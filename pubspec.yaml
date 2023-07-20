@@ -1,0 +1,51 @@
+name: cling
+description: A new Flutter project.
+publish_to: 'none'
+version: 0.1.0
+
+environment:
+  sdk: '>=3.0.6 <4.0.0'
+
+dependencies:
+  bloc: ^8.1.2
+  build_runner: ^2.4.6
+  equatable: ^2.0.5
+  flutter:
+    sdk: flutter
+  flutter_bloc: ^8.1.3
+  flutter_gen: ^5.3.1
+  flutter_native_splash: ^2.3.1
+  flutter_svg: ^2.0.7
+  open_mail_app: ^0.4.5
+  sizer: ^2.0.15
+
+dev_dependencies:
+  flutter_launcher_icons: ^0.13.1
+  flutter_lints: ^2.0.0
+  flutter_test:
+    sdk: flutter
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "lib/resources/images/logo_png.png"
+
+flutter:
+  uses-material-design: true
+  assets:
+    - lib/resources/images/
+  fonts:
+    - family: Bungee
+      fonts:
+        - asset: lib/resources/fonts/Bungee-Regular.ttf
+    - family: Cabinet Grotesk
+      fonts:
+        - asset: lib/resources/fonts/CabinetGrotesk-Bold.otf
+        - asset: lib/resources/fonts/CabinetGrotesk-Regular.otf
+
+flutter_gen:
+  output: lib/resources/gen/ # Optional (default: lib/gen/)
+
+  # Optional
+  integrations:
+    flutter_svg: true
