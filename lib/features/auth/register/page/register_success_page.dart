@@ -54,7 +54,7 @@ class RegisterSuccessPage extends StatelessWidget {
               height: Utils.h(16).h,
             ),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 45),
+              padding: const EdgeInsets.symmetric(horizontal: 45),
               child: Text(
                 'The last step is verify your account. Go to mail to verify your account now',
                 textAlign: TextAlign.center,

@@ -94,7 +94,7 @@ class StackStar extends StatelessWidget {
         ),
         Positioned(
           left: Utils.w(309).w,
-          top: Utils.w(362).w,
+          top: Utils.h(362).h,
           child: RotationTransition(
             turns: listAnimation[1],
             child: Container(

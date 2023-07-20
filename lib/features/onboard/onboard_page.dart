@@ -37,29 +37,29 @@ class _OnboardPageState extends State<OnboardPage>
         backgroundColor: Colors.black,
         body: Column(
           children: [
-            SizedBox(
-              width: 100.w,
-              height: Utils.h(430).h,
-              child: Stack(
-                children: [
-                  const StackEmoticon(),
-                  StackStar(
+            Stack(
+              children: [
+                const StackEmoticon(),
+                SizedBox(
+                  width: 100.w,
+                  height: (Utils.h(215).h) * 2,
+                  child: StackStar(
                     listAnimation: listSpinAnimation,
                   ),
-                  PositionedTransition(
-                    rect: _animationTween,
-                    child: Center(
-                      child: Assets.lib.resources.images.emoticon.image(
-                        width: Utils.w(238.9).w,
-                        height: Utils.w(238.9).w,
-                      ),
+                ),
+                PositionedTransition(
+                  rect: _animationTween,
+                  child: Center(
+                    child: Assets.lib.resources.images.emoticon.image(
+                      width: Utils.w(230).w,
+                      height: Utils.w(230).w,
                     ),
-                  )
-                ],
-              ),
+                  ),
+                )
+              ],
             ),
             SizedBox(
-              height: Utils.h(24).h,
+              height: Utils.h(40).h,
             ),
             Text(
               "Cling!",

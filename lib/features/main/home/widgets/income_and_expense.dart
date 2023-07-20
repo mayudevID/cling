@@ -6,7 +6,9 @@ import '../../../../resources/gen/fonts.gen.dart';
 
 Widget incomeAndExpense() {
   return Container(
-    margin: EdgeInsets.symmetric(horizontal: Utils.w(20).w),
+    margin: EdgeInsets.symmetric(
+      horizontal: Utils.w(20).w,
+    ),
     width: double.infinity,
     padding: EdgeInsets.symmetric(
       horizontal: Utils.w(16).w,
@@ -20,7 +22,6 @@ Widget incomeAndExpense() {
       children: [
         Expanded(
           child: Container(
-            //height: Utils.h(77).h,
             decoration: BoxDecoration(
               color: const Color(0xFF07AC65),
               borderRadius: BorderRadius.circular(7),
@@ -76,7 +77,6 @@ Widget incomeAndExpense() {
         ),
         Expanded(
           child: Container(
-            //height: Utils.h(77).h,
             decoration: BoxDecoration(
               color: const Color(0xFFE54C19),
               borderRadius: BorderRadius.circular(7),

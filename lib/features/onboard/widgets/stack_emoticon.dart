@@ -1,5 +1,8 @@
 import 'package:cling/features/onboard/widgets/quarter_widget_rotate.dart';
 import 'package:flutter/material.dart';
+import 'package:sizer/sizer.dart';
+
+import '../../../core/utils.dart';
 
 class StackEmoticon extends StatelessWidget {
   const StackEmoticon({super.key});

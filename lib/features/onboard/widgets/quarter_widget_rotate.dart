@@ -1,3 +1,4 @@
+import 'package:cling/core/utils.dart';
 import 'package:flutter/material.dart';
 
 import 'package:sizer/sizer.dart';
@@ -13,7 +14,9 @@ class QuarterWidgetRotate extends StatelessWidget {
     return RotatedBox(
       quarterTurns: bigRound,
       child: Assets.lib.resources.images.ellipseOnboard.image(
-        width: 50.w,
+        fit: BoxFit.fill,
+        width: (bigRound == 1 || bigRound == -1) ? Utils.h(215).h : 50.w,
+        height: (bigRound == 1 || bigRound == -1) ? 50.w : Utils.h(215).h,
       ),
     );
   }
