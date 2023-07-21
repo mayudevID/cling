@@ -9,6 +9,7 @@ environment:
 dependencies:
   bloc: ^8.1.2
   build_runner: ^2.4.6
+  dropdown_button2: ^2.3.6
   equatable: ^2.0.5
   flutter:
     sdk: flutter
@@ -20,6 +21,7 @@ dependencies:
   open_mail_app: ^0.4.5
   rename: ^2.1.1
   sizer: ^2.0.15
+  syncfusion_flutter_charts: ^22.1.39
   transitioned_indexed_stack: ^1.0.2
 
 dev_dependencies:
