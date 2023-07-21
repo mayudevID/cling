@@ -12,3 +12,9 @@ class TabChange extends MainEvent {
 
   const TabChange({required this.tabIndex});
 }
+
+class HomePageStateChange extends MainEvent {
+  final HomePageState homePageState;
+
+  const HomePageStateChange({required this.homePageState});
+}

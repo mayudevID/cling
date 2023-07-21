@@ -1,34 +1,15 @@
 import 'package:cling/core/route.dart';
 import 'package:cling/core/utils.dart';
 import 'package:cling/features/onboard/widgets/button_onboard.dart';
+import 'package:cling/features/onboard/widgets/emoticon_widget.dart';
 import 'package:cling/features/onboard/widgets/stack_emoticon.dart';
-
-import 'package:cling/resources/gen/assets.gen.dart';
 import 'package:cling/resources/gen/fonts.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
-
-import 'widgets/animation_onboard.dart';
 import 'widgets/stack_star.dart';
 
-class OnboardPage extends StatefulWidget {
+class OnboardPage extends StatelessWidget {
   const OnboardPage({super.key});
-
-  @override
-  State<OnboardPage> createState() => _OnboardPageState();
-}
-
-class _OnboardPageState extends State<OnboardPage>
-    with TickerProviderStateMixin {
-  late List<Animation<double>> listSpinAnimation;
-  late Animation<RelativeRect> _animationTween;
-
-  @override
-  void initState() {
-    listSpinAnimation = AnimationOnboard.setAnimationsStar(this);
-    _animationTween = AnimationOnboard.setAnimationEmoticon(this);
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,19 +24,9 @@ class _OnboardPageState extends State<OnboardPage>
                 SizedBox(
                   width: 100.w,
                   height: (Utils.h(215).h) * 2,
-                  child: StackStar(
-                    listAnimation: listSpinAnimation,
-                  ),
+                  child: const StackStar(),
                 ),
-                PositionedTransition(
-                  rect: _animationTween,
-                  child: Center(
-                    child: Assets.lib.resources.images.emoticon.image(
-                      width: Utils.w(230).w,
-                      height: Utils.w(230).w,
-                    ),
-                  ),
-                )
+                const EmoticonWidget(),
               ],
             ),
             SizedBox(

@@ -2,9 +2,23 @@ import 'package:cling/core/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
-class StackStar extends StatelessWidget {
-  const StackStar({super.key, required this.listAnimation});
-  final List<Animation<double>> listAnimation;
+import 'animation_onboard.dart';
+
+class StackStar extends StatefulWidget {
+  const StackStar({super.key});
+
+  @override
+  State<StackStar> createState() => _StackStarState();
+}
+
+class _StackStarState extends State<StackStar> with TickerProviderStateMixin {
+  late List<Animation<double>> _listSpinAnimation;
+
+  @override
+  void initState() {
+    _listSpinAnimation = AnimationOnboard.setAnimationsStar(this);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +28,7 @@ class StackStar extends StatelessWidget {
           left: Utils.w(308.90).w,
           top: Utils.h(50).h,
           child: RotationTransition(
-            turns: listAnimation[0],
+            turns: _listSpinAnimation[0],
             child: Container(
               width: Utils.w(61.02).w,
               height: Utils.w(61.02).w,
@@ -74,7 +88,7 @@ class StackStar extends StatelessWidget {
           left: Utils.w(10).h,
           top: Utils.h(118.98).h,
           child: RotationTransition(
-            turns: listAnimation[2],
+            turns: _listSpinAnimation[2],
             child: Container(
               width: 34.49,
               height: 34.49,
@@ -96,7 +110,7 @@ class StackStar extends StatelessWidget {
           left: Utils.w(309).w,
           top: Utils.h(362).h,
           child: RotationTransition(
-            turns: listAnimation[1],
+            turns: _listSpinAnimation[1],
             child: Container(
               width: Utils.w(34.49).w,
               height: Utils.w(34.49).w,

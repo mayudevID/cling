@@ -49,6 +49,10 @@ class $LibResourcesImagesGen {
   SvgGenImage get biBarChartFill =>
       const SvgGenImage('lib/resources/images/bi_bar-chart-fill.svg');
 
+  /// File path: lib/resources/images/calendar.svg
+  SvgGenImage get calendar =>
+      const SvgGenImage('lib/resources/images/calendar.svg');
+
   /// File path: lib/resources/images/ellipse_onboard.png
   AssetGenImage get ellipseOnboard =>
       const AssetGenImage('lib/resources/images/ellipse_onboard.png');
@@ -75,6 +79,10 @@ class $LibResourcesImagesGen {
   /// File path: lib/resources/images/flat_ticket.svg
   SvgGenImage get flatTicket =>
       const SvgGenImage('lib/resources/images/flat_ticket.svg');
+
+  /// File path: lib/resources/images/fluent_chevron-down-24-filled.svg
+  SvgGenImage get fluentChevronDown24Filled => const SvgGenImage(
+      'lib/resources/images/fluent_chevron-down-24-filled.svg');
 
   /// File path: lib/resources/images/fluent_chevron-left-24-filled.svg
   SvgGenImage get fluentChevronLeft24Filled => const SvgGenImage(
@@ -120,6 +128,7 @@ class $LibResourcesImagesGen {
         backButton,
         bell,
         biBarChartFill,
+        calendar,
         ellipseOnboard,
         emailLogo,
         emoticon,
@@ -127,6 +136,7 @@ class $LibResourcesImagesGen {
         eyeOn,
         faSolidWallet,
         flatTicket,
+        fluentChevronDown24Filled,
         fluentChevronLeft24Filled,
         fluentHome48Filled,
         headphone,

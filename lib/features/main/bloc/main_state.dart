@@ -1,13 +1,23 @@
 part of 'main_bloc.dart';
 
-abstract class MainState extends Equatable {
+class MainState extends Equatable {
   final int tabIndex;
-  const MainState({required this.tabIndex});
+  final HomePageState homePageState;
+  const MainState({
+    required this.tabIndex,
+    required this.homePageState,
+  });
 
   @override
-  List<Object> get props => [tabIndex];
-}
+  List<Object> get props => [tabIndex, homePageState];
 
-class MainInitial extends MainState {
-  const MainInitial({required super.tabIndex});
+  MainState copyWith({
+    int? tabIndex,
+    HomePageState? homePageState,
+  }) {
+    return MainState(
+      tabIndex: tabIndex ?? this.tabIndex,
+      homePageState: homePageState ?? this.homePageState,
+    );
+  }
 }

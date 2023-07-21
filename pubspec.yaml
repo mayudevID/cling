@@ -20,6 +20,7 @@ dependencies:
   open_mail_app: ^0.4.5
   rename: ^2.1.1
   sizer: ^2.0.15
+  transitioned_indexed_stack: ^1.0.2
 
 dev_dependencies:
   flutter_launcher_icons: ^0.13.1
