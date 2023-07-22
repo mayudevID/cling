@@ -1,8 +1,9 @@
 import 'package:cling/core/route.dart';
-import 'package:cling/core/utils.dart';
+
+import 'package:cling/features/main/statistics/bloc/statistics_bloc.dart';
 import 'package:cling/resources/gen/fonts.gen.dart';
-import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
 
 void main() {
@@ -14,66 +15,20 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Sizer(
-      builder: (context, orientation, deviceType) {
-        return const MaterialApp(
-          onGenerateRoute: RouteGen.generateRoute,
-          debugShowCheckedModeBanner: false,
-        );
-        // return MaterialApp(
-        //   home: MyHomePage(),
-        // );
-      },
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key});
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: DropdownButtonHideUnderline(
-          child: DropdownButton2(
-            customButton: const Icon(
-              Icons.abc,
-              size: 46,
-              color: Colors.red,
-            ),
-            items: [
-              ...MenuItems.firstItems.map(
-                (item) => DropdownMenuItem<MenuItem>(
-                  value: item,
-                  child: MenuItems.buildItem(item),
-                ),
-              ),
-            ],
-            onChanged: (value) {
-              MenuItems.onChanged(context, value!);
-            },
-            dropdownStyleData: DropdownStyleData(
-              width: Utils.w(390).w,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: const Color(0xFF313131),
-              ),
-              offset: const Offset(0, 8),
-            ),
-            menuItemStyleData: MenuItemStyleData(
-              padding: EdgeInsets.symmetric(
-                horizontal: Utils.w(16).w,
-                vertical: Utils.h(16).h,
-              ),
-            ),
-          ),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          lazy: true,
+          create: (_) => StatisticsBloc(),
         ),
+      ],
+      child: Sizer(
+        builder: (context, orientation, deviceType) {
+          return const MaterialApp(
+            onGenerateRoute: RouteGen.generateRoute,
+            debugShowCheckedModeBanner: false,
+          );
+        },
       ),
     );
   }

@@ -1,14 +1,14 @@
-import 'package:cling/resources/gen/assets.gen.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../../core/utils.dart';
-import '../../../main.dart';
-import '../../../resources/gen/fonts.gen.dart';
+import '../../../../core/utils.dart';
+import '../../../../main.dart';
+import '../../../../resources/gen/assets.gen.dart';
+import '../../../../resources/gen/fonts.gen.dart';
 
-class AddExpensePage extends StatelessWidget {
-  const AddExpensePage({super.key});
+class AddIncomePage extends StatelessWidget {
+  const AddIncomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +21,7 @@ class AddExpensePage extends StatelessWidget {
             height: Utils.h(16).h,
           ),
           Text(
-            'Add Expenses',
+            'Add Income',
             textAlign: TextAlign.center,
             style: TextStyle(
               color: Colors.white,
@@ -34,7 +34,7 @@ class AddExpensePage extends StatelessWidget {
             height: Utils.h(24).h,
           ),
           Text(
-            'Purchase Date',
+            'Date',
             style: TextStyle(
               color: Colors.white,
               fontSize: 12.sp,
@@ -77,7 +77,7 @@ class AddExpensePage extends StatelessWidget {
             height: Utils.h(16).h,
           ),
           Text(
-            'Categories',
+            'Income Source',
             style: TextStyle(
               color: Colors.white,
               fontSize: 12.sp,
@@ -135,13 +135,6 @@ class AddExpensePage extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10),
                   color: const Color(0xFF313131),
                 ),
-                offset: const Offset(0, 8),
-              ),
-              menuItemStyleData: MenuItemStyleData(
-                padding: EdgeInsets.symmetric(
-                  horizontal: Utils.w(16).w,
-                  vertical: Utils.h(16).h,
-                ),
               ),
             ),
           ),
@@ -149,7 +142,7 @@ class AddExpensePage extends StatelessWidget {
             height: Utils.h(16).h,
           ),
           Text(
-            'Items',
+            'Description (Optional)',
             style: TextStyle(
               color: Colors.white,
               fontSize: 12.sp,
@@ -234,7 +227,15 @@ class AddExpensePage extends StatelessWidget {
                 Expanded(
                   child: TextFormField(
                     keyboardType: TextInputType.number,
-                    onChanged: (value) {},
+                    onChanged: (value) {
+                      // if (value.trim().isNotEmpty) {
+                      //   try {
+                      //     final result = double.parse(value);
+                      //   } on FormatException catch (e) {
+                      //     print(e);
+                      //   }
+                      // }
+                    },
                     cursorColor: Colors.white,
                     style: TextStyle(
                       color: Colors.white,

@@ -55,7 +55,7 @@ class HomePage extends StatelessWidget {
           ),
           SizedBox(
             height: Utils.h(90).h,
-          )
+          ),
         ],
       ),
     );

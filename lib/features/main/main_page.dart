@@ -1,10 +1,8 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:cling/core/utils.dart';
-import 'package:cling/features/main/home/add_expense_page.dart';
-import 'package:cling/features/main/home/add_income_page.dart';
-import 'package:cling/features/main/home/home_page.dart';
-import 'package:cling/features/main/statistics/statistics_page.dart';
+
+import 'package:cling/features/main/statistics/page/statistics_page.dart';
 import 'package:cling/resources/gen/assets.gen.dart';
 import 'package:cling/resources/gen/fonts.gen.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +14,9 @@ import 'dart:math' as math;
 
 import 'bloc/enum_home_page_state.dart';
 import 'bloc/main_bloc.dart';
+import 'home/page/add_expense_page.dart';
+import 'home/page/add_income_page.dart';
+import 'home/page/home_page.dart';
 
 class MainPage extends StatelessWidget {
   const MainPage({super.key});
