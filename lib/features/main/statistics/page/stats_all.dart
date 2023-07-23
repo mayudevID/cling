@@ -41,7 +41,7 @@ class StatsAll extends StatelessWidget {
         const TagInfo(),
         SizedBox(
           width: double.infinity,
-          height: Utils.w(248.5).w,
+          height: Utils.h(248.5).h,
           child: SfCircularChart(
             series: <DoughnutSeries<_PieData, String>>[
               DoughnutSeries<_PieData, String>(

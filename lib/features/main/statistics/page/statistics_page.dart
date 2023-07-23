@@ -49,8 +49,8 @@ class StatisticsPage extends StatelessWidget {
                   index: state.typeCategories,
                   children: [
                     StatsAll(),
-                    const StatsIncome(),
-                    const StatsExpense(),
+                    StatsIncome(),
+                    StatsExpense(),
                   ],
                 );
               },

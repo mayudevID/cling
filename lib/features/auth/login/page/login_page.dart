@@ -28,6 +28,18 @@ class LoginPage extends StatelessWidget {
 class LoginPageContent extends StatelessWidget {
   const LoginPageContent({super.key});
 
+  Future<void> stopAnimation() async {
+    AnimationOnboard.animC1.stop();
+    AnimationOnboard.animC2.stop();
+    AnimationOnboard.animC3.stop();
+    AnimationOnboard.animC4.stop();
+    await Future.delayed(const Duration(milliseconds: 200));
+    AnimationOnboard.animC1.dispose();
+    AnimationOnboard.animC2.dispose();
+    AnimationOnboard.animC3.dispose();
+    AnimationOnboard.animC4.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -109,24 +121,15 @@ class LoginPageContent extends StatelessWidget {
                 height: Utils.h(40).h,
               ),
               ButtonLogin(
-                onTap: () {
-                  AnimationOnboard.animC1
-                    ..stop()
-                    ..dispose();
-                  AnimationOnboard.animC2
-                    ..stop()
-                    ..dispose();
-                  AnimationOnboard.animC3
-                    ..stop()
-                    ..dispose();
-                  AnimationOnboard.animC4
-                    ..stop()
-                    ..dispose();
-                  Navigator.pushNamedAndRemoveUntil(
-                    context,
-                    RouteName.main,
-                    (route) => false,
-                  );
+                onTap: () async {
+                  await stopAnimation();
+                  Future.microtask(() {
+                    Navigator.pushNamedAndRemoveUntil(
+                      context,
+                      RouteName.main,
+                      (route) => false,
+                    );
+                  });
                 },
               ),
               const Expanded(

@@ -33,8 +33,8 @@ class HomePage extends StatelessWidget {
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
-              children: dataDummy.map((e) {
-                return widgetGoals(e);
+              children: dataDummy.asMap().entries.map((e) {
+                return widgetGoals(e, dataDummy.length);
               }).toList(),
             ),
           ),

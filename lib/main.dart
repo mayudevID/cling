@@ -24,7 +24,8 @@ class MainApp extends StatelessWidget {
       ],
       child: Sizer(
         builder: (context, orientation, deviceType) {
-          return const MaterialApp(
+          return MaterialApp(
+            theme: ThemeData(primaryColor: Colors.white),
             onGenerateRoute: RouteGen.generateRoute,
             debugShowCheckedModeBanner: false,
           );
