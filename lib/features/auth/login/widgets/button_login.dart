@@ -11,8 +11,8 @@ class ButtonLogin extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: Utils.w(390).w,
-      height: Utils.h(57).h,
+      width: 390.wmea,
+      height: 57.hmea,
       child: ElevatedButton(
         onPressed: onTap,
         style: ButtonStyle(

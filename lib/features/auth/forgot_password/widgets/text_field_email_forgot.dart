@@ -10,8 +10,8 @@ class TextFieldEmailForgot extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: Utils.w(390).w,
-      height: Utils.h(54).h,
+      width: 390.wmea,
+      height: 54.hmea,
       decoration: ShapeDecoration(
         color: const Color(0xFF313131),
         shape: RoundedRectangleBorder(

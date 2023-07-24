@@ -30,10 +30,10 @@ class TagChooser extends StatelessWidget {
                 },
                 child: Container(
                   padding: EdgeInsets.symmetric(
-                    horizontal: Utils.w(16).w,
-                    vertical: Utils.h(8).h,
+                    horizontal: 16.wmea,
+                    vertical: 8.hmea,
                   ),
-                  margin: EdgeInsets.only(right: Utils.w(12).w),
+                  margin: EdgeInsets.only(right: 12.wmea),
                   decoration: ShapeDecoration(
                     color: (e.key == state.typeCategories)
                         ? const Color(0xFFF599DA)

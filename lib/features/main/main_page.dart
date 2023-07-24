@@ -71,7 +71,7 @@ class MainPage extends StatelessWidget {
   Widget customFloatingActionButton(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(
-        bottom: Utils.h(96).h,
+        bottom: 96.hmea,
       ),
       child: ExpandableFab(
         child: Assets.lib.resources.images.plus.svg(),
@@ -108,8 +108,8 @@ class MainPage extends StatelessWidget {
             },
             child: Container(
               padding: EdgeInsets.symmetric(
-                vertical: Utils.w(9).w,
-                horizontal: Utils.h(19.5).h,
+                vertical: 9.wmea,
+                horizontal: 19.5.hmea,
               ),
               decoration: BoxDecoration(
                 color: Color(0xFFF599DA),
@@ -136,8 +136,8 @@ class MainPage extends StatelessWidget {
             },
             child: Container(
               padding: EdgeInsets.symmetric(
-                vertical: Utils.w(9).w,
-                horizontal: Utils.h(19.5).h,
+                vertical: 9.wmea,
+                horizontal: 19.5.hmea,
               ),
               decoration: BoxDecoration(
                 color: Color(0xFFF599DA),
@@ -170,8 +170,8 @@ class MainPage extends StatelessWidget {
           right: 20,
         ),
         padding: EdgeInsets.symmetric(
-          vertical: Utils.h(25.5).h,
-          horizontal: Utils.w(45.5).w,
+          vertical: 25.5.hmea,
+          horizontal: 45.5.wmea,
         ),
         decoration: BoxDecoration(
           color: Color(0xFF343437),

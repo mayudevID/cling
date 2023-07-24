@@ -17,8 +17,8 @@ class OvalStack extends StatelessWidget {
             decoration: BoxDecoration(
               color: const Color(0xFF313131),
               borderRadius: BorderRadius.only(
-                bottomRight: Radius.circular(Utils.w(139.50).w),
-                topRight: Radius.circular(Utils.w(139.50).w),
+                bottomRight: Radius.circular(139.50.wmea),
+                topRight: Radius.circular(139.50.wmea),
               ),
             ),
           ),
@@ -47,8 +47,8 @@ class OvalStack extends StatelessWidget {
             decoration: BoxDecoration(
               color: const Color(0xFF313131),
               borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(Utils.w(139.50).w),
-                topLeft: Radius.circular(Utils.w(139.50).w),
+                bottomLeft: Radius.circular(139.50.wmea),
+                topLeft: Radius.circular(139.50.wmea),
               ),
             ),
           ),

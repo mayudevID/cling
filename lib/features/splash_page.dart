@@ -6,7 +6,6 @@ import 'package:cling/resources/gen/assets.gen.dart';
 import 'package:cling/resources/gen/fonts.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:sizer/sizer.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
@@ -46,7 +45,7 @@ class _SplashPageState extends State<SplashPage> {
             children: [
               Assets.lib.resources.images.logo.svg(),
               SizedBox(
-                height: Utils.h(8.02).h,
+                height: 8.02.hmea,
               ),
               const Text(
                 'Cling!',

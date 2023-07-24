@@ -1,6 +1,5 @@
 import 'package:cling/core/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:sizer/sizer.dart';
 
 class AnimationOnboard {
   static late AnimationController animC1;
@@ -78,8 +77,8 @@ class AnimationOnboard {
     late Animation<RelativeRect> animationTween;
 
     animationTween = RelativeRectTween(
-      begin: RelativeRect.fromLTRB(0, 0, 0, -1 * Utils.h(55).h),
-      end: RelativeRect.fromLTRB(0, 0, 0, Utils.h(55).h),
+      begin: RelativeRect.fromLTRB(0, 0, 0, -1 * 55.hmea),
+      end: RelativeRect.fromLTRB(0, 0, 0, 55.hmea),
     ).animate(
       CurvedAnimation(
         parent: animC4,

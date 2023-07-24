@@ -7,7 +7,7 @@ import '../../../../resources/gen/fonts.gen.dart';
 
 Widget nameAndNotification() {
   return Padding(
-    padding: EdgeInsets.symmetric(horizontal: Utils.w(20).w),
+    padding: EdgeInsets.symmetric(horizontal: 20.wmea),
     child: Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.center,

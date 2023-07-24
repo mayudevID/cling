@@ -1,6 +1,5 @@
 import 'package:cling/core/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:sizer/sizer.dart';
 
 class StackStarReg extends StatelessWidget {
   const StackStarReg({super.key});
@@ -10,11 +9,11 @@ class StackStarReg extends StatelessWidget {
     return Stack(
       children: [
         Positioned(
-          left: Utils.w(308.90).w,
-          top: Utils.h(95).h,
+          left: 308.90.wmea,
+          top: 95.hmea,
           child: Container(
-            width: Utils.w(61.02).w,
-            height: Utils.w(61.02).w,
+            width: 61.02.wmea,
+            height: 61.02.wmea,
             decoration: const ShapeDecoration(
               color: Color(0xFFF2D82D),
               shape: StarBorder(
@@ -29,11 +28,11 @@ class StackStarReg extends StatelessWidget {
           ),
         ),
         Positioned(
-          left: Utils.w(350).w,
-          top: Utils.h(80.45).h,
+          left: 350.wmea,
+          top: 80.45.hmea,
           child: Container(
-            width: Utils.w(34.49).w,
-            height: Utils.w(34.49).w,
+            width: 34.49.wmea,
+            height: 34.49.wmea,
             decoration: const ShapeDecoration(
               color: Color(0xFF006DE9),
               shape: StarBorder(
@@ -48,11 +47,11 @@ class StackStarReg extends StatelessWidget {
           ),
         ),
         Positioned(
-          left: Utils.w(45).w,
-          top: Utils.h(108).h,
+          left: 45.wmea,
+          top: 108.hmea,
           child: Container(
-            width: Utils.w(21).w,
-            height: Utils.w(21).w,
+            width: 21.wmea,
+            height: 21.wmea,
             decoration: const ShapeDecoration(
               color: Color(0xFFE54C19),
               shape: StarBorder(
@@ -67,8 +66,8 @@ class StackStarReg extends StatelessWidget {
           ),
         ),
         Positioned(
-          left: Utils.w(30).h,
-          top: Utils.h(123).h,
+          left: 30.hmea,
+          top: 123.hmea,
           child: Container(
             width: 34.49,
             height: 34.49,
@@ -86,11 +85,11 @@ class StackStarReg extends StatelessWidget {
           ),
         ),
         Positioned(
-          left: Utils.w(309).w,
-          top: Utils.w(305).w,
+          left: 309.wmea,
+          top: 305.wmea,
           child: Container(
-            width: Utils.w(34.49).w,
-            height: Utils.w(34.49).w,
+            width: 34.49.wmea,
+            height: 34.49.wmea,
             decoration: const ShapeDecoration(
               color: Color(0xFFF599DA),
               shape: StarBorder(

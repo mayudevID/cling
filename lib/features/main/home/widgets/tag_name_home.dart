@@ -7,10 +7,10 @@ import '../../../../resources/gen/fonts.gen.dart';
 List<Widget> tagNameHome(String name) {
   return [
     SizedBox(
-      height: Utils.h(24).h,
+      height: 24.hmea,
     ),
     Padding(
-      padding: EdgeInsets.symmetric(horizontal: Utils.w(20).w),
+      padding: EdgeInsets.symmetric(horizontal: 20.wmea),
       child: Text(
         name,
         style: TextStyle(
@@ -22,7 +22,7 @@ List<Widget> tagNameHome(String name) {
       ),
     ),
     SizedBox(
-      height: Utils.h(16).h,
+      height: 16.hmea,
     ),
   ];
 }

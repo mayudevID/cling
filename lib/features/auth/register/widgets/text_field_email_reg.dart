@@ -17,8 +17,8 @@ class TextFieldEmailReg extends StatelessWidget {
         ),
       ),
       padding: EdgeInsets.symmetric(
-        vertical: Utils.h(16).h,
-        horizontal: Utils.w(16).w,
+        vertical: 16.hmea,
+        horizontal: 16.wmea,
       ),
       child: TextFormField(
         onChanged: (value) {},

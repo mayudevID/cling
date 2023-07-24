@@ -12,15 +12,15 @@ class TagInfo extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Container(
-          width: Utils.w(15).w,
-          height: Utils.w(15).w,
+          width: 15.wmea,
+          height: 15.wmea,
           decoration: const ShapeDecoration(
             color: Color(0xFFE54C19),
             shape: OvalBorder(),
           ),
         ),
         SizedBox(
-          width: Utils.w(6).w,
+          width: 6.wmea,
         ),
         Text(
           'Expense',
@@ -33,18 +33,18 @@ class TagInfo extends StatelessWidget {
           ),
         ),
         SizedBox(
-          width: Utils.w(11).w,
+          width: 11.wmea,
         ),
         Container(
-          width: Utils.w(15).w,
-          height: Utils.w(15).w,
+          width: 15.wmea,
+          height: 15.wmea,
           decoration: const ShapeDecoration(
             color: Color(0xFF07AC65),
             shape: OvalBorder(),
           ),
         ),
         SizedBox(
-          width: Utils.w(6).w,
+          width: 6.wmea,
         ),
         Text(
           'Income',
@@ -57,18 +57,18 @@ class TagInfo extends StatelessWidget {
           ),
         ),
         SizedBox(
-          width: Utils.w(11).w,
+          width: 11.wmea,
         ),
         Container(
-          width: Utils.w(15).w,
-          height: Utils.w(15).w,
+          width: 15.wmea,
+          height: 15.wmea,
           decoration: const ShapeDecoration(
             color: Color(0xFF006DE9),
             shape: OvalBorder(),
           ),
         ),
         SizedBox(
-          width: Utils.w(6).w,
+          width: 6.wmea,
         ),
         Text(
           'Savings',

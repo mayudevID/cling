@@ -19,12 +19,12 @@ class StatisticsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: Utils.w(20).w),
+        padding: EdgeInsets.symmetric(horizontal: 20.wmea),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(
-              height: Utils.h(16).h,
+              height: 16.hmea,
             ),
             Text(
               'Statistics',
@@ -37,11 +37,11 @@ class StatisticsPage extends StatelessWidget {
               ),
             ),
             SizedBox(
-              height: Utils.h(24).h,
+              height: 24.hmea,
             ),
             TagChooser(),
             SizedBox(
-              height: Utils.h(24).h,
+              height: 24.hmea,
             ),
             BlocBuilder<StatisticsBloc, StatisticsState>(
               builder: (context, state) {

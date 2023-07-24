@@ -6,13 +6,13 @@ import '../../../../resources/gen/fonts.gen.dart';
 
 Widget monthlyBudget() {
   return Container(
-    margin: EdgeInsets.symmetric(horizontal: Utils.w(20).w),
+    margin: EdgeInsets.symmetric(horizontal: 20.wmea),
     padding: EdgeInsets.symmetric(
-      horizontal: Utils.w(16).w,
-      vertical: Utils.h(16).h,
+      horizontal: 16.wmea,
+      vertical: 16.hmea,
     ),
     width: double.infinity,
-    //height: Utils.h(117).h,
+    //height: 117.hmea,
     decoration: ShapeDecoration(
       color: const Color(0x3D787880),
       shape: RoundedRectangleBorder(
@@ -46,12 +46,12 @@ Widget monthlyBudget() {
             ),
           ],
         ),
-        SizedBox(height: Utils.h(16).h),
+        SizedBox(height: 16.hmea),
         Stack(
           children: [
             Container(
               width: double.maxFinite,
-              height: Utils.h(16).h,
+              height: 16.hmea,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(100),
                 color: Colors.white.withOpacity(0.76),
@@ -59,7 +59,7 @@ Widget monthlyBudget() {
             ),
             Container(
               width: 70.w,
-              height: Utils.h(16).h,
+              height: 16.hmea,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(100),
                 color: const Color(0xFF006DE9),

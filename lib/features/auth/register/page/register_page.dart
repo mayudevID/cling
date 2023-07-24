@@ -35,11 +35,11 @@ class RegisterPageContent extends StatelessWidget {
         backgroundColor: Colors.black,
         body: Container(
           width: 100.w,
-          padding: EdgeInsets.symmetric(horizontal: Utils.w(20).w),
+          padding: EdgeInsets.symmetric(horizontal: 20.wmea),
           child: Column(
             children: [
               SizedBox(
-                height: Utils.h(40).h,
+                height: 40.hmea,
               ),
               Align(
                 alignment: Alignment.centerLeft,
@@ -54,7 +54,7 @@ class RegisterPageContent extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                height: Utils.h(8).h,
+                height: 8.hmea,
               ),
               Text(
                 'Nice to meet you! enter your identity to reach your goals',
@@ -66,33 +66,33 @@ class RegisterPageContent extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                height: Utils.h(32).h,
+                height: 32.hmea,
               ),
               const TagNameReg(name: "Email"),
               SizedBox(
-                height: Utils.h(8).h,
+                height: 8.hmea,
               ),
               const TextFieldEmailReg(),
               SizedBox(
-                height: Utils.h(16).h,
+                height: 16.hmea,
               ),
               const TagNameReg(name: "Password"),
               SizedBox(
-                height: Utils.h(8).h,
+                height: 8.hmea,
               ),
               const TextFieldPassReg(),
               SizedBox(
-                height: Utils.h(16).h,
+                height: 16.hmea,
               ),
               const TagNameReg(
                 name: 'Confirm Password',
               ),
               SizedBox(
-                height: Utils.h(8).h,
+                height: 8.hmea,
               ),
               const TextFieldConPassReg(),
               SizedBox(
-                height: Utils.h(40).h,
+                height: 40.hmea,
               ),
               ButtonRegist(
                 onTap: () {
@@ -136,7 +136,7 @@ class RegisterPageContent extends StatelessWidget {
                 textAlign: TextAlign.center,
               ),
               SizedBox(
-                height: Utils.h(55).h,
+                height: 55.hmea,
               ),
             ],
           ),

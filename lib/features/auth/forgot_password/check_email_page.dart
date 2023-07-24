@@ -18,11 +18,11 @@ class CheckEmailPage extends StatelessWidget {
         body: Column(
           children: [
             SizedBox(
-              height: Utils.h(110).h,
+              height: 110.hmea,
             ),
             const EmailWithStar(),
             SizedBox(
-              height: Utils.h(81).h,
+              height: 81.hmea,
             ),
             Text(
               'Check your email',
@@ -35,10 +35,10 @@ class CheckEmailPage extends StatelessWidget {
               ),
             ),
             SizedBox(
-              height: Utils.h(16).h,
+              height: 16.hmea,
             ),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: Utils.w(47).w),
+              padding: EdgeInsets.symmetric(horizontal: 47.wmea),
               child: Text(
                 'Great! Now you can change your password through the link we send to your mail',
                 textAlign: TextAlign.center,
@@ -51,7 +51,7 @@ class CheckEmailPage extends StatelessWidget {
               ),
             ),
             SizedBox(
-              height: Utils.h(81).h,
+              height: 81.hmea,
             ),
             ButtonGoToMail(
               onTap: () async {

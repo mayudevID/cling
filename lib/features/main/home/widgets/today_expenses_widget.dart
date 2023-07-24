@@ -7,12 +7,12 @@ import '../../../../core/utils.dart';
 Widget todayExpensesWidget(Map data) {
   return Container(
     margin: EdgeInsets.only(
-      left: Utils.w(20).w,
-      right: Utils.w(20).w,
-      bottom: Utils.h(16).h,
+      left: 20.wmea,
+      right: 20.wmea,
+      bottom: 16.hmea,
     ),
     padding: EdgeInsets.all(
-      Utils.w(16).w,
+      16.wmea,
     ),
     width: double.infinity,
     decoration: BoxDecoration(
@@ -22,7 +22,7 @@ Widget todayExpensesWidget(Map data) {
     child: Row(
       children: [
         Container(
-          padding: EdgeInsets.all(Utils.w(8).w),
+          padding: EdgeInsets.all(8.wmea),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(5),
@@ -30,7 +30,7 @@ Widget todayExpensesWidget(Map data) {
           child: data['image'],
         ),
         SizedBox(
-          width: Utils.w(12).w,
+          width: 12.wmea,
         ),
         Text(
           data['name'],

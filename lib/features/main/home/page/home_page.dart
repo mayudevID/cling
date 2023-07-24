@@ -8,7 +8,6 @@ import 'package:cling/features/main/home/widgets/widget_goals.dart';
 import 'package:cling/resources/gen/assets.gen.dart';
 
 import 'package:flutter/material.dart';
-import 'package:sizer/sizer.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -20,11 +19,11 @@ class HomePage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(
-            height: Utils.h(16).h,
+            height: 16.hmea,
           ),
           nameAndNotification(),
           SizedBox(
-            height: Utils.h(24).h,
+            height: 24.hmea,
           ),
           monthlyBudget(),
           ...tagNameHome("Overview"),
@@ -54,7 +53,7 @@ class HomePage extends StatelessWidget {
             ),
           ),
           SizedBox(
-            height: Utils.h(90).h,
+            height: 90.hmea,
           ),
         ],
       ),

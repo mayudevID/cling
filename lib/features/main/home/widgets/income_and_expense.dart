@@ -7,12 +7,12 @@ import '../../../../resources/gen/fonts.gen.dart';
 Widget incomeAndExpense() {
   return Container(
     margin: EdgeInsets.symmetric(
-      horizontal: Utils.w(20).w,
+      horizontal: 20.wmea,
     ),
     width: double.infinity,
     padding: EdgeInsets.symmetric(
-      horizontal: Utils.w(16).w,
-      vertical: Utils.h(16).h,
+      horizontal: 16.wmea,
+      vertical: 16.hmea,
     ),
     decoration: BoxDecoration(
       color: const Color(0x3D787880),
@@ -28,8 +28,8 @@ Widget incomeAndExpense() {
             ),
             child: Padding(
               padding: EdgeInsets.symmetric(
-                horizontal: Utils.w(8).w,
-                vertical: Utils.h(10).h,
+                horizontal: 8.wmea,
+                vertical: 10.hmea,
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -45,7 +45,7 @@ Widget incomeAndExpense() {
                     ),
                   ),
                   SizedBox(
-                    height: Utils.h(6).h,
+                    height: 6.hmea,
                   ),
                   Text(
                     'IDR',
@@ -73,7 +73,7 @@ Widget incomeAndExpense() {
           ),
         ),
         SizedBox(
-          width: Utils.w(16).w,
+          width: 16.wmea,
         ),
         Expanded(
           child: Container(
@@ -83,8 +83,8 @@ Widget incomeAndExpense() {
             ),
             child: Padding(
               padding: EdgeInsets.symmetric(
-                horizontal: Utils.w(8).w,
-                vertical: Utils.h(10).h,
+                horizontal: 8.wmea,
+                vertical: 10.hmea,
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -99,7 +99,7 @@ Widget incomeAndExpense() {
                     ),
                   ),
                   SizedBox(
-                    height: Utils.h(6).h,
+                    height: 6.hmea,
                   ),
                   Text(
                     'IDR',

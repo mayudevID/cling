@@ -23,14 +23,14 @@ class OnboardPage extends StatelessWidget {
                 const StackEmoticon(),
                 SizedBox(
                   width: 100.w,
-                  height: (Utils.h(215).h) * 2,
+                  height: (215.hmea) * 2,
                   child: const StackStar(),
                 ),
                 const EmoticonWidget(),
               ],
             ),
             SizedBox(
-              height: Utils.h(40).h,
+              height: 40.hmea,
             ),
             Text(
               "Cling!",
@@ -42,7 +42,7 @@ class OnboardPage extends StatelessWidget {
               ),
             ),
             SizedBox(
-              height: Utils.h(24).h,
+              height: 24.hmea,
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -58,7 +58,7 @@ class OnboardPage extends StatelessWidget {
               ),
             ),
             SizedBox(
-              height: Utils.h(32).h,
+              height: 32.hmea,
             ),
             ButtonOnboard(
               type: "New",
@@ -67,7 +67,7 @@ class OnboardPage extends StatelessWidget {
               },
             ),
             SizedBox(
-              height: Utils.h(8).h,
+              height: 8.hmea,
             ),
             ButtonOnboard(
               type: "Already",

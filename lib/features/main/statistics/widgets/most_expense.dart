@@ -7,10 +7,10 @@ import '../../../../resources/gen/fonts.gen.dart';
 Widget mostExpense(Map data) {
   return Container(
     margin: EdgeInsets.only(
-      bottom: Utils.h(16).h,
+      bottom: 16.hmea,
     ),
     padding: EdgeInsets.all(
-      Utils.w(16).w,
+      16.wmea,
     ),
     width: double.infinity,
     decoration: BoxDecoration(
@@ -20,7 +20,7 @@ Widget mostExpense(Map data) {
     child: Row(
       children: [
         Container(
-          padding: EdgeInsets.all(Utils.w(8).w),
+          padding: EdgeInsets.all(8.wmea),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(5),
@@ -28,7 +28,7 @@ Widget mostExpense(Map data) {
           child: data['image'],
         ),
         SizedBox(
-          width: Utils.w(12).w,
+          width: 12.wmea,
         ),
         Text(
           data['name'],

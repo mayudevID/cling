@@ -37,7 +37,7 @@ class StatsExpense extends StatelessWidget {
       children: [
         SizedBox(
           width: double.infinity,
-          height: Utils.w(248.5).w,
+          height: 248.5.wmea,
           child: SfCircularChart(
             tooltipBehavior: TooltipBehavior(
               enable: true,
@@ -74,6 +74,9 @@ class StatsExpense extends StatelessWidget {
             ],
           ),
         ),
+        SizedBox(
+          height: 24.hmea,
+        )
       ],
     );
   }

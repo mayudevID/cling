@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:sizer/sizer.dart';
 
 import '../../../core/utils.dart';
 import '../../../resources/gen/assets.gen.dart';
@@ -27,8 +26,8 @@ class _EmoticonWidgetState extends State<EmoticonWidget>
       rect: _animationTween,
       child: Center(
         child: Assets.lib.resources.images.emoticon.image(
-          width: Utils.w(230).w,
-          height: Utils.w(230).w,
+          width: 230.wmea,
+          height: 230.wmea,
         ),
       ),
     );

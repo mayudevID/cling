@@ -29,15 +29,11 @@ class LoginPageContent extends StatelessWidget {
   const LoginPageContent({super.key});
 
   Future<void> stopAnimation() async {
-    AnimationOnboard.animC1.stop();
-    AnimationOnboard.animC2.stop();
-    AnimationOnboard.animC3.stop();
-    AnimationOnboard.animC4.stop();
-    await Future.delayed(const Duration(milliseconds: 200));
     AnimationOnboard.animC1.dispose();
     AnimationOnboard.animC2.dispose();
     AnimationOnboard.animC3.dispose();
     AnimationOnboard.animC4.dispose();
+    await Future.delayed(const Duration(milliseconds: 250));
   }
 
   @override
@@ -47,11 +43,11 @@ class LoginPageContent extends StatelessWidget {
         backgroundColor: Colors.black,
         body: Container(
           width: 100.w,
-          padding: EdgeInsets.symmetric(horizontal: Utils.w(20).w),
+          padding: EdgeInsets.symmetric(horizontal: 20.wmea),
           child: Column(
             children: [
               SizedBox(
-                height: Utils.h(40).h,
+                height: 40.hmea,
               ),
               Align(
                 alignment: Alignment.centerLeft,
@@ -66,7 +62,7 @@ class LoginPageContent extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                height: Utils.h(8).h,
+                height: 8.hmea,
               ),
               Text(
                 'Enter your registed account to manage your money and reach your goals',
@@ -78,23 +74,23 @@ class LoginPageContent extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                height: Utils.h(32).h,
+                height: 32.hmea,
               ),
               const TagNameLogin(name: "Email"),
               SizedBox(
-                height: Utils.h(8).h,
+                height: 8.hmea,
               ),
               const TextFieldEmailLogin(),
               SizedBox(
-                height: Utils.h(16).h,
+                height: 16.hmea,
               ),
               const TagNameLogin(name: "Password"),
               SizedBox(
-                height: Utils.h(8).h,
+                height: 8.hmea,
               ),
               const TextFieldPassLogin(),
               SizedBox(
-                height: Utils.h(16).h,
+                height: 16.hmea,
               ),
               Align(
                 alignment: Alignment.centerRight,
@@ -118,7 +114,7 @@ class LoginPageContent extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                height: Utils.h(40).h,
+                height: 40.hmea,
               ),
               ButtonLogin(
                 onTap: () async {
@@ -169,7 +165,7 @@ class LoginPageContent extends StatelessWidget {
                 textAlign: TextAlign.center,
               ),
               SizedBox(
-                height: Utils.h(55).h,
+                height: 55.hmea,
               ),
             ],
           ),

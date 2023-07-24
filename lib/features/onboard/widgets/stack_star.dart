@@ -1,6 +1,5 @@
 import 'package:cling/core/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:sizer/sizer.dart';
 
 import 'animation_onboard.dart';
 
@@ -25,13 +24,13 @@ class _StackStarState extends State<StackStar> with TickerProviderStateMixin {
     return Stack(
       children: [
         Positioned(
-          left: Utils.w(308.90).w,
-          top: Utils.h(50).h,
+          left: 308.90.wmea,
+          top: 50.hmea,
           child: RotationTransition(
             turns: _listSpinAnimation[0],
             child: Container(
-              width: Utils.w(61.02).w,
-              height: Utils.w(61.02).w,
+              width: 61.02.wmea,
+              height: 61.02.wmea,
               decoration: const ShapeDecoration(
                 color: Color(0xFF07AC65),
                 shape: StarBorder(
@@ -47,11 +46,11 @@ class _StackStarState extends State<StackStar> with TickerProviderStateMixin {
           ),
         ),
         Positioned(
-          left: Utils.w(369.92).w,
-          top: Utils.h(92.45).h,
+          left: 369.92.wmea,
+          top: 92.45.hmea,
           child: Container(
-            width: Utils.w(34.49).w,
-            height: Utils.w(34.49).w,
+            width: 34.49.wmea,
+            height: 34.49.wmea,
             decoration: const ShapeDecoration(
               color: Color(0xFF006DE9),
               shape: StarBorder(
@@ -66,11 +65,11 @@ class _StackStarState extends State<StackStar> with TickerProviderStateMixin {
           ),
         ),
         Positioned(
-          left: Utils.w(59).w,
-          top: Utils.h(108).h,
+          left: 59.wmea,
+          top: 108.hmea,
           child: Container(
-            width: Utils.w(21).w,
-            height: Utils.w(21).w,
+            width: 21.wmea,
+            height: 21.wmea,
             decoration: const ShapeDecoration(
               color: Color(0xFF006DE9),
               shape: StarBorder(
@@ -85,8 +84,8 @@ class _StackStarState extends State<StackStar> with TickerProviderStateMixin {
           ),
         ),
         Positioned(
-          left: Utils.w(10).h,
-          top: Utils.h(118.98).h,
+          left: 25.wmea,
+          top: 118.98.hmea,
           child: RotationTransition(
             turns: _listSpinAnimation[2],
             child: Container(
@@ -107,13 +106,13 @@ class _StackStarState extends State<StackStar> with TickerProviderStateMixin {
           ),
         ),
         Positioned(
-          left: Utils.w(309).w,
-          top: Utils.h(362).h,
+          left: 309.wmea,
+          top: 362.hmea,
           child: RotationTransition(
             turns: _listSpinAnimation[1],
             child: Container(
-              width: Utils.w(34.49).w,
-              height: Utils.w(34.49).w,
+              width: 34.49.wmea,
+              height: 34.49.wmea,
               decoration: const ShapeDecoration(
                 color: Color(0xFFF599DA),
                 shape: StarBorder(

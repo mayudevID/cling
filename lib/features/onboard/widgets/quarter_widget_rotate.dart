@@ -15,8 +15,8 @@ class QuarterWidgetRotate extends StatelessWidget {
       quarterTurns: bigRound,
       child: Assets.lib.resources.images.ellipseOnboard.image(
         fit: BoxFit.fill,
-        width: (bigRound == 1 || bigRound == -1) ? Utils.h(215).h : 50.w,
-        height: (bigRound == 1 || bigRound == -1) ? 50.w : Utils.h(215).h,
+        width: (bigRound == 1 || bigRound == -1) ? 215.hmea : 50.w,
+        height: (bigRound == 1 || bigRound == -1) ? 50.w : 215.hmea,
       ),
     );
   }

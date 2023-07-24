@@ -41,7 +41,7 @@ class StatsAll extends StatelessWidget {
         const TagInfo(),
         SizedBox(
           width: double.infinity,
-          height: Utils.h(248.5).h,
+          height: 248.5.hmea,
           child: SfCircularChart(
             series: <DoughnutSeries<_PieData, String>>[
               DoughnutSeries<_PieData, String>(
@@ -76,7 +76,7 @@ class StatsAll extends StatelessWidget {
           ),
         ),
         SizedBox(
-          height: Utils.h(24).h,
+          height: 24.hmea,
         ),
         Text(
           'Yearly Breakdown',
@@ -89,11 +89,11 @@ class StatsAll extends StatelessWidget {
           ),
         ),
         SizedBox(
-          height: Utils.h(24).h,
+          height: 24.hmea,
         ),
         SizedBox(
           width: double.infinity,
-          height: Utils.h(193).h,
+          height: 193.hmea,
           child: SfCartesianChart(
             plotAreaBorderWidth: 0,
             plotAreaBorderColor: Colors.transparent,
@@ -159,7 +159,7 @@ class StatsAll extends StatelessWidget {
           ),
         ),
         SizedBox(
-          height: Utils.h(24).h,
+          height: 24.hmea,
         ),
         Text(
           'Most Expense',
@@ -171,7 +171,7 @@ class StatsAll extends StatelessWidget {
           ),
         ),
         SizedBox(
-          height: Utils.h(16).h,
+          height: 16.hmea,
         ),
         MediaQuery.removePadding(
           context: context,
@@ -188,7 +188,7 @@ class StatsAll extends StatelessWidget {
           ),
         ),
         SizedBox(
-          height: Utils.h(90).h,
+          height: 90.hmea,
         ),
       ],
     );

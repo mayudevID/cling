@@ -1,4 +1,6 @@
-class Utils {
-  static double w(double target) => target * 100 / 430;
-  static double h(double target) => target * 100 / 932;
+import 'package:sizer/sizer.dart';
+
+extension Resizing on num {
+  double get hmea => (toDouble() * 100 / 932).h;
+  double get wmea => (toDouble() * 100 / 430).w;
 }

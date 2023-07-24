@@ -7,12 +7,12 @@ import '../../../../resources/gen/fonts.gen.dart';
 Widget widgetGoals(MapEntry e, int length) {
   return Container(
     margin: EdgeInsets.only(
-      left: (e.key == 0) ? Utils.w(20).w : Utils.w(12).w,
-      right: (e.key == length - 1) ? Utils.w(20).w : 0,
+      left: (e.key == 0) ? 20.wmea : 12.wmea,
+      right: (e.key == length - 1) ? 20.wmea : 0,
     ),
     padding: EdgeInsets.symmetric(
-      vertical: Utils.w(16).w,
-      horizontal: Utils.w(16).w,
+      vertical: 16.wmea,
+      horizontal: 16.wmea,
     ),
     decoration: BoxDecoration(
       color: const Color(0x3D787880),
@@ -22,7 +22,7 @@ Widget widgetGoals(MapEntry e, int length) {
       children: [
         Container(
           padding: EdgeInsets.all(
-            Utils.w(8).w,
+            8.wmea,
           ),
           decoration: BoxDecoration(
             color: Colors.white,
@@ -31,7 +31,7 @@ Widget widgetGoals(MapEntry e, int length) {
           child: e.value['image'],
         ),
         SizedBox(
-          height: Utils.h(12).h,
+          height: 12.hmea,
         ),
         Text(
           e.value['name'],
@@ -44,13 +44,13 @@ Widget widgetGoals(MapEntry e, int length) {
           ),
         ),
         SizedBox(
-          height: Utils.h(4).h,
+          height: 4.hmea,
         ),
         Stack(
           children: [
             Container(
-              width: Utils.w(133).w,
-              height: Utils.h(8).h,
+              width: 133.wmea,
+              height: 8.hmea,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(100),
                 color: Colors.white.withOpacity(0.76),
@@ -58,7 +58,7 @@ Widget widgetGoals(MapEntry e, int length) {
             ),
             Container(
               width: 10.w,
-              height: Utils.h(8).h,
+              height: 8.hmea,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(100),
                 color: const Color(0xFF006DE9),
@@ -67,7 +67,7 @@ Widget widgetGoals(MapEntry e, int length) {
           ],
         ),
         SizedBox(
-          height: Utils.h(4).h,
+          height: 4.hmea,
         ),
         Text(
           "IDR ${e.value['target']} / ${(e.value['collected'] * 100 / e.value['target']).round()}%",

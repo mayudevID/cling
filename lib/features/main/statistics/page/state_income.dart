@@ -41,11 +41,11 @@ class StatsIncome extends StatelessWidget {
           ),
         ),
         SizedBox(
-          height: Utils.h(24).h,
+          height: 24.hmea,
         ),
         SizedBox(
           width: double.infinity,
-          height: Utils.h(193).h,
+          height: 193.hmea,
           child: SfCartesianChart(
             plotAreaBorderWidth: 0,
             plotAreaBorderColor: Colors.transparent,
@@ -88,7 +88,7 @@ class StatsIncome extends StatelessWidget {
           ),
         ),
         SizedBox(
-          height: Utils.h(24).h,
+          height: 24.hmea,
         ),
         Text(
           'Income Breakdown',
@@ -100,7 +100,7 @@ class StatsIncome extends StatelessWidget {
           ),
         ),
         SizedBox(
-          height: Utils.h(16).h,
+          height: 16.hmea,
         ),
         MediaQuery.removePadding(
           context: context,
@@ -117,7 +117,7 @@ class StatsIncome extends StatelessWidget {
           ),
         ),
         SizedBox(
-          height: Utils.h(90).h,
+          height: 90.hmea,
         ),
       ],
     );

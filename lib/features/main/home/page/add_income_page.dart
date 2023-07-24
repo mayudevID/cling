@@ -13,12 +13,12 @@ class AddIncomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: Utils.w(20).w),
+      padding: EdgeInsets.symmetric(horizontal: 20.wmea),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(
-            height: Utils.h(16).h,
+            height: 16.hmea,
           ),
           Text(
             'Add Income',
@@ -31,7 +31,7 @@ class AddIncomePage extends StatelessWidget {
             ),
           ),
           SizedBox(
-            height: Utils.h(24).h,
+            height: 24.hmea,
           ),
           Text(
             'Date',
@@ -43,7 +43,7 @@ class AddIncomePage extends StatelessWidget {
             ),
           ),
           SizedBox(
-            height: Utils.h(8).h,
+            height: 8.hmea,
           ),
           Container(
             decoration: ShapeDecoration(
@@ -53,8 +53,8 @@ class AddIncomePage extends StatelessWidget {
               ),
             ),
             padding: EdgeInsets.symmetric(
-              vertical: Utils.h(16).h,
-              horizontal: Utils.w(16).w,
+              vertical: 16.hmea,
+              horizontal: 16.wmea,
             ),
             child: Row(
               children: [
@@ -74,7 +74,7 @@ class AddIncomePage extends StatelessWidget {
             ),
           ),
           SizedBox(
-            height: Utils.h(16).h,
+            height: 16.hmea,
           ),
           Text(
             'Income Source',
@@ -86,7 +86,7 @@ class AddIncomePage extends StatelessWidget {
             ),
           ),
           SizedBox(
-            height: Utils.h(8).h,
+            height: 8.hmea,
           ),
           DropdownButtonHideUnderline(
             child: DropdownButton2(
@@ -98,8 +98,8 @@ class AddIncomePage extends StatelessWidget {
                   ),
                 ),
                 padding: EdgeInsets.symmetric(
-                  vertical: Utils.h(16).h,
-                  horizontal: Utils.w(16).w,
+                  vertical: 16.hmea,
+                  horizontal: 16.wmea,
                 ),
                 child: Row(
                   children: [
@@ -130,7 +130,7 @@ class AddIncomePage extends StatelessWidget {
                 MenuItems.onChanged(context, value!);
               },
               dropdownStyleData: DropdownStyleData(
-                width: Utils.w(390).w,
+                width: 390.wmea,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                   color: const Color(0xFF313131),
@@ -139,7 +139,7 @@ class AddIncomePage extends StatelessWidget {
             ),
           ),
           SizedBox(
-            height: Utils.h(16).h,
+            height: 16.hmea,
           ),
           Text(
             'Description (Optional)',
@@ -151,7 +151,7 @@ class AddIncomePage extends StatelessWidget {
             ),
           ),
           SizedBox(
-            height: Utils.h(8).h,
+            height: 8.hmea,
           ),
           Container(
             decoration: ShapeDecoration(
@@ -161,8 +161,8 @@ class AddIncomePage extends StatelessWidget {
               ),
             ),
             padding: EdgeInsets.symmetric(
-              vertical: Utils.h(16).h,
-              horizontal: Utils.w(16).w,
+              vertical: 16.hmea,
+              horizontal: 16.wmea,
             ),
             child: TextFormField(
               onChanged: (value) {},
@@ -185,7 +185,7 @@ class AddIncomePage extends StatelessWidget {
             ),
           ),
           SizedBox(
-            height: Utils.h(16).h,
+            height: 16.hmea,
           ),
           Text(
             'Amount (IDR)',
@@ -197,7 +197,7 @@ class AddIncomePage extends StatelessWidget {
             ),
           ),
           SizedBox(
-            height: Utils.h(8).h,
+            height: 8.hmea,
           ),
           Container(
             decoration: ShapeDecoration(
@@ -207,8 +207,8 @@ class AddIncomePage extends StatelessWidget {
               ),
             ),
             padding: EdgeInsets.symmetric(
-              vertical: Utils.h(16).h,
-              horizontal: Utils.w(16).w,
+              vertical: 16.hmea,
+              horizontal: 16.wmea,
             ),
             child: Row(
               children: [
@@ -222,7 +222,7 @@ class AddIncomePage extends StatelessWidget {
                   ),
                 ),
                 SizedBox(
-                  width: Utils.w(10).w,
+                  width: 10.wmea,
                 ),
                 Expanded(
                   child: TextFormField(
@@ -258,11 +258,11 @@ class AddIncomePage extends StatelessWidget {
             ),
           ),
           SizedBox(
-            height: Utils.h(40).h,
+            height: 40.hmea,
           ),
           SizedBox(
-            width: Utils.w(390).w,
-            height: Utils.h(57).h,
+            width: 390.wmea,
+            height: 57.hmea,
             child: ElevatedButton(
               onPressed: () {},
               style: ButtonStyle(

@@ -13,12 +13,12 @@ class AddExpensePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: Utils.w(20).w),
+      padding: EdgeInsets.symmetric(horizontal: 20.wmea),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(
-            height: Utils.h(16).h,
+            height: 16.hmea,
           ),
           Text(
             'Add Expenses',
@@ -31,7 +31,7 @@ class AddExpensePage extends StatelessWidget {
             ),
           ),
           SizedBox(
-            height: Utils.h(24).h,
+            height: 24.hmea,
           ),
           Text(
             'Purchase Date',
@@ -43,7 +43,7 @@ class AddExpensePage extends StatelessWidget {
             ),
           ),
           SizedBox(
-            height: Utils.h(8).h,
+            height: 8.hmea,
           ),
           Container(
             decoration: ShapeDecoration(
@@ -53,8 +53,8 @@ class AddExpensePage extends StatelessWidget {
               ),
             ),
             padding: EdgeInsets.symmetric(
-              vertical: Utils.h(16).h,
-              horizontal: Utils.w(16).w,
+              vertical: 16.hmea,
+              horizontal: 16.wmea,
             ),
             child: Row(
               children: [
@@ -74,7 +74,7 @@ class AddExpensePage extends StatelessWidget {
             ),
           ),
           SizedBox(
-            height: Utils.h(16).h,
+            height: 16.hmea,
           ),
           Text(
             'Categories',
@@ -86,7 +86,7 @@ class AddExpensePage extends StatelessWidget {
             ),
           ),
           SizedBox(
-            height: Utils.h(8).h,
+            height: 8.hmea,
           ),
           DropdownButtonHideUnderline(
             child: DropdownButton2(
@@ -98,8 +98,8 @@ class AddExpensePage extends StatelessWidget {
                   ),
                 ),
                 padding: EdgeInsets.symmetric(
-                  vertical: Utils.h(16).h,
-                  horizontal: Utils.w(16).w,
+                  vertical: 16.hmea,
+                  horizontal: 16.wmea,
                 ),
                 child: Row(
                   children: [
@@ -130,7 +130,7 @@ class AddExpensePage extends StatelessWidget {
                 MenuItems.onChanged(context, value!);
               },
               dropdownStyleData: DropdownStyleData(
-                width: Utils.w(390).w,
+                width: 390.wmea,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                   color: const Color(0xFF313131),
@@ -139,14 +139,14 @@ class AddExpensePage extends StatelessWidget {
               ),
               menuItemStyleData: MenuItemStyleData(
                 padding: EdgeInsets.symmetric(
-                  horizontal: Utils.w(16).w,
-                  vertical: Utils.h(16).h,
+                  horizontal: 16.wmea,
+                  vertical: 16.hmea,
                 ),
               ),
             ),
           ),
           SizedBox(
-            height: Utils.h(16).h,
+            height: 16.hmea,
           ),
           Text(
             'Items',
@@ -158,7 +158,7 @@ class AddExpensePage extends StatelessWidget {
             ),
           ),
           SizedBox(
-            height: Utils.h(8).h,
+            height: 8.hmea,
           ),
           Container(
             decoration: ShapeDecoration(
@@ -168,8 +168,8 @@ class AddExpensePage extends StatelessWidget {
               ),
             ),
             padding: EdgeInsets.symmetric(
-              vertical: Utils.h(16).h,
-              horizontal: Utils.w(16).w,
+              vertical: 16.hmea,
+              horizontal: 16.wmea,
             ),
             child: TextFormField(
               onChanged: (value) {},
@@ -192,7 +192,7 @@ class AddExpensePage extends StatelessWidget {
             ),
           ),
           SizedBox(
-            height: Utils.h(16).h,
+            height: 16.hmea,
           ),
           Text(
             'Amount (IDR)',
@@ -204,7 +204,7 @@ class AddExpensePage extends StatelessWidget {
             ),
           ),
           SizedBox(
-            height: Utils.h(8).h,
+            height: 8.hmea,
           ),
           Container(
             decoration: ShapeDecoration(
@@ -214,8 +214,8 @@ class AddExpensePage extends StatelessWidget {
               ),
             ),
             padding: EdgeInsets.symmetric(
-              vertical: Utils.h(16).h,
-              horizontal: Utils.w(16).w,
+              vertical: 16.hmea,
+              horizontal: 16.wmea,
             ),
             child: Row(
               children: [
@@ -229,7 +229,7 @@ class AddExpensePage extends StatelessWidget {
                   ),
                 ),
                 SizedBox(
-                  width: Utils.w(10).w,
+                  width: 10.wmea,
                 ),
                 Expanded(
                   child: TextFormField(
@@ -257,11 +257,11 @@ class AddExpensePage extends StatelessWidget {
             ),
           ),
           SizedBox(
-            height: Utils.h(40).h,
+            height: 40.hmea,
           ),
           SizedBox(
-            width: Utils.w(390).w,
-            height: Utils.h(57).h,
+            width: 390.wmea,
+            height: 57.hmea,
             child: ElevatedButton(
               onPressed: () {},
               style: ButtonStyle(

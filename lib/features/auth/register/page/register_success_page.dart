@@ -38,7 +38,7 @@ class RegisterSuccessPage extends StatelessWidget {
               ),
             ),
             SizedBox(
-              height: Utils.h(97).h,
+              height: 97.hmea,
             ),
             Text(
               'Almost there',
@@ -51,7 +51,7 @@ class RegisterSuccessPage extends StatelessWidget {
               ),
             ),
             SizedBox(
-              height: Utils.h(16).h,
+              height: 16.hmea,
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 45),
@@ -67,7 +67,7 @@ class RegisterSuccessPage extends StatelessWidget {
               ),
             ),
             SizedBox(
-              height: Utils.h(63).h,
+              height: 63.hmea,
             ),
             ButtonGoToMail(
               onTap: () async {

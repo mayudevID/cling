@@ -18,11 +18,11 @@ class ForgotPasswordPage extends StatelessWidget {
         backgroundColor: Colors.black,
         body: Container(
           width: 100.w,
-          padding: EdgeInsets.symmetric(horizontal: Utils.w(20).w),
+          padding: EdgeInsets.symmetric(horizontal: 20.wmea),
           child: Column(
             children: [
               SizedBox(
-                height: Utils.h(40).h,
+                height: 40.hmea,
               ),
               GestureDetector(
                 onTap: () {
@@ -33,7 +33,7 @@ class ForgotPasswordPage extends StatelessWidget {
                     child: Assets.lib.resources.images.backButton.svg()),
               ),
               SizedBox(
-                height: Utils.h(36).h,
+                height: 36.hmea,
               ),
               Align(
                 alignment: Alignment.centerLeft,
@@ -48,7 +48,7 @@ class ForgotPasswordPage extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                height: Utils.h(8).h,
+                height: 8.hmea,
               ),
               Text(
                 'Don\'t worry! enter your mail so we can share you link to change password',
@@ -60,15 +60,15 @@ class ForgotPasswordPage extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                height: Utils.h(32).h,
+                height: 32.hmea,
               ),
               const TagNameLogin(name: "Email"),
               SizedBox(
-                height: Utils.h(8).h,
+                height: 8.hmea,
               ),
               const TextFieldEmailForgot(),
               SizedBox(
-                height: Utils.h(40).h,
+                height: 40.hmea,
               ),
               ButtonSendLink(
                 onTap: () {
