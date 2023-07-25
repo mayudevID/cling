@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "726454501636",
+    "project_id": "cling-c49aa",
+    "storage_bucket": "cling-c49aa.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:726454501636:android:ab702bbb891ffed96d1051",
+        "android_client_info": {
+          "package_name": "com.maul.cling"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "726454501636-skdf4jfhb3r2ktgnsqhfp631ec03rrac.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCl7wqJThd-_E68DSKI53ECk7x3YGCgWI0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "726454501636-skdf4jfhb3r2ktgnsqhfp631ec03rrac.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
