@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sizer/sizer.dart';
 
 import '../../../../core/utils.dart';
 import '../../../../resources/gen/assets.gen.dart';
@@ -9,7 +10,7 @@ class EmailWithStar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 100.wmea,
+      width: 100.w,
       height: 197.hmea,
       child: Stack(
         children: [

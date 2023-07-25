@@ -1,9 +1,14 @@
+import 'package:cling/features/main/statistics/widgets/expense_widget.dart';
+import 'package:cling/resources/gen/assets.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../../../../core/utils.dart';
 import '../../../../resources/gen/fonts.gen.dart';
+import 'dart:math' as math;
+
+import '../../home/page/home_page.dart';
 
 class StatsExpense extends StatelessWidget {
   StatsExpense({super.key});
@@ -76,7 +81,62 @@ class StatsExpense extends StatelessWidget {
         ),
         SizedBox(
           height: 24.hmea,
-        )
+        ),
+        Row(
+          children: [
+            Text(
+              'Income',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 13.5.sp,
+                fontFamily: FontFamily.cabinetGrotesk,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            const Spacer(),
+            Assets.lib.resources.images.fluentChevronLeft24Filled.svg(),
+            SizedBox(
+              width: 8.wmea,
+            ),
+            Text(
+              '01/01/23 - 01/01/23',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 10.5.sp,
+                fontFamily: FontFamily.cabinetGrotesk,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            SizedBox(
+              width: 8.wmea,
+            ),
+            Transform.rotate(
+              angle: math.pi,
+              child:
+                  Assets.lib.resources.images.fluentChevronLeft24Filled.svg(),
+            ),
+          ],
+        ),
+        SizedBox(height: 16.hmea),
+        MediaQuery.removePadding(
+          context: context,
+          removeTop: true,
+          child: ListView.builder(
+            itemCount: dataDummyExpenses.length,
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemBuilder: (context, index) {
+              return expenseWidget(
+                dataDummyExpenses[index],
+              );
+            },
+          ),
+        ),
+        SizedBox(
+          height: 90.hmea,
+        ),
       ],
     );
   }

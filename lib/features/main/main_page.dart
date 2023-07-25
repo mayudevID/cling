@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:cling/core/utils.dart';
+import 'package:cling/features/main/cashflow/page/cashflow_page.dart';
 
 import 'package:cling/features/main/statistics/page/statistics_page.dart';
 import 'package:cling/resources/gen/assets.gen.dart';
@@ -48,7 +49,7 @@ class MainPage extends StatelessWidget {
                                 ? AddExpensePage()
                                 : AddIncomePage(),
                         StatisticsPage(),
-                        Text('Index 2: Search'),
+                        CashflowPage(),
                         Text('Index 3: Favorite'),
                       ],
                     ),
