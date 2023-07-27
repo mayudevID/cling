@@ -1,12 +1,15 @@
 import 'package:cling/core/route.dart';
 import 'package:cling/core/utils.dart';
+import 'package:cling/features/repository/auth_repository.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lottie/lottie.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../../../../injection.dart';
 import '../../../../../resources/gen/fonts.gen.dart';
-import '../../../onboard/widgets/animation_onboard.dart';
+
 import '../bloc/login_bloc.dart';
 import '../widgets/button_login.dart';
 import '../widgets/tag_name_login.dart';
@@ -19,7 +22,7 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<LoginBloc>(
-      create: (_) => LoginBloc(),
+      create: (_) => LoginBloc(getIt<AuthRepository>()),
       child: const LoginPageContent(),
     );
   }
@@ -27,14 +30,6 @@ class LoginPage extends StatelessWidget {
 
 class LoginPageContent extends StatelessWidget {
   const LoginPageContent({super.key});
-
-  Future<void> stopAnimation() async {
-    AnimationOnboard.animC1.dispose();
-    AnimationOnboard.animC2.dispose();
-    AnimationOnboard.animC3.dispose();
-    AnimationOnboard.animC4.dispose();
-    await Future.delayed(const Duration(milliseconds: 250));
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +75,7 @@ class LoginPageContent extends StatelessWidget {
               SizedBox(
                 height: 8.hmea,
               ),
-              const TextFieldEmailLogin(),
+              textFieldEmailLogin(context),
               SizedBox(
                 height: 16.hmea,
               ),
@@ -88,7 +83,7 @@ class LoginPageContent extends StatelessWidget {
               SizedBox(
                 height: 8.hmea,
               ),
-              const TextFieldPassLogin(),
+              textFieldPassLogin(context),
               SizedBox(
                 height: 16.hmea,
               ),
@@ -116,16 +111,24 @@ class LoginPageContent extends StatelessWidget {
               SizedBox(
                 height: 40.hmea,
               ),
-              ButtonLogin(
-                onTap: () async {
-                  await stopAnimation();
-                  Future.microtask(() {
-                    Navigator.pushNamedAndRemoveUntil(
-                      context,
-                      RouteName.main,
-                      (route) => false,
+              BlocBuilder<LoginBloc, LoginState>(
+                builder: (context, state) {
+                  if (state.status == LoginStatus.load) {
+                    return Lottie.asset(
+                      "lib/resources/anim/loading_carga.json",
+                      animate: true,
+                      repeat: true,
+                      width: 40.wmea,
+                      height: 40.wmea,
+                      frameRate: FrameRate.max,
                     );
-                  });
+                  }
+
+                  return ButtonLogin(
+                    onTap: () async {
+                      context.read<LoginBloc>().add(SendLogin(context));
+                    },
+                  );
                 },
               ),
               const Expanded(

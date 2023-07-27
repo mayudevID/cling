@@ -8,3 +8,21 @@ abstract class LoginEvent extends Equatable {
 }
 
 class ToggleEye extends LoginEvent {}
+
+class ChangeEmail extends LoginEvent {
+  const ChangeEmail(this.email);
+
+  final String email;
+}
+
+class ChangePassword extends LoginEvent {
+  const ChangePassword(this.password);
+
+  final String password;
+}
+
+class SendLogin extends LoginEvent {
+  const SendLogin(this.context);
+
+  final BuildContext context;
+}

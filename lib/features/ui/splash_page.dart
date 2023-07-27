@@ -1,11 +1,13 @@
 import 'dart:async';
 
-import 'package:cling/core/route.dart';
 import 'package:cling/core/utils.dart';
+import 'package:cling/features/ui/auth/bloc/app_bloc.dart';
 import 'package:cling/resources/gen/assets.gen.dart';
 import 'package:cling/resources/gen/fonts.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sizer/sizer.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
@@ -21,10 +23,7 @@ class _SplashPageState extends State<SplashPage> {
       const Duration(milliseconds: 3500),
       (timer) {
         timer.cancel();
-        Navigator.pushReplacementNamed(
-          context,
-          RouteName.onboard,
-        );
+        context.read<AppBloc>().add(CheckStatus(context));
       },
     );
     super.initState();
@@ -37,8 +36,8 @@ class _SplashPageState extends State<SplashPage> {
       child: Scaffold(
         backgroundColor: Colors.black,
         body: SizedBox(
-          width: MediaQuery.sizeOf(context).width,
-          height: MediaQuery.sizeOf(context).height,
+          width: 100.w,
+          height: 100.h,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,

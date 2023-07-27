@@ -10,7 +10,9 @@ dependencies:
   bloc: ^8.1.2
   build_runner: ^2.4.6
   dropdown_button2: ^2.3.6
+  email_validator: ^2.1.17
   equatable: ^2.0.5
+  firebase_auth: ^4.7.2
   firebase_core: ^2.15.0
   flutter:
     sdk: flutter
@@ -19,10 +21,14 @@ dependencies:
   flutter_gen: ^5.3.1
   flutter_native_splash: ^2.3.1
   flutter_svg: ^2.0.7
+  get_it: ^7.6.0
+  lottie: ^2.5.0
   neon_widgets: ^2.0.0
   open_mail_app: ^0.4.5
   rename: ^2.1.1
+  shared_preferences: ^2.2.0
   sizer: ^2.0.15
+  sqflite: ^2.3.0
   syncfusion_flutter_charts: ^22.1.39
   transitioned_indexed_stack: ^1.0.2
 
@@ -41,6 +47,7 @@ flutter:
   uses-material-design: true
   assets:
     - lib/resources/images/
+    - lib/resources/anim/
   fonts:
     - family: Bungee
       fonts:

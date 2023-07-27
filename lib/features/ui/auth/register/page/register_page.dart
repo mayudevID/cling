@@ -33,8 +33,7 @@ class RegisterPageContent extends StatelessWidget {
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         backgroundColor: Colors.black,
-        body: Container(
-          width: 100.w,
+        body: Padding(
           padding: EdgeInsets.symmetric(horizontal: 20.wmea),
           child: Column(
             children: [
