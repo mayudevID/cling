@@ -13,18 +13,11 @@ class EmoticonWidget extends StatefulWidget {
 }
 
 class _EmoticonWidgetState extends State<EmoticonWidget>
-    with TickerProviderStateMixin {
-  late Animation<RelativeRect> _animationTween;
-  @override
-  void initState() {
-    _animationTween = AnimationOnboard.setAnimationEmoticon(this);
-    super.initState();
-  }
-
+    with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return PositionedTransition(
-      rect: _animationTween,
+      rect: AnimationOnboard.setAnimationEmoticon(this),
       child: Center(
         child: Assets.lib.resources.images.emoticon.image(
           width: 230.wmea,

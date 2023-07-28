@@ -7,66 +7,73 @@ class AnimationOnboard {
   static late AnimationController animC3;
   static late AnimationController animC4;
 
-  static List<Animation<double>> setAnimationsStar(classMixin) {
-    List<Animation<double>> listSpinAnimation = [];
-
+  static Animation<double> setAnimStarOne(classMixin) {
     animC1 = AnimationController(
       vsync: classMixin,
       duration: const Duration(seconds: 35),
     );
+
+    Animation<double> animate = Tween<double>(
+      begin: 0,
+      end: -12.5664,
+    ).animate(animC1);
+    animC1.forward();
+
+    animate.addStatusListener(
+      (status) {
+        if (status == AnimationStatus.completed) {
+          animC1.repeat();
+        }
+      },
+    );
+
+    return animate;
+  }
+
+  static Animation<double> setAnimStarThree(classMixin) {
     animC2 = AnimationController(
       vsync: classMixin,
       duration: const Duration(seconds: 15),
     );
+
+    Animation<double> animate = Tween<double>(
+      begin: 0,
+      end: 12.5664,
+    ).animate(animC2);
+    animC2.forward();
+
+    animate.addStatusListener(
+      (status) {
+        if (status == AnimationStatus.completed) {
+          animC2.repeat();
+        }
+      },
+    );
+
+    return animate;
+  }
+
+  static Animation<double> setAnimStarTwo(classMixin) {
     animC3 = AnimationController(
       vsync: classMixin,
       duration: const Duration(seconds: 60),
     );
 
-    List<Map<String, dynamic>> animations = [
-      {
-        'animationController': animC1,
-        'animation': Tween<double>(
-          begin: 0,
-          end: -12.5664,
-        ),
+    Animation<double> animate = Tween<double>(
+      begin: 0,
+      end: -12.5664,
+    ).animate(animC3);
+    animC3.forward();
+
+    animate.addStatusListener(
+      (status) {
+        if (status == AnimationStatus.completed) {
+          animC3.repeat();
+        }
       },
-      {
-        'animationController': animC2,
-        'animation': Tween<double>(
-          begin: 0,
-          end: 12.5664,
-        ),
-      },
-      {
-        'animationController': animC3,
-        'animation': Tween<double>(
-          begin: 0,
-          end: -12.5664,
-        ),
-      },
-    ];
+    );
 
-    for (int i = 0; i < animations.length; i++) {
-      AnimationController animationController =
-          animations[i]['animationController'];
-      Tween<double> animation = animations[i]['animation'];
-
-      Animation<double> animate = animation.animate(animationController);
-      animationController.forward();
-
-      animate.addStatusListener(
-        (status) {
-          if (status == AnimationStatus.completed) {
-            animationController.repeat();
-          }
-        },
-      );
-
-      listSpinAnimation.add(animate);
-    }
-
-    return listSpinAnimation;
+    return animate;
   }
 
   static Animation<RelativeRect> setAnimationEmoticon(classMixin) {
