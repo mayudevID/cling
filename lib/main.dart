@@ -1,3 +1,4 @@
+import 'package:cling/core/bloc_observer.dart';
 import 'package:cling/core/route.dart';
 import 'package:cling/features/repository/auth_repository.dart';
 import 'package:flutter/material.dart';
@@ -10,9 +11,11 @@ import 'injection.dart';
 import 'resources/gen/fonts.gen.dart';
 
 void main() async {
+  Bloc.observer = MyGlobalObserver();
   WidgetsFlutterBinding.ensureInitialized();
 
   await initSl();
+
   runApp(const MainApp());
 }
 

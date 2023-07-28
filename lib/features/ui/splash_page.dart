@@ -23,7 +23,8 @@ class _SplashPageState extends State<SplashPage> {
       const Duration(milliseconds: 3500),
       (timer) {
         timer.cancel();
-        context.read<AppBloc>().add(CheckStatus(context));
+
+        context.read<AppBloc>().add(Redirect(context));
       },
     );
     super.initState();

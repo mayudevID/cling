@@ -12,6 +12,7 @@ Future<void> initSl() async {
   final app = await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
   final firebaseAuth = FirebaseAuth.instanceFor(app: app);
   getIt.registerLazySingleton<FirebaseAuth>(() => firebaseAuth);
 

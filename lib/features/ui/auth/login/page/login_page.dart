@@ -4,7 +4,7 @@ import 'package:cling/features/repository/auth_repository.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lottie/lottie.dart';
+
 import 'package:sizer/sizer.dart';
 
 import '../../../../../injection.dart';
@@ -12,9 +12,7 @@ import '../../../../../resources/gen/fonts.gen.dart';
 
 import '../bloc/login_bloc.dart';
 import '../widgets/button_login.dart';
-import '../widgets/tag_name_login.dart';
-import '../widgets/text_field_email_login.dart';
-import '../widgets/text_field_pass_login.dart';
+import '../widgets/form_login.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
@@ -71,64 +69,13 @@ class LoginPageContent extends StatelessWidget {
               SizedBox(
                 height: 32.hmea,
               ),
-              const TagNameLogin(name: "Email"),
-              SizedBox(
-                height: 8.hmea,
-              ),
-              textFieldEmailLogin(context),
-              SizedBox(
-                height: 16.hmea,
-              ),
-              const TagNameLogin(name: "Password"),
-              SizedBox(
-                height: 8.hmea,
-              ),
-              textFieldPassLogin(context),
-              SizedBox(
-                height: 16.hmea,
-              ),
-              Align(
-                alignment: Alignment.centerRight,
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.pushNamed(
-                      context,
-                      RouteName.forgotPassword,
-                    );
-                  },
-                  child: Text(
-                    'Forgot Password?',
-                    textAlign: TextAlign.right,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 12.sp,
-                      fontFamily: FontFamily.cabinetGrotesk,
-                      fontWeight: FontWeight.w800,
-                    ),
-                  ),
-                ),
-              ),
+              ...formLogin(context),
               SizedBox(
                 height: 40.hmea,
               ),
-              BlocBuilder<LoginBloc, LoginState>(
-                builder: (context, state) {
-                  if (state.status == LoginStatus.load) {
-                    return Lottie.asset(
-                      "lib/resources/anim/loading_carga.json",
-                      animate: true,
-                      repeat: true,
-                      width: 40.wmea,
-                      height: 40.wmea,
-                      frameRate: FrameRate.max,
-                    );
-                  }
-
-                  return ButtonLogin(
-                    onTap: () async {
-                      context.read<LoginBloc>().add(SendLogin(context));
-                    },
-                  );
+              ButtonLogin(
+                onTap: () async {
+                  context.read<LoginBloc>().add(SendLogin(context));
                 },
               ),
               const Expanded(

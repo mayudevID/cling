@@ -17,8 +17,8 @@ class AppUserChanged extends AppEvent {
   final UserModel? user;
 }
 
-class CheckStatus extends AppEvent {
-  const CheckStatus(this.context);
+class Redirect extends AppEvent {
+  const Redirect(this.context);
 
   final BuildContext context;
 }

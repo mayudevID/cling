@@ -1,9 +1,3 @@
-import 'package:flutter/material.dart';
-
-import 'package:sizer/sizer.dart';
-
-import '../resources/gen/fonts.gen.dart';
-
 class SignUpWithEmailAndPasswordFailure implements Exception {
   const SignUpWithEmailAndPasswordFailure([
     this.message = 'An unknown exception occurred.',
@@ -71,21 +65,3 @@ class LogInWithEmailAndPasswordFailure implements Exception {
 }
 
 class LogOutFailure implements Exception {}
-
-void errorSnackbar(BuildContext context, String msg) {
-  ScaffoldMessenger.of(context)
-    ..hideCurrentSnackBar()
-    ..showSnackBar(
-      SnackBar(
-        backgroundColor: Colors.red.shade400,
-        content: Text(
-          msg,
-          style: TextStyle(
-            fontFamily: FontFamily.cabinetGrotesk,
-            fontWeight: FontWeight.w600,
-            fontSize: 11.5.sp,
-          ),
-        ),
-      ),
-    );
-}

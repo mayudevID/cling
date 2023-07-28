@@ -11,6 +11,7 @@ String userModelToMap(UserModel data) => json.encode(data.toMap());
 class UserModel extends Equatable {
   UserModel({
     required this.id,
+    required this.emailVerified,
     this.email,
     this.name,
     this.photo,
@@ -18,17 +19,25 @@ class UserModel extends Equatable {
 
   String? email;
   String id;
+  bool emailVerified;
   String? name;
   String? photo;
 
   @override
-  List<Object?> get props => [email, id, name, photo];
+  List<Object?> get props => [
+        email,
+        id,
+        name,
+        photo,
+        emailVerified,
+      ];
 
   factory UserModel.fromMap(Map<String, dynamic> json) => UserModel(
         id: json["id"],
         name: json["name"],
         email: json["email"],
         photo: json["photo"],
+        emailVerified: json["email_verified"],
       );
 
   Map<String, dynamic> toMap() => {
@@ -36,5 +45,6 @@ class UserModel extends Equatable {
         "name": name,
         "email": email,
         "photo": photo,
+        "email_verified": emailVerified,
       };
 }

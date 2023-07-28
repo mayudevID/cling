@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:cling/core/utils.dart';
+import 'package:cling/features/ui/main/profile/page/profile_page.dart';
 import 'package:cling/resources/gen/assets.gen.dart';
 import 'package:cling/resources/gen/fonts.gen.dart';
 import 'package:flutter/material.dart';
@@ -49,7 +50,7 @@ class MainPage extends StatelessWidget {
                                 : AddIncomePage(),
                         StatisticsPage(),
                         CashflowPage(),
-                        Text('Index 3: Favorite'),
+                        ProfilePage(),
                       ],
                     ),
                     customNavBar(context, state)

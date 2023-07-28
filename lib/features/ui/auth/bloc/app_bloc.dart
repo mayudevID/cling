@@ -21,7 +21,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         ) {
     on<AppUserChanged>(_onUserChanged);
     on<AppLogoutRequested>(_onLogoutRequested);
-    on<CheckStatus>(_onCheckStatus);
+    on<Redirect>(_onRedirect);
     _userSubscription = _authenticationRepository.user.listen(
       (user) => add(AppUserChanged(user)),
     );
@@ -48,12 +48,15 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     unawaited(_authenticationRepository.logOut());
   }
 
-  void _onCheckStatus(CheckStatus event, Emitter<AppState> _) {
-    Navigator.pushReplacementNamed(
+  void _onRedirect(Redirect event, Emitter<AppState> _) {
+    Navigator.pushNamedAndRemoveUntil(
       event.context,
-      (state.status == AppStatus.authenticated)
+      ((state.status == AppStatus.authenticated) &&
+              (_authenticationRepository.loginStatus ||
+                  _authenticationRepository.registerStatus))
           ? RouteName.main
           : RouteName.onboard,
+      (route) => false,
     );
   }
 

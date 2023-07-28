@@ -6,7 +6,7 @@ import 'package:sizer/sizer.dart';
 
 import '../../../../../resources/gen/fonts.gen.dart';
 
-Widget textFieldEmailReg(BuildContext context) {
+Widget textFieldNameReg(BuildContext context) {
   return Container(
     decoration: ShapeDecoration(
       color: const Color(0xFF313131),
@@ -20,7 +20,7 @@ Widget textFieldEmailReg(BuildContext context) {
     ),
     child: TextFormField(
       onChanged: (value) {
-        context.read<RegisterBloc>().add(ChangeEmail(value));
+        context.read<RegisterBloc>().add(ChangeName(value));
       },
       cursorColor: Colors.white,
       style: TextStyle(
@@ -30,7 +30,7 @@ Widget textFieldEmailReg(BuildContext context) {
         fontWeight: FontWeight.w500,
       ),
       decoration: InputDecoration.collapsed(
-        hintText: 'Email',
+        hintText: 'Name',
         hintStyle: TextStyle(
           color: Colors.grey,
           fontSize: 12.5.sp,

@@ -1,16 +1,15 @@
 import 'package:cling/core/utils.dart';
+import 'package:cling/features/repository/auth_repository.dart';
+import 'package:cling/features/ui/auth/register/widgets/form_register.dart';
 import 'package:cling/resources/gen/fonts.gen.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
 import '../../../../../core/route.dart';
+import '../../../../../injection.dart';
 import '../bloc/register_bloc.dart';
 import '../widgets/button_regist.dart';
-import '../widgets/tag_name_reg.dart';
-import '../widgets/text_field_con_pass_reg.dart';
-import '../widgets/text_field_email_reg.dart';
-import '../widgets/text_field_pass_reg.dart';
 
 class RegisterPage extends StatelessWidget {
   const RegisterPage({super.key});
@@ -18,7 +17,7 @@ class RegisterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => RegisterBloc(),
+      create: (_) => RegisterBloc(getIt<AuthRepository>()),
       child: const RegisterPageContent(),
     );
   }
@@ -67,38 +66,13 @@ class RegisterPageContent extends StatelessWidget {
               SizedBox(
                 height: 32.hmea,
               ),
-              const TagNameReg(name: "Email"),
-              SizedBox(
-                height: 8.hmea,
-              ),
-              const TextFieldEmailReg(),
-              SizedBox(
-                height: 16.hmea,
-              ),
-              const TagNameReg(name: "Password"),
-              SizedBox(
-                height: 8.hmea,
-              ),
-              const TextFieldPassReg(),
-              SizedBox(
-                height: 16.hmea,
-              ),
-              const TagNameReg(
-                name: 'Confirm Password',
-              ),
-              SizedBox(
-                height: 8.hmea,
-              ),
-              const TextFieldConPassReg(),
+              ...formRegister(context),
               SizedBox(
                 height: 40.hmea,
               ),
               ButtonRegist(
                 onTap: () {
-                  Navigator.pushReplacementNamed(
-                    context,
-                    RouteName.registerSuccess,
-                  );
+                  context.read<RegisterBloc>().add(SendRegister(context));
                 },
               ),
               const Expanded(flex: 1, child: SizedBox()),
