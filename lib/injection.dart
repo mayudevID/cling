@@ -1,3 +1,4 @@
+import 'package:cling/features/repository/database_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:get_it/get_it.dart';
@@ -24,4 +25,7 @@ Future<void> initSl() async {
     cache: getIt<SharedPreferences>(),
   );
   getIt.registerLazySingleton<AuthRepository>(() => authRepo);
+
+  final dbRepository = DatabaseRepository();
+  getIt.registerSingleton<DatabaseRepository>(dbRepository);
 }

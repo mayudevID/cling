@@ -1,6 +1,9 @@
 import 'package:cling/core/bloc_observer.dart';
 import 'package:cling/core/route.dart';
 import 'package:cling/features/repository/auth_repository.dart';
+import 'package:cling/features/repository/database_repository.dart';
+import 'package:cling/features/ui/main/bloc/main_bloc.dart';
+import 'package:cling/features/ui/main/home/bloc/home_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
@@ -8,7 +11,6 @@ import 'package:sizer/sizer.dart';
 import 'features/ui/auth/bloc/app_bloc.dart';
 import 'features/ui/main/statistics/bloc/statistics_bloc.dart';
 import 'injection.dart';
-import 'resources/gen/fonts.gen.dart';
 
 void main() async {
   Bloc.observer = MyGlobalObserver();
@@ -28,7 +30,17 @@ class MainApp extends StatelessWidget {
       providers: [
         BlocProvider(
           create: (_) => AppBloc(
-            authenticationRepository: getIt<AuthRepository>(),
+            authRepo: getIt<AuthRepository>(),
+          ),
+        ),
+        BlocProvider(
+          lazy: true,
+          create: (_) => MainBloc(),
+        ),
+        BlocProvider(
+          lazy: true,
+          create: (_) => HomeBloc(
+            dbRepo: getIt<DatabaseRepository>(),
           ),
         ),
         BlocProvider(
@@ -67,32 +79,6 @@ abstract class MenuItems {
   static const share = MenuItem(text: 'Share', icon: Icons.share);
   static const settings = MenuItem(text: 'Settings', icon: Icons.settings);
   static const logout = MenuItem(text: 'Log Out', icon: Icons.logout);
-
-  static Widget buildItem(MenuItem item) {
-    return Row(
-      children: [
-        Icon(
-          item.icon,
-          color: Colors.white,
-          size: 22,
-        ),
-        const SizedBox(
-          width: 10,
-        ),
-        Expanded(
-          child: Text(
-            item.text,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 12.5.sp,
-              fontFamily: FontFamily.cabinetGrotesk,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
 
   static void onChanged(BuildContext context, MenuItem item) {
     switch (item) {

@@ -1,9 +1,11 @@
+// ignore_for_file: must_be_immutable
+
 part of 'main_bloc.dart';
 
 class MainState extends Equatable {
-  final int tabIndex;
-  final HomePageState homePageState;
-  const MainState({
+  int tabIndex;
+  HomePageState homePageState;
+  MainState({
     required this.tabIndex,
     required this.homePageState,
   });

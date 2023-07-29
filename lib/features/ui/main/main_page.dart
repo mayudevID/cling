@@ -14,6 +14,7 @@ import 'dart:math' as math;
 import 'bloc/enum_home_page_state.dart';
 import 'bloc/main_bloc.dart';
 import 'cashflow/page/cashflow_page.dart';
+import 'home/bloc/home_bloc.dart';
 import 'home/page/add_expense_page.dart';
 import 'home/page/add_income_page.dart';
 import 'home/page/home_page.dart';
@@ -24,48 +25,45 @@ class MainPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => MainBloc(),
-      child: BlocBuilder<MainBloc, MainState>(
-        builder: (context, state) {
-          return SafeArea(
-            child: Scaffold(
-              backgroundColor: const Color(0xFF101010),
-              body: SizedBox(
-                width: 100.w,
-                height: 100.h,
-                child: Stack(
-                  children: [
-                    FadeIndexedStack(
-                      beginOpacity: 0.5,
-                      endOpacity: 1.0,
-                      duration: Duration(milliseconds: 100),
-                      curve: Curves.easeOutExpo,
-                      index: state.tabIndex,
-                      children: [
-                        (state.homePageState == HomePageState.home)
-                            ? HomePage()
-                            : (state.homePageState == HomePageState.expense)
-                                ? AddExpensePage()
-                                : AddIncomePage(),
-                        StatisticsPage(),
-                        CashflowPage(),
-                        ProfilePage(),
-                      ],
-                    ),
-                    customNavBar(context, state)
-                  ],
-                ),
+    return BlocBuilder<MainBloc, MainState>(
+      builder: (context, state) {
+        return SafeArea(
+          child: Scaffold(
+            backgroundColor: const Color(0xFF101010),
+            body: SizedBox(
+              width: 100.w,
+              height: 100.h,
+              child: Stack(
+                children: [
+                  FadeIndexedStack(
+                    beginOpacity: 0.5,
+                    endOpacity: 1.0,
+                    duration: Duration(milliseconds: 100),
+                    curve: Curves.easeOutExpo,
+                    index: state.tabIndex,
+                    children: [
+                      (state.homePageState == HomePageState.home)
+                          ? HomePage()
+                          : (state.homePageState == HomePageState.expense)
+                              ? AddExpensePage()
+                              : AddIncomePage(),
+                      StatisticsPage(),
+                      CashflowPage(),
+                      ProfilePage(),
+                    ],
+                  ),
+                  customNavBar(context, state)
+                ],
               ),
-              floatingActionButtonLocation: ExpandableFab.location,
-              floatingActionButton: (state.tabIndex == 0 &&
-                      state.homePageState == HomePageState.home)
-                  ? customFloatingActionButton(context)
-                  : null,
             ),
-          );
-        },
-      ),
+            floatingActionButtonLocation: ExpandableFab.location,
+            floatingActionButton: (state.tabIndex == 0 &&
+                    state.homePageState == HomePageState.home)
+                ? customFloatingActionButton(context)
+                : null,
+          ),
+        );
+      },
     );
   }
 
@@ -101,9 +99,11 @@ class MainPage extends StatelessWidget {
         children: [
           GestureDetector(
             onTap: () {
+              context.read<HomeBloc>().add(GetIncomeSource());
               context.read<MainBloc>().add(
                     HomePageStateChange(
                       homePageState: HomePageState.income,
+                      context: context,
                     ),
                   );
             },
@@ -129,9 +129,11 @@ class MainPage extends StatelessWidget {
           ),
           GestureDetector(
             onTap: () {
+              context.read<HomeBloc>().add(GetExpenseCategories());
               context.read<MainBloc>().add(
                     HomePageStateChange(
                       homePageState: HomePageState.expense,
+                      context: context,
                     ),
                   );
             },
@@ -231,6 +233,11 @@ class MainPage extends StatelessWidget {
   }
 
   void changeTab(BuildContext context, int tabIndex) {
-    context.read<MainBloc>().add(TabChange(tabIndex: tabIndex));
+    context.read<MainBloc>().add(
+          TabChange(
+            tabIndex: tabIndex,
+            context: context,
+          ),
+        );
   }
 }

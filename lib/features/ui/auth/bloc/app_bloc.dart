@@ -12,22 +12,22 @@ part 'app_event.dart';
 part 'app_state.dart';
 
 class AppBloc extends Bloc<AppEvent, AppState> {
-  AppBloc({required AuthRepository authenticationRepository})
-      : _authenticationRepository = authenticationRepository,
+  AppBloc({required AuthRepository authRepo})
+      : _authRepo = authRepo,
         super(
-          authenticationRepository.currentUser != null
-              ? AppState.authenticated(authenticationRepository.currentUser!)
+          authRepo.currentUser != null
+              ? AppState.authenticated(authRepo.currentUser!)
               : const AppState.unauthenticated(),
         ) {
     on<AppUserChanged>(_onUserChanged);
     on<AppLogoutRequested>(_onLogoutRequested);
     on<Redirect>(_onRedirect);
-    _userSubscription = _authenticationRepository.user.listen(
+    _userSubscription = _authRepo.user.listen(
       (user) => add(AppUserChanged(user)),
     );
   }
 
-  final AuthRepository _authenticationRepository;
+  final AuthRepository _authRepo;
   late final StreamSubscription<UserModel?> _userSubscription;
 
   void _onUserChanged(
@@ -45,15 +45,14 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     AppLogoutRequested event,
     Emitter<AppState> emit,
   ) {
-    unawaited(_authenticationRepository.logOut());
+    unawaited(_authRepo.logOut());
   }
 
   void _onRedirect(Redirect event, Emitter<AppState> _) {
     Navigator.pushNamedAndRemoveUntil(
       event.context,
       ((state.status == AppStatus.authenticated) &&
-              (_authenticationRepository.loginStatus ||
-                  _authenticationRepository.registerStatus))
+              (_authRepo.loginStatus || _authRepo.registerStatus))
           ? RouteName.main
           : RouteName.onboard,
       (route) => false,

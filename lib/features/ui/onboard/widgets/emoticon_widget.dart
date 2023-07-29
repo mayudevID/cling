@@ -13,7 +13,7 @@ class EmoticonWidget extends StatefulWidget {
 }
 
 class _EmoticonWidgetState extends State<EmoticonWidget>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return PositionedTransition(

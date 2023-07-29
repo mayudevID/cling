@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:cling/core/static_name_table.dart';
+
 ExpenseModel expenseModelFromMap(String str) =>
     ExpenseModel.fromMap(json.decode(str));
 
@@ -36,18 +38,18 @@ class ExpenseModel {
       );
 
   factory ExpenseModel.fromMap(Map<String, dynamic> json) => ExpenseModel(
-        id: json["id"],
-        date: DateTime.parse(json["date"]),
-        item: json["item"],
-        amount: json["amount"]?.toDouble(),
-        categories: json["categories"],
+        id: json[ExpenseMeta.id],
+        date: DateTime.parse(json[ExpenseMeta.date]),
+        item: json[ExpenseMeta.item],
+        amount: json[ExpenseMeta.amount]?.toDouble(),
+        categories: json[ExpenseMeta.categories],
       );
 
   Map<String, dynamic> toMap() => {
-        "id": id,
-        "date": date.toIso8601String(),
-        "item": item,
-        "amount": amount,
-        "categories": categories,
+        ExpenseMeta.id: id,
+        ExpenseMeta.date: date.toIso8601String(),
+        ExpenseMeta.item: item,
+        ExpenseMeta.amount: amount,
+        ExpenseMeta.categories: categories,
       };
 }

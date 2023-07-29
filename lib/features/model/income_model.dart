@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:cling/core/static_name_table.dart';
+
 IncomeModel incomeModelFromMap(String str) =>
     IncomeModel.fromMap(json.decode(str));
 
@@ -36,18 +38,18 @@ class IncomeModel {
       );
 
   factory IncomeModel.fromMap(Map<String, dynamic> json) => IncomeModel(
-        id: json["id"],
-        date: DateTime.parse(json["date"]),
-        desc: json["desc"],
-        amount: json["amount"]?.toDouble(),
-        incomeSource: json["income_source"],
+        id: json[IncomeMeta.id],
+        date: DateTime.parse(json[IncomeMeta.date]),
+        desc: json[IncomeMeta.desc],
+        amount: json[IncomeMeta.amount]?.toDouble(),
+        incomeSource: json[IncomeMeta.incomeSource],
       );
 
   Map<String, dynamic> toMap() => {
-        "id": id,
-        "date": date.toIso8601String(),
-        "desc": desc,
-        "amount": amount,
-        "income_source": incomeSource,
+        IncomeMeta.id: id,
+        IncomeMeta.date: date.toIso8601String(),
+        IncomeMeta.desc: desc,
+        IncomeMeta.amount: amount,
+        IncomeMeta.incomeSource: incomeSource,
       };
 }

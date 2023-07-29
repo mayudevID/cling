@@ -1,6 +1,8 @@
-import 'package:bloc/bloc.dart';
+import 'package:cling/core/logger.dart';
+import 'package:cling/features/ui/main/home/bloc/home_bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'enum_home_page_state.dart';
 
@@ -10,14 +12,14 @@ part 'main_state.dart';
 class MainBloc extends Bloc<MainEvent, MainState> {
   MainBloc()
       : super(
-          const MainState(tabIndex: 0, homePageState: HomePageState.home),
+          MainState(tabIndex: 0, homePageState: HomePageState.home),
         ) {
-    on<TabChange>(tabChange);
-    on<HomePageStateChange>(homePageStateChange);
+    on<TabChange>(_tabChange);
+    on<HomePageStateChange>(_homePageStateChange);
   }
 
-  void tabChange(event, emit) {
-    if (kDebugMode) print("Tab Clicked: ${event.tabIndex}");
+  void _tabChange(TabChange event, emit) {
+    final lastHomePageState = state.homePageState;
     emit(
       state.copyWith(
         tabIndex: event.tabIndex,
@@ -25,15 +27,20 @@ class MainBloc extends Bloc<MainEvent, MainState> {
             (event.tabIndex == 0) ? HomePageState.home : state.homePageState,
       ),
     );
+    Logger.Yellow.log("Tab Clicked: ${event.tabIndex}");
+
+    if (lastHomePageState != HomePageState.home) {
+      event.context.read<HomeBloc>().add(ClearListDropdown());
+    }
   }
 
-  void homePageStateChange(event, emit) {
-    if (kDebugMode) print("HomePageState Clicked: ${event.homePageState}");
+  void _homePageStateChange(HomePageStateChange event, emit) async {
     emit(
       state.copyWith(
         homePageState:
             (state.tabIndex == 0) ? event.homePageState : state.homePageState,
       ),
     );
+    Logger.Yellow.log("HomePageState Clicked: ${event.homePageState}");
   }
 }

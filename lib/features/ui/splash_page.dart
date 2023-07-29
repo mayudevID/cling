@@ -19,9 +19,14 @@ class SplashPage extends StatefulWidget {
 class _SplashPageState extends State<SplashPage> {
   @override
   void initState() {
+    initSplash();
+    super.initState();
+  }
+
+  Future<void> initSplash() async {
     Timer.periodic(
-      const Duration(milliseconds: 3500),
-      (timer) {
+      const Duration(milliseconds: 3000),
+      (timer) async {
         timer.cancel();
 
         context.read<AppBloc>().add(Redirect(context));
