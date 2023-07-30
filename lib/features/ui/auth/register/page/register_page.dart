@@ -1,3 +1,4 @@
+import 'package:cling/core/common_widget.dart';
 import 'package:cling/core/utils.dart';
 import 'package:cling/features/repository/auth_repository.dart';
 import 'package:cling/features/ui/auth/register/widgets/form_register.dart';
@@ -9,7 +10,6 @@ import 'package:sizer/sizer.dart';
 import '../../../../../core/route.dart';
 import '../../../../../injection.dart';
 import '../bloc/register_bloc.dart';
-import '../widgets/button_regist.dart';
 
 class RegisterPage extends StatelessWidget {
   const RegisterPage({super.key});
@@ -70,10 +70,11 @@ class RegisterPageContent extends StatelessWidget {
               SizedBox(
                 height: 40.hmea,
               ),
-              ButtonRegist(
+              PinkButton(
                 onTap: () {
                   context.read<RegisterBloc>().add(SendRegister(context));
                 },
+                name: "Create New Account",
               ),
               const Expanded(flex: 1, child: SizedBox()),
               Text.rich(

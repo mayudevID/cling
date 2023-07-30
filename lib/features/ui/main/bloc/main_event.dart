@@ -9,12 +9,8 @@ abstract class MainEvent extends Equatable {
 
 class TabChange extends MainEvent {
   final int tabIndex;
-  final BuildContext context;
 
-  const TabChange({
-    required this.tabIndex,
-    required this.context,
-  });
+  const TabChange({required this.tabIndex});
 }
 
 class HomePageStateChange extends MainEvent {

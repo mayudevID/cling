@@ -1,5 +1,7 @@
 import 'package:cling/core/utils.dart';
+import 'package:cling/features/ui/main/home/bloc/home_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../../resources/gen/fonts.gen.dart';
@@ -57,15 +59,22 @@ Widget incomeAndExpense() {
                       fontWeight: FontWeight.w500,
                     ),
                   ),
-                  Text(
-                    '3,800,000',
-                    textAlign: TextAlign.right,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 10.5.sp,
-                      fontFamily: FontFamily.cabinetGrotesk,
-                      fontWeight: FontWeight.w500,
-                    ),
+                  BlocBuilder<HomeBloc, HomeState>(
+                    buildWhen: (prev, curr) {
+                      return prev.amountIncome != curr.amountIncome;
+                    },
+                    builder: (context, state) {
+                      return Text(
+                        state.amountIncome.toString(),
+                        textAlign: TextAlign.right,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 10.5.sp,
+                          fontFamily: FontFamily.cabinetGrotesk,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      );
+                    },
                   ),
                 ],
               ),
@@ -111,15 +120,22 @@ Widget incomeAndExpense() {
                       fontWeight: FontWeight.w500,
                     ),
                   ),
-                  Text(
-                    '-1,450,000',
-                    textAlign: TextAlign.right,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 10.5.sp,
-                      fontFamily: FontFamily.cabinetGrotesk,
-                      fontWeight: FontWeight.w500,
-                    ),
+                  BlocBuilder<HomeBloc, HomeState>(
+                    buildWhen: (prev, curr) {
+                      return prev.amountExpense != curr.amountExpense;
+                    },
+                    builder: (context, state) {
+                      return Text(
+                        '-${state.amountExpense.toString()}',
+                        textAlign: TextAlign.right,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 10.5.sp,
+                          fontFamily: FontFamily.cabinetGrotesk,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      );
+                    },
                   ),
                 ],
               ),

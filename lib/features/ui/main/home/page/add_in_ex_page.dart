@@ -1,0 +1,376 @@
+import 'package:cling/core/common_widget.dart';
+import 'package:cling/core/utils.dart';
+import 'package:cling/features/model/expense_categories_model.dart';
+import 'package:cling/features/model/income_source_model.dart';
+import 'package:cling/features/ui/main/home/bloc/home_bloc.dart';
+import 'package:cling/features/ui/main/home/widgets/categories_row.dart';
+import 'package:cling/resources/gen/assets.gen.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sizer/sizer.dart';
+
+import '../../../../../resources/gen/fonts.gen.dart';
+import '../../bloc/main_bloc.dart';
+
+enum FlowType { income, expense }
+
+class AddIncomeExpensePage extends StatelessWidget {
+  const AddIncomeExpensePage({super.key, required this.flowType});
+  final FlowType flowType;
+
+  List<DropdownMenuItem> menuItemExpense(
+    List<ExpenseCategoriesModel> data,
+  ) {
+    return data
+        .map(
+          (item) => DropdownMenuItem<ExpenseCategoriesModel>(
+            value: item,
+            child: Row(
+              children: rowCategories(item.expenseCategories),
+            ),
+          ),
+        )
+        .toList();
+  }
+
+  List<DropdownMenuItem> menuItemIncome(
+    List<IncomeSourceModel> data,
+  ) {
+    return data
+        .map(
+          (item) => DropdownMenuItem<IncomeSourceModel>(
+            value: item,
+            child: Row(
+              children: rowCategories(item.incomeSource),
+            ),
+          ),
+        )
+        .toList();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 20.wmea),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            height: 16.hmea,
+          ),
+          Text(
+            (flowType == FlowType.income) ? 'Add Income' : 'Add Expenses',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 22.sp,
+              fontFamily: FontFamily.cabinetGrotesk,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          SizedBox(
+            height: 24.hmea,
+          ),
+          Text(
+            (flowType == FlowType.income) ? 'Date' : 'Purchase Date',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 12.sp,
+              fontFamily: FontFamily.cabinetGrotesk,
+              fontWeight: FontWeight.w800,
+            ),
+          ),
+          SizedBox(
+            height: 8.hmea,
+          ),
+          Container(
+            decoration: ShapeDecoration(
+              color: const Color(0xFF313131),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+            padding: EdgeInsets.symmetric(
+              vertical: 16.hmea,
+              horizontal: 16.wmea,
+            ),
+            child: Row(
+              children: [
+                BlocBuilder<HomeBloc, HomeState>(
+                  buildWhen: (prev, curr) {
+                    return prev.selectedDate != curr.selectedDate;
+                  },
+                  builder: (context, state) {
+                    final day = state.selectedDate.day;
+                    final month = state.selectedDate.month;
+                    final year = state.selectedDate.year;
+                    return Text(
+                      '$day/$month/$year',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 12.5.sp,
+                        fontFamily: FontFamily.cabinetGrotesk,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    );
+                  },
+                ),
+                const Spacer(),
+                GestureDetector(
+                  onTap: () async {
+                    final now = DateTime.now();
+                    DateTime? pickedDate = await showDatePicker(
+                      context: context,
+                      initialDate: now,
+                      firstDate: DateTime(now.year, now.month, 1),
+                      lastDate: now,
+                    );
+                    if (pickedDate != null) {
+                      Future.microtask(() {
+                        context.read<HomeBloc>().add(SetDate(pickedDate));
+                      });
+                    }
+                  },
+                  child: Assets.lib.resources.images.calendar.svg(),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(
+            height: 16.hmea,
+          ),
+          Text(
+            (flowType == FlowType.income) ? 'Income Source' : 'Categories',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 12.sp,
+              fontFamily: FontFamily.cabinetGrotesk,
+              fontWeight: FontWeight.w800,
+            ),
+          ),
+          SizedBox(
+            height: 8.hmea,
+          ),
+          BlocBuilder<HomeBloc, HomeState>(
+            buildWhen: (prev, curr) {
+              switch (flowType) {
+                case FlowType.income:
+                  return (prev.listInSource != curr.listInSource ||
+                      prev.selectedCategories != curr.selectedCategories);
+                case FlowType.expense:
+                  return (prev.listExCategories != curr.listExCategories ||
+                      prev.selectedCategories != curr.selectedCategories);
+              }
+            },
+            builder: (context, state) {
+              return DropdownButtonHideUnderline(
+                child: DropdownButton2(
+                  customButton: Container(
+                    decoration: ShapeDecoration(
+                      color: const Color(0xFF313131),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    padding: EdgeInsets.symmetric(
+                      vertical: 16.hmea,
+                      horizontal: 16.wmea,
+                    ),
+                    child: Row(
+                      children: [
+                        if (state.selectedCategories.isEmpty) ...[
+                          Text(
+                            "Select Categories",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 12.5.sp,
+                              fontFamily: FontFamily.cabinetGrotesk,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ] else
+                          ...rowCategories(
+                            state.selectedCategories.entries.first.value,
+                          ),
+                        const Spacer(),
+                        Assets.lib.resources.images.fluentChevronDown24Filled
+                            .svg(),
+                      ],
+                    ),
+                  ),
+                  items: (flowType == FlowType.income)
+                      ? menuItemIncome(
+                          state.listInSource,
+                        )
+                      : menuItemExpense(
+                          state.listExCategories,
+                        ),
+                  onChanged: (value) {
+                    dynamic newVal;
+                    switch (flowType) {
+                      case FlowType.income:
+                        newVal = value as IncomeSourceModel;
+                        context.read<HomeBloc>().add(SetCategories(
+                              {newVal.id: newVal.incomeSource},
+                            ));
+                        break;
+                      case FlowType.expense:
+                        newVal = value as ExpenseCategoriesModel;
+                        context.read<HomeBloc>().add(SetCategories(
+                              {newVal.id: newVal.expenseCategories},
+                            ));
+                        break;
+                    }
+                  },
+                  dropdownStyleData: DropdownStyleData(
+                    width: 390.wmea,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: const Color(0xFF313131),
+                    ),
+                  ),
+                ),
+              );
+            },
+          ),
+          SizedBox(
+            height: 16.hmea,
+          ),
+          Text(
+            (flowType == FlowType.income) ? 'Description (Optional)' : 'Items',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 12.sp,
+              fontFamily: FontFamily.cabinetGrotesk,
+              fontWeight: FontWeight.w800,
+            ),
+          ),
+          SizedBox(
+            height: 8.hmea,
+          ),
+          Container(
+            decoration: ShapeDecoration(
+              color: const Color(0xFF313131),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+            padding: EdgeInsets.symmetric(
+              vertical: 16.hmea,
+              horizontal: 16.wmea,
+            ),
+            child: TextFormField(
+              onChanged: (value) {},
+              cursorColor: Colors.white,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 12.5.sp,
+                fontFamily: FontFamily.cabinetGrotesk,
+                fontWeight: FontWeight.w500,
+              ),
+              decoration: InputDecoration.collapsed(
+                hintText:
+                    (flowType == FlowType.income) ? 'Description' : 'Items',
+                hintStyle: TextStyle(
+                  color: Colors.grey,
+                  fontSize: 12.5.sp,
+                  fontFamily: FontFamily.cabinetGrotesk,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 16.hmea,
+          ),
+          Text(
+            'Amount (IDR)',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 12.sp,
+              fontFamily: FontFamily.cabinetGrotesk,
+              fontWeight: FontWeight.w800,
+            ),
+          ),
+          SizedBox(
+            height: 8.hmea,
+          ),
+          Container(
+            decoration: ShapeDecoration(
+              color: const Color(0xFF313131),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+            padding: EdgeInsets.symmetric(
+              vertical: 16.hmea,
+              horizontal: 16.wmea,
+            ),
+            child: Row(
+              children: [
+                Text(
+                  'IDR',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 12.sp,
+                    fontFamily: FontFamily.cabinetGrotesk,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+                SizedBox(
+                  width: 10.wmea,
+                ),
+                Expanded(
+                  child: TextFormField(
+                    keyboardType: TextInputType.number,
+                    onChanged: (value) {},
+                    cursorColor: Colors.white,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 12.5.sp,
+                      fontFamily: FontFamily.cabinetGrotesk,
+                      fontWeight: FontWeight.w500,
+                    ),
+                    decoration: InputDecoration.collapsed(
+                      hintText: '0',
+                      hintStyle: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 12.5.sp,
+                        fontFamily: FontFamily.cabinetGrotesk,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(
+            height: 40.hmea,
+          ),
+          PinkButton(
+            onTap: () {},
+            name: "Submit",
+          ),
+          SizedBox(
+            height: 32.hmea,
+          ),
+          BlackButton(
+            name: "Cancel",
+            onTap: () {
+              context.read<MainBloc>().add(
+                    const TabChange(
+                      tabIndex: 0,
+                    ),
+                  );
+              context.read<HomeBloc>().add(ClearDataForm());
+            },
+          ),
+        ],
+      ),
+    );
+  }
+}

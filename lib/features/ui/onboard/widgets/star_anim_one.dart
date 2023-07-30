@@ -10,7 +10,7 @@ class StarAnimOne extends StatefulWidget {
 }
 
 class _StarAnimOneState extends State<StarAnimOne>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return RotationTransition(

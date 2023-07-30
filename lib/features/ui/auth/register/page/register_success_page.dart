@@ -1,3 +1,4 @@
+import 'package:cling/core/common_widget.dart';
 import 'package:cling/core/utils.dart';
 import 'package:cling/resources/gen/fonts.gen.dart';
 import 'package:flutter/material.dart';
@@ -5,7 +6,7 @@ import 'package:open_mail_app/open_mail_app.dart';
 import 'package:sizer/sizer.dart';
 
 import '../widgets/box_face.dart';
-import '../widgets/button_go_to_mail.dart';
+
 import '../widgets/oval_stack.dart';
 import '../widgets/stack_star_reg.dart';
 
@@ -69,7 +70,7 @@ class RegisterSuccessPage extends StatelessWidget {
             SizedBox(
               height: 63.hmea,
             ),
-            ButtonGoToMail(
+            PinkButton(
               onTap: () async {
                 var result = await OpenMailApp.openMailApp();
 
@@ -106,6 +107,7 @@ class RegisterSuccessPage extends StatelessWidget {
                   });
                 }
               },
+              name: "Go to mail",
             ),
           ],
         ),

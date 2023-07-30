@@ -1,3 +1,4 @@
+import 'package:cling/core/common_widget.dart';
 import 'package:cling/core/route.dart';
 import 'package:cling/core/utils.dart';
 import 'package:cling/features/repository/auth_repository.dart';
@@ -11,7 +12,7 @@ import '../../../../../injection.dart';
 import '../../../../../resources/gen/fonts.gen.dart';
 
 import '../bloc/login_bloc.dart';
-import '../widgets/button_login.dart';
+
 import '../widgets/form_login.dart';
 
 class LoginPage extends StatelessWidget {
@@ -73,10 +74,11 @@ class LoginPageContent extends StatelessWidget {
               SizedBox(
                 height: 40.hmea,
               ),
-              ButtonLogin(
+              PinkButton(
                 onTap: () async {
                   context.read<LoginBloc>().add(SendLogin(context));
                 },
+                name: "Login",
               ),
               const Expanded(
                 flex: 1,

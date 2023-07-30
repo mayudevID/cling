@@ -1,5 +1,5 @@
 import 'package:cling/core/logger.dart';
-import 'package:cling/features/ui/main/home/bloc/home_bloc.dart';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,7 +19,6 @@ class MainBloc extends Bloc<MainEvent, MainState> {
   }
 
   void _tabChange(TabChange event, emit) {
-    final lastHomePageState = state.homePageState;
     emit(
       state.copyWith(
         tabIndex: event.tabIndex,
@@ -28,10 +27,6 @@ class MainBloc extends Bloc<MainEvent, MainState> {
       ),
     );
     Logger.Yellow.log("Tab Clicked: ${event.tabIndex}");
-
-    if (lastHomePageState != HomePageState.home) {
-      event.context.read<HomeBloc>().add(ClearListDropdown());
-    }
   }
 
   void _homePageStateChange(HomePageStateChange event, emit) async {

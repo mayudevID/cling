@@ -20,7 +20,18 @@ class $LibGen {
 class $LibResourcesGen {
   const $LibResourcesGen();
 
+  $LibResourcesAnimGen get anim => const $LibResourcesAnimGen();
   $LibResourcesImagesGen get images => const $LibResourcesImagesGen();
+}
+
+class $LibResourcesAnimGen {
+  const $LibResourcesAnimGen();
+
+  /// File path: lib/resources/anim/loading_carga.json
+  String get loadingCarga => 'lib/resources/anim/loading_carga.json';
+
+  /// List of all assets
+  List<String> get values => [loadingCarga];
 }
 
 class $LibResourcesImagesGen {
@@ -52,6 +63,10 @@ class $LibResourcesImagesGen {
   /// File path: lib/resources/images/calendar.svg
   SvgGenImage get calendar =>
       const SvgGenImage('lib/resources/images/calendar.svg');
+
+  /// File path: lib/resources/images/dismiss.svg
+  SvgGenImage get dismiss =>
+      const SvgGenImage('lib/resources/images/dismiss.svg');
 
   /// File path: lib/resources/images/ellipse_onboard.png
   AssetGenImage get ellipseOnboard =>
@@ -129,6 +144,7 @@ class $LibResourcesImagesGen {
         bell,
         biBarChartFill,
         calendar,
+        dismiss,
         ellipseOnboard,
         emailLogo,
         emoticon,

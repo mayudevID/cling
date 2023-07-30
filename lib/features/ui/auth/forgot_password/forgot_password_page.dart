@@ -1,3 +1,4 @@
+import 'package:cling/core/common_widget.dart';
 import 'package:cling/core/route.dart';
 import 'package:cling/core/utils.dart';
 import 'package:cling/resources/gen/assets.gen.dart';
@@ -5,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 import '../../../../resources/gen/fonts.gen.dart';
 import '../login/widgets/tag_name_login.dart';
-import 'widgets/button_send_link.dart';
+
 import 'widgets/text_field_email_forgot.dart';
 
 class ForgotPasswordPage extends StatelessWidget {
@@ -70,13 +71,14 @@ class ForgotPasswordPage extends StatelessWidget {
               SizedBox(
                 height: 40.hmea,
               ),
-              ButtonSendLink(
+              PinkButton(
                 onTap: () {
                   Navigator.pushReplacementNamed(
                     context,
                     RouteName.checkEmail,
                   );
                 },
+                name: "Send me link",
               ),
             ],
           ),

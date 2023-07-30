@@ -1,4 +1,5 @@
 import 'package:cling/core/utils.dart';
+import 'package:cling/features/ui/auth/forgot_password/widgets/star_rotate_scale_anim.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
@@ -27,24 +28,7 @@ class EmailWithStar extends StatelessWidget {
               ),
             ),
           ),
-          Positioned(
-            right: 120.wmea,
-            child: Container(
-              width: 61.02.wmea,
-              height: 61.02.wmea,
-              decoration: const ShapeDecoration(
-                color: Color(0xFFF2D82D),
-                shape: StarBorder(
-                  points: 4,
-                  innerRadiusRatio: 0.39,
-                  pointRounding: 0,
-                  valleyRounding: 0,
-                  rotation: 0,
-                  squash: 0,
-                ),
-              ),
-            ),
-          ),
+          const StarRotateScaleAnim(),
           Positioned(
             bottom: 10.hmea,
             left: 118.wmea,

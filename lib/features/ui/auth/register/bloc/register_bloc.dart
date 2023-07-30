@@ -81,25 +81,22 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
         state.password.trim().isEmpty ||
         state.name.trim().isEmpty ||
         state.confirmPassword.trim().isEmpty) {
-      errorSnackbar(event.context, "Form empty");
+      errorToast("Form empty");
       return;
     }
 
     if (!EmailValidator.validate(state.email)) {
-      errorSnackbar(event.context, "Email not valid");
+      errorToast("Email not valid");
       return;
     }
 
     if (state.password.trim().length < 8) {
-      errorSnackbar(event.context, "Password must be 8 character or more");
+      errorToast("Password must be 8 character or more");
       return;
     }
 
     if (state.password.trim() != state.confirmPassword.trim()) {
-      errorSnackbar(
-        event.context,
-        "Password and Confirm Password do not match",
-      );
+      errorToast("Password and Confirm Password do not match");
       return;
     }
 
@@ -131,13 +128,13 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     } on SignUpWithEmailAndPasswordFailure catch (e) {
       Future.microtask(() {
         Navigator.pop(event.context);
-        errorSnackbar(event.context, e.message);
+        errorToast(e.message);
       });
     } on Exception catch (e) {
       _authRepository.logOut();
       Future.microtask(() {
         Navigator.pop(event.context);
-        errorSnackbar(event.context, e.toString());
+        errorToast(e.toString());
       });
     }
   }

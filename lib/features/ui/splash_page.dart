@@ -2,11 +2,13 @@ import 'dart:async';
 
 import 'package:cling/core/utils.dart';
 import 'package:cling/features/ui/auth/bloc/app_bloc.dart';
+import 'package:cling/injection.dart';
 import 'package:cling/resources/gen/assets.gen.dart';
 import 'package:cling/resources/gen/fonts.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:sizer/sizer.dart';
 
 class SplashPage extends StatefulWidget {
@@ -19,6 +21,7 @@ class SplashPage extends StatefulWidget {
 class _SplashPageState extends State<SplashPage> {
   @override
   void initState() {
+    getIt<FToast>().init(navigatorKeyOpen.currentContext!);
     initSplash();
     super.initState();
   }

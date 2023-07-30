@@ -1,9 +1,10 @@
+import 'package:cling/core/common_widget.dart';
 import 'package:cling/core/route.dart';
 import 'package:cling/core/utils.dart';
 import 'package:cling/resources/gen/fonts.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
-import 'widgets/button_onboard.dart';
+
 import 'widgets/emoticon_widget.dart';
 import 'widgets/stack_emoticon.dart';
 import 'widgets/stack_star.dart';
@@ -60,8 +61,8 @@ class OnboardPage extends StatelessWidget {
             SizedBox(
               height: 32.hmea,
             ),
-            ButtonOnboard(
-              type: "New",
+            PinkButton(
+              name: 'I\'m new here',
               onTap: () {
                 Navigator.pushNamed(context, RouteName.register);
               },
@@ -69,8 +70,8 @@ class OnboardPage extends StatelessWidget {
             SizedBox(
               height: 8.hmea,
             ),
-            ButtonOnboard(
-              type: "Already",
+            BlackButton(
+              name: 'Already have an account',
               onTap: () {
                 Navigator.pushNamed(context, RouteName.login);
               },

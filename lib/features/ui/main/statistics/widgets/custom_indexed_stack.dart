@@ -15,7 +15,7 @@ class CustomIndexedStack extends StatefulWidget {
 }
 
 class _CustomIndexedStackState extends State<CustomIndexedStack>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   late AnimationController _controller;
 
   @override

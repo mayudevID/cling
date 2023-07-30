@@ -39,17 +39,17 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
   void _sendLogin(SendLogin event, _) async {
     if (state.email.trim().isEmpty || state.password.trim().isEmpty) {
-      errorSnackbar(event.context, "Form empty");
+      errorToast("Form empty");
       return;
     }
 
     if (!EmailValidator.validate(state.email)) {
-      errorSnackbar(event.context, "Email not valid");
+      errorToast("Email not valid");
       return;
     }
 
     if (state.password.trim().length < 8) {
-      errorSnackbar(event.context, "Password must be 8 character or more");
+      errorToast("Password must be 8 character or more");
       return;
     }
 
@@ -86,7 +86,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       _authRepository.logOut();
       Future.microtask(() {
         Navigator.pop(event.context);
-        errorSnackbar(event.context, e.message);
+        errorToast(e.message);
       });
     }
   }

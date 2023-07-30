@@ -21,7 +21,9 @@ dependencies:
   flutter_gen: ^5.3.1
   flutter_native_splash: ^2.3.1
   flutter_svg: ^2.0.7
+  fluttertoast: ^8.2.2
   get_it: ^7.6.0
+  intl: ^0.18.1
   lottie: ^2.5.0
   neon_widgets: ^2.0.0
   open_mail_app: ^0.4.5
@@ -44,6 +46,7 @@ flutter_launcher_icons:
   image_path: "lib/resources/images/logo_png.png"
 
 flutter:
+  generate: true
   uses-material-design: true
   assets:
     - lib/resources/images/
@@ -56,6 +59,9 @@ flutter:
       fonts:
         - asset: lib/resources/fonts/CabinetGrotesk-Bold.otf
         - asset: lib/resources/fonts/CabinetGrotesk-Regular.otf
+
+flutter_localizations: # Add this line
+  sdk: flutter
 
 flutter_gen:
   output: lib/resources/gen/ # Optional (default: lib/gen/)

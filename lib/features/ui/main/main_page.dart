@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:cling/core/utils.dart';
+import 'package:cling/features/ui/main/home/page/add_in_ex_page.dart';
 import 'package:cling/features/ui/main/profile/page/profile_page.dart';
 import 'package:cling/resources/gen/assets.gen.dart';
 import 'package:cling/resources/gen/fonts.gen.dart';
@@ -15,8 +16,6 @@ import 'bloc/enum_home_page_state.dart';
 import 'bloc/main_bloc.dart';
 import 'cashflow/page/cashflow_page.dart';
 import 'home/bloc/home_bloc.dart';
-import 'home/page/add_expense_page.dart';
-import 'home/page/add_income_page.dart';
 import 'home/page/home_page.dart';
 import 'statistics/page/statistics_page.dart';
 
@@ -39,20 +38,22 @@ class MainPage extends StatelessWidget {
                     beginOpacity: 0.5,
                     endOpacity: 1.0,
                     duration: Duration(milliseconds: 100),
-                    curve: Curves.easeOutExpo,
                     index: state.tabIndex,
                     children: [
                       (state.homePageState == HomePageState.home)
                           ? HomePage()
-                          : (state.homePageState == HomePageState.expense)
-                              ? AddExpensePage()
-                              : AddIncomePage(),
+                          : AddIncomeExpensePage(
+                              flowType:
+                                  (state.homePageState == HomePageState.income)
+                                      ? FlowType.income
+                                      : FlowType.expense,
+                            ),
                       StatisticsPage(),
                       CashflowPage(),
                       ProfilePage(),
                     ],
                   ),
-                  customNavBar(context, state)
+                  customNavBar(context, state),
                 ],
               ),
             ),
@@ -185,25 +186,25 @@ class MainPage extends StatelessWidget {
           children: [
             buildTabButton(
               state: state,
-              onPressed: () => changeTab(context, 0),
+              onPressed: () => changeTab(state, context, 0),
               icon: Assets.lib.resources.images.fluentHome48Filled.svg(),
               isSelected: state.tabIndex == 0,
             ),
             buildTabButton(
               state: state,
-              onPressed: () => changeTab(context, 1),
+              onPressed: () => changeTab(state, context, 1),
               icon: Assets.lib.resources.images.biBarChartFill.svg(),
               isSelected: state.tabIndex == 1,
             ),
             buildTabButton(
               state: state,
-              onPressed: () => changeTab(context, 2),
+              onPressed: () => changeTab(state, context, 2),
               icon: Assets.lib.resources.images.faSolidWallet.svg(),
               isSelected: state.tabIndex == 2,
             ),
             buildTabButton(
               state: state,
-              onPressed: () => changeTab(context, 3),
+              onPressed: () => changeTab(state, context, 3),
               icon: Assets.lib.resources.images.iconamoonProfileFill.svg(),
               isSelected: state.tabIndex == 3,
             ),
@@ -232,12 +233,17 @@ class MainPage extends StatelessWidget {
     );
   }
 
-  void changeTab(BuildContext context, int tabIndex) {
-    context.read<MainBloc>().add(
-          TabChange(
-            tabIndex: tabIndex,
-            context: context,
-          ),
-        );
+  void changeTab(
+    MainState state,
+    BuildContext context,
+    int tabIndex,
+  ) {
+    if (state.homePageState == HomePageState.home) {
+      context.read<MainBloc>().add(
+            TabChange(
+              tabIndex: tabIndex,
+            ),
+          );
+    }
   }
 }
