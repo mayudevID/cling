@@ -25,6 +25,7 @@ dependencies:
   get_it: ^7.6.0
   intl: ^0.18.1
   lottie: ^2.5.0
+  money_formatter: ^0.0.4
   neon_widgets: ^2.0.0
   open_mail_app: ^0.4.5
   rename: ^2.1.1

@@ -2,6 +2,7 @@ import 'package:cling/core/utils.dart';
 import 'package:cling/features/ui/main/home/bloc/home_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:money_formatter/money_formatter.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../../resources/gen/fonts.gen.dart';
@@ -65,7 +66,15 @@ Widget incomeAndExpense() {
                     },
                     builder: (context, state) {
                       return Text(
-                        state.amountIncome.toString(),
+                        MoneyFormatter(
+                          amount: state.amountIncome,
+                          settings: MoneyFormatterSettings(
+                            thousandSeparator: '.',
+                            decimalSeparator: ',',
+                            symbolAndNumberSeparator: ' ',
+                            fractionDigits: 2,
+                          ),
+                        ).output.nonSymbol,
                         textAlign: TextAlign.right,
                         style: TextStyle(
                           color: Colors.white,
@@ -126,7 +135,15 @@ Widget incomeAndExpense() {
                     },
                     builder: (context, state) {
                       return Text(
-                        '-${state.amountExpense.toString()}',
+                        "-${MoneyFormatter(
+                          amount: state.amountExpense,
+                          settings: MoneyFormatterSettings(
+                            thousandSeparator: '.',
+                            decimalSeparator: ',',
+                            symbolAndNumberSeparator: ' ',
+                            fractionDigits: 2,
+                          ),
+                        ).output.nonSymbol}",
                         textAlign: TextAlign.right,
                         style: TextStyle(
                           color: Colors.white,

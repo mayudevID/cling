@@ -30,5 +30,24 @@ class SetDate extends HomeEvent {
 class SetCategories extends HomeEvent {
   const SetCategories(this.categories);
 
-  final Map<int, String> categories;
+  final MapEntry<int, String> categories;
+}
+
+class SetDescOrItem extends HomeEvent {
+  const SetDescOrItem(this.descOrItem);
+
+  final String descOrItem;
+}
+
+class SetAmountInput extends HomeEvent {
+  const SetAmountInput(this.amountInput);
+
+  final String amountInput;
+}
+
+class SaveData extends HomeEvent {
+  const SaveData(this.flowType, this.context);
+
+  final FlowType flowType;
+  final BuildContext context;
 }

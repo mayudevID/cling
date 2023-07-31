@@ -8,7 +8,9 @@ class HomeState extends Equatable {
   double amountIncome;
   double amountExpense;
   DateTime selectedDate;
-  Map<int, String> selectedCategories;
+  MapEntry<int, String> selectedCategories;
+  String descOrItem;
+  String amountInput;
 
   HomeState({
     List<IncomeSourceModel>? listInSource,
@@ -17,7 +19,9 @@ class HomeState extends Equatable {
     this.amountIncome = 0,
     this.amountExpense = 0,
     DateTime? selectedDate,
-    Map<int, String>? selectedCategories,
+    MapEntry<int, String>? selectedCategories,
+    this.descOrItem = "",
+    this.amountInput = "",
   })  : selectedDate = selectedDate ??
             DateTime(
               dateNow.year,
@@ -27,7 +31,7 @@ class HomeState extends Equatable {
         listTodayExpenses = listTodayExpenses ?? List.empty(),
         listInSource = listInSource ?? List.empty(),
         listExCategories = listExCategories ?? List.empty(),
-        selectedCategories = selectedCategories ?? {};
+        selectedCategories = selectedCategories ?? const MapEntry(0, "");
 
   @override
   List<Object?> get props => [
@@ -38,6 +42,8 @@ class HomeState extends Equatable {
         amountExpense,
         selectedDate,
         selectedCategories,
+        descOrItem,
+        amountInput,
       ];
 
   HomeState copyWith({
@@ -47,7 +53,9 @@ class HomeState extends Equatable {
     double? amountIncome,
     double? amountExpense,
     DateTime? selectedDate,
-    Map<int, String>? selectedCategories,
+    MapEntry<int, String>? selectedCategories,
+    String? descOrItem,
+    String? amountInput,
   }) {
     return HomeState(
       listInSource: listInSource ?? this.listInSource,
@@ -57,6 +65,8 @@ class HomeState extends Equatable {
       amountExpense: amountExpense ?? this.amountExpense,
       selectedDate: selectedDate ?? this.selectedDate,
       selectedCategories: selectedCategories ?? this.selectedCategories,
+      descOrItem: descOrItem ?? this.descOrItem,
+      amountInput: amountInput ?? this.amountInput,
     );
   }
 }

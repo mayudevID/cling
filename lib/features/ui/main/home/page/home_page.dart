@@ -66,19 +66,19 @@ List<Map> dataDummy = [
   {
     "image": Assets.lib.resources.images.phone.svg(),
     "name": "New Phone",
-    "target": 9000000,
+    "target": 9000000.0,
     "collected": 6840000,
   },
   {
     "image": Assets.lib.resources.images.headphone.svg(),
     "name": "Headphone",
-    "target": 345000,
+    "target": 345000.0,
     "collected": 55200,
   },
   {
     "image": Assets.lib.resources.images.phone.svg(),
     "name": "Trip to Japan",
-    "target": 13452000,
+    "target": 13452000.0,
     "collected": 7507200,
   },
 ];

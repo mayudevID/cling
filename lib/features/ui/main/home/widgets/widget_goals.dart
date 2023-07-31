@@ -1,5 +1,6 @@
 import 'package:cling/core/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:money_formatter/money_formatter.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../../resources/gen/fonts.gen.dart';
@@ -70,7 +71,16 @@ Widget widgetGoals(MapEntry e, int length) {
           height: 4.hmea,
         ),
         Text(
-          "IDR ${e.value['target']} / ${(e.value['collected'] * 100 / e.value['target']).round()}%",
+          "${MoneyFormatter(
+            amount: e.value['target'],
+            settings: MoneyFormatterSettings(
+              symbol: "IDR",
+              thousandSeparator: '.',
+              decimalSeparator: ',',
+              symbolAndNumberSeparator: ' ',
+              fractionDigits: 2,
+            ),
+          ).output.symbolOnLeft} / ${(e.value['collected'] * 100 / e.value['target']).round()}%",
           textAlign: TextAlign.center,
           style: TextStyle(
             color: Colors.white,

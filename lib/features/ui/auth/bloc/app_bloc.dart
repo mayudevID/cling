@@ -2,8 +2,10 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:cling/features/model/user_model.dart';
+import 'package:cling/features/ui/main/home/bloc/home_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/route.dart';
 import '../../../repository/auth_repository.dart';
@@ -49,12 +51,18 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   }
 
   void _onRedirect(Redirect event, Emitter<AppState> _) {
+    final redirect = ((state.status == AppStatus.authenticated) &&
+        (_authRepo.loginStatus || _authRepo.registerStatus));
+
+    if (redirect) {
+      event.context.read<HomeBloc>()
+        ..add(GetTotalIncome())
+        ..add(GetTotalExpense());
+    }
+
     Navigator.pushNamedAndRemoveUntil(
       event.context,
-      ((state.status == AppStatus.authenticated) &&
-              (_authRepo.loginStatus || _authRepo.registerStatus))
-          ? RouteName.main
-          : RouteName.onboard,
+      redirect ? RouteName.main : RouteName.onboard,
       (route) => false,
     );
   }

@@ -4,6 +4,7 @@ import 'package:cling/features/model/expense_categories_model.dart';
 import 'package:cling/features/model/income_source_model.dart';
 import 'package:cling/features/ui/main/home/bloc/home_bloc.dart';
 import 'package:cling/features/ui/main/home/widgets/categories_row.dart';
+import 'package:cling/features/ui/main/home/widgets/dialog_add_success.dart';
 import 'package:cling/resources/gen/assets.gen.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
@@ -180,7 +181,8 @@ class AddIncomeExpensePage extends StatelessWidget {
                     ),
                     child: Row(
                       children: [
-                        if (state.selectedCategories.isEmpty) ...[
+                        if (state.selectedCategories ==
+                            const MapEntry(0, "")) ...[
                           Text(
                             "Select Categories",
                             textAlign: TextAlign.center,
@@ -193,7 +195,7 @@ class AddIncomeExpensePage extends StatelessWidget {
                           ),
                         ] else
                           ...rowCategories(
-                            state.selectedCategories.entries.first.value,
+                            state.selectedCategories.value,
                           ),
                         const Spacer(),
                         Assets.lib.resources.images.fluentChevronDown24Filled
@@ -214,13 +216,13 @@ class AddIncomeExpensePage extends StatelessWidget {
                       case FlowType.income:
                         newVal = value as IncomeSourceModel;
                         context.read<HomeBloc>().add(SetCategories(
-                              {newVal.id: newVal.incomeSource},
+                              MapEntry(newVal.id, newVal.incomeSource),
                             ));
                         break;
                       case FlowType.expense:
                         newVal = value as ExpenseCategoriesModel;
                         context.read<HomeBloc>().add(SetCategories(
-                              {newVal.id: newVal.expenseCategories},
+                              MapEntry(newVal.id, newVal.expenseCategories),
                             ));
                         break;
                     }
@@ -263,7 +265,9 @@ class AddIncomeExpensePage extends StatelessWidget {
               horizontal: 16.wmea,
             ),
             child: TextFormField(
-              onChanged: (value) {},
+              onChanged: (value) {
+                context.read<HomeBloc>().add(SetDescOrItem(value));
+              },
               cursorColor: Colors.white,
               style: TextStyle(
                 color: Colors.white,
@@ -325,8 +329,11 @@ class AddIncomeExpensePage extends StatelessWidget {
                 ),
                 Expanded(
                   child: TextFormField(
+                    enableInteractiveSelection: false,
                     keyboardType: TextInputType.number,
-                    onChanged: (value) {},
+                    onChanged: (value) {
+                      context.read<HomeBloc>().add(SetAmountInput(value));
+                    },
                     cursorColor: Colors.white,
                     style: TextStyle(
                       color: Colors.white,
@@ -352,7 +359,12 @@ class AddIncomeExpensePage extends StatelessWidget {
             height: 40.hmea,
           ),
           PinkButton(
-            onTap: () {},
+            onTap: () {
+              context.read<HomeBloc>().add(SaveData(
+                    flowType,
+                    context,
+                  ));
+            },
             name: "Submit",
           ),
           SizedBox(

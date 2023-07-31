@@ -50,14 +50,23 @@ class MainApp extends StatelessWidget {
       ],
       child: Sizer(
         builder: (context, orientation, deviceType) {
-          return MaterialApp(
-            builder: FToastBuilder(),
-            navigatorKey: navigatorKeyOpen,
-            theme: ThemeData(
-              primaryColor: Colors.white,
+          return GestureDetector(
+            onTap: () {
+              FocusScopeNode currentFocus = FocusScope.of(context);
+
+              if (!currentFocus.hasPrimaryFocus) {
+                currentFocus.unfocus();
+              }
+            },
+            child: MaterialApp(
+              builder: FToastBuilder(),
+              navigatorKey: navigatorKeyOpen,
+              theme: ThemeData(
+                primaryColor: Colors.white,
+              ),
+              onGenerateRoute: RouteGen.generateRoute,
+              debugShowCheckedModeBanner: false,
             ),
-            onGenerateRoute: RouteGen.generateRoute,
-            debugShowCheckedModeBanner: false,
           );
         },
       ),
