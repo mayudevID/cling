@@ -13,7 +13,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sqflite/sqflite.dart';
 
-import '../../bloc/main_bloc.dart';
 import '../widgets/dialog_add_success.dart';
 
 part 'home_event.dart';
@@ -128,6 +127,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
           );
           await _dbRepo.insertExpense(data);
           add(GetTotalExpense());
+          add(GetTodayExpenses());
           break;
       }
       Future.microtask(() {

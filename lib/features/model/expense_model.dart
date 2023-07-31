@@ -1,11 +1,5 @@
-import 'dart:convert';
-
+import 'package:cling/core/init_database.dart';
 import 'package:cling/core/static_name_table.dart';
-
-ExpenseModel expenseModelFromMap(String str) =>
-    ExpenseModel.fromMap(json.decode(str));
-
-String expenseModelToMap(ExpenseModel data) => json.encode(data.toMap());
 
 class ExpenseModel {
   int? id;
@@ -37,12 +31,12 @@ class ExpenseModel {
         categories: categories ?? this.categories,
       );
 
-  factory ExpenseModel.fromMap(Map<String, dynamic> json) => ExpenseModel(
+  factory ExpenseModel.fromDatabase(Map<String, dynamic> json) => ExpenseModel(
         id: json[ExpenseMeta.id],
         date: DateTime.parse(json[ExpenseMeta.date]),
         item: json[ExpenseMeta.item],
         amount: json[ExpenseMeta.amount]?.toDouble(),
-        categories: json[ExpenseMeta.categories],
+        categories: exCategoriesData[json[ExpenseCategoriesMeta.id]],
       );
 
   Map<String, dynamic> toMap() => {

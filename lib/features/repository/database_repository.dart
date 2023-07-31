@@ -103,8 +103,9 @@ class DatabaseRepository {
       where: "date(${ExpenseMeta.date}) = date(?)",
       whereArgs: [DateTime(now.year, now.month, now.day).toIso8601String()],
     );
+
     for (var element in maps) {
-      listData.add(ExpenseModel.fromMap(element));
+      listData.add(ExpenseModel.fromDatabase(element));
     }
     return listData;
   }

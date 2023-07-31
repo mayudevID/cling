@@ -1,8 +1,11 @@
 import 'package:cling/core/utils.dart';
 import 'package:cling/resources/gen/assets.gen.dart';
+import 'package:cling/resources/gen/fonts.gen.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../bloc/home_bloc.dart';
 import '../widgets/income_and_expense.dart';
 import '../widgets/monthy_budget.dart';
 import '../widgets/name_and_notification.dart';
@@ -39,19 +42,39 @@ class HomePage extends StatelessWidget {
             ),
           ),
           ...tagNameHome("Today Expenses"),
-          MediaQuery.removePadding(
-            context: context,
-            removeTop: true,
-            child: ListView.builder(
-              itemCount: dataDummyExpenses.length,
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemBuilder: (context, index) {
-                return todayExpensesWidget(
-                  dataDummyExpenses[index],
+          BlocBuilder<HomeBloc, HomeState>(
+            buildWhen: (prev, next) {
+              return prev.listTodayExpenses != next.listTodayExpenses;
+            },
+            builder: (context, state) {
+              if (state.listTodayExpenses.isEmpty) {
+                return Container(
+                  padding: EdgeInsets.symmetric(horizontal: 20.wmea),
+                  child: const Text(
+                    "No expenses today :D",
+                    style: TextStyle(
+                      fontFamily: FontFamily.cabinetGrotesk,
+                      color: Colors.white,
+                    ),
+                  ),
                 );
-              },
-            ),
+              }
+
+              return MediaQuery.removePadding(
+                context: context,
+                removeTop: true,
+                child: ListView.builder(
+                  itemCount: state.listTodayExpenses.length,
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemBuilder: (context, index) {
+                    return todayExpensesWidget(
+                      state.listTodayExpenses[index],
+                    );
+                  },
+                ),
+              );
+            },
           ),
           SizedBox(
             height: 90.hmea,

@@ -1,9 +1,11 @@
 import 'package:cling/core/utils.dart';
+import 'package:cling/features/model/expense_model.dart';
 import 'package:cling/resources/gen/fonts.gen.dart';
 import 'package:flutter/material.dart';
+import 'package:money_formatter/money_formatter.dart';
 import 'package:sizer/sizer.dart';
 
-Widget todayExpensesWidget(Map data) {
+Widget todayExpensesWidget(ExpenseModel expenseModel) {
   return Container(
     margin: EdgeInsets.only(
       left: 20.wmea,
@@ -26,13 +28,19 @@ Widget todayExpensesWidget(Map data) {
             color: Colors.white,
             borderRadius: BorderRadius.circular(5),
           ),
-          child: data['image'],
+          child: Text(
+            expenseModel.categories.substring(
+              0,
+              expenseModel.categories.indexOf(" "),
+            ),
+            style: TextStyle(fontSize: 24.sp),
+          ),
         ),
         SizedBox(
           width: 12.wmea,
         ),
         Text(
-          data['name'],
+          expenseModel.item,
           textAlign: TextAlign.center,
           style: TextStyle(
             color: Colors.white,
@@ -43,7 +51,16 @@ Widget todayExpensesWidget(Map data) {
         ),
         const Spacer(),
         Text(
-          "IDR ${data['expense'].toString()}",
+          MoneyFormatter(
+            amount: expenseModel.amount,
+            settings: MoneyFormatterSettings(
+              symbol: "IDR",
+              thousandSeparator: '.',
+              decimalSeparator: ',',
+              symbolAndNumberSeparator: ' ',
+              fractionDigits: 2,
+            ),
+          ).output.symbolOnLeft,
           textAlign: TextAlign.center,
           style: TextStyle(
             color: Colors.white,

@@ -3,28 +3,28 @@ import 'package:sqflite/sqflite.dart';
 
 import 'static_name_table.dart';
 
-FutureOr<void> initDatabaseTable(Database db, int version) async {
-  final exCategoriesData = [
-    "🎑 Other",
-    "💵 Bill",
-    "💹 Business & Investment",
-    "😎 Entertaiment",
-    "🍽️ Food & Beverage",
-    "🎁 Gift",
-    "🙂 Health & Beauty",
-    "🛒 Shopping",
-    "💳 Subscription",
-    "🚗 Transport",
-  ];
-  final inSourceData = [
-    "🎑 Other",
-    "🧑‍💼 Fulltime Job",
-    "💹 Investment",
-    "😎 Business",
-    "🎁 Gift",
-    "🙂 Health, Beauty, & Wellbeing"
-  ];
+final exCategoriesData = [
+  "🎑 Other",
+  "💵 Bill",
+  "💹 Business & Investment",
+  "😎 Entertaiment",
+  "🍽️ Food & Beverage",
+  "🎁 Gift",
+  "🙂 Health & Beauty",
+  "🛒 Shopping",
+  "💳 Subscription",
+  "🚗 Transport",
+];
+final inSourceData = [
+  "🎑 Other",
+  "🧑‍💼 Fulltime Job",
+  "💹 Investment",
+  "😎 Business",
+  "🎁 Gift",
+  "🙂 Health, Beauty, & Wellbeing"
+];
 
+FutureOr<void> initDatabaseTable(Database db, int version) async {
   await Future.wait([
     db.execute('''
           CREATE TABLE ${IncomeSourceMeta.nameTable}(

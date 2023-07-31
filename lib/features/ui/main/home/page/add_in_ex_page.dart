@@ -4,7 +4,6 @@ import 'package:cling/features/model/expense_categories_model.dart';
 import 'package:cling/features/model/income_source_model.dart';
 import 'package:cling/features/ui/main/home/bloc/home_bloc.dart';
 import 'package:cling/features/ui/main/home/widgets/categories_row.dart';
-import 'package:cling/features/ui/main/home/widgets/dialog_add_success.dart';
 import 'package:cling/resources/gen/assets.gen.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';

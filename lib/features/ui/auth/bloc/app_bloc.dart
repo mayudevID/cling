@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:bloc/bloc.dart';
 import 'package:cling/features/model/user_model.dart';
 import 'package:cling/features/ui/main/home/bloc/home_bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -57,7 +56,8 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     if (redirect) {
       event.context.read<HomeBloc>()
         ..add(GetTotalIncome())
-        ..add(GetTotalExpense());
+        ..add(GetTotalExpense())
+        ..add(GetTodayExpenses());
     }
 
     Navigator.pushNamedAndRemoveUntil(
