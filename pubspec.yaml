@@ -8,7 +8,6 @@ environment:
 
 dependencies:
   bloc: ^8.1.2
-  build_runner: ^2.4.6
   dropdown_button2: ^2.3.6
   email_validator: ^2.1.17
   equatable: ^2.0.5
@@ -18,15 +17,17 @@ dependencies:
     sdk: flutter
   flutter_bloc: ^8.1.3
   flutter_expandable_fab: ^1.8.1
-  flutter_gen: ^5.3.1
+  flutter_localizations:
+    sdk: flutter
   flutter_native_splash: ^2.3.1
   flutter_svg: ^2.0.7
   fluttertoast: ^8.2.2
   get_it: ^7.6.0
-  intl: ^0.18.1
+  intl: ^0.18.0
   lottie: ^2.5.0
   money_formatter: ^0.0.4
   neon_widgets: ^2.0.0
+  nil: ^1.1.1
   open_mail_app: ^0.4.5
   rename: ^2.1.1
   shared_preferences: ^2.2.0
@@ -36,6 +37,9 @@ dependencies:
   transitioned_indexed_stack: ^1.0.2
 
 dev_dependencies:
+  arb_generator: ^0.0.3
+  # flutter_gen: ^5.3.1
+  build_runner: ^2.4.6
   flutter_launcher_icons: ^0.13.1
   flutter_lints: ^2.0.0
   flutter_test:
@@ -61,8 +65,14 @@ flutter:
         - asset: lib/resources/fonts/CabinetGrotesk-Bold.otf
         - asset: lib/resources/fonts/CabinetGrotesk-Regular.otf
 
-flutter_localizations: # Add this line
-  sdk: flutter
+arb_generator:
+  input_filepath: "lib/resources/localization/localization_cling.csv"
+  output_directory: "lib/l10n"
+  filename_prepend: "app_"
+  csv_settings:
+    delimiter: ","
+    description_index: null
+    base_index: 2
 
 flutter_gen:
   output: lib/resources/gen/ # Optional (default: lib/gen/)

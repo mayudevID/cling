@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../../resources/gen/fonts.gen.dart';
+import '../../../language/lang_export.dart';
 import '../../home/bloc/home_bloc.dart';
 
 import '../../home/widgets/today_expenses_widget.dart';
@@ -30,7 +31,7 @@ class CashflowPage extends StatelessWidget {
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 20.wmea),
             child: Text(
-              'Cashflow',
+              AppLocalizations.of(context)!.cashflow,
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Colors.white,
@@ -46,7 +47,7 @@ class CashflowPage extends StatelessWidget {
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 20.wmea),
             child: Text(
-              'Income',
+              AppLocalizations.of(context)!.income,
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Colors.white,
@@ -77,7 +78,7 @@ class CashflowPage extends StatelessWidget {
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 20.wmea),
             child: Text(
-              'Today Expenses',
+              AppLocalizations.of(context)!.todayExpenses,
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Colors.white,
@@ -98,9 +99,9 @@ class CashflowPage extends StatelessWidget {
               if (state.listTodayExpenses.isEmpty) {
                 return Container(
                   padding: EdgeInsets.symmetric(horizontal: 20.wmea),
-                  child: const Text(
-                    "No expenses today :D",
-                    style: TextStyle(
+                  child: Text(
+                    "${AppLocalizations.of(context)!.noExpenseToday} :D",
+                    style: const TextStyle(
                       fontFamily: FontFamily.cabinetGrotesk,
                       color: Colors.white,
                     ),

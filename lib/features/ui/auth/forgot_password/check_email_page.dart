@@ -1,10 +1,10 @@
 import 'package:cling/core/common_widget.dart';
 import 'package:cling/core/utils.dart';
-
 import 'package:cling/resources/gen/fonts.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:open_mail_app/open_mail_app.dart';
 import 'package:sizer/sizer.dart';
+import '../../language/lang_export.dart';
 import 'widgets/email_with_star.dart';
 
 class CheckEmailPage extends StatelessWidget {
@@ -25,7 +25,7 @@ class CheckEmailPage extends StatelessWidget {
               height: 81.hmea,
             ),
             Text(
-              'Check your email',
+              AppLocalizations.of(context)!.checkYourEmail,
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Colors.white,
@@ -40,7 +40,7 @@ class CheckEmailPage extends StatelessWidget {
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 47.wmea),
               child: Text(
-                'Great! Now you can change your password through the link we send to your mail',
+                AppLocalizations.of(context)!.descCheckYourEmail,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Colors.white,
@@ -90,7 +90,7 @@ class CheckEmailPage extends StatelessWidget {
                   });
                 }
               },
-              name: "Go to mail",
+              name: AppLocalizations.of(context)!.goToMail,
             ),
           ],
         ),

@@ -1,0 +1,54 @@
+key,description,en,id
+onboarding,-,"Manage Your Money, Reach Your Goals, and Thrive.","Kelola uang Anda, mencapai tujuan Anda, dan berkembang."
+newUser,-,I’m new here,Saya baru disini
+haveAccount,-,Already have an account,Sudah memiliki akun
+welcomeBack,-,Welcome Back! ✨,Selamat Datang kembali! ✨
+descWelcomeBack,-,Enter your registed account to manage your money and reach your goals,Masukkan akun Anda yang ditdaftar untuk mengelola uang Anda dan mencapai tujuan Anda
+email,-,Email,Email
+password,-,Password,Kata sandi
+forgotPassword,-,Forgot Password?,Tidak ingat kata sandi?
+login,-,Login,Login
+dontHaveAnAccount,-,Don’t have an account?,Tidak punya akun?
+createNewAccount,-,Create New Account,Buat akun baru
+emailPassIsIncorrect,-,Email or Password is incorrect,Email atau kata sandi salah
+confirmPassword,-,Confirm Password,Konfirmasi Sandi
+helloThere,-,Hello THERE! ✨,Halo yang disana! ✨
+descHelloThere,-,Nice to meet you! enter your identity to reach your goals,Senang bertemu dengan Anda! Masukkan identitas Anda untuk mencapai tujuan Anda
+haveAccountTwo,-,Already have an account?,Sudah memiliki akun?
+almostThere,-,Almost there,Hampir selesai
+lastStep,-,The last step is verify your account. Go to email to verify your account now,Langkah terakhir adalah memverifikasi akun Anda. Buka email untuk memverifikasi akun Anda sekarang
+goToMail,-,Go to email,Pergi ke email
+forgotPasswordPage,-,Forgot Password,Tidak ingat kata sandi
+descForgotPassword,-,Don’t worry! enter your mail so we can share you link to change password,Jangan khawatir! Masukkan email Anda sehingga kami dapat membagikan tautan Anda untuk mengubah kata sandi
+sendMeLink,-,Send me link,Kirimkan saya tautan
+checkYourEmail,-,Check your email,Periksa email anda
+descCheckYourEmail,-,Great! Now you can change your password through the link we send to your mail,Bagus! Sekarang Anda dapat mengubah kata sandi Anda melalui tautan yang kami kirim ke email Anda
+goodDay,-,Good day,Halo
+overview,-,Overview,Ringkasan
+goals,-,Goals,Tujuan
+todayExpenses,-,Today Expenses,Pengeluaran Hari Ini
+addExpenses,-,Add Expenses,Tambah Pengeluaran
+addIncome,-,Add Income,Tambah Penghasilan
+purchaseDate,-,Purchase Date,Tanggal Pembelian
+categories,-,Categories,Kategori
+items,-,Items,Item
+amount,-,Amount,Jumlah
+submit,-,Submit,Simpan
+cancel,-,Cancel,Batal
+date,-,Date,Tanggal
+incomeSource,-,Income Source,Sumber pendapatan
+descriptionOptional,-,Description (Optional),Deskripsi (opsional)
+expenseAdded,-,Expense Added,Biaya ditambahkan
+incomeAdded,-,Income Added,Pendapatan ditambahkan
+income,-,Income,Penghasilan
+expense,-,Expense,Pengeluaran
+all,-,All,Semua
+savings,-,Savings,Tabungan
+yearlyBreakdown,-,Yearly Breakdown,Rincian Tahunan
+mostExpense,-,Most Expense,Pengeluaran Terbesar
+incomeBreakdown,-,Income Breakdown,Rincian Pendapatan
+cashflow,-,Cashflow,Arus kas
+noExpenseToday,-,No expense today :D,Tidak ada pengeluaran hari ini :D
+name,-,Name,Nama
+selectCategories,-,Select Categories,Pilih Kategori
+statistics,-,Statistics,Statistik

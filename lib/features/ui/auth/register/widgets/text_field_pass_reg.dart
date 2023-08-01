@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
 import '../../../../../resources/gen/fonts.gen.dart';
+
+import '../../../language/lang_export.dart';
 import '../bloc/register_bloc.dart';
 
 Widget textFieldPassReg(BuildContext context) {
@@ -36,7 +38,7 @@ Widget textFieldPassReg(BuildContext context) {
                   fontWeight: FontWeight.w500,
                 ),
                 decoration: InputDecoration.collapsed(
-                  hintText: 'Password',
+                  hintText: AppLocalizations.of(context)!.password,
                   hintStyle: TextStyle(
                     color: Colors.grey,
                     fontSize: 12.5.sp,

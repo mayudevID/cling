@@ -1,6 +1,7 @@
 import 'package:cling/core/common_widget.dart';
 import 'package:cling/core/route.dart';
 import 'package:cling/core/utils.dart';
+
 import 'package:cling/features/repository/auth_repository.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +12,7 @@ import 'package:sizer/sizer.dart';
 import '../../../../../injection.dart';
 import '../../../../../resources/gen/fonts.gen.dart';
 
+import '../../../language/lang_export.dart';
 import '../bloc/login_bloc.dart';
 
 import '../widgets/form_login.dart';
@@ -46,7 +48,7 @@ class LoginPageContent extends StatelessWidget {
               Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  'Welcome Back! ✨',
+                  AppLocalizations.of(context)!.welcomeBack,
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 22.sp,
@@ -59,7 +61,7 @@ class LoginPageContent extends StatelessWidget {
                 height: 8.hmea,
               ),
               Text(
-                'Enter your registed account to manage your money and reach your goals',
+                AppLocalizations.of(context)!.descWelcomeBack,
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 13.sp,
@@ -78,7 +80,7 @@ class LoginPageContent extends StatelessWidget {
                 onTap: () async {
                   context.read<LoginBloc>().add(SendLogin(context));
                 },
-                name: "Login",
+                name: AppLocalizations.of(context)!.login,
               ),
               const Expanded(
                 flex: 1,
@@ -88,7 +90,7 @@ class LoginPageContent extends StatelessWidget {
                 TextSpan(
                   children: [
                     TextSpan(
-                      text: 'Don\'t have an account?',
+                      text: AppLocalizations.of(context)!.dontHaveAnAccount,
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 12.sp,
@@ -97,7 +99,8 @@ class LoginPageContent extends StatelessWidget {
                       ),
                     ),
                     TextSpan(
-                      text: ' Create New Account',
+                      text:
+                          ' ${AppLocalizations.of(context)!.createNewAccount}',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 12.sp,

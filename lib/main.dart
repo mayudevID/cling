@@ -1,15 +1,15 @@
 import 'package:cling/core/bloc_observer.dart';
 import 'package:cling/core/route.dart';
+import 'package:cling/features/repository/settings_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:sizer/sizer.dart';
 import 'features/repository/auth_repository.dart';
-import 'features/repository/database_repository.dart';
+
 import 'features/ui/auth/bloc/app_bloc.dart';
-import 'features/ui/main/bloc/main_bloc.dart';
-import 'features/ui/main/home/bloc/home_bloc.dart';
-import 'features/ui/main/statistics/bloc/statistics_bloc.dart';
+import 'features/ui/language/lang_export.dart';
+import 'features/ui/language/language_bloc.dart';
 import 'injection.dart';
 
 void main() async {
@@ -34,42 +34,47 @@ class MainApp extends StatelessWidget {
           ),
         ),
         BlocProvider(
-          lazy: true,
-          create: (_) => MainBloc(),
-        ),
-        BlocProvider(
-          lazy: true,
-          create: (_) => HomeBloc(
-            dbRepo: getIt<DatabaseRepository>(),
-          ),
-        ),
-        BlocProvider(
-          lazy: true,
-          create: (_) => StatisticsBloc(),
+          create: (_) => LanguageBloc(
+            settingsRepo: getIt<SettingsRepository>(),
+          )..add(GetLanguage()),
         ),
       ],
-      child: Sizer(
-        builder: (context, orientation, deviceType) {
-          return GestureDetector(
-            onTap: () {
-              FocusScopeNode currentFocus = FocusScope.of(context);
+      child: initApp(),
+    );
+  }
 
-              if (!currentFocus.hasPrimaryFocus) {
-                currentFocus.unfocus();
-              }
+  Widget initApp() {
+    return Sizer(
+      builder: (context, orientation, deviceType) {
+        return GestureDetector(
+          onTap: () {
+            FocusScopeNode currentFocus = FocusScope.of(context);
+
+            if (!currentFocus.hasPrimaryFocus) {
+              currentFocus.unfocus();
+            }
+          },
+          child: BlocBuilder<LanguageBloc, LanguageState>(
+            buildWhen: (prev, curr) {
+              return prev.selectedLanguage != curr.selectedLanguage;
             },
-            child: MaterialApp(
-              builder: FToastBuilder(),
-              navigatorKey: navigatorKeyOpen,
-              theme: ThemeData(
-                primaryColor: Colors.white,
-              ),
-              onGenerateRoute: RouteGen.generateRoute,
-              debugShowCheckedModeBanner: false,
-            ),
-          );
-        },
-      ),
+            builder: (context, state) {
+              return MaterialApp(
+                builder: FToastBuilder(),
+                navigatorKey: navigatorKeyOpen,
+                theme: ThemeData(
+                  primaryColor: Colors.white,
+                ),
+                locale: state.selectedLanguage.value,
+                supportedLocales: AppLocalizations.supportedLocales,
+                localizationsDelegates: AppLocalizations.localizationsDelegates,
+                onGenerateRoute: RouteGen.generateRoute,
+                debugShowCheckedModeBanner: false,
+              );
+            },
+          ),
+        );
+      },
     );
   }
 }

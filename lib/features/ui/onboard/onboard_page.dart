@@ -4,7 +4,7 @@ import 'package:cling/core/utils.dart';
 import 'package:cling/resources/gen/fonts.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
-
+import '../language/lang_export.dart';
 import 'widgets/emoticon_widget.dart';
 import 'widgets/stack_emoticon.dart';
 import 'widgets/stack_star.dart';
@@ -48,7 +48,7 @@ class OnboardPage extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: Text(
-                'Manage Your Money, Reach Your Goals, and Thrive.',
+                AppLocalizations.of(context)!.onboarding,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Colors.white,
@@ -62,7 +62,7 @@ class OnboardPage extends StatelessWidget {
               height: 32.hmea,
             ),
             PinkButton(
-              name: 'I\'m new here',
+              name: AppLocalizations.of(context)!.newUser,
               onTap: () {
                 Navigator.pushNamed(context, RouteName.register);
               },
@@ -71,7 +71,7 @@ class OnboardPage extends StatelessWidget {
               height: 8.hmea,
             ),
             BlackButton(
-              name: 'Already have an account',
+              name: AppLocalizations.of(context)!.haveAccount,
               onTap: () {
                 Navigator.pushNamed(context, RouteName.login);
               },

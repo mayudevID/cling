@@ -1,16 +1,18 @@
 import 'package:cling/core/utils.dart';
+
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../../core/route.dart';
 import '../../../../../resources/gen/fonts.gen.dart';
+import '../../../language/lang_export.dart';
 import 'tag_name_login.dart';
 import 'text_field_email_login.dart';
 import 'text_field_pass_login.dart';
 
 List<Widget> formLogin(BuildContext context) {
   return [
-    const TagNameLogin(name: "Email"),
+    TagNameLogin(name: AppLocalizations.of(context)!.email),
     SizedBox(
       height: 8.hmea,
     ),
@@ -18,7 +20,7 @@ List<Widget> formLogin(BuildContext context) {
     SizedBox(
       height: 16.hmea,
     ),
-    const TagNameLogin(name: "Password"),
+    TagNameLogin(name: AppLocalizations.of(context)!.password),
     SizedBox(
       height: 8.hmea,
     ),
@@ -36,7 +38,7 @@ List<Widget> formLogin(BuildContext context) {
           );
         },
         child: Text(
-          'Forgot Password?',
+          AppLocalizations.of(context)!.forgotPassword,
           textAlign: TextAlign.right,
           style: TextStyle(
             color: Colors.white,

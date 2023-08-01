@@ -5,10 +5,16 @@ class CustomIndexedStack extends StatefulWidget {
     super.key,
     required this.children,
     required this.index,
+    required this.curve,
+    this.begin = const Offset(0, 0.02),
+    this.end = const Offset(0, 0),
   });
 
   final List<Widget> children;
   final int? index;
+  final Curve? curve;
+  final Offset? begin;
+  final Offset? end;
 
   @override
   State<CustomIndexedStack> createState() => _CustomIndexedStackState();
@@ -22,7 +28,7 @@ class _CustomIndexedStackState extends State<CustomIndexedStack>
   void initState() {
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 500),
+      duration: const Duration(milliseconds: 250),
     );
 
     super.initState();
@@ -51,11 +57,11 @@ class _CustomIndexedStackState extends State<CustomIndexedStack>
   Widget build(BuildContext context) {
     return SlideTransition(
       position: Tween<Offset>(
-        begin: const Offset(0, 0.02),
-        end: const Offset(0, 0),
+        begin: widget.begin,
+        end: widget.end,
       )
           .chain(
-            CurveTween(curve: Curves.easeOutExpo),
+            CurveTween(curve: widget.curve!),
           )
           .animate(
             _controller,

@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../../resources/gen/fonts.gen.dart';
+import '../../../language/lang_export.dart';
 
 Widget textFieldNameReg(BuildContext context) {
   return Container(
@@ -30,7 +31,7 @@ Widget textFieldNameReg(BuildContext context) {
         fontWeight: FontWeight.w500,
       ),
       decoration: InputDecoration.collapsed(
-        hintText: 'Name',
+        hintText: AppLocalizations.of(context)!.name,
         hintStyle: TextStyle(
           color: Colors.grey,
           fontSize: 12.5.sp,

@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:sizer/sizer.dart';
+import 'package:transitioned_indexed_stack/transitioned_indexed_stack.dart';
 
 import '../../../../../resources/gen/fonts.gen.dart';
 
+import '../../../language/lang_export.dart';
 import '../bloc/statistics_bloc.dart';
 import '../widgets/custom_indexed_stack.dart';
 import '../widgets/tag_chooser.dart';
@@ -28,7 +30,7 @@ class StatisticsPage extends StatelessWidget {
               height: 16.hmea,
             ),
             Text(
-              'Statistics',
+              AppLocalizations.of(context)!.statistics,
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Colors.white,
@@ -40,13 +42,17 @@ class StatisticsPage extends StatelessWidget {
             SizedBox(
               height: 24.hmea,
             ),
-            TagChooser(),
+            const TagChooser(),
             SizedBox(
               height: 24.hmea,
             ),
             BlocBuilder<StatisticsBloc, StatisticsState>(
+              buildWhen: (previous, current) {
+                return previous.typeCategories != current.typeCategories;
+              },
               builder: (context, state) {
                 return CustomIndexedStack(
+                  curve: Curves.fastOutSlowIn,
                   index: state.typeCategories,
                   children: [
                     StatsAll(),

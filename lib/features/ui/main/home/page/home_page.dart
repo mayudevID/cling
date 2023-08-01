@@ -5,6 +5,7 @@ import 'package:cling/resources/gen/fonts.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../language/lang_export.dart';
 import '../bloc/home_bloc.dart';
 import '../widgets/income_and_expense.dart';
 import '../widgets/monthy_budget.dart';
@@ -30,9 +31,9 @@ class HomePage extends StatelessWidget {
             height: 24.hmea,
           ),
           monthlyBudget(),
-          ...tagNameHome("Overview"),
+          ...tagNameHome(AppLocalizations.of(context)!.overview),
           incomeAndExpense(),
-          ...tagNameHome("Goals"),
+          ...tagNameHome(AppLocalizations.of(context)!.goals),
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
@@ -41,7 +42,7 @@ class HomePage extends StatelessWidget {
               }).toList(),
             ),
           ),
-          ...tagNameHome("Today Expenses"),
+          ...tagNameHome(AppLocalizations.of(context)!.todayExpenses),
           BlocBuilder<HomeBloc, HomeState>(
             buildWhen: (prev, next) {
               return prev.listTodayExpenses != next.listTodayExpenses;
@@ -50,9 +51,9 @@ class HomePage extends StatelessWidget {
               if (state.listTodayExpenses.isEmpty) {
                 return Container(
                   padding: EdgeInsets.symmetric(horizontal: 20.wmea),
-                  child: const Text(
-                    "No expenses today :D",
-                    style: TextStyle(
+                  child: Text(
+                    AppLocalizations.of(context)!.noExpenseToday,
+                    style: const TextStyle(
                       fontFamily: FontFamily.cabinetGrotesk,
                       color: Colors.white,
                     ),

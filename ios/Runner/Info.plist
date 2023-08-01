@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Cling</string>
+	<string>Cling!</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -58,6 +58,11 @@
 		<string>fastmail</string>
 		<string>superhuman</string>
 		<string>protonmail</string>
+	</array>
+	<key>CFBundleLocalizations</key>
+	<array>
+		<string>id</string>
+		<string>en</string>
 	</array>
 </dict>
 </plist>

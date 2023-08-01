@@ -11,6 +11,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../../resources/gen/fonts.gen.dart';
+import '../../../language/lang_export.dart';
 import '../../bloc/main_bloc.dart';
 
 enum FlowType { income, expense }
@@ -60,7 +61,9 @@ class AddIncomeExpensePage extends StatelessWidget {
             height: 16.hmea,
           ),
           Text(
-            (flowType == FlowType.income) ? 'Add Income' : 'Add Expenses',
+            (flowType == FlowType.income)
+                ? AppLocalizations.of(context)!.addIncome
+                : AppLocalizations.of(context)!.addExpenses,
             textAlign: TextAlign.center,
             style: TextStyle(
               color: Colors.white,
@@ -73,7 +76,9 @@ class AddIncomeExpensePage extends StatelessWidget {
             height: 24.hmea,
           ),
           Text(
-            (flowType == FlowType.income) ? 'Date' : 'Purchase Date',
+            (flowType == FlowType.income)
+                ? AppLocalizations.of(context)!.date
+                : AppLocalizations.of(context)!.purchaseDate,
             style: TextStyle(
               color: Colors.white,
               fontSize: 12.sp,
@@ -142,7 +147,9 @@ class AddIncomeExpensePage extends StatelessWidget {
             height: 16.hmea,
           ),
           Text(
-            (flowType == FlowType.income) ? 'Income Source' : 'Categories',
+            (flowType == FlowType.income)
+                ? AppLocalizations.of(context)!.incomeSource
+                : AppLocalizations.of(context)!.categories,
             style: TextStyle(
               color: Colors.white,
               fontSize: 12.sp,
@@ -183,7 +190,7 @@ class AddIncomeExpensePage extends StatelessWidget {
                         if (state.selectedCategories ==
                             const MapEntry(0, "")) ...[
                           Text(
-                            "Select Categories",
+                            AppLocalizations.of(context)!.selectCategories,
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               color: Colors.white,
@@ -241,7 +248,9 @@ class AddIncomeExpensePage extends StatelessWidget {
             height: 16.hmea,
           ),
           Text(
-            (flowType == FlowType.income) ? 'Description (Optional)' : 'Items',
+            (flowType == FlowType.income)
+                ? AppLocalizations.of(context)!.descriptionOptional
+                : AppLocalizations.of(context)!.items,
             style: TextStyle(
               color: Colors.white,
               fontSize: 12.sp,
@@ -275,8 +284,9 @@ class AddIncomeExpensePage extends StatelessWidget {
                 fontWeight: FontWeight.w500,
               ),
               decoration: InputDecoration.collapsed(
-                hintText:
-                    (flowType == FlowType.income) ? 'Description' : 'Items',
+                hintText: (flowType == FlowType.income)
+                    ? AppLocalizations.of(context)!.descriptionOptional
+                    : AppLocalizations.of(context)!.items,
                 hintStyle: TextStyle(
                   color: Colors.grey,
                   fontSize: 12.5.sp,
@@ -290,7 +300,7 @@ class AddIncomeExpensePage extends StatelessWidget {
             height: 16.hmea,
           ),
           Text(
-            'Amount (IDR)',
+            '${AppLocalizations.of(context)!.amount} (IDR)',
             style: TextStyle(
               color: Colors.white,
               fontSize: 12.sp,
@@ -364,13 +374,13 @@ class AddIncomeExpensePage extends StatelessWidget {
                     context,
                   ));
             },
-            name: "Submit",
+            name: AppLocalizations.of(context)!.submit,
           ),
           SizedBox(
             height: 32.hmea,
           ),
           BlackButton(
-            name: "Cancel",
+            name: AppLocalizations.of(context)!.cancel,
             onTap: () {
               context.read<MainBloc>().add(
                     const TabChange(

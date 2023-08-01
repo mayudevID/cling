@@ -4,21 +4,24 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../../resources/gen/fonts.gen.dart';
+import '../../../language/lang_export.dart';
 import '../bloc/statistics_bloc.dart';
 
 class TagChooser extends StatelessWidget {
-  TagChooser({super.key});
-
-  final tagFlow = {
-    0: "All",
-    1: "Income",
-    2: "Expense",
-  };
+  const TagChooser({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<StatisticsBloc, StatisticsState>(
+      buildWhen: (previous, current) {
+        return previous.typeCategories != current.typeCategories;
+      },
       builder: (context, state) {
+        final tagFlow = {
+          0: AppLocalizations.of(context)!.all,
+          1: AppLocalizations.of(context)!.income,
+          2: AppLocalizations.of(context)!.expense,
+        };
         return Row(
           children: tagFlow.entries.map(
             (e) {

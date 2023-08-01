@@ -6,6 +6,7 @@ import 'package:sizer/sizer.dart';
 import '../../../../../resources/gen/assets.gen.dart';
 import '../../../../../resources/gen/fonts.gen.dart';
 
+import '../../../language/lang_export.dart';
 import '../bloc/register_bloc.dart';
 
 Widget textFieldConPassReg(BuildContext context) {
@@ -38,7 +39,7 @@ Widget textFieldConPassReg(BuildContext context) {
                   fontWeight: FontWeight.w500,
                 ),
                 decoration: InputDecoration.collapsed(
-                  hintText: 'Confirm Password',
+                  hintText: AppLocalizations.of(context)!.confirmPassword,
                   hintStyle: TextStyle(
                     color: Colors.grey,
                     fontSize: 12.5.sp,

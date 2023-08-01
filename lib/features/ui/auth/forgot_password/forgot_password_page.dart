@@ -5,6 +5,7 @@ import 'package:cling/resources/gen/assets.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 import '../../../../resources/gen/fonts.gen.dart';
+import '../../language/lang_export.dart';
 import '../login/widgets/tag_name_login.dart';
 
 import 'widgets/text_field_email_forgot.dart';
@@ -30,8 +31,9 @@ class ForgotPasswordPage extends StatelessWidget {
                   Navigator.pop(context);
                 },
                 child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Assets.lib.resources.images.backButton.svg()),
+                  alignment: Alignment.centerLeft,
+                  child: Assets.lib.resources.images.backButton.svg(),
+                ),
               ),
               SizedBox(
                 height: 36.hmea,
@@ -39,7 +41,7 @@ class ForgotPasswordPage extends StatelessWidget {
               Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  'Forgot Password',
+                  AppLocalizations.of(context)!.forgotPasswordPage,
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 22.sp,
@@ -52,7 +54,7 @@ class ForgotPasswordPage extends StatelessWidget {
                 height: 8.hmea,
               ),
               Text(
-                'Don\'t worry! enter your mail so we can share you link to change password',
+                AppLocalizations.of(context)!.descForgotPassword,
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 13.sp,
@@ -63,7 +65,7 @@ class ForgotPasswordPage extends StatelessWidget {
               SizedBox(
                 height: 32.hmea,
               ),
-              const TagNameLogin(name: "Email"),
+              TagNameLogin(name: AppLocalizations.of(context)!.email),
               SizedBox(
                 height: 8.hmea,
               ),
@@ -78,7 +80,7 @@ class ForgotPasswordPage extends StatelessWidget {
                     RouteName.checkEmail,
                   );
                 },
-                name: "Send me link",
+                name: AppLocalizations.of(context)!.sendMeLink,
               ),
             ],
           ),

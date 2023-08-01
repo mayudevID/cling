@@ -1,5 +1,6 @@
 import 'package:cling/core/common_widget.dart';
 import 'package:cling/core/utils.dart';
+
 import 'package:cling/features/repository/auth_repository.dart';
 import 'package:cling/features/ui/auth/register/widgets/form_register.dart';
 import 'package:cling/resources/gen/fonts.gen.dart';
@@ -9,6 +10,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
 import '../../../../../core/route.dart';
 import '../../../../../injection.dart';
+import '../../../language/lang_export.dart';
 import '../bloc/register_bloc.dart';
 
 class RegisterPage extends StatelessWidget {
@@ -42,7 +44,7 @@ class RegisterPageContent extends StatelessWidget {
               Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  'Hello THERE! ✨',
+                  AppLocalizations.of(context)!.helloThere,
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 22.sp,
@@ -55,7 +57,7 @@ class RegisterPageContent extends StatelessWidget {
                 height: 8.hmea,
               ),
               Text(
-                'Nice to meet you! enter your identity to reach your goals',
+                AppLocalizations.of(context)!.descHelloThere,
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 13.sp,

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import '../../../../../resources/gen/fonts.gen.dart';
+import '../../../language/lang_export.dart';
 import '../../home/page/home_page.dart';
 import '../widgets/most_expense.dart';
 import '../widgets/tag_info.dart';
@@ -78,7 +79,7 @@ class StatsAll extends StatelessWidget {
           height: 24.hmea,
         ),
         Text(
-          'Yearly Breakdown',
+          AppLocalizations.of(context)!.yearlyBreakdown,
           textAlign: TextAlign.center,
           style: TextStyle(
             color: Colors.white,
@@ -161,7 +162,7 @@ class StatsAll extends StatelessWidget {
           height: 24.hmea,
         ),
         Text(
-          'Most Expense',
+          AppLocalizations.of(context)!.mostExpense,
           style: TextStyle(
             color: Colors.white,
             fontSize: 13.5.sp,

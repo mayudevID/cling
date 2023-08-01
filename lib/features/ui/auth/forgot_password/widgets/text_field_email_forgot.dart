@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../../resources/gen/fonts.gen.dart';
+import '../../../language/lang_export.dart';
 
 class TextFieldEmailForgot extends StatelessWidget {
   const TextFieldEmailForgot({super.key});
@@ -31,7 +32,7 @@ class TextFieldEmailForgot extends StatelessWidget {
             fontWeight: FontWeight.w500,
           ),
           decoration: InputDecoration.collapsed(
-            hintText: 'Email',
+            hintText: AppLocalizations.of(context)!.email,
             hintStyle: TextStyle(
               color: Colors.grey,
               fontSize: 12.5.sp,

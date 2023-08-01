@@ -4,6 +4,7 @@ import 'package:sizer/sizer.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../../../../../resources/gen/fonts.gen.dart';
+import '../../../language/lang_export.dart';
 import '../../home/page/home_page.dart';
 import '../widgets/income_widget.dart';
 
@@ -31,7 +32,7 @@ class StatsIncome extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Yearly Breakdown',
+          AppLocalizations.of(context)!.yearlyBreakdown,
           textAlign: TextAlign.center,
           style: TextStyle(
             color: Colors.white,
@@ -91,7 +92,7 @@ class StatsIncome extends StatelessWidget {
           height: 24.hmea,
         ),
         Text(
-          'Income Breakdown',
+          AppLocalizations.of(context)!.incomeBreakdown,
           style: TextStyle(
             color: Colors.white,
             fontSize: 13.5.sp,

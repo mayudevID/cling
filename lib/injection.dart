@@ -1,4 +1,5 @@
 import 'package:cling/features/repository/database_repository.dart';
+import 'package:cling/features/repository/settings_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -34,4 +35,9 @@ Future<void> initSl() async {
 
   final fToast = FToast();
   getIt.registerLazySingleton<FToast>(() => fToast);
+
+  final settingsRepo = SettingsRepository(
+    cache: getIt<SharedPreferences>(),
+  );
+  getIt.registerLazySingleton<SettingsRepository>(() => settingsRepo);
 }

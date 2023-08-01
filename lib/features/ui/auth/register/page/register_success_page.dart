@@ -1,10 +1,12 @@
 import 'package:cling/core/common_widget.dart';
 import 'package:cling/core/utils.dart';
+
 import 'package:cling/resources/gen/fonts.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:open_mail_app/open_mail_app.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../../language/lang_export.dart';
 import '../widgets/box_face.dart';
 
 import '../widgets/oval_stack.dart';
@@ -42,7 +44,7 @@ class RegisterSuccessPage extends StatelessWidget {
               height: 97.hmea,
             ),
             Text(
-              'Almost there',
+              AppLocalizations.of(context)!.almostThere,
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Colors.white,
@@ -57,7 +59,7 @@ class RegisterSuccessPage extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 45),
               child: Text(
-                'The last step is verify your account. Go to mail to verify your account now',
+                AppLocalizations.of(context)!.lastStep,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Colors.white,
@@ -107,7 +109,7 @@ class RegisterSuccessPage extends StatelessWidget {
                   });
                 }
               },
-              name: "Go to mail",
+              name: AppLocalizations.of(context)!.goToMail,
             ),
           ],
         ),
