@@ -36,7 +36,5 @@ class ChangeName extends RegisterEvent {
 }
 
 class SendRegister extends RegisterEvent {
-  const SendRegister(this.context);
-
-  final BuildContext context;
+  const SendRegister();
 }

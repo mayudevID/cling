@@ -24,6 +24,8 @@ void main() async {
 class MainApp extends StatelessWidget {
   const MainApp({super.key});
 
+  static var navKeyGlobal = GlobalKey<NavigatorState>();
+
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
@@ -59,22 +61,26 @@ class MainApp extends StatelessWidget {
               return prev.selectedLanguage != curr.selectedLanguage;
             },
             builder: (context, state) {
-              return MaterialApp(
-                builder: FToastBuilder(),
-                navigatorKey: navigatorKeyOpen,
-                theme: ThemeData(
-                  primaryColor: Colors.white,
-                ),
-                locale: state.selectedLanguage.value,
-                supportedLocales: AppLocalizations.supportedLocales,
-                localizationsDelegates: AppLocalizations.localizationsDelegates,
-                onGenerateRoute: RouteGen.generateRoute,
-                debugShowCheckedModeBanner: false,
-              );
+              return materialApp(state);
             },
           ),
         );
       },
+    );
+  }
+
+  MaterialApp materialApp(LanguageState state) {
+    return MaterialApp(
+      builder: FToastBuilder(),
+      navigatorKey: navKeyGlobal,
+      theme: ThemeData(
+        primaryColor: Colors.white,
+      ),
+      locale: state.selectedLanguage.value,
+      supportedLocales: AppLocalizations.supportedLocales,
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      onGenerateRoute: RouteGen.generateRoute,
+      debugShowCheckedModeBanner: false,
     );
   }
 }

@@ -369,10 +369,7 @@ class AddIncomeExpensePage extends StatelessWidget {
           ),
           PinkButton(
             onTap: () {
-              context.read<HomeBloc>().add(SaveData(
-                    flowType,
-                    context,
-                  ));
+              context.read<HomeBloc>().add(SaveData(flowType));
             },
             name: AppLocalizations.of(context)!.submit,
           ),

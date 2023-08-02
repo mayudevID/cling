@@ -9,7 +9,11 @@ import '../injection.dart';
 import '../resources/gen/fonts.gen.dart';
 
 class PinkButton extends StatelessWidget {
-  const PinkButton({super.key, required this.onTap, required this.name});
+  const PinkButton({
+    super.key,
+    required this.onTap,
+    required this.name,
+  });
   final Function() onTap;
   final String name;
 
@@ -49,7 +53,11 @@ class PinkButton extends StatelessWidget {
 }
 
 class BlackButton extends StatelessWidget {
-  const BlackButton({super.key, required this.name, required this.onTap});
+  const BlackButton({
+    super.key,
+    required this.name,
+    required this.onTap,
+  });
   final String name;
   final Function() onTap;
 
@@ -57,7 +65,7 @@ class BlackButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: 390.wmea,
-      height: 57.hmea,
+      height: 57.wmea,
       child: ElevatedButton(
         onPressed: onTap,
         style: ButtonStyle(

@@ -6,6 +6,7 @@ import 'package:sizer/sizer.dart';
 
 import '../../../../resources/gen/assets.gen.dart';
 import '../../../../resources/gen/fonts.gen.dart';
+import '../../language/lang_export.dart';
 import '../bloc/enum_home_page_state.dart';
 import '../bloc/main_bloc.dart';
 import '../home/bloc/home_bloc.dart';
@@ -45,9 +46,8 @@ Widget customFloatingActionButton(BuildContext context) {
           onTap: () {
             context.read<HomeBloc>().add(GetIncomeSource());
             context.read<MainBloc>().add(
-                  HomePageStateChange(
+                  const HomePageStateChange(
                     homePageState: HomePageState.income,
-                    context: context,
                   ),
                 );
           },
@@ -61,7 +61,7 @@ Widget customFloatingActionButton(BuildContext context) {
               borderRadius: BorderRadius.circular(13),
             ),
             child: Text(
-              'Add income',
+              AppLocalizations.of(context)!.addIncome,
               style: TextStyle(
                 color: Colors.black,
                 fontSize: 13.5.sp,
@@ -75,9 +75,8 @@ Widget customFloatingActionButton(BuildContext context) {
           onTap: () {
             context.read<HomeBloc>().add(GetExpenseCategories());
             context.read<MainBloc>().add(
-                  HomePageStateChange(
+                  const HomePageStateChange(
                     homePageState: HomePageState.expense,
-                    context: context,
                   ),
                 );
           },
@@ -91,7 +90,7 @@ Widget customFloatingActionButton(BuildContext context) {
               borderRadius: BorderRadius.circular(13),
             ),
             child: Text(
-              'Add expense',
+              AppLocalizations.of(context)!.addExpenses,
               style: TextStyle(
                 color: Colors.black,
                 fontSize: 13.5.sp,

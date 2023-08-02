@@ -16,6 +16,8 @@ import '../bloc/register_bloc.dart';
 class RegisterPage extends StatelessWidget {
   const RegisterPage({super.key});
 
+  static var navKeyRegister = GlobalKey<NavigatorState>();
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -32,6 +34,7 @@ class RegisterPageContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        key: RegisterPage.navKeyRegister,
         resizeToAvoidBottomInset: false,
         backgroundColor: Colors.black,
         body: Padding(
@@ -74,16 +77,16 @@ class RegisterPageContent extends StatelessWidget {
               ),
               PinkButton(
                 onTap: () {
-                  context.read<RegisterBloc>().add(SendRegister(context));
+                  context.read<RegisterBloc>().add(const SendRegister());
                 },
-                name: "Create New Account",
+                name: AppLocalizations.of(context)!.createNewAccount,
               ),
               const Expanded(flex: 1, child: SizedBox()),
               Text.rich(
                 TextSpan(
                   children: [
                     TextSpan(
-                      text: 'Already have an account?',
+                      text: AppLocalizations.of(context)!.haveAccountTwo,
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 12.sp,
@@ -92,7 +95,7 @@ class RegisterPageContent extends StatelessWidget {
                       ),
                     ),
                     TextSpan(
-                      text: ' Login',
+                      text: ' ${AppLocalizations.of(context)!.login}',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 12.sp,

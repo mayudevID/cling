@@ -30,9 +30,9 @@ class HomePage extends StatelessWidget {
           SizedBox(
             height: 24.hmea,
           ),
-          monthlyBudget(),
+          monthlyBudget(context),
           ...tagNameHome(AppLocalizations.of(context)!.overview),
-          incomeAndExpense(),
+          incomeAndExpense(context),
           ...tagNameHome(AppLocalizations.of(context)!.goals),
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,

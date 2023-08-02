@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:cling/core/utils.dart';
 import 'package:cling/features/ui/auth/bloc/app_bloc.dart';
 import 'package:cling/injection.dart';
+import 'package:cling/main.dart';
 import 'package:cling/resources/gen/assets.gen.dart';
 import 'package:cling/resources/gen/fonts.gen.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +22,7 @@ class SplashPage extends StatefulWidget {
 class _SplashPageState extends State<SplashPage> {
   @override
   void initState() {
-    getIt<FToast>().init(navigatorKeyOpen.currentContext!);
+    getIt<FToast>().init(MainApp.navKeyGlobal.currentContext!);
     initSplash();
     super.initState();
   }
@@ -32,7 +33,7 @@ class _SplashPageState extends State<SplashPage> {
       (timer) async {
         timer.cancel();
 
-        context.read<AppBloc>().add(Redirect(context));
+        context.read<AppBloc>().add(const Redirect());
       },
     );
     super.initState();

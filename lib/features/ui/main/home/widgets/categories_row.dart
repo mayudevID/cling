@@ -11,7 +11,10 @@ List<Widget> rowCategories(String data) {
         0,
         data.indexOf(" "),
       ),
-      style: TextStyle(fontSize: 16.sp),
+      style: TextStyle(
+        fontSize: 16.sp,
+        fontFamily: FontFamily.cabinetGrotesk,
+      ),
     ),
     SizedBox(
       width: 10.wmea,

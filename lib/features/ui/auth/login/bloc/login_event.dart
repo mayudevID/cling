@@ -22,7 +22,5 @@ class ChangePassword extends LoginEvent {
 }
 
 class SendLogin extends LoginEvent {
-  const SendLogin(this.context);
-
-  final BuildContext context;
+  const SendLogin();
 }

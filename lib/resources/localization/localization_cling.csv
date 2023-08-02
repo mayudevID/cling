@@ -52,3 +52,10 @@ noExpenseToday,-,No expense today :D,Tidak ada pengeluaran hari ini :D
 name,-,Name,Nama
 selectCategories,-,Select Categories,Pilih Kategori
 statistics,-,Statistics,Statistik
+invalidEmailFailure,-,Email is not valid or badly formatted.,Email tidak valid atau format yang buruk.
+userDisabledFailure,-,This user has been disabled. Please contact support for help.,Pengguna ini telah dinonaktifkan. Silakan hubungi Dukungan untuk Bantuan.
+userNotFoundFailure,-,"Email is not found, please create an account.","Email tidak ditemukan, silakan buat akun."
+wrongPasswordFailure,-,"Incorrect password, please try again.","Kata sandi yang salah, coba lagi."
+emailAlreadyFailure,-,An account already exists.,Akun sudah ada.
+operationNotAllowedFailure,-,Operation is not allowed. Please contact support.,Operasi tidak diperbolehkan. Silakan hubungi Dukungan.
+waekPasswordFailure,-,Please enter a stronger password.,Harap masukkan kata sandi yang lebih kuat.

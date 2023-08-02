@@ -15,10 +15,8 @@ class TabChange extends MainEvent {
 
 class HomePageStateChange extends MainEvent {
   final HomePageState homePageState;
-  final BuildContext context;
 
   const HomePageStateChange({
     required this.homePageState,
-    required this.context,
   });
 }

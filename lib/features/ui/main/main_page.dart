@@ -1,6 +1,5 @@
 import 'package:cling/features/ui/main/home/page/add_in_ex_page.dart';
 import 'package:cling/features/ui/main/profile/page/profile_page.dart';
-import 'package:cling/features/ui/main/statistics/widgets/custom_indexed_stack.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -55,6 +54,7 @@ class MainPageContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        key: navigatorKeyMain,
         backgroundColor: const Color(0xFF101010),
         body: SizedBox(
           width: 100.w,
@@ -103,3 +103,5 @@ class MainPageContent extends StatelessWidget {
     );
   }
 }
+
+GlobalKey<NavigatorState> navigatorKeyMain = GlobalKey<NavigatorState>();

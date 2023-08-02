@@ -6,8 +6,9 @@ import 'package:money_formatter/money_formatter.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../../resources/gen/fonts.gen.dart';
+import '../../../language/lang_export.dart';
 
-Widget incomeAndExpense() {
+Widget incomeAndExpense(BuildContext context) {
   return Container(
     margin: EdgeInsets.symmetric(
       horizontal: 20.wmea,
@@ -38,7 +39,7 @@ Widget incomeAndExpense() {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Text(
-                    'Income ✨',
+                    '${AppLocalizations.of(context)!.income} ✨',
                     textAlign: TextAlign.left,
                     style: TextStyle(
                       color: Colors.white,
@@ -108,7 +109,7 @@ Widget incomeAndExpense() {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Text(
-                    'Expense 🙏',
+                    '${AppLocalizations.of(context)!.expense} 🙏',
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 10.5.sp,

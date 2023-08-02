@@ -3,11 +3,11 @@ import 'dart:ui';
 enum Language {
   english(
     Locale('en'),
-    'English',
+    '🇺🇸 English',
   ),
   indonesia(
     Locale('id'),
-    'Bahasa Indonesia',
+    '🇮🇩 Bahasa Indonesia',
   );
 
   const Language(this.value, this.text);

@@ -3,12 +3,14 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:cling/core/exception.dart';
 import 'package:cling/core/route.dart';
+import 'package:cling/main.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../../core/common_widget.dart';
 import '../../../../repository/auth_repository.dart';
+import '../page/register_page.dart';
 
 part 'register_event.dart';
 part 'register_state.dart';
@@ -100,7 +102,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
       return;
     }
 
-    loadingAuth(event.context);
+    loadingAuth(RegisterPage.navKeyRegister.currentContext!);
     await _authRepository.logOut();
     await _authRepository.saveRegisterStatus(false);
 
@@ -119,21 +121,21 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
       await _authRepository.saveRegisterStatus(true);
 
       Future.microtask(() {
-        Navigator.pop(event.context);
+        Navigator.pop(RegisterPage.navKeyRegister.currentContext!);
         Navigator.pushReplacementNamed(
-          event.context,
+          MainApp.navKeyGlobal.currentContext!,
           RouteName.registerSuccess,
         );
       });
     } on SignUpWithEmailAndPasswordFailure catch (e) {
       Future.microtask(() {
-        Navigator.pop(event.context);
+        Navigator.pop(RegisterPage.navKeyRegister.currentContext!);
         errorToast(e.message);
       });
     } on Exception catch (e) {
       _authRepository.logOut();
       Future.microtask(() {
-        Navigator.pop(event.context);
+        Navigator.pop(RegisterPage.navKeyRegister.currentContext!);
         errorToast(e.toString());
       });
     }

@@ -2,6 +2,8 @@ import 'package:cling/core/exception.dart';
 
 import 'package:cling/features/repository/auth_repository.dart';
 import 'package:cling/features/ui/auth/bloc/app_bloc.dart';
+import 'package:cling/features/ui/auth/login/page/login_page.dart';
+import 'package:cling/features/ui/language/lang_export.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
@@ -44,7 +46,10 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     }
 
     if (!EmailValidator.validate(state.email)) {
-      errorToast("Email not valid");
+      errorToast(
+        AppLocalizations.of(LoginPage.navKeyLogin.currentContext!)!
+            .invalidEmailFailure,
+      );
       return;
     }
 
@@ -53,7 +58,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       return;
     }
 
-    loadingAuth(event.context);
+    loadingAuth(LoginPage.navKeyLogin.currentContext!);
     await _authRepository.logOut();
     await _authRepository.saveLoginStatus(false);
 
@@ -68,7 +73,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       if (!_authRepository.currentUser!.emailVerified) {
         await Future.microtask(
           () async {
-            await dialogEmailNotVerified(event.context);
+            await dialogEmailNotVerified(LoginPage.navKeyLogin.currentContext!);
           },
         );
       }
@@ -80,12 +85,14 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       await Future.delayed(const Duration(milliseconds: 250));
 
       Future.microtask(() {
-        event.context.read<AppBloc>().add(Redirect(event.context));
+        LoginPage.navKeyLogin.currentContext!
+            .read<AppBloc>()
+            .add(const Redirect());
       });
     } on LogInWithEmailAndPasswordFailure catch (e) {
       _authRepository.logOut();
       Future.microtask(() {
-        Navigator.pop(event.context);
+        Navigator.pop(LoginPage.navKeyLogin.currentContext!);
         errorToast(e.message);
       });
     }

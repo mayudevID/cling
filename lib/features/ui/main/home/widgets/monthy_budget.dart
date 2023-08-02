@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../../resources/gen/fonts.gen.dart';
+import '../../../language/lang_export.dart';
 
-Widget monthlyBudget() {
+Widget monthlyBudget(BuildContext context) {
   return Container(
     margin: EdgeInsets.symmetric(horizontal: 20.wmea),
     padding: EdgeInsets.symmetric(
@@ -25,7 +26,7 @@ Widget monthlyBudget() {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              'Monthly Budget',
+              AppLocalizations.of(context)!.addExpenses,
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Colors.white,

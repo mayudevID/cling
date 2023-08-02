@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:cling/features/model/user_model.dart';
+import 'package:cling/main.dart';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
@@ -53,15 +54,8 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     final redirect = ((state.status == AppStatus.authenticated) &&
         (_authRepo.loginStatus || _authRepo.registerStatus));
 
-    // if (redirect) {
-    //   event.context.read<HomeBloc>()
-    //     ..add(GetTotalIncome())
-    //     ..add(GetTotalExpense())
-    //     ..add(GetTodayExpenses());
-    // }
-
     Navigator.pushNamedAndRemoveUntil(
-      event.context,
+      MainApp.navKeyGlobal.currentContext!,
       redirect ? RouteName.main : RouteName.onboard,
       (route) => false,
     );

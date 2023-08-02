@@ -8,6 +8,8 @@ import 'package:cling/features/model/income_model.dart';
 import 'package:cling/features/model/income_source_model.dart';
 import 'package:cling/features/repository/database_repository.dart';
 import 'package:cling/features/ui/main/home/page/add_in_ex_page.dart';
+import 'package:cling/features/ui/main/main_page.dart';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -132,7 +134,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       }
       Future.microtask(() {
         dialogAddSuccess(
-          event.context,
+          navigatorKeyMain.currentContext!,
           (event.flowType == FlowType.income) ? "Income" : "Expense",
         );
       });

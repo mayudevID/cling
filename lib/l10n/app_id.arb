@@ -105,5 +105,19 @@
   "selectCategories": "Pilih Kategori",
   "@selectCategories": {},
   "statistics": "Statistik",
-  "@statistics": {}
+  "@statistics": {},
+  "invalidEmailFailure": "Email tidak valid atau format yang buruk.",
+  "@invalidEmailFailure": {},
+  "userDisabledFailure": "Pengguna ini telah dinonaktifkan. Silakan hubungi Dukungan untuk Bantuan.",
+  "@userDisabledFailure": {},
+  "userNotFoundFailure": "Email tidak ditemukan, silakan buat akun.",
+  "@userNotFoundFailure": {},
+  "wrongPasswordFailure": "Kata sandi yang salah, coba lagi.",
+  "@wrongPasswordFailure": {},
+  "emailAlreadyFailure": "Akun sudah ada.",
+  "@emailAlreadyFailure": {},
+  "operationNotAllowedFailure": "Operasi tidak diperbolehkan. Silakan hubungi Dukungan.",
+  "@operationNotAllowedFailure": {},
+  "waekPasswordFailure": "Harap masukkan kata sandi yang lebih kuat.",
+  "@waekPasswordFailure": {}
 }

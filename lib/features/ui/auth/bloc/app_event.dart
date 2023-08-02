@@ -18,7 +18,5 @@ class AppUserChanged extends AppEvent {
 }
 
 class Redirect extends AppEvent {
-  const Redirect(this.context);
-
-  final BuildContext context;
+  const Redirect();
 }

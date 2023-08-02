@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:sizer/sizer.dart';
-import 'package:transitioned_indexed_stack/transitioned_indexed_stack.dart';
 
 import '../../../../../resources/gen/fonts.gen.dart';
 

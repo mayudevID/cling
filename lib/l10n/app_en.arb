@@ -105,5 +105,19 @@
   "selectCategories": "Select Categories",
   "@selectCategories": {},
   "statistics": "Statistics",
-  "@statistics": {}
+  "@statistics": {},
+  "invalidEmailFailure": "Email is not valid or badly formatted.",
+  "@invalidEmailFailure": {},
+  "userDisabledFailure": "This user has been disabled. Please contact support for help.",
+  "@userDisabledFailure": {},
+  "userNotFoundFailure": "Email is not found, please create an account.",
+  "@userNotFoundFailure": {},
+  "wrongPasswordFailure": "Incorrect password, please try again.",
+  "@wrongPasswordFailure": {},
+  "emailAlreadyFailure": "An account already exists.",
+  "@emailAlreadyFailure": {},
+  "operationNotAllowedFailure": "Operation is not allowed. Please contact support.",
+  "@operationNotAllowedFailure": {},
+  "waekPasswordFailure": "Please enter a stronger password.",
+  "@waekPasswordFailure": {}
 }

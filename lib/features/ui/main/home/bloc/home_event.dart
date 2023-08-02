@@ -46,8 +46,7 @@ class SetAmountInput extends HomeEvent {
 }
 
 class SaveData extends HomeEvent {
-  const SaveData(this.flowType, this.context);
+  const SaveData(this.flowType);
 
   final FlowType flowType;
-  final BuildContext context;
 }

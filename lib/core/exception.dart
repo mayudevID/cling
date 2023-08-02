@@ -1,3 +1,6 @@
+import 'package:cling/features/ui/language/lang_export.dart';
+import '../main.dart';
+
 class SignUpWithEmailAndPasswordFailure implements Exception {
   const SignUpWithEmailAndPasswordFailure([
     this.message = 'An unknown exception occurred.',
@@ -6,24 +9,29 @@ class SignUpWithEmailAndPasswordFailure implements Exception {
   factory SignUpWithEmailAndPasswordFailure.fromCode(String code) {
     switch (code) {
       case 'invalid-email':
-        return const SignUpWithEmailAndPasswordFailure(
-          'Email is not valid or badly formatted.',
+        return SignUpWithEmailAndPasswordFailure(
+          AppLocalizations.of(MainApp.navKeyGlobal.currentContext!)!
+              .invalidEmailFailure,
         );
       case 'user-disabled':
-        return const SignUpWithEmailAndPasswordFailure(
-          'This user has been disabled. Please contact support for help.',
+        return SignUpWithEmailAndPasswordFailure(
+          AppLocalizations.of(MainApp.navKeyGlobal.currentContext!)!
+              .userDisabledFailure,
         );
       case 'email-already-in-use':
-        return const SignUpWithEmailAndPasswordFailure(
-          'An account already exists for that email.',
+        return SignUpWithEmailAndPasswordFailure(
+          AppLocalizations.of(MainApp.navKeyGlobal.currentContext!)!
+              .emailAlreadyFailure,
         );
       case 'operation-not-allowed':
-        return const SignUpWithEmailAndPasswordFailure(
-          'Operation is not allowed. Please contact support.',
+        return SignUpWithEmailAndPasswordFailure(
+          AppLocalizations.of(MainApp.navKeyGlobal.currentContext!)!
+              .operationNotAllowedFailure,
         );
       case 'weak-password':
-        return const SignUpWithEmailAndPasswordFailure(
-          'Please enter a stronger password.',
+        return SignUpWithEmailAndPasswordFailure(
+          AppLocalizations.of(MainApp.navKeyGlobal.currentContext!)!
+              .waekPasswordFailure,
         );
       default:
         return const SignUpWithEmailAndPasswordFailure();
@@ -41,20 +49,24 @@ class LogInWithEmailAndPasswordFailure implements Exception {
   factory LogInWithEmailAndPasswordFailure.fromCode(String code) {
     switch (code) {
       case 'invalid-email':
-        return const LogInWithEmailAndPasswordFailure(
-          'Email is not valid or badly formatted.',
+        return LogInWithEmailAndPasswordFailure(
+          AppLocalizations.of(MainApp.navKeyGlobal.currentContext!)!
+              .invalidEmailFailure,
         );
       case 'user-disabled':
-        return const LogInWithEmailAndPasswordFailure(
-          'This user has been disabled. Please contact support for help.',
+        return LogInWithEmailAndPasswordFailure(
+          AppLocalizations.of(MainApp.navKeyGlobal.currentContext!)!
+              .userDisabledFailure,
         );
       case 'user-not-found':
-        return const LogInWithEmailAndPasswordFailure(
-          'Email is not found, please create an account.',
+        return LogInWithEmailAndPasswordFailure(
+          AppLocalizations.of(MainApp.navKeyGlobal.currentContext!)!
+              .userNotFoundFailure,
         );
       case 'wrong-password':
-        return const LogInWithEmailAndPasswordFailure(
-          'Incorrect password, please try again.',
+        return LogInWithEmailAndPasswordFailure(
+          AppLocalizations.of(MainApp.navKeyGlobal.currentContext!)!
+              .wrongPasswordFailure,
         );
       default:
         return const LogInWithEmailAndPasswordFailure();

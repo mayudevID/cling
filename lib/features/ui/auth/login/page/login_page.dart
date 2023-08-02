@@ -20,6 +20,8 @@ import '../widgets/form_login.dart';
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
 
+  static var navKeyLogin = GlobalKey<NavigatorState>();
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider<LoginBloc>(
@@ -36,6 +38,7 @@ class LoginPageContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        key: LoginPage.navKeyLogin,
         backgroundColor: Colors.black,
         body: Container(
           width: 100.w,
@@ -78,7 +81,7 @@ class LoginPageContent extends StatelessWidget {
               ),
               PinkButton(
                 onTap: () async {
-                  context.read<LoginBloc>().add(SendLogin(context));
+                  context.read<LoginBloc>().add(const SendLogin());
                 },
                 name: AppLocalizations.of(context)!.login,
               ),
