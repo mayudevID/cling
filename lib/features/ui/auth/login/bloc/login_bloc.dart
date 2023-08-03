@@ -41,7 +41,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
   void _sendLogin(SendLogin event, _) async {
     if (state.email.trim().isEmpty || state.password.trim().isEmpty) {
-      errorToast("Form empty");
+      errorToast(
+        AppLocalizations.of(LoginPage.navKeyLogin.currentContext!)!.formEmpty,
+      );
       return;
     }
 
@@ -54,7 +56,10 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     }
 
     if (state.password.trim().length < 8) {
-      errorToast("Password must be 8 character or more");
+      errorToast(
+        AppLocalizations.of(LoginPage.navKeyLogin.currentContext!)!
+            .passwordLengthFailure,
+      );
       return;
     }
 

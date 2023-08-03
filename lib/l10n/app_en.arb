@@ -118,6 +118,18 @@
   "@emailAlreadyFailure": {},
   "operationNotAllowedFailure": "Operation is not allowed. Please contact support.",
   "@operationNotAllowedFailure": {},
-  "waekPasswordFailure": "Please enter a stronger password.",
-  "@waekPasswordFailure": {}
+  "weakPasswordFailure": "Please enter a stronger password.",
+  "@weakPasswordFailure": {},
+  "monthlyBudget": "Monthly Budget",
+  "@monthlyBudget": {},
+  "spent": "Spent",
+  "@spent": {},
+  "formEmpty": "Blank data",
+  "@formEmpty": {},
+  "passwordLengthFailure": "Password must be 8 character or more",
+  "@passwordLengthFailure": {},
+  "passConfPassFailure": "Password and Confirm Password do not match",
+  "@passConfPassFailure": {},
+  "chooseLang": "Choose language:",
+  "@chooseLang": {}
 }

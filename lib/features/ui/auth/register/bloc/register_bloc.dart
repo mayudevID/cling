@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:cling/core/exception.dart';
 import 'package:cling/core/route.dart';
+import 'package:cling/features/ui/language/lang_export.dart';
 import 'package:cling/main.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:equatable/equatable.dart';
@@ -83,22 +84,34 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
         state.password.trim().isEmpty ||
         state.name.trim().isEmpty ||
         state.confirmPassword.trim().isEmpty) {
-      errorToast("Form empty");
+      errorToast(
+        AppLocalizations.of(RegisterPage.navKeyRegister.currentContext!)!
+            .formEmpty,
+      );
       return;
     }
 
     if (!EmailValidator.validate(state.email)) {
-      errorToast("Email not valid");
+      errorToast(
+        AppLocalizations.of(RegisterPage.navKeyRegister.currentContext!)!
+            .invalidEmailFailure,
+      );
       return;
     }
 
     if (state.password.trim().length < 8) {
-      errorToast("Password must be 8 character or more");
+      errorToast(
+        AppLocalizations.of(RegisterPage.navKeyRegister.currentContext!)!
+            .passwordLengthFailure,
+      );
       return;
     }
 
     if (state.password.trim() != state.confirmPassword.trim()) {
-      errorToast("Password and Confirm Password do not match");
+      errorToast(
+        AppLocalizations.of(RegisterPage.navKeyRegister.currentContext!)!
+            .passConfPassFailure,
+      );
       return;
     }
 

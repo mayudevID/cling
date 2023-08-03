@@ -31,7 +31,7 @@ class SignUpWithEmailAndPasswordFailure implements Exception {
       case 'weak-password':
         return SignUpWithEmailAndPasswordFailure(
           AppLocalizations.of(MainApp.navKeyGlobal.currentContext!)!
-              .waekPasswordFailure,
+              .weakPasswordFailure,
         );
       default:
         return const SignUpWithEmailAndPasswordFailure();

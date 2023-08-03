@@ -1,9 +1,6 @@
 import 'package:cling/core/logger.dart';
-
 import 'package:equatable/equatable.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'enum_home_page_state.dart';
 
 part 'main_event.dart';
