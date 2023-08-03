@@ -149,7 +149,7 @@ class OnboardPage extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        "Choose Language: ",
+                        AppLocalizations.of(context)!.chooseLang,
                         style: TextStyle(
                           fontFamily: FontFamily.cabinetGrotesk,
                           fontSize: 12.sp,
