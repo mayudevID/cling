@@ -7,7 +7,7 @@ import '../features/ui/auth/register/page/register_page.dart';
 import '../features/ui/auth/register/page/register_success_page.dart';
 import '../features/ui/main/main_page.dart';
 import '../features/ui/onboard/onboard_page.dart';
-import '../features/ui/splash_page.dart';
+import '../features/ui/splash/splash_page.dart';
 
 class RouteGen {
   static Route<dynamic> generateRoute(RouteSettings settings) {

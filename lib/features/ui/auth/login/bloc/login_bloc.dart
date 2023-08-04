@@ -4,6 +4,7 @@ import 'package:cling/features/repository/auth_repository.dart';
 import 'package:cling/features/ui/auth/bloc/app_bloc.dart';
 import 'package:cling/features/ui/auth/login/page/login_page.dart';
 import 'package:cling/features/ui/language/lang_export.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +12,6 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../core/common_widget.dart';
-import '../../../onboard/widgets/animation_onboard.dart';
 import '../widgets/dialog_email_not_verified.dart';
 
 part 'login_event.dart';
@@ -40,6 +40,16 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   }
 
   void _sendLogin(SendLogin event, _) async {
+    final connectivityResult = await (Connectivity().checkConnectivity());
+    if (connectivityResult != ConnectivityResult.mobile ||
+        connectivityResult != ConnectivityResult.wifi) {
+      errorSnackbar(
+        LoginPage.navKeyLogin.currentContext!,
+        "No connection",
+      );
+      return;
+    }
+
     if (state.email.trim().isEmpty || state.password.trim().isEmpty) {
       errorToast(
         AppLocalizations.of(LoginPage.navKeyLogin.currentContext!)!.formEmpty,
@@ -82,12 +92,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           },
         );
       }
-
-      AnimationOnboard.animC1.dispose();
-      AnimationOnboard.animC2.dispose();
-      AnimationOnboard.animC3.dispose();
-      AnimationOnboard.animC4.dispose();
-      await Future.delayed(const Duration(milliseconds: 250));
 
       Future.microtask(() {
         LoginPage.navKeyLogin.currentContext!

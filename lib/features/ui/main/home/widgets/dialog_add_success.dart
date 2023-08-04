@@ -1,7 +1,9 @@
 import 'dart:async';
 
 import 'package:cling/core/utils.dart';
+import 'package:cling/features/ui/language/lang_export.dart';
 import 'package:cling/features/ui/main/home/bloc/home_bloc.dart';
+import 'package:cling/features/ui/main/home/page/add_in_ex_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:open_mail_app/open_mail_app.dart';
@@ -10,7 +12,10 @@ import 'package:sizer/sizer.dart';
 import '../../../../../resources/gen/fonts.gen.dart';
 import '../../bloc/main_bloc.dart';
 
-Future<void> dialogAddSuccess(BuildContext context, String msg) async {
+Future<void> dialogAddSuccess(
+  BuildContext context,
+  FlowType msg,
+) async {
   Timer(const Duration(milliseconds: 1500), () {
     Navigator.pop(context);
 
@@ -59,7 +64,9 @@ Future<void> dialogAddSuccess(BuildContext context, String msg) async {
                 height: 29.69.hmea,
               ),
               Text(
-                "$msg Added",
+                (msg == FlowType.income)
+                    ? AppLocalizations.of(context)!.incomeAdded
+                    : AppLocalizations.of(context)!.expenseAdded,
                 style: TextStyle(
                   fontFamily: FontFamily.cabinetGrotesk,
                   fontWeight: FontWeight.w500,

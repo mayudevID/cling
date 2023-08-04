@@ -11,6 +11,12 @@ class StarAnimTwo extends StatefulWidget {
 class _StarAnimTwoState extends State<StarAnimTwo>
     with TickerProviderStateMixin {
   @override
+  void dispose() {
+    AnimationOnboard.animC3.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return RotationTransition(
       turns: AnimationOnboard.setAnimStarTwo(this),

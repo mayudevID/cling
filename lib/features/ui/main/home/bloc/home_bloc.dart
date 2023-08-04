@@ -134,7 +134,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       Future.microtask(() {
         dialogAddSuccess(
           navigatorKeyMain.currentContext!,
-          (event.flowType == FlowType.income) ? "Income" : "Expense",
+          event.flowType,
         );
       });
     } on FormatException {

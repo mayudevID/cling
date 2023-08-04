@@ -5,6 +5,7 @@ import 'package:cling/core/exception.dart';
 import 'package:cling/core/route.dart';
 import 'package:cling/features/ui/language/lang_export.dart';
 import 'package:cling/main.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
@@ -80,6 +81,16 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   }
 
   void _onSendRegister(SendRegister event, _) async {
+    final connectivityResult = await (Connectivity().checkConnectivity());
+    if (connectivityResult != ConnectivityResult.mobile ||
+        connectivityResult != ConnectivityResult.wifi) {
+      errorSnackbar(
+        RegisterPage.navKeyRegister.currentContext!,
+        "No connection",
+      );
+      return;
+    }
+
     if (state.email.trim().isEmpty ||
         state.password.trim().isEmpty ||
         state.name.trim().isEmpty ||

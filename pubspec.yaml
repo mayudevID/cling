@@ -1,5 +1,5 @@
 name: cling
-description: A new Flutter project.
+description: A Money Management App.
 publish_to: 'none'
 version: 0.1.0
 
@@ -8,9 +8,11 @@ environment:
 
 dependencies:
   bloc: ^8.1.2
+  connectivity_plus: ^4.0.2
   dropdown_button2: ^2.3.6
   email_validator: ^2.1.17
   equatable: ^2.0.5
+  firebase_analytics: ^10.4.4
   firebase_auth: ^4.7.2
   firebase_core: ^2.15.0
   flutter:
@@ -27,7 +29,6 @@ dependencies:
   lottie: ^2.5.0
   modal_bottom_sheet: ^3.0.0-pre
   money_formatter: ^0.0.4
-  neon_widgets: ^2.0.0
   nil: ^1.1.1
   open_mail_app: ^0.4.5
   rename: ^2.1.1
@@ -76,8 +77,6 @@ arb_generator:
     base_index: 2
 
 flutter_gen:
-  output: lib/resources/gen/ # Optional (default: lib/gen/)
-
-  # Optional
+  output: lib/resources/gen/ 
   integrations:
     flutter_svg: true
