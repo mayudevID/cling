@@ -138,11 +138,15 @@ class OnboardPage extends StatelessWidget {
       duration: const Duration(milliseconds: 200),
       context: context,
       enableDrag: false,
+      isDismissible: false,
       builder: (context) {
         return BlocBuilder<LanguageBloc, LanguageState>(
           builder: (context, state) {
             return Container(
               padding: EdgeInsets.all(24.wmea),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+              ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -212,13 +216,17 @@ class OnboardPage extends StatelessWidget {
               Language.values[index].text.indexOf(" "),
             ),
             style: TextStyle(
-              fontSize: 16.sp,
+              fontSize: 13.sp,
               fontFamily: FontFamily.cabinetGrotesk,
             ),
           ),
           title: Text(
             Language.values[index].text.substring(
               Language.values[index].text.indexOf(" ") + 1,
+            ),
+            style: const TextStyle(
+              fontFamily: FontFamily.cabinetGrotesk,
+              fontWeight: FontWeight.w600,
             ),
           ),
           trailing: Language.values[index] == state.selectedLanguage

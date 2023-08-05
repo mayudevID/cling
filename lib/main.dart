@@ -1,4 +1,5 @@
 import 'package:cling/core/bloc_observer.dart';
+import 'package:cling/core/notification.dart';
 import 'package:cling/core/route.dart';
 import 'package:cling/features/repository/settings_repository.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +17,7 @@ void main() async {
   Bloc.observer = MyGlobalObserver();
   WidgetsFlutterBinding.ensureInitialized();
 
+  NotificationClass.init();
   await initSl();
 
   runApp(const MainApp());

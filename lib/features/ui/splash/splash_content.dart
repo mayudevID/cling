@@ -63,7 +63,7 @@ class _SplashContentState extends State<SplashContent>
 
   late final Animation<RelativeRect> _tweenText = RelativeRectTween(
     begin: RelativeRect.fromLTRB(_leftText, 505.hmea, 0, 0),
-    end: RelativeRect.fromLTRB(_leftText, 526.hmea, 0, 0),
+    end: RelativeRect.fromLTRB(_leftText, 534.hmea, 0, 0),
   ).animate(
     CurvedAnimation(
       parent: _controller,
