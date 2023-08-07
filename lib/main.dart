@@ -2,6 +2,8 @@ import 'package:cling/core/bloc_observer.dart';
 import 'package:cling/core/notification.dart';
 import 'package:cling/core/route.dart';
 import 'package:cling/features/repository/settings_repository.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -18,6 +20,16 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   NotificationClass.init();
+  if (kDebugMode) {
+    await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(false);
+  } else {
+    await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
+    Function? originalOnError = FlutterError.onError;
+    FlutterError.onError = (FlutterErrorDetails errorDetails) async {
+      await FirebaseCrashlytics.instance.recordFlutterError(errorDetails);
+      originalOnError!(errorDetails);
+    };
+  }
   await initSl();
 
   runApp(const MainApp());
