@@ -82,8 +82,8 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
 
   void _onSendRegister(SendRegister event, _) async {
     final connectivityResult = await (Connectivity().checkConnectivity());
-    if (connectivityResult != ConnectivityResult.mobile ||
-        connectivityResult != ConnectivityResult.wifi) {
+    if (!(connectivityResult == ConnectivityResult.mobile ||
+        connectivityResult == ConnectivityResult.wifi)) {
       errorSnackbar(
         RegisterPage.navKeyRegister.currentContext!,
         "No connection",

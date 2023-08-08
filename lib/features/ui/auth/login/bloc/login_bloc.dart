@@ -41,8 +41,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
   void _sendLogin(SendLogin event, _) async {
     final connectivityResult = await (Connectivity().checkConnectivity());
-    if (connectivityResult != ConnectivityResult.mobile ||
-        connectivityResult != ConnectivityResult.wifi) {
+    if (!(connectivityResult == ConnectivityResult.mobile ||
+        connectivityResult == ConnectivityResult.wifi)) {
       errorSnackbar(
         LoginPage.navKeyLogin.currentContext!,
         "No connection",

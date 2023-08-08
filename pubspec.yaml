@@ -38,6 +38,7 @@ dependencies:
   shared_preferences: ^2.2.0
   sizer: ^2.0.15
   sqflite: ^2.3.0
+  supabase_flutter: ^1.10.11
   syncfusion_flutter_charts: ^22.1.39
   transitioned_indexed_stack: ^1.0.2
 
