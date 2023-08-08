@@ -2,6 +2,7 @@ import 'package:cling/features/repository/database_repository.dart';
 import 'package:cling/features/repository/settings_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get_it/get_it.dart';
@@ -19,6 +20,9 @@ Future<void> initSl() async {
 
   final firebaseAuth = FirebaseAuth.instanceFor(app: app);
   getIt.registerLazySingleton<FirebaseAuth>(() => firebaseAuth);
+
+  final firebaseCrashlytics = FirebaseCrashlytics.instance;
+  getIt.registerLazySingleton<FirebaseCrashlytics>(() => firebaseCrashlytics);
 
   final cache = await SharedPreferences.getInstance();
   getIt.registerLazySingleton<SharedPreferences>(() => cache);

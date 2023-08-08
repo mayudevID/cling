@@ -20,17 +20,18 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   NotificationClass.init();
+  await initSl();
+
   if (kDebugMode) {
-    await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(false);
+    await getIt<FirebaseCrashlytics>().setCrashlyticsCollectionEnabled(false);
   } else {
-    await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
+    await getIt<FirebaseCrashlytics>().setCrashlyticsCollectionEnabled(true);
     Function? originalOnError = FlutterError.onError;
     FlutterError.onError = (FlutterErrorDetails errorDetails) async {
-      await FirebaseCrashlytics.instance.recordFlutterError(errorDetails);
+      await getIt<FirebaseCrashlytics>().recordFlutterError(errorDetails);
       originalOnError!(errorDetails);
     };
   }
-  await initSl();
 
   runApp(const MainApp());
 }

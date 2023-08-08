@@ -15,7 +15,6 @@ class AuthRepository {
         _cache = cache;
 
   static const userCacheKey = '__user_cache_key__';
-  static const onboardStatusKey = '__onboard_stat_key__';
   static const loginStatusKey = '__login_stat_key__';
   static const registerStatusKey = '__register_stat_key__';
 
@@ -37,10 +36,6 @@ class AuthRepository {
       return userModelFromMap(getData);
     }
     return null;
-  }
-
-  bool isOnboardPassed() {
-    return _cache.getBool(onboardStatusKey) ?? false;
   }
 
   Future<void> signUp({
