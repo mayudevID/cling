@@ -14,7 +14,7 @@ class AppLogoutRequested extends AppEvent {
 class AppUserChanged extends AppEvent {
   const AppUserChanged(this.user);
 
-  final UserModel? user;
+  final User? user;
 }
 
 class Redirect extends AppEvent {

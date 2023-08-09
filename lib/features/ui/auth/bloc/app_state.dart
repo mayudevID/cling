@@ -11,13 +11,13 @@ final class AppState extends Equatable {
     this.user,
   });
 
-  const AppState.authenticated(UserModel user)
+  const AppState.authenticated(User user)
       : this._(status: AppStatus.authenticated, user: user);
 
   const AppState.unauthenticated() : this._(status: AppStatus.unauthenticated);
 
   final AppStatus status;
-  final UserModel? user;
+  final User? user;
 
   @override
   List<Object?> get props => [status, user];

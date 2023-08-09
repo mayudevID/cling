@@ -58,7 +58,7 @@ class LogInWithEmailAndPasswordFailure implements Exception {
           AppLocalizations.of(MainApp.navKeyGlobal.currentContext!)!
               .userDisabledFailure,
         );
-      case 'user-not-found':
+      case 'Invalid login credentials':
         return LogInWithEmailAndPasswordFailure(
           AppLocalizations.of(MainApp.navKeyGlobal.currentContext!)!
               .userNotFoundFailure,

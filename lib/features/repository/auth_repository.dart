@@ -1,6 +1,11 @@
+import 'dart:io';
+
+import 'package:cling/core/common_widget.dart';
 import 'package:cling/core/logger.dart';
 import 'package:cling/features/model/user_model.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+
+import 'package:cling/main.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -25,30 +30,37 @@ class AuthRepository {
   static const loginStatusKey = '__login_stat_key__';
   static const registerStatusKey = '__register_stat_key__';
 
-  Stream<UserModel?> get user {
-    return _supabaseClient.auth.onAuthStateChange.asyncMap((event) async {
+  Stream<User?> get user {
+    return _supabaseClient.auth.onAuthStateChange.map((event) {
       final user = _supabaseClient.auth.currentUser;
-      UserModel? userModel;
+
       if (user != null) {
-        if (!registerProcess) {
-          final userFromQuery = await _supabaseClient
-              .from("users")
-              .select<Map<String, dynamic>>()
-              .eq('id', user.id);
-          userModel = UserModel(
-            id: userFromQuery['id'],
-            name: userFromQuery['name'],
-            email: user.email,
-            photo: userFromQuery['avatar_url'],
-            emailVerified: userFromQuery['verified_process'],
-          );
-          _cache.setString(userCacheKey, userModelToMap(userModel));
-        }
+        Future.microtask(() async {
+          try {
+            final userFromQuery = await _supabaseClient
+                .from("users")
+                .select<Map<String, dynamic>>()
+                .eq('id', user.id)
+                .single();
+            UserModel? userModel = UserModel(
+              id: userFromQuery['id'],
+              name: userFromQuery['name'],
+              email: user.email,
+              photo: userFromQuery['avatar_url'],
+              emailVerified: userFromQuery['verified_process'],
+            );
+            _cache.setString(userCacheKey, userModelToMap(userModel));
+          } on SocketException catch (e) {
+            Logger.Red.log(e.message);
+            final context = MainApp.navKeyGlobal.currentContext!;
+            errorSnackbar(context, "No connections");
+          }
+        });
       } else {
         _cache.remove(userCacheKey);
       }
 
-      return userModel;
+      return user;
     });
     // return _firebaseAuth.authStateChanges().map((firebaseUser) {
     //   final user = firebaseUser?.toUser;
@@ -69,25 +81,36 @@ class AuthRepository {
     return null;
   }
 
+  User? get currentUserSupabase {
+    return _supabaseClient.auth.currentUser;
+  }
+
   Future<void> signUp({
     required String name,
     required String email,
     required String password,
   }) async {
     try {
-      final result = await _supabaseClient.auth.signUp(
+      saveRegisterProcess(true);
+      await _supabaseClient.auth
+          .signUp(
         email: email,
         password: password,
-      );
-      Logger.Green.log("USER REGIST: ${result.user}");
-      Logger.Green.log("USER SESSION: ${result.session}");
-      await _supabaseClient.from("users").upsert(
-        {
-          "id": result.user!.id,
-          "name": name,
-          "verified_process": false,
+      )
+          .then(
+        (result) async {
+          saveRegisterProcess(false);
+          Logger.Green.log("User Regist: ${result.user}");
+          Logger.Green.log("User Session (must be null): ${result.session}");
+          await _supabaseClient.from("users").upsert(
+            {
+              "id": result.user!.id,
+              "name": name,
+            },
+          );
         },
       );
+
       // await _firebaseAuth.createUserWithEmailAndPassword(
       //   email: email,
       //   password: password,
@@ -112,16 +135,17 @@ class AuthRepository {
   //   }
   // }
 
-  Future<Session?> logInWithEmailAndPassword({
+  Future<void> logInWithEmailAndPassword({
     required String email,
     required String password,
   }) async {
     try {
-      final result = await _supabaseClient.auth.signInWithPassword(
+      saveLoginProcess(true);
+      await _supabaseClient.auth.signInWithPassword(
         email: email,
         password: password,
       );
-      return result.session;
+      saveLoginProcess(false);
       // await _firebaseAuth.signInWithEmailAndPassword(
       //   email: email,
       //   password: password,
@@ -170,6 +194,8 @@ class AuthRepository {
   bool get registerProcess {
     return _cache.getBool(registerStatusKey) ?? false;
   }
+
+  //* Update User Profile
 
   Future<void> updateDisplayName(String displayName) async {
     try {

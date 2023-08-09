@@ -12,7 +12,6 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../core/common_widget.dart';
-import '../widgets/dialog_email_not_verified.dart';
 
 part 'login_event.dart';
 part 'login_state.dart';
@@ -75,7 +74,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
     loadingAuth(LoginPage.navKeyLogin.currentContext!);
     await _authRepository.logOut();
-    await _authRepository.saveLoginProcess(true);
+    //await _authRepository.saveLoginProcess(true);
 
     try {
       await _authRepository.logInWithEmailAndPassword(
@@ -83,7 +82,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         password: state.password.trim(),
       );
 
-      await _authRepository.saveLoginProcess(false);
+      //await _authRepository.saveLoginProcess(false);
 
       // if (!_authRepository.currentUserModel!.emailVerified) {
       //   await Future.microtask(
@@ -93,11 +92,13 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       //   );
       // }
 
-      Future.microtask(() {
-        LoginPage.navKeyLogin.currentContext!
-            .read<AppBloc>()
-            .add(const Redirect());
-      });
+      Future.delayed(const Duration(milliseconds: 200)).then(
+        (value) {
+          LoginPage.navKeyLogin.currentContext!
+              .read<AppBloc>()
+              .add(const Redirect());
+        },
+      );
     } on LogInWithEmailAndPasswordFailure catch (e) {
       _authRepository.logOut();
       Future.microtask(() {

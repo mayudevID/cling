@@ -1,11 +1,12 @@
 import 'dart:async';
 
-import 'package:cling/features/model/user_model.dart';
+import 'package:cling/core/logger.dart';
 import 'package:cling/main.dart';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../../core/route.dart';
 import '../../../repository/auth_repository.dart';
@@ -18,7 +19,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       : _authRepo = authRepo,
         super(
           authRepo.currentUserModel != null
-              ? AppState.authenticated(authRepo.currentUserModel!)
+              ? AppState.authenticated(authRepo.currentUserSupabase!)
               : const AppState.unauthenticated(),
         ) {
     on<AppUserChanged>(_onUserChanged);
@@ -30,7 +31,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   }
 
   final AuthRepository _authRepo;
-  late final StreamSubscription<UserModel?> _userSubscription;
+  late final StreamSubscription<User?> _userSubscription;
 
   void _onUserChanged(
     AppUserChanged event,
@@ -51,6 +52,11 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   }
 
   void _onRedirect(Redirect event, Emitter<AppState> _) {
+    Logger.Green.log(
+        "is Authenticated? ${(state.status == AppStatus.authenticated)}");
+    Logger.Green.log("loginProcess? ${_authRepo.loginProcess}");
+    Logger.Green.log("registerProcess? ${_authRepo.registerProcess}");
+
     final redirect = ((state.status == AppStatus.authenticated) &&
         (_authRepo.loginProcess == false ||
             _authRepo.registerProcess == false));
