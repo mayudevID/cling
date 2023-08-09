@@ -75,7 +75,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
     loadingAuth(LoginPage.navKeyLogin.currentContext!);
     await _authRepository.logOut();
-    await _authRepository.saveLoginStatus(false);
+    await _authRepository.saveLoginProcess(true);
 
     try {
       await _authRepository.logInWithEmailAndPassword(
@@ -83,15 +83,15 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         password: state.password.trim(),
       );
 
-      await _authRepository.saveLoginStatus(true);
+      await _authRepository.saveLoginProcess(false);
 
-      if (!_authRepository.currentUser!.emailVerified) {
-        await Future.microtask(
-          () async {
-            await dialogEmailNotVerified(LoginPage.navKeyLogin.currentContext!);
-          },
-        );
-      }
+      // if (!_authRepository.currentUserModel!.emailVerified) {
+      //   await Future.microtask(
+      //     () async {
+      //       await dialogEmailNotVerified(LoginPage.navKeyLogin.currentContext!);
+      //     },
+      //   );
+      // }
 
       Future.microtask(() {
         LoginPage.navKeyLogin.currentContext!

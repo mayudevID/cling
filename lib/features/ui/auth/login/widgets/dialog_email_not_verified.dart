@@ -57,61 +57,31 @@ Future<void> dialogEmailNotVerified(BuildContext context) async {
               SizedBox(
                 height: 12.hmea,
               ),
-              Row(
-                children: [
-                  const Spacer(),
-                  GestureDetector(
-                    onTap: () async {
-                      await Future.microtask(() async {
-                        await openMail(context);
-                      });
-                    },
-                    child: Container(
-                      padding: EdgeInsets.all(12.hmea),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFF06AC9),
-                        borderRadius: BorderRadius.circular(24),
-                      ),
-                      alignment: Alignment.center,
-                      child: Align(
-                        alignment: Alignment.center,
-                        child: Text(
-                          "Go to mail",
-                          style: TextStyle(
-                            fontFamily: FontFamily.cabinetGrotesk,
-                            fontSize: 12.sp,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ),
-                    ),
+              GestureDetector(
+                onTap: () async {
+                  await Future.microtask(() async {
+                    await openMail(context);
+                  });
+                },
+                child: Container(
+                  padding: EdgeInsets.all(12.hmea),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFF06AC9),
+                    borderRadius: BorderRadius.circular(24),
                   ),
-                  SizedBox(width: 10.wmea),
-                  GestureDetector(
-                    onTap: () async {
-                      Navigator.pop(context);
-                    },
-                    child: Container(
-                      padding: EdgeInsets.all(12.hmea),
-                      decoration: BoxDecoration(
+                  alignment: Alignment.center,
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: Text(
+                      "Go to mail",
+                      style: TextStyle(
+                        fontFamily: FontFamily.cabinetGrotesk,
+                        fontSize: 12.sp,
                         color: Colors.black,
-                        borderRadius: BorderRadius.circular(24),
-                      ),
-                      alignment: Alignment.center,
-                      child: Align(
-                        alignment: Alignment.center,
-                        child: Text(
-                          "Skip",
-                          style: TextStyle(
-                            fontFamily: FontFamily.cabinetGrotesk,
-                            fontSize: 12.sp,
-                            color: Colors.white,
-                          ),
-                        ),
                       ),
                     ),
                   ),
-                ],
+                ),
               ),
             ],
           ),

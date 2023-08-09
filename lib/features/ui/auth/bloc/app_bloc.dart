@@ -17,8 +17,8 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   AppBloc({required AuthRepository authRepo})
       : _authRepo = authRepo,
         super(
-          authRepo.currentUser != null
-              ? AppState.authenticated(authRepo.currentUser!)
+          authRepo.currentUserModel != null
+              ? AppState.authenticated(authRepo.currentUserModel!)
               : const AppState.unauthenticated(),
         ) {
     on<AppUserChanged>(_onUserChanged);
@@ -52,7 +52,8 @@ class AppBloc extends Bloc<AppEvent, AppState> {
 
   void _onRedirect(Redirect event, Emitter<AppState> _) {
     final redirect = ((state.status == AppStatus.authenticated) &&
-        (_authRepo.loginStatus || _authRepo.registerStatus));
+        (_authRepo.loginProcess == false ||
+            _authRepo.registerProcess == false));
 
     Navigator.pushNamedAndRemoveUntil(
       MainApp.navKeyGlobal.currentContext!,

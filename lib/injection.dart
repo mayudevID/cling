@@ -7,6 +7,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'features/repository/auth_repository.dart';
 import 'firebase_options.dart';
@@ -21,6 +22,9 @@ Future<void> initSl() async {
   final firebaseAuth = FirebaseAuth.instanceFor(app: app);
   getIt.registerLazySingleton<FirebaseAuth>(() => firebaseAuth);
 
+  final supabaseClient = Supabase.instance.client;
+  getIt.registerLazySingleton<SupabaseClient>(() => supabaseClient);
+
   final firebaseCrashlytics = FirebaseCrashlytics.instance;
   getIt.registerLazySingleton<FirebaseCrashlytics>(() => firebaseCrashlytics);
 
@@ -28,7 +32,8 @@ Future<void> initSl() async {
   getIt.registerLazySingleton<SharedPreferences>(() => cache);
 
   final authRepo = AuthRepository(
-    firebaseAuth: getIt<FirebaseAuth>(),
+    supabaseClient: getIt<SupabaseClient>(),
+    //firebaseAuth: getIt<FirebaseAuth>(),
     cache: getIt<SharedPreferences>(),
   );
   getIt.registerLazySingleton<AuthRepository>(() => authRepo);

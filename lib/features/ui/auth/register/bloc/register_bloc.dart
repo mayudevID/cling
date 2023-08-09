@@ -128,21 +128,22 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
 
     loadingAuth(RegisterPage.navKeyRegister.currentContext!);
     await _authRepository.logOut();
-    await _authRepository.saveRegisterStatus(false);
+    await _authRepository.saveRegisterProcess(true);
 
     try {
       await _authRepository.signUp(
+        name: state.name.trim(),
         email: state.email.trim(),
         password: state.password.trim(),
       );
 
-      await Future.wait([
-        _authRepository.sendEmailVerification(),
-        _authRepository.updateDisplayName(state.name.trim()),
-      ]);
+      // await Future.wait([
+      //   _authRepository.sendEmailVerification(),
+      //   _authRepository.updateDisplayName(state.name.trim()),
+      // ]);
 
       await _authRepository.logOut();
-      await _authRepository.saveRegisterStatus(true);
+      await _authRepository.saveRegisterProcess(false);
 
       Future.microtask(() {
         Navigator.pop(RegisterPage.navKeyRegister.currentContext!);
