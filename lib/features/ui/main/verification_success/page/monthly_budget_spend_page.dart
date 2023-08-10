@@ -1,15 +1,14 @@
 import 'package:auto_size_text_field/auto_size_text_field.dart';
-import 'package:cling/core/common_widget.dart';
 import 'package:cling/core/utils.dart';
-import 'package:cling/resources/gen/fonts.gen.dart';
 import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
-
 import 'package:flutter/material.dart';
-
 import 'package:sizer/sizer.dart';
 
-class MonthlyBudgetIncomePage extends StatelessWidget {
-  const MonthlyBudgetIncomePage({super.key});
+import '../../../../../core/common_widget.dart';
+import '../../../../../resources/gen/fonts.gen.dart';
+
+class MonthlyBudgetSpendPage extends StatelessWidget {
+  const MonthlyBudgetSpendPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -36,14 +35,17 @@ class MonthlyBudgetIncomePage extends StatelessWidget {
             SizedBox(
               height: 100.hmea,
             ),
-            Text(
-              'First thing first!\nwhat\'s your monthly income?',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 16.sp,
-                fontFamily: FontFamily.cabinetGrotesk,
-                fontWeight: FontWeight.w500,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              child: Text(
+                "How much do you want to spend monthly?",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16.sp,
+                  fontFamily: FontFamily.cabinetGrotesk,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
             ),
             SizedBox(

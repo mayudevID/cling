@@ -15,6 +15,12 @@ class EmoticonWidget extends StatefulWidget {
 class _EmoticonWidgetState extends State<EmoticonWidget>
     with TickerProviderStateMixin {
   @override
+  void dispose() {
+    AnimationOnboard.animC4.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return PositionedTransition(
       rect: AnimationOnboard.setAnimationEmoticon(this),

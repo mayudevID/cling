@@ -1,15 +1,33 @@
 import 'package:cling/core/utils.dart';
+import 'package:cling/features/ui/main/verification_success/bloc/verification_onboard_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../../../core/common_widget.dart';
-import '../../../../core/route.dart';
-import '../../../../resources/gen/fonts.gen.dart';
+import '../../../../../core/common_widget.dart';
+import '../../../../../core/route.dart';
+import '../../../../../resources/gen/fonts.gen.dart';
 
 class VerificationSuccessPage extends StatelessWidget {
   const VerificationSuccessPage({super.key});
+
+  static var verifNavKey = GlobalKey<NavigatorState>();
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (_) {
+        return VerificationOnboardBloc();
+      },
+      child: const VerificationSuccessPageContent(),
+    );
+  }
+}
+
+class VerificationSuccessPageContent extends StatelessWidget {
+  const VerificationSuccessPageContent({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -17,6 +35,7 @@ class VerificationSuccessPage extends StatelessWidget {
       value: SystemUiOverlayStyle.light,
       child: SafeArea(
         child: Scaffold(
+          key: VerificationSuccessPage.verifNavKey,
           backgroundColor: Colors.black,
           body: Column(
             crossAxisAlignment: CrossAxisAlignment.center,

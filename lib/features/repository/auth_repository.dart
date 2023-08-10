@@ -5,11 +5,13 @@ import 'package:cling/core/logger.dart';
 import 'package:cling/features/model/user_model.dart';
 
 import 'package:cling/main.dart';
+import 'package:flutter/material.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../core/exception.dart';
+import '../../core/route.dart';
 import '../ui/auth/login/page/login_page.dart';
 import '../ui/auth/login/widgets/dialog_email_not_verified.dart';
 
@@ -49,7 +51,11 @@ class AuthRepository {
               photo: userFromQuery['avatar_url'],
               emailVerified: userFromQuery['verified_process'],
             );
-            _cache.setString(userCacheKey, userModelToMap(userModel));
+            _cache.setString(
+              userCacheKey,
+              userModelToMap(userModel),
+            );
+            checkIfUserPassVerifOnboard(event, user, userModel);
           } on SocketException catch (e) {
             Logger.Red.log(e.message);
             final context = MainApp.navKeyGlobal.currentContext!;
@@ -71,6 +77,28 @@ class AuthRepository {
     //   }
     //   return user;
     // });
+  }
+
+  void checkIfUserPassVerifOnboard(
+    AuthState event,
+    User user,
+    UserModel userModel,
+  ) async {
+    if (event.event == AuthChangeEvent.signedIn &&
+        (user.emailConfirmedAt != null && !userModel.emailVerified)) {
+      loadingAuth(MainApp.navKeyGlobal.currentContext!);
+      await _supabaseClient.from("users").upsert(
+        {
+          "id": user.id,
+          'verified_process': true,
+          'updated_at': DateTime.now().toIso8601String(),
+        },
+      );
+      Navigator.pushReplacementNamed(
+        MainApp.navKeyGlobal.currentContext!,
+        RouteName.verifOnboard,
+      );
+    }
   }
 
   UserModel? get currentUserModel {
@@ -102,6 +130,7 @@ class AuthRepository {
           saveRegisterProcess(false);
           Logger.Green.log("User Regist: ${result.user}");
           Logger.Green.log("User Session (must be null): ${result.session}");
+          //* New Row App
           await _supabaseClient.from("users").upsert(
             {
               "id": result.user!.id,

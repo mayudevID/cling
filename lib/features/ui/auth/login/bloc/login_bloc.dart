@@ -92,13 +92,11 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       //   );
       // }
 
-      Future.delayed(const Duration(milliseconds: 200)).then(
-        (value) {
-          LoginPage.navKeyLogin.currentContext!
-              .read<AppBloc>()
-              .add(const Redirect());
-        },
-      );
+      Future.microtask(() {
+        LoginPage.navKeyLogin.currentContext!
+            .read<AppBloc>()
+            .add(const Redirect());
+      });
     } on LogInWithEmailAndPasswordFailure catch (e) {
       _authRepository.logOut();
       Future.microtask(() {

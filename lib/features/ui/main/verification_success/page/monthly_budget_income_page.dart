@@ -1,14 +1,18 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:auto_size_text_field/auto_size_text_field.dart';
+import 'package:cling/core/common_widget.dart';
+
 import 'package:cling/core/utils.dart';
+import 'package:cling/resources/gen/fonts.gen.dart';
 import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
+
 import 'package:flutter/material.dart';
+
 import 'package:sizer/sizer.dart';
 
-import '../../../../core/common_widget.dart';
-import '../../../../resources/gen/fonts.gen.dart';
-
-class MonthlyBudgetSpendPage extends StatelessWidget {
-  const MonthlyBudgetSpendPage({super.key});
+class MonthlyBudgetIncomePage extends StatelessWidget {
+  const MonthlyBudgetIncomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +40,7 @@ class MonthlyBudgetSpendPage extends StatelessWidget {
               height: 100.hmea,
             ),
             Text(
-              "How much do you want to spend monthly?",
+              'First thing first!\nwhat\'s your monthly income?',
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Colors.white,
@@ -84,7 +88,9 @@ class MonthlyBudgetSpendPage extends StatelessWidget {
                     fontFamily: FontFamily.cabinetGrotesk,
                     fontWeight: FontWeight.w700,
                   ),
-                  onChanged: (val) {},
+                  onChanged: (val) {
+                    //monthlyBudgetIncome = val;
+                  },
                   decoration: InputDecoration.collapsed(
                     hintText: "0",
                     hintStyle: TextStyle(
@@ -101,7 +107,14 @@ class MonthlyBudgetSpendPage extends StatelessWidget {
               height: 187.hmea,
             ),
             PinkButton(
-              onTap: () {},
+              onTap: () {
+                //final val = monthlyBudgetIncome.replaceAll(".", "").trim();
+                // if (val == "0" || val.isEmpty) {
+                //   errorSnackbar(context, "Monthly income must above 0");
+                // } else {
+                //   Navigator.pushNamed(context, RouteName.monthlyBudgetSpend);
+                // }
+              },
               name: "Next",
             ),
           ],
