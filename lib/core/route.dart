@@ -1,3 +1,4 @@
+import 'package:cling/features/ui/main/verification_success/monthly_budget_income_page.dart';
 import 'package:flutter/material.dart';
 
 import '../features/ui/auth/forgot_password/check_email_page.dart';
@@ -6,6 +7,7 @@ import '../features/ui/auth/login/page/login_page.dart';
 import '../features/ui/auth/register/page/register_page.dart';
 import '../features/ui/auth/register/page/register_success_page.dart';
 import '../features/ui/main/main_page.dart';
+import '../features/ui/main/verification_success/monthly_budget_spend_page.dart';
 import '../features/ui/onboard/onboard_page.dart';
 import '../features/ui/splash/splash_page.dart';
 
@@ -44,6 +46,14 @@ class RouteGen {
         return MaterialPageRoute(
           builder: (_) => const MainPage(),
         );
+      case '/monthlyBudgetIncome':
+        return MaterialPageRoute(
+          builder: (_) => const MonthlyBudgetIncomePage(),
+        );
+      case '/monthlyBudgetSpend':
+        return MaterialPageRoute(
+          builder: (_) => const MonthlyBudgetSpendPage(),
+        );
       default:
         return _errorRoute();
     }
@@ -70,4 +80,5 @@ class RouteName {
   static String forgotPassword = "/forgotPassword";
   static String checkEmail = "/checkEmail";
   static String main = "/main";
+  static String monthlyBudgetIncome = "/monthlyBudgetIncome";
 }

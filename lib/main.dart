@@ -1,8 +1,10 @@
+import 'package:auto_size_text_field/auto_size_text_field.dart';
 import 'package:cling/core/bloc_observer.dart';
 import 'package:cling/core/notification.dart';
-import 'package:cling/core/route.dart';
 import 'package:cling/env.dart';
 import 'package:cling/features/repository/settings_repository.dart';
+import 'package:cling/features/ui/main/verification_success/verification_success_page.dart';
+import 'package:cling/resources/gen/fonts.gen.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +12,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:sizer/sizer.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'core/route.dart';
 import 'features/repository/auth_repository.dart';
 
 import 'features/ui/auth/bloc/app_bloc.dart';
@@ -102,6 +105,7 @@ class MainApp extends StatelessWidget {
       supportedLocales: AppLocalizations.supportedLocales,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       onGenerateRoute: RouteGen.generateRoute,
+      home: const VerificationSuccessPage(),
       debugShowCheckedModeBanner: false,
     );
   }
