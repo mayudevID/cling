@@ -25,6 +25,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   }
 
   final AuthRepository _authRepository;
+  var context = LoginPage.navKeyLogin.currentContext;
 
   void _toggleEye(ToggleEye event, Emitter<LoginState> emit) {
     emit(state.copyWith(isObscure: !state.isObscure));
@@ -43,7 +44,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     if (!(connectivityResult == ConnectivityResult.mobile ||
         connectivityResult == ConnectivityResult.wifi)) {
       errorSnackbar(
-        LoginPage.navKeyLogin.currentContext!,
+        context!,
         "No connection",
       );
       return;
@@ -51,28 +52,26 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
     if (state.email.trim().isEmpty || state.password.trim().isEmpty) {
       errorToast(
-        AppLocalizations.of(LoginPage.navKeyLogin.currentContext!)!.formEmpty,
+        AppLocalizations.of(context!)!.formEmpty,
       );
       return;
     }
 
     if (!EmailValidator.validate(state.email)) {
       errorToast(
-        AppLocalizations.of(LoginPage.navKeyLogin.currentContext!)!
-            .invalidEmailFailure,
+        AppLocalizations.of(context!)!.invalidEmailFailure,
       );
       return;
     }
 
     if (state.password.trim().length < 8) {
       errorToast(
-        AppLocalizations.of(LoginPage.navKeyLogin.currentContext!)!
-            .passwordLengthFailure,
+        AppLocalizations.of(context!)!.passwordLengthFailure,
       );
       return;
     }
 
-    loadingAuth(LoginPage.navKeyLogin.currentContext!);
+    loadingAuth(context!);
     await _authRepository.logOut();
     //await _authRepository.saveLoginProcess(true);
 
@@ -87,20 +86,18 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       // if (!_authRepository.currentUserModel!.emailVerified) {
       //   await Future.microtask(
       //     () async {
-      //       await dialogEmailNotVerified(LoginPage.navKeyLogin.currentContext!);
+      //       await dialogEmailNotVerified(context!);
       //     },
       //   );
       // }
 
       Future.microtask(() {
-        LoginPage.navKeyLogin.currentContext!
-            .read<AppBloc>()
-            .add(const Redirect());
+        context!.read<AppBloc>().add(const Redirect());
       });
     } on LogInWithEmailAndPasswordFailure catch (e) {
       _authRepository.logOut();
       Future.microtask(() {
-        Navigator.pop(LoginPage.navKeyLogin.currentContext!);
+        Navigator.pop(context!);
         errorToast(e.message);
       });
     }

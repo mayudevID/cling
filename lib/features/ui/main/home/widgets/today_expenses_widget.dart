@@ -2,6 +2,7 @@ import 'package:cling/core/utils.dart';
 import 'package:cling/features/model/expense_model.dart';
 import 'package:cling/resources/gen/fonts.gen.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:money_formatter/money_formatter.dart';
 import 'package:sizer/sizer.dart';
 
@@ -51,16 +52,11 @@ Widget todayExpensesWidget(ExpenseModel expenseModel) {
         ),
         const Spacer(),
         Text(
-          MoneyFormatter(
-            amount: expenseModel.amount,
-            settings: MoneyFormatterSettings(
-              symbol: "IDR",
-              thousandSeparator: '.',
-              decimalSeparator: ',',
-              symbolAndNumberSeparator: ' ',
-              fractionDigits: 2,
-            ),
-          ).output.symbolOnLeft,
+          NumberFormat.currency(
+            locale: "id",
+            decimalDigits: 2,
+            name: "IDR ",
+          ).format(expenseModel.amount),
           textAlign: TextAlign.center,
           style: TextStyle(
             color: Colors.white,

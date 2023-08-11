@@ -138,7 +138,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         );
       });
     } on FormatException {
-      errorToast("Amount not valid");
+      errorToast("Invalid amount");
     } on DatabaseException catch (e) {
       errorToast(e.toString());
       Logger.Red.log(e.toString());

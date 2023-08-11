@@ -1,0 +1,23 @@
+import 'package:flutter/material.dart';
+import 'package:sizer/sizer.dart';
+
+import '../../../../../resources/gen/fonts.gen.dart';
+
+class TextMonthlyBudget extends StatelessWidget {
+  const TextMonthlyBudget({super.key, required this.text});
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      text,
+      textAlign: TextAlign.center,
+      style: TextStyle(
+        color: Colors.white,
+        fontSize: 16.sp,
+        fontFamily: FontFamily.cabinetGrotesk,
+        fontWeight: FontWeight.w500,
+      ),
+    );
+  }
+}

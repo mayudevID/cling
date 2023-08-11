@@ -7,8 +7,8 @@ import '../features/ui/auth/login/page/login_page.dart';
 import '../features/ui/auth/register/page/register_page.dart';
 import '../features/ui/auth/register/page/register_success_page.dart';
 import '../features/ui/main/main_page.dart';
-import '../features/ui/main/verification_success/page/monthly_budget_income_page.dart';
-import '../features/ui/main/verification_success/page/monthly_budget_spend_page.dart';
+import '../features/ui/main/verification_success/page/monthly_budget_page.dart';
+
 import '../features/ui/onboard/onboard_page.dart';
 import '../features/ui/splash/splash_page.dart';
 
@@ -51,14 +51,11 @@ class RouteGen {
         return MaterialPageRoute(
           builder: (_) => const VerificationSuccessPage(),
         );
-      case '/monthlyBudgetIncome':
+      case '/monthlyBudget':
         return MaterialPageRoute(
-          builder: (_) => const MonthlyBudgetIncomePage(),
+          builder: (_) => const MonthlyBudgetPage(),
         );
-      case '/monthlyBudgetSpend':
-        return MaterialPageRoute(
-          builder: (_) => const MonthlyBudgetSpendPage(),
-        );
+
       default:
         return _errorRoute();
     }
@@ -86,6 +83,5 @@ class RouteName {
   static String checkEmail = "/checkEmail";
   static String main = "/main";
   static String verifOnboard = "/verifOnboard";
-  static String monthlyBudgetIncome = "/monthlyBudgetIncome";
-  static String monthlyBudgetSpend = "/monthlyBudgetSpend";
+  static String monthlyBudget = "/monthlyBudget";
 }

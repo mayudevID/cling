@@ -26,7 +26,7 @@ Widget monthlyBudget(BuildContext context) {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              AppLocalizations.of(context)!.addExpenses,
+              AppLocalizations.of(context)!.monthlyBudget,
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Colors.white,

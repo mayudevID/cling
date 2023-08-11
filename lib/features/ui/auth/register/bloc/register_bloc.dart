@@ -29,6 +29,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   }
 
   final AuthRepository _authRepository;
+  var context = RegisterPage.navKeyRegister.currentContext;
 
   void _toggleEyePass(
     ToggleEyePass event,
@@ -85,7 +86,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     if (!(connectivityResult == ConnectivityResult.mobile ||
         connectivityResult == ConnectivityResult.wifi)) {
       errorSnackbar(
-        RegisterPage.navKeyRegister.currentContext!,
+        context!,
         "No connection",
       );
       return;
@@ -96,37 +97,33 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
         state.name.trim().isEmpty ||
         state.confirmPassword.trim().isEmpty) {
       errorToast(
-        AppLocalizations.of(RegisterPage.navKeyRegister.currentContext!)!
-            .formEmpty,
+        AppLocalizations.of(context!)!.formEmpty,
       );
       return;
     }
 
     if (!EmailValidator.validate(state.email)) {
       errorToast(
-        AppLocalizations.of(RegisterPage.navKeyRegister.currentContext!)!
-            .invalidEmailFailure,
+        AppLocalizations.of(context!)!.invalidEmailFailure,
       );
       return;
     }
 
     if (state.password.trim().length < 8) {
       errorToast(
-        AppLocalizations.of(RegisterPage.navKeyRegister.currentContext!)!
-            .passwordLengthFailure,
+        AppLocalizations.of(context!)!.passwordLengthFailure,
       );
       return;
     }
 
     if (state.password.trim() != state.confirmPassword.trim()) {
       errorToast(
-        AppLocalizations.of(RegisterPage.navKeyRegister.currentContext!)!
-            .passConfPassFailure,
+        AppLocalizations.of(context!)!.passConfPassFailure,
       );
       return;
     }
 
-    loadingAuth(RegisterPage.navKeyRegister.currentContext!);
+    loadingAuth(context!);
     await _authRepository.logOut();
     //await _authRepository.saveRegisterProcess(true);
 
@@ -146,7 +143,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
       //await _authRepository.saveRegisterProcess(false);
 
       Future.microtask(() {
-        Navigator.pop(RegisterPage.navKeyRegister.currentContext!);
+        Navigator.pop(context!);
         Navigator.pushReplacementNamed(
           MainApp.navKeyGlobal.currentContext!,
           RouteName.registerSuccess,
@@ -154,13 +151,13 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
       });
     } on SignUpWithEmailAndPasswordFailure catch (e) {
       Future.microtask(() {
-        Navigator.pop(RegisterPage.navKeyRegister.currentContext!);
+        Navigator.pop(context!);
         errorToast(e.message);
       });
     } on Exception catch (e) {
       _authRepository.logOut();
       Future.microtask(() {
-        Navigator.pop(RegisterPage.navKeyRegister.currentContext!);
+        Navigator.pop(context!);
         errorToast(e.toString());
       });
     }
