@@ -2,7 +2,6 @@ import 'package:cling/core/bloc_observer.dart';
 import 'package:cling/core/notification.dart';
 import 'package:cling/env.dart';
 import 'package:cling/features/repository/settings_repository.dart';
-import 'package:cling/features/ui/main/verification_success/page/verification_success_page.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
