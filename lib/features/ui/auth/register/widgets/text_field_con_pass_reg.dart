@@ -5,8 +5,7 @@ import 'package:sizer/sizer.dart';
 
 import '../../../../../resources/gen/assets.gen.dart';
 import '../../../../../resources/gen/fonts.gen.dart';
-
-import '../../../language/lang_export.dart';
+import '../../../language_currency/lang_export.dart';
 import '../bloc/register_bloc.dart';
 
 Widget textFieldConPassReg(BuildContext context) {

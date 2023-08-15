@@ -3,7 +3,6 @@ import 'package:cling/features/model/expense_model.dart';
 import 'package:cling/resources/gen/fonts.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:money_formatter/money_formatter.dart';
 import 'package:sizer/sizer.dart';
 
 Widget todayExpensesWidget(ExpenseModel expenseModel) {

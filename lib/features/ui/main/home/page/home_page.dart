@@ -4,8 +4,7 @@ import 'package:cling/resources/gen/fonts.gen.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import '../../../language/lang_export.dart';
+import '../../../language_currency/lang_export.dart';
 import '../bloc/home_bloc.dart';
 import '../widgets/income_and_expense.dart';
 import '../widgets/monthy_budget.dart';

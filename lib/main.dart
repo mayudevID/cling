@@ -13,9 +13,9 @@ import 'core/route.dart';
 import 'features/repository/auth_repository.dart';
 
 import 'features/ui/auth/bloc/app_bloc.dart';
-import 'features/ui/language/lang_export.dart';
-import 'features/ui/language/language_bloc.dart';
 
+import 'features/ui/language_currency/lang_export.dart';
+import 'features/ui/language_currency/language_bloc.dart';
 import 'injection.dart';
 
 void main() async {
@@ -59,7 +59,7 @@ class MainApp extends StatelessWidget {
           ),
         ),
         BlocProvider(
-          create: (_) => LanguageBloc(
+          create: (_) => LangCurrencyBloc(
             settingsRepo: getIt<SettingsRepository>(),
           )..add(GetLanguage()),
         ),
@@ -79,7 +79,7 @@ class MainApp extends StatelessWidget {
               currentFocus.unfocus();
             }
           },
-          child: BlocBuilder<LanguageBloc, LanguageState>(
+          child: BlocBuilder<LangCurrencyBloc, LangCurrencyState>(
             buildWhen: (prev, curr) {
               return prev.selectedLanguage != curr.selectedLanguage;
             },
@@ -92,7 +92,7 @@ class MainApp extends StatelessWidget {
     );
   }
 
-  MaterialApp materialApp(LanguageState state) {
+  MaterialApp materialApp(LangCurrencyState state) {
     return MaterialApp(
       builder: FToastBuilder(),
       navigatorKey: navKeyGlobal,

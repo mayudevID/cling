@@ -5,7 +5,7 @@ import 'package:sizer/sizer.dart';
 
 import '../../../../../core/route.dart';
 import '../../../../../resources/gen/fonts.gen.dart';
-import '../../../language/lang_export.dart';
+import '../../../language_currency/lang_export.dart';
 import 'tag_name_login.dart';
 import 'text_field_email_login.dart';
 import 'text_field_pass_login.dart';

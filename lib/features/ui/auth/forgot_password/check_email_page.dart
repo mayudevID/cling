@@ -4,7 +4,7 @@ import 'package:cling/resources/gen/fonts.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:open_mail_app/open_mail_app.dart';
 import 'package:sizer/sizer.dart';
-import '../../language/lang_export.dart';
+import '../../language_currency/lang_export.dart';
 import 'widgets/email_with_star.dart';
 
 class CheckEmailPage extends StatelessWidget {

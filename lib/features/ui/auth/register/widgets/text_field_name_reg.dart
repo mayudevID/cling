@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../../resources/gen/fonts.gen.dart';
-import '../../../language/lang_export.dart';
+import '../../../language_currency/lang_export.dart';
 
 Widget textFieldNameReg(BuildContext context) {
   return Container(

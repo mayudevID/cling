@@ -3,7 +3,7 @@ import 'package:cling/core/exception.dart';
 import 'package:cling/features/repository/auth_repository.dart';
 import 'package:cling/features/ui/auth/bloc/app_bloc.dart';
 import 'package:cling/features/ui/auth/login/page/login_page.dart';
-import 'package:cling/features/ui/language/lang_export.dart';
+import 'package:cling/features/ui/language_currency/lang_export.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:equatable/equatable.dart';

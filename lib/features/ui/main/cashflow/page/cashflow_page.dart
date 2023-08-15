@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../../resources/gen/fonts.gen.dart';
-import '../../../language/lang_export.dart';
+import '../../../language_currency/lang_export.dart';
 import '../../home/bloc/home_bloc.dart';
 
 import '../../home/widgets/today_expenses_widget.dart';

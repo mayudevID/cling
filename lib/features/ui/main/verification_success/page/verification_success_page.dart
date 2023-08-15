@@ -148,7 +148,7 @@ class VerificationSuccessPage extends StatelessWidget {
                   //   RouteName.monthlyBudget,
                   // );
                   Navigator.push(context, MaterialPageRoute(builder: (_) {
-                    return MonthlyBudgetPage();
+                    return const MonthlyBudgetPage();
                   }));
                 },
                 name: "Set Monthly Budget",

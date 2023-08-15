@@ -92,7 +92,7 @@ class MonthlyBudgetPageContent extends StatelessWidget {
                 SizedBox(
                   width: 6.wmea,
                 ),
-                TextFieldMonthlyBudget(),
+                const TextFieldMonthlyBudget(),
               ],
             ),
             SizedBox(

@@ -10,7 +10,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
 import '../../../../../core/route.dart';
 import '../../../../../injection.dart';
-import '../../../language/lang_export.dart';
+import '../../../language_currency/lang_export.dart';
 import '../bloc/register_bloc.dart';
 
 class RegisterPage extends StatelessWidget {

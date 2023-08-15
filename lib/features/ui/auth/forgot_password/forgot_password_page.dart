@@ -5,7 +5,7 @@ import 'package:cling/resources/gen/assets.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 import '../../../../resources/gen/fonts.gen.dart';
-import '../../language/lang_export.dart';
+import '../../language_currency/lang_export.dart';
 import '../login/widgets/tag_name_login.dart';
 
 import 'widgets/text_field_email_forgot.dart';

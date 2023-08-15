@@ -1,7 +1,6 @@
 import 'package:cling/core/utils.dart';
 import 'package:flutter/material.dart';
-
-import '../../../language/lang_export.dart';
+import '../../../language_currency/lang_export.dart';
 import 'tag_name_reg.dart';
 import 'text_field_con_pass_reg.dart';
 import 'text_field_email_reg.dart';

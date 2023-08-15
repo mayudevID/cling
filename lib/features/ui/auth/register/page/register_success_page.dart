@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:open_mail_app/open_mail_app.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../../language/lang_export.dart';
+import '../../../language_currency/lang_export.dart';
 import '../widgets/box_face.dart';
 
 import '../widgets/oval_stack.dart';

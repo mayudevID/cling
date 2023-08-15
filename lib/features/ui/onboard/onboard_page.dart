@@ -2,14 +2,14 @@ import 'package:cling/core/common_widget.dart';
 import 'package:cling/core/route.dart';
 import 'package:cling/core/utils.dart';
 import 'package:cling/features/model/language.dart';
-import 'package:cling/features/ui/language/language_bloc.dart';
 import 'package:cling/resources/gen/fonts.gen.dart';
 import 'package:flutter/material.dart' hide ModalBottomSheetRoute;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:sizer/sizer.dart';
 import '../../../resources/gen/assets.gen.dart';
-import '../language/lang_export.dart';
+import '../language_currency/lang_export.dart';
+import '../language_currency/language_bloc.dart';
 import 'widgets/emoticon_widget.dart';
 import 'widgets/stack_emoticon.dart';
 import 'widgets/stack_star.dart';
@@ -94,7 +94,7 @@ class OnboardPage extends StatelessWidget {
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Center(
-                        child: BlocBuilder<LanguageBloc, LanguageState>(
+                        child: BlocBuilder<LangCurrencyBloc, LangCurrencyState>(
                           builder: (context, state) {
                             return Text(
                               state.selectedLanguage.text.substring(
@@ -140,7 +140,7 @@ class OnboardPage extends StatelessWidget {
       enableDrag: false,
       isDismissible: false,
       builder: (context) {
-        return BlocBuilder<LanguageBloc, LanguageState>(
+        return BlocBuilder<LangCurrencyBloc, LangCurrencyState>(
           builder: (context, state) {
             return Container(
               padding: EdgeInsets.all(24.wmea),
@@ -177,7 +177,7 @@ class OnboardPage extends StatelessWidget {
                   MediaQuery.removePadding(
                     removeTop: true,
                     context: context,
-                    child: BlocBuilder<LanguageBloc, LanguageState>(
+                    child: BlocBuilder<LangCurrencyBloc, LangCurrencyState>(
                       builder: (context, state) {
                         return listLanguage(state);
                       },
@@ -192,14 +192,14 @@ class OnboardPage extends StatelessWidget {
     );
   }
 
-  ListView listLanguage(LanguageState state) {
+  ListView listLanguage(LangCurrencyState state) {
     return ListView.separated(
       shrinkWrap: true,
       itemCount: Language.values.length,
       itemBuilder: (context, index) {
         return ListTile(
           onTap: () async {
-            context.read<LanguageBloc>().add(
+            context.read<LangCurrencyBloc>().add(
                   ChangeLanguage(
                     selectedLanguage: Language.values[index],
                   ),

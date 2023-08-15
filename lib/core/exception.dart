@@ -1,4 +1,4 @@
-import 'package:cling/features/ui/language/lang_export.dart';
+import 'package:cling/features/ui/language_currency/lang_export.dart';
 import '../main.dart';
 
 class SignUpWithEmailAndPasswordFailure implements Exception {

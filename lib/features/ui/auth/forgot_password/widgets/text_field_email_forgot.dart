@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../../resources/gen/fonts.gen.dart';
-import '../../../language/lang_export.dart';
+import '../../../language_currency/lang_export.dart';
 
 class TextFieldEmailForgot extends StatelessWidget {
   const TextFieldEmailForgot({super.key});

@@ -3,11 +3,10 @@ import 'package:cling/features/ui/main/home/bloc/home_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:money_formatter/money_formatter.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../../resources/gen/fonts.gen.dart';
-import '../../../language/lang_export.dart';
+import '../../../language_currency/lang_export.dart';
 
 Widget incomeAndExpense(BuildContext context) {
   return Container(

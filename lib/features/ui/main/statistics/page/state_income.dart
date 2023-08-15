@@ -4,7 +4,7 @@ import 'package:sizer/sizer.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../../../../../resources/gen/fonts.gen.dart';
-import '../../../language/lang_export.dart';
+import '../../../language_currency/lang_export.dart';
 import '../../home/page/home_page.dart';
 import '../widgets/income_widget.dart';
 

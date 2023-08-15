@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:cling/core/exception.dart';
 import 'package:cling/core/route.dart';
-import 'package:cling/features/ui/language/lang_export.dart';
+import 'package:cling/features/ui/language_currency/lang_export.dart';
 import 'package:cling/main.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:email_validator/email_validator.dart';
