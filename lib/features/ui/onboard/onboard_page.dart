@@ -9,7 +9,7 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:sizer/sizer.dart';
 import '../../../resources/gen/assets.gen.dart';
 import '../language_currency/lang_export.dart';
-import '../language_currency/language_bloc.dart';
+import '../language_currency/lang_currency_bloc.dart';
 import 'widgets/emoticon_widget.dart';
 import 'widgets/stack_emoticon.dart';
 import 'widgets/stack_star.dart';

@@ -15,7 +15,7 @@ import 'features/repository/auth_repository.dart';
 import 'features/ui/auth/bloc/app_bloc.dart';
 
 import 'features/ui/language_currency/lang_export.dart';
-import 'features/ui/language_currency/language_bloc.dart';
+import 'features/ui/language_currency/lang_currency_bloc.dart';
 import 'injection.dart';
 
 void main() async {
