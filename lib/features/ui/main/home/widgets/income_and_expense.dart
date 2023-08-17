@@ -1,4 +1,5 @@
 import 'package:cling/core/utils.dart';
+import 'package:cling/features/model/currency.dart';
 import 'package:cling/features/ui/main/home/bloc/home_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -6,6 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../../resources/gen/fonts.gen.dart';
+import '../../../language_currency/lang_currency_bloc.dart';
 import '../../../language_currency/lang_export.dart';
 
 Widget incomeAndExpense(BuildContext context) {
@@ -37,18 +39,25 @@ Widget incomeAndExpense(BuildContext context) {
               ),
             ),
             const Spacer(),
-            Text(
-              NumberFormat.currency(
-                locale: "id",
-                decimalDigits: 2,
-                name: "IDR ",
-              ).format(5000000),
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 12.5.sp,
-                fontFamily: 'Cabinet Grotesk',
-                fontWeight: FontWeight.w700,
-              ),
+            BlocBuilder<LangCurrencyBloc, LangCurrencyState>(
+              buildWhen: (prev, curr) {
+                return prev.selectedCurrency != curr.selectedCurrency;
+              },
+              builder: (context, state) {
+                return Text(
+                  NF.currency(
+                    amount: 2000000,
+                    currency: state.selectedCurrency,
+                    decimalDigits: 2,
+                  ),
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 12.5.sp,
+                    fontFamily: FontFamily.cabinetGrotesk,
+                    fontWeight: FontWeight.w700,
+                  ),
+                );
+              },
             )
           ],
         ),

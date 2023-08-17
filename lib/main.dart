@@ -2,6 +2,7 @@ import 'package:cling/core/bloc_observer.dart';
 import 'package:cling/core/notification.dart';
 import 'package:cling/env.dart';
 import 'package:cling/features/repository/settings_repository.dart';
+import 'package:device_preview/device_preview.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -41,7 +42,12 @@ void main() async {
     };
   }
 
-  runApp(const MainApp());
+  runApp(
+    DevicePreview(
+      enabled: !kReleaseMode,
+      builder: (_) => const MainApp(),
+    ),
+  );
 }
 
 class MainApp extends StatelessWidget {

@@ -18,7 +18,7 @@ enum Currency {
 }
 
 class NF {
-  String currency({
+  static String currency({
     required num amount,
     required Currency currency,
     int? decimalDigits,
