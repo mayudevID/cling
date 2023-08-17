@@ -11,6 +11,7 @@ import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
 import '../../core/init_database.dart';
+import '../model/goal_model.dart';
 
 class DatabaseRepository {
   late Database db;
@@ -124,5 +125,16 @@ class DatabaseRepository {
         FROM ${ExpenseMeta.nameTable}
       ''');
     return maps.first['SUM(${ExpenseMeta.amount})'] ?? 0;
+  }
+
+  Future<List<GoalModel>> getGoals() async {
+    List<GoalModel> dataList = [];
+    List<Map<String, dynamic>> maps = await db.query(
+      GoalMeta.nameTable,
+    );
+    for (var element in maps) {
+      dataList.add(GoalModel.fromDatabase(element));
+    }
+    return dataList;
   }
 }

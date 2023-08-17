@@ -1,7 +1,10 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:cling/core/init_database.dart';
 import 'package:cling/core/static_name_table.dart';
+import 'package:equatable/equatable.dart';
 
-class IncomeModel {
+class IncomeModel extends Equatable {
   int? id;
   DateTime date;
   String? desc;
@@ -46,4 +49,13 @@ class IncomeModel {
         IncomeMeta.amount: amount,
         IncomeMeta.incomeSource: incomeSource,
       };
+
+  @override
+  List<Object?> get props => [
+        id,
+        date,
+        desc,
+        amount,
+        incomeSource,
+      ];
 }

@@ -4,6 +4,7 @@ import 'package:cling/core/common_widget.dart';
 import 'package:cling/core/logger.dart';
 import 'package:cling/features/model/expense_categories_model.dart';
 import 'package:cling/features/model/expense_model.dart';
+import 'package:cling/features/model/goal_model.dart';
 import 'package:cling/features/model/income_model.dart';
 import 'package:cling/features/model/income_source_model.dart';
 import 'package:cling/features/repository/database_repository.dart';
@@ -51,7 +52,10 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     emit(state.copyWith(amountExpense: amount.toDouble()));
   }
 
-  void _getGoals(event, emit) async {}
+  void _getGoals(event, emit) async {
+    final listData = await _dbRepo.getGoals();
+    emit(state.copyWith(listGoals: listData));
+  }
 
   void _getTodayExpenses(_, emit) async {
     final listData = await _dbRepo.getTodayExpenses();

@@ -33,13 +33,20 @@ class HomePage extends StatelessWidget {
           ...tagNameHome(AppLocalizations.of(context)!.overview),
           incomeAndExpense(context),
           ...tagNameHome(AppLocalizations.of(context)!.goals),
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              children: dataDummy.asMap().entries.map((e) {
-                return widgetGoals(e, dataDummy.length);
-              }).toList(),
-            ),
+          BlocBuilder<HomeBloc, HomeState>(
+            buildWhen: (prev, next) {
+              return true;
+            },
+            builder: (context, state) {
+              return SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: dataDummy.asMap().entries.map((e) {
+                    return widgetGoals(e, dataDummy.length);
+                  }).toList(),
+                ),
+              );
+            },
           ),
           ...tagNameHome(AppLocalizations.of(context)!.todayExpenses),
           BlocBuilder<HomeBloc, HomeState>(

@@ -27,3 +27,12 @@ class ExpenseCategoriesMeta {
   static const id = 'expense_source_id';
   static const expenseCategories = 'expense_categories';
 }
+
+class GoalMeta {
+  static const nameTable = 'goal_meta';
+  static const id = 'goal_id';
+  static const image = 'goal_image';
+  static const name = 'goal_name';
+  static const target = 'goal_target';
+  static const collected = 'goal_collected';
+}

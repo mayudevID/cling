@@ -66,6 +66,17 @@ FutureOr<void> initDatabaseTable(Database db, int version) async {
           )
           ''',
     ),
+    db.execute(
+      '''
+          CREATE TABLE ${GoalMeta.nameTable}(
+            ${GoalMeta.id} INTEGER PRIMARY KEY AUTOINCREMENT, 
+            ${GoalMeta.name} TEXT, 
+            ${GoalMeta.image} TEXT,
+            ${GoalMeta.target} INTEGER,
+            ${GoalMeta.collected} INTEGER,
+          )
+          ''',
+    ),
   ]);
 
   for (var i = 0; i < inSourceData.length; i++) {

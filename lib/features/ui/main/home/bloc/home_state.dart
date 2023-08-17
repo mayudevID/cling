@@ -5,6 +5,7 @@ class HomeState extends Equatable {
   List<IncomeSourceModel> listInSource;
   List<ExpenseCategoriesModel> listExCategories;
   List<ExpenseModel> listTodayExpenses;
+  List<GoalModel> listGoals;
   double amountIncome;
   double amountExpense;
   DateTime selectedDate;
@@ -16,6 +17,7 @@ class HomeState extends Equatable {
     List<IncomeSourceModel>? listInSource,
     List<ExpenseCategoriesModel>? listExCategories,
     List<ExpenseModel>? listTodayExpenses,
+    List<GoalModel>? listGoals,
     this.amountIncome = 0,
     this.amountExpense = 0,
     DateTime? selectedDate,
@@ -31,13 +33,15 @@ class HomeState extends Equatable {
         listTodayExpenses = listTodayExpenses ?? List.empty(),
         listInSource = listInSource ?? List.empty(),
         listExCategories = listExCategories ?? List.empty(),
-        selectedCategories = selectedCategories ?? const MapEntry(0, "");
+        selectedCategories = selectedCategories ?? const MapEntry(0, ""),
+        listGoals = listGoals ?? List.empty();
 
   @override
   List<Object?> get props => [
         listInSource,
         listExCategories,
         listTodayExpenses,
+        listGoals,
         amountIncome,
         amountExpense,
         selectedDate,
@@ -50,6 +54,7 @@ class HomeState extends Equatable {
     List<IncomeSourceModel>? listInSource,
     List<ExpenseCategoriesModel>? listExCategories,
     List<ExpenseModel>? listTodayExpenses,
+    List<GoalModel>? listGoals,
     double? amountIncome,
     double? amountExpense,
     DateTime? selectedDate,
@@ -61,6 +66,7 @@ class HomeState extends Equatable {
       listInSource: listInSource ?? this.listInSource,
       listExCategories: listExCategories ?? this.listExCategories,
       listTodayExpenses: listTodayExpenses ?? this.listTodayExpenses,
+      listGoals: listGoals ?? this.listGoals,
       amountIncome: amountIncome ?? this.amountIncome,
       amountExpense: amountExpense ?? this.amountExpense,
       selectedDate: selectedDate ?? this.selectedDate,
