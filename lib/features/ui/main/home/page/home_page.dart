@@ -4,6 +4,7 @@ import 'package:cling/resources/gen/fonts.gen.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sizer/sizer.dart';
 import '../../../language_currency/lang_export.dart';
 import '../bloc/home_bloc.dart';
 import '../widgets/income_and_expense.dart';
@@ -35,9 +36,61 @@ class HomePage extends StatelessWidget {
           ...tagNameHome(AppLocalizations.of(context)!.goals),
           BlocBuilder<HomeBloc, HomeState>(
             buildWhen: (prev, next) {
-              return true;
+              return prev.listGoals != next.listGoals;
             },
             builder: (context, state) {
+              if (state.listGoals.isEmpty) {
+                return Container(
+                  margin: EdgeInsets.symmetric(horizontal: 20.wmea),
+                  decoration: BoxDecoration(
+                    color: const Color(0x3D787880),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        height: 16.hmea,
+                      ),
+                      Text(
+                        "You don`t have a goal",
+                        style: TextStyle(
+                          fontFamily: FontFamily.cabinetGrotesk,
+                          fontSize: 12.sp,
+                          color: Colors.white,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 16.hmea,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Assets.lib.resources.images.plus.svg(
+                            color: Colors.white,
+                            width: 14.wmea,
+                          ),
+                          SizedBox(
+                            width: 4.wmea,
+                          ),
+                          Text(
+                            "Add goals",
+                            style: TextStyle(
+                              fontFamily: FontFamily.cabinetGrotesk,
+                              fontSize: 10.sp,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 16.hmea,
+                      ),
+                    ],
+                  ),
+                );
+              }
+
               return SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(

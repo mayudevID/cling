@@ -73,7 +73,7 @@ FutureOr<void> initDatabaseTable(Database db, int version) async {
             ${GoalMeta.name} TEXT, 
             ${GoalMeta.image} TEXT,
             ${GoalMeta.target} INTEGER,
-            ${GoalMeta.collected} INTEGER,
+            ${GoalMeta.collected} INTEGER
           )
           ''',
     ),

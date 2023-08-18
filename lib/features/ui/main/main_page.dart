@@ -36,7 +36,8 @@ class MainPage extends StatelessWidget {
           )
             ..add(GetTotalIncome())
             ..add(GetTotalExpense())
-            ..add(GetTodayExpenses()),
+            ..add(GetTodayExpenses())
+            ..add(GetGoals()),
         ),
         BlocProvider(
           create: (_) => StatisticsBloc(),
