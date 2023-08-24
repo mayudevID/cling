@@ -16,16 +16,13 @@ import '../ui/auth/login/page/login_page.dart';
 import '../ui/auth/login/widgets/dialog_email_not_verified.dart';
 
 class AuthRepository {
-  //final FirebaseAuth _firebaseAuth;
   final SupabaseClient _supabaseClient;
   final SharedPreferences _cache;
 
   AuthRepository({
-    //required FirebaseAuth firebaseAuth,
     required SupabaseClient supabaseClient,
     required SharedPreferences cache,
-  })  : //_firebaseAuth = firebaseAuth,
-        _supabaseClient = supabaseClient,
+  })  : _supabaseClient = supabaseClient,
         _cache = cache;
 
   static const userCacheKey = '__user_cache_key__';
@@ -36,70 +33,41 @@ class AuthRepository {
     return _supabaseClient.auth.onAuthStateChange.map((event) {
       final user = _supabaseClient.auth.currentUser;
 
-      if (user != null) {
-        Future.microtask(() async {
-          try {
-            final userFromQuery = await _supabaseClient
-                .from("users")
-                .select<Map<String, dynamic>>()
-                .eq('id', user.id)
-                .single();
-            UserModel? userModel = UserModel(
-              id: userFromQuery['id'],
-              name: userFromQuery['name'],
-              email: user.email,
-              photo: userFromQuery['avatar_url'],
-              emailVerified: userFromQuery['verified_process'],
-            );
-            _cache.setString(
-              userCacheKey,
-              userModelToMap(userModel),
-            );
-            checkIfUserPassVerifOnboard(event, user, userModel);
-          } on SocketException catch (e) {
-            Logger.Red.log(e.message);
-            final context = MainApp.navKeyGlobal.currentContext!;
-            errorSnackbar(context, "No connections");
-          }
-        });
-      } else {
+      if (user == null) {
         _cache.remove(userCacheKey);
       }
 
       return user;
     });
-    // return _firebaseAuth.authStateChanges().map((firebaseUser) {
-    //   final user = firebaseUser?.toUser;
-    //   if (user != null) {
-    //     _cache.setString(userCacheKey, userModelToMap(user));
-    //   } else {
-    //     _cache.remove(userCacheKey);
-    //   }
-    //   return user;
-    // });
   }
 
-  void checkIfUserPassVerifOnboard(
-    AuthState event,
-    User user,
-    UserModel userModel,
-  ) async {
-    if (event.event == AuthChangeEvent.signedIn &&
-        (user.emailConfirmedAt != null && !userModel.emailVerified)) {
-      loadingAuth(MainApp.navKeyGlobal.currentContext!);
-      await _supabaseClient.from("users").upsert(
-        {
-          "id": user.id,
-          'verified_process': true,
-          'updated_at': DateTime.now().toIso8601String(),
-        },
-      );
-      Navigator.pushReplacementNamed(
-        MainApp.navKeyGlobal.currentContext!,
-        RouteName.verifOnboard,
-      );
-    }
-  }
+  // void checkIfUserPassVerifOnboard(
+  //   AuthState event,
+  //   User user,
+  //   UserModel userModel,
+  // ) async {
+  //   if (event.event == AuthChangeEvent.signedIn &&
+  //       (user.emailConfirmedAt != null && !userModel.emailVerified)) {
+  //     loadingAuth(MainApp.navKeyGlobal.currentContext!);
+  //     await _supabaseClient.from("users").upsert(
+  //       {
+  //         "id": user.id,
+  //         'verified_process': true,
+  //         'updated_at': DateTime.now().toIso8601String(),
+  //       },
+  //     );
+  //     userModel = UserModel(id: id, emailVerified: emailVerified);
+  //     Navigator.pushReplacementNamed(
+  //       MainApp.navKeyGlobal.currentContext!,
+  //       RouteName.verifOnboard,
+  //     );
+  //   }
+
+  //   _cache.setString(
+  //     userCacheKey,
+  //     userModelToMap(userModel),
+  //   );
+  // }
 
   UserModel? get currentUserModel {
     final getData = _cache.getString(userCacheKey);
@@ -141,11 +109,6 @@ class AuthRepository {
           );
         },
       );
-
-      // await _firebaseAuth.createUserWithEmailAndPassword(
-      //   email: email,
-      //   password: password,
-      // );
     } on AuthException catch (e) {
       Logger.Red.log("Status: ${e.statusCode} Message: ${e.message}");
       throw SignUpWithEmailAndPasswordFailure.fromCode(e.message);
@@ -158,29 +121,64 @@ class AuthRepository {
     }
   }
 
-  // Future<void> sendEmailVerification() async {
-  //   try {
-  //     await _firebaseAuth.currentUser!.sendEmailVerification();
-  //   } on FirebaseException catch (e) {
-  //     throw Exception(e.message);
-  //   }
-  // }
-
   Future<void> logInWithEmailAndPassword({
     required String email,
     required String password,
   }) async {
     try {
       saveLoginProcess(true);
-      await _supabaseClient.auth.signInWithPassword(
+      final userResultLogin = await _supabaseClient.auth.signInWithPassword(
         email: email,
         password: password,
       );
       saveLoginProcess(false);
-      // await _firebaseAuth.signInWithEmailAndPassword(
-      //   email: email,
-      //   password: password,
-      // );
+      final userFromQuery = await _supabaseClient
+          .from("users")
+          .select<Map<String, dynamic>>()
+          .eq('id', userResultLogin.user!.id)
+          .single();
+
+      UserModel? userModel = UserModel(
+        id: userResultLogin.user!.id,
+        name: userFromQuery['name'],
+        email: email,
+        photo: userFromQuery['avatar_url'],
+        verifiedProcess: userFromQuery['verified_process'],
+      );
+
+      final isVerifiedProcessNotPassed =
+          userResultLogin.user!.emailConfirmedAt != null &&
+              userFromQuery['verified_process'] == false;
+
+      if (isVerifiedProcessNotPassed) {
+        loadingAuth(MainApp.navKeyGlobal.currentContext!);
+        await _supabaseClient.from("users").upsert(
+          {
+            "id": userResultLogin.user!.id,
+            'verified_process': true,
+            'updated_at': DateTime.now().toIso8601String(),
+          },
+        );
+
+        userModel = userModel.copyWith(verifiedProcess: true);
+      }
+
+      await _cache.setString(
+        userCacheKey,
+        userModelToMap(userModel),
+      );
+
+      if (isVerifiedProcessNotPassed) {
+        Future.delayed(
+          const Duration(seconds: 2),
+          () {
+            Navigator.pushNamed(
+              MainApp.navKeyGlobal.currentContext!,
+              RouteName.verifOnboard,
+            );
+          },
+        );
+      }
     } on AuthException catch (e) {
       Logger.Red.log("Status: ${e.statusCode} Message: ${e.message}");
       if (e.statusCode == '400' && e.message == "Email not confirmed") {
@@ -189,6 +187,10 @@ class AuthRepository {
         });
       }
       throw LogInWithEmailAndPasswordFailure.fromCode(e.message);
+    } on SocketException catch (e) {
+      Logger.Red.log(e.message);
+      final context = MainApp.navKeyGlobal.currentContext!;
+      errorSnackbar(context, "No connections");
     } on Exception catch (e) {
       Logger.Red.log(e.toString());
       throw const LogInWithEmailAndPasswordFailure();

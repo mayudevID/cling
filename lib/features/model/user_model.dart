@@ -11,7 +11,7 @@ String userModelToMap(UserModel data) => json.encode(data.toMap());
 class UserModel extends Equatable {
   UserModel({
     required this.id,
-    required this.emailVerified,
+    required this.verifiedProcess,
     this.email,
     this.name,
     this.photo,
@@ -19,7 +19,7 @@ class UserModel extends Equatable {
 
   String? email;
   String id;
-  bool emailVerified;
+  bool verifiedProcess;
   String? name;
   String? photo;
 
@@ -29,7 +29,7 @@ class UserModel extends Equatable {
         id,
         name,
         photo,
-        emailVerified,
+        verifiedProcess,
       ];
 
   factory UserModel.fromMap(Map<String, dynamic> json) => UserModel(
@@ -37,7 +37,7 @@ class UserModel extends Equatable {
         name: json["name"],
         email: json["email"],
         photo: json["photo"],
-        emailVerified: json["email_verified"],
+        verifiedProcess: json["verified_process"],
       );
 
   Map<String, dynamic> toMap() => {
@@ -45,6 +45,22 @@ class UserModel extends Equatable {
         "name": name,
         "email": email,
         "photo": photo,
-        "email_verified": emailVerified,
+        "verified_process": verifiedProcess,
       };
+
+  UserModel copyWith({
+    String? email,
+    String? id,
+    String? name,
+    String? photo,
+    bool? verifiedProcess,
+  }) {
+    return UserModel(
+      id: id ?? this.id,
+      email: email ?? this.email,
+      name: name ?? this.name,
+      photo: photo ?? this.photo,
+      verifiedProcess: verifiedProcess ?? this.verifiedProcess,
+    );
+  }
 }

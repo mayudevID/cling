@@ -81,16 +81,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         password: state.password.trim(),
       );
 
-      //await _authRepository.saveLoginProcess(false);
-
-      // if (!_authRepository.currentUserModel!.emailVerified) {
-      //   await Future.microtask(
-      //     () async {
-      //       await dialogEmailNotVerified(context!);
-      //     },
-      //   );
-      // }
-
       Future.microtask(() {
         context!.read<AppBloc>().add(const Redirect());
       });
