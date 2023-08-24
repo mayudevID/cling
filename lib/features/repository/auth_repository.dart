@@ -189,8 +189,7 @@ class AuthRepository {
       throw LogInWithEmailAndPasswordFailure.fromCode(e.message);
     } on SocketException catch (e) {
       Logger.Red.log(e.message);
-      final context = MainApp.navKeyGlobal.currentContext!;
-      errorSnackbar(context, "No connections");
+      throw SocketException(e.message);
     } on Exception catch (e) {
       Logger.Red.log(e.toString());
       throw const LogInWithEmailAndPasswordFailure();

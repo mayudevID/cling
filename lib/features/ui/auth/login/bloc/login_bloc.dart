@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cling/core/exception.dart';
 
 import 'package:cling/features/repository/auth_repository.dart';
@@ -89,6 +91,12 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       Future.microtask(() {
         Navigator.pop(context!);
         errorToast(e.message);
+      });
+    } on SocketException catch (_) {
+      _authRepository.logOut();
+      Future.microtask(() {
+        Navigator.pop(context!);
+        errorSnackbar(context!, "No connection");
       });
     }
   }

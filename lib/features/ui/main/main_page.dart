@@ -1,3 +1,4 @@
+import 'package:cling/features/ui/main/home/page/add_goal_page.dart';
 import 'package:cling/features/ui/main/home/page/add_in_ex_page.dart';
 import 'package:cling/features/ui/main/profile/page/profile_page.dart';
 
@@ -12,7 +13,6 @@ import '../../../injection.dart';
 import '../../repository/database_repository.dart';
 import 'bloc/enum_home_page_state.dart';
 import 'bloc/main_bloc.dart';
-import 'cashflow/page/cashflow_page.dart';
 import 'home/bloc/home_bloc.dart';
 import 'home/page/home_page.dart';
 import 'main_widget/custom_fab.dart';
@@ -54,6 +54,19 @@ class MainPage extends StatelessWidget {
 class MainPageContent extends StatelessWidget {
   const MainPageContent({super.key});
 
+  Widget homePageStatus(MainState state) {
+    switch (state.homePageState) {
+      case HomePageState.home:
+        return const HomePage();
+      case HomePageState.goal:
+        return const AddGoalPage();
+      case HomePageState.income:
+        return const AddIncomeExpensePage(flowType: FlowType.income);
+      case HomePageState.expense:
+        return const AddIncomeExpensePage(flowType: FlowType.expense);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -66,6 +79,9 @@ class MainPageContent extends StatelessWidget {
           child: Stack(
             children: [
               BlocBuilder<MainBloc, MainState>(
+                buildWhen: (previous, current) {
+                  return previous.tabIndex != current.tabIndex;
+                },
                 builder: (context, state) {
                   return FadeIndexedStack(
                     index: state.tabIndex,
@@ -73,14 +89,7 @@ class MainPageContent extends StatelessWidget {
                     beginOpacity: 0.75,
                     endOpacity: 1,
                     children: [
-                      (state.homePageState == HomePageState.home)
-                          ? const HomePage()
-                          : AddIncomeExpensePage(
-                              flowType:
-                                  (state.homePageState == HomePageState.income)
-                                      ? FlowType.income
-                                      : FlowType.expense,
-                            ),
+                      homePageStatus(state),
                       const StatisticsPage(),
                       const ProfilePage(),
                     ],
