@@ -35,6 +35,12 @@ class ChangeName extends RegisterEvent {
   final String name;
 }
 
+class ChangeCurrency extends RegisterEvent {
+  const ChangeCurrency(this.currency);
+
+  final Currency currency;
+}
+
 class SendRegister extends RegisterEvent {
   const SendRegister();
 }

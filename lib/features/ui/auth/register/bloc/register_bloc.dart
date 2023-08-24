@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:cling/core/exception.dart';
 import 'package:cling/core/route.dart';
+import 'package:cling/features/model/currency.dart';
 import 'package:cling/features/ui/language_currency/lang_export.dart';
 import 'package:cling/main.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
@@ -26,6 +27,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     on<ChangeEmail>(_onChangeEmail);
     on<ChangePassword>(_onChangePassword);
     on<ChangeConfPassword>(_onChangeConfPassword);
+    on<ChangeCurrency>(_onChangeCurrency);
   }
 
   final AuthRepository _authRepository;
@@ -81,6 +83,13 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     emit(state.copyWith(confirmPassword: event.confPassword));
   }
 
+  void _onChangeCurrency(
+    ChangeCurrency event,
+    Emitter<RegisterState> emit,
+  ) {
+    emit(state.copyWith(selectedCurrency: event.currency));
+  }
+
   void _onSendRegister(SendRegister event, _) async {
     final connectivityResult = await (Connectivity().checkConnectivity());
     if (!(connectivityResult == ConnectivityResult.mobile ||
@@ -132,6 +141,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
         name: state.name.trim(),
         email: state.email.trim(),
         password: state.password.trim(),
+        currency: state.selectedCurrency.value.countryCode!,
       );
 
       // await Future.wait([

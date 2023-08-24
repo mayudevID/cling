@@ -137,7 +137,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       }
       Future.microtask(() {
         dialogAddSuccess(
-          navigatorKeyMain.currentContext!,
+          MainPage.navigatorKeyMain.currentContext!,
           event.flowType,
         );
       });

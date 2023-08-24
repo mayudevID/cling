@@ -100,6 +100,35 @@ Widget customFloatingActionButton(BuildContext context) {
             ),
           ),
         ),
+        GestureDetector(
+          onTap: () {
+            //context.read<HomeBloc>().add(GetExpenseCategories());
+            context.read<MainBloc>().add(
+                  const HomePageStateChange(
+                    homePageState: HomePageState.goal,
+                  ),
+                );
+          },
+          child: Container(
+            padding: EdgeInsets.symmetric(
+              vertical: 9.wmea,
+              horizontal: 19.5.hmea,
+            ),
+            decoration: BoxDecoration(
+              color: const Color(0xFFF599DA),
+              borderRadius: BorderRadius.circular(13),
+            ),
+            child: Text(
+              "Add goal",
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 13.5.sp,
+                fontFamily: FontFamily.cabinetGrotesk,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+          ),
+        ),
       ],
     ),
   );

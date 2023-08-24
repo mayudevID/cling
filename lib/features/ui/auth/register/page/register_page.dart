@@ -115,7 +115,7 @@ class RegisterPageContent extends StatelessWidget {
                 textAlign: TextAlign.center,
               ),
               SizedBox(
-                height: 55.hmea,
+                height: 24.hmea,
               ),
             ],
           ),

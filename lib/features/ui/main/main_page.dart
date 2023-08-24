@@ -23,6 +23,9 @@ import 'statistics/page/statistics_page.dart';
 class MainPage extends StatelessWidget {
   const MainPage({super.key});
 
+  static GlobalKey<NavigatorState> navigatorKeyMain =
+      GlobalKey<NavigatorState>();
+
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
@@ -55,7 +58,7 @@ class MainPageContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        key: navigatorKeyMain,
+        key: MainPage.navigatorKeyMain,
         backgroundColor: const Color(0xFF101010),
         body: SizedBox(
           width: 100.w,
@@ -79,7 +82,6 @@ class MainPageContent extends StatelessWidget {
                                       : FlowType.expense,
                             ),
                       const StatisticsPage(),
-                      CashflowPage(),
                       const ProfilePage(),
                     ],
                   );
@@ -104,5 +106,3 @@ class MainPageContent extends StatelessWidget {
     );
   }
 }
-
-GlobalKey<NavigatorState> navigatorKeyMain = GlobalKey<NavigatorState>();

@@ -11,6 +11,7 @@ class RegisterState extends Equatable {
     this.password = "",
     this.confirmPassword = "",
     this.name = "",
+    this.selectedCurrency = Currency.idr,
   });
 
   bool isEnableObscurePass;
@@ -19,6 +20,7 @@ class RegisterState extends Equatable {
   String email;
   String password;
   String confirmPassword;
+  Currency selectedCurrency;
 
   @override
   List<Object> get props => [
@@ -27,6 +29,7 @@ class RegisterState extends Equatable {
         email,
         password,
         confirmPassword,
+        selectedCurrency,
         name,
       ];
 
@@ -37,6 +40,7 @@ class RegisterState extends Equatable {
     String? password,
     String? name,
     String? confirmPassword,
+    Currency? selectedCurrency,
   }) {
     return RegisterState(
       isEnableObscurePass: isEnableObscurePass ?? this.isEnableObscurePass,
@@ -46,6 +50,7 @@ class RegisterState extends Equatable {
       password: password ?? this.password,
       confirmPassword: confirmPassword ?? this.confirmPassword,
       name: name ?? this.name,
+      selectedCurrency: selectedCurrency ?? this.selectedCurrency,
     );
   }
 }

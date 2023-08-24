@@ -117,6 +117,7 @@ class AuthRepository {
     required String name,
     required String email,
     required String password,
+    required String currency,
   }) async {
     try {
       saveRegisterProcess(true);
@@ -135,6 +136,7 @@ class AuthRepository {
             {
               "id": result.user!.id,
               "name": name,
+              "currency": currency,
             },
           );
         },

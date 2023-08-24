@@ -1,1 +1,1 @@
-enum HomePageState { home, expense, income }
+enum HomePageState { home, expense, income, goal }
