@@ -1,13 +1,18 @@
 import 'package:cling/core/utils.dart';
 import 'package:cling/resources/gen/assets.gen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:sizer/sizer.dart';
 
+import '../features/model/currency.dart';
+import '../features/ui/language_currency/lang_currency_bloc.dart';
 import '../injection.dart';
 import '../resources/gen/fonts.gen.dart';
 
+///* Pink Button
 class PinkButton extends StatelessWidget {
   const PinkButton({
     super.key,
@@ -52,6 +57,7 @@ class PinkButton extends StatelessWidget {
   }
 }
 
+///* Black Button
 class BlackButton extends StatelessWidget {
   const BlackButton({
     super.key,
@@ -94,6 +100,7 @@ class BlackButton extends StatelessWidget {
   }
 }
 
+///* Loading Auth
 void loadingAuth(BuildContext context) {
   showDialog(
     context: context,
@@ -121,6 +128,7 @@ void loadingAuth(BuildContext context) {
   );
 }
 
+///* Error Snackbar
 void errorSnackbar(BuildContext context, String msg) {
   ScaffoldMessenger.of(context)
     ..hideCurrentSnackBar()
@@ -139,6 +147,7 @@ void errorSnackbar(BuildContext context, String msg) {
     );
 }
 
+///* Error Toast
 void errorToast(String msg) {
   getIt<FToast>()
     ..removeCustomToast()
@@ -172,4 +181,38 @@ void errorToast(String msg) {
         ),
       ),
     );
+}
+
+///* NominalMoneyFormatter
+class NominalMoneyFormatter extends StatelessWidget {
+  const NominalMoneyFormatter({
+    super.key,
+    required this.textStyle,
+    required this.amount,
+    required this.decimalDigits,
+    required this.isWithName,
+  });
+  final TextStyle textStyle;
+  final num amount;
+  final int decimalDigits;
+  final bool isWithName;
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<LangCurrencyBloc, LangCurrencyState>(
+      buildWhen: (prev, curr) {
+        return prev.selectedCurrency != curr.selectedCurrency;
+      },
+      builder: (context, state) {
+        return Text(
+          NumberFormat.currency(
+            locale: state.selectedCurrency.value.toLanguageTag(),
+            decimalDigits: decimalDigits,
+            name: (isWithName) ? "${state.selectedCurrency.name} " : "",
+          ).format(amount),
+          style: textStyle,
+        );
+      },
+    );
+  }
 }

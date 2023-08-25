@@ -112,9 +112,9 @@ class AuthRepository {
     } on AuthException catch (e) {
       Logger.Red.log("Status: ${e.statusCode} Message: ${e.message}");
       throw SignUpWithEmailAndPasswordFailure.fromCode(e.message);
-    } on PostgrestException catch (e) {
-      Logger.Red.log("Status: ${e.code} Message: ${e.message}");
-      throw SignUpWithEmailAndPasswordFailure.fromCode(e.message);
+    } on SocketException catch (e) {
+      Logger.Red.log(e.message);
+      throw SocketException(e.message);
     } on Exception catch (e) {
       Logger.Red.log(e.toString());
       throw SignUpWithEmailAndPasswordFailure(e.toString());

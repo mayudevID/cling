@@ -47,7 +47,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         connectivityResult == ConnectivityResult.wifi)) {
       errorSnackbar(
         context!,
-        "No connection",
+        "No connection, (wifi/mobile not available)",
       );
       return;
     }
@@ -97,6 +97,12 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       Future.microtask(() {
         Navigator.pop(context!);
         errorSnackbar(context!, "No connection");
+      });
+    } on Exception catch (e) {
+      _authRepository.logOut();
+      Future.microtask(() {
+        Navigator.pop(context!);
+        errorToast(e.toString());
       });
     }
   }

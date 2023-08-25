@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:cling/core/exception.dart';
@@ -12,6 +13,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../../core/common_widget.dart';
+import '../../../../../core/logger.dart';
 import '../../../../repository/auth_repository.dart';
 import '../page/register_page.dart';
 
@@ -96,7 +98,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
         connectivityResult == ConnectivityResult.wifi)) {
       errorSnackbar(
         context!,
-        "No connection",
+        "No connection, (wifi/mobile not available)",
       );
       return;
     }
@@ -163,6 +165,11 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
       Future.microtask(() {
         Navigator.pop(context!);
         errorToast(e.message);
+      });
+    } on SocketException catch (_) {
+      Future.microtask(() {
+        Navigator.pop(context!);
+        errorSnackbar(context!, "No connection");
       });
     } on Exception catch (e) {
       _authRepository.logOut();

@@ -67,9 +67,17 @@ class $LibResourcesImagesGen {
   SvgGenImage get calendar =>
       const SvgGenImage('lib/resources/images/calendar.svg');
 
+  /// File path: lib/resources/images/chevron-right-16.svg
+  SvgGenImage get chevronRight16 =>
+      const SvgGenImage('lib/resources/images/chevron-right-16.svg');
+
   /// File path: lib/resources/images/dismiss.svg
   SvgGenImage get dismiss =>
       const SvgGenImage('lib/resources/images/dismiss.svg');
+
+  /// File path: lib/resources/images/edit-big.svg
+  SvgGenImage get editBig =>
+      const SvgGenImage('lib/resources/images/edit-big.svg');
 
   /// File path: lib/resources/images/edit-pencil.svg
   SvgGenImage get editPencil =>
@@ -114,6 +122,13 @@ class $LibResourcesImagesGen {
   SvgGenImage get fluentHome48Filled =>
       const SvgGenImage('lib/resources/images/fluent_home-48-filled.svg');
 
+  /// File path: lib/resources/images/fluent_star-24-filled.svg
+  SvgGenImage get fluentStar24Filled =>
+      const SvgGenImage('lib/resources/images/fluent_star-24-filled.svg');
+
+  /// File path: lib/resources/images/globe.svg
+  SvgGenImage get globe => const SvgGenImage('lib/resources/images/globe.svg');
+
   /// File path: lib/resources/images/headphone.svg
   SvgGenImage get headphone =>
       const SvgGenImage('lib/resources/images/headphone.svg');
@@ -128,6 +143,13 @@ class $LibResourcesImagesGen {
   /// File path: lib/resources/images/logo_png.png
   AssetGenImage get logoPng =>
       const AssetGenImage('lib/resources/images/logo_png.png');
+
+  /// File path: lib/resources/images/money-hand.svg
+  SvgGenImage get moneyHand =>
+      const SvgGenImage('lib/resources/images/money-hand.svg');
+
+  /// File path: lib/resources/images/money.svg
+  SvgGenImage get money => const SvgGenImage('lib/resources/images/money.svg');
 
   /// File path: lib/resources/images/phone.svg
   SvgGenImage get phone => const SvgGenImage('lib/resources/images/phone.svg');
@@ -151,7 +173,9 @@ class $LibResourcesImagesGen {
         bell,
         biBarChartFill,
         calendar,
+        chevronRight16,
         dismiss,
+        editBig,
         editPencil,
         ellipseOnboard,
         emailLogo,
@@ -163,10 +187,14 @@ class $LibResourcesImagesGen {
         fluentChevronDown24Filled,
         fluentChevronLeft24Filled,
         fluentHome48Filled,
+        fluentStar24Filled,
+        globe,
         headphone,
         iconamoonProfileFill,
         logo,
         logoPng,
+        moneyHand,
+        money,
         phone,
         plus,
         shallowPanOfFood,
