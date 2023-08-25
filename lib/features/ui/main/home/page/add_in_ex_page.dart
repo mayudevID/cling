@@ -374,7 +374,7 @@ class AddIncomeExpensePage extends StatelessWidget {
             name: AppLocalizations.of(context)!.submit,
           ),
           SizedBox(
-            height: 32.hmea,
+            height: 16.hmea,
           ),
           BlackButton(
             name: AppLocalizations.of(context)!.cancel,

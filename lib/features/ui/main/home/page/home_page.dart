@@ -67,6 +67,7 @@ class HomePage extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Assets.lib.resources.images.plus.svg(
+                            // ignore: deprecated_member_use_from_same_package
                             color: Colors.white,
                             width: 14.wmea,
                           ),

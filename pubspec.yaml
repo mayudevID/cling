@@ -82,7 +82,7 @@ arb_generator:
   csv_settings:
     delimiter: ","
     description_index: null
-    base_index: 2
+    base_index: 1
 
 flutter_gen:
   output: lib/resources/gen/

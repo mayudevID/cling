@@ -13,7 +13,6 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../../core/common_widget.dart';
-import '../../../../../core/logger.dart';
 import '../../../../repository/auth_repository.dart';
 import '../page/register_page.dart';
 

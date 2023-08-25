@@ -42,7 +42,7 @@ List<Widget> formRegister(BuildContext context) {
     SizedBox(
       height: 16.hmea,
     ),
-    TagNameReg(name: "Currency"),
+    const TagNameReg(name: "Currency"),
     SizedBox(
       height: 8.hmea,
     ),

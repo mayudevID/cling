@@ -1,6 +1,4 @@
 import 'dart:io';
-
-import 'package:cling/core/common_widget.dart';
 import 'package:cling/core/logger.dart';
 import 'package:cling/features/model/user_model.dart';
 
@@ -12,6 +10,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../core/exception.dart';
 import '../../core/route.dart';
+import '../model/currency.dart';
 import '../ui/auth/login/page/login_page.dart';
 import '../ui/auth/login/widgets/dialog_email_not_verified.dart';
 
@@ -41,34 +40,6 @@ class AuthRepository {
     });
   }
 
-  // void checkIfUserPassVerifOnboard(
-  //   AuthState event,
-  //   User user,
-  //   UserModel userModel,
-  // ) async {
-  //   if (event.event == AuthChangeEvent.signedIn &&
-  //       (user.emailConfirmedAt != null && !userModel.emailVerified)) {
-  //     loadingAuth(MainApp.navKeyGlobal.currentContext!);
-  //     await _supabaseClient.from("users").upsert(
-  //       {
-  //         "id": user.id,
-  //         'verified_process': true,
-  //         'updated_at': DateTime.now().toIso8601String(),
-  //       },
-  //     );
-  //     userModel = UserModel(id: id, emailVerified: emailVerified);
-  //     Navigator.pushReplacementNamed(
-  //       MainApp.navKeyGlobal.currentContext!,
-  //       RouteName.verifOnboard,
-  //     );
-  //   }
-
-  //   _cache.setString(
-  //     userCacheKey,
-  //     userModelToMap(userModel),
-  //   );
-  // }
-
   UserModel? get currentUserModel {
     final getData = _cache.getString(userCacheKey);
     if (getData != null) {
@@ -88,36 +59,51 @@ class AuthRepository {
     required String currency,
   }) async {
     try {
-      saveRegisterProcess(true);
-      await _supabaseClient.auth
-          .signUp(
-        email: email,
-        password: password,
-      )
-          .then(
-        (result) async {
-          saveRegisterProcess(false);
-          Logger.Green.log("User Regist: ${result.user}");
-          Logger.Green.log("User Session (must be null): ${result.session}");
-          //* New Row App
-          await _supabaseClient.from("users").upsert(
-            {
-              "id": result.user!.id,
-              "name": name,
-              "currency": currency,
+      await _supabaseClient
+          .from("users")
+          .select<Map<String, dynamic>>()
+          .eq('email', email)
+          .single();
+      throw SignUpWithEmailAndPasswordFailure.fromCode(
+        "email-already-in-use",
+      );
+    } on PostgrestException catch (e) {
+      if (e.code == "PGRST116") {
+        try {
+          saveRegisterProcess(true);
+          await _supabaseClient.auth
+              .signUp(
+            email: email,
+            password: password,
+          )
+              .then(
+            (result) async {
+              saveRegisterProcess(false);
+              Logger.Green.log("User Regist: ${result.user}");
+              Logger.Green.log(
+                  "User Session (must be null): ${result.session}");
+              //* New Row App
+              await _supabaseClient.from("users").upsert(
+                {
+                  "id": result.user!.id,
+                  "name": name,
+                  "email": email,
+                  "currency": currency,
+                },
+              );
             },
           );
-        },
-      );
-    } on AuthException catch (e) {
-      Logger.Red.log("Status: ${e.statusCode} Message: ${e.message}");
-      throw SignUpWithEmailAndPasswordFailure.fromCode(e.message);
-    } on SocketException catch (e) {
-      Logger.Red.log(e.message);
-      throw SocketException(e.message);
-    } on Exception catch (e) {
-      Logger.Red.log(e.toString());
-      throw SignUpWithEmailAndPasswordFailure(e.toString());
+        } on AuthException catch (e) {
+          Logger.Red.log("Status: ${e.statusCode} Message: ${e.message}");
+          throw SignUpWithEmailAndPasswordFailure.fromCode(e.message);
+        } on SocketException catch (e) {
+          Logger.Red.log(e.message);
+          throw SocketException(e.message);
+        } on Exception catch (e) {
+          Logger.Red.log(e.toString());
+          throw SignUpWithEmailAndPasswordFailure(e.toString());
+        }
+      }
     }
   }
 
@@ -127,23 +113,30 @@ class AuthRepository {
   }) async {
     try {
       saveLoginProcess(true);
+      Logger.White.log("Send data email password...");
       final userResultLogin = await _supabaseClient.auth.signInWithPassword(
         email: email,
         password: password,
       );
       saveLoginProcess(false);
+      Logger.White.log("Get user data...");
       final userFromQuery = await _supabaseClient
           .from("users")
           .select<Map<String, dynamic>>()
           .eq('id', userResultLogin.user!.id)
           .single();
 
+      Logger.White.log("Create data...");
       UserModel? userModel = UserModel(
         id: userResultLogin.user!.id,
         name: userFromQuery['name'],
         email: email,
         photo: userFromQuery['avatar_url'],
         verifiedProcess: userFromQuery['verified_process'],
+        currency: Currency.values.firstWhere(
+          (item) => item.value.countryCode == userFromQuery['currency'],
+          orElse: () => Currency.idr,
+        ),
       );
 
       final isVerifiedProcessNotPassed =
@@ -151,7 +144,7 @@ class AuthRepository {
               userFromQuery['verified_process'] == false;
 
       if (isVerifiedProcessNotPassed) {
-        loadingAuth(MainApp.navKeyGlobal.currentContext!);
+        Logger.Green.log("User not pass verified process. Update data...");
         await _supabaseClient.from("users").upsert(
           {
             "id": userResultLogin.user!.id,
@@ -163,12 +156,16 @@ class AuthRepository {
         userModel = userModel.copyWith(verifiedProcess: true);
       }
 
+      Logger.White.log("Save user data..");
       await _cache.setString(
         userCacheKey,
         userModelToMap(userModel),
       );
 
       if (isVerifiedProcessNotPassed) {
+        Logger.Green.log(
+          "User not pass verified process. Go t verif onboard...",
+        );
         Future.delayed(
           const Duration(seconds: 2),
           () {

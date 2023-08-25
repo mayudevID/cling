@@ -1,16 +1,18 @@
 import 'package:cling/core/utils.dart';
 import 'package:cling/resources/gen/assets.gen.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide ModalBottomSheetRoute;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:sizer/sizer.dart';
-
-import '../features/model/currency.dart';
+import '../features/model/language.dart';
 import '../features/ui/language_currency/lang_currency_bloc.dart';
+import '../features/ui/language_currency/lang_export.dart';
 import '../injection.dart';
 import '../resources/gen/fonts.gen.dart';
+import 'dart:math' as math;
 
 ///* Pink Button
 class PinkButton extends StatelessWidget {
@@ -215,4 +217,129 @@ class NominalMoneyFormatter extends StatelessWidget {
       },
     );
   }
+}
+
+///* Choose Language Bottomsheet
+Future<void> showBottomsheetChooseLang(BuildContext context) async {
+  ListView listLanguage(LangCurrencyState state) {
+    return ListView.separated(
+      shrinkWrap: true,
+      itemCount: Language.values.length,
+      itemBuilder: (context, index) {
+        return ListTile(
+          onTap: () async {
+            context.read<LangCurrencyBloc>().add(
+                  ChangeLanguage(
+                    selectedLanguage: Language.values[index],
+                  ),
+                );
+            await Future.delayed(
+              const Duration(milliseconds: 300),
+            ).then((value) {
+              Navigator.pop(context);
+            });
+          },
+          leading: Text(
+            Language.values[index].text.substring(
+              0,
+              Language.values[index].text.indexOf(" "),
+            ),
+            style: TextStyle(
+              fontSize: 13.sp,
+              fontFamily: FontFamily.cabinetGrotesk,
+            ),
+          ),
+          title: Text(
+            Language.values[index].text.substring(
+              Language.values[index].text.indexOf(" ") + 1,
+            ),
+            style: const TextStyle(
+              fontFamily: FontFamily.cabinetGrotesk,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          trailing: Language.values[index] == state.selectedLanguage
+              ? const Icon(
+                  Icons.check_circle_rounded,
+                  color: Colors.black,
+                )
+              : null,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+            side: Language.values[index] == state.selectedLanguage
+                ? const BorderSide(
+                    color: Colors.black,
+                    width: 1.5,
+                  )
+                : BorderSide(color: Colors.grey[300]!),
+          ),
+          tileColor: Language.values[index] == state.selectedLanguage
+              ? Colors.black.withOpacity(0.05)
+              : null,
+        );
+      },
+      separatorBuilder: (BuildContext context, int index) {
+        return SizedBox(
+          height: 18.hmea,
+        );
+      },
+    );
+  }
+
+  showMaterialModalBottomSheet(
+    duration: const Duration(milliseconds: 200),
+    context: context,
+    enableDrag: false,
+    isDismissible: false,
+    builder: (context) {
+      return BlocBuilder<LangCurrencyBloc, LangCurrencyState>(
+        builder: (context, state) {
+          return Container(
+            padding: EdgeInsets.all(24.wmea),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  children: [
+                    Text(
+                      AppLocalizations.of(context)!.chooseLang,
+                      style: TextStyle(
+                        fontFamily: FontFamily.cabinetGrotesk,
+                        fontSize: 12.sp,
+                      ),
+                    ),
+                    const Spacer(),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: Transform.rotate(
+                        angle: math.pi / 4,
+                        child: Assets.lib.resources.images.plus.svg(),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 16.hmea,
+                ),
+                MediaQuery.removePadding(
+                  removeTop: true,
+                  context: context,
+                  child: BlocBuilder<LangCurrencyBloc, LangCurrencyState>(
+                    builder: (context, state) {
+                      return listLanguage(state);
+                    },
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+      );
+    },
+  );
 }

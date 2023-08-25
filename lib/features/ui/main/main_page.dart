@@ -80,7 +80,8 @@ class MainPageContent extends StatelessWidget {
             children: [
               BlocBuilder<MainBloc, MainState>(
                 buildWhen: (previous, current) {
-                  return previous.tabIndex != current.tabIndex;
+                  return (previous.tabIndex != current.tabIndex) ||
+                      (previous.homePageState != current.homePageState);
                 },
                 builder: (context, state) {
                   return FadeIndexedStack(

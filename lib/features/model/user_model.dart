@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 
+import 'package:cling/features/model/currency.dart';
 import 'package:equatable/equatable.dart';
 
 UserModel userModelFromMap(String str) => UserModel.fromMap(json.decode(str));
@@ -12,6 +13,7 @@ class UserModel extends Equatable {
   UserModel({
     required this.id,
     required this.verifiedProcess,
+    required this.currency,
     this.email,
     this.name,
     this.photo,
@@ -22,6 +24,7 @@ class UserModel extends Equatable {
   bool verifiedProcess;
   String? name;
   String? photo;
+  Currency currency;
 
   @override
   List<Object?> get props => [
@@ -30,6 +33,7 @@ class UserModel extends Equatable {
         name,
         photo,
         verifiedProcess,
+        currency,
       ];
 
   factory UserModel.fromMap(Map<String, dynamic> json) => UserModel(
@@ -38,6 +42,10 @@ class UserModel extends Equatable {
         email: json["email"],
         photo: json["photo"],
         verifiedProcess: json["verified_process"],
+        currency: Currency.values.firstWhere(
+          (e) => e.value == json["currency"],
+          orElse: () => Currency.idr,
+        ),
       );
 
   Map<String, dynamic> toMap() => {
@@ -46,6 +54,7 @@ class UserModel extends Equatable {
         "email": email,
         "photo": photo,
         "verified_process": verifiedProcess,
+        "currency": currency.value.countryCode,
       };
 
   UserModel copyWith({
@@ -54,6 +63,7 @@ class UserModel extends Equatable {
     String? name,
     String? photo,
     bool? verifiedProcess,
+    Currency? currency,
   }) {
     return UserModel(
       id: id ?? this.id,
@@ -61,6 +71,7 @@ class UserModel extends Equatable {
       name: name ?? this.name,
       photo: photo ?? this.photo,
       verifiedProcess: verifiedProcess ?? this.verifiedProcess,
+      currency: currency ?? this.currency,
     );
   }
 }
