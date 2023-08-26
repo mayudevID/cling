@@ -97,7 +97,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   }
 
   void _setAmountInput(SetAmountInput event, Emitter<HomeState> emit) {
-    emit(state.copyWith(amountInput: event.amountInput));
+    final replaceDot = event.amountInput.replaceAll(".", "");
+    emit(state.copyWith(amountInput: replaceDot));
   }
 
   void _saveData(SaveData event, emit) async {

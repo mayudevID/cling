@@ -1,4 +1,5 @@
 import 'package:cling/core/utils.dart';
+import 'package:cling/features/ui/main/profile/widgets/dialog_logout.dart';
 import 'package:cling/resources/gen/assets.gen.dart';
 import 'package:cling/resources/gen/fonts.gen.dart';
 import 'package:flutter/material.dart';
@@ -133,7 +134,9 @@ class ProfilePage extends StatelessWidget {
             width: 390.wmea,
             height: 57.hmea,
             child: ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                dialogLogout(context);
+              },
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all(
                   const Color(0xFFF8312F),

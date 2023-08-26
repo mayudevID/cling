@@ -164,7 +164,7 @@ class AuthRepository {
 
       if (isVerifiedProcessNotPassed) {
         Logger.Green.log(
-          "User not pass verified process. Go t verif onboard...",
+          "User not pass verified process. Go to verif onboard...",
         );
         Future.delayed(
           const Duration(seconds: 2),
@@ -196,12 +196,11 @@ class AuthRepository {
   Future<void> logOut() async {
     try {
       await Future.wait([
-        _supabaseClient.auth.signOut(),
-        //_firebaseAuth.signOut(),
         _cache.remove(userCacheKey),
         _cache.remove(registerStatusKey),
         _cache.remove(loginStatusKey),
       ]);
+      await _supabaseClient.auth.signOut();
     } catch (e) {
       Logger.Red.log(e.toString());
       throw LogOutFailure();

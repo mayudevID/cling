@@ -70,12 +70,16 @@ class MonthlyBudgetBloc extends Bloc<MonthlyBudgetEvent, MonthlyBudgetState> {
 
     switch (event.state) {
       case VerifOnboardPos.income:
+        //* (Back Condition)
+        //* Save Month Budget Spent
         state.monBudgetSpent =
             TextFieldMonthlyBudget.textEditingController.text;
+        //* Get Month Budget Income
         TextFieldMonthlyBudget.textEditingController.text =
             state.monBudgetIncome;
         break;
       case VerifOnboardPos.spent:
+        //* Get Month Budget Spent
         TextFieldMonthlyBudget.textEditingController.text =
             state.monBudgetSpent;
         break;

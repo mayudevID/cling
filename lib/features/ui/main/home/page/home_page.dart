@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
 import '../../../language_currency/lang_export.dart';
+import '../../bloc/enum_home_page_state.dart';
+import '../../bloc/main_bloc.dart';
 import '../bloc/home_bloc.dart';
 import '../widgets/income_and_expense.dart';
 import '../widgets/monthy_budget.dart';
@@ -63,26 +65,35 @@ class HomePage extends StatelessWidget {
                       SizedBox(
                         height: 16.hmea,
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Assets.lib.resources.images.plus.svg(
-                            // ignore: deprecated_member_use_from_same_package
-                            color: Colors.white,
-                            width: 14.wmea,
-                          ),
-                          SizedBox(
-                            width: 4.wmea,
-                          ),
-                          Text(
-                            "Add goals",
-                            style: TextStyle(
-                              fontFamily: FontFamily.cabinetGrotesk,
-                              fontSize: 10.sp,
+                      GestureDetector(
+                        onTap: () {
+                          context.read<MainBloc>().add(
+                                const HomePageStateChange(
+                                  homePageState: HomePageState.goal,
+                                ),
+                              );
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Assets.lib.resources.images.plus.svg(
+                              // ignore: deprecated_member_use_from_same_package
                               color: Colors.white,
+                              width: 14.wmea,
                             ),
-                          ),
-                        ],
+                            SizedBox(
+                              width: 4.wmea,
+                            ),
+                            Text(
+                              "Add goals",
+                              style: TextStyle(
+                                fontFamily: FontFamily.cabinetGrotesk,
+                                fontSize: 10.sp,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                       SizedBox(
                         height: 16.hmea,

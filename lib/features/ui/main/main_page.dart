@@ -1,5 +1,7 @@
+import 'package:cling/features/repository/auth_repository.dart';
 import 'package:cling/features/ui/main/home/page/add_goal_page.dart';
 import 'package:cling/features/ui/main/home/page/add_in_ex_page.dart';
+import 'package:cling/features/ui/main/profile/bloc/profile_bloc.dart';
 import 'package:cling/features/ui/main/profile/page/profile_page.dart';
 
 import 'package:flutter/material.dart';
@@ -44,6 +46,11 @@ class MainPage extends StatelessWidget {
         ),
         BlocProvider(
           create: (_) => StatisticsBloc(),
+        ),
+        BlocProvider(
+          create: (_) => ProfileBloc(
+            authRepo: getIt<AuthRepository>(),
+          ),
         ),
       ],
       child: const MainPageContent(),
