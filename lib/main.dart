@@ -109,7 +109,6 @@ class MainApp extends StatelessWidget {
       supportedLocales: AppLocalizations.supportedLocales,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       onGenerateRoute: RouteGen.generateRoute,
-      //home: VerificationSuccessPage(),
       debugShowCheckedModeBanner: false,
     );
   }

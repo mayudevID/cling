@@ -38,6 +38,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     on<SetDescOrItem>(_setDescOrItem);
     on<SetAmountInput>(_setAmountInput);
     on<SaveData>(_saveData);
+    on<SetNameGoal>(_setNameGoal);
   }
 
   final DatabaseRepository _dbRepo;
@@ -163,7 +164,14 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         ),
         descOrItem: "",
         amountInput: "",
+        nameGoal: "",
       ),
     );
+  }
+
+  //* ADD GOAL
+
+  void _setNameGoal(SetNameGoal event, Emitter<HomeState> emit) {
+    emit(state.copyWith(nameGoal: event.nameGoal));
   }
 }

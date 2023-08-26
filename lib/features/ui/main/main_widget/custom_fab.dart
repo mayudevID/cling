@@ -119,7 +119,7 @@ Widget customFloatingActionButton(BuildContext context) {
               borderRadius: BorderRadius.circular(13),
             ),
             child: Text(
-              "Add goal",
+              "Add Goal",
               style: TextStyle(
                 color: Colors.black,
                 fontSize: 13.5.sp,

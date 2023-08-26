@@ -118,6 +118,10 @@ class $LibResourcesImagesGen {
   SvgGenImage get fluentChevronLeft24Filled => const SvgGenImage(
       'lib/resources/images/fluent_chevron-left-24-filled.svg');
 
+  /// File path: lib/resources/images/fluent_emoji-16-filled.svg
+  SvgGenImage get fluentEmoji16Filled =>
+      const SvgGenImage('lib/resources/images/fluent_emoji-16-filled.svg');
+
   /// File path: lib/resources/images/fluent_home-48-filled.svg
   SvgGenImage get fluentHome48Filled =>
       const SvgGenImage('lib/resources/images/fluent_home-48-filled.svg');
@@ -186,6 +190,7 @@ class $LibResourcesImagesGen {
         flatTicket,
         fluentChevronDown24Filled,
         fluentChevronLeft24Filled,
+        fluentEmoji16Filled,
         fluentHome48Filled,
         fluentStar24Filled,
         globe,

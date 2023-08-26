@@ -50,3 +50,9 @@ class SaveData extends HomeEvent {
 
   final FlowType flowType;
 }
+
+class SetNameGoal extends HomeEvent {
+  const SetNameGoal(this.nameGoal);
+
+  final String nameGoal;
+}

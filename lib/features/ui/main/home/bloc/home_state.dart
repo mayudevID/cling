@@ -12,6 +12,7 @@ class HomeState extends Equatable {
   MapEntry<int, String> selectedCategories;
   String descOrItem;
   String amountInput;
+  String nameGoal;
 
   HomeState({
     List<IncomeSourceModel>? listInSource,
@@ -24,6 +25,7 @@ class HomeState extends Equatable {
     MapEntry<int, String>? selectedCategories,
     this.descOrItem = "",
     this.amountInput = "",
+    this.nameGoal = "",
   })  : selectedDate = selectedDate ??
             DateTime(
               dateNow.year,
@@ -48,6 +50,7 @@ class HomeState extends Equatable {
         selectedCategories,
         descOrItem,
         amountInput,
+        nameGoal,
       ];
 
   HomeState copyWith({
@@ -61,6 +64,7 @@ class HomeState extends Equatable {
     MapEntry<int, String>? selectedCategories,
     String? descOrItem,
     String? amountInput,
+    String? nameGoal,
   }) {
     return HomeState(
       listInSource: listInSource ?? this.listInSource,
@@ -73,6 +77,7 @@ class HomeState extends Equatable {
       selectedCategories: selectedCategories ?? this.selectedCategories,
       descOrItem: descOrItem ?? this.descOrItem,
       amountInput: amountInput ?? this.amountInput,
+      nameGoal: nameGoal ?? this.nameGoal,
     );
   }
 }

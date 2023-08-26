@@ -66,10 +66,13 @@ class MainPageContent extends StatelessWidget {
       case HomePageState.home:
         return const HomePage();
       case HomePageState.goal:
+        CustomNavBar.animCustomNavBar.forward();
         return const AddGoalPage();
       case HomePageState.income:
+        CustomNavBar.animCustomNavBar.forward();
         return const AddIncomeExpensePage(flowType: FlowType.income);
       case HomePageState.expense:
+        CustomNavBar.animCustomNavBar.forward();
         return const AddIncomeExpensePage(flowType: FlowType.expense);
     }
   }
@@ -78,6 +81,7 @@ class MainPageContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         key: MainPage.navigatorKeyMain,
         backgroundColor: const Color(0xFF101010),
         body: SizedBox(
@@ -104,7 +108,7 @@ class MainPageContent extends StatelessWidget {
                   );
                 },
               ),
-              customNavBar(context),
+              const CustomNavBar(),
             ],
           ),
         ),
