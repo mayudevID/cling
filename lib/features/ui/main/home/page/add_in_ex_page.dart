@@ -56,7 +56,6 @@ class AddIncomeExpensePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        CustomNavBar.animCustomNavBar.reverse();
         context.read<MainBloc>().add(
               const TabChange(
                 tabIndex: 0,
@@ -399,7 +398,6 @@ class AddIncomeExpensePage extends StatelessWidget {
             BlackButton(
               name: AppLocalizations.of(context)!.cancel,
               onTap: () {
-                CustomNavBar.animCustomNavBar.reverse();
                 context.read<MainBloc>().add(
                       const TabChange(
                         tabIndex: 0,

@@ -66,13 +66,10 @@ class MainPageContent extends StatelessWidget {
       case HomePageState.home:
         return const HomePage();
       case HomePageState.goal:
-        CustomNavBar.animCustomNavBar.forward();
         return const AddGoalPage();
       case HomePageState.income:
-        CustomNavBar.animCustomNavBar.forward();
         return const AddIncomeExpensePage(flowType: FlowType.income);
       case HomePageState.expense:
-        CustomNavBar.animCustomNavBar.forward();
         return const AddIncomeExpensePage(flowType: FlowType.expense);
     }
   }
@@ -108,7 +105,7 @@ class MainPageContent extends StatelessWidget {
                   );
                 },
               ),
-              const CustomNavBar(),
+              customNavBar(context),
             ],
           ),
         ),

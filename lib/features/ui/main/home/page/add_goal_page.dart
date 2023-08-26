@@ -22,7 +22,6 @@ class AddGoalPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        CustomNavBar.animCustomNavBar.reverse();
         context.read<MainBloc>().add(
               const TabChange(
                 tabIndex: 0,
@@ -190,7 +189,6 @@ class AddGoalPage extends StatelessWidget {
             ),
             BlackButton(
               onTap: () {
-                CustomNavBar.animCustomNavBar.reverse();
                 context.read<MainBloc>().add(
                       const TabChange(
                         tabIndex: 0,
