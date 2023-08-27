@@ -1,15 +1,18 @@
+import 'package:cling/core/common_widget.dart';
 import 'package:cling/core/utils.dart';
+import 'package:cling/features/model/goal_model.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../../resources/gen/fonts.gen.dart';
 
-Widget widgetGoals(MapEntry e, int length) {
+Widget widgetGoals(int index, GoalModel goalModel, int length) {
+  final percent = ((goalModel.collected * 100) / goalModel.target).round();
+
   return Container(
     margin: EdgeInsets.only(
-      left: (e.key == 0) ? 20.wmea : 12.wmea,
-      right: (e.key == length - 1) ? 20.wmea : 0,
+      left: (index == 0) ? 20.wmea : 12.wmea,
+      right: (index == length - 1) ? 20.wmea : 0,
     ),
     padding: EdgeInsets.symmetric(
       vertical: 16.wmea,
@@ -29,13 +32,16 @@ Widget widgetGoals(MapEntry e, int length) {
             color: Colors.white,
             borderRadius: BorderRadius.circular(5),
           ),
-          child: e.value['image'],
+          child: Text(
+            goalModel.image,
+            style: TextStyle(fontSize: 24.sp),
+          ),
         ),
         SizedBox(
           height: 12.hmea,
         ),
         Text(
-          e.value['name'],
+          goalModel.name,
           textAlign: TextAlign.center,
           style: TextStyle(
             color: Colors.white,
@@ -58,7 +64,7 @@ Widget widgetGoals(MapEntry e, int length) {
               ),
             ),
             Container(
-              width: 10.w,
+              width: ((133.wmea * percent) / 100.0),
               height: 8.hmea,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(100),
@@ -70,19 +76,29 @@ Widget widgetGoals(MapEntry e, int length) {
         SizedBox(
           height: 4.hmea,
         ),
-        Text(
-          "${NumberFormat.currency(
-            locale: "id",
-            decimalDigits: 2,
-            name: "IDR ",
-          ).format(e.value['target'])} / ${(e.value['collected'] * 100 / e.value['target']).round()}%",
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 10.5.sp,
-            fontFamily: FontFamily.cabinetGrotesk,
-            fontWeight: FontWeight.w500,
-          ),
+        Row(
+          children: [
+            NominalMoneyFormatter(
+              textStyle: TextStyle(
+                color: Colors.white,
+                fontSize: 10.5.sp,
+                fontFamily: FontFamily.cabinetGrotesk,
+                fontWeight: FontWeight.w500,
+              ),
+              amount: goalModel.target,
+              decimalDigits: 2,
+              isWithName: true,
+            ),
+            Text(
+              " / $percent%",
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 10.5.sp,
+                fontFamily: FontFamily.cabinetGrotesk,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ],
         )
       ],
     ),

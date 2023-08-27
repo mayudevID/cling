@@ -1,4 +1,3 @@
-import 'package:bloc/bloc.dart';
 import 'package:cling/core/common_widget.dart';
 import 'package:cling/core/exception.dart';
 import 'package:cling/features/ui/auth/bloc/app_bloc.dart';

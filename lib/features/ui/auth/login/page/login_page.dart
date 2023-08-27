@@ -39,8 +39,7 @@ class LoginPageContent extends StatelessWidget {
       child: Scaffold(
         key: LoginPage.navKeyLogin,
         backgroundColor: Colors.black,
-        body: Container(
-          width: 100.w,
+        body: Padding(
           padding: EdgeInsets.symmetric(horizontal: 20.wmea),
           child: Column(
             children: [

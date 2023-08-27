@@ -106,9 +106,15 @@ class HomePage extends StatelessWidget {
               return SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
-                  children: dataDummy.asMap().entries.map((e) {
-                    return widgetGoals(e, dataDummy.length);
-                  }).toList(),
+                  children: state.listGoals.asMap().entries.map(
+                    (e) {
+                      return widgetGoals(
+                        e.key,
+                        e.value,
+                        state.listGoals.length,
+                      );
+                    },
+                  ).toList(),
                 ),
               );
             },
@@ -156,27 +162,6 @@ class HomePage extends StatelessWidget {
     );
   }
 }
-
-List<Map> dataDummy = [
-  {
-    "image": Assets.lib.resources.images.phone.svg(),
-    "name": "New Phone",
-    "target": 9000000.0,
-    "collected": 6840000,
-  },
-  {
-    "image": Assets.lib.resources.images.headphone.svg(),
-    "name": "Headphone",
-    "target": 345000.0,
-    "collected": 55200,
-  },
-  {
-    "image": Assets.lib.resources.images.phone.svg(),
-    "name": "Trip to Japan",
-    "target": 13452000.0,
-    "collected": 7507200,
-  },
-];
 
 List<Map> dataDummyExpenses = [
   {

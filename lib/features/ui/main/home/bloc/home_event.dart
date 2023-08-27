@@ -56,3 +56,11 @@ class SetNameGoal extends HomeEvent {
 
   final String nameGoal;
 }
+
+class SetLogoGoal extends HomeEvent {
+  const SetLogoGoal(this.logoGoal);
+
+  final String logoGoal;
+}
+
+class SaveDataGoal extends HomeEvent {}

@@ -3,7 +3,6 @@ import 'package:cling/core/utils.dart';
 import 'package:cling/features/ui/main/home/bloc/home_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../../resources/gen/fonts.gen.dart';
@@ -38,16 +37,24 @@ Widget incomeAndExpense(BuildContext context) {
               ),
             ),
             const Spacer(),
-            NominalMoneyFormatter(
-              textStyle: TextStyle(
-                color: Colors.white,
-                fontSize: 12.5.sp,
-                fontFamily: FontFamily.cabinetGrotesk,
-                fontWeight: FontWeight.w700,
-              ),
-              amount: 2000000,
-              decimalDigits: 2,
-              isWithName: true,
+            BlocBuilder<HomeBloc, HomeState>(
+              buildWhen: (p, c) {
+                return p.amountIncome != c.amountIncome ||
+                    p.amountExpense != c.amountExpense;
+              },
+              builder: (context, state) {
+                return NominalMoneyFormatter(
+                  textStyle: TextStyle(
+                    color: Colors.white,
+                    fontSize: 12.5.sp,
+                    fontFamily: FontFamily.cabinetGrotesk,
+                    fontWeight: FontWeight.w700,
+                  ),
+                  amount: state.amountExpense - state.amountIncome,
+                  decimalDigits: 2,
+                  isWithName: true,
+                );
+              },
             ),
           ],
         ),
@@ -98,19 +105,17 @@ Widget incomeAndExpense(BuildContext context) {
                           return prev.amountIncome != curr.amountIncome;
                         },
                         builder: (context, state) {
-                          return Text(
-                            NumberFormat.currency(
-                              locale: "id",
-                              decimalDigits: 2,
-                              name: "",
-                            ).format(state.amountIncome),
-                            textAlign: TextAlign.right,
-                            style: TextStyle(
+                          return NominalMoneyFormatter(
+                            textStyle: TextStyle(
                               color: Colors.white,
                               fontSize: 10.5.sp,
                               fontFamily: FontFamily.cabinetGrotesk,
                               fontWeight: FontWeight.w500,
                             ),
+                            amount: state.amountIncome,
+                            decimalDigits: 2,
+                            isWithName: false,
+                            textAlign: TextAlign.right,
                           );
                         },
                       ),
@@ -141,7 +146,7 @@ Widget incomeAndExpense(BuildContext context) {
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 10.5.sp,
-                          fontFamily: 'Cabinet Grotesk',
+                          fontFamily: FontFamily.cabinetGrotesk,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
@@ -163,19 +168,17 @@ Widget incomeAndExpense(BuildContext context) {
                           return prev.amountExpense != curr.amountExpense;
                         },
                         builder: (context, state) {
-                          return Text(
-                            "-${NumberFormat.currency(
-                              locale: "id",
-                              decimalDigits: 2,
-                              name: "",
-                            ).format(state.amountExpense)}",
-                            textAlign: TextAlign.right,
-                            style: TextStyle(
+                          return NominalMoneyFormatter(
+                            textStyle: TextStyle(
                               color: Colors.white,
                               fontSize: 10.5.sp,
                               fontFamily: FontFamily.cabinetGrotesk,
                               fontWeight: FontWeight.w500,
                             ),
+                            amount: state.amountExpense,
+                            decimalDigits: 2,
+                            isWithName: false,
+                            textAlign: TextAlign.right,
                           );
                         },
                       ),

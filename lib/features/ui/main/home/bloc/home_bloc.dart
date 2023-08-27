@@ -39,6 +39,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     on<SetAmountInput>(_setAmountInput);
     on<SaveData>(_saveData);
     on<SetNameGoal>(_setNameGoal);
+    on<SetLogoGoal>(_setLogoGoal);
+    on<SaveDataGoal>(_saveDataGoal);
   }
 
   final DatabaseRepository _dbRepo;
@@ -105,10 +107,12 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   void _saveData(SaveData event, emit) async {
     if (state.selectedCategories == const MapEntry(0, "")) {
       errorToast("Please select categories");
+      return;
     }
 
     if (state.amountInput.trim().isEmpty || state.amountInput.trim() == "0") {
       errorToast("Please fill amount, above 0");
+      return;
     }
 
     try {
@@ -151,7 +155,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     }
   }
 
-  void _clearDataForm(ClearDataForm event, emit) {
+  void _clearDataForm(ClearDataForm event, Emitter<HomeState> emit) {
     emit(
       state.copyWith(
         listInSource: List.empty(),
@@ -165,6 +169,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         descOrItem: "",
         amountInput: "",
         nameGoal: "",
+        logoGoal: "",
       ),
     );
   }
@@ -173,5 +178,48 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   void _setNameGoal(SetNameGoal event, Emitter<HomeState> emit) {
     emit(state.copyWith(nameGoal: event.nameGoal));
+  }
+
+  void _setLogoGoal(SetLogoGoal event, Emitter<HomeState> emit) {
+    emit(state.copyWith(logoGoal: event.logoGoal));
+  }
+
+  void _saveDataGoal(SaveDataGoal event, Emitter<HomeState> emit) async {
+    if (state.logoGoal.trim().isEmpty) {
+      errorToast("Please select logo");
+      return;
+    }
+
+    if (state.nameGoal.trim().isEmpty) {
+      errorToast("Please fill name");
+      return;
+    }
+
+    if (state.amountInput.trim().isEmpty || state.amountInput.trim() == "0") {
+      errorToast("Please fill amount, above 0");
+      return;
+    }
+
+    try {
+      final goalData = GoalModel(
+        name: state.nameGoal.trim(),
+        image: state.logoGoal,
+        target: double.parse(state.amountInput),
+        collected: 0,
+      );
+      await _dbRepo.insertGoal(goalData);
+      add(GetGoals());
+      Future.microtask(() {
+        dialogAddSuccess(
+          MainPage.navigatorKeyMain.currentContext!,
+          null,
+        );
+      });
+    } on FormatException {
+      errorToast("Invalid amount");
+    } on DatabaseException catch (e) {
+      errorToast(e.toString());
+      Logger.Red.log(e.toString());
+    }
   }
 }

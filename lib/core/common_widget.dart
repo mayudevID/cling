@@ -186,18 +186,21 @@ void errorToast(String msg) {
 }
 
 ///* NominalMoneyFormatter
+// ignore: must_be_immutable
 class NominalMoneyFormatter extends StatelessWidget {
-  const NominalMoneyFormatter({
+  NominalMoneyFormatter({
     super.key,
     required this.textStyle,
     required this.amount,
     required this.decimalDigits,
     required this.isWithName,
+    this.textAlign,
   });
   final TextStyle textStyle;
   final num amount;
   final int decimalDigits;
   final bool isWithName;
+  TextAlign? textAlign;
 
   @override
   Widget build(BuildContext context) {
@@ -213,6 +216,7 @@ class NominalMoneyFormatter extends StatelessWidget {
             name: (isWithName) ? "${state.selectedCurrency.name} " : "",
           ).format(amount),
           style: textStyle,
+          textAlign: textAlign,
         );
       },
     );

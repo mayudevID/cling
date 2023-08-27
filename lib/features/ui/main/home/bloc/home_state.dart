@@ -13,6 +13,7 @@ class HomeState extends Equatable {
   String descOrItem;
   String amountInput;
   String nameGoal;
+  String logoGoal;
 
   HomeState({
     List<IncomeSourceModel>? listInSource,
@@ -26,6 +27,7 @@ class HomeState extends Equatable {
     this.descOrItem = "",
     this.amountInput = "",
     this.nameGoal = "",
+    this.logoGoal = "",
   })  : selectedDate = selectedDate ??
             DateTime(
               dateNow.year,
@@ -51,6 +53,7 @@ class HomeState extends Equatable {
         descOrItem,
         amountInput,
         nameGoal,
+        logoGoal,
       ];
 
   HomeState copyWith({
@@ -65,6 +68,7 @@ class HomeState extends Equatable {
     String? descOrItem,
     String? amountInput,
     String? nameGoal,
+    String? logoGoal,
   }) {
     return HomeState(
       listInSource: listInSource ?? this.listInSource,
@@ -78,6 +82,7 @@ class HomeState extends Equatable {
       descOrItem: descOrItem ?? this.descOrItem,
       amountInput: amountInput ?? this.amountInput,
       nameGoal: nameGoal ?? this.nameGoal,
+      logoGoal: logoGoal ?? this.logoGoal,
     );
   }
 }

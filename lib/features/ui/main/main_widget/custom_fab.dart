@@ -38,7 +38,7 @@ Widget customFloatingActionButton(BuildContext context) {
       ),
       distance: 60,
       overlayStyle: ExpandableFabOverlayStyle(
-        blur: 5,
+        blur: 3,
       ),
       expandedFabSize: ExpandableFabSize.regular,
       children: [

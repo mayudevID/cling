@@ -14,7 +14,7 @@ import '../../bloc/main_bloc.dart';
 
 Future<void> dialogAddSuccess(
   BuildContext context,
-  FlowType msg,
+  FlowType? msg,
 ) async {
   Timer(const Duration(milliseconds: 1500), () {
     Navigator.pop(context);
@@ -66,7 +66,9 @@ Future<void> dialogAddSuccess(
               Text(
                 (msg == FlowType.income)
                     ? AppLocalizations.of(context)!.incomeAdded
-                    : AppLocalizations.of(context)!.expenseAdded,
+                    : (msg == FlowType.expense)
+                        ? AppLocalizations.of(context)!.expenseAdded
+                        : "Goal Added",
                 style: TextStyle(
                   fontFamily: FontFamily.cabinetGrotesk,
                   fontWeight: FontWeight.w500,

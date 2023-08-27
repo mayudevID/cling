@@ -4,7 +4,6 @@ import 'package:cling/core/common_widget.dart';
 import 'package:cling/core/utils.dart';
 import 'package:cling/features/ui/language_currency/lang_export.dart';
 import 'package:cling/features/ui/main/home/widgets/add_goal_logo_picker.dart';
-import 'package:cling/resources/gen/assets.gen.dart';
 import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,7 +11,6 @@ import 'package:sizer/sizer.dart';
 
 import '../../../../../resources/gen/fonts.gen.dart';
 import '../../bloc/main_bloc.dart';
-import '../../main_widget/custom_nav_bar.dart';
 import '../bloc/home_bloc.dart';
 
 class AddGoalPage extends StatelessWidget {
@@ -52,7 +50,7 @@ class AddGoalPage extends StatelessWidget {
               height: 32.hmea,
             ),
             Center(
-              child: addGoalLogoPicker(),
+              child: addGoalLogoPicker(context),
             ),
             SizedBox(
               height: 24.hmea,
@@ -82,7 +80,7 @@ class AddGoalPage extends StatelessWidget {
               ),
               child: TextFormField(
                 onChanged: (value) {
-                  //context.read<HomeBloc>().add(SetDescOrItem(value));
+                  context.read<HomeBloc>().add(SetNameGoal(value));
                 },
                 cursorColor: Colors.white,
                 style: TextStyle(
@@ -106,7 +104,7 @@ class AddGoalPage extends StatelessWidget {
               height: 16.hmea,
             ),
             Text(
-              "Goals name",
+              "Target (IDR)",
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 12.sp,
@@ -154,7 +152,7 @@ class AddGoalPage extends StatelessWidget {
                       enableInteractiveSelection: false,
                       keyboardType: TextInputType.number,
                       onChanged: (value) {
-                        //context.read<HomeBloc>().add(SetAmountInput(value));
+                        context.read<HomeBloc>().add(SetAmountInput(value));
                       },
                       cursorColor: Colors.white,
                       style: TextStyle(
@@ -181,7 +179,9 @@ class AddGoalPage extends StatelessWidget {
               height: 32.hmea,
             ),
             PinkButton(
-              onTap: () {},
+              onTap: () {
+                context.read<HomeBloc>().add(SaveDataGoal());
+              },
               name: AppLocalizations.of(context)!.submit,
             ),
             SizedBox(

@@ -30,48 +30,53 @@ class DatabaseRepository {
     Logger.Green.log("Database Created");
   }
 
-  Future<void> insertIncome(IncomeModel data) async {
-    try {
-      final foreignId = data.incomeSource.substring(
-        0,
-        data.incomeSource.indexOf(" "),
-      );
+  Future<void> insertGoal(GoalModel data) async {
+    await db.insert(
+      GoalMeta.nameTable,
+      {
+        GoalMeta.name: data.name,
+        GoalMeta.image: data.image,
+        GoalMeta.target: data.target,
+        GoalMeta.collected: data.collected,
+      },
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
 
-      await db.insert(
-        IncomeMeta.nameTable,
-        {
-          IncomeMeta.date: data.date.toIso8601String(),
-          IncomeMeta.amount: data.amount,
-          IncomeMeta.desc: data.desc,
-          IncomeSourceMeta.id: foreignId,
-        },
-        conflictAlgorithm: ConflictAlgorithm.replace,
-      );
-    } on DatabaseException catch (e) {
-      throw Exception(e);
-    }
+  Future<void> insertIncome(IncomeModel data) async {
+    final foreignId = data.incomeSource.substring(
+      0,
+      data.incomeSource.indexOf(" "),
+    );
+
+    await db.insert(
+      IncomeMeta.nameTable,
+      {
+        IncomeMeta.date: data.date.toIso8601String(),
+        IncomeMeta.amount: data.amount,
+        IncomeMeta.desc: data.desc,
+        IncomeSourceMeta.id: foreignId,
+      },
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
   }
 
   Future<void> insertExpense(ExpenseModel data) async {
-    try {
-      final foreignId = data.categories.substring(
-        0,
-        data.categories.indexOf(" "),
-      );
+    final foreignId = data.categories.substring(
+      0,
+      data.categories.indexOf(" "),
+    );
 
-      await db.insert(
-        ExpenseMeta.nameTable,
-        {
-          ExpenseMeta.date: data.date.toIso8601String(),
-          ExpenseMeta.amount: data.amount,
-          ExpenseMeta.item: data.item,
-          ExpenseCategoriesMeta.id: foreignId,
-        },
-        conflictAlgorithm: ConflictAlgorithm.replace,
-      );
-    } on DatabaseException catch (e) {
-      throw Exception(e);
-    }
+    await db.insert(
+      ExpenseMeta.nameTable,
+      {
+        ExpenseMeta.date: data.date.toIso8601String(),
+        ExpenseMeta.amount: data.amount,
+        ExpenseMeta.item: data.item,
+        ExpenseCategoriesMeta.id: foreignId,
+      },
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
   }
 
   Future<List<IncomeSourceModel>> getIncomeSource() async {

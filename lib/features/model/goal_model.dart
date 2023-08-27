@@ -24,7 +24,7 @@ class GoalModel extends Equatable {
         name: json[GoalMeta.name],
         image: json[GoalMeta.image],
         target: json[GoalMeta.target]?.toDouble(),
-        collected: json[GoalMeta.target]?.toDouble(),
+        collected: json[GoalMeta.collected]?.toDouble(),
       );
 
   Map<String, dynamic> toMap() => {
