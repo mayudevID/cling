@@ -1,3 +1,5 @@
-# cling
+# Cling! - Money Management App
 
-A new Flutter project.
+Manage Your Money, Reach Your Goals, and Thrive.
+
+Made by [Flutter](https://flutter.dev/)
