@@ -1,9 +1,11 @@
 import 'dart:io';
 import 'package:cling/core/logger.dart';
 import 'package:cling/features/model/user_model.dart';
+import 'package:cling/features/ui/language_currency/lang_currency_bloc.dart';
 
 import 'package:cling/main.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -81,7 +83,8 @@ class AuthRepository {
               saveRegisterProcess(false);
               Logger.Green.log("User Regist: ${result.user}");
               Logger.Green.log(
-                  "User Session (must be null): ${result.session}");
+                "User Session (must be null): ${result.session}",
+              );
               //* New Row App
               await _supabaseClient.from("users").upsert(
                 {
@@ -119,6 +122,7 @@ class AuthRepository {
         password: password,
       );
       saveLoginProcess(false);
+      saveRegisterProcess(false);
       Logger.White.log("Get user data...");
       final userFromQuery = await _supabaseClient
           .from("users")
@@ -137,6 +141,8 @@ class AuthRepository {
           (item) => item.value.countryCode == userFromQuery['currency'],
           orElse: () => Currency.idr,
         ),
+        monthlyBudget: userFromQuery["monthly_budget"].toDouble(),
+        monthlyIncome: userFromQuery["monthly_income"].toDouble(),
       );
 
       final isVerifiedProcessNotPassed =
@@ -154,6 +160,14 @@ class AuthRepository {
         );
 
         userModel = userModel.copyWith(verifiedProcess: true);
+
+        Future.microtask(() {
+          MainApp.navKeyGlobal.currentContext!.read<LangCurrencyBloc>().add(
+                ChangeCurrency(
+                  selectedCurrency: userModel!.currency,
+                ),
+              );
+        });
       }
 
       Logger.White.log("Save user data..");
@@ -167,7 +181,7 @@ class AuthRepository {
           "User not pass verified process. Go to verif onboard...",
         );
         Future.delayed(
-          const Duration(seconds: 2),
+          const Duration(milliseconds: 1250),
           () {
             Navigator.pushNamed(
               MainApp.navKeyGlobal.currentContext!,
@@ -216,11 +230,11 @@ class AuthRepository {
   }
 
   bool get loginProcess {
-    return _cache.getBool(loginStatusKey) ?? false;
+    return _cache.getBool(loginStatusKey) ?? true;
   }
 
   bool get registerProcess {
-    return _cache.getBool(registerStatusKey) ?? false;
+    return _cache.getBool(registerStatusKey) ?? true;
   }
 
   //* Update User Profile

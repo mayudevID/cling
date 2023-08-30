@@ -1,6 +1,7 @@
 import 'package:cling/core/common_widget.dart';
 import 'package:cling/core/utils.dart';
 import 'package:cling/features/ui/main/home/bloc/home_bloc.dart';
+import 'package:cling/features/ui/main/home/widgets/tag_currency.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
@@ -43,6 +44,7 @@ Widget incomeAndExpense(BuildContext context) {
                     p.amountExpense != c.amountExpense;
               },
               builder: (context, state) {
+                final currBalance = state.amountIncome - state.amountExpense;
                 return NominalMoneyFormatter(
                   textStyle: TextStyle(
                     color: Colors.white,
@@ -50,7 +52,7 @@ Widget incomeAndExpense(BuildContext context) {
                     fontFamily: FontFamily.cabinetGrotesk,
                     fontWeight: FontWeight.w700,
                   ),
-                  amount: state.amountExpense - state.amountIncome,
+                  amount: currBalance,
                   decimalDigits: 2,
                   isWithName: true,
                 );
@@ -90,16 +92,7 @@ Widget incomeAndExpense(BuildContext context) {
                       SizedBox(
                         height: 6.hmea,
                       ),
-                      Text(
-                        'IDR',
-                        textAlign: TextAlign.right,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 10.5.sp,
-                          fontFamily: FontFamily.cabinetGrotesk,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
+                      tagCurrency(context),
                       BlocBuilder<HomeBloc, HomeState>(
                         buildWhen: (prev, curr) {
                           return prev.amountIncome != curr.amountIncome;
@@ -153,16 +146,7 @@ Widget incomeAndExpense(BuildContext context) {
                       SizedBox(
                         height: 6.hmea,
                       ),
-                      Text(
-                        'IDR',
-                        textAlign: TextAlign.right,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 10.5.sp,
-                          fontFamily: FontFamily.cabinetGrotesk,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
+                      tagCurrency(context),
                       BlocBuilder<HomeBloc, HomeState>(
                         buildWhen: (prev, curr) {
                           return prev.amountExpense != curr.amountExpense;

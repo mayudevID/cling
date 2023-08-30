@@ -140,7 +140,7 @@ class AddIncomeExpensePage extends StatelessWidget {
                       DateTime? pickedDate = await showDatePicker(
                         context: context,
                         initialDate: now,
-                        firstDate: DateTime(now.year, now.month, 1),
+                        firstDate: now.subtract(const Duration(days: 186)),
                         lastDate: now,
                       );
                       if (pickedDate != null) {

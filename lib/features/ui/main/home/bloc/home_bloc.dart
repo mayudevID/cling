@@ -10,6 +10,7 @@ import 'package:cling/features/model/income_source_model.dart';
 import 'package:cling/features/repository/database_repository.dart';
 import 'package:cling/features/ui/main/home/page/add_in_ex_page.dart';
 import 'package:cling/features/ui/main/main_page.dart';
+import 'package:cling/features/ui/main/statistics/bloc/statistics_bloc.dart';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -127,6 +128,11 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
           );
           await _dbRepo.insertIncome(data);
           add(GetTotalIncome());
+          Future.microtask(() {
+            MainPage.navigatorKeyMain.currentContext!.read<StatisticsBloc>()
+              ..add(GetIncomeExpenseTotalCurrMonth())
+              ..add(GetIncomeExpenseTotalSixMonth());
+          });
           break;
         case FlowType.expense:
           final data = ExpenseModel(
@@ -139,6 +145,11 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
           await _dbRepo.insertExpense(data);
           add(GetTotalExpense());
           add(GetTodayExpenses());
+          Future.microtask(() {
+            MainPage.navigatorKeyMain.currentContext!.read<StatisticsBloc>()
+              ..add(GetIncomeExpenseTotalCurrMonth())
+              ..add(GetIncomeExpenseTotalSixMonth());
+          });
           break;
       }
       Future.microtask(() {

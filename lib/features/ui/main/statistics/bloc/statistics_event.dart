@@ -12,3 +12,7 @@ class TypeCategoriesEvent extends StatisticsEvent {
 
   final int type;
 }
+
+class GetIncomeExpenseTotalCurrMonth extends StatisticsEvent {}
+
+class GetIncomeExpenseTotalSixMonth extends StatisticsEvent {}

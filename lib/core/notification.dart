@@ -1,17 +1,16 @@
 import 'package:cling/core/logger.dart';
+import 'package:cling/env.dart';
 import 'package:flutter/foundation.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 class NotificationClass {
-  static const appId = "95f9e85c-44e9-4559-ae29-ffab2ce791f1";
-
   static void init() {
     //Remove this method to stop OneSignal Debugging
     if (kDebugMode) {
       OneSignal.shared.setLogLevel(OSLogLevel.verbose, OSLogLevel.none);
     }
 
-    OneSignal.shared.setAppId(appId);
+    OneSignal.shared.setAppId(EnvApp.oneSignalAppId);
 
     // The promptForPushNotificationsWithUserResponse function will show the iOS or Android push notification prompt. We recommend removing the following code and instead using an In-App Message to prompt for notification permission
     OneSignal.shared

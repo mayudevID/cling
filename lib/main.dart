@@ -67,7 +67,9 @@ class MainApp extends StatelessWidget {
         BlocProvider(
           create: (_) => LangCurrencyBloc(
             settingsRepo: getIt<SettingsRepository>(),
-          )..add(GetLanguage()),
+          )
+            ..add(GetLanguage())
+            ..add(GetCurrency()),
         ),
       ],
       child: initApp(),

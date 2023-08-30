@@ -142,4 +142,105 @@ class DatabaseRepository {
     }
     return dataList;
   }
+
+  Future<Map<String, double>> getTotalIncomeExpenseCurrMonth() async {
+    final monthNow = DateTime.now();
+    final monthNowFirstDay =
+        DateTime(monthNow.year, monthNow.month, 1).toIso8601String();
+
+    final monthNowLastDay = monthNow.toIso8601String();
+
+    final result = await Future.wait([
+      db.rawQuery(
+        '''
+        SELECT strftime('%Y-%m', ${IncomeMeta.date}) AS Month,
+        SUM(${IncomeMeta.amount}) AS TotalIncome,
+        FROM ${IncomeMeta.nameTable}
+        WHERE date(${IncomeMeta.date}) >= date(?)
+        AND date(${IncomeMeta.date}) <= date(?)
+        GROUP BY Month
+      ''',
+        [monthNowFirstDay, monthNowLastDay],
+      ),
+      db.rawQuery(
+        '''
+        SELECT strftime('%Y-%m', ${ExpenseMeta.date}) AS Month,
+        SUM(${ExpenseMeta.amount}) AS TotalExpense,
+        FROM ${ExpenseMeta.nameTable}
+        WHERE date(${ExpenseMeta.date}) >= date(?)
+        AND date(${ExpenseMeta.date}) <= date(?)
+        GROUP BY Month
+      ''',
+        [monthNowFirstDay, monthNowLastDay],
+      ),
+    ]);
+
+    final income = result[0][0]['TotalIncome'] ?? 0;
+    final expense = result[1][0]['TotalExpense'] ?? 0;
+
+    final incomeParse = double.parse(income.toString());
+    final expenseParse = double.parse(expense.toString());
+
+    return {
+      "income": incomeParse,
+      "expense": expenseParse,
+    };
+  }
+
+  Future<void> getTotalIncomeExpenseSixMonth() async {
+    final monthNow = DateTime.now().subtract(const Duration(days: 31));
+    final fourMonthsAgo = monthNow.subtract(const Duration(days: 124));
+
+    final monthNowFormatted = DateTime(
+      monthNow.year,
+      monthNow.month,
+      monthNow.day,
+    ).toIso8601String();
+    final fourMonthsAgoFormatted = DateTime(
+      fourMonthsAgo.year,
+      fourMonthsAgo.month,
+      fourMonthsAgo.day,
+    ).toIso8601String();
+
+    final result = await Future.wait([
+      db.rawQuery(
+        '''
+        SELECT strftime('%Y-%m', ${IncomeMeta.date}) AS Month, 
+        SUM(${IncomeMeta.amount}) AS TotalIncome 
+        FROM ${IncomeMeta.nameTable}
+        WHERE date(${IncomeMeta.date}) >= date(?)
+        AND date(${IncomeMeta.date}) <= date(?)
+        GROUP BY Month
+      ''',
+        [fourMonthsAgoFormatted, monthNowFormatted],
+      ),
+      db.rawQuery(
+        '''
+        SELECT strftime('%Y-%m', ${ExpenseMeta.date}) AS Month, 
+        SUM(${ExpenseMeta.amount}) AS TotalExpense
+        FROM ${ExpenseMeta.nameTable}
+        WHERE date(${ExpenseMeta.date}) >= date(?)
+        AND date(${ExpenseMeta.date}) <= date(?)
+        GROUP BY Month
+      ''',
+        [fourMonthsAgoFormatted, monthNowFormatted],
+      ),
+    ]);
+
+    Map<String, Map<String, dynamic>> combinedData = {};
+
+    for (var income in result[0]) {
+      var month = income["Month"] as String;
+      combinedData[month] ??= {};
+      combinedData[month]!["TotalIncome"] = income["TotalIncome"];
+    }
+
+    for (var expense in result[1]) {
+      var month = expense["Month"] as String;
+      combinedData[month] ??= {};
+      combinedData[month]!["TotalExpense"] = expense["TotalExpense"];
+    }
+
+    print("COMBINED $combinedData");
+  }
 }

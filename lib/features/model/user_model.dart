@@ -17,6 +17,8 @@ class UserModel extends Equatable {
     this.email,
     this.name,
     this.photo,
+    required this.monthlyBudget,
+    required this.monthlyIncome,
   });
 
   String? email;
@@ -25,6 +27,8 @@ class UserModel extends Equatable {
   String? name;
   String? photo;
   Currency currency;
+  double monthlyBudget;
+  double monthlyIncome;
 
   @override
   List<Object?> get props => [
@@ -34,6 +38,8 @@ class UserModel extends Equatable {
         photo,
         verifiedProcess,
         currency,
+        monthlyBudget,
+        monthlyIncome,
       ];
 
   factory UserModel.fromMap(Map<String, dynamic> json) => UserModel(
@@ -46,6 +52,8 @@ class UserModel extends Equatable {
           (e) => e.value == json["currency"],
           orElse: () => Currency.idr,
         ),
+        monthlyBudget: json["monthly_budget"],
+        monthlyIncome: json["monthly_income"],
       );
 
   Map<String, dynamic> toMap() => {
@@ -55,6 +63,8 @@ class UserModel extends Equatable {
         "photo": photo,
         "verified_process": verifiedProcess,
         "currency": currency.value.countryCode,
+        "monthly_budget": monthlyBudget,
+        "monthly_income": monthlyIncome,
       };
 
   UserModel copyWith({
@@ -64,6 +74,8 @@ class UserModel extends Equatable {
     String? photo,
     bool? verifiedProcess,
     Currency? currency,
+    double? monthlyBudget,
+    double? monthlyIncome,
   }) {
     return UserModel(
       id: id ?? this.id,
@@ -72,6 +84,8 @@ class UserModel extends Equatable {
       photo: photo ?? this.photo,
       verifiedProcess: verifiedProcess ?? this.verifiedProcess,
       currency: currency ?? this.currency,
+      monthlyBudget: monthlyBudget ?? this.monthlyBudget,
+      monthlyIncome: monthlyIncome ?? this.monthlyIncome,
     );
   }
 }
