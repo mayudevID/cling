@@ -14,7 +14,7 @@ List<Widget> formRegister(BuildContext context) {
     SizedBox(
       height: 8.hmea,
     ),
-    textFieldNameReg(context),
+    const TextFieldNameReg(),
     SizedBox(
       height: 16.hmea,
     ),
@@ -22,7 +22,7 @@ List<Widget> formRegister(BuildContext context) {
     SizedBox(
       height: 8.hmea,
     ),
-    textFieldEmailReg(context),
+    const TextFieldEmailReg(),
     SizedBox(
       height: 16.hmea,
     ),
@@ -30,7 +30,7 @@ List<Widget> formRegister(BuildContext context) {
     SizedBox(
       height: 8.hmea,
     ),
-    textFieldPassReg(context),
+    const TextFieldPassReg(),
     SizedBox(
       height: 16.hmea,
     ),
@@ -38,7 +38,7 @@ List<Widget> formRegister(BuildContext context) {
     SizedBox(
       height: 8.hmea,
     ),
-    textFieldConPassReg(context),
+    const TextFieldConPassReg(),
     SizedBox(
       height: 16.hmea,
     ),

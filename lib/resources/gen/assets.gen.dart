@@ -148,6 +148,10 @@ class $LibResourcesImagesGen {
   AssetGenImage get logoPng =>
       const AssetGenImage('lib/resources/images/logo_png.png');
 
+  /// File path: lib/resources/images/mdi_person.svg
+  SvgGenImage get mdiPerson =>
+      const SvgGenImage('lib/resources/images/mdi_person.svg');
+
   /// File path: lib/resources/images/money-hand.svg
   SvgGenImage get moneyHand =>
       const SvgGenImage('lib/resources/images/money-hand.svg');
@@ -198,6 +202,7 @@ class $LibResourcesImagesGen {
         iconamoonProfileFill,
         logo,
         logoPng,
+        mdiPerson,
         moneyHand,
         money,
         phone,

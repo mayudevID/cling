@@ -3,6 +3,7 @@ import 'package:cling/core/route.dart';
 import 'package:cling/core/utils.dart';
 
 import 'package:cling/features/repository/auth_repository.dart';
+import 'package:cling/resources/gen/assets.gen.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -83,10 +84,80 @@ class LoginPageContent extends StatelessWidget {
                 },
                 name: AppLocalizations.of(context)!.login,
               ),
-              const Expanded(
-                flex: 1,
-                child: SizedBox(),
+              SizedBox(
+                height: 24.hmea,
               ),
+              Row(
+                children: [
+                  Expanded(
+                    child: Container(
+                      height: 1.hmea,
+                      color: Colors.grey,
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 24.wmea),
+                    child: Text(
+                      "or",
+                      style: TextStyle(
+                        fontSize: 12.sp,
+                        color: Colors.white,
+                        fontFamily: FontFamily.cabinetGrotesk,
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Container(
+                      height: 1.hmea,
+                      color: Colors.grey,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 24.hmea,
+              ),
+              SizedBox(
+                width: 390.wmea,
+                height: 57.wmea,
+                child: ElevatedButton(
+                  onPressed: () {},
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(
+                      const Color(0xFF101010),
+                    ),
+                    overlayColor: null,
+                    shape: MaterialStateProperty.all(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Assets.lib.resources.images.mdiPerson.svg(
+                        // ignore: deprecated_member_use_from_same_package
+                        color: Colors.white,
+                      ),
+                      SizedBox(
+                        width: 10.wmea,
+                      ),
+                      Text(
+                        "Login with Anonymous",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 13.5.sp,
+                          fontFamily: FontFamily.cabinetGrotesk,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const Spacer(),
               Text.rich(
                 TextSpan(
                   children: [
