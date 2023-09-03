@@ -24,3 +24,5 @@ class ChangePassword extends LoginEvent {
 class SendLogin extends LoginEvent {
   const SendLogin();
 }
+
+class LoginAnonymous extends LoginEvent {}

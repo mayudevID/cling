@@ -60,9 +60,7 @@ class OnboardPage extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(
-              height: 32.hmea,
-            ),
+            const Spacer(),
             PinkButton(
               name: AppLocalizations.of(context)!.newUser,
               onTap: () {
@@ -122,6 +120,9 @@ class OnboardPage extends StatelessWidget {
                   ),
                 ],
               ),
+            ),
+            SizedBox(
+              height: 24.hmea,
             ),
           ],
         ),

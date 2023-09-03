@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:cling/core/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:sizer/sizer.dart';
 
@@ -111,7 +112,19 @@ class _SplashContentState extends State<SplashContent>
         }
       },
     );
+
+    preloadSvg();
     super.initState();
+  }
+
+  void preloadSvg() async {
+    for (SvgGenImage image in Assets.lib.resources.images.values) {
+      final SvgAssetLoader loader = SvgAssetLoader(image.path);
+      await svg.cache.putIfAbsent(
+        loader.cacheKey(null),
+        () => loader.loadBytes(null),
+      );
+    }
   }
 
   @override

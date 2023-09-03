@@ -154,7 +154,7 @@ class DatabaseRepository {
       db.rawQuery(
         '''
         SELECT strftime('%Y-%m', ${IncomeMeta.date}) AS Month,
-        SUM(${IncomeMeta.amount}) AS TotalIncome,
+        SUM(${IncomeMeta.amount}) AS TotalIncome
         FROM ${IncomeMeta.nameTable}
         WHERE date(${IncomeMeta.date}) >= date(?)
         AND date(${IncomeMeta.date}) <= date(?)
@@ -165,7 +165,7 @@ class DatabaseRepository {
       db.rawQuery(
         '''
         SELECT strftime('%Y-%m', ${ExpenseMeta.date}) AS Month,
-        SUM(${ExpenseMeta.amount}) AS TotalExpense,
+        SUM(${ExpenseMeta.amount}) AS TotalExpense
         FROM ${ExpenseMeta.nameTable}
         WHERE date(${ExpenseMeta.date}) >= date(?)
         AND date(${ExpenseMeta.date}) <= date(?)

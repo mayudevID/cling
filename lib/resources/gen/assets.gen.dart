@@ -22,6 +22,7 @@ class $LibResourcesGen {
 
   $LibResourcesAnimGen get anim => const $LibResourcesAnimGen();
   $LibResourcesImagesGen get images => const $LibResourcesImagesGen();
+  $LibResourcesImagesPngGen get imagesPng => const $LibResourcesImagesPngGen();
 }
 
 class $LibResourcesAnimGen {
@@ -83,18 +84,6 @@ class $LibResourcesImagesGen {
   SvgGenImage get editPencil =>
       const SvgGenImage('lib/resources/images/edit-pencil.svg');
 
-  /// File path: lib/resources/images/ellipse_onboard.png
-  AssetGenImage get ellipseOnboard =>
-      const AssetGenImage('lib/resources/images/ellipse_onboard.png');
-
-  /// File path: lib/resources/images/email_logo.png
-  AssetGenImage get emailLogo =>
-      const AssetGenImage('lib/resources/images/email_logo.png');
-
-  /// File path: lib/resources/images/emoticon.png
-  AssetGenImage get emoticon =>
-      const AssetGenImage('lib/resources/images/emoticon.png');
-
   /// File path: lib/resources/images/eye_off.svg
   SvgGenImage get eyeOff =>
       const SvgGenImage('lib/resources/images/eye_off.svg');
@@ -144,10 +133,6 @@ class $LibResourcesImagesGen {
   /// File path: lib/resources/images/logo.svg
   SvgGenImage get logo => const SvgGenImage('lib/resources/images/logo.svg');
 
-  /// File path: lib/resources/images/logo_png.png
-  AssetGenImage get logoPng =>
-      const AssetGenImage('lib/resources/images/logo_png.png');
-
   /// File path: lib/resources/images/mdi_person.svg
   SvgGenImage get mdiPerson =>
       const SvgGenImage('lib/resources/images/mdi_person.svg');
@@ -173,7 +158,7 @@ class $LibResourcesImagesGen {
   SvgGenImage get smile => const SvgGenImage('lib/resources/images/smile.svg');
 
   /// List of all assets
-  List<dynamic> get values => [
+  List<SvgGenImage> get values => [
         admissionTickets,
         alienMonster,
         automobile,
@@ -185,9 +170,6 @@ class $LibResourcesImagesGen {
         dismiss,
         editBig,
         editPencil,
-        ellipseOnboard,
-        emailLogo,
-        emoticon,
         eyeOff,
         eyeOn,
         faSolidWallet,
@@ -201,7 +183,6 @@ class $LibResourcesImagesGen {
         headphone,
         iconamoonProfileFill,
         logo,
-        logoPng,
         mdiPerson,
         moneyHand,
         money,
@@ -210,6 +191,30 @@ class $LibResourcesImagesGen {
         shallowPanOfFood,
         smile
       ];
+}
+
+class $LibResourcesImagesPngGen {
+  const $LibResourcesImagesPngGen();
+
+  /// File path: lib/resources/images_png/ellipse_onboard.png
+  AssetGenImage get ellipseOnboard =>
+      const AssetGenImage('lib/resources/images_png/ellipse_onboard.png');
+
+  /// File path: lib/resources/images_png/email_logo.png
+  AssetGenImage get emailLogo =>
+      const AssetGenImage('lib/resources/images_png/email_logo.png');
+
+  /// File path: lib/resources/images_png/emoticon.png
+  AssetGenImage get emoticon =>
+      const AssetGenImage('lib/resources/images_png/emoticon.png');
+
+  /// File path: lib/resources/images_png/logo_png.png
+  AssetGenImage get logoPng =>
+      const AssetGenImage('lib/resources/images_png/logo_png.png');
+
+  /// List of all assets
+  List<AssetGenImage> get values =>
+      [ellipseOnboard, emailLogo, emoticon, logoPng];
 }
 
 class Assets {

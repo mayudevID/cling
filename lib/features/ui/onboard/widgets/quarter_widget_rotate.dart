@@ -13,7 +13,7 @@ class QuarterWidgetRotate extends StatelessWidget {
   Widget build(BuildContext context) {
     return RotatedBox(
       quarterTurns: bigRound,
-      child: Assets.lib.resources.images.ellipseOnboard.image(
+      child: Assets.lib.resources.imagesPng.ellipseOnboard.image(
         fit: BoxFit.fill,
         width: (bigRound == 1 || bigRound == -1) ? 215.hmea : 50.w,
         height: (bigRound == 1 || bigRound == -1) ? 50.w : 215.hmea,

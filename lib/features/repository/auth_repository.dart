@@ -61,8 +61,9 @@ class AuthRepository {
     required String currency,
   }) async {
     try {
+      Logger.White.log("Check user if already exist...");
       await _supabaseClient
-          .from("users")
+          .from("profiles")
           .select<Map<String, dynamic>>()
           .eq('email', email)
           .single();
@@ -71,30 +72,24 @@ class AuthRepository {
       );
     } on PostgrestException catch (e) {
       if (e.code == "PGRST116") {
+        Logger.White.log("User empty. Create account...");
         try {
           saveRegisterProcess(true);
-          await _supabaseClient.auth
-              .signUp(
+          final result = await _supabaseClient.auth.signUp(
             email: email,
             password: password,
-          )
-              .then(
-            (result) async {
-              saveRegisterProcess(false);
-              Logger.Green.log("User Regist: ${result.user}");
-              Logger.Green.log(
-                "User Session (must be null): ${result.session}",
-              );
-              //* New Row App
-              await _supabaseClient.from("users").upsert(
-                {
-                  "id": result.user!.id,
-                  "name": name,
-                  "email": email,
-                  "currency": currency,
-                },
-              );
+            data: {
+              'full_name': name,
+              'email': email,
+              'currency': currency,
             },
+          );
+          saveRegisterProcess(false);
+          Logger.Green.log(
+            "User Regist: ${result.user}",
+          );
+          Logger.Green.log(
+            "User Session (must be null): ${result.session}",
           );
         } on AuthException catch (e) {
           Logger.Red.log("Status: ${e.statusCode} Message: ${e.message}");
@@ -106,6 +101,14 @@ class AuthRepository {
           Logger.Red.log(e.toString());
           throw SignUpWithEmailAndPasswordFailure(e.toString());
         }
+      } else {
+        Logger.Red.log(e.toString());
+        throw PostgrestException(
+          code: e.code,
+          message: e.message,
+          details: e.details,
+          hint: e.hint,
+        );
       }
     }
   }
@@ -125,7 +128,7 @@ class AuthRepository {
       saveRegisterProcess(false);
       Logger.White.log("Get user data...");
       final userFromQuery = await _supabaseClient
-          .from("users")
+          .from("profiles")
           .select<Map<String, dynamic>>()
           .eq('id', userResultLogin.user!.id)
           .single();
@@ -133,7 +136,7 @@ class AuthRepository {
       Logger.White.log("Create data...");
       UserModel? userModel = UserModel(
         id: userResultLogin.user!.id,
-        name: userFromQuery['name'],
+        name: userFromQuery['full_name'],
         email: email,
         photo: userFromQuery['avatar_url'],
         verifiedProcess: userFromQuery['verified_process'],
@@ -151,7 +154,7 @@ class AuthRepository {
 
       if (isVerifiedProcessNotPassed) {
         Logger.Green.log("User not pass verified process. Update data...");
-        await _supabaseClient.from("users").upsert(
+        await _supabaseClient.from("profiles").upsert(
           {
             "id": userResultLogin.user!.id,
             'verified_process': true,

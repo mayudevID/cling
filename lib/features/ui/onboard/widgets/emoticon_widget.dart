@@ -14,6 +14,23 @@ class EmoticonWidget extends StatefulWidget {
 
 class _EmoticonWidgetState extends State<EmoticonWidget>
     with TickerProviderStateMixin {
+  late Image imageEmot;
+
+  @override
+  void initState() {
+    imageEmot = Assets.lib.resources.imagesPng.emoticon.image(
+      width: 230.wmea,
+      height: 230.wmea,
+    );
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    precacheImage(imageEmot.image, context);
+    super.didChangeDependencies();
+  }
+
   @override
   void dispose() {
     AnimationOnboard.animC4.dispose();
@@ -25,10 +42,7 @@ class _EmoticonWidgetState extends State<EmoticonWidget>
     return PositionedTransition(
       rect: AnimationOnboard.setAnimationEmoticon(this),
       child: Center(
-        child: Assets.lib.resources.images.emoticon.image(
-          width: 230.wmea,
-          height: 230.wmea,
-        ),
+        child: imageEmot,
       ),
     );
   }

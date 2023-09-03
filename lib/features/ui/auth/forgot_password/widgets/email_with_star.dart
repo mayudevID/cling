@@ -24,7 +24,7 @@ class EmailWithStar extends StatelessWidget {
                 shape: OvalBorder(),
               ),
               child: Center(
-                child: Assets.lib.resources.images.emailLogo.image(),
+                child: Assets.lib.resources.imagesPng.emailLogo.image(),
               ),
             ),
           ),

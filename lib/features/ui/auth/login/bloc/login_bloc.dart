@@ -19,14 +19,17 @@ part 'login_event.dart';
 part 'login_state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
-  LoginBloc(this._authRepository) : super(LoginState()) {
+  LoginBloc({required AuthRepository authRepo})
+      : _authRepo = authRepo,
+        super(LoginState()) {
     on<ToggleEye>(_toggleEye);
     on<ChangeEmail>(_changeEmail);
     on<ChangePassword>(_changePassword);
     on<SendLogin>(_sendLogin);
+    on<LoginAnonymous>(_loginAnony);
   }
 
-  final AuthRepository _authRepository;
+  final AuthRepository _authRepo;
   var context = LoginPage.navKeyLogin.currentContext;
 
   void _toggleEye(ToggleEye event, Emitter<LoginState> emit) {
@@ -74,11 +77,11 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     }
 
     loadingAuth(context!);
-    await _authRepository.logOut();
-    //await _authRepository.saveLoginProcess(true);
+    await _authRepo.logOut();
+    //await _authRepo.saveLoginProcess(true);
 
     try {
-      await _authRepository.logInWithEmailAndPassword(
+      await _authRepo.logInWithEmailAndPassword(
         email: state.email.trim(),
         password: state.password.trim(),
       );
@@ -87,23 +90,25 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         context!.read<AppBloc>().add(const Redirect());
       });
     } on LogInWithEmailAndPasswordFailure catch (e) {
-      _authRepository.logOut();
+      _authRepo.logOut();
       Future.microtask(() {
         Navigator.pop(context!);
         errorToast(e.message);
       });
     } on SocketException catch (_) {
-      _authRepository.logOut();
+      _authRepo.logOut();
       Future.microtask(() {
         Navigator.pop(context!);
         errorSnackbar(context!, "No connection");
       });
     } on Exception catch (e) {
-      _authRepository.logOut();
+      _authRepo.logOut();
       Future.microtask(() {
         Navigator.pop(context!);
         errorToast(e.toString());
       });
     }
   }
+
+  void _loginAnony(LoginAnonymous event, emit) {}
 }
