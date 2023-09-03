@@ -3,8 +3,10 @@ import 'package:cling/features/ui/main/profile/widgets/dialog_logout.dart';
 import 'package:cling/resources/gen/assets.gen.dart';
 import 'package:cling/resources/gen/fonts.gen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
 
+import '../bloc/profile_bloc.dart';
 import '../widgets/list_account_settings.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -33,26 +35,40 @@ class ProfilePage extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        "Jane Cooper",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 14.sp,
-                          fontFamily: FontFamily.cabinetGrotesk,
-                          fontWeight: FontWeight.w700,
-                        ),
+                      BlocBuilder<ProfileBloc, ProfileState>(
+                        buildWhen: (p, c) {
+                          return p.userModel.name != c.userModel.name;
+                        },
+                        builder: (context, state) {
+                          return Text(
+                            state.userModel.name,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 14.sp,
+                              fontFamily: FontFamily.cabinetGrotesk,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          );
+                        },
                       ),
                       SizedBox(
                         height: 8.hmea,
                       ),
-                      Text(
-                        'janecooper@mail.com',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 10.5.sp,
-                          fontFamily: FontFamily.cabinetGrotesk,
-                          fontWeight: FontWeight.w400,
-                        ),
+                      BlocBuilder<ProfileBloc, ProfileState>(
+                        buildWhen: (p, c) {
+                          return p.userModel.email != c.userModel.email;
+                        },
+                        builder: (context, state) {
+                          return Text(
+                            state.userModel.email,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 10.5.sp,
+                              fontFamily: FontFamily.cabinetGrotesk,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          );
+                        },
                       )
                     ],
                   ),

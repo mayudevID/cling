@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:bloc/bloc.dart';
 import 'package:cling/core/common_widget.dart';
 import 'package:cling/core/logger.dart';
 import 'package:cling/features/model/expense_categories_model.dart';
@@ -20,8 +19,6 @@ import '../widgets/dialog_add_success.dart';
 
 part 'home_event.dart';
 part 'home_state.dart';
-
-final dateNow = DateTime.now();
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   HomeBloc({required DatabaseRepository dbRepo})
@@ -167,6 +164,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   }
 
   void _clearDataForm(ClearDataForm event, Emitter<HomeState> emit) {
+    final dateNow = DateTime.now();
+
     emit(
       state.copyWith(
         listInSource: List.empty(),

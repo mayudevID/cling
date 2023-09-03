@@ -33,8 +33,8 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
   ) async {
     final data = await _dbRepo.getTotalIncomeExpenseCurrMonth();
     emit(state.copyWith(
-      expenseTotal: data['expense'],
-      incomeTotal: data['income'],
+      expenseTotal: data['expense'] ?? 0,
+      incomeTotal: data['income'] ?? 0,
     ));
   }
 

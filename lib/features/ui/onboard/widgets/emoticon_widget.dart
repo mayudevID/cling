@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 
 import '../../../../resources/gen/assets.gen.dart';
 
-import 'animation_onboard.dart';
-
 class EmoticonWidget extends StatefulWidget {
   const EmoticonWidget({super.key});
 
@@ -15,12 +13,43 @@ class EmoticonWidget extends StatefulWidget {
 class _EmoticonWidgetState extends State<EmoticonWidget>
     with TickerProviderStateMixin {
   late Image imageEmot;
+  late AnimationController animation;
+  late Animation<RelativeRect> animationTween;
 
   @override
   void initState() {
     imageEmot = Assets.lib.resources.imagesPng.emoticon.image(
       width: 230.wmea,
       height: 230.wmea,
+    );
+
+    animation = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 2),
+    );
+
+    animationTween = RelativeRectTween(
+      begin: RelativeRect.fromLTRB(0, 0, 0, -1 * 55.hmea),
+      end: RelativeRect.fromLTRB(0, 0, 0, 55.hmea),
+    ).animate(
+      CurvedAnimation(
+        parent: animation,
+        curve: Curves.easeInOut,
+      ),
+    );
+
+    animation.forward();
+    animationTween.addStatusListener(
+      (status) {
+        if (status == AnimationStatus.completed) {
+          animation.reverse();
+          Future.delayed(const Duration(seconds: 2)).then(
+            (value) {
+              animation.forward();
+            },
+          );
+        }
+      },
     );
     super.initState();
   }
@@ -33,14 +62,14 @@ class _EmoticonWidgetState extends State<EmoticonWidget>
 
   @override
   void dispose() {
-    AnimationOnboard.animC4.dispose();
+    animation.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return PositionedTransition(
-      rect: AnimationOnboard.setAnimationEmoticon(this),
+      rect: animationTween,
       child: Center(
         child: imageEmot,
       ),

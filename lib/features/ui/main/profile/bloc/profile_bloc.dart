@@ -1,5 +1,6 @@
 import 'package:cling/core/common_widget.dart';
 import 'package:cling/core/exception.dart';
+import 'package:cling/features/model/user_model.dart';
 import 'package:cling/features/ui/auth/bloc/app_bloc.dart';
 import 'package:cling/features/ui/main/main_page.dart';
 import 'package:equatable/equatable.dart';
@@ -14,8 +15,9 @@ part 'profile_state.dart';
 class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   ProfileBloc({required AuthRepository authRepo})
       : _authRepo = authRepo,
-        super(ProfileInitial()) {
+        super(ProfileState()) {
     on<SendLogout>(_sendLogout);
+    on<GetProfile>(_getProfile);
   }
 
   final AuthRepository _authRepo;
@@ -35,5 +37,12 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
         "Error Logout",
       );
     }
+  }
+
+  void _getProfile(
+    GetProfile event,
+    Emitter<ProfileState> emit,
+  ) async {
+    emit(state.copyWith(userModel: _authRepo.currentUserModel));
   }
 }

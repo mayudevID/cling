@@ -14,17 +14,17 @@ class UserModel extends Equatable {
     required this.id,
     required this.verifiedProcess,
     required this.currency,
-    this.email,
-    this.name,
+    required this.email,
+    required this.name,
     this.photo,
     required this.monthlyBudget,
     required this.monthlyIncome,
   });
 
-  String? email;
+  String email;
   String id;
   bool verifiedProcess;
-  String? name;
+  String name;
   String? photo;
   Currency currency;
   double monthlyBudget;
@@ -60,12 +60,23 @@ class UserModel extends Equatable {
         "id": id,
         "name": name,
         "email": email,
-        "photo": photo,
+        "photo": null,
         "verified_process": verifiedProcess,
         "currency": currency.value.countryCode,
         "monthly_budget": monthlyBudget,
         "monthly_income": monthlyIncome,
       };
+
+  factory UserModel.empty() => UserModel(
+        id: '-1',
+        verifiedProcess: false,
+        currency: Currency.idr,
+        email: "",
+        name: "",
+        photo: "",
+        monthlyBudget: 0.0,
+        monthlyIncome: 0.0,
+      );
 
   UserModel copyWith({
     String? email,

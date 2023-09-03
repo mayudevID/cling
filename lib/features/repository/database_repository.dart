@@ -143,7 +143,7 @@ class DatabaseRepository {
     return dataList;
   }
 
-  Future<Map<String, double>> getTotalIncomeExpenseCurrMonth() async {
+  Future<Map<String, double?>> getTotalIncomeExpenseCurrMonth() async {
     final monthNow = DateTime.now();
     final monthNowFirstDay =
         DateTime(monthNow.year, monthNow.month, 1).toIso8601String();
@@ -175,16 +175,23 @@ class DatabaseRepository {
       ),
     ]);
 
-    final income = result[0][0]['TotalIncome'] ?? 0;
-    final expense = result[1][0]['TotalExpense'] ?? 0;
+    //* Empty: []
+    //* Non Empty: [{....}]
 
-    final incomeParse = double.parse(income.toString());
-    final expenseParse = double.parse(expense.toString());
+    double? incomeParse;
+    double? expenseParse;
 
-    return {
-      "income": incomeParse,
-      "expense": expenseParse,
-    };
+    if (result[0].isNotEmpty) {
+      final income = result[0][0]['TotalIncome'];
+      incomeParse = double.parse(income.toString());
+    }
+
+    if (result[1].isNotEmpty) {
+      final expense = result[1][0]['TotalExpense'] ?? 0;
+      expenseParse = double.parse(expense.toString());
+    }
+
+    return {"income": incomeParse, "expense": expenseParse};
   }
 
   Future<void> getTotalIncomeExpenseSixMonth() async {

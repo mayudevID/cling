@@ -28,12 +28,7 @@ class HomeState extends Equatable {
     this.amountInput = "",
     this.nameGoal = "",
     this.logoGoal = "",
-  })  : selectedDate = selectedDate ??
-            DateTime(
-              dateNow.year,
-              dateNow.month,
-              dateNow.day,
-            ),
+  })  : selectedDate = selectedDate ?? DateTime.now(),
         listTodayExpenses = listTodayExpenses ?? List.empty(),
         listInSource = listInSource ?? List.empty(),
         listExCategories = listExCategories ?? List.empty(),

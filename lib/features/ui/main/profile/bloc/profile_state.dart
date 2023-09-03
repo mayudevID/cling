@@ -1,10 +1,20 @@
+// ignore_for_file: must_be_immutable
+
 part of 'profile_bloc.dart';
 
-sealed class ProfileState extends Equatable {
-  const ProfileState();
-  
-  @override
-  List<Object> get props => [];
-}
+class ProfileState extends Equatable {
+  UserModel userModel;
 
-final class ProfileInitial extends ProfileState {}
+  ProfileState({
+    UserModel? userModel,
+  }) : userModel = userModel ?? UserModel.empty();
+
+  @override
+  List<Object> get props => [userModel];
+
+  ProfileState copyWith({UserModel? userModel}) {
+    return ProfileState(
+      userModel: userModel ?? this.userModel,
+    );
+  }
+}

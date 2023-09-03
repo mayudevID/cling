@@ -1,5 +1,4 @@
 import 'package:cling/core/utils.dart';
-import 'package:cling/features/ui/onboard/widgets/animation_onboard.dart';
 import 'package:flutter/material.dart';
 
 class StarAnimOne extends StatefulWidget {
@@ -11,16 +10,40 @@ class StarAnimOne extends StatefulWidget {
 
 class _StarAnimOneState extends State<StarAnimOne>
     with TickerProviderStateMixin {
+  late AnimationController animation = AnimationController(
+    vsync: this,
+    duration: const Duration(seconds: 35),
+  );
+  late Animation<double> animate = Tween<double>(
+    begin: 0,
+    end: -12.5664,
+  ).animate(animation);
+
+  @override
+  void initState() {
+    animation.forward();
+
+    animate.addStatusListener(
+      (status) {
+        if (status == AnimationStatus.completed) {
+          animation.repeat();
+        }
+      },
+    );
+
+    super.initState();
+  }
+
   @override
   void dispose() {
-    AnimationOnboard.animC1.dispose();
+    animation.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return RotationTransition(
-      turns: AnimationOnboard.setAnimStarOne(this),
+      turns: animate,
       child: Container(
         width: 61.02.wmea,
         height: 61.02.wmea,

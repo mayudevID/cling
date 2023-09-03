@@ -4,7 +4,10 @@ import 'package:cling/features/ui/language_currency/lang_export.dart';
 import 'package:cling/resources/gen/assets.gen.dart';
 import 'package:cling/resources/gen/fonts.gen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
+
+import '../bloc/profile_bloc.dart';
 
 List<Widget> listAccountSettings(BuildContext context) {
   return [
@@ -30,16 +33,23 @@ List<Widget> listAccountSettings(BuildContext context) {
           ),
         ),
         const Spacer(),
-        NominalMoneyFormatter(
-          textStyle: TextStyle(
-            color: Colors.white,
-            fontSize: 10.5.sp,
-            fontFamily: FontFamily.cabinetGrotesk,
-            fontWeight: FontWeight.w400,
-          ),
-          amount: 5000000,
-          decimalDigits: 0,
-          isWithName: true,
+        BlocBuilder<ProfileBloc, ProfileState>(
+          buildWhen: (p, c) {
+            return p.userModel.monthlyBudget != c.userModel.monthlyBudget;
+          },
+          builder: (context, state) {
+            return NominalMoneyFormatter(
+              textStyle: TextStyle(
+                color: Colors.white,
+                fontSize: 10.5.sp,
+                fontFamily: FontFamily.cabinetGrotesk,
+                fontWeight: FontWeight.w400,
+              ),
+              amount: state.userModel.monthlyBudget,
+              decimalDigits: 0,
+              isWithName: true,
+            );
+          },
         ),
         SizedBox(
           width: 10.wmea,
@@ -76,16 +86,23 @@ List<Widget> listAccountSettings(BuildContext context) {
           ),
         ),
         const Spacer(),
-        NominalMoneyFormatter(
-          textStyle: TextStyle(
-            color: Colors.white,
-            fontSize: 10.5.sp,
-            fontFamily: FontFamily.cabinetGrotesk,
-            fontWeight: FontWeight.w400,
-          ),
-          amount: 5000000,
-          decimalDigits: 0,
-          isWithName: true,
+        BlocBuilder<ProfileBloc, ProfileState>(
+          buildWhen: (p, c) {
+            return p.userModel.monthlyIncome != c.userModel.monthlyIncome;
+          },
+          builder: (context, state) {
+            return NominalMoneyFormatter(
+              textStyle: TextStyle(
+                color: Colors.white,
+                fontSize: 10.5.sp,
+                fontFamily: FontFamily.cabinetGrotesk,
+                fontWeight: FontWeight.w400,
+              ),
+              amount: state.userModel.monthlyIncome,
+              decimalDigits: 0,
+              isWithName: true,
+            );
+          },
         ),
         SizedBox(
           width: 10.wmea,
