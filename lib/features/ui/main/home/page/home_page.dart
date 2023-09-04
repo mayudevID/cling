@@ -33,7 +33,10 @@ class HomePage extends StatelessWidget {
             height: 24.hmea,
           ),
           monthlyBudget(context),
-          ...tagNameHome(AppLocalizations.of(context)!.overview),
+          ...tagNameHome(
+            AppLocalizations.of(context)!.overview,
+            withDate: true,
+          ),
           incomeAndExpense(context),
           ...tagNameHome(AppLocalizations.of(context)!.goals),
           BlocBuilder<HomeBloc, HomeState>(

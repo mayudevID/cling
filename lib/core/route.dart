@@ -7,7 +7,7 @@ import '../features/ui/auth/login/page/login_page.dart';
 import '../features/ui/auth/register/page/register_page.dart';
 import '../features/ui/auth/register/page/register_success_page.dart';
 import '../features/ui/main/main_page.dart';
-import '../features/ui/main/verification_success/page/monthly_budget_page.dart';
+import '../features/ui/main/verification_success/page/monthly_data_page.dart';
 
 import '../features/ui/onboard/onboard_page.dart';
 import '../features/ui/splash/splash_page.dart';
@@ -53,7 +53,7 @@ class RouteGen {
         );
       case '/monthlyBudget':
         return MaterialPageRoute(
-          builder: (_) => const MonthlyBudgetPage(),
+          builder: (_) => const MonthlyDataPage(),
         );
 
       default:

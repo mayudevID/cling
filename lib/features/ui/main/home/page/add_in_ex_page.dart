@@ -12,6 +12,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../../resources/gen/fonts.gen.dart';
+import '../../../language_currency/lang_currency_bloc.dart';
 import '../../../language_currency/lang_export.dart';
 import '../../bloc/main_bloc.dart';
 
@@ -335,14 +336,18 @@ class AddIncomeExpensePage extends StatelessWidget {
               ),
               child: Row(
                 children: [
-                  Text(
-                    'IDR',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 12.sp,
-                      fontFamily: FontFamily.cabinetGrotesk,
-                      fontWeight: FontWeight.w800,
-                    ),
+                  BlocBuilder<LangCurrencyBloc, LangCurrencyState>(
+                    builder: (context, state) {
+                      return Text(
+                        state.selectedCurrency.name,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 12.sp,
+                          fontFamily: FontFamily.cabinetGrotesk,
+                          fontWeight: FontWeight.w800,
+                        ),
+                      );
+                    },
                   ),
                   SizedBox(
                     width: 10.wmea,

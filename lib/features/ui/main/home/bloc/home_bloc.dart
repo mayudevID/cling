@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:cling/core/common_widget.dart';
 import 'package:cling/core/logger.dart';
+import 'package:cling/core/utils.dart';
 import 'package:cling/features/model/expense_categories_model.dart';
 import 'package:cling/features/model/expense_model.dart';
 import 'package:cling/features/model/goal_model.dart';
@@ -45,12 +46,12 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   void _getTotalIncome(_, emit) async {
     final amount = await _dbRepo.getTotalIncome();
-    emit(state.copyWith(amountIncome: amount.toDouble()));
+    emit(state.copyWith(amountIncomeThisMonth: amount.toDouble()));
   }
 
   void _getTotalExpense(_, emit) async {
     final amount = await _dbRepo.getTotalExpense();
-    emit(state.copyWith(amountExpense: amount.toDouble()));
+    emit(state.copyWith(amountExpenseThisMonth: amount.toDouble()));
   }
 
   void _getGoals(event, emit) async {
@@ -98,7 +99,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   }
 
   void _setAmountInput(SetAmountInput event, Emitter<HomeState> emit) {
-    final replaceDot = event.amountInput.replaceAll(".", "");
+    final replaceDot = event.amountInput.removeDot;
     emit(state.copyWith(amountInput: replaceDot));
   }
 

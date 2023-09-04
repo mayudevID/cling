@@ -1,9 +1,13 @@
+import 'package:cling/core/common_widget.dart';
 import 'package:cling/core/utils.dart';
+import 'package:cling/features/ui/main/profile/bloc/profile_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../../resources/gen/fonts.gen.dart';
 import '../../../language_currency/lang_export.dart';
+import '../bloc/home_bloc.dart';
 
 Widget monthlyBudget(BuildContext context) {
   return Container(
@@ -35,15 +39,31 @@ Widget monthlyBudget(BuildContext context) {
                 fontWeight: FontWeight.w700,
               ),
             ),
-            Text(
-              'IDR 2,000,000',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 12.sp,
-                fontFamily: FontFamily.cabinetGrotesk,
-                fontWeight: FontWeight.w700,
-              ),
+            BlocBuilder<ProfileBloc, ProfileState>(
+              builder: (context, state) {
+                if (state.userModel.monthlyBudget == 0) {
+                  return Text(
+                    "Haven't set a monthly budget",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 12.sp,
+                      fontFamily: FontFamily.cabinetGrotesk,
+                    ),
+                  );
+                }
+
+                return NominalMoneyFormatter(
+                  textStyle: TextStyle(
+                    color: Colors.white,
+                    fontSize: 12.sp,
+                    fontFamily: FontFamily.cabinetGrotesk,
+                    fontWeight: FontWeight.w700,
+                  ),
+                  amount: state.userModel.monthlyBudget,
+                  decimalDigits: 2,
+                  isWithName: true,
+                );
+              },
             ),
           ],
         ),
@@ -82,8 +102,23 @@ Widget monthlyBudget(BuildContext context) {
               ),
             ),
             const SizedBox(width: 8),
+            BlocBuilder<HomeBloc, HomeState>(
+              builder: (context, state) {
+                return NominalMoneyFormatter(
+                  textStyle: TextStyle(
+                    color: Colors.white,
+                    fontSize: 10.5.sp,
+                    fontFamily: FontFamily.cabinetGrotesk,
+                    fontWeight: FontWeight.w700,
+                  ),
+                  amount: state.amountExpenseThisMonth,
+                  decimalDigits: 2,
+                  isWithName: true,
+                );
+              },
+            ),
             Text(
-              'IDR 1,450,000 / 80%',
+              ' / 80%',
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Colors.white,

@@ -6,8 +6,8 @@ class HomeState extends Equatable {
   List<ExpenseCategoriesModel> listExCategories;
   List<ExpenseModel> listTodayExpenses;
   List<GoalModel> listGoals;
-  double amountIncome;
-  double amountExpense;
+  double amountIncomeThisMonth;
+  double amountExpenseThisMonth;
   DateTime selectedDate;
   MapEntry<int, String> selectedCategories;
   String descOrItem;
@@ -20,8 +20,8 @@ class HomeState extends Equatable {
     List<ExpenseCategoriesModel>? listExCategories,
     List<ExpenseModel>? listTodayExpenses,
     List<GoalModel>? listGoals,
-    this.amountIncome = 0,
-    this.amountExpense = 0,
+    this.amountIncomeThisMonth = 0,
+    this.amountExpenseThisMonth = 0,
     DateTime? selectedDate,
     MapEntry<int, String>? selectedCategories,
     this.descOrItem = "",
@@ -41,8 +41,8 @@ class HomeState extends Equatable {
         listExCategories,
         listTodayExpenses,
         listGoals,
-        amountIncome,
-        amountExpense,
+        amountIncomeThisMonth,
+        amountExpenseThisMonth,
         selectedDate,
         selectedCategories,
         descOrItem,
@@ -56,8 +56,8 @@ class HomeState extends Equatable {
     List<ExpenseCategoriesModel>? listExCategories,
     List<ExpenseModel>? listTodayExpenses,
     List<GoalModel>? listGoals,
-    double? amountIncome,
-    double? amountExpense,
+    double? amountIncomeThisMonth,
+    double? amountExpenseThisMonth,
     DateTime? selectedDate,
     MapEntry<int, String>? selectedCategories,
     String? descOrItem,
@@ -70,8 +70,10 @@ class HomeState extends Equatable {
       listExCategories: listExCategories ?? this.listExCategories,
       listTodayExpenses: listTodayExpenses ?? this.listTodayExpenses,
       listGoals: listGoals ?? this.listGoals,
-      amountIncome: amountIncome ?? this.amountIncome,
-      amountExpense: amountExpense ?? this.amountExpense,
+      amountIncomeThisMonth:
+          amountIncomeThisMonth ?? this.amountIncomeThisMonth,
+      amountExpenseThisMonth:
+          amountExpenseThisMonth ?? this.amountExpenseThisMonth,
       selectedDate: selectedDate ?? this.selectedDate,
       selectedCategories: selectedCategories ?? this.selectedCategories,
       descOrItem: descOrItem ?? this.descOrItem,

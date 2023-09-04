@@ -3,8 +3,8 @@ import 'package:sizer/sizer.dart';
 
 import '../../../../../resources/gen/fonts.gen.dart';
 
-class TextMonthlyBudget extends StatelessWidget {
-  const TextMonthlyBudget({super.key, required this.text});
+class TextMonthlyData extends StatelessWidget {
+  const TextMonthlyData({super.key, required this.text});
   final String text;
 
   @override

@@ -40,11 +40,12 @@ Widget incomeAndExpense(BuildContext context) {
             const Spacer(),
             BlocBuilder<HomeBloc, HomeState>(
               buildWhen: (p, c) {
-                return p.amountIncome != c.amountIncome ||
-                    p.amountExpense != c.amountExpense;
+                return p.amountIncomeThisMonth != c.amountIncomeThisMonth ||
+                    p.amountExpenseThisMonth != c.amountExpenseThisMonth;
               },
               builder: (context, state) {
-                final currBalance = state.amountIncome - state.amountExpense;
+                final currBalance =
+                    state.amountIncomeThisMonth - state.amountExpenseThisMonth;
                 return NominalMoneyFormatter(
                   textStyle: TextStyle(
                     color: Colors.white,
@@ -95,7 +96,8 @@ Widget incomeAndExpense(BuildContext context) {
                       tagCurrency(context),
                       BlocBuilder<HomeBloc, HomeState>(
                         buildWhen: (prev, curr) {
-                          return prev.amountIncome != curr.amountIncome;
+                          return prev.amountIncomeThisMonth !=
+                              curr.amountIncomeThisMonth;
                         },
                         builder: (context, state) {
                           return NominalMoneyFormatter(
@@ -105,7 +107,7 @@ Widget incomeAndExpense(BuildContext context) {
                               fontFamily: FontFamily.cabinetGrotesk,
                               fontWeight: FontWeight.w500,
                             ),
-                            amount: state.amountIncome,
+                            amount: state.amountIncomeThisMonth,
                             decimalDigits: 2,
                             isWithName: false,
                             textAlign: TextAlign.right,
@@ -149,7 +151,8 @@ Widget incomeAndExpense(BuildContext context) {
                       tagCurrency(context),
                       BlocBuilder<HomeBloc, HomeState>(
                         buildWhen: (prev, curr) {
-                          return prev.amountExpense != curr.amountExpense;
+                          return prev.amountExpenseThisMonth !=
+                              curr.amountExpenseThisMonth;
                         },
                         builder: (context, state) {
                           return NominalMoneyFormatter(
@@ -159,7 +162,7 @@ Widget incomeAndExpense(BuildContext context) {
                               fontFamily: FontFamily.cabinetGrotesk,
                               fontWeight: FontWeight.w500,
                             ),
-                            amount: state.amountExpense,
+                            amount: state.amountExpenseThisMonth,
                             decimalDigits: 2,
                             isWithName: false,
                             textAlign: TextAlign.right,

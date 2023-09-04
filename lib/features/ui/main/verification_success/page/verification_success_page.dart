@@ -1,5 +1,4 @@
 import 'package:cling/core/utils.dart';
-import 'package:cling/features/ui/main/verification_success/page/monthly_budget_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lottie/lottie.dart';
@@ -7,6 +6,7 @@ import 'package:sizer/sizer.dart';
 
 import '../../../../../core/common_widget.dart';
 import '../../../../../resources/gen/fonts.gen.dart';
+import 'monthly_data_page.dart';
 
 class VerificationSuccessPage extends StatelessWidget {
   const VerificationSuccessPage({super.key});
@@ -148,7 +148,7 @@ class VerificationSuccessPage extends StatelessWidget {
                   //   RouteName.monthlyBudget,
                   // );
                   Navigator.push(context, MaterialPageRoute(builder: (_) {
-                    return const MonthlyBudgetPage();
+                    return const MonthlyDataPage();
                   }));
                 },
                 name: "Set Monthly Budget",

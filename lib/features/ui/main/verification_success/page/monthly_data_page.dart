@@ -1,9 +1,12 @@
 // ignore_for_file: must_be_immutable
 import 'package:cling/core/common_widget.dart';
 import 'package:cling/core/utils.dart';
-import 'package:cling/features/ui/main/verification_success/bloc/monthly_budget_bloc.dart';
-import 'package:cling/features/ui/main/verification_success/widget/text_field_mothly_budget.dart';
-import 'package:cling/features/ui/main/verification_success/widget/text_monthly_budget.dart';
+import 'package:cling/features/repository/settings_repository.dart';
+import 'package:cling/features/ui/language_currency/lang_currency_bloc.dart';
+import 'package:cling/features/ui/main/verification_success/bloc/monthly_data_bloc.dart';
+import 'package:cling/features/ui/main/verification_success/widget/text_field_mothly_data.dart';
+import 'package:cling/features/ui/main/verification_success/widget/text_monthly_data.dart';
+import 'package:cling/injection.dart';
 import 'package:cling/resources/gen/fonts.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,8 +14,8 @@ import 'package:nil/nil.dart';
 import 'package:sizer/sizer.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
-class MonthlyBudgetPage extends StatelessWidget {
-  const MonthlyBudgetPage({super.key});
+class MonthlyDataPage extends StatelessWidget {
+  const MonthlyDataPage({super.key});
 
   static final verifOnboardNavKey = GlobalKey<NavigatorState>();
 
@@ -20,21 +23,23 @@ class MonthlyBudgetPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) {
-        return MonthlyBudgetBloc();
+        return MonthlyDataBloc(
+          settingsRepo: getIt<SettingsRepository>(),
+        );
       },
-      child: const MonthlyBudgetPageContent(),
+      child: const MonthlyDataPageContent(),
     );
   }
 }
 
-class MonthlyBudgetPageContent extends StatelessWidget {
-  const MonthlyBudgetPageContent({super.key});
+class MonthlyDataPageContent extends StatelessWidget {
+  const MonthlyDataPageContent({super.key});
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        key: MonthlyBudgetPage.verifOnboardNavKey,
+        key: MonthlyDataPage.verifOnboardNavKey,
         backgroundColor: Colors.black,
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -56,17 +61,17 @@ class MonthlyBudgetPageContent extends StatelessWidget {
             SizedBox(
               height: 100.hmea,
             ),
-            BlocBuilder<MonthlyBudgetBloc, MonthlyBudgetState>(
+            BlocBuilder<MonthlyDataBloc, MonthlyDataState>(
               builder: (context, state) {
                 switch (state.state) {
                   case VerifOnboardPos.income:
-                    return const TextMonthlyBudget(
+                    return const TextMonthlyData(
                       text: 'First thing first!\nwhat\'s your monthly income?',
                     );
-                  case VerifOnboardPos.spent:
+                  case VerifOnboardPos.budget:
                     return const Padding(
                       padding: EdgeInsets.symmetric(horizontal: 24),
-                      child: TextMonthlyBudget(
+                      child: TextMonthlyData(
                         text: "How much do you want to spend monthly?",
                       ),
                     );
@@ -79,26 +84,30 @@ class MonthlyBudgetPageContent extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
-                  'IDR',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 22.sp,
-                    fontFamily: FontFamily.cabinetGrotesk,
-                    fontWeight: FontWeight.w700,
-                  ),
+                BlocBuilder<LangCurrencyBloc, LangCurrencyState>(
+                  builder: (context, state) {
+                    return Text(
+                      state.selectedCurrency.name,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 22.sp,
+                        fontFamily: FontFamily.cabinetGrotesk,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    );
+                  },
                 ),
                 SizedBox(
                   width: 6.wmea,
                 ),
-                const TextFieldMonthlyBudget(),
+                const TextFieldMonthlyData(),
               ],
             ),
             SizedBox(
               height: 93.5.hmea,
             ),
-            BlocBuilder<MonthlyBudgetBloc, MonthlyBudgetState>(
+            BlocBuilder<MonthlyDataBloc, MonthlyDataState>(
               builder: (context, state) {
                 return AnimatedSmoothIndicator(
                   activeIndex: (state.state == VerifOnboardPos.income) ? 0 : 1,
@@ -115,16 +124,16 @@ class MonthlyBudgetPageContent extends StatelessWidget {
             SizedBox(
               height: 93.5.hmea,
             ),
-            BlocBuilder<MonthlyBudgetBloc, MonthlyBudgetState>(
+            BlocBuilder<MonthlyDataBloc, MonthlyDataState>(
               builder: (context, state) {
                 return PinkButton(
                   onTap: () {
                     switch (state.state) {
                       case VerifOnboardPos.income:
-                        context.read<MonthlyBudgetBloc>().add(SetIncome());
+                        context.read<MonthlyDataBloc>().add(SetIncome());
                         break;
-                      case VerifOnboardPos.spent:
-                        context.read<MonthlyBudgetBloc>().add(SetSpent());
+                      case VerifOnboardPos.budget:
+                        context.read<MonthlyDataBloc>().add(SetBudget());
                         break;
                     }
                   },
@@ -132,7 +141,7 @@ class MonthlyBudgetPageContent extends StatelessWidget {
                 );
               },
             ),
-            BlocBuilder<MonthlyBudgetBloc, MonthlyBudgetState>(
+            BlocBuilder<MonthlyDataBloc, MonthlyDataState>(
               builder: (context, state) {
                 if (state.state == VerifOnboardPos.income) {
                   return nil;
@@ -143,7 +152,7 @@ class MonthlyBudgetPageContent extends StatelessWidget {
                   child: BlackButton(
                     name: "Back",
                     onTap: () {
-                      context.read<MonthlyBudgetBloc>().add(
+                      context.read<MonthlyDataBloc>().add(
                             SetState(
                               VerifOnboardPos.income,
                             ),

@@ -7,25 +7,25 @@ import 'package:sizer/sizer.dart';
 
 import '../../../../../resources/gen/fonts.gen.dart';
 
-class TextFieldMonthlyBudget extends StatefulWidget {
-  const TextFieldMonthlyBudget({super.key});
+class TextFieldMonthlyData extends StatefulWidget {
+  const TextFieldMonthlyData({super.key});
   static late TextEditingController textEditingController;
 
   @override
-  State<TextFieldMonthlyBudget> createState() => _TextFieldMonthlyBudgetState();
+  State<TextFieldMonthlyData> createState() => _TextFieldMonthlyDataState();
 }
 
-class _TextFieldMonthlyBudgetState extends State<TextFieldMonthlyBudget> {
+class _TextFieldMonthlyDataState extends State<TextFieldMonthlyData> {
   @override
   void initState() {
-    TextFieldMonthlyBudget.textEditingController = TextEditingController();
+    TextFieldMonthlyData.textEditingController = TextEditingController();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return AutoSizeTextField(
-      controller: TextFieldMonthlyBudget.textEditingController,
+      controller: TextFieldMonthlyData.textEditingController,
       inputFormatters: [
         CurrencyTextInputFormatter(
           locale: "id",
@@ -58,7 +58,7 @@ class _TextFieldMonthlyBudgetState extends State<TextFieldMonthlyBudget> {
 
   @override
   void dispose() {
-    TextFieldMonthlyBudget.textEditingController.dispose();
+    TextFieldMonthlyData.textEditingController.dispose();
     super.dispose();
   }
 }
