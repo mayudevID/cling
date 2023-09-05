@@ -2,17 +2,13 @@ import 'dart:io';
 import 'package:cling/core/logger.dart';
 import 'package:cling/features/model/user_model.dart';
 import 'package:cling/features/ui/language_currency/lang_currency_bloc.dart';
-
 import 'package:cling/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-
 import '../../core/exception.dart';
 import '../../core/route.dart';
-import '../model/currency.dart';
 import '../ui/auth/login/page/login_page.dart';
 import '../ui/auth/login/widgets/dialog_email_not_verified.dart';
 
@@ -134,19 +130,7 @@ class AuthRepository {
           .single();
 
       Logger.White.log("Create data...");
-      UserModel? userModel = UserModel(
-        id: userResultLogin.user!.id,
-        name: userFromQuery['full_name'],
-        email: email,
-        photo: userFromQuery['avatar_url'],
-        verifiedProcess: userFromQuery['verified_process'],
-        currency: Currency.values.firstWhere(
-          (item) => item.value.countryCode == userFromQuery['currency'],
-          orElse: () => Currency.idr,
-        ),
-        monthlyBudget: userFromQuery["monthly_budget"].toDouble(),
-        monthlyIncome: userFromQuery["monthly_income"].toDouble(),
-      );
+      UserModel userModel = UserModel.fromMap(userFromQuery);
 
       final isVerifiedProcessNotPassed =
           userResultLogin.user!.emailConfirmedAt != null &&
@@ -167,7 +151,7 @@ class AuthRepository {
         Future.microtask(() {
           MainApp.navKeyGlobal.currentContext!.read<LangCurrencyBloc>().add(
                 ChangeCurrency(
-                  selectedCurrency: userModel!.currency,
+                  selectedCurrency: userModel.currency,
                 ),
               );
         });
@@ -262,3 +246,17 @@ class AuthRepository {
 //     );
 //   }
 // }
+
+// UserModel? userModel = UserModel(
+//   id: userResultLogin.user!.id,
+//   name: userFromQuery['full_name'],
+//   email: email,
+//   lastBackupTime: userFromQuery['last_backup_time'],
+//   verifiedProcess: userFromQuery['verified_process'],
+//   currency: Currency.values.firstWhere(
+//     (item) => item.value.countryCode == userFromQuery['currency'],
+//     orElse: () => Currency.idr,
+//   ),
+//   monthlyBudget: userFromQuery["monthly_budget"].toDouble(),
+//   monthlyIncome: userFromQuery["monthly_income"].toDouble(),
+// );

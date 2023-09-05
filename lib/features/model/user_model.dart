@@ -16,7 +16,8 @@ class UserModel extends Equatable {
     required this.currency,
     required this.email,
     required this.name,
-    this.photo,
+    this.lastBackupTime,
+    this.backupUrl,
     required this.monthlyBudget,
     required this.monthlyIncome,
   });
@@ -25,7 +26,8 @@ class UserModel extends Equatable {
   String id;
   bool verifiedProcess;
   String name;
-  String? photo;
+  DateTime? lastBackupTime;
+  String? backupUrl;
   Currency currency;
   double monthlyBudget;
   double monthlyIncome;
@@ -35,7 +37,8 @@ class UserModel extends Equatable {
         email,
         id,
         name,
-        photo,
+        lastBackupTime,
+        backupUrl,
         verifiedProcess,
         currency,
         monthlyBudget,
@@ -46,21 +49,23 @@ class UserModel extends Equatable {
         id: json["id"],
         name: json["name"],
         email: json["email"],
-        photo: json["photo"],
+        lastBackupTime: DateTime.tryParse(json["last_backup_time"]),
+        backupUrl: json['backup_url'],
         verifiedProcess: json["verified_process"],
         currency: Currency.values.firstWhere(
-          (e) => e.value == json["currency"],
+          (e) => e.value.countryCode == json["currency"],
           orElse: () => Currency.idr,
         ),
-        monthlyBudget: json["monthly_budget"],
-        monthlyIncome: json["monthly_income"],
+        monthlyBudget: json["monthly_budget"].toDouble(),
+        monthlyIncome: json["monthly_income"].toDouble(),
       );
 
   Map<String, dynamic> toMap() => {
         "id": id,
         "name": name,
         "email": email,
-        "photo": null,
+        "last_backup_time": lastBackupTime?.toIso8601String(),
+        "backup_url": backupUrl,
         "verified_process": verifiedProcess,
         "currency": currency.value.countryCode,
         "monthly_budget": monthlyBudget,
@@ -73,7 +78,8 @@ class UserModel extends Equatable {
         currency: Currency.idr,
         email: "",
         name: "",
-        photo: "",
+        lastBackupTime: null,
+        backupUrl: null,
         monthlyBudget: 0.0,
         monthlyIncome: 0.0,
       );
@@ -82,7 +88,8 @@ class UserModel extends Equatable {
     String? email,
     String? id,
     String? name,
-    String? photo,
+    DateTime? lastBackupTime,
+    String? backupUrl,
     bool? verifiedProcess,
     Currency? currency,
     double? monthlyBudget,
@@ -92,7 +99,8 @@ class UserModel extends Equatable {
       id: id ?? this.id,
       email: email ?? this.email,
       name: name ?? this.name,
-      photo: photo ?? this.photo,
+      lastBackupTime: lastBackupTime ?? this.lastBackupTime,
+      backupUrl: backupUrl ?? this.backupUrl,
       verifiedProcess: verifiedProcess ?? this.verifiedProcess,
       currency: currency ?? this.currency,
       monthlyBudget: monthlyBudget ?? this.monthlyBudget,
