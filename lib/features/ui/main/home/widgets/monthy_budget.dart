@@ -3,6 +3,7 @@ import 'package:cling/core/utils.dart';
 import 'package:cling/features/ui/main/profile/bloc/profile_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nil/nil.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../../resources/gen/fonts.gen.dart';
@@ -71,20 +72,41 @@ Widget monthlyBudget(BuildContext context) {
         Stack(
           children: [
             Container(
-              width: double.maxFinite,
+              width: 358.wmea,
               height: 16.hmea,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(100),
                 color: Colors.white.withOpacity(0.76),
               ),
             ),
-            Container(
-              width: 70.w,
-              height: 16.hmea,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(100),
-                color: const Color(0xFF006DE9),
-              ),
+            BlocBuilder<ProfileBloc, ProfileState>(
+              buildWhen: (p, c) {
+                return p.userModel.monthlyBudget != c.userModel.monthlyBudget;
+              },
+              builder: (context, profileState) {
+                return BlocBuilder<HomeBloc, HomeState>(
+                  buildWhen: (p, c) {
+                    return p.amountExpenseThisMonth != c.amountExpenseThisMonth;
+                  },
+                  builder: (context, homeState) {
+                    if (profileState.userModel.monthlyBudget < 1) {
+                      return nil;
+                    }
+
+                    final length =
+                        (homeState.amountExpenseThisMonth * 358.wmea) /
+                            profileState.userModel.monthlyBudget;
+                    return Container(
+                      width: length,
+                      height: 16.hmea,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(100),
+                        color: const Color(0xFF006DE9),
+                      ),
+                    );
+                  },
+                );
+              },
             ),
           ],
         ),
@@ -92,7 +114,7 @@ Widget monthlyBudget(BuildContext context) {
         Row(
           children: [
             Text(
-              'Spent',
+              AppLocalizations.of(context)!.spent,
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Colors.white,
@@ -117,15 +139,45 @@ Widget monthlyBudget(BuildContext context) {
                 );
               },
             ),
-            Text(
-              ' / 80%',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 10.5.sp,
-                fontFamily: FontFamily.cabinetGrotesk,
-                fontWeight: FontWeight.w700,
-              ),
+            BlocBuilder<ProfileBloc, ProfileState>(
+              buildWhen: (p, c) {
+                return p.userModel.monthlyBudget != c.userModel.monthlyBudget;
+              },
+              builder: (context, profileState) {
+                return BlocBuilder<HomeBloc, HomeState>(
+                  buildWhen: (p, c) {
+                    return p.amountExpenseThisMonth != c.amountExpenseThisMonth;
+                  },
+                  builder: (context, homeState) {
+                    if (profileState.userModel.monthlyBudget < 1) {
+                      return Text(
+                        ' / 0%',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 10.5.sp,
+                          fontFamily: FontFamily.cabinetGrotesk,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      );
+                    }
+
+                    final amount = (homeState.amountExpenseThisMonth /
+                            profileState.userModel.monthlyBudget) *
+                        100.0;
+                    return Text(
+                      ' / ${amount.round()}%',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 10.5.sp,
+                        fontFamily: FontFamily.cabinetGrotesk,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    );
+                  },
+                );
+              },
             ),
           ],
         ),

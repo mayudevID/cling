@@ -21,19 +21,18 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   }
 
   final AuthRepository _authRepo;
+  var context = MainPage.navigatorKeyMain.currentContext;
 
   void _sendLogout(event, emit) async {
     try {
-      Navigator.pop(MainPage.navigatorKeyMain.currentContext!);
-      loadingAuth(MainPage.navigatorKeyMain.currentContext!);
+      Navigator.pop(context!);
+      loadingAuth(context!);
       await _authRepo.logOut().then((value) {
-        MainPage.navigatorKeyMain.currentContext!
-            .read<AppBloc>()
-            .add(const Redirect());
+        context!.read<AppBloc>().add(const Redirect());
       });
     } on LogOutFailure catch (_) {
       errorSnackbar(
-        MainPage.navigatorKeyMain.currentContext!,
+        context!,
         "Error Logout",
       );
     }

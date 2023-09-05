@@ -3,6 +3,7 @@ import 'package:cling/core/common_widget.dart';
 import 'package:cling/core/utils.dart';
 import 'package:cling/features/repository/settings_repository.dart';
 import 'package:cling/features/ui/language_currency/lang_currency_bloc.dart';
+import 'package:cling/features/ui/language_currency/lang_export.dart';
 import 'package:cling/features/ui/main/verification_success/bloc/monthly_data_bloc.dart';
 import 'package:cling/features/ui/main/verification_success/widget/text_field_mothly_data.dart';
 import 'package:cling/features/ui/main/verification_success/widget/text_monthly_data.dart';
@@ -10,7 +11,6 @@ import 'package:cling/injection.dart';
 import 'package:cling/resources/gen/fonts.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:nil/nil.dart';
 import 'package:sizer/sizer.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -48,15 +48,21 @@ class MonthlyDataPageContent extends StatelessWidget {
               width: 100.w,
               height: 58.hmea,
             ),
-            Text(
-              'monthly Budget',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 16.sp,
-                fontFamily: FontFamily.bungee,
-                fontWeight: FontWeight.w400,
-              ),
+            BlocBuilder<MonthlyDataBloc, MonthlyDataState>(
+              builder: (context, state) {
+                return Text(
+                  (state.state == VerifOnboardPos.income)
+                      ? AppLocalizations.of(context)!.monthlyIncome
+                      : AppLocalizations.of(context)!.monthlyBudget,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16.sp,
+                    fontFamily: FontFamily.bungee,
+                    fontWeight: FontWeight.w400,
+                  ),
+                );
+              },
             ),
             SizedBox(
               height: 100.hmea,
@@ -65,14 +71,14 @@ class MonthlyDataPageContent extends StatelessWidget {
               builder: (context, state) {
                 switch (state.state) {
                   case VerifOnboardPos.income:
-                    return const TextMonthlyData(
-                      text: 'First thing first!\nwhat\'s your monthly income?',
+                    return TextMonthlyData(
+                      text: AppLocalizations.of(context)!.monBudgetIncomeQuest,
                     );
                   case VerifOnboardPos.budget:
-                    return const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 24),
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 24),
                       child: TextMonthlyData(
-                        text: "How much do you want to spend monthly?",
+                        text: AppLocalizations.of(context)!.monBudgetSpentQuest,
                       ),
                     );
                 }
@@ -144,7 +150,7 @@ class MonthlyDataPageContent extends StatelessWidget {
             BlocBuilder<MonthlyDataBloc, MonthlyDataState>(
               builder: (context, state) {
                 if (state.state == VerifOnboardPos.income) {
-                  return nil;
+                  return const SizedBox();
                 }
 
                 return Padding(

@@ -48,10 +48,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     final connectivityResult = await (Connectivity().checkConnectivity());
     if (!(connectivityResult == ConnectivityResult.mobile ||
         connectivityResult == ConnectivityResult.wifi)) {
-      errorSnackbar(
-        context!,
-        "No connection, (wifi/mobile not available)",
-      );
+      errorSnackbar(context!, AppLocalizations.of(context!)!.noConnection);
       return;
     }
 
@@ -91,22 +88,19 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       });
     } on LogInWithEmailAndPasswordFailure catch (e) {
       _authRepo.logOut();
-      Future.microtask(() {
-        Navigator.pop(context!);
-        errorToast(e.message);
-      });
+
+      Navigator.pop(context!);
+      errorToast(e.message);
     } on SocketException catch (_) {
       _authRepo.logOut();
-      Future.microtask(() {
-        Navigator.pop(context!);
-        errorSnackbar(context!, "No connection");
-      });
+
+      Navigator.pop(context!);
+      errorSnackbar(context!, AppLocalizations.of(context!)!.noConnection);
     } on Exception catch (e) {
       _authRepo.logOut();
-      Future.microtask(() {
-        Navigator.pop(context!);
-        errorToast(e.toString());
-      });
+
+      Navigator.pop(context!);
+      errorToast(e.toString());
     }
   }
 

@@ -97,7 +97,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
         connectivityResult == ConnectivityResult.wifi)) {
       errorSnackbar(
         context!,
-        "No connection, (wifi/mobile not available)",
+        AppLocalizations.of(context!)!.noConnection,
       );
       return;
     }
@@ -168,7 +168,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     } on SocketException catch (_) {
       Future.microtask(() {
         Navigator.pop(context!);
-        errorSnackbar(context!, "No connection");
+        errorSnackbar(context!, AppLocalizations.of(context!)!.noConnection);
       });
     } on Exception catch (e) {
       _authRepository.logOut();

@@ -45,6 +45,7 @@ Future<void> initSl() async {
   getIt.registerLazySingleton<FToast>(() => fToast);
 
   final settingsRepo = SettingsRepository(
+    supabaseClient: getIt<SupabaseClient>(),
     cache: getIt<SharedPreferences>(),
   );
   getIt.registerLazySingleton<SettingsRepository>(() => settingsRepo);

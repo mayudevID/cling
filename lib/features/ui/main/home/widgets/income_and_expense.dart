@@ -28,7 +28,7 @@ Widget incomeAndExpense(BuildContext context) {
         Row(
           children: [
             Text(
-              'Current balance',
+              AppLocalizations.of(context)!.currentBalance,
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Colors.white,

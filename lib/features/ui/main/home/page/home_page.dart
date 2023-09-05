@@ -58,7 +58,7 @@ class HomePage extends StatelessWidget {
                         height: 16.hmea,
                       ),
                       Text(
-                        "You don`t have a goal",
+                        AppLocalizations.of(context)!.goalEmpty,
                         style: TextStyle(
                           fontFamily: FontFamily.cabinetGrotesk,
                           fontSize: 12.sp,
@@ -88,7 +88,7 @@ class HomePage extends StatelessWidget {
                               width: 4.wmea,
                             ),
                             Text(
-                              "Add goals",
+                              AppLocalizations.of(context)!.addGoals,
                               style: TextStyle(
                                 fontFamily: FontFamily.cabinetGrotesk,
                                 fontSize: 10.sp,
@@ -158,7 +158,7 @@ class HomePage extends StatelessWidget {
             },
           ),
           SizedBox(
-            height: 90.hmea,
+            height: 180.hmea,
           ),
         ],
       ),

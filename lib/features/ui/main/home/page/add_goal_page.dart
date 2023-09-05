@@ -38,7 +38,7 @@ class AddGoalPage extends StatelessWidget {
               height: 16.hmea,
             ),
             Text(
-              "Add Goal",
+              AppLocalizations.of(context)!.addGoals,
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Colors.white,

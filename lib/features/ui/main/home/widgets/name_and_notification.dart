@@ -6,6 +6,7 @@ import 'package:sizer/sizer.dart';
 
 import '../../../../../resources/gen/assets.gen.dart';
 import '../../../../../resources/gen/fonts.gen.dart';
+import '../../../language_currency/lang_export.dart';
 
 Widget nameAndNotification() {
   return Padding(
@@ -21,7 +22,7 @@ Widget nameAndNotification() {
             },
             builder: (context, state) {
               return Text(
-                'Good day, ${state.userModel.name.split(" ")[0]}!',
+                '${AppLocalizations.of(context)!.goodDay}, ${state.userModel.name.split(" ")[0]}!',
                 textAlign: TextAlign.left,
                 style: TextStyle(
                   color: Colors.white,

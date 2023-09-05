@@ -8,6 +8,7 @@ import 'package:cling/features/model/goal_model.dart';
 import 'package:cling/features/model/income_model.dart';
 import 'package:cling/features/model/income_source_model.dart';
 import 'package:cling/features/repository/database_repository.dart';
+import 'package:cling/features/ui/language_currency/lang_export.dart';
 import 'package:cling/features/ui/main/home/page/add_in_ex_page.dart';
 import 'package:cling/features/ui/main/main_page.dart';
 import 'package:cling/features/ui/main/statistics/bloc/statistics_bloc.dart';
@@ -42,6 +43,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   }
 
   final DatabaseRepository _dbRepo;
+  var context = MainPage.navigatorKeyMain.currentContext;
 
   void _getTotalIncomeExpenseCurrMonth(_, emit) async {
     final amount = await _dbRepo.getTotalIncomeExpenseCurrMonth();
@@ -107,12 +109,12 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   void _saveData(SaveData event, emit) async {
     if (state.selectedCategories == const MapEntry(0, "")) {
-      errorToast("Please select categories");
+      errorToast(AppLocalizations.of(context!)!.pleaseSelectCategories);
       return;
     }
 
     if (state.amountInput.trim().isEmpty || state.amountInput.trim() == "0") {
-      errorToast("Please fill amount, above 0");
+      errorToast(AppLocalizations.of(context!)!.pleaseFillAmount);
       return;
     }
 
@@ -129,7 +131,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
           await _dbRepo.insertIncome(data);
           add(GetTotalIncomeExpenseCurrMonth());
           Future.microtask(() {
-            MainPage.navigatorKeyMain.currentContext!.read<StatisticsBloc>()
+            context!.read<StatisticsBloc>()
               ..add(GetIncomeExpenseTotalCurrMonth())
               ..add(GetIncomeExpenseTotalSixMonth());
           });
@@ -146,7 +148,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
           add(GetTotalIncomeExpenseCurrMonth());
           add(GetTodayExpenses());
           Future.microtask(() {
-            MainPage.navigatorKeyMain.currentContext!.read<StatisticsBloc>()
+            context!.read<StatisticsBloc>()
               ..add(GetIncomeExpenseTotalCurrMonth())
               ..add(GetIncomeExpenseTotalSixMonth());
           });
@@ -154,12 +156,12 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       }
       Future.microtask(() {
         dialogAddSuccess(
-          MainPage.navigatorKeyMain.currentContext!,
+          context!,
           event.flowType,
         );
       });
     } on FormatException {
-      errorToast("Invalid amount");
+      errorToast(AppLocalizations.of(context!)!.invalidAmount);
     } on DatabaseException catch (e) {
       errorToast(e.toString());
       Logger.Red.log(e.toString());
@@ -199,17 +201,17 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   void _saveDataGoal(SaveDataGoal event, Emitter<HomeState> emit) async {
     if (state.logoGoal.trim().isEmpty) {
-      errorToast("Please select logo");
+      errorToast(AppLocalizations.of(context!)!.pleaseSelectLogo);
       return;
     }
 
     if (state.nameGoal.trim().isEmpty) {
-      errorToast("Please fill name");
+      errorToast(AppLocalizations.of(context!)!.pleaseFillName);
       return;
     }
 
     if (state.amountInput.trim().isEmpty || state.amountInput.trim() == "0") {
-      errorToast("Please fill amount, above 0");
+      errorToast(AppLocalizations.of(context!)!.pleaseFillAmount);
       return;
     }
 
@@ -224,12 +226,14 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       add(GetGoals());
       Future.microtask(() {
         dialogAddSuccess(
-          MainPage.navigatorKeyMain.currentContext!,
+          context!,
           null,
         );
       });
     } on FormatException {
-      errorToast("Invalid amount");
+      errorToast(
+        AppLocalizations.of(context!)!.invalidAmount,
+      );
     } on DatabaseException catch (e) {
       errorToast(e.toString());
       Logger.Red.log(e.toString());
