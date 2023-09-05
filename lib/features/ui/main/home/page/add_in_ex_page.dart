@@ -311,14 +311,21 @@ class AddIncomeExpensePage extends StatelessWidget {
             SizedBox(
               height: 16.hmea,
             ),
-            Text(
-              '${AppLocalizations.of(context)!.amount} (IDR)',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 12.sp,
-                fontFamily: FontFamily.cabinetGrotesk,
-                fontWeight: FontWeight.w800,
-              ),
+            BlocBuilder<LangCurrencyBloc, LangCurrencyState>(
+              buildWhen: (p, c) {
+                return p.selectedCurrency.name != c.selectedCurrency.name;
+              },
+              builder: (context, state) {
+                return Text(
+                  '${AppLocalizations.of(context)!.amount} (${state.selectedCurrency.name})',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 12.sp,
+                    fontFamily: FontFamily.cabinetGrotesk,
+                    fontWeight: FontWeight.w800,
+                  ),
+                );
+              },
             ),
             SizedBox(
               height: 8.hmea,
@@ -337,6 +344,9 @@ class AddIncomeExpensePage extends StatelessWidget {
               child: Row(
                 children: [
                   BlocBuilder<LangCurrencyBloc, LangCurrencyState>(
+                    buildWhen: (p, c) {
+                      return p.selectedCurrency.name != c.selectedCurrency.name;
+                    },
                     builder: (context, state) {
                       return Text(
                         state.selectedCurrency.name,
@@ -353,35 +363,44 @@ class AddIncomeExpensePage extends StatelessWidget {
                     width: 10.wmea,
                   ),
                   Expanded(
-                    child: TextFormField(
-                      inputFormatters: [
-                        CurrencyTextInputFormatter(
-                          locale: "id",
-                          symbol: "",
-                          decimalDigits: 0,
-                        ),
-                      ],
-                      enableInteractiveSelection: false,
-                      keyboardType: TextInputType.number,
-                      onChanged: (value) {
-                        context.read<HomeBloc>().add(SetAmountInput(value));
+                    child: BlocBuilder<LangCurrencyBloc, LangCurrencyState>(
+                      buildWhen: (p, c) {
+                        return p.selectedCurrency.name !=
+                            c.selectedCurrency.name;
                       },
-                      cursorColor: Colors.white,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 12.5.sp,
-                        fontFamily: FontFamily.cabinetGrotesk,
-                        fontWeight: FontWeight.w500,
-                      ),
-                      decoration: InputDecoration.collapsed(
-                        hintText: '0',
-                        hintStyle: TextStyle(
-                          color: Colors.grey,
-                          fontSize: 12.5.sp,
-                          fontFamily: FontFamily.cabinetGrotesk,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
+                      builder: (context, state) {
+                        return TextFormField(
+                          inputFormatters: [
+                            CurrencyTextInputFormatter(
+                              locale:
+                                  state.selectedCurrency.value.toLanguageTag(),
+                              symbol: "",
+                              decimalDigits: 2,
+                            ),
+                          ],
+                          enableInteractiveSelection: false,
+                          keyboardType: TextInputType.number,
+                          onChanged: (value) {
+                            context.read<HomeBloc>().add(SetAmountInput(value));
+                          },
+                          cursorColor: Colors.white,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 12.5.sp,
+                            fontFamily: FontFamily.cabinetGrotesk,
+                            fontWeight: FontWeight.w500,
+                          ),
+                          decoration: InputDecoration.collapsed(
+                            hintText: '0',
+                            hintStyle: TextStyle(
+                              color: Colors.grey,
+                              fontSize: 12.5.sp,
+                              fontFamily: FontFamily.cabinetGrotesk,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        );
+                      },
                     ),
                   ),
                 ],

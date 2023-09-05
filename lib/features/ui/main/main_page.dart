@@ -39,8 +39,7 @@ class MainPage extends StatelessWidget {
           create: (_) => HomeBloc(
             dbRepo: getIt<DatabaseRepository>(),
           )
-            ..add(GetTotalIncome())
-            ..add(GetTotalExpense())
+            ..add(GetTotalIncomeExpenseCurrMonth())
             ..add(GetGoals())
             ..add(GetTodayExpenses()),
         ),

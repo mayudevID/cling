@@ -28,8 +28,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     on<GetIncomeSource>(_getIncomeSource);
     on<GetExpenseCategories>(_getExpenseCategories);
     on<ClearDataForm>(_clearDataForm);
-    on<GetTotalIncome>(_getTotalIncome);
-    on<GetTotalExpense>(_getTotalExpense);
+    on<GetTotalIncomeExpenseCurrMonth>(_getTotalIncomeExpenseCurrMonth);
     on<GetGoals>(_getGoals);
     on<GetTodayExpenses>(_getTodayExpenses);
     on<SetDate>(_setDate);
@@ -44,15 +43,18 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   final DatabaseRepository _dbRepo;
 
-  void _getTotalIncome(_, emit) async {
-    final amount = await _dbRepo.getTotalIncome();
-    emit(state.copyWith(amountIncomeThisMonth: amount.toDouble()));
+  void _getTotalIncomeExpenseCurrMonth(_, emit) async {
+    final amount = await _dbRepo.getTotalIncomeExpenseCurrMonth();
+    emit(state.copyWith(
+      amountIncomeThisMonth: amount['income'],
+      amountExpenseThisMonth: amount['expense'],
+    ));
   }
 
-  void _getTotalExpense(_, emit) async {
-    final amount = await _dbRepo.getTotalExpense();
-    emit(state.copyWith(amountExpenseThisMonth: amount.toDouble()));
-  }
+  // void _getTotalExpenseCurrMonth(_, emit) async {
+  //   final amount = await _dbRepo.getTotalExpense();
+  //   emit(state.copyWith(amountExpenseThisMonth: amount.toDouble()));
+  // }
 
   void _getGoals(event, emit) async {
     final listData = await _dbRepo.getGoals();
@@ -125,7 +127,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
                 '${state.selectedCategories.key} ${state.selectedCategories.value}',
           );
           await _dbRepo.insertIncome(data);
-          add(GetTotalIncome());
+          add(GetTotalIncomeExpenseCurrMonth());
           Future.microtask(() {
             MainPage.navigatorKeyMain.currentContext!.read<StatisticsBloc>()
               ..add(GetIncomeExpenseTotalCurrMonth())
@@ -141,7 +143,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
                 '${state.selectedCategories.key} ${state.selectedCategories.value}',
           );
           await _dbRepo.insertExpense(data);
-          add(GetTotalExpense());
+          add(GetTotalIncomeExpenseCurrMonth());
           add(GetTodayExpenses());
           Future.microtask(() {
             MainPage.navigatorKeyMain.currentContext!.read<StatisticsBloc>()
