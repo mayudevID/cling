@@ -14,6 +14,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../core/common_widget.dart';
+import '../../../language_currency/lang_currency_bloc.dart';
 
 part 'login_event.dart';
 part 'login_state.dart';
@@ -83,9 +84,16 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         password: state.password.trim(),
       );
 
-      Future.microtask(() {
-        context!.read<AppBloc>().add(const Redirect());
-      });
+      // ignore: use_build_context_synchronously
+      context!.read<LangCurrencyBloc>().add(
+            ChangeCurrency(
+              selectedCurrency: _authRepo.currentUserModel!.currency,
+            ),
+          );
+      await Future.delayed(const Duration(milliseconds: 100));
+
+      // ignore: use_build_context_synchronously
+      context!.read<AppBloc>().add(const Redirect());
     } on LogInWithEmailAndPasswordFailure catch (e) {
       _authRepo.logOut();
 

@@ -42,7 +42,7 @@ List<Widget> formRegister(BuildContext context) {
     SizedBox(
       height: 16.hmea,
     ),
-    const TagNameReg(name: "Currency"),
+    TagNameReg(name: AppLocalizations.of(context)!.currency),
     SizedBox(
       height: 8.hmea,
     ),

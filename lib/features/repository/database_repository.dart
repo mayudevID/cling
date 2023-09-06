@@ -194,7 +194,8 @@ class DatabaseRepository {
     return {"income": incomeParse, "expense": expenseParse};
   }
 
-  Future<void> getTotalIncomeExpenseSixMonth() async {
+  Future<Map<String, Map<String, dynamic>>?>
+      getTotalIncomeExpenseSixMonth() async {
     final monthNow = DateTime.now().subtract(const Duration(days: 31));
     final fourMonthsAgo = monthNow.subtract(const Duration(days: 124));
 
@@ -236,18 +237,32 @@ class DatabaseRepository {
 
     Map<String, Map<String, dynamic>> combinedData = {};
 
-    for (var income in result[0]) {
-      var month = income["Month"] as String;
-      combinedData[month] ??= {};
-      combinedData[month]!["TotalIncome"] = income["TotalIncome"];
+    if (result[0].isNotEmpty) {
+      for (var income in result[0]) {
+        var month = income["Month"] as String;
+        combinedData[month] ??= {"TotalIncome": 0, "TotalExpense": 0};
+        combinedData[month]!["TotalIncome"] = income["TotalIncome"];
+      }
     }
 
-    for (var expense in result[1]) {
-      var month = expense["Month"] as String;
-      combinedData[month] ??= {};
-      combinedData[month]!["TotalExpense"] = expense["TotalExpense"];
+    if (result[1].isNotEmpty) {
+      for (var expense in result[0]) {
+        var month = expense["Month"] as String;
+        combinedData[month] ??= {"TotalIncome": 0, "TotalExpense": 0};
+        combinedData[month]!["TotalExpense"] = expense["TotalExpense"];
+      }
     }
 
-    print("COMBINED $combinedData");
+    return (combinedData.isEmpty) ? null : combinedData;
+  }
+
+  //! ================ DELETE ALL ================
+
+  Future<void> deleteAllTable() async {
+    await Future.wait([
+      db.delete(IncomeMeta.nameTable),
+      db.delete(ExpenseMeta.nameTable),
+      db.delete(GoalMeta.nameTable),
+    ]);
   }
 }

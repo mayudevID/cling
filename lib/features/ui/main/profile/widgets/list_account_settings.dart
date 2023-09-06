@@ -76,7 +76,7 @@ List<Widget> listAccountSettings(BuildContext context) {
           width: 10.wmea,
         ),
         Text(
-          'Monthly Income',
+          AppLocalizations.of(context)!.monthlyIncome,
           textAlign: TextAlign.center,
           style: TextStyle(
             color: Colors.white,
@@ -133,7 +133,7 @@ List<Widget> listAccountSettings(BuildContext context) {
             width: 10.wmea,
           ),
           Text(
-            'Change Language',
+            AppLocalizations.of(context)!.changeLanguage,
             textAlign: TextAlign.center,
             style: TextStyle(
               color: Colors.white,

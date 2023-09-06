@@ -47,9 +47,9 @@ class UserModel extends Equatable {
 
   factory UserModel.fromMap(Map<String, dynamic> json) => UserModel(
         id: json["id"],
-        name: json["name"],
+        name: json["full_name"],
         email: json["email"],
-        lastBackupTime: DateTime.tryParse(json["last_backup_time"]),
+        lastBackupTime: DateTime.tryParse(json["last_backup_time"] ?? ""),
         backupUrl: json['backup_url'],
         verifiedProcess: json["verified_process"],
         currency: Currency.values.firstWhere(
@@ -62,7 +62,7 @@ class UserModel extends Equatable {
 
   Map<String, dynamic> toMap() => {
         "id": id,
-        "name": name,
+        "full_name": name,
         "email": email,
         "last_backup_time": lastBackupTime?.toIso8601String(),
         "backup_url": backupUrl,

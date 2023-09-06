@@ -8,6 +8,10 @@ enum Currency {
   usd(
     Locale("en", "US"),
     "USD",
+  ),
+  myr(
+    Locale("ms", "MY"),
+    "MYR",
   );
 
   const Currency(this.value, this.name);

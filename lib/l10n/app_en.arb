@@ -189,5 +189,7 @@
   "pleaseFillName": "Please fill name",
   "@pleaseFillName": {},
   "pleaseSelectLogo": "Please select Logo",
-  "@pleaseSelectLogo": {}
+  "@pleaseSelectLogo": {},
+  "currency": "Currency",
+  "@currency": {}
 }

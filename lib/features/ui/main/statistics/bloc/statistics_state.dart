@@ -4,31 +4,44 @@ part of 'statistics_bloc.dart';
 
 class StatisticsState extends Equatable {
   int typeCategories;
-  double expenseTotal;
-  double incomeTotal;
+  List<PieDataExSav> pieDataExSavList;
+  List<ChartData> chartDataIncomeList;
+  List<ChartData> chartDataExpenseList;
+  List<ChartData> chartDataSavingsList;
 
   StatisticsState({
     this.typeCategories = 0,
-    this.expenseTotal = 0,
-    this.incomeTotal = 0,
-  });
+    List<PieDataExSav>? pieDataExSavList,
+    List<ChartData>? chartDataIncomeList,
+    List<ChartData>? chartDataExpenseList,
+    List<ChartData>? chartDataSavingsList,
+  })  : pieDataExSavList = pieDataExSavList ?? List.empty(),
+        chartDataIncomeList = chartDataIncomeList ?? List.empty(),
+        chartDataExpenseList = chartDataExpenseList ?? List.empty(),
+        chartDataSavingsList = chartDataSavingsList ?? List.empty();
 
   @override
   List<Object> get props => [
         typeCategories,
-        expenseTotal,
-        incomeTotal,
+        pieDataExSavList,
+        chartDataIncomeList,
+        chartDataExpenseList,
+        chartDataSavingsList,
       ];
 
   StatisticsState copyWith({
     int? typeCategories,
-    double? incomeTotal,
-    double? expenseTotal,
+    List<PieDataExSav>? pieDataExSavList,
+    List<ChartData>? chartDataIncomeList,
+    List<ChartData>? chartDataExpenseList,
+    List<ChartData>? chartDataSavingsList,
   }) {
     return StatisticsState(
       typeCategories: typeCategories ?? this.typeCategories,
-      incomeTotal: incomeTotal ?? this.incomeTotal,
-      expenseTotal: expenseTotal ?? this.expenseTotal,
+      pieDataExSavList: pieDataExSavList ?? this.pieDataExSavList,
+      chartDataIncomeList: chartDataIncomeList ?? this.chartDataIncomeList,
+      chartDataExpenseList: chartDataExpenseList ?? this.chartDataExpenseList,
+      chartDataSavingsList: chartDataSavingsList ?? this.chartDataSavingsList,
     );
   }
 }

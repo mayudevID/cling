@@ -1,10 +1,8 @@
 import 'dart:io';
 import 'package:cling/core/logger.dart';
 import 'package:cling/features/model/user_model.dart';
-import 'package:cling/features/ui/language_currency/lang_currency_bloc.dart';
 import 'package:cling/main.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../core/exception.dart';
@@ -147,14 +145,6 @@ class AuthRepository {
         );
 
         userModel = userModel.copyWith(verifiedProcess: true);
-
-        Future.microtask(() {
-          MainApp.navKeyGlobal.currentContext!.read<LangCurrencyBloc>().add(
-                ChangeCurrency(
-                  selectedCurrency: userModel.currency,
-                ),
-              );
-        });
       }
 
       Logger.White.log("Save user data..");

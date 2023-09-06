@@ -1,4 +1,5 @@
 import 'package:cling/core/utils.dart';
+import 'package:cling/features/ui/language_currency/lang_export.dart';
 import 'package:cling/features/ui/main/profile/widgets/dialog_logout.dart';
 import 'package:cling/resources/gen/assets.gen.dart';
 import 'package:cling/resources/gen/fonts.gen.dart';
@@ -80,10 +81,42 @@ class ProfilePage extends StatelessWidget {
           SizedBox(
             height: 31.hmea,
           ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                AppLocalizations.of(context)!.currency,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 12.sp,
+                  fontFamily: FontFamily.cabinetGrotesk,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              BlocBuilder<ProfileBloc, ProfileState>(
+                builder: (context, state) {
+                  return Text(
+                    state.userModel.currency.name,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 12.sp,
+                      fontFamily: FontFamily.cabinetGrotesk,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  );
+                },
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 31.hmea,
+          ),
           Align(
             alignment: Alignment.centerLeft,
             child: Text(
-              'Account',
+              AppLocalizations.of(context)!.account,
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Colors.white,
@@ -103,7 +136,7 @@ class ProfilePage extends StatelessWidget {
           Align(
             alignment: Alignment.centerLeft,
             child: Text(
-              'General',
+              AppLocalizations.of(context)!.general,
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Colors.white,
@@ -127,7 +160,7 @@ class ProfilePage extends StatelessWidget {
                 width: 10.wmea,
               ),
               Text(
-                'Rate Cling App',
+                AppLocalizations.of(context)!.rateCling,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Colors.white,

@@ -189,5 +189,7 @@
   "pleaseFillName": "Mohon isi nama",
   "@pleaseFillName": {},
   "pleaseSelectLogo": "Mohon pilih logo",
-  "@pleaseSelectLogo": {}
+  "@pleaseSelectLogo": {},
+  "currency": "Mata uang",
+  "@currency": {}
 }

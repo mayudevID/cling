@@ -1,7 +1,8 @@
 import 'package:cling/core/utils.dart';
+import 'package:cling/features/ui/main/statistics/widgets/line_column_widget.dart';
+import 'package:cling/features/ui/main/statistics/widgets/pie_chat_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
-import 'package:syncfusion_flutter_charts/charts.dart';
 import '../../../../../resources/gen/fonts.gen.dart';
 import '../../../language_currency/lang_export.dart';
 import '../../home/page/home_page.dart';
@@ -9,29 +10,7 @@ import '../widgets/most_expense.dart';
 import '../widgets/tag_info.dart';
 
 class StatsAll extends StatelessWidget {
-  StatsAll({super.key});
-
-  final dataPieChart = [
-    _PieData("Expense", 30000, "exp"),
-    _PieData("Income", 100000, "inc"),
-    _PieData("Savings", 15000, "save"),
-  ];
-
-  final List<ChartData> chartData = [
-    ChartData(2023, 35),
-    ChartData(2024, 23),
-    ChartData(2025, 34),
-    ChartData(2026, 25),
-    ChartData(2027, 40)
-  ];
-
-  double countPercentage(double count) {
-    var data = 0.0;
-    for (var element in dataPieChart) {
-      data += element.amount;
-    }
-    return (count / data) * 100;
-  }
+  const StatsAll({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -39,42 +18,7 @@ class StatsAll extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const TagInfo(),
-        SizedBox(
-          width: double.infinity,
-          height: 248.5.hmea,
-          child: SfCircularChart(
-            series: <DoughnutSeries<_PieData, String>>[
-              DoughnutSeries<_PieData, String>(
-                pointColorMapper: (datum, index) {
-                  switch (index) {
-                    case 0:
-                      return const Color(0xFFE54C19);
-                    case 1:
-                      return const Color(0xFF07AC65);
-                    case 2:
-                      return const Color(0xFF006DE9);
-                  }
-                  return null;
-                },
-                dataSource: dataPieChart,
-                xValueMapper: (_PieData data, _) => data.nameData,
-                yValueMapper: (_PieData data, _) => data.amount,
-                dataLabelMapper: (_PieData data, _) {
-                  return "${countPercentage(data.amount).round()}%";
-                },
-                dataLabelSettings: DataLabelSettings(
-                  isVisible: true,
-                  textStyle: TextStyle(
-                    color: Colors.white,
-                    fontSize: 10.5.sp,
-                    fontFamily: FontFamily.cabinetGrotesk,
-                    fontWeight: FontWeight.w800,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
+        pieChartWidget(),
         SizedBox(
           height: 24.hmea,
         ),
@@ -91,73 +35,7 @@ class StatsAll extends StatelessWidget {
         SizedBox(
           height: 24.hmea,
         ),
-        SizedBox(
-          width: double.infinity,
-          height: 193.hmea,
-          child: SfCartesianChart(
-            plotAreaBorderWidth: 0,
-            plotAreaBorderColor: Colors.transparent,
-            primaryXAxis: CategoryAxis(
-              labelStyle: TextStyle(
-                color: Colors.white,
-                fontSize: 10.5.sp,
-                fontFamily: FontFamily.cabinetGrotesk,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            primaryYAxis: NumericAxis(
-              labelStyle: TextStyle(
-                color: Colors.white,
-                fontSize: 10.5.sp,
-                fontFamily: FontFamily.cabinetGrotesk,
-                fontWeight: FontWeight.w700,
-              ),
-              labelFormat: "IDR {value} K ",
-              //maximumLabels: 2,
-              majorGridLines: const MajorGridLines(
-                color: Color(0xFF343437),
-                dashArray: <double>[20, 2],
-              ),
-            ),
-            series: [
-              ColumnSeries<ChartData, int>(
-                color: const Color(0xFFE54C19),
-                dataSource: chartData,
-                xValueMapper: (ChartData data, _) => data.x,
-                yValueMapper: (ChartData data, _) => data.y,
-                // Sets the corner radius
-                borderRadius: const BorderRadius.all(
-                  Radius.circular(8),
-                ),
-                width: 1,
-                spacing: 0.4,
-              ),
-              ColumnSeries<ChartData, int>(
-                color: const Color(0xFF07AC65),
-                dataSource: chartData,
-                xValueMapper: (ChartData data, _) => data.x,
-                yValueMapper: (ChartData data, _) => data.y,
-                // Sets the corner radius
-                borderRadius: const BorderRadius.all(
-                  Radius.circular(8),
-                ),
-                width: 1,
-                spacing: 0.4,
-              ),
-              ColumnSeries<ChartData, int>(
-                color: const Color(0xFF006DE9),
-                dataSource: chartData,
-                xValueMapper: (ChartData data, _) => data.x,
-                yValueMapper: (ChartData data, _) => data.y,
-                borderRadius: const BorderRadius.all(
-                  Radius.circular(8),
-                ),
-                width: 1,
-                spacing: 0.4,
-              )
-            ],
-          ),
-        ),
+        lineColumnWidget(context),
         SizedBox(
           height: 24.hmea,
         ),
@@ -195,21 +73,8 @@ class StatsAll extends StatelessWidget {
   }
 }
 
-class _PieData {
-  _PieData(this.nameData, this.amount, this.text);
-  final String nameData;
-  final double amount;
-  final String text;
-}
-
 class SalesData {
   SalesData(this.year, this.sales);
   final String year;
   final double sales;
-}
-
-class ChartData {
-  ChartData(this.x, this.y);
-  final int x;
-  final double y;
 }

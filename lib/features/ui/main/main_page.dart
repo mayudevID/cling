@@ -53,6 +53,7 @@ class MainPage extends StatelessWidget {
         BlocProvider(
           create: (_) => ProfileBloc(
             authRepo: getIt<AuthRepository>(),
+            dbRepo: getIt<DatabaseRepository>(),
           )..add(GetProfile()),
         ),
       ],
