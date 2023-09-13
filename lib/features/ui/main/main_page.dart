@@ -1,6 +1,6 @@
 import 'package:cling/features/repository/auth_repository.dart';
-import 'package:cling/features/ui/main/home/page/add_goal_page.dart';
-import 'package:cling/features/ui/main/home/page/add_in_ex_page.dart';
+import 'package:cling/features/ui/main/home_features/page/add_goal_page.dart';
+import 'package:cling/features/ui/main/home_features/page/add_in_ex_page.dart';
 import 'package:cling/features/ui/main/profile/bloc/profile_bloc.dart';
 import 'package:cling/features/ui/main/profile/page/profile_page.dart';
 
@@ -15,8 +15,8 @@ import '../../../injection.dart';
 import '../../repository/database_repository.dart';
 import 'bloc/enum_home_page_state.dart';
 import 'bloc/main_bloc.dart';
-import 'home/bloc/home_bloc.dart';
-import 'home/page/home_page.dart';
+import 'home_features/bloc/home_bloc.dart';
+import 'home_features/page/home_page.dart';
 import 'main_widget/custom_fab.dart';
 import 'main_widget/custom_nav_bar.dart';
 import 'statistics/bloc/statistics_bloc.dart';

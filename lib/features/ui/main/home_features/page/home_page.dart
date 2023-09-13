@@ -130,7 +130,7 @@ class HomePage extends StatelessWidget {
             builder: (context, state) {
               if (state.listTodayExpenses.isEmpty) {
                 return Container(
-                  padding: EdgeInsets.symmetric(horizontal: 20.wmea),
+                  padding: EdgeInsets.symmetric(horizontal: 24.wmea),
                   child: Text(
                     AppLocalizations.of(context)!.noExpenseToday,
                     style: const TextStyle(

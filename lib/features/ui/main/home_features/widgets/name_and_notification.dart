@@ -10,7 +10,7 @@ import '../../../language_currency/lang_export.dart';
 
 Widget nameAndNotification() {
   return Padding(
-    padding: EdgeInsets.symmetric(horizontal: 20.wmea),
+    padding: EdgeInsets.symmetric(horizontal: 24.wmea),
     child: Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.center,

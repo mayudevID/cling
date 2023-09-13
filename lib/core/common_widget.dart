@@ -27,7 +27,7 @@ class PinkButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 390.wmea,
+      width: 380.wmea,
       height: 57.hmea,
       child: ElevatedButton(
         onPressed: onTap,
@@ -346,5 +346,63 @@ Future<void> showBottomsheetChooseLang(BuildContext context) async {
         },
       );
     },
+  );
+}
+
+///* App Bar Profile
+Widget appBarProfile({
+  required BuildContext context,
+  required String title,
+  required String textButton,
+  required Function() onTapButton,
+}) {
+  return Container(
+    margin: EdgeInsets.only(top: 16.hmea),
+    child: Row(
+      children: [
+        GestureDetector(
+          onTap: () => Navigator.pop(context),
+          child: Assets.lib.resources.images.fluentChevronLeft24Filled.svg(),
+        ),
+        SizedBox(
+          width: 8.wmea,
+        ),
+        Text(
+          title,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 16.sp,
+            fontFamily: FontFamily.cabinetGrotesk,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        const Spacer(),
+        GestureDetector(
+          onTap: onTapButton,
+          child: Container(
+            width: 74.wmea,
+            height: 36.hmea,
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            decoration: ShapeDecoration(
+              color: const Color(0xFFF599DA),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+            child: Text(
+              textButton,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: const Color(0xFF101010),
+                fontSize: 12.sp,
+                fontFamily: FontFamily.cabinetGrotesk,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ),
+        )
+      ],
+    ),
   );
 }

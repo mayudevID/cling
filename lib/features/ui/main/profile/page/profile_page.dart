@@ -1,3 +1,4 @@
+import 'package:cling/core/route.dart';
 import 'package:cling/core/utils.dart';
 import 'package:cling/features/ui/language_currency/lang_export.dart';
 import 'package:cling/features/ui/main/profile/widgets/dialog_logout.dart';
@@ -16,7 +17,7 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 20.wmea),
+      padding: EdgeInsets.symmetric(horizontal: 24.wmea),
       child: Column(
         children: [
           SizedBox(
@@ -74,7 +75,12 @@ class ProfilePage extends StatelessWidget {
                     ],
                   ),
                 ),
-                Assets.lib.resources.images.editBig.svg(),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pushNamed(context, RouteName.editProfile);
+                  },
+                  child: Assets.lib.resources.images.editBig.svg(),
+                ),
               ],
             ),
           ),

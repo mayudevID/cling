@@ -24,7 +24,7 @@ List<Widget> tagNameHome(String name, {bool withDate = false}) {
       height: 24.hmea,
     ),
     Padding(
-      padding: EdgeInsets.symmetric(horizontal: 20.wmea),
+      padding: EdgeInsets.symmetric(horizontal: 24.wmea),
       child: Text(
         '$name ${withDate ? monthAndYearNow() : ""}'.trim(),
         style: TextStyle(

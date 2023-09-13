@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:cling/core/utils.dart';
 import 'package:cling/features/ui/language_currency/lang_export.dart';
-import 'package:cling/features/ui/main/home/bloc/home_bloc.dart';
-import 'package:cling/features/ui/main/home/page/add_in_ex_page.dart';
+import 'package:cling/features/ui/main/home_features/bloc/home_bloc.dart';
+import 'package:cling/features/ui/main/home_features/page/add_in_ex_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:open_mail_app/open_mail_app.dart';

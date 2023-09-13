@@ -1,6 +1,6 @@
 import 'package:cling/core/utils.dart';
-import 'package:cling/features/ui/main/home/bloc/home_bloc.dart';
-import 'package:cling/features/ui/main/home/widgets/dialog_pick_goal_logo.dart';
+import 'package:cling/features/ui/main/home_features/bloc/home_bloc.dart';
+import 'package:cling/features/ui/main/home_features/widgets/dialog_pick_goal_logo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';

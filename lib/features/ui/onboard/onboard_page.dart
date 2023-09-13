@@ -71,7 +71,7 @@ class OnboardPage extends StatelessWidget {
               height: 8.hmea,
             ),
             SizedBox(
-              width: 390.wmea,
+              width: 370.wmea,
               child: Row(
                 children: [
                   GestureDetector(

@@ -9,7 +9,7 @@ import '../../../../resources/gen/fonts.gen.dart';
 import '../../language_currency/lang_export.dart';
 import '../bloc/enum_home_page_state.dart';
 import '../bloc/main_bloc.dart';
-import '../home/bloc/home_bloc.dart';
+import '../home_features/bloc/home_bloc.dart';
 import 'dart:math' as math;
 
 Widget customFloatingActionButton(BuildContext context) {

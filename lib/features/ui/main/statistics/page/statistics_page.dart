@@ -20,7 +20,7 @@ class StatisticsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20.wmea),
+        padding: EdgeInsets.symmetric(horizontal: 24.wmea),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

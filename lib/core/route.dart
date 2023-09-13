@@ -1,3 +1,4 @@
+import 'package:cling/features/ui/main/edit_profile/page/edit_profile.dart';
 import 'package:cling/features/ui/main/verification_success/page/verification_success_page.dart';
 import 'package:flutter/material.dart';
 
@@ -15,45 +16,49 @@ import '../features/ui/splash/splash_page.dart';
 class RouteGen {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
-      case '/':
+      case RouteName.splash:
         return MaterialPageRoute(
           builder: (_) => const SplashPage(),
         );
-      case '/onboard':
+      case RouteName.onboard:
         return MaterialPageRoute(
           builder: (_) => const OnboardPage(),
         );
-      case '/register':
+      case RouteName.register:
         return MaterialPageRoute(
           builder: (_) => const RegisterPage(),
         );
-      case '/login':
+      case RouteName.login:
         return MaterialPageRoute(
           builder: (_) => const LoginPage(),
         );
-      case '/registerSuccess':
+      case RouteName.registerSuccess:
         return MaterialPageRoute(
           builder: (_) => const RegisterSuccessPage(),
         );
-      case '/forgotPassword':
+      case RouteName.forgotPassword:
         return MaterialPageRoute(
           builder: (_) => const ForgotPasswordPage(),
         );
-      case '/checkEmail':
+      case RouteName.checkEmail:
         return MaterialPageRoute(
           builder: (_) => const CheckEmailPage(),
         );
-      case '/main':
+      case RouteName.main:
         return MaterialPageRoute(
           builder: (_) => const MainPage(),
         );
-      case '/verifOnboard':
+      case RouteName.verifOnboard:
         return MaterialPageRoute(
           builder: (_) => const VerificationSuccessPage(),
         );
-      case '/monthlyBudget':
+      case RouteName.monthlyBudget:
         return MaterialPageRoute(
           builder: (_) => const MonthlyDataPage(),
+        );
+      case RouteName.editProfile:
+        return MaterialPageRoute(
+          builder: (_) => const EditProfilePage(),
         );
 
       default:
@@ -74,14 +79,15 @@ class RouteGen {
 }
 
 class RouteName {
-  static String splash = "/";
-  static String onboard = "/onboard";
-  static String register = "/register";
-  static String login = "/login";
-  static String registerSuccess = "/registerSuccess";
-  static String forgotPassword = "/forgotPassword";
-  static String checkEmail = "/checkEmail";
-  static String main = "/main";
-  static String verifOnboard = "/verifOnboard";
-  static String monthlyBudget = "/monthlyBudget";
+  static const String splash = "/";
+  static const String onboard = "/onboard";
+  static const String register = "/register";
+  static const String login = "/login";
+  static const String registerSuccess = "/registerSuccess";
+  static const String forgotPassword = "/forgotPassword";
+  static const String checkEmail = "/checkEmail";
+  static const String main = "/main";
+  static const String verifOnboard = "/verifOnboard";
+  static const String monthlyBudget = "/monthlyBudget";
+  static const String editProfile = "/editProfile";
 }

@@ -9,7 +9,7 @@ import 'package:cling/features/model/income_model.dart';
 import 'package:cling/features/model/income_source_model.dart';
 import 'package:cling/features/repository/database_repository.dart';
 import 'package:cling/features/ui/language_currency/lang_export.dart';
-import 'package:cling/features/ui/main/home/page/add_in_ex_page.dart';
+import 'package:cling/features/ui/main/home_features/page/add_in_ex_page.dart';
 import 'package:cling/features/ui/main/main_page.dart';
 import 'package:cling/features/ui/main/statistics/bloc/statistics_bloc.dart';
 

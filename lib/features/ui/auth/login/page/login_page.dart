@@ -42,7 +42,7 @@ class LoginPageContent extends StatelessWidget {
         key: LoginPage.navKeyLogin,
         backgroundColor: Colors.black,
         body: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20.wmea),
+          padding: EdgeInsets.symmetric(horizontal: 24.wmea),
           child: Column(
             children: [
               SizedBox(

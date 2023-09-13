@@ -2,8 +2,8 @@ import 'package:cling/core/common_widget.dart';
 import 'package:cling/core/utils.dart';
 import 'package:cling/features/model/expense_categories_model.dart';
 import 'package:cling/features/model/income_source_model.dart';
-import 'package:cling/features/ui/main/home/bloc/home_bloc.dart';
-import 'package:cling/features/ui/main/home/widgets/categories_row.dart';
+import 'package:cling/features/ui/main/home_features/bloc/home_bloc.dart';
+import 'package:cling/features/ui/main/home_features/widgets/categories_row.dart';
 import 'package:cling/resources/gen/assets.gen.dart';
 import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
@@ -65,7 +65,7 @@ class AddIncomeExpensePage extends StatelessWidget {
         return false;
       },
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20.wmea),
+        padding: EdgeInsets.symmetric(horizontal: 24.wmea),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

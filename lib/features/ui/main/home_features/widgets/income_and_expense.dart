@@ -1,7 +1,7 @@
 import 'package:cling/core/common_widget.dart';
 import 'package:cling/core/utils.dart';
-import 'package:cling/features/ui/main/home/bloc/home_bloc.dart';
-import 'package:cling/features/ui/main/home/widgets/tag_currency.dart';
+import 'package:cling/features/ui/main/home_features/bloc/home_bloc.dart';
+import 'package:cling/features/ui/main/home_features/widgets/tag_currency.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
