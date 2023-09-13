@@ -38,6 +38,7 @@ class LoginPageContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         key: LoginPage.navKeyLogin,
         backgroundColor: Colors.black,
         body: Padding(

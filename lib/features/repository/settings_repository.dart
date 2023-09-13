@@ -50,10 +50,13 @@ class SettingsRepository {
       "id": userData.id,
       "monthly_income": monthlyIncome ?? userData.monthlyIncome,
       "monthly_budget": monthlyBudget ?? userData.monthlyBudget,
+      // "verified_process": true,
+      // "updated_at": DateTime.now().toIso8601String(),
     });
     final newUserData = userData.copyWith(
       monthlyBudget: monthlyBudget!.toDouble(),
       monthlyIncome: monthlyIncome!.toDouble(),
+      //verifiedProcess: true,
     );
     await _cache.setString(
       userCacheKey,

@@ -53,7 +53,7 @@ class StatisticsPage extends StatelessWidget {
                   curve: Curves.fastOutSlowIn,
                   index: state.typeCategories,
                   children: [
-                    StatsAll(),
+                    const StatsAll(),
                     StatsIncome(),
                     StatsExpense(),
                   ],
