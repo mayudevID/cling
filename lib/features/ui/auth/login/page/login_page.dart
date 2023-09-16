@@ -20,12 +20,13 @@ import '../widgets/form_login.dart';
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
 
-  static var navKeyLogin = GlobalKey<NavigatorState>();
-
   @override
   Widget build(BuildContext context) {
     return BlocProvider<LoginBloc>(
-      create: (_) => LoginBloc(authRepo: getIt<AuthRepository>()),
+      create: (_) => LoginBloc(
+        context: context,
+        authRepo: getIt<AuthRepository>(),
+      ),
       child: const LoginPageContent(),
     );
   }
@@ -39,7 +40,6 @@ class LoginPageContent extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         resizeToAvoidBottomInset: false,
-        key: LoginPage.navKeyLogin,
         backgroundColor: Colors.black,
         body: Padding(
           padding: EdgeInsets.symmetric(horizontal: 24.wmea),

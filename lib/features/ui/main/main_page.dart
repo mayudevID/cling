@@ -25,8 +25,7 @@ import 'statistics/page/statistics_page.dart';
 class MainPage extends StatelessWidget {
   const MainPage({super.key});
 
-  static GlobalKey<NavigatorState> navigatorKeyMain =
-      GlobalKey<NavigatorState>();
+  static GlobalKey<NavigatorState> navKeyMain = GlobalKey<NavigatorState>();
 
   @override
   Widget build(BuildContext context) {
@@ -82,8 +81,8 @@ class MainPageContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        key: MainPage.navKeyMain,
         resizeToAvoidBottomInset: false,
-        key: MainPage.navigatorKeyMain,
         backgroundColor: const Color(0xFF101010),
         body: SizedBox(
           width: 100.w,

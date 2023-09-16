@@ -7,8 +7,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../core/exception.dart';
 import '../../core/route.dart';
-import '../ui/auth/login/page/login_page.dart';
-import '../ui/auth/login/widgets/dialog_email_not_verified.dart';
 
 class AuthRepository {
   final SupabaseClient _supabaseClient;
@@ -168,13 +166,7 @@ class AuthRepository {
         );
       }
     } on AuthException catch (e) {
-      Logger.Red.log("Status: ${e.statusCode} Message: ${e.message}");
-      if (e.statusCode == '400' && e.message == "Email not confirmed") {
-        await Future.microtask(() async {
-          await dialogEmailNotVerified(LoginPage.navKeyLogin.currentContext!);
-        });
-      }
-      throw LogInWithEmailAndPasswordFailure.fromCode(e.message);
+      throw AuthException(e.message, statusCode: e.statusCode);
     } on SocketException catch (e) {
       Logger.Red.log(e.message);
       throw SocketException(e.message);

@@ -1,3 +1,4 @@
+import 'package:cling/features/ui/main/edit_monthly/page/edit_budget_or_income.dart';
 import 'package:cling/features/ui/main/edit_profile/page/edit_profile.dart';
 import 'package:cling/features/ui/main/verification_success/page/verification_success_page.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +16,7 @@ import '../features/ui/splash/splash_page.dart';
 
 class RouteGen {
   static Route<dynamic> generateRoute(RouteSettings settings) {
+    final data = settings.arguments;
     switch (settings.name) {
       case RouteName.splash:
         return MaterialPageRoute(
@@ -52,13 +54,19 @@ class RouteGen {
         return MaterialPageRoute(
           builder: (_) => const VerificationSuccessPage(),
         );
-      case RouteName.monthlyBudget:
+      case RouteName.monthlyData:
         return MaterialPageRoute(
           builder: (_) => const MonthlyDataPage(),
         );
       case RouteName.editProfile:
         return MaterialPageRoute(
           builder: (_) => const EditProfilePage(),
+        );
+      case RouteName.editMonBudgetOrIncome:
+        return MaterialPageRoute(
+          builder: (_) => EditMonBudgetOrIncomePage(
+            monthlyMode: data as EditMonthlyMode,
+          ),
         );
 
       default:
@@ -88,6 +96,7 @@ class RouteName {
   static const String checkEmail = "/checkEmail";
   static const String main = "/main";
   static const String verifOnboard = "/verifOnboard";
-  static const String monthlyBudget = "/monthlyBudget";
+  static const String monthlyData = "/monthlyData";
   static const String editProfile = "/editProfile";
+  static const String editMonBudgetOrIncome = "/editMonBudgetOrIncome";
 }

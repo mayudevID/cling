@@ -1,13 +1,14 @@
 import 'package:cling/core/utils.dart';
-import 'package:cling/features/ui/main/verification_success/widget/dialog_close_verif_onboar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lottie/lottie.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../../core/common_widget.dart';
+import '../../../../../core/route.dart';
 import '../../../../../resources/gen/fonts.gen.dart';
-import 'monthly_data_page.dart';
+import '../../../language_currency/lang_export.dart';
+import '../widget/dialog_close_verif_onboar.dart';
 
 class VerificationSuccessPage extends StatelessWidget {
   const VerificationSuccessPage({super.key});
@@ -134,7 +135,7 @@ class VerificationSuccessPage extends StatelessWidget {
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 47.wmea),
                   child: Text(
-                    "Get ready to dive headfirst into the app, where you can effortlessly glide through its awesome features and unlock a goal!",
+                    AppLocalizations.of(context)!.verifSuccess,
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Colors.white,
@@ -149,21 +150,15 @@ class VerificationSuccessPage extends StatelessWidget {
                 ),
                 PinkButton(
                   onTap: () {
-                    // Navigator.pushNamed(
-                    //   context,
-                    //   RouteName.monthlyBudget,
-                    // );
-                    Navigator.push(context, MaterialPageRoute(builder: (_) {
-                      return const MonthlyDataPage();
-                    }));
+                    Navigator.pushNamed(context, RouteName.monthlyData);
                   },
-                  name: "Set Monthly Budget",
+                  name: AppLocalizations.of(context)!.setMonthlyBudget,
                 ),
                 SizedBox(
                   height: 8.hmea,
                 ),
                 BlackButton(
-                  name: "Skip",
+                  name: AppLocalizations.of(context)!.skip,
                   onTap: () {
                     dialogCloseVerifOnboard(context);
                   },

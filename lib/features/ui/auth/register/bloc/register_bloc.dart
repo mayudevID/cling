@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:async';
 import 'dart:io';
 
@@ -14,13 +16,17 @@ import 'package:flutter/material.dart';
 
 import '../../../../../core/common_widget.dart';
 import '../../../../repository/auth_repository.dart';
-import '../page/register_page.dart';
 
 part 'register_event.dart';
 part 'register_state.dart';
 
 class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
-  RegisterBloc(this._authRepository) : super(RegisterState()) {
+  RegisterBloc({
+    required BuildContext context,
+    required AuthRepository authRepo,
+  })  : _authRepository = authRepo,
+        _context = context,
+        super(RegisterState()) {
     on<ToggleEyePass>(_toggleEyePass);
     on<ToggleEyeConfirmPass>(_toggleEyeConfirmPass);
     on<SendRegister>(_onSendRegister);
@@ -32,7 +38,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   }
 
   final AuthRepository _authRepository;
-  var context = RegisterPage.navKeyRegister.currentContext;
+  final BuildContext _context;
 
   void _toggleEyePass(
     ToggleEyePass event,
@@ -96,8 +102,8 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     if (!(connectivityResult == ConnectivityResult.mobile ||
         connectivityResult == ConnectivityResult.wifi)) {
       errorSnackbar(
-        context!,
-        AppLocalizations.of(context!)!.noConnection,
+        _context,
+        AppLocalizations.of(_context)!.noConnection,
       );
       return;
     }
@@ -107,33 +113,33 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
         state.name.trim().isEmpty ||
         state.confirmPassword.trim().isEmpty) {
       errorToast(
-        AppLocalizations.of(context!)!.formEmpty,
+        AppLocalizations.of(_context)!.formEmpty,
       );
       return;
     }
 
     if (!EmailValidator.validate(state.email)) {
       errorToast(
-        AppLocalizations.of(context!)!.invalidEmailFailure,
+        AppLocalizations.of(_context)!.invalidEmailFailure,
       );
       return;
     }
 
     if (state.password.trim().length < 8) {
       errorToast(
-        AppLocalizations.of(context!)!.passwordLengthFailure,
+        AppLocalizations.of(_context)!.passwordLengthFailure,
       );
       return;
     }
 
     if (state.password.trim() != state.confirmPassword.trim()) {
       errorToast(
-        AppLocalizations.of(context!)!.passConfPassFailure,
+        AppLocalizations.of(_context)!.passConfPassFailure,
       );
       return;
     }
 
-    loadingAuth(context!);
+    loadingAuth(_context);
     await _authRepository.logOut();
     //await _authRepository.saveRegisterProcess(true);
 
@@ -154,7 +160,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
       //await _authRepository.saveRegisterProcess(false);
 
       Future.microtask(() {
-        Navigator.pop(context!);
+        Navigator.pop(_context);
         Navigator.pushReplacementNamed(
           MainApp.navKeyGlobal.currentContext!,
           RouteName.registerSuccess,
@@ -162,18 +168,18 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
       });
     } on SignUpWithEmailAndPasswordFailure catch (e) {
       Future.microtask(() {
-        Navigator.pop(context!);
+        Navigator.pop(_context);
         errorToast(e.message);
       });
     } on SocketException catch (_) {
       Future.microtask(() {
-        Navigator.pop(context!);
-        errorSnackbar(context!, AppLocalizations.of(context!)!.noConnection);
+        Navigator.pop(_context);
+        errorSnackbar(_context, AppLocalizations.of(_context)!.noConnection);
       });
     } on Exception catch (e) {
       _authRepository.logOut();
       Future.microtask(() {
-        Navigator.pop(context!);
+        Navigator.pop(_context);
         errorToast(e.toString());
       });
     }

@@ -5,9 +5,9 @@ import 'package:sizer/sizer.dart';
 
 import '../../../../../core/common_widget.dart';
 import '../../../language_currency/lang_export.dart';
-import '../../profile/widgets/text_field_name_edit_profile.dart';
-import '../../profile/widgets/text_field_password_edit_profile.dart';
 import '../widget/text_field_email_edit_profile.dart';
+import '../widget/text_field_name_edit_profile.dart';
+import '../widget/text_field_password_edit_profile.dart';
 
 class EditProfilePage extends StatelessWidget {
   const EditProfilePage({super.key});

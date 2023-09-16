@@ -11,9 +11,7 @@ part 'statistics_state.dart';
 class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
   StatisticsBloc({required DatabaseRepository dbRepo})
       : _dbRepo = dbRepo,
-        super(
-          StatisticsState(),
-        ) {
+        super(StatisticsState()) {
     on<TypeCategoriesEvent>(_typeCategories);
     on<GetIncomeExpenseTotalCurrMonth>(_getIncomeExpenseTotalCurrMonth);
     on<GetIncomeExpenseTotalSixMonth>(_getIncomeExpenseTotalSixMonth);

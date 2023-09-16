@@ -1,11 +1,12 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:io';
 import 'package:cling/core/common_widget.dart';
 import 'package:cling/core/utils.dart';
 import 'package:cling/features/repository/settings_repository.dart';
 import 'package:cling/features/ui/language_currency/lang_export.dart';
-import 'package:cling/features/ui/main/main_page.dart';
 import 'package:cling/features/ui/main/profile/bloc/profile_bloc.dart';
-import 'package:cling/features/ui/main/verification_success/widget/text_field_mothly_data.dart';
+import 'package:cling/features/ui/main/verification_success/widget/text_field_monthly_data.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
@@ -13,14 +14,17 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../../../core/logger.dart';
-import '../page/monthly_data_page.dart';
+import '../../main_page.dart';
 
 part 'monthly_data_event.dart';
 part 'monthly_data_state.dart';
 
 class MonthlyDataBloc extends Bloc<MonthlyDataEvent, MonthlyDataState> {
-  MonthlyDataBloc({required SettingsRepository settingsRepo})
-      : _settingsRepo = settingsRepo,
+  MonthlyDataBloc({
+    required BuildContext context,
+    required SettingsRepository settingsRepo,
+  })  : _settingsRepo = settingsRepo,
+        _context = context,
         super(MonthlyDataState()) {
     on<SetIncome>(_setIncome);
     on<SetBudget>(_setBudget);
@@ -29,15 +33,16 @@ class MonthlyDataBloc extends Bloc<MonthlyDataEvent, MonthlyDataState> {
   }
 
   final SettingsRepository _settingsRepo;
-  var context = MonthlyDataPage.verifOnboardNavKey.currentContext;
+  final BuildContext _context;
+  var mainContext = MainPage.navKeyMain.currentContext!;
 
   void _setIncome(SetIncome event, emit) {
     final data = TextFieldMonthlyData.textEditingController.text;
     final amount = data.removeDot;
     if (amount == "0" || amount.trim().isEmpty) {
       errorSnackbar(
-        context!,
-        AppLocalizations.of(context!)!.incomeMustAbove0,
+        _context,
+        AppLocalizations.of(_context)!.incomeMustAbove0,
       );
     } else {
       try {
@@ -50,8 +55,8 @@ class MonthlyDataBloc extends Bloc<MonthlyDataEvent, MonthlyDataState> {
         add(SetState(VerifOnboardPos.budget));
       } on FormatException {
         errorSnackbar(
-          context!,
-          AppLocalizations.of(context!)!.invalidAmount,
+          _context,
+          AppLocalizations.of(_context)!.invalidAmount,
         );
       }
     }
@@ -62,8 +67,8 @@ class MonthlyDataBloc extends Bloc<MonthlyDataEvent, MonthlyDataState> {
     final amount = data.removeDot;
     if (amount == "0" || amount.trim().isEmpty) {
       errorSnackbar(
-        context!,
-        AppLocalizations.of(context!)!.budgetMustAbove0,
+        _context,
+        AppLocalizations.of(_context)!.budgetMustAbove0,
       );
     } else {
       try {
@@ -78,8 +83,8 @@ class MonthlyDataBloc extends Bloc<MonthlyDataEvent, MonthlyDataState> {
         add(SetFinish());
       } on FormatException {
         errorSnackbar(
-          context!,
-          AppLocalizations.of(context!)!.invalidAmount,
+          _context,
+          AppLocalizations.of(_context)!.invalidAmount,
         );
       }
     }
@@ -115,13 +120,13 @@ class MonthlyDataBloc extends Bloc<MonthlyDataEvent, MonthlyDataState> {
     if (!(connectivityResult == ConnectivityResult.mobile ||
         connectivityResult == ConnectivityResult.wifi)) {
       errorSnackbar(
-        context!,
-        AppLocalizations.of(context!)!.noConnection,
+        _context,
+        AppLocalizations.of(_context)!.noConnection,
       );
       return;
     }
 
-    loadingAuth(context!);
+    loadingAuth(_context);
     try {
       final monIncome = int.parse(state.monIncome.removeDot);
       final monBudget = int.parse(state.monBudget.removeDot);
@@ -131,30 +136,26 @@ class MonthlyDataBloc extends Bloc<MonthlyDataEvent, MonthlyDataState> {
         monthlyBudget: monBudget,
       );
 
-      Future.microtask(() {
-        MainPage.navigatorKeyMain.currentContext!
-            .read<ProfileBloc>()
-            .add(GetProfile());
-      });
+      mainContext.read<ProfileBloc>().add(GetProfile());
 
-      Navigator.of(context!)
+      Navigator.of(_context)
         ..pop()
         ..pop()
         ..pop();
     } on SocketException catch (e) {
       Logger.Red.log(e.message);
 
-      Navigator.pop(context!);
+      Navigator.pop(_context);
       errorSnackbar(
-        context!,
-        AppLocalizations.of(context!)!.noConnection,
+        _context,
+        AppLocalizations.of(_context)!.noConnection,
       );
     } on PostgrestException catch (e) {
       Logger.Red.log(e.message);
 
-      Navigator.pop(context!);
+      Navigator.pop(_context);
       errorSnackbar(
-        context!,
+        _context,
         e.message,
       );
     }

@@ -5,7 +5,7 @@ import 'package:cling/features/repository/settings_repository.dart';
 import 'package:cling/features/ui/language_currency/lang_currency_bloc.dart';
 import 'package:cling/features/ui/language_currency/lang_export.dart';
 import 'package:cling/features/ui/main/verification_success/bloc/monthly_data_bloc.dart';
-import 'package:cling/features/ui/main/verification_success/widget/text_field_mothly_data.dart';
+import 'package:cling/features/ui/main/verification_success/widget/text_field_monthly_data.dart';
 import 'package:cling/features/ui/main/verification_success/widget/text_monthly_data.dart';
 import 'package:cling/injection.dart';
 import 'package:cling/resources/gen/fonts.gen.dart';
@@ -17,13 +17,12 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 class MonthlyDataPage extends StatelessWidget {
   const MonthlyDataPage({super.key});
 
-  static final verifOnboardNavKey = GlobalKey<NavigatorState>();
-
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) {
+      create: (context) {
         return MonthlyDataBloc(
+          context: context,
           settingsRepo: getIt<SettingsRepository>(),
         );
       },
@@ -39,7 +38,6 @@ class MonthlyDataPageContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        key: MonthlyDataPage.verifOnboardNavKey,
         backgroundColor: Colors.black,
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.center,

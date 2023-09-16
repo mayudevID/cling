@@ -16,12 +16,13 @@ import '../bloc/register_bloc.dart';
 class RegisterPage extends StatelessWidget {
   const RegisterPage({super.key});
 
-  static var navKeyRegister = GlobalKey<NavigatorState>();
-
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => RegisterBloc(getIt<AuthRepository>()),
+      create: (_) => RegisterBloc(
+        context: context,
+        authRepo: getIt<AuthRepository>(),
+      ),
       child: const RegisterPageContent(),
     );
   }
@@ -34,7 +35,6 @@ class RegisterPageContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        key: RegisterPage.navKeyRegister,
         resizeToAvoidBottomInset: false,
         backgroundColor: Colors.black,
         body: Padding(

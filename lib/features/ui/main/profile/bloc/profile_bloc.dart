@@ -28,21 +28,20 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
 
   final AuthRepository _authRepo;
   final DatabaseRepository _dbRepo;
-
-  var context = MainPage.navigatorKeyMain.currentContext;
+  var mainContext = MainPage.navKeyMain.currentContext!;
 
   void _sendLogout(event, emit) async {
     try {
-      Navigator.pop(context!);
-      loadingAuth(context!);
+      Navigator.pop(mainContext);
+      loadingAuth(mainContext);
       Future.wait([
         _authRepo.logOut(),
         _dbRepo.deleteAllTable(),
       ]).then((_) async {
-        context!.read<AppBloc>().add(const Redirect());
+        mainContext.read<AppBloc>().add(const Redirect());
         await Future.delayed(const Duration(milliseconds: 100));
         // ignore: use_build_context_synchronously
-        context!.read<LangCurrencyBloc>().add(
+        mainContext.read<LangCurrencyBloc>().add(
               const ChangeCurrency(
                 selectedCurrency: Currency.idr,
               ),
@@ -50,7 +49,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       });
     } on LogOutFailure catch (_) {
       errorSnackbar(
-        context!,
+        mainContext,
         "Error Logout",
       );
     }

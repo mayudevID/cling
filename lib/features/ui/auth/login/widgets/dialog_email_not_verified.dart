@@ -105,8 +105,9 @@ Future<void> openMail(BuildContext context) async {
               ElevatedButton(
                 child: const Text("OK"),
                 onPressed: () {
-                  Navigator.pop(context);
-                  Navigator.pop(context);
+                  Navigator.of(context)
+                    ..pop()
+                    ..pop();
                 },
               )
             ],
