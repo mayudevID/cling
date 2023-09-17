@@ -1,15 +1,22 @@
 import 'package:cling/core/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:sizer/sizer.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../../../../../resources/gen/fonts.gen.dart';
+import '../../../../model/chart_data.dart';
 import '../../../language_currency/lang_currency_bloc.dart';
 import '../bloc/statistics_bloc.dart';
 
 Widget lineColumnWidget(BuildContext mainContext) {
   return BlocBuilder<StatisticsBloc, StatisticsState>(
+    buildWhen: (p, c) {
+      return (p.chartDataExpenseList != c.chartDataExpenseList) ||
+          (p.chartDataIncomeList != c.chartDataIncomeList) ||
+          (p.chartDataSavingsList != c.chartDataSavingsList);
+    },
     builder: (context, state) {
       return SizedBox(
         width: double.infinity,
@@ -32,8 +39,18 @@ Widget lineColumnWidget(BuildContext mainContext) {
               fontFamily: FontFamily.cabinetGrotesk,
               fontWeight: FontWeight.w700,
             ),
+            numberFormat: NumberFormat.compactCurrency(
+              locale: mainContext
+                  .watch<LangCurrencyBloc>()
+                  .state
+                  .selectedCurrency
+                  .value
+                  .toLanguageTag(),
+              decimalDigits: 2,
+              name: "",
+            ),
             labelFormat:
-                "${mainContext.watch<LangCurrencyBloc>().state.selectedCurrency.name} {value} K ",
+                "${mainContext.watch<LangCurrencyBloc>().state.selectedCurrency.name} {value}",
             //maximumLabels: 2,
             majorGridLines: const MajorGridLines(
               color: Color(0xFF343437),
@@ -43,7 +60,7 @@ Widget lineColumnWidget(BuildContext mainContext) {
           series: [
             ColumnSeries<ChartData, String>(
               color: const Color(0xFFE54C19),
-              dataSource: chartData,
+              dataSource: state.chartDataExpenseList,
               xValueMapper: (ChartData data, _) => data.x,
               yValueMapper: (ChartData data, _) => data.y,
               // Sets the corner radius
@@ -55,7 +72,7 @@ Widget lineColumnWidget(BuildContext mainContext) {
             ),
             ColumnSeries<ChartData, String>(
               color: const Color(0xFF07AC65),
-              dataSource: chartData,
+              dataSource: state.chartDataIncomeList,
               xValueMapper: (ChartData data, _) => data.x,
               yValueMapper: (ChartData data, _) => data.y,
               // Sets the corner radius
@@ -67,7 +84,7 @@ Widget lineColumnWidget(BuildContext mainContext) {
             ),
             ColumnSeries<ChartData, String>(
               color: const Color(0xFF006DE9),
-              dataSource: chartData,
+              dataSource: state.chartDataSavingsList,
               xValueMapper: (ChartData data, _) => data.x,
               yValueMapper: (ChartData data, _) => data.y,
               borderRadius: const BorderRadius.all(
@@ -82,17 +99,3 @@ Widget lineColumnWidget(BuildContext mainContext) {
     },
   );
 }
-
-class ChartData {
-  ChartData(this.x, this.y);
-  final String x;
-  final double y;
-}
-
-final List<ChartData> chartData = [
-  ChartData("2023", 35),
-  ChartData("2024", 23),
-  ChartData("2025", 34),
-  ChartData("2026", 25),
-  ChartData("2027", 40)
-];

@@ -5,6 +5,7 @@ import 'package:cling/core/utils.dart';
 import 'package:cling/features/repository/settings_repository.dart';
 import 'package:cling/features/ui/main/edit_monthly/page/edit_budget_or_income.dart';
 import 'package:cling/features/ui/main/edit_monthly/page/text_field_edit_monthly.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -29,7 +30,7 @@ class EditMonthlyBloc extends Bloc<EditMonthlyEvent, EditMonthlyState> {
   })  : _monthlyMode = monthlyMode,
         _context = context,
         _settingsRepo = settingsRepo,
-        super(EditMonthlyState(value: "0", newValue: '0')) {
+        super(EditMonthlyState()) {
     on<SetAmountInput>(_setAmountInput);
     on<SaveNewMonthly>(_saveNewMonthly);
     on<InitialValue>(_initVal);
@@ -39,8 +40,9 @@ class EditMonthlyBloc extends Bloc<EditMonthlyEvent, EditMonthlyState> {
   final SettingsRepository _settingsRepo;
   final BuildContext _context;
   var mainContext = MainPage.navKeyMain.currentContext!;
+  late String initMonthly;
 
-  void _initVal(event, emit) {
+  void _initVal(event, _) {
     final currentCurr = _settingsRepo.getCurrentCurrency();
     final currency = currentCurr != null
         ? Currency.values
@@ -55,18 +57,31 @@ class EditMonthlyBloc extends Bloc<EditMonthlyEvent, EditMonthlyState> {
       name: "",
     );
 
-    TextFieldEditMonthly.textEditingController.text = numFormat.format(
-        (_monthlyMode == EditMonthlyMode.income)
-            ? _settingsRepo.currentUserModel!.monthlyIncome / 100.0
-            : _settingsRepo.currentUserModel!.monthlyBudget / 100.0);
+    initMonthly = numFormat.format((_monthlyMode == EditMonthlyMode.income)
+        ? _settingsRepo.currentUserModel!.monthlyIncome / 100.0
+        : _settingsRepo.currentUserModel!.monthlyBudget / 100.0);
+
+    TextFieldEditMonthly.textEditingController.text = initMonthly;
   }
 
   void _setAmountInput(event, emit) async {}
 
   void _saveNewMonthly(SaveNewMonthly event, _) async {
+    final connectivityResult = await (Connectivity().checkConnectivity());
+    if (!(connectivityResult == ConnectivityResult.mobile ||
+        connectivityResult == ConnectivityResult.wifi)) {
+      errorSnackbar(_context, AppLocalizations.of(_context)!.noConnection);
+      return;
+    }
+
+    if (initMonthly == TextFieldEditMonthly.textEditingController.text) {
+      return;
+    }
+
     loadingAuth(_context);
     try {
-      final monValue = int.parse(state.newValue.removeDot);
+      final monValue =
+          int.parse(TextFieldEditMonthly.textEditingController.text.removeDot);
 
       await _settingsRepo.saveMonthlyBudgetAndIncome(
         monthlyIncome:

@@ -38,7 +38,7 @@ class MainPage extends StatelessWidget {
           create: (_) => HomeBloc(
             dbRepo: getIt<DatabaseRepository>(),
           )
-            ..add(GetTotalIncomeExpenseCurrMonth())
+            ..add(GetIncomeExpenseAmountTotalCurrMonth())
             ..add(GetGoals())
             ..add(GetTodayExpenses()),
         ),
@@ -47,7 +47,8 @@ class MainPage extends StatelessWidget {
             dbRepo: getIt<DatabaseRepository>(),
           )
             ..add(GetIncomeExpenseTotalCurrMonth())
-            ..add(GetIncomeExpenseTotalSixMonth()),
+            ..add(GetIncomeExpenseTotalSixMonth())
+            ..add(GetMostExpense()),
         ),
         BlocProvider(
           create: (_) => ProfileBloc(

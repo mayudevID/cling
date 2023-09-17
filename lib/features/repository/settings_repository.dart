@@ -46,16 +46,20 @@ class SettingsRepository {
   }) async {
     final userData = currentUserModel!;
 
+    int monIncomeNew = monthlyIncome ?? userData.monthlyIncome.toInt();
+    int monBudgetNew = monthlyBudget ?? userData.monthlyBudget.toInt();
+
     await _supabaseClient.from("profiles").upsert({
       "id": userData.id,
-      "monthly_income": monthlyIncome ?? userData.monthlyIncome,
-      "monthly_budget": monthlyBudget ?? userData.monthlyBudget,
+      "monthly_income": monIncomeNew,
+      "monthly_budget": monBudgetNew,
       // "verified_process": true,
       "updated_at": DateTime.now().toIso8601String(),
     });
+
     final newUserData = userData.copyWith(
-      monthlyBudget: monthlyBudget!.toDouble(),
-      monthlyIncome: monthlyIncome!.toDouble(),
+      monthlyBudget: monBudgetNew.toDouble(),
+      monthlyIncome: monIncomeNew.toDouble(),
       //verifiedProcess: true,
     );
     await _cache.setString(

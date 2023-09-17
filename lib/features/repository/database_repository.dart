@@ -196,18 +196,24 @@ class DatabaseRepository {
 
   Future<Map<String, Map<String, dynamic>>?>
       getTotalIncomeExpenseSixMonth() async {
-    final monthNow = DateTime.now().subtract(const Duration(days: 31));
-    final fourMonthsAgo = monthNow.subtract(const Duration(days: 124));
+    final now = DateTime.now();
+
+    final monthNow = now.subtract(
+      Duration(days: DateTime(now.year, now.month + 1, 0).day),
+    );
+    final fourMonthsAgo = monthNow.subtract(
+      const Duration(days: 124),
+    );
 
     final monthNowFormatted = DateTime(
       monthNow.year,
       monthNow.month,
-      monthNow.day,
+      DateTime(monthNow.year, monthNow.month + 1, 0).day,
     ).toIso8601String();
     final fourMonthsAgoFormatted = DateTime(
       fourMonthsAgo.year,
       fourMonthsAgo.month,
-      fourMonthsAgo.day,
+      1,
     ).toIso8601String();
 
     final result = await Future.wait([
@@ -246,7 +252,7 @@ class DatabaseRepository {
     }
 
     if (result[1].isNotEmpty) {
-      for (var expense in result[0]) {
+      for (var expense in result[1]) {
         var month = expense["Month"] as String;
         combinedData[month] ??= {"TotalIncome": 0, "TotalExpense": 0};
         combinedData[month]!["TotalExpense"] = expense["TotalExpense"];
@@ -254,6 +260,13 @@ class DatabaseRepository {
     }
 
     return (combinedData.isEmpty) ? null : combinedData;
+  }
+
+  Future<void> getMostExpense() async {
+    final result = await db.rawQuery(
+      "SELECT * FROM expense_table ORDER BY amount DESC LIMIT 7",
+    );
+    print(result);
   }
 
   //! ================ DELETE ALL ================

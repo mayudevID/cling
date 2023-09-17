@@ -13,7 +13,7 @@ class GetExpenseCategories extends HomeEvent {}
 
 class ClearDataForm extends HomeEvent {}
 
-class GetTotalIncomeExpenseCurrMonth extends HomeEvent {}
+class GetIncomeExpenseAmountTotalCurrMonth extends HomeEvent {}
 
 class GetTodayExpenses extends HomeEvent {}
 

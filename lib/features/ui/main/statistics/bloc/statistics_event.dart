@@ -16,3 +16,5 @@ class TypeCategoriesEvent extends StatisticsEvent {
 class GetIncomeExpenseTotalCurrMonth extends StatisticsEvent {}
 
 class GetIncomeExpenseTotalSixMonth extends StatisticsEvent {}
+
+class GetMostExpense extends StatisticsEvent {}

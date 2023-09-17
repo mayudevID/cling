@@ -54,7 +54,9 @@ class EditMonBudgetOrIncomePageContent extends StatelessWidget {
                     ? AppLocalizations.of(context)!.monthlyBudget
                     : AppLocalizations.of(context)!.monthlyIncome,
                 textButton: "Save",
-                onTapButton: () {},
+                onTapButton: () {
+                  context.read<EditMonthlyBloc>().add(SaveNewMonthly());
+                },
               ),
               SizedBox(
                 height: 32.hmea,

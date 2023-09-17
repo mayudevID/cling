@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:cling/core/utils.dart';
 import 'package:cling/resources/gen/assets.gen.dart';
 import 'package:flutter/material.dart' hide ModalBottomSheetRoute;
@@ -186,7 +188,6 @@ void errorToast(String msg) {
 }
 
 ///* NominalMoneyFormatter
-// ignore: must_be_immutable
 class NominalMoneyFormatter extends StatelessWidget {
   NominalMoneyFormatter({
     super.key,
@@ -204,22 +205,16 @@ class NominalMoneyFormatter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<LangCurrencyBloc, LangCurrencyState>(
-      buildWhen: (prev, curr) {
-        return prev.selectedCurrency != curr.selectedCurrency;
-      },
-      builder: (context, state) {
-        return Text(
-          NumberFormat.currency(
-            locale: state.selectedCurrency.value.toLanguageTag(),
-            decimalDigits: decimalDigits,
-            customPattern: '\u00a4###,###.00',
-            name: (isWithName) ? "${state.selectedCurrency.name} " : "",
-          ).format(amount / 100.0),
-          style: textStyle,
-          textAlign: textAlign,
-        );
-      },
+    var data = context.watch<LangCurrencyBloc>().state.selectedCurrency;
+    return Text(
+      NumberFormat.currency(
+        locale: data.value.toLanguageTag(),
+        decimalDigits: decimalDigits,
+        customPattern: '\u00a4###,###.00',
+        name: (isWithName) ? "${data.name} " : "",
+      ).format(amount / 100.0),
+      style: textStyle,
+      textAlign: textAlign,
     );
   }
 }

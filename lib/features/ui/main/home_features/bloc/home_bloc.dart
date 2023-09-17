@@ -32,7 +32,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     on<GetIncomeSource>(_getIncomeSource);
     on<GetExpenseCategories>(_getExpenseCategories);
     on<ClearDataForm>(_clearDataForm);
-    on<GetTotalIncomeExpenseCurrMonth>(_getTotalIncomeExpenseCurrMonth);
+    on<GetIncomeExpenseAmountTotalCurrMonth>(_getTotalIncomeExpenseCurrMonth);
     on<GetGoals>(_getGoals);
     on<GetTodayExpenses>(_getTodayExpenses);
     on<SetDate>(_setDate);
@@ -132,12 +132,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
                 '${state.selectedCategories.key} ${state.selectedCategories.value}',
           );
           await _dbRepo.insertIncome(data);
-          add(GetTotalIncomeExpenseCurrMonth());
-          Future.microtask(() {
-            mainContext.read<StatisticsBloc>()
-              ..add(GetIncomeExpenseTotalCurrMonth())
-              ..add(GetIncomeExpenseTotalSixMonth());
-          });
+
           break;
         case FlowType.expense:
           final data = ExpenseModel(
@@ -148,21 +143,21 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
                 '${state.selectedCategories.key} ${state.selectedCategories.value}',
           );
           await _dbRepo.insertExpense(data);
-          add(GetTotalIncomeExpenseCurrMonth());
+
+          ///* Update UI
           add(GetTodayExpenses());
-          Future.microtask(() {
-            mainContext.read<StatisticsBloc>()
-              ..add(GetIncomeExpenseTotalCurrMonth())
-              ..add(GetIncomeExpenseTotalSixMonth());
-          });
+          mainContext.read<StatisticsBloc>().add(GetMostExpense());
+
           break;
       }
-      Future.microtask(() {
-        dialogAddSuccess(
-          mainContext,
-          event.flowType,
-        );
-      });
+
+      ///* Update UI
+      add(GetIncomeExpenseAmountTotalCurrMonth());
+      mainContext.read<StatisticsBloc>()
+        ..add(GetIncomeExpenseTotalCurrMonth())
+        ..add(GetIncomeExpenseTotalSixMonth());
+
+      dialogAddSuccess(mainContext, event.flowType);
     } on FormatException {
       errorToast(AppLocalizations.of(mainContext)!.invalidAmount);
     } on DatabaseException catch (e) {

@@ -57,7 +57,7 @@ userDisabledFailure,This user has been disabled. Please contact support for help
 userNotFoundFailure,"Email is not found, please create an account.","Email tidak ditemukan, silakan buat akun."
 wrongPasswordFailure,"Incorrect password, please try again.","Kata sandi yang salah, coba lagi."
 emailAlreadyFailure,An account already exists.,Akun sudah ada.
-operationNotAllowedFailure,Operation is not allowed. Please contact support.,Operasi tidak diperbolehkan. Silakan hubungi dukungan.
+operationNotAllowedFailure,Operation is not allowed. Please contact support.,Operasi tidak diperbolehkan. Silakan hubungi Dukungan.
 weakPasswordFailure,Please enter a stronger password.,Harap masukkan kata sandi yang lebih kuat.
 monthlyBudget,Monthly Budget,Anggaran bulanan
 spent,Spent,Dihabiskan
@@ -95,3 +95,29 @@ pleaseFillAmount,"Please fill amount, above 0","Mohon isi jumlah, diatas 0"
 pleaseFillName,Please fill name,Mohon isi nama
 pleaseSelectLogo,Please select Logo,Mohon pilih logo
 currency,Currency,Mata uang
+january,January,Januari
+february,February,Februari
+march,March,Maret
+april,April,April
+may,May,Mei
+june,June,Juni
+july,July,Juli
+august,August,Agustus
+september,September,September
+october,October,Oktober
+november,November,November
+december,December,Desember
+wantLogout,Are you sure want to logout? Make sure backup your data before logout.,Apakah anda ingin logout? Pastikan sudah mencadangkan data anda sebelum logout.
+save,Save,Simpan
+jan,Jan,Jan
+feb,Feb,Feb
+mar,Mar,Mar
+apr,Apr,Apr
+may,May,Mei
+jun,Jun,Jun
+jul,Jul,Jul
+aug,Aug,Aug
+sept,Sep,Sep
+oct,Oct,Okt
+nov,Nov,Nov
+dec,Dec,Des
