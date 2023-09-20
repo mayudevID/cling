@@ -27,6 +27,14 @@ class GoalModel extends Equatable {
         collected: json[GoalMeta.collected]?.toDouble(),
       );
 
+  factory GoalModel.empty() => GoalModel(
+        id: null,
+        name: "",
+        image: "",
+        target: 0,
+        collected: 0,
+      );
+
   Map<String, dynamic> toMap() => {
         GoalMeta.id: id,
         GoalMeta.name: name,

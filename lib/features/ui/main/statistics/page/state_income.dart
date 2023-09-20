@@ -5,7 +5,6 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../../../../../resources/gen/fonts.gen.dart';
 import '../../../language_currency/lang_export.dart';
-import '../../home_features/page/home_page.dart';
 import '../widgets/income_widget.dart';
 
 class StatsIncome extends StatelessWidget {
@@ -103,20 +102,20 @@ class StatsIncome extends StatelessWidget {
         SizedBox(
           height: 16.hmea,
         ),
-        MediaQuery.removePadding(
-          context: context,
-          removeTop: true,
-          child: ListView.builder(
-            itemCount: dataDummyExpenses.length,
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemBuilder: (context, index) {
-              return incomeWidget(
-                dataDummyExpenses[index],
-              );
-            },
-          ),
-        ),
+        // MediaQuery.removePadding(
+        //   context: context,
+        //   removeTop: true,
+        //   child: ListView.builder(
+        //     itemCount: dataDummyExpenses.length,
+        //     shrinkWrap: true,
+        //     physics: const NeverScrollableScrollPhysics(),
+        //     itemBuilder: (context, index) {
+        //       return incomeWidget(
+        //         dataDummyExpenses[index],
+        //       );
+        //     },
+        //   ),
+        // ),
         SizedBox(
           height: 90.hmea,
         ),

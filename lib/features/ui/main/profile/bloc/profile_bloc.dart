@@ -3,13 +3,13 @@ import 'package:cling/core/exception.dart';
 import 'package:cling/features/model/currency.dart';
 import 'package:cling/features/model/user_model.dart';
 import 'package:cling/features/repository/database_repository.dart';
-import 'package:cling/features/ui/auth/bloc/app_bloc.dart';
 import 'package:cling/features/ui/main/main_page.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../repository/auth_repository.dart';
+import '../../../app_bloc/app_bloc.dart';
 import '../../../language_currency/lang_currency_bloc.dart';
 
 part 'profile_event.dart';
@@ -24,6 +24,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
         super(ProfileState()) {
     on<SendLogout>(_sendLogout);
     on<GetProfile>(_getProfile);
+    on<GetVerifiedStatus>(_getVerifiedStatus);
   }
 
   final AuthRepository _authRepo;
@@ -60,5 +61,12 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     Emitter<ProfileState> emit,
   ) async {
     emit(state.copyWith(userModel: _authRepo.currentUserModel));
+  }
+
+  void _getVerifiedStatus(event, emit) {
+    final isVerified = (_authRepo.currentUserSupabase!.emailConfirmedAt == null)
+        ? false
+        : true;
+    emit(state.copyWith(isVerified: isVerified));
   }
 }

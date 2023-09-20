@@ -15,6 +15,7 @@ final exCategoriesData = [
   "💳 Subscription",
   "🚗 Transport",
 ];
+
 final inSourceData = [
   "🎑 Other",
   "🧑‍💼 Fulltime Job",
@@ -22,6 +23,16 @@ final inSourceData = [
   "😎 Business",
   "🎁 Gift",
   "🙂 Health, Beauty, & Wellbeing"
+];
+
+final emotLogo = [
+  "📱",
+  "⛩️",
+  "🎧",
+  "🖥️",
+  "💻",
+  "🎉",
+  "🌏",
 ];
 
 FutureOr<void> initDatabaseTable(Database db, int version) async {

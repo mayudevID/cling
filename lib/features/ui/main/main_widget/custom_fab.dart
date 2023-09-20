@@ -1,15 +1,13 @@
+import 'package:cling/core/route.dart';
 import 'package:cling/core/utils.dart';
+import 'package:cling/features/ui/main/add_in_ex/page/add_in_ex_page.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../resources/gen/assets.gen.dart';
 import '../../../../resources/gen/fonts.gen.dart';
 import '../../language_currency/lang_export.dart';
-import '../bloc/enum_home_page_state.dart';
-import '../bloc/main_bloc.dart';
-import '../home_features/bloc/home_bloc.dart';
 import 'dart:math' as math;
 
 Widget customFloatingActionButton(BuildContext context) {
@@ -37,19 +35,16 @@ Widget customFloatingActionButton(BuildContext context) {
         borderRadius: BorderRadius.circular(13),
       ),
       distance: 60,
-      overlayStyle: ExpandableFabOverlayStyle(
-        blur: 3,
-      ),
+      overlayStyle: ExpandableFabOverlayStyle(blur: 3),
       expandedFabSize: ExpandableFabSize.regular,
       children: [
         GestureDetector(
-          onTap: () {
-            context.read<HomeBloc>().add(GetIncomeSource());
-            context.read<MainBloc>().add(
-                  const HomePageStateChange(
-                    homePageState: HomePageState.income,
-                  ),
-                );
+          onTap: () async {
+            Navigator.pushNamed(
+              context,
+              RouteName.addInEx,
+              arguments: FlowType.income,
+            );
           },
           child: Container(
             padding: EdgeInsets.symmetric(
@@ -72,13 +67,12 @@ Widget customFloatingActionButton(BuildContext context) {
           ),
         ),
         GestureDetector(
-          onTap: () {
-            context.read<HomeBloc>().add(GetExpenseCategories());
-            context.read<MainBloc>().add(
-                  const HomePageStateChange(
-                    homePageState: HomePageState.expense,
-                  ),
-                );
+          onTap: () async {
+            Navigator.pushNamed(
+              context,
+              RouteName.addInEx,
+              arguments: FlowType.expense,
+            );
           },
           child: Container(
             padding: EdgeInsets.symmetric(
@@ -101,13 +95,8 @@ Widget customFloatingActionButton(BuildContext context) {
           ),
         ),
         GestureDetector(
-          onTap: () {
-            //context.read<HomeBloc>().add(GetExpenseCategories());
-            context.read<MainBloc>().add(
-                  const HomePageStateChange(
-                    homePageState: HomePageState.goal,
-                  ),
-                );
+          onTap: () async {
+            Navigator.pushNamed(context, RouteName.addGoal);
           },
           child: Container(
             padding: EdgeInsets.symmetric(

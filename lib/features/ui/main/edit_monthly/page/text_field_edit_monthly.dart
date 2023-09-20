@@ -19,9 +19,14 @@ class _TextFieldEditMonthlyState extends State<TextFieldEditMonthly> {
   @override
   void initState() {
     TextFieldEditMonthly.textEditingController = TextEditingController();
-
     context.read<EditMonthlyBloc>().add(InitialValue());
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    TextFieldEditMonthly.textEditingController.dispose();
+    super.dispose();
   }
 
   @override

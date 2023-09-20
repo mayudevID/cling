@@ -7,7 +7,7 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 import '../../../../../resources/gen/fonts.gen.dart';
 import 'dart:math' as math;
 import '../../../language_currency/lang_export.dart';
-import '../../home_features/page/home_page.dart';
+import '../../home/page/home_page.dart';
 import '../widgets/expense_widget.dart';
 
 class StatsExpense extends StatelessWidget {
@@ -120,20 +120,20 @@ class StatsExpense extends StatelessWidget {
           ],
         ),
         SizedBox(height: 16.hmea),
-        MediaQuery.removePadding(
-          context: context,
-          removeTop: true,
-          child: ListView.builder(
-            itemCount: dataDummyExpenses.length,
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemBuilder: (context, index) {
-              return expenseWidget(
-                dataDummyExpenses[index],
-              );
-            },
-          ),
-        ),
+        // MediaQuery.removePadding(
+        //   context: context,
+        //   removeTop: true,
+        //   child: ListView.builder(
+        //     itemCount: dataDummyExpenses.length,
+        //     shrinkWrap: true,
+        //     physics: const NeverScrollableScrollPhysics(),
+        //     itemBuilder: (context, index) {
+        //       return expenseWidget(
+        //         dataDummyExpenses[index],
+        //       );
+        //     },
+        //   ),
+        // ),
         SizedBox(
           height: 90.hmea,
         ),

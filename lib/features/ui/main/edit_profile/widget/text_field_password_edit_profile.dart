@@ -1,11 +1,14 @@
 import 'package:cling/core/utils.dart';
+import 'package:cling/features/ui/main/profile/bloc/profile_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
 import '../../../../../resources/gen/fonts.gen.dart';
 import '../../../language_currency/lang_export.dart';
 
 class TextFieldPasswordEditProfile extends StatefulWidget {
   const TextFieldPasswordEditProfile({super.key});
+  static late TextEditingController textEditingController;
 
   @override
   State<TextFieldPasswordEditProfile> createState() =>
@@ -17,6 +20,8 @@ class _TextFieldPasswordRegState extends State<TextFieldPasswordEditProfile> {
 
   @override
   void initState() {
+    TextFieldPasswordEditProfile.textEditingController =
+        TextEditingController();
     _focus.addListener(_onFocusChange);
     super.initState();
   }
@@ -25,6 +30,7 @@ class _TextFieldPasswordRegState extends State<TextFieldPasswordEditProfile> {
   void dispose() {
     _focus.removeListener(_onFocusChange);
     _focus.dispose();
+    TextFieldPasswordEditProfile.textEditingController.dispose();
     super.dispose();
   }
 
@@ -49,27 +55,43 @@ class _TextFieldPasswordRegState extends State<TextFieldPasswordEditProfile> {
         vertical: 16.hmea,
         horizontal: 16.wmea,
       ),
-      child: TextFormField(
-        focusNode: _focus,
-        onChanged: (value) {
-          //context.read<RegisterBloc>().add(ChangeName(value));
-        },
-        cursorColor: Colors.white,
-        style: TextStyle(
-          color: Colors.white,
-          fontSize: 12.5.sp,
-          fontFamily: FontFamily.cabinetGrotesk,
-          fontWeight: FontWeight.w500,
-        ),
-        decoration: InputDecoration.collapsed(
-          hintText: AppLocalizations.of(context)!.name,
-          hintStyle: TextStyle(
-            color: Colors.grey,
-            fontSize: 12.5.sp,
-            fontFamily: FontFamily.cabinetGrotesk,
-            fontWeight: FontWeight.w500,
+      child: Row(
+        children: [
+          Expanded(
+            child: BlocBuilder<ProfileBloc, ProfileState>(
+              buildWhen: (p, c) {
+                return p.isObscure != c.isObscure;
+              },
+              builder: (context, state) {
+                return TextFormField(
+                  focusNode: _focus,
+                  obscureText: state.isObscure,
+                  controller:
+                      TextFieldPasswordEditProfile.textEditingController,
+                  onChanged: (value) {
+                    //context.read<RegisterBloc>().add(ChangeName(value));
+                  },
+                  cursorColor: Colors.white,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 12.5.sp,
+                    fontFamily: FontFamily.cabinetGrotesk,
+                    fontWeight: FontWeight.w500,
+                  ),
+                  decoration: InputDecoration.collapsed(
+                    hintText: AppLocalizations.of(context)!.password,
+                    hintStyle: TextStyle(
+                      color: Colors.grey,
+                      fontSize: 12.5.sp,
+                      fontFamily: FontFamily.cabinetGrotesk,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                );
+              },
+            ),
           ),
-        ),
+        ],
       ),
     );
   }

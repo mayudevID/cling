@@ -1,18 +1,20 @@
+import 'package:cling/features/model/goal_model.dart';
+import 'package:cling/features/ui/main/add_in_ex/page/add_in_ex_page.dart';
 import 'package:cling/features/ui/main/edit_monthly/page/edit_budget_or_income.dart';
 import 'package:cling/features/ui/main/edit_profile/page/edit_profile.dart';
-import 'package:cling/features/ui/main/verification_success/page/verification_success_page.dart';
 import 'package:flutter/material.dart';
-
-import '../features/ui/auth/forgot_password/check_email_page.dart';
-import '../features/ui/auth/forgot_password/forgot_password_page.dart';
-import '../features/ui/auth/login/page/login_page.dart';
-import '../features/ui/auth/register/page/register_page.dart';
-import '../features/ui/auth/register/page/register_success_page.dart';
+import '../features/ui/forgot_password/check_email_page.dart';
+import '../features/ui/forgot_password/forgot_password_page.dart';
+import '../features/ui/login/page/login_page.dart';
+import '../features/ui/main/add_goal/page/add_goal_page.dart';
+import '../features/ui/main/goal_detail/pages/goal_detail_page.dart';
 import '../features/ui/main/main_page.dart';
-import '../features/ui/main/verification_success/page/monthly_data_page.dart';
-
 import '../features/ui/onboard/onboard_page.dart';
+import '../features/ui/register/page/register_page.dart';
+import '../features/ui/register/page/register_success_page.dart';
 import '../features/ui/splash/splash_page.dart';
+import '../features/ui/verification_success/page/monthly_data_page.dart';
+import '../features/ui/verification_success/page/verification_success_page.dart';
 
 class RouteGen {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -68,6 +70,22 @@ class RouteGen {
             monthlyMode: data as EditMonthlyMode,
           ),
         );
+      case RouteName.goalsDetail:
+        return MaterialPageRoute(
+          builder: (_) => GoalDetailPage(
+            goalModel: data as GoalModel,
+          ),
+        );
+      case RouteName.addInEx:
+        return MaterialPageRoute(
+          builder: (_) => AddIncomeExpensePage(
+            flowType: data as FlowType,
+          ),
+        );
+      case RouteName.addGoal:
+        return MaterialPageRoute(
+          builder: (_) => const AddGoalPage(),
+        );
 
       default:
         return _errorRoute();
@@ -99,4 +117,7 @@ class RouteName {
   static const String monthlyData = "/monthlyData";
   static const String editProfile = "/editProfile";
   static const String editMonBudgetOrIncome = "/editMonBudgetOrIncome";
+  static const String goalsDetail = "/goalsDetail";
+  static const String addGoal = "/addGoal";
+  static const String addInEx = "/addInEx";
 }

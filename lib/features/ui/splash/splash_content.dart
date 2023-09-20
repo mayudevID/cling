@@ -11,7 +11,7 @@ import '../../../injection.dart';
 import '../../../main.dart';
 import '../../../resources/gen/assets.gen.dart';
 import '../../../resources/gen/fonts.gen.dart';
-import '../auth/bloc/app_bloc.dart';
+import '../app_bloc/app_bloc.dart';
 
 class SplashContent extends StatefulWidget {
   const SplashContent({super.key});

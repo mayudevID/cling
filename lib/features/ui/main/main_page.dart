@@ -1,6 +1,4 @@
 import 'package:cling/features/repository/auth_repository.dart';
-import 'package:cling/features/ui/main/home_features/page/add_goal_page.dart';
-import 'package:cling/features/ui/main/home_features/page/add_in_ex_page.dart';
 import 'package:cling/features/ui/main/profile/bloc/profile_bloc.dart';
 import 'package:cling/features/ui/main/profile/page/profile_page.dart';
 
@@ -13,10 +11,9 @@ import 'package:transitioned_indexed_stack/transitioned_indexed_stack.dart';
 
 import '../../../injection.dart';
 import '../../repository/database_repository.dart';
-import 'bloc/enum_home_page_state.dart';
-import 'bloc/main_bloc.dart';
-import 'home_features/bloc/home_bloc.dart';
-import 'home_features/page/home_page.dart';
+import 'home/bloc/home_bloc.dart';
+import 'home/page/home_page.dart';
+import 'main_bloc/main_bloc.dart';
 import 'main_widget/custom_fab.dart';
 import 'main_widget/custom_nav_bar.dart';
 import 'statistics/bloc/statistics_bloc.dart';
@@ -54,7 +51,9 @@ class MainPage extends StatelessWidget {
           create: (_) => ProfileBloc(
             authRepo: getIt<AuthRepository>(),
             dbRepo: getIt<DatabaseRepository>(),
-          )..add(GetProfile()),
+          )
+            ..add(GetProfile())
+            ..add(GetVerifiedStatus()),
         ),
       ],
       child: const MainPageContent(),
@@ -64,19 +63,6 @@ class MainPage extends StatelessWidget {
 
 class MainPageContent extends StatelessWidget {
   const MainPageContent({super.key});
-
-  Widget homePageStatus(MainState state) {
-    switch (state.homePageState) {
-      case HomePageState.home:
-        return const HomePage();
-      case HomePageState.goal:
-        return const AddGoalPage();
-      case HomePageState.income:
-        return const AddIncomeExpensePage(flowType: FlowType.income);
-      case HomePageState.expense:
-        return const AddIncomeExpensePage(flowType: FlowType.expense);
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -92,32 +78,33 @@ class MainPageContent extends StatelessWidget {
             children: [
               BlocBuilder<MainBloc, MainState>(
                 buildWhen: (previous, current) {
-                  return (previous.tabIndex != current.tabIndex) ||
-                      (previous.homePageState != current.homePageState);
+                  return previous.tabIndex != current.tabIndex;
                 },
                 builder: (context, state) {
                   return FadeIndexedStack(
                     index: state.tabIndex,
-                    duration: const Duration(milliseconds: 50),
+                    duration: const Duration(milliseconds: 60),
                     beginOpacity: 0.75,
                     endOpacity: 1,
-                    children: [
-                      homePageStatus(state),
-                      const StatisticsPage(),
-                      const ProfilePage(),
+                    children: const [
+                      HomePage(),
+                      StatisticsPage(),
+                      ProfilePage(),
                     ],
                   );
                 },
               ),
-              const CustomNavBar(),
+              const Positioned(
+                bottom: 0,
+                child: CustomNavBar(),
+              ),
             ],
           ),
         ),
         floatingActionButtonLocation: ExpandableFab.location,
         floatingActionButton: BlocBuilder<MainBloc, MainState>(
           builder: (context, state) {
-            if (state.tabIndex == 0 &&
-                state.homePageState == HomePageState.home) {
+            if (state.tabIndex == 0) {
               return customFloatingActionButton(context);
             }
 

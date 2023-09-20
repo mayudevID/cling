@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 import '../../../../../resources/gen/fonts.gen.dart';
 import '../../../language_currency/lang_export.dart';
-import '../../home_features/page/home_page.dart';
+import '../../home/page/home_page.dart';
 import '../widgets/most_expense.dart';
 import '../widgets/tag_info.dart';
 
@@ -67,20 +67,20 @@ class StatsAll extends StatelessWidget {
         SizedBox(
           height: 16.hmea,
         ),
-        MediaQuery.removePadding(
-          context: context,
-          removeTop: true,
-          child: ListView.builder(
-            itemCount: dataDummyExpenses.length,
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemBuilder: (context, index) {
-              return mostExpense(
-                dataDummyExpenses[index],
-              );
-            },
-          ),
-        ),
+        // MediaQuery.removePadding(
+        //   context: context,
+        //   removeTop: true,
+        //   child: ListView.builder(
+        //     itemCount: dataDummyExpenses.length,
+        //     shrinkWrap: true,
+        //     physics: const NeverScrollableScrollPhysics(),
+        //     itemBuilder: (context, index) {
+        //       return mostExpense(
+        //         dataDummyExpenses[index],
+        //       );
+        //     },
+        //   ),
+        // ),
         SizedBox(
           height: 90.hmea,
         ),

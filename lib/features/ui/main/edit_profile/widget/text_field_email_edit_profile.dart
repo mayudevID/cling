@@ -6,6 +6,7 @@ import '../../../language_currency/lang_export.dart';
 
 class TextFieldEmailEditProfile extends StatefulWidget {
   const TextFieldEmailEditProfile({super.key});
+  static late TextEditingController textEditingController;
 
   @override
   State<TextFieldEmailEditProfile> createState() => _TextFieldEmailRegState();
@@ -16,6 +17,7 @@ class _TextFieldEmailRegState extends State<TextFieldEmailEditProfile> {
 
   @override
   void initState() {
+    TextFieldEmailEditProfile.textEditingController = TextEditingController();
     _focus.addListener(_onFocusChange);
     super.initState();
   }
@@ -24,6 +26,7 @@ class _TextFieldEmailRegState extends State<TextFieldEmailEditProfile> {
   void dispose() {
     _focus.removeListener(_onFocusChange);
     _focus.dispose();
+    TextFieldEmailEditProfile.textEditingController.dispose();
     super.dispose();
   }
 
@@ -50,6 +53,7 @@ class _TextFieldEmailRegState extends State<TextFieldEmailEditProfile> {
       ),
       child: TextFormField(
         focusNode: _focus,
+        controller: TextFieldEmailEditProfile.textEditingController,
         onChanged: (value) {
           //context.read<RegisterBloc>().add(ChangeName(value));
         },
@@ -61,7 +65,7 @@ class _TextFieldEmailRegState extends State<TextFieldEmailEditProfile> {
           fontWeight: FontWeight.w500,
         ),
         decoration: InputDecoration.collapsed(
-          hintText: AppLocalizations.of(context)!.name,
+          hintText: AppLocalizations.of(context)!.email,
           hintStyle: TextStyle(
             color: Colors.grey,
             fontSize: 12.5.sp,

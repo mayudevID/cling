@@ -10,3 +10,5 @@ sealed class ProfileEvent extends Equatable {
 class SendLogout extends ProfileEvent {}
 
 class GetProfile extends ProfileEvent {}
+
+class GetVerifiedStatus extends ProfileEvent {}

@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:cling/core/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
@@ -6,6 +8,7 @@ import '../../../language_currency/lang_export.dart';
 
 class TextFieldNameEditProfile extends StatefulWidget {
   const TextFieldNameEditProfile({super.key});
+  static late TextEditingController textEditingController;
 
   @override
   State<TextFieldNameEditProfile> createState() => _TextFieldNameRegState();
@@ -16,6 +19,7 @@ class _TextFieldNameRegState extends State<TextFieldNameEditProfile> {
 
   @override
   void initState() {
+    TextFieldNameEditProfile.textEditingController = TextEditingController();
     _focus.addListener(_onFocusChange);
     super.initState();
   }
@@ -24,6 +28,7 @@ class _TextFieldNameRegState extends State<TextFieldNameEditProfile> {
   void dispose() {
     _focus.removeListener(_onFocusChange);
     _focus.dispose();
+    TextFieldNameEditProfile.textEditingController.dispose();
     super.dispose();
   }
 
@@ -50,6 +55,7 @@ class _TextFieldNameRegState extends State<TextFieldNameEditProfile> {
       ),
       child: TextFormField(
         focusNode: _focus,
+        controller: TextFieldNameEditProfile.textEditingController,
         onChanged: (value) {
           //context.read<RegisterBloc>().add(ChangeName(value));
         },

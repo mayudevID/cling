@@ -1,7 +1,7 @@
-import 'package:cling/core/route.dart';
 import 'package:cling/core/utils.dart';
 import 'package:cling/features/ui/language_currency/lang_export.dart';
 import 'package:cling/features/ui/main/profile/widgets/dialog_logout.dart';
+import 'package:cling/features/ui/main/profile/widgets/name_and_email.dart';
 import 'package:cling/resources/gen/assets.gen.dart';
 import 'package:cling/resources/gen/fonts.gen.dart';
 import 'package:flutter/material.dart';
@@ -23,67 +23,7 @@ class ProfilePage extends StatelessWidget {
           SizedBox(
             height: 31.hmea,
           ),
-          Container(
-            padding: EdgeInsets.all(16.wmea),
-            decoration: ShapeDecoration(
-              color: const Color(0x3D787880),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-            ),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      BlocBuilder<ProfileBloc, ProfileState>(
-                        buildWhen: (p, c) {
-                          return p.userModel.name != c.userModel.name;
-                        },
-                        builder: (context, state) {
-                          return Text(
-                            state.userModel.name,
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 14.sp,
-                              fontFamily: FontFamily.cabinetGrotesk,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          );
-                        },
-                      ),
-                      SizedBox(
-                        height: 8.hmea,
-                      ),
-                      BlocBuilder<ProfileBloc, ProfileState>(
-                        buildWhen: (p, c) {
-                          return p.userModel.email != c.userModel.email;
-                        },
-                        builder: (context, state) {
-                          return Text(
-                            state.userModel.email,
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 10.5.sp,
-                              fontFamily: FontFamily.cabinetGrotesk,
-                              fontWeight: FontWeight.w400,
-                            ),
-                          );
-                        },
-                      )
-                    ],
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.pushNamed(context, RouteName.editProfile);
-                  },
-                  child: Assets.lib.resources.images.editBig.svg(),
-                ),
-              ],
-            ),
-          ),
+          nameAndEmail(context),
           SizedBox(
             height: 31.hmea,
           ),
