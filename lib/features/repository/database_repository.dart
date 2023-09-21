@@ -262,11 +262,42 @@ class DatabaseRepository {
     return (combinedData.isEmpty) ? null : combinedData;
   }
 
-  Future<void> getMostExpense() async {
+  Future<List<ExpenseModel>> getMostExpense() async {
+    List<ExpenseModel> dataList = [];
     final result = await db.rawQuery(
-      "SELECT * FROM expense_table ORDER BY amount DESC LIMIT 7",
+      "SELECT * FROM ${ExpenseMeta.nameTable} ORDER BY ${ExpenseMeta.amount} DESC LIMIT 7",
     );
-    print(result);
+
+    for (var element in result) {
+      dataList.add(ExpenseModel.fromDatabase(element));
+    }
+    return dataList;
+  }
+
+  Future<List<Map<dynamic, dynamic>>> getYearlyIncome() async {
+    List<Map> dataList = [];
+
+    final now = DateTime.now();
+    final firstDate = DateTime(now.year, 1, 1).toIso8601String();
+    final lastDate = DateTime(now.year, 12, 31).toIso8601String();
+
+    final result = await db.rawQuery(
+      '''
+        SELECT strftime('%Y-%m', ${IncomeMeta.date}) AS Month, 
+        SUM(${IncomeMeta.amount}) AS TotalIncome 
+        FROM ${IncomeMeta.nameTable}
+        WHERE date(${IncomeMeta.date}) >= date(?)
+        AND date(${IncomeMeta.date}) <= date(?)
+        GROUP BY Month
+      ''',
+      [firstDate, lastDate],
+    );
+
+    for (var element in result) {
+      dataList.add(element);
+    }
+
+    return dataList;
   }
 
   //! ================ DELETE ALL ================

@@ -1,4 +1,5 @@
 import 'package:cling/core/utils.dart';
+import 'package:cling/features/model/chart_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -6,33 +7,52 @@ import 'package:sizer/sizer.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../../../../../resources/gen/fonts.gen.dart';
-import '../../../../model/chart_data.dart';
 import '../../../language_currency/lang_currency_bloc.dart';
 import '../bloc/statistics_bloc.dart';
 
-Widget lineColumnWidget(BuildContext mainContext) {
+Widget lineColumnStatsIncomeWidget(BuildContext mainContext) {
   return BlocBuilder<StatisticsBloc, StatisticsState>(
     buildWhen: (p, c) {
-      return (p.chartDataExpenseList != c.chartDataExpenseList) ||
-          (p.chartDataIncomeList != c.chartDataIncomeList) ||
-          (p.chartDataSavingsList != c.chartDataSavingsList);
+      return p.yearlyIncomeList != c.yearlyIncomeList;
     },
     builder: (context, state) {
+      if (state.yearlyIncomeList.isEmpty) {
+        return const Center(
+          child: Text(
+            "No data :(",
+            style: TextStyle(
+              fontFamily: FontFamily.cabinetGrotesk,
+              color: Colors.white,
+            ),
+          ),
+        );
+      }
+
       return SizedBox(
         width: double.infinity,
         height: 193.hmea,
         child: SfCartesianChart(
+          tooltipBehavior: TooltipBehavior(
+            enable: true,
+            decimalPlaces: 2,
+            textStyle: const TextStyle(
+              fontFamily: FontFamily.cabinetGrotesk,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
           plotAreaBorderWidth: 0,
           plotAreaBorderColor: Colors.transparent,
           primaryXAxis: CategoryAxis(
+            interval: 1,
             labelStyle: TextStyle(
               color: Colors.white,
-              fontSize: 10.5.sp,
+              fontSize: 9.sp,
               fontFamily: FontFamily.cabinetGrotesk,
               fontWeight: FontWeight.w700,
             ),
           ),
           primaryYAxis: NumericAxis(
+            interval: setInterval(state.maxValIncome),
             labelStyle: TextStyle(
               color: Colors.white,
               fontSize: 10.5.sp,
@@ -50,7 +70,7 @@ Widget lineColumnWidget(BuildContext mainContext) {
               name: "",
             ),
             labelFormat:
-                "${mainContext.watch<LangCurrencyBloc>().state.selectedCurrency.name} {value}",
+                "${context.watch<LangCurrencyBloc>().state.selectedCurrency.name} {value}",
             //maximumLabels: 2,
             majorGridLines: const MajorGridLines(
               color: Color(0xFF343437),
@@ -59,40 +79,18 @@ Widget lineColumnWidget(BuildContext mainContext) {
           ),
           series: [
             ColumnSeries<ChartData, String>(
-              color: const Color(0xFFE54C19),
-              dataSource: state.chartDataExpenseList,
-              xValueMapper: (ChartData data, _) => data.x,
-              yValueMapper: (ChartData data, _) => data.y,
-              // Sets the corner radius
-              borderRadius: const BorderRadius.all(
-                Radius.circular(8),
-              ),
-              width: 1,
-              spacing: 0.4,
-            ),
-            ColumnSeries<ChartData, String>(
+              name: "",
               color: const Color(0xFF07AC65),
-              dataSource: state.chartDataIncomeList,
+              dataSource: state.yearlyIncomeList,
               xValueMapper: (ChartData data, _) => data.x,
               yValueMapper: (ChartData data, _) => data.y,
               // Sets the corner radius
               borderRadius: const BorderRadius.all(
                 Radius.circular(8),
               ),
-              width: 1,
-              spacing: 0.4,
+              width: 0.6,
+              spacing: 0.2,
             ),
-            ColumnSeries<ChartData, String>(
-              color: const Color(0xFF006DE9),
-              dataSource: state.chartDataSavingsList,
-              xValueMapper: (ChartData data, _) => data.x,
-              yValueMapper: (ChartData data, _) => data.y,
-              borderRadius: const BorderRadius.all(
-                Radius.circular(8),
-              ),
-              width: 1,
-              spacing: 0.4,
-            )
           ],
         ),
       );

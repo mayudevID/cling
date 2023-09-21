@@ -110,6 +110,9 @@ class AddIncomeExpenseBloc
           );
           await _dbRepo.insertIncome(data);
 
+          ///* Update UI
+          mainContext.read<StatisticsBloc>().add(GetYearlyIncome());
+
           break;
         case FlowType.expense:
           final data = ExpenseModel(

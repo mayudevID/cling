@@ -7,6 +7,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../model/chart_data.dart';
+import '../../../../model/expense_model.dart';
 import '../../../language_currency/lang_export.dart';
 
 part 'statistics_event.dart';
@@ -20,6 +21,7 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
     on<GetMostExpense>(_getMostExpense);
     on<GetIncomeExpenseTotalCurrMonth>(_getIncomeExpenseTotalCurrMonth);
     on<GetIncomeExpenseTotalSixMonth>(_getIncomeExpenseTotalSixMonth);
+    on<GetYearlyIncome>(_getYearlyIncome);
   }
 
   final DatabaseRepository _dbRepo;
@@ -61,6 +63,7 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
     GetIncomeExpenseTotalSixMonth event,
     Emitter<StatisticsState> emit,
   ) async {
+    double max = 0;
     List<ChartData> incomeData = List.empty(growable: true);
     List<ChartData> expenseData = List.empty(growable: true);
     List<ChartData> savingsData = List.empty(growable: true);
@@ -79,9 +82,12 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
         Logger.White.log("Income ${value['TotalIncome']}");
         Logger.White.log("Expense ${value['TotalExpense']}");
 
-        final income = double.parse(value['TotalIncome'].toString()) / 100.0;
-        final expense = double.parse(value['TotalExpense'].toString()) / 100.0;
+        final income = value['TotalIncome'] / 100.0;
+        final expense = value['TotalExpense'] / 100.0;
         final savings = income - expense;
+
+        final maxLocal = (income > expense) ? income : expense;
+        max = (max > maxLocal) ? max : maxLocal;
 
         incomeData.add(ChartData(x: key, y: income));
         expenseData.add(ChartData(x: key, y: expense));
@@ -92,12 +98,35 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
         chartDataIncomeList: incomeData,
         chartDataExpenseList: expenseData,
         chartDataSavingsList: savingsData,
+        maxValAll: max,
       ));
     }
   }
 
   void _getMostExpense(event, emit) async {
-    await _dbRepo.getMostExpense();
+    final result = await _dbRepo.getMostExpense();
+
+    emit(state.copyWith(mostExpenseList: result));
+  }
+
+  void _getYearlyIncome(event, emit) async {
+    List<ChartData> yearlyIncomeList = List.empty(growable: true);
+    int max = 0;
+    final result = await _dbRepo.getYearlyIncome();
+
+    if (result.isNotEmpty) {
+      for (var element in result) {
+        yearlyIncomeList.add(
+          ChartData(x: element["Month"], y: element["TotalIncome"] / 100.0),
+        );
+        max = (element["TotalIncome"] > max) ? element["TotalIncome"] : max;
+      }
+
+      emit(state.copyWith(
+        yearlyIncomeList: yearlyIncomeList,
+        maxValIncome: max.toDouble(),
+      ));
+    }
   }
 
   String monthDataInExToString({

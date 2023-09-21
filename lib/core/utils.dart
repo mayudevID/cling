@@ -46,3 +46,21 @@ String monthIntToString({
       return "-";
   }
 }
+
+double setInterval(double maxVal) {
+  if (maxVal < 50000) {
+    return 10000;
+  } else if (maxVal < 100000) {
+    return 20000;
+  } else if (maxVal < 500000) {
+    return 100000;
+  } else if (maxVal < 1000000) {
+    return 200000;
+  } else if (maxVal < 10000000) {
+    return 500000;
+  } else if (maxVal < 100000000) {
+    return 1000000;
+  } else {
+    return 10000000;
+  }
+}

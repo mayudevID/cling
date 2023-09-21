@@ -1,11 +1,12 @@
 import 'package:cling/core/utils.dart';
-import 'package:cling/features/ui/main/statistics/widgets/line_column_widget.dart';
-import 'package:cling/features/ui/main/statistics/widgets/pie_chat_widget.dart';
+import 'package:cling/features/ui/main/statistics/widgets/line_column_stats_all_widget.dart';
+import 'package:cling/features/ui/main/statistics/widgets/pie_chart_stats_all_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
 import '../../../../../resources/gen/fonts.gen.dart';
 import '../../../language_currency/lang_export.dart';
-import '../../home/page/home_page.dart';
+import '../bloc/statistics_bloc.dart';
 import '../widgets/most_expense.dart';
 import '../widgets/tag_info.dart';
 
@@ -34,7 +35,7 @@ class StatsAll extends StatelessWidget {
           height: 8.hmea,
         ),
         const TagInfo(),
-        pieChartWidget(),
+        pieChartStatsAllWidget(),
         SizedBox(
           height: 24.hmea,
         ),
@@ -51,7 +52,7 @@ class StatsAll extends StatelessWidget {
         SizedBox(
           height: 24.hmea,
         ),
-        lineColumnWidget(context),
+        lineColumnStatsAllWidget(context),
         SizedBox(
           height: 24.hmea,
         ),
@@ -67,22 +68,41 @@ class StatsAll extends StatelessWidget {
         SizedBox(
           height: 16.hmea,
         ),
-        // MediaQuery.removePadding(
-        //   context: context,
-        //   removeTop: true,
-        //   child: ListView.builder(
-        //     itemCount: dataDummyExpenses.length,
-        //     shrinkWrap: true,
-        //     physics: const NeverScrollableScrollPhysics(),
-        //     itemBuilder: (context, index) {
-        //       return mostExpense(
-        //         dataDummyExpenses[index],
-        //       );
-        //     },
-        //   ),
-        // ),
+        BlocBuilder<StatisticsBloc, StatisticsState>(
+          buildWhen: (p, c) {
+            return p.mostExpenseList != c.mostExpenseList;
+          },
+          builder: (context, state) {
+            if (state.mostExpenseList.isEmpty) {
+              return const Center(
+                child: Text(
+                  "No data :(",
+                  style: TextStyle(
+                    fontFamily: FontFamily.cabinetGrotesk,
+                    color: Colors.white,
+                  ),
+                ),
+              );
+            }
+
+            return MediaQuery.removePadding(
+              context: context,
+              removeTop: true,
+              child: ListView.builder(
+                itemCount: state.mostExpenseList.length,
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemBuilder: (context, index) {
+                  return mostExpense(
+                    state.mostExpenseList[index],
+                  );
+                },
+              ),
+            );
+          },
+        ),
         SizedBox(
-          height: 90.hmea,
+          height: 128.hmea,
         ),
       ],
     );

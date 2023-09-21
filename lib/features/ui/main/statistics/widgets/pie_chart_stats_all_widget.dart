@@ -8,7 +8,7 @@ import '../../../../../resources/gen/fonts.gen.dart';
 import '../../../../model/pie_data_expense_savings.dart';
 import '../bloc/statistics_bloc.dart';
 
-Widget pieChartWidget() {
+Widget pieChartStatsAllWidget() {
   return BlocBuilder<StatisticsBloc, StatisticsState>(
     buildWhen: (previous, current) {
       return previous.pieDataExSavList != current.pieDataExSavList;
@@ -48,14 +48,20 @@ Widget pieChartWidget() {
       return SizedBox(
         height: 248.5.hmea,
         child: SfCircularChart(
+          tooltipBehavior: TooltipBehavior(
+            enable: true,
+            decimalPlaces: 2,
+            textStyle: const TextStyle(
+              fontFamily: FontFamily.cabinetGrotesk,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
           series: <DoughnutSeries<PieDataExSav, String>>[
             DoughnutSeries<PieDataExSav, String>(
               pointColorMapper: (datum, index) {
                 switch (index) {
                   case 0:
                     return const Color(0xFFE54C19);
-                  // case 1:
-                  //   return const Color(0xFF07AC65);
                   case 1:
                     return const Color(0xFF006DE9);
                 }
