@@ -2,6 +2,7 @@
 
 import 'dart:io';
 import 'package:cling/core/utils.dart';
+import 'package:cling/features/repository/auth_repository.dart';
 import 'package:cling/features/repository/settings_repository.dart';
 import 'package:cling/features/ui/main/edit_monthly/page/edit_budget_or_income.dart';
 import 'package:cling/features/ui/main/edit_monthly/page/text_field_edit_monthly.dart';
@@ -27,9 +28,11 @@ class EditMonthlyBloc extends Bloc<EditMonthlyEvent, EditMonthlyState> {
     required BuildContext context,
     required EditMonthlyMode monthlyMode,
     required SettingsRepository settingsRepo,
+    required AuthRepository authRepo,
   })  : _monthlyMode = monthlyMode,
         _context = context,
         _settingsRepo = settingsRepo,
+        _authRepo = authRepo,
         super(EditMonthlyState()) {
     on<SetAmountInput>(_setAmountInput);
     on<SaveNewMonthly>(_saveNewMonthly);
@@ -38,6 +41,7 @@ class EditMonthlyBloc extends Bloc<EditMonthlyEvent, EditMonthlyState> {
 
   final EditMonthlyMode _monthlyMode;
   final SettingsRepository _settingsRepo;
+  final AuthRepository _authRepo;
   final BuildContext _context;
   var mainContext = MainPage.navKeyMain.currentContext!;
   late String initMonthly;
@@ -58,8 +62,8 @@ class EditMonthlyBloc extends Bloc<EditMonthlyEvent, EditMonthlyState> {
     );
 
     initMonthly = numFormat.format((_monthlyMode == EditMonthlyMode.income)
-        ? _settingsRepo.currentUserModel!.monthlyIncome / 100.0
-        : _settingsRepo.currentUserModel!.monthlyBudget / 100.0);
+        ? _authRepo.currentUserModel!.monthlyIncome / 100.0
+        : _authRepo.currentUserModel!.monthlyBudget / 100.0);
 
     TextFieldEditMonthly.textEditingController.text = initMonthly;
   }
@@ -84,6 +88,7 @@ class EditMonthlyBloc extends Bloc<EditMonthlyEvent, EditMonthlyState> {
           int.parse(TextFieldEditMonthly.textEditingController.text.removeDot);
 
       await _settingsRepo.saveMonthlyBudgetAndIncome(
+        userModel: _authRepo.currentUserModel!,
         monthlyIncome:
             (_monthlyMode == EditMonthlyMode.income) ? monValue : null,
         monthlyBudget:

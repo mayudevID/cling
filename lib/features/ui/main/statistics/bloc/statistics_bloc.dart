@@ -19,8 +19,8 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
         super(StatisticsState()) {
     on<TypeCategoriesEvent>(_typeCategories);
     on<GetMostExpense>(_getMostExpense);
-    on<GetIncomeExpenseTotalCurrMonth>(_getIncomeExpenseTotalCurrMonth);
-    on<GetIncomeExpenseTotalSixMonth>(_getIncomeExpenseTotalSixMonth);
+    on<GetIncomeBreakdown>(_getIncomeBreakdown);
+    on<GetIncomeExpenseTotalAllMonth>(_getIncomeExpenseTotalAllMonth);
     on<GetYearlyIncome>(_getYearlyIncome);
   }
 
@@ -35,40 +35,19 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
     ));
   }
 
-  void _getIncomeExpenseTotalCurrMonth(
-    GetIncomeExpenseTotalCurrMonth event,
-    Emitter<StatisticsState> emit,
-  ) async {
-    final data = await _dbRepo.getTotalIncomeExpenseCurrMonth();
-    final expense = data['expense'] ?? 0;
-    final income = data['income'] ?? 0;
-    final saving = income - expense;
-    emit(state.copyWith(
-      pieDataExSavList: [
-        PieDataExSav(
-          nameData: "Expense",
-          amount: expense,
-          text: "Ex",
-        ),
-        PieDataExSav(
-          nameData: "Savings",
-          amount: (saving < 0) ? 0 : saving,
-          text: "Save",
-        ),
-      ],
-    ));
-  }
-
-  void _getIncomeExpenseTotalSixMonth(
-    GetIncomeExpenseTotalSixMonth event,
+  void _getIncomeExpenseTotalAllMonth(
+    GetIncomeExpenseTotalAllMonth event,
     Emitter<StatisticsState> emit,
   ) async {
     double max = 0;
+    double totalExpense = 0;
+    double totalSavings = 0;
+
     List<ChartData> incomeData = List.empty(growable: true);
     List<ChartData> expenseData = List.empty(growable: true);
     List<ChartData> savingsData = List.empty(growable: true);
 
-    final result = await _dbRepo.getTotalIncomeExpenseSixMonth();
+    final result = await _dbRepo.getTotalIncomeExpenseAllMonth();
 
     if (result != null) {
       result.forEach((key, value) {
@@ -86,6 +65,9 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
         final expense = value['TotalExpense'] / 100.0;
         final savings = income - expense;
 
+        totalExpense += expense;
+        totalSavings += savings;
+
         final maxLocal = (income > expense) ? income : expense;
         max = (max > maxLocal) ? max : maxLocal;
 
@@ -94,13 +76,37 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
         savingsData.add(ChartData(x: key, y: (savings < 0) ? 0 : savings));
       });
 
-      emit(state.copyWith(
-        chartDataIncomeList: incomeData,
-        chartDataExpenseList: expenseData,
-        chartDataSavingsList: savingsData,
-        maxValAll: max,
-      ));
+      Logger.White.log("MaxAll: $max");
+
+      final pieData = [
+        PieDataExSav(
+          nameData: "Expense",
+          amount: totalExpense,
+          text: "Ex",
+        ),
+        PieDataExSav(
+          nameData: "Savings",
+          amount: (totalSavings < 0) ? 0 : totalSavings,
+          text: "Save",
+        ),
+      ];
+
+      emit(
+        state.copyWith(
+          chartDataIncomeList: incomeData,
+          chartDataExpenseList: expenseData,
+          chartDataSavingsList: savingsData,
+          maxValAll: max,
+          pieDataExSavList: pieData,
+        ),
+      );
     }
+  }
+
+  void _getIncomeBreakdown(event, emit) async {
+    final result = await _dbRepo.getIncomeBreakdown();
+
+    emit(state.copyWith(incomeBreakdownList: result));
   }
 
   void _getMostExpense(event, emit) async {
@@ -111,16 +117,23 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
 
   void _getYearlyIncome(event, emit) async {
     List<ChartData> yearlyIncomeList = List.empty(growable: true);
-    int max = 0;
+    double max = 0;
     final result = await _dbRepo.getYearlyIncome();
 
-    if (result.isNotEmpty) {
-      for (var element in result) {
-        yearlyIncomeList.add(
-          ChartData(x: element["Month"], y: element["TotalIncome"] / 100.0),
+    if (!result.values.every((value) => value == 0)) {
+      result.forEach((key, value) {
+        final splitKey = key.split("-");
+        key = monthDataInExToString(
+          context: MainPage.navKeyMain.currentContext!,
+          time: splitKey[1],
         );
-        max = (element["TotalIncome"] > max) ? element["TotalIncome"] : max;
-      }
+
+        value = value / 100.0;
+
+        yearlyIncomeList.add(ChartData(x: key, y: value));
+
+        max = (value > max) ? value : max;
+      });
 
       emit(state.copyWith(
         yearlyIncomeList: yearlyIncomeList,

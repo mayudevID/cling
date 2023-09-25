@@ -10,6 +10,7 @@ class StatisticsState extends Equatable {
   List<ChartData> chartDataIncomeList;
   List<ChartData> chartDataExpenseList;
   List<ChartData> chartDataSavingsList;
+  List<Map<String, Object?>> incomeBreakdownList;
   double maxValAll;
   double maxValIncome;
 
@@ -23,9 +24,11 @@ class StatisticsState extends Equatable {
     List<ChartData>? chartDataIncomeList,
     List<ChartData>? chartDataExpenseList,
     List<ChartData>? chartDataSavingsList,
+    List<Map<String, Object?>>? incomeBreakdownList,
   })  : pieDataExSavList = pieDataExSavList ?? List.empty(),
         yearlyIncomeList = yearlyIncomeList ?? List.empty(),
         mostExpenseList = mostExpenseList ?? List.empty(),
+        incomeBreakdownList = incomeBreakdownList ?? List.empty(),
         chartDataIncomeList = chartDataIncomeList ?? List.empty(),
         chartDataExpenseList = chartDataExpenseList ?? List.empty(),
         chartDataSavingsList = chartDataSavingsList ?? List.empty();
@@ -37,23 +40,25 @@ class StatisticsState extends Equatable {
         maxValIncome,
         pieDataExSavList,
         yearlyIncomeList,
+        incomeBreakdownList,
         mostExpenseList,
         chartDataIncomeList,
         chartDataExpenseList,
         chartDataSavingsList,
+        incomeBreakdownList,
       ];
 
-  StatisticsState copyWith({
-    int? typeCategories,
-    double? maxValAll,
-    double? maxValIncome,
-    List<PieDataExSav>? pieDataExSavList,
-    List<ExpenseModel>? mostExpenseList,
-    List<ChartData>? yearlyIncomeList,
-    List<ChartData>? chartDataIncomeList,
-    List<ChartData>? chartDataExpenseList,
-    List<ChartData>? chartDataSavingsList,
-  }) {
+  StatisticsState copyWith(
+      {int? typeCategories,
+      double? maxValAll,
+      double? maxValIncome,
+      List<PieDataExSav>? pieDataExSavList,
+      List<ExpenseModel>? mostExpenseList,
+      List<ChartData>? yearlyIncomeList,
+      List<ChartData>? chartDataIncomeList,
+      List<ChartData>? chartDataExpenseList,
+      List<ChartData>? chartDataSavingsList,
+      List<Map<String, Object?>>? incomeBreakdownList}) {
     return StatisticsState(
       maxValAll: maxValAll ?? this.maxValAll,
       maxValIncome: maxValIncome ?? this.maxValIncome,
@@ -64,6 +69,7 @@ class StatisticsState extends Equatable {
       chartDataIncomeList: chartDataIncomeList ?? this.chartDataIncomeList,
       chartDataExpenseList: chartDataExpenseList ?? this.chartDataExpenseList,
       chartDataSavingsList: chartDataSavingsList ?? this.chartDataSavingsList,
+      incomeBreakdownList: incomeBreakdownList ?? this.incomeBreakdownList,
     );
   }
 }

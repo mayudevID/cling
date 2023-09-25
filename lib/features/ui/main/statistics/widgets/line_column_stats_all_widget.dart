@@ -37,6 +37,7 @@ Widget lineColumnStatsAllWidget(BuildContext mainContext) {
         width: double.infinity,
         height: 193.hmea,
         child: SfCartesianChart(
+          zoomPanBehavior: ZoomPanBehavior(enablePanning: true),
           tooltipBehavior: TooltipBehavior(
             enable: true,
             decimalPlaces: 2,
@@ -48,14 +49,16 @@ Widget lineColumnStatsAllWidget(BuildContext mainContext) {
           plotAreaBorderWidth: 0,
           plotAreaBorderColor: Colors.transparent,
           primaryXAxis: CategoryAxis(
+            visibleMaximum: 4,
             labelStyle: TextStyle(
               color: Colors.white,
-              fontSize: 10.5.sp,
+              fontSize: 8.sp,
               fontFamily: FontFamily.cabinetGrotesk,
               fontWeight: FontWeight.w700,
             ),
           ),
           primaryYAxis: NumericAxis(
+            enableAutoIntervalOnZooming: false,
             interval: setInterval(state.maxValAll),
             labelStyle: TextStyle(
               color: Colors.white,
@@ -77,8 +80,14 @@ Widget lineColumnStatsAllWidget(BuildContext mainContext) {
                 "${mainContext.watch<LangCurrencyBloc>().state.selectedCurrency.name} {value}",
             //maximumLabels: 2,
             majorGridLines: const MajorGridLines(
+              width: 1,
               color: Color(0xFF343437),
               dashArray: <double>[20, 2],
+            ),
+            minorGridLines: const MinorGridLines(
+              color: Color(0xFF343437),
+              dashArray: <double>[20, 2],
+              width: 1,
             ),
           ),
           series: [

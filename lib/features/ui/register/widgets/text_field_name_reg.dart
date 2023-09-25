@@ -30,9 +30,7 @@ class _TextFieldNameRegState extends State<TextFieldNameReg> {
     super.dispose();
   }
 
-  void _onFocusChange() {
-    setState(() {});
-  }
+  void _onFocusChange() => setState(() {});
 
   @override
   Widget build(BuildContext context) {

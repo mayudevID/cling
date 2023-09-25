@@ -30,9 +30,7 @@ class _TextFieldEmailRegState extends State<TextFieldEmailReg> {
     super.dispose();
   }
 
-  void _onFocusChange() {
-    setState(() {});
-  }
+  void _onFocusChange() => setState(() {});
 
   @override
   Widget build(BuildContext context) {

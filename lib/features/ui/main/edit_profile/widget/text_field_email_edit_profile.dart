@@ -1,8 +1,10 @@
 import 'package:cling/core/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
 import '../../../../../resources/gen/fonts.gen.dart';
 import '../../../language_currency/lang_export.dart';
+import '../bloc/edit_profile_bloc.dart';
 
 class TextFieldEmailEditProfile extends StatefulWidget {
   const TextFieldEmailEditProfile({super.key});
@@ -19,6 +21,7 @@ class _TextFieldEmailRegState extends State<TextFieldEmailEditProfile> {
   void initState() {
     TextFieldEmailEditProfile.textEditingController = TextEditingController();
     _focus.addListener(_onFocusChange);
+    context.read<EditProfileBloc>().add(const InitialValueEdit("email"));
     super.initState();
   }
 
@@ -30,9 +33,7 @@ class _TextFieldEmailRegState extends State<TextFieldEmailEditProfile> {
     super.dispose();
   }
 
-  void _onFocusChange() {
-    setState(() {});
-  }
+  void _onFocusChange() => setState(() {});
 
   @override
   Widget build(BuildContext context) {

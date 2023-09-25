@@ -32,6 +32,9 @@ Widget lineColumnStatsIncomeWidget(BuildContext mainContext) {
         width: double.infinity,
         height: 193.hmea,
         child: SfCartesianChart(
+          // zoomPanBehavior: ZoomPanBehavior(
+          //   enablePanning: true,
+          // ),
           tooltipBehavior: TooltipBehavior(
             enable: true,
             decimalPlaces: 2,
@@ -73,8 +76,14 @@ Widget lineColumnStatsIncomeWidget(BuildContext mainContext) {
                 "${context.watch<LangCurrencyBloc>().state.selectedCurrency.name} {value}",
             //maximumLabels: 2,
             majorGridLines: const MajorGridLines(
+              width: 1,
               color: Color(0xFF343437),
               dashArray: <double>[20, 2],
+            ),
+            minorGridLines: const MinorGridLines(
+              color: Color(0xFF343437),
+              dashArray: <double>[20, 2],
+              width: 1,
             ),
           ),
           series: [

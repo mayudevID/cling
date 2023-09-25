@@ -16,13 +16,13 @@ class SettingsRepository {
   static const languagePrefsKey = '__language_prefs__';
   static const currencyPrefsKey = '__currency_prefs__';
 
-  UserModel? get currentUserModel {
-    final getData = _cache.getString(userCacheKey);
-    if (getData != null) {
-      return userModelFromMap(getData);
-    }
-    return null;
-  }
+  // UserModel? get currentUserModel {
+  //   final getData = _cache.getString(userCacheKey);
+  //   if (getData != null) {
+  //     return userModelFromMap(getData);
+  //   }
+  //   return null;
+  // }
 
   Future<void> saveLangSettings(String langCode) async {
     await _cache.setString(languagePrefsKey, langCode);
@@ -41,10 +41,11 @@ class SettingsRepository {
   }
 
   Future<void> saveMonthlyBudgetAndIncome({
+    required UserModel userModel,
     int? monthlyIncome,
     int? monthlyBudget,
   }) async {
-    final userData = currentUserModel!;
+    final userData = userModel;
 
     int monIncomeNew = monthlyIncome ?? userData.monthlyIncome.toInt();
     int monBudgetNew = monthlyBudget ?? userData.monthlyBudget.toInt();
@@ -65,6 +66,38 @@ class SettingsRepository {
     await _cache.setString(
       userCacheKey,
       userModelToMap(newUserData),
+    );
+  }
+
+  Future<void> editProfileSave({
+    required UserModel userOld,
+    String? newName,
+    String? newEmail,
+  }) async {
+    await Future.wait([
+      _supabaseClient.auth.updateUser(
+        UserAttributes(
+          email: (newEmail != userOld.email) ? newEmail : null,
+          password: null,
+        ),
+      ),
+    ]);
+
+    if (newName != userOld.name) {
+      await _supabaseClient.from("profiles").upsert({
+        "id": userOld.id,
+        'full_name': newName,
+      });
+    }
+
+    final newUserModel = userOld.copyWith(
+      name: newName,
+      email: newEmail,
+    );
+
+    await _cache.setString(
+      userCacheKey,
+      userModelToMap(newUserModel),
     );
   }
 }

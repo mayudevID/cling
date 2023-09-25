@@ -6,7 +6,7 @@ import 'package:sizer/sizer.dart';
 
 import '../../../../../resources/gen/fonts.gen.dart';
 
-Future<void> dialogEmailNotVerified(BuildContext context) async {
+Future<void> dialogChangeEmail(BuildContext context) async {
   await showDialog(
     context: context,
     barrierDismissible: false,
@@ -35,7 +35,7 @@ Future<void> dialogEmailNotVerified(BuildContext context) async {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                AppLocalizations.of(context)!.emailNotConfirmed,
+                AppLocalizations.of(context)!.changingEmail,
                 style: TextStyle(
                   fontFamily: FontFamily.cabinetGrotesk,
                   fontWeight: FontWeight.bold,
@@ -47,7 +47,7 @@ Future<void> dialogEmailNotVerified(BuildContext context) async {
                 height: 8.hmea,
               ),
               Text(
-                AppLocalizations.of(context)!.goVerify,
+                AppLocalizations.of(context)!.changeEmailVerifyDialog,
                 style: TextStyle(
                   fontFamily: FontFamily.cabinetGrotesk,
                   fontSize: 12.sp,
@@ -60,9 +60,7 @@ Future<void> dialogEmailNotVerified(BuildContext context) async {
               ),
               GestureDetector(
                 onTap: () async {
-                  await Future.microtask(() async {
-                    await openMail(context);
-                  });
+                  Navigator.pop(context);
                 },
                 child: Container(
                   padding: EdgeInsets.all(12.hmea),
@@ -74,7 +72,7 @@ Future<void> dialogEmailNotVerified(BuildContext context) async {
                   child: Align(
                     alignment: Alignment.center,
                     child: Text(
-                      "Go to mail",
+                      "OK",
                       style: TextStyle(
                         fontFamily: FontFamily.cabinetGrotesk,
                         fontSize: 12.sp,

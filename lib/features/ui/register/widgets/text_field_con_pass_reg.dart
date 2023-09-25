@@ -31,9 +31,7 @@ class _TextFieldConPassRegState extends State<TextFieldConPassReg> {
     super.dispose();
   }
 
-  void _onFocusChange() {
-    setState(() {});
-  }
+  void _onFocusChange() => setState(() {});
 
   @override
   Widget build(BuildContext context) {

@@ -7,8 +7,6 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 import '../../../../../resources/gen/fonts.gen.dart';
 import 'dart:math' as math;
 import '../../../language_currency/lang_export.dart';
-import '../../home/page/home_page.dart';
-import '../widgets/expense_widget.dart';
 
 class StatsExpense extends StatelessWidget {
   StatsExpense({super.key});

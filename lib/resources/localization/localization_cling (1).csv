@@ -117,12 +117,9 @@ may,May,Mei
 jun,Jun,Jun
 jul,Jul,Jul
 aug,Aug,Aug
-sept,Sep,Sep
+sept,Sept,Sept
 oct,Oct,Okt
 nov,Nov,Nov
 dec,Dec,Des
 emailEmpty,Email empty,Email kosong
 nameEmpty,"Name empty, must above 4 characters","Nama kosong, harus lebih dari 4 karakter"
-goVerify,Please verify email for backup feature,Harap verifikasi email untuk fitur cadangan
-changeEmailVerifyDialog,"You will change your email. After changing your email, please verify your email again.","Kamu akan mengganti email. Setelah mengganti email, harap untuk melakukan verifikasi email kembali"
-changingEmail,Email changing,Penggantian Email

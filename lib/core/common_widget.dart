@@ -373,30 +373,32 @@ Widget appBarProfile({
           ),
         ),
         const Spacer(),
-        GestureDetector(
-          onTap: onTapButton,
-          child: Container(
-            width: 74.wmea,
-            height: 36.hmea,
-            padding: const EdgeInsets.symmetric(vertical: 8),
-            decoration: ShapeDecoration(
-              color: const Color(0xFFF599DA),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
+        if (title != "Edit Profile") ...[
+          GestureDetector(
+            onTap: onTapButton,
+            child: Container(
+              width: 74.wmea,
+              height: 36.hmea,
+              padding: const EdgeInsets.symmetric(vertical: 8),
+              decoration: ShapeDecoration(
+                color: const Color(0xFFF599DA),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              child: Text(
+                textButton,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: const Color(0xFF101010),
+                  fontSize: 12.sp,
+                  fontFamily: FontFamily.cabinetGrotesk,
+                  fontWeight: FontWeight.w700,
+                ),
               ),
             ),
-            child: Text(
-              textButton,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: const Color(0xFF101010),
-                fontSize: 12.sp,
-                fontFamily: FontFamily.cabinetGrotesk,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-          ),
-        )
+          )
+        ]
       ],
     ),
   );

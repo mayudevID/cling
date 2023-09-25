@@ -3,6 +3,7 @@
 import 'dart:io';
 import 'package:cling/core/common_widget.dart';
 import 'package:cling/core/utils.dart';
+import 'package:cling/features/repository/auth_repository.dart';
 import 'package:cling/features/repository/settings_repository.dart';
 import 'package:cling/features/ui/language_currency/lang_export.dart';
 import 'package:cling/features/ui/main/profile/bloc/profile_bloc.dart';
@@ -23,8 +24,10 @@ class MonthlyDataBloc extends Bloc<MonthlyDataEvent, MonthlyDataState> {
   MonthlyDataBloc({
     required BuildContext context,
     required SettingsRepository settingsRepo,
+    required AuthRepository authRepo,
   })  : _settingsRepo = settingsRepo,
         _context = context,
+        _authRepo = authRepo,
         super(MonthlyDataState()) {
     on<SetIncome>(_setIncome);
     on<SetBudget>(_setBudget);
@@ -34,6 +37,7 @@ class MonthlyDataBloc extends Bloc<MonthlyDataEvent, MonthlyDataState> {
 
   final SettingsRepository _settingsRepo;
   final BuildContext _context;
+  final AuthRepository _authRepo;
   var mainContext = MainPage.navKeyMain.currentContext!;
 
   void _setIncome(SetIncome event, emit) {
@@ -132,6 +136,7 @@ class MonthlyDataBloc extends Bloc<MonthlyDataEvent, MonthlyDataState> {
       final monBudget = int.parse(state.monBudget.removeDot);
 
       await _settingsRepo.saveMonthlyBudgetAndIncome(
+        userModel: _authRepo.currentUserModel!,
         monthlyIncome: monIncome,
         monthlyBudget: monBudget,
       );

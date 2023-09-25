@@ -21,6 +21,21 @@ class DatabaseRepository {
     open();
   }
 
+  Map<String, dynamic> emptyData = {
+    "2023-01": 0,
+    "2023-02": 0,
+    "2023-03": 0,
+    "2023-04": 0,
+    "2023-05": 0,
+    "2023-06": 0,
+    "2023-07": 0,
+    "2023-08": 0,
+    "2023-09": 0,
+    "2023-10": 0,
+    "2023-11": 0,
+    "2023-12": 0,
+  };
+
   Future<void> open() async {
     db = await openDatabase(
       join(await getDatabasesPath(), databaseName),
@@ -145,8 +160,11 @@ class DatabaseRepository {
 
   Future<Map<String, double?>> getTotalIncomeExpenseCurrMonth() async {
     final monthNow = DateTime.now();
-    final monthNowFirstDay =
-        DateTime(monthNow.year, monthNow.month, 1).toIso8601String();
+    final monthNowFirstDay = DateTime(
+      monthNow.year,
+      monthNow.month,
+      1,
+    ).toIso8601String();
 
     final monthNowLastDay = monthNow.toIso8601String();
 
@@ -195,24 +213,18 @@ class DatabaseRepository {
   }
 
   Future<Map<String, Map<String, dynamic>>?>
-      getTotalIncomeExpenseSixMonth() async {
+      getTotalIncomeExpenseAllMonth() async {
     final now = DateTime.now();
 
-    final monthNow = now.subtract(
-      Duration(days: DateTime(now.year, now.month + 1, 0).day),
-    );
-    final fourMonthsAgo = monthNow.subtract(
-      const Duration(days: 124),
-    );
-
     final monthNowFormatted = DateTime(
-      monthNow.year,
-      monthNow.month,
-      DateTime(monthNow.year, monthNow.month + 1, 0).day,
+      now.year,
+      now.month,
+      DateTime(now.year, now.month + 1, 0).day,
     ).toIso8601String();
+
     final fourMonthsAgoFormatted = DateTime(
-      fourMonthsAgo.year,
-      fourMonthsAgo.month,
+      now.year,
+      1,
       1,
     ).toIso8601String();
 
@@ -274,8 +286,8 @@ class DatabaseRepository {
     return dataList;
   }
 
-  Future<List<Map<dynamic, dynamic>>> getYearlyIncome() async {
-    List<Map> dataList = [];
+  Future<Map<String, dynamic>> getYearlyIncome() async {
+    var uniqueData = emptyData;
 
     final now = DateTime.now();
     final firstDate = DateTime(now.year, 1, 1).toIso8601String();
@@ -293,11 +305,29 @@ class DatabaseRepository {
       [firstDate, lastDate],
     );
 
-    for (var element in result) {
-      dataList.add(element);
+    for (Map<String, Object?> item in result) {
+      final month = item["Month"].toString();
+      uniqueData[month] = item["TotalIncome"];
     }
 
-    return dataList;
+    return uniqueData;
+  }
+
+  Future<List<Map<String, Object?>>> getIncomeBreakdown() async {
+    final result = await db.rawQuery(
+      '''
+        SELECT ${IncomeSourceMeta.nameTable}.${IncomeSourceMeta.incomeSource} AS Categories, 
+        SUM(${IncomeMeta.amount}) AS TotalIncome
+        FROM ${IncomeMeta.nameTable}
+        INNER JOIN ${IncomeSourceMeta.nameTable} 
+        ON ${IncomeMeta.nameTable}.${IncomeSourceMeta.id} 
+        = 
+        ${IncomeSourceMeta.nameTable}.${IncomeSourceMeta.id} 
+        GROUP BY Categories;
+      ''',
+    );
+
+    return result;
   }
 
   //! ================ DELETE ALL ================

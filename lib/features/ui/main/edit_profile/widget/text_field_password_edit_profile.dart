@@ -1,10 +1,11 @@
 import 'package:cling/core/utils.dart';
-import 'package:cling/features/ui/main/profile/bloc/profile_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
+import '../../../../../resources/gen/assets.gen.dart';
 import '../../../../../resources/gen/fonts.gen.dart';
 import '../../../language_currency/lang_export.dart';
+import '../bloc/edit_profile_bloc.dart';
 
 class TextFieldPasswordEditProfile extends StatefulWidget {
   const TextFieldPasswordEditProfile({super.key});
@@ -23,6 +24,7 @@ class _TextFieldPasswordRegState extends State<TextFieldPasswordEditProfile> {
     TextFieldPasswordEditProfile.textEditingController =
         TextEditingController();
     _focus.addListener(_onFocusChange);
+    context.read<EditProfileBloc>().add(const InitialValueEdit("password"));
     super.initState();
   }
 
@@ -34,9 +36,7 @@ class _TextFieldPasswordRegState extends State<TextFieldPasswordEditProfile> {
     super.dispose();
   }
 
-  void _onFocusChange() {
-    setState(() {});
-  }
+  void _onFocusChange() => setState(() {});
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +58,7 @@ class _TextFieldPasswordRegState extends State<TextFieldPasswordEditProfile> {
       child: Row(
         children: [
           Expanded(
-            child: BlocBuilder<ProfileBloc, ProfileState>(
+            child: BlocBuilder<EditProfileBloc, EditProfileState>(
               buildWhen: (p, c) {
                 return p.isObscure != c.isObscure;
               },
@@ -88,6 +88,23 @@ class _TextFieldPasswordRegState extends State<TextFieldPasswordEditProfile> {
                     ),
                   ),
                 );
+              },
+            ),
+          ),
+          GestureDetector(
+            onTap: () {
+              context.read<EditProfileBloc>().add(ToggleEyeEditProfile());
+            },
+            child: BlocBuilder<EditProfileBloc, EditProfileState>(
+              buildWhen: (p, c) {
+                return p.isObscure != c.isObscure;
+              },
+              builder: (context, state) {
+                if (state.isObscure) {
+                  return Assets.lib.resources.images.eyeOff.svg();
+                }
+
+                return Assets.lib.resources.images.eyeOn.svg();
               },
             ),
           ),

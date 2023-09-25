@@ -1,7 +1,9 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:cling/core/utils.dart';
+import 'package:cling/features/ui/main/edit_profile/bloc/edit_profile_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
 import '../../../../../resources/gen/fonts.gen.dart';
 import '../../../language_currency/lang_export.dart';
@@ -21,6 +23,7 @@ class _TextFieldNameRegState extends State<TextFieldNameEditProfile> {
   void initState() {
     TextFieldNameEditProfile.textEditingController = TextEditingController();
     _focus.addListener(_onFocusChange);
+    context.read<EditProfileBloc>().add(const InitialValueEdit("name"));
     super.initState();
   }
 
@@ -32,9 +35,7 @@ class _TextFieldNameRegState extends State<TextFieldNameEditProfile> {
     super.dispose();
   }
 
-  void _onFocusChange() {
-    setState(() {});
-  }
+  void _onFocusChange() => setState(() {});
 
   @override
   Widget build(BuildContext context) {

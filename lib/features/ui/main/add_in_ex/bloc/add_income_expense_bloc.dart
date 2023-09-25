@@ -111,7 +111,9 @@ class AddIncomeExpenseBloc
           await _dbRepo.insertIncome(data);
 
           ///* Update UI
-          mainContext.read<StatisticsBloc>().add(GetYearlyIncome());
+          mainContext.read<StatisticsBloc>()
+            ..add(GetIncomeBreakdown())
+            ..add(GetYearlyIncome());
 
           break;
         case FlowType.expense:
@@ -133,9 +135,7 @@ class AddIncomeExpenseBloc
 
       ///* Update UI
       mainContext.read<HomeBloc>().add(GetIncomeExpenseAmountTotalCurrMonth());
-      mainContext.read<StatisticsBloc>()
-        ..add(GetIncomeExpenseTotalCurrMonth())
-        ..add(GetIncomeExpenseTotalSixMonth());
+      mainContext.read<StatisticsBloc>().add(GetIncomeExpenseTotalAllMonth());
 
       dialogAddSuccess(_context, event.flowType);
     } on FormatException {

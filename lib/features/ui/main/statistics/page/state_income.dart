@@ -3,29 +3,14 @@ import 'package:cling/features/ui/main/statistics/widgets/line_column_stats_inco
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
-import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../../../../../resources/gen/fonts.gen.dart';
-import '../../../language_currency/lang_currency_bloc.dart';
 import '../../../language_currency/lang_export.dart';
+import '../bloc/statistics_bloc.dart';
+import '../widgets/income_breakdown.dart';
 
 class StatsIncome extends StatelessWidget {
-  StatsIncome({super.key});
-
-  final List<IncomeData> chartData = [
-    IncomeData("Jan", 35),
-    IncomeData("Feb", 23),
-    IncomeData("Mar", 23),
-    IncomeData("Apr", 34),
-    IncomeData("Mei", 25),
-    IncomeData("Jun", 40),
-    IncomeData("Jul", 35),
-    IncomeData("Ags", 23),
-    IncomeData("Sep", 34),
-    IncomeData("Okt", 25),
-    IncomeData("Nov", 40),
-    IncomeData("Des", 40),
-  ];
+  const StatsIncome({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -61,20 +46,39 @@ class StatsIncome extends StatelessWidget {
         SizedBox(
           height: 16.hmea,
         ),
-        // MediaQuery.removePadding(
-        //   context: context,
-        //   removeTop: true,
-        //   child: ListView.builder(
-        //     itemCount: dataDummyExpenses.length,
-        //     shrinkWrap: true,
-        //     physics: const NeverScrollableScrollPhysics(),
-        //     itemBuilder: (context, index) {
-        //       return incomeWidget(
-        //         dataDummyExpenses[index],
-        //       );
-        //     },
-        //   ),
-        // ),
+        BlocBuilder<StatisticsBloc, StatisticsState>(
+          buildWhen: (p, c) {
+            return p.incomeBreakdownList != c.incomeBreakdownList;
+          },
+          builder: (context, state) {
+            if (state.incomeBreakdownList.isEmpty) {
+              return const Center(
+                child: Text(
+                  "No data :(",
+                  style: TextStyle(
+                    fontFamily: FontFamily.cabinetGrotesk,
+                    color: Colors.white,
+                  ),
+                ),
+              );
+            }
+
+            return MediaQuery.removePadding(
+              context: context,
+              removeTop: true,
+              child: ListView.builder(
+                itemCount: state.incomeBreakdownList.length,
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemBuilder: (context, index) {
+                  return incomeBreakdown(
+                    state.incomeBreakdownList[index],
+                  );
+                },
+              ),
+            );
+          },
+        ),
         SizedBox(
           height: 90.hmea,
         ),

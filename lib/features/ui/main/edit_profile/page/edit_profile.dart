@@ -1,6 +1,11 @@
 import 'package:cling/core/utils.dart';
+import 'package:cling/features/repository/auth_repository.dart';
+import 'package:cling/features/repository/settings_repository.dart';
+import 'package:cling/features/ui/main/edit_profile/bloc/edit_profile_bloc.dart';
+import 'package:cling/injection.dart';
 import 'package:cling/resources/gen/fonts.gen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../../core/common_widget.dart';
@@ -11,6 +16,22 @@ import '../widget/text_field_password_edit_profile.dart';
 
 class EditProfilePage extends StatelessWidget {
   const EditProfilePage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => EditProfileBloc(
+        context: context,
+        settingsRepo: getIt<SettingsRepository>(),
+        authRepo: getIt<AuthRepository>(),
+      ),
+      child: const EditProfilePageContent(),
+    );
+  }
+}
+
+class EditProfilePageContent extends StatelessWidget {
+  const EditProfilePageContent({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +46,9 @@ class EditProfilePage extends StatelessWidget {
                 context: context,
                 title: "Edit Profile",
                 textButton: "Save",
-                onTapButton: () {},
+                onTapButton: () async {
+                  context.read<EditProfileBloc>().add(SaveNewProfile());
+                },
               ),
               SizedBox(
                 height: 32.hmea,

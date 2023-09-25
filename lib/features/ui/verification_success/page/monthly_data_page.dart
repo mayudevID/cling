@@ -1,6 +1,7 @@
 // ignore_for_file: must_be_immutable
 import 'package:cling/core/common_widget.dart';
 import 'package:cling/core/utils.dart';
+import 'package:cling/features/repository/auth_repository.dart';
 import 'package:cling/features/repository/settings_repository.dart';
 import 'package:cling/features/ui/language_currency/lang_currency_bloc.dart';
 import 'package:cling/features/ui/language_currency/lang_export.dart';
@@ -25,6 +26,7 @@ class MonthlyDataPage extends StatelessWidget {
         return MonthlyDataBloc(
           context: context,
           settingsRepo: getIt<SettingsRepository>(),
+          authRepo: getIt<AuthRepository>(),
         );
       },
       child: const MonthlyDataPageContent(),
