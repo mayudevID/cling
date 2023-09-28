@@ -7,12 +7,16 @@ class EditProfileState extends Equatable {
   String initName;
   String initEmail;
   String initPass;
+  bool isNameSame;
+  bool isEmailSame;
 
   EditProfileState({
     this.isObscure = true,
     this.initName = "",
     this.initEmail = "",
     this.initPass = "",
+    this.isNameSame = true,
+    this.isEmailSame = true,
   });
 
   @override
@@ -21,6 +25,8 @@ class EditProfileState extends Equatable {
         initName,
         initEmail,
         initPass,
+        isEmailSame,
+        isNameSame,
       ];
 
   EditProfileState copyWith({
@@ -28,12 +34,16 @@ class EditProfileState extends Equatable {
     String? initName,
     String? initEmail,
     String? initPass,
+    bool? isEmailSame,
+    bool? isNameSame,
   }) {
     return EditProfileState(
       isObscure: isObscure ?? this.isObscure,
       initName: initName ?? this.initName,
       initEmail: initEmail ?? this.initEmail,
       initPass: initPass ?? this.initPass,
+      isEmailSame: isEmailSame ?? this.isEmailSame,
+      isNameSame: isNameSame ?? this.isNameSame,
     );
   }
 }

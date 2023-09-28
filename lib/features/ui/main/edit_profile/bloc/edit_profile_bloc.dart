@@ -1,6 +1,4 @@
 // ignore_for_file: use_build_context_synchronously
-
-import 'package:bloc/bloc.dart';
 import 'package:cling/features/repository/auth_repository.dart';
 import 'package:cling/features/repository/settings_repository.dart';
 import 'package:cling/features/ui/main/edit_profile/widget/text_field_email_edit_profile.dart';
@@ -31,7 +29,10 @@ class EditProfileBloc extends Bloc<EditProfileEvent, EditProfileState> {
         super(EditProfileState()) {
     on<ToggleEyeEditProfile>(_toggleEye);
     on<InitialValueEdit>(_initVal);
-    on<SaveNewProfile>(_saveNewData);
+    on<SaveNewName>(_saveNewName);
+    on<SaveNewEmail>(_saveNewEmail);
+    on<CheckEmail>(_checkEmail);
+    on<CheckName>(_checkName);
   }
 
   final SettingsRepository _settingsRepo;
@@ -58,7 +59,20 @@ class EditProfileBloc extends Bloc<EditProfileEvent, EditProfileState> {
     emit(state.copyWith(isObscure: !state.isObscure));
   }
 
-  void _saveNewData(event, emit) async {
+  void _checkName(CheckName event, emit) {
+    final isSame = TextFieldNameEditProfile.textEditingController.text.trim() ==
+        state.initName.trim();
+    emit(state.copyWith(isNameSame: isSame));
+  }
+
+  void _checkEmail(CheckEmail event, emit) {
+    final isSame =
+        TextFieldEmailEditProfile.textEditingController.text.trim() ==
+            state.initEmail.trim();
+    emit(state.copyWith(isEmailSame: isSame));
+  }
+
+  void _saveNewName(event, emit) async {
     final connectivityResult = await (Connectivity().checkConnectivity());
     if (!(connectivityResult == ConnectivityResult.mobile ||
         connectivityResult == ConnectivityResult.wifi)) {
@@ -71,13 +85,41 @@ class EditProfileBloc extends Bloc<EditProfileEvent, EditProfileState> {
 
     String? newName =
         TextFieldNameEditProfile.textEditingController.text.trim();
-    String? newEmail =
-        TextFieldEmailEditProfile.textEditingController.text.trim();
 
     if (newName.isEmpty || newName.length <= 4) {
       errorToast(AppLocalizations.of(_context)!.nameEmpty);
       return;
     }
+
+    loadingAuth(_context);
+
+    try {
+      await _settingsRepo.editProfileName(
+        userModel: _authRepo.currentUserModel!,
+        newName: newName,
+      );
+
+      mainContext.read<ProfileBloc>().add(GetProfile());
+
+      emit(state.copyWith(initName: newName, isNameSame: true));
+
+      Navigator.of(_context).pop();
+    } catch (e) {}
+  }
+
+  void _saveNewEmail(event, emit) async {
+    final connectivityResult = await (Connectivity().checkConnectivity());
+    if (!(connectivityResult == ConnectivityResult.mobile ||
+        connectivityResult == ConnectivityResult.wifi)) {
+      errorSnackbar(
+        _context,
+        AppLocalizations.of(_context)!.noConnection,
+      );
+      return;
+    }
+
+    String? newEmail =
+        TextFieldEmailEditProfile.textEditingController.text.trim();
 
     if (newEmail.isEmpty) {
       errorToast(AppLocalizations.of(_context)!.emailEmpty);
@@ -96,19 +138,18 @@ class EditProfileBloc extends Bloc<EditProfileEvent, EditProfileState> {
     loadingAuth(_context);
 
     try {
-      await _settingsRepo.editProfileSave(
-        userOld: _authRepo.currentUserModel!,
+      await _settingsRepo.editProfileEmail(
+        userModel: _authRepo.currentUserModel!,
         newEmail: newEmail,
-        newName: newName,
       );
 
       mainContext.read<ProfileBloc>()
         ..add(GetProfile())
         ..add(GetVerifiedStatus());
 
-      Navigator.of(_context)
-        ..pop()
-        ..pop();
+      emit(state.copyWith(initEmail: newEmail, isEmailSame: true));
+
+      Navigator.of(_context).pop();
     } catch (e) {}
   }
 }

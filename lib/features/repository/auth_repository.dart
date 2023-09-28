@@ -206,15 +206,21 @@ class AuthRepository {
     return _cache.getBool(registerStatusKey) ?? true;
   }
 
-  //* Update User Profile
-
-  Future<void> updateDisplayName(String displayName) async {
-    try {
-      //await _firebaseAuth.currentUser!.updateDisplayName(displayName);
-    } on PostgrestException catch (e) {
-      throw PostgrestException(message: e.message);
-    }
+  Future<void> sendResetPassword() async {
+    await _supabaseClient.auth.updateUser(UserAttributes(
+      password: "12345678",
+    ));
   }
+
+  // //* Update User Profile
+
+  // Future<void> updateDisplayName(String displayName) async {
+  //   try {
+  //     //await _firebaseAuth.currentUser!.updateDisplayName(displayName);
+  //   } on PostgrestException catch (e) {
+  //     throw PostgrestException(message: e.message);
+  //   }
+  // }
 }
 
 // extension on User {

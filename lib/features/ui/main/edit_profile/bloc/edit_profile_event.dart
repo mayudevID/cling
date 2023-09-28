@@ -15,4 +15,10 @@ class InitialValueEdit extends EditProfileEvent {
   const InitialValueEdit(this.type);
 }
 
-class SaveNewProfile extends EditProfileEvent {}
+class CheckName extends EditProfileEvent {}
+
+class CheckEmail extends EditProfileEvent {}
+
+class SaveNewName extends EditProfileEvent {}
+
+class SaveNewEmail extends EditProfileEvent {}

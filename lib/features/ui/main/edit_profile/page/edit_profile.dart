@@ -46,9 +46,7 @@ class EditProfilePageContent extends StatelessWidget {
                 context: context,
                 title: "Edit Profile",
                 textButton: "Save",
-                onTapButton: () async {
-                  context.read<EditProfileBloc>().add(SaveNewProfile());
-                },
+                onTapButton: () {},
               ),
               SizedBox(
                 height: 32.hmea,
@@ -72,6 +70,25 @@ class EditProfilePageContent extends StatelessWidget {
               SizedBox(
                 height: 24.hmea,
               ),
+              BlocBuilder<EditProfileBloc, EditProfileState>(
+                buildWhen: (p, c) {
+                  return p.isNameSame != c.isNameSame;
+                },
+                builder: (context, state) {
+                  if (!state.isNameSame) {
+                    return Container(
+                      margin: EdgeInsets.only(bottom: 24.hmea),
+                      child: PinkButton(
+                        onTap: () {
+                          context.read<EditProfileBloc>().add(SaveNewName());
+                        },
+                        name: AppLocalizations.of(context)!.save,
+                      ),
+                    );
+                  }
+                  return const SizedBox();
+                },
+              ),
               Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
@@ -90,6 +107,25 @@ class EditProfilePageContent extends StatelessWidget {
               const TextFieldEmailEditProfile(),
               SizedBox(
                 height: 24.hmea,
+              ),
+              BlocBuilder<EditProfileBloc, EditProfileState>(
+                buildWhen: (p, c) {
+                  return p.isEmailSame != c.isEmailSame;
+                },
+                builder: (context, state) {
+                  if (!state.isEmailSame) {
+                    return Container(
+                      margin: EdgeInsets.only(bottom: 24.hmea),
+                      child: PinkButton(
+                        onTap: () {
+                          context.read<EditProfileBloc>().add(SaveNewEmail());
+                        },
+                        name: AppLocalizations.of(context)!.save,
+                      ),
+                    );
+                  }
+                  return const SizedBox();
+                },
               ),
               Align(
                 alignment: Alignment.centerLeft,

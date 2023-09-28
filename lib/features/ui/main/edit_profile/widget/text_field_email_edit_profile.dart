@@ -20,6 +20,9 @@ class _TextFieldEmailRegState extends State<TextFieldEmailEditProfile> {
   @override
   void initState() {
     TextFieldEmailEditProfile.textEditingController = TextEditingController();
+    TextFieldEmailEditProfile.textEditingController.addListener(() {
+      context.read<EditProfileBloc>().add(CheckEmail());
+    });
     _focus.addListener(_onFocusChange);
     context.read<EditProfileBloc>().add(const InitialValueEdit("email"));
     super.initState();

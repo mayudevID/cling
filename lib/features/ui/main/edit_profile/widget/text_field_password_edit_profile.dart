@@ -23,6 +23,9 @@ class _TextFieldPasswordRegState extends State<TextFieldPasswordEditProfile> {
   void initState() {
     TextFieldPasswordEditProfile.textEditingController =
         TextEditingController();
+    TextFieldPasswordEditProfile.textEditingController.addListener(() {
+      print("berubah");
+    });
     _focus.addListener(_onFocusChange);
     context.read<EditProfileBloc>().add(const InitialValueEdit("password"));
     super.initState();

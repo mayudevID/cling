@@ -22,6 +22,9 @@ class _TextFieldNameRegState extends State<TextFieldNameEditProfile> {
   @override
   void initState() {
     TextFieldNameEditProfile.textEditingController = TextEditingController();
+    TextFieldNameEditProfile.textEditingController.addListener(() {
+      context.read<EditProfileBloc>().add(CheckName());
+    });
     _focus.addListener(_onFocusChange);
     context.read<EditProfileBloc>().add(const InitialValueEdit("name"));
     super.initState();

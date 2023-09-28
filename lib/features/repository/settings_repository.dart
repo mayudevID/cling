@@ -69,29 +69,39 @@ class SettingsRepository {
     );
   }
 
-  Future<void> editProfileSave({
-    required UserModel userOld,
+  Future<void> editProfileName({
+    required UserModel userModel,
     String? newName,
+  }) async {
+    await _supabaseClient.from("profiles").upsert(
+      {
+        "id": userModel.id,
+        'full_name': newName,
+      },
+    );
+
+    final newUserModel = userModel.copyWith(
+      name: newName,
+    );
+
+    await _cache.setString(
+      userCacheKey,
+      userModelToMap(newUserModel),
+    );
+  }
+
+  Future<void> editProfileEmail({
+    required UserModel userModel,
     String? newEmail,
   }) async {
-    await Future.wait([
-      _supabaseClient.auth.updateUser(
-        UserAttributes(
-          email: (newEmail != userOld.email) ? newEmail : null,
-          password: null,
-        ),
-      ),
-    ]);
+    await _supabaseClient.auth.updateUser(
+      UserAttributes(email: newEmail),
+    );
+    await _supabaseClient.from("profiles").upsert(
+      {"id": userModel.id, 'email': newEmail},
+    );
 
-    if (newName != userOld.name) {
-      await _supabaseClient.from("profiles").upsert({
-        "id": userOld.id,
-        'full_name': newName,
-      });
-    }
-
-    final newUserModel = userOld.copyWith(
-      name: newName,
+    final newUserModel = userModel.copyWith(
       email: newEmail,
     );
 
