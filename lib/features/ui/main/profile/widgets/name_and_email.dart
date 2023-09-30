@@ -6,7 +6,7 @@ import 'package:sizer/sizer.dart';
 import '../../../../../core/route.dart';
 import '../../../../../resources/gen/assets.gen.dart';
 import '../../../../../resources/gen/fonts.gen.dart';
-import '../bloc/profile_bloc.dart';
+import '../../../app_bloc/app_bloc.dart';
 
 Widget nameAndEmail(BuildContext context) {
   return Container(
@@ -23,13 +23,13 @@ Widget nameAndEmail(BuildContext context) {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              BlocBuilder<ProfileBloc, ProfileState>(
+              BlocBuilder<AppBloc, AppState>(
                 buildWhen: (p, c) {
-                  return p.userModel.name != c.userModel.name;
+                  return p.user?.displayName != c.user?.displayName;
                 },
                 builder: (context, state) {
                   return Text(
-                    state.userModel.name,
+                    state.user!.displayName!,
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 14.sp,
@@ -44,13 +44,13 @@ Widget nameAndEmail(BuildContext context) {
               ),
               Row(
                 children: [
-                  BlocBuilder<ProfileBloc, ProfileState>(
+                  BlocBuilder<AppBloc, AppState>(
                     buildWhen: (p, c) {
-                      return p.userModel.email != c.userModel.email;
+                      return p.user?.email != c.user?.email;
                     },
                     builder: (context, state) {
                       return Text(
-                        state.userModel.email,
+                        state.user!.email!,
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 10.5.sp,
@@ -72,15 +72,18 @@ Widget nameAndEmail(BuildContext context) {
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    child: BlocBuilder<ProfileBloc, ProfileState>(
+                    child: BlocBuilder<AppBloc, AppState>(
                       buildWhen: (previous, current) {
-                        return previous.isVerified != current.isVerified;
+                        return previous.user?.emailVerified !=
+                            current.user?.emailVerified;
                       },
                       builder: (context, state) {
                         return Text(
-                          (state.isVerified) ? "Verified" : "Not Verified",
+                          (state.user!.emailVerified)
+                              ? "Verified"
+                              : "Not Verified",
                           style: TextStyle(
-                            color: (state.isVerified)
+                            color: (state.user!.emailVerified)
                                 ? Colors.green.shade800
                                 : Colors.red.shade800,
                             fontFamily: FontFamily.cabinetGrotesk,

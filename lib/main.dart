@@ -1,6 +1,5 @@
 import 'package:cling/core/bloc_observer.dart';
 import 'package:cling/core/notification.dart';
-import 'package:cling/env.dart';
 import 'package:cling/features/repository/settings_repository.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -9,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:sizer/sizer.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import 'core/route.dart';
 import 'features/repository/auth_repository.dart';
 
@@ -21,11 +19,6 @@ import 'injection.dart';
 void main() async {
   Bloc.observer = MyGlobalObserver();
   WidgetsFlutterBinding.ensureInitialized();
-
-  await Supabase.initialize(
-    url: EnvApp.supabaseUrl,
-    anonKey: EnvApp.supabaseAnonKey,
-  );
 
   NotificationClass.init();
   await initSl();

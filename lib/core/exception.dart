@@ -48,7 +48,7 @@ class LogInWithEmailAndPasswordFailure implements Exception {
 
   factory LogInWithEmailAndPasswordFailure.fromCode(String code) {
     switch (code) {
-      case 'Email not confirmed':
+      case 'invalid-email':
         return LogInWithEmailAndPasswordFailure(
           AppLocalizations.of(MainApp.navKeyGlobal.currentContext!)!
               .invalidEmailFailure,
@@ -58,7 +58,7 @@ class LogInWithEmailAndPasswordFailure implements Exception {
           AppLocalizations.of(MainApp.navKeyGlobal.currentContext!)!
               .userDisabledFailure,
         );
-      case 'Invalid login credentials':
+      case 'user-not-found':
         return LogInWithEmailAndPasswordFailure(
           AppLocalizations.of(MainApp.navKeyGlobal.currentContext!)!
               .userNotFoundFailure,
@@ -77,3 +77,5 @@ class LogInWithEmailAndPasswordFailure implements Exception {
 }
 
 class LogOutFailure implements Exception {}
+
+class EmailNotVerifiedException implements Exception {}

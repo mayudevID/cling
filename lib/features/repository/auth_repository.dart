@@ -1,21 +1,24 @@
-import 'dart:io';
 import 'package:cling/core/logger.dart';
 import 'package:cling/features/model/user_model.dart';
-import 'package:cling/main.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../core/exception.dart';
 import '../../core/route.dart';
+import '../../main.dart';
 
 class AuthRepository {
-  final SupabaseClient _supabaseClient;
+  final FirebaseAuth _firebaseAuth;
+  final FirebaseFirestore _firestore;
   final SharedPreferences _cache;
 
   AuthRepository({
-    required SupabaseClient supabaseClient,
+    required FirebaseAuth firebaseAuth,
+    required FirebaseFirestore firestore,
     required SharedPreferences cache,
-  })  : _supabaseClient = supabaseClient,
+  })  : _firebaseAuth = firebaseAuth,
+        _firestore = firestore,
         _cache = cache;
 
   static const userCacheKey = '__user_cache_key__';
@@ -23,9 +26,8 @@ class AuthRepository {
   static const registerStatusKey = '__register_stat_key__';
 
   Stream<User?> get user {
-    return _supabaseClient.auth.onAuthStateChange.map((event) {
-      final user = _supabaseClient.auth.currentUser;
-
+    return _firebaseAuth.userChanges().map((firebaseUser) {
+      final user = firebaseUser;
       if (user == null) {
         _cache.remove(userCacheKey);
       }
@@ -42,8 +44,8 @@ class AuthRepository {
     return null;
   }
 
-  User? get currentUserSupabase {
-    return _supabaseClient.auth.currentUser;
+  User? get currentUserFirebase {
+    return _firebaseAuth.currentUser;
   }
 
   Future<void> signUp({
@@ -52,127 +54,92 @@ class AuthRepository {
     required String password,
     required String currency,
   }) async {
-    try {
-      Logger.White.log("Check user if already exist...");
-      await _supabaseClient
-          .from("profiles")
-          .select<Map<String, dynamic>>()
-          .eq('email', email)
-          .single();
-      throw SignUpWithEmailAndPasswordFailure.fromCode(
-        "email-already-in-use",
-      );
-    } on PostgrestException catch (e) {
-      if (e.code == "PGRST116") {
-        Logger.White.log("User empty. Create account...");
-        try {
-          saveRegisterProcess(true);
-          final result = await _supabaseClient.auth.signUp(
-            email: email,
-            password: password,
-            data: {
-              'full_name': name,
-              'email': email,
-              'currency': currency,
-            },
-          );
-          saveRegisterProcess(false);
-          Logger.Green.log(
-            "User Regist: ${result.user}",
-          );
-          Logger.Green.log(
-            "User Session (must be null): ${result.session}",
-          );
-        } on AuthException catch (e) {
-          Logger.Red.log("Status: ${e.statusCode} Message: ${e.message}");
-          throw SignUpWithEmailAndPasswordFailure.fromCode(e.message);
-        } on SocketException catch (e) {
-          Logger.Red.log(e.message);
-          throw SocketException(e.message);
-        } on Exception catch (e) {
-          Logger.Red.log(e.toString());
-          throw SignUpWithEmailAndPasswordFailure(e.toString());
-        }
-      } else {
-        Logger.Red.log(e.toString());
-        throw PostgrestException(
-          code: e.code,
-          message: e.message,
-          details: e.details,
-          hint: e.hint,
-        );
-      }
-    }
+    await saveRegisterProcess(true);
+    Logger.White.log("User empty. Create account...");
+    final userCredential = await _firebaseAuth.createUserWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
+    await saveRegisterProcess(false);
+    Logger.Green.log("User regist: ${userCredential.user!.uid}");
+    Logger.White.log("Saving user data..");
+    await userCredential.user!.updateDisplayName(name);
+    await _firestore.collection("users").doc(userCredential.user!.uid).set(
+      {
+        "uid": userCredential.user!.uid,
+        "currency": currency,
+        "created_at": DateTime.now().toIso8601String(),
+        "last_backup_time": null,
+        "backup_url": null,
+        "verified_process": false,
+        "monthly_budget": 0,
+        "monthly_income": 0,
+        "updated_at": DateTime.now().toIso8601String(),
+      },
+    );
+    Logger.White.log("Send email verification..");
+    await userCredential.user!.sendEmailVerification();
   }
 
   Future<void> logInWithEmailAndPassword({
     required String email,
     required String password,
   }) async {
-    try {
-      saveLoginProcess(true);
-      Logger.White.log("Send data email password...");
-      final userResultLogin = await _supabaseClient.auth.signInWithPassword(
-        email: email,
-        password: password,
+    await saveLoginProcess(true);
+    Logger.White.log("User login...");
+    final userCredential = await _firebaseAuth.signInWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
+    if (!userCredential.user!.emailVerified) {
+      throw EmailNotVerifiedException();
+    }
+
+    await saveLoginProcess(false);
+    await saveRegisterProcess(false);
+    Logger.Green.log("User logged...");
+    Logger.White.log("Get user data...");
+    final userDoc = await _firestore
+        .collection("users")
+        .doc(userCredential.user!.uid)
+        .get();
+    var userModel = UserModel.fromMap(userDoc.data()!);
+
+    final isVerifiedProcessNotPassed =
+        userCredential.user!.emailVerified && !userModel.verifiedProcess;
+
+    if (isVerifiedProcessNotPassed) {
+      Logger.Green.log("User not pass verified process. Update data...");
+
+      await _firestore
+          .collection("users")
+          .doc(userCredential.user!.uid)
+          .update({
+        "verified_process": true,
+      });
+
+      userModel = userModel.copyWith(verifiedProcess: true);
+    }
+
+    Logger.White.log("Save user data..");
+    await _cache.setString(
+      userCacheKey,
+      userModelToMap(userModel),
+    );
+
+    if (isVerifiedProcessNotPassed) {
+      Logger.Green.log(
+        "User not pass verified process. Go to verif onboard...",
       );
-      saveLoginProcess(false);
-      saveRegisterProcess(false);
-      Logger.White.log("Get user data...");
-      final userFromQuery = await _supabaseClient
-          .from("profiles")
-          .select<Map<String, dynamic>>()
-          .eq('id', userResultLogin.user!.id)
-          .single();
-
-      Logger.White.log("Create data...");
-      UserModel userModel = UserModel.fromMap(userFromQuery);
-
-      final isVerifiedProcessNotPassed =
-          userResultLogin.user!.emailConfirmedAt != null &&
-              userFromQuery['verified_process'] == false;
-
-      if (isVerifiedProcessNotPassed) {
-        Logger.Green.log("User not pass verified process. Update data...");
-        await _supabaseClient.from("profiles").upsert(
-          {
-            "id": userResultLogin.user!.id,
-            'verified_process': true,
-            'updated_at': DateTime.now().toIso8601String(),
-          },
-        );
-
-        userModel = userModel.copyWith(verifiedProcess: true);
-      }
-
-      Logger.White.log("Save user data..");
-      await _cache.setString(
-        userCacheKey,
-        userModelToMap(userModel),
+      Future.delayed(
+        const Duration(milliseconds: 1250),
+        () {
+          Navigator.pushNamed(
+            MainApp.navKeyGlobal.currentContext!,
+            RouteName.verifOnboard,
+          );
+        },
       );
-
-      if (isVerifiedProcessNotPassed) {
-        Logger.Green.log(
-          "User not pass verified process. Go to verif onboard...",
-        );
-        Future.delayed(
-          const Duration(milliseconds: 1250),
-          () {
-            Navigator.pushNamed(
-              MainApp.navKeyGlobal.currentContext!,
-              RouteName.verifOnboard,
-            );
-          },
-        );
-      }
-    } on AuthException catch (e) {
-      throw AuthException(e.message, statusCode: e.statusCode);
-    } on SocketException catch (e) {
-      Logger.Red.log(e.message);
-      throw SocketException(e.message);
-    } on Exception catch (e) {
-      Logger.Red.log(e.toString());
-      throw const LogInWithEmailAndPasswordFailure();
     }
   }
 
@@ -183,7 +150,7 @@ class AuthRepository {
         _cache.remove(registerStatusKey),
         _cache.remove(loginStatusKey),
       ]);
-      await _supabaseClient.auth.signOut();
+      await _firebaseAuth.signOut();
     } catch (e) {
       Logger.Red.log(e.toString());
       throw LogOutFailure();
@@ -206,10 +173,8 @@ class AuthRepository {
     return _cache.getBool(registerStatusKey) ?? true;
   }
 
-  Future<void> sendResetPassword() async {
-    await _supabaseClient.auth.updateUser(UserAttributes(
-      password: "12345678",
-    ));
+  Future<void> sendResetPassword(String email) async {
+    await _firebaseAuth.sendPasswordResetEmail(email: email);
   }
 
   // //* Update User Profile

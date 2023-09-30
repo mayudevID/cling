@@ -5,6 +5,8 @@ import 'package:cling/core/common_widget.dart';
 import 'package:cling/core/logger.dart';
 import 'package:cling/core/route.dart';
 import 'package:cling/features/repository/auth_repository.dart';
+import 'package:cling/features/ui/language_currency/lang_export.dart';
+import 'package:email_validator/email_validator.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 
@@ -16,15 +18,28 @@ class ForgotPasswordCubit extends Cubit<ForgotPasswordState> {
     required AuthRepository authRepo,
   })  : _authRepo = authRepo,
         _context = context,
-        super(ForgotPasswordInitial());
+        super(ForgotPasswordState());
 
   final BuildContext _context;
   final AuthRepository _authRepo;
 
+  void changeEmail(String email) {
+    emit(state.copyWith(emailTarget: email));
+  }
+
   void sendResetPassword() async {
+    loadingAuth(_context);
+
+    if (!EmailValidator.validate(state.emailTarget)) {
+      errorSnackbar(
+        _context,
+        AppLocalizations.of(_context)!.invalidEmailFailure,
+      );
+      return;
+    }
+
     try {
-      loadingAuth(_context);
-      await _authRepo.sendResetPassword();
+      await _authRepo.sendResetPassword(state.emailTarget);
       Navigator.of(_context)
         ..pop()
         ..pushReplacementNamed(RouteName.checkEmail);

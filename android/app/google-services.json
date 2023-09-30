@@ -14,7 +14,7 @@
       },
       "oauth_client": [
         {
-          "client_id": "726454501636-skdf4jfhb3r2ktgnsqhfp631ec03rrac.apps.googleusercontent.com",
+          "client_id": "726454501636-vo3dlbc6mn8f00c2n5dpk3925d5a15b4.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
@@ -29,6 +29,13 @@
             {
               "client_id": "726454501636-skdf4jfhb3r2ktgnsqhfp631ec03rrac.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "726454501636-6gfr5fknobmh0do3tga12aps810cb947.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.maul.cling"
+              }
             }
           ]
         }

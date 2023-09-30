@@ -41,16 +41,17 @@ class EditProfileBloc extends Bloc<EditProfileEvent, EditProfileState> {
   var mainContext = MainPage.navKeyMain.currentContext!;
 
   void _initVal(InitialValueEdit event, emit) {
-    final userOld = _authRepo.currentUserModel;
+    final userOld = _authRepo.currentUserFirebase;
 
     switch (event.type) {
       case "name":
-        emit(state.copyWith(initName: userOld!.name));
-        TextFieldNameEditProfile.textEditingController.text = userOld.name;
+        emit(state.copyWith(initName: userOld!.displayName));
+        TextFieldNameEditProfile.textEditingController.text =
+            userOld.displayName!;
         break;
       case "email":
         emit(state.copyWith(initEmail: userOld!.email));
-        TextFieldEmailEditProfile.textEditingController.text = userOld.email;
+        TextFieldEmailEditProfile.textEditingController.text = userOld.email!;
         break;
     }
   }
@@ -94,10 +95,7 @@ class EditProfileBloc extends Bloc<EditProfileEvent, EditProfileState> {
     loadingAuth(_context);
 
     try {
-      await _settingsRepo.editProfileName(
-        userModel: _authRepo.currentUserModel!,
-        newName: newName,
-      );
+      await _settingsRepo.editProfileName(newName: newName);
 
       mainContext.read<ProfileBloc>().add(GetProfile());
 
@@ -138,10 +136,7 @@ class EditProfileBloc extends Bloc<EditProfileEvent, EditProfileState> {
     loadingAuth(_context);
 
     try {
-      await _settingsRepo.editProfileEmail(
-        userModel: _authRepo.currentUserModel!,
-        newEmail: newEmail,
-      );
+      await _settingsRepo.editProfileEmail(newEmail: newEmail);
 
       mainContext.read<ProfileBloc>()
         ..add(GetProfile())

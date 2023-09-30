@@ -64,9 +64,8 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   }
 
   void _getVerifiedStatus(event, emit) {
-    final isVerified = (_authRepo.currentUserSupabase!.emailConfirmedAt == null)
-        ? false
-        : true;
+    final isVerified =
+        (_authRepo.currentUserFirebase!.emailVerified == false) ? false : true;
     emit(state.copyWith(isVerified: isVerified));
   }
 }

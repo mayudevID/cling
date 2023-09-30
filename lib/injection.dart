@@ -1,5 +1,6 @@
 import 'package:cling/features/repository/database_repository.dart';
 import 'package:cling/features/repository/settings_repository.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -7,7 +8,6 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'features/repository/auth_repository.dart';
 import 'firebase_options.dart';
@@ -22,18 +22,18 @@ Future<void> initSl() async {
   final firebaseAuth = FirebaseAuth.instanceFor(app: app);
   getIt.registerLazySingleton<FirebaseAuth>(() => firebaseAuth);
 
-  final supabaseClient = Supabase.instance.client;
-  getIt.registerLazySingleton<SupabaseClient>(() => supabaseClient);
-
   final firebaseCrashlytics = FirebaseCrashlytics.instance;
   getIt.registerLazySingleton<FirebaseCrashlytics>(() => firebaseCrashlytics);
+
+  final firestore = FirebaseFirestore.instance;
+  getIt.registerLazySingleton<FirebaseFirestore>(() => firestore);
 
   final cache = await SharedPreferences.getInstance();
   getIt.registerLazySingleton<SharedPreferences>(() => cache);
 
   final authRepo = AuthRepository(
-    supabaseClient: getIt<SupabaseClient>(),
-    //firebaseAuth: getIt<FirebaseAuth>(),
+    firebaseAuth: getIt<FirebaseAuth>(),
+    firestore: getIt<FirebaseFirestore>(),
     cache: getIt<SharedPreferences>(),
   );
   getIt.registerLazySingleton<AuthRepository>(() => authRepo);
@@ -45,7 +45,8 @@ Future<void> initSl() async {
   getIt.registerLazySingleton<FToast>(() => fToast);
 
   final settingsRepo = SettingsRepository(
-    supabaseClient: getIt<SupabaseClient>(),
+    firebaseAuth: getIt<FirebaseAuth>(),
+    firestore: getIt<FirebaseFirestore>(),
     cache: getIt<SharedPreferences>(),
   );
   getIt.registerLazySingleton<SettingsRepository>(() => settingsRepo);

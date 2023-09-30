@@ -11,44 +11,42 @@ String userModelToMap(UserModel data) => json.encode(data.toMap());
 
 class UserModel extends Equatable {
   UserModel({
-    required this.id,
+    required this.uid,
     required this.verifiedProcess,
     required this.currency,
-    required this.email,
-    required this.name,
     this.lastBackupTime,
     this.backupUrl,
     required this.monthlyBudget,
     required this.monthlyIncome,
+    required this.createdAt,
+    required this.updatedAt,
   });
 
-  String email;
-  String id;
+  String uid;
   bool verifiedProcess;
-  String name;
   DateTime? lastBackupTime;
   String? backupUrl;
   Currency currency;
   double monthlyBudget;
   double monthlyIncome;
+  DateTime createdAt;
+  DateTime updatedAt;
 
   @override
   List<Object?> get props => [
-        email,
-        id,
-        name,
+        uid,
         lastBackupTime,
         backupUrl,
         verifiedProcess,
         currency,
         monthlyBudget,
         monthlyIncome,
+        createdAt,
+        updatedAt,
       ];
 
   factory UserModel.fromMap(Map<String, dynamic> json) => UserModel(
-        id: json["id"],
-        name: json["full_name"],
-        email: json["email"],
+        uid: json["uid"],
         lastBackupTime: DateTime.tryParse(json["last_backup_time"] ?? ""),
         backupUrl: json['backup_url'],
         verifiedProcess: json["verified_process"],
@@ -58,53 +56,55 @@ class UserModel extends Equatable {
         ),
         monthlyBudget: json["monthly_budget"].toDouble(),
         monthlyIncome: json["monthly_income"].toDouble(),
+        createdAt: DateTime.parse(json["created_at"]),
+        updatedAt: DateTime.parse(json["updated_at"]),
       );
 
   Map<String, dynamic> toMap() => {
-        "id": id,
-        "full_name": name,
-        "email": email,
+        "uid": uid,
         "last_backup_time": lastBackupTime?.toIso8601String(),
         "backup_url": backupUrl,
         "verified_process": verifiedProcess,
         "currency": currency.value.countryCode,
         "monthly_budget": monthlyBudget,
         "monthly_income": monthlyIncome,
+        "created_at": createdAt.toIso8601String(),
+        "updated_at": updatedAt.toIso8601String(),
       };
 
   factory UserModel.empty() => UserModel(
-        id: '-1',
+        uid: '-1',
         verifiedProcess: false,
         currency: Currency.idr,
-        email: "",
-        name: "",
         lastBackupTime: null,
         backupUrl: null,
         monthlyBudget: 0.0,
         monthlyIncome: 0.0,
+        createdAt: DateTime(0),
+        updatedAt: DateTime(0),
       );
 
   UserModel copyWith({
-    String? email,
-    String? id,
-    String? name,
+    String? uid,
     DateTime? lastBackupTime,
     String? backupUrl,
     bool? verifiedProcess,
     Currency? currency,
     double? monthlyBudget,
     double? monthlyIncome,
+    DateTime? createdAt,
+    DateTime? updatedAt,
   }) {
     return UserModel(
-      id: id ?? this.id,
-      email: email ?? this.email,
-      name: name ?? this.name,
+      uid: uid ?? this.uid,
       lastBackupTime: lastBackupTime ?? this.lastBackupTime,
       backupUrl: backupUrl ?? this.backupUrl,
       verifiedProcess: verifiedProcess ?? this.verifiedProcess,
       currency: currency ?? this.currency,
       monthlyBudget: monthlyBudget ?? this.monthlyBudget,
       monthlyIncome: monthlyIncome ?? this.monthlyIncome,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
     );
   }
 }

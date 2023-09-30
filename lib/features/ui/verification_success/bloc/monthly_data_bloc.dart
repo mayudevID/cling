@@ -11,7 +11,6 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../../../core/logger.dart';
 import '../../main/main_page.dart';
@@ -154,14 +153,6 @@ class MonthlyDataBloc extends Bloc<MonthlyDataEvent, MonthlyDataState> {
       errorSnackbar(
         _context,
         AppLocalizations.of(_context)!.noConnection,
-      );
-    } on PostgrestException catch (e) {
-      Logger.Red.log(e.message);
-
-      Navigator.pop(_context);
-      errorSnackbar(
-        _context,
-        e.message,
       );
     }
   }

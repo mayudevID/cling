@@ -1,17 +1,16 @@
 // ignore_for_file: use_build_context_synchronously
-
-import 'dart:async';
 import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:cling/core/exception.dart';
+import 'package:cling/core/logger.dart';
 import 'package:cling/core/route.dart';
 import 'package:cling/features/model/currency.dart';
 import 'package:cling/features/ui/language_currency/lang_export.dart';
-import 'package:cling/main.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:equatable/equatable.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../../core/common_widget.dart';
@@ -141,7 +140,6 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
 
     loadingAuth(_context);
     await _authRepository.logOut();
-    //await _authRepository.saveRegisterProcess(true);
 
     try {
       await _authRepository.signUp(
@@ -151,37 +149,23 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
         currency: state.selectedCurrency.value.countryCode!,
       );
 
-      // await Future.wait([
-      //   _authRepository.sendEmailVerification(),
-      //   _authRepository.updateDisplayName(state.name.trim()),
-      // ]);
-
-      await _authRepository.logOut();
-      //await _authRepository.saveRegisterProcess(false);
-
-      Future.microtask(() {
-        Navigator.pop(_context);
-        Navigator.pushReplacementNamed(
-          MainApp.navKeyGlobal.currentContext!,
-          RouteName.registerSuccess,
-        );
-      });
-    } on SignUpWithEmailAndPasswordFailure catch (e) {
-      Future.microtask(() {
-        Navigator.pop(_context);
-        errorToast(e.message);
-      });
-    } on SocketException catch (_) {
-      Future.microtask(() {
-        Navigator.pop(_context);
-        errorSnackbar(_context, AppLocalizations.of(_context)!.noConnection);
-      });
-    } on Exception catch (e) {
-      _authRepository.logOut();
-      Future.microtask(() {
-        Navigator.pop(_context);
-        errorToast(e.toString());
-      });
+      Navigator.of(_context)
+        ..pop()
+        ..pushReplacementNamed(RouteName.registerSuccess);
+    } on FirebaseAuthException catch (e) {
+      Logger.Red.log("FirebaseAuthException: $e");
+      Navigator.pop(_context);
+      errorToast(SignUpWithEmailAndPasswordFailure.fromCode(e.code).message);
+    } on SocketException catch (e) {
+      Logger.Red.log("SocketException: $e");
+      Navigator.pop(_context);
+      errorSnackbar(_context, AppLocalizations.of(_context)!.noConnection);
+    } catch (e) {
+      Logger.Red.log("FirebaseAuthException: $e");
+      Navigator.pop(_context);
+      errorToast(const SignUpWithEmailAndPasswordFailure().message);
     }
+
+    await _authRepository.logOut();
   }
 }

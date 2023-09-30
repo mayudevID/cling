@@ -9,6 +9,7 @@ environment:
 dependencies:
   auto_size_text_field: ^2.2.1
   bloc: ^8.1.2
+  cloud_firestore: ^4.9.2
   connectivity_plus: ^4.0.2
   currency_text_input_formatter: ^2.1.10
   device_preview: ^1.1.0
@@ -42,7 +43,6 @@ dependencies:
   sizer: ^2.0.15
   smooth_page_indicator: ^1.1.0
   sqflite: ^2.3.0
-  supabase_flutter: ^1.10.11
   syncfusion_flutter_charts: ^22.1.39
   transitioned_indexed_stack: ^1.0.2
 
