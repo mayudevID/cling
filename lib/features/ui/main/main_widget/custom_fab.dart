@@ -1,123 +1,96 @@
 import 'package:cling/core/route.dart';
 import 'package:cling/core/utils.dart';
 import 'package:cling/features/ui/main/add_in_ex/page/add_in_ex_page.dart';
+import 'package:cling/features/ui/main/main_widget/custom_button_fab.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
-import 'package:sizer/sizer.dart';
+import 'package:nil/nil.dart';
 
 import '../../../../resources/gen/assets.gen.dart';
-import '../../../../resources/gen/fonts.gen.dart';
 import '../../language_currency/lang_export.dart';
 import 'dart:math' as math;
 
 Widget customFloatingActionButton(BuildContext context) {
+  final buttonData = [
+    {
+      "route": RouteName.addInEx,
+      "args": FlowType.income,
+      "name": AppLocalizations.of(context)!.addIncome,
+    },
+    {
+      "route": RouteName.addInEx,
+      "args": FlowType.expense,
+      "name": AppLocalizations.of(context)!.addExpenses,
+    },
+    {
+      "route": RouteName.addGoal,
+      "args": null,
+      "name": AppLocalizations.of(context)!.addGoals,
+    }
+  ];
+
   return Container(
     margin: EdgeInsets.only(
       bottom: 96.hmea,
     ),
     child: ExpandableFab(
-      child: Assets.lib.resources.images.plus.svg(),
-      backgroundColor: const Color(0xFFF599DA),
-      foregroundColor: Colors.black,
       type: ExpandableFabType.up,
-      closeButtonStyle: ExpandableFabCloseButtonStyle(
-        backgroundColor: const Color(0xFFF06AC9),
-        foregroundColor: Colors.black,
-        child: Transform.rotate(
-          angle: math.pi / 4,
-          child: Assets.lib.resources.images.plus.svg(),
-        ),
+      closeButtonBuilder: FloatingActionButtonBuilder(
+        size: 0.2,
+        builder: (
+          BuildContext context,
+          void Function()? onPressed,
+          Animation<double> progress,
+        ) {
+          return Container(
+            padding: const EdgeInsets.all(18),
+            width: 64.wmea,
+            height: 64.wmea,
+            decoration: BoxDecoration(
+              color: const Color(0xFFF599DA),
+              borderRadius: BorderRadius.circular(24),
+            ),
+            child: Transform.rotate(
+              angle: math.pi / 4,
+              child: Assets.lib.resources.images.plus.svg(),
+            ),
+          );
+        },
       ),
-      expandedFabShape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(13),
+      openButtonBuilder: FloatingActionButtonBuilder(
+        size: 0.2,
+        builder: (
+          BuildContext context,
+          void Function()? onPressed,
+          Animation<double> progress,
+        ) {
+          return Container(
+            padding: const EdgeInsets.all(18),
+            width: 64.wmea,
+            height: 64.wmea,
+            decoration: BoxDecoration(
+              color: const Color(0xFFF599DA),
+              borderRadius: BorderRadius.circular(24),
+            ),
+            child: Assets.lib.resources.images.plus.svg(),
+          );
+        },
       ),
-      collapsedFabShape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(13),
-      ),
-      distance: 60,
+      distance: 50.hmea,
       overlayStyle: ExpandableFabOverlayStyle(blur: 3),
-      expandedFabSize: ExpandableFabSize.regular,
       children: [
-        GestureDetector(
-          onTap: () async {
-            Navigator.pushNamed(
-              context,
-              RouteName.addInEx,
-              arguments: FlowType.income,
-            );
-          },
-          child: Container(
-            padding: EdgeInsets.symmetric(
-              vertical: 9.wmea,
-              horizontal: 19.5.hmea,
-            ),
-            decoration: BoxDecoration(
-              color: const Color(0xFFF599DA),
-              borderRadius: BorderRadius.circular(13),
-            ),
-            child: Text(
-              AppLocalizations.of(context)!.addIncome,
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 13.5.sp,
-                fontFamily: FontFamily.cabinetGrotesk,
-                fontWeight: FontWeight.w400,
-              ),
-            ),
+        const Nil(),
+        for (Map data in buttonData)
+          GestureDetector(
+            onTap: () async {
+              Navigator.pushNamed(
+                context,
+                data["route"],
+                arguments: data["args"],
+              );
+            },
+            child: customButtonFab(data["name"]),
           ),
-        ),
-        GestureDetector(
-          onTap: () async {
-            Navigator.pushNamed(
-              context,
-              RouteName.addInEx,
-              arguments: FlowType.expense,
-            );
-          },
-          child: Container(
-            padding: EdgeInsets.symmetric(
-              vertical: 9.wmea,
-              horizontal: 19.5.hmea,
-            ),
-            decoration: BoxDecoration(
-              color: const Color(0xFFF599DA),
-              borderRadius: BorderRadius.circular(13),
-            ),
-            child: Text(
-              AppLocalizations.of(context)!.addExpenses,
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 13.5.sp,
-                fontFamily: FontFamily.cabinetGrotesk,
-                fontWeight: FontWeight.w400,
-              ),
-            ),
-          ),
-        ),
-        GestureDetector(
-          onTap: () async {
-            Navigator.pushNamed(context, RouteName.addGoal);
-          },
-          child: Container(
-            padding: EdgeInsets.symmetric(
-              vertical: 9.wmea,
-              horizontal: 19.5.hmea,
-            ),
-            decoration: BoxDecoration(
-              color: const Color(0xFFF599DA),
-              borderRadius: BorderRadius.circular(13),
-            ),
-            child: Text(
-              AppLocalizations.of(context)!.addGoals,
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 13.5.sp,
-                fontFamily: FontFamily.cabinetGrotesk,
-                fontWeight: FontWeight.w400,
-              ),
-            ),
-          ),
-        ),
       ],
     ),
   );

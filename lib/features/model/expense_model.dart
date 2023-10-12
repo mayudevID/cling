@@ -47,7 +47,7 @@ class ExpenseModel extends Equatable {
         ExpenseMeta.date: date.toIso8601String(),
         ExpenseMeta.item: item,
         ExpenseMeta.amount: amount,
-        ExpenseMeta.categories: categories,
+        ExpenseMeta.idCategories: categories,
       };
 
   @override

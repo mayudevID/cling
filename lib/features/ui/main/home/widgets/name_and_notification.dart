@@ -22,7 +22,7 @@ Widget nameAndNotification() {
             },
             builder: (context, state) {
               return Text(
-                '${AppLocalizations.of(context)!.goodDay}, ${state.user!.displayName!.split(" ")[0]}!',
+                '${AppLocalizations.of(context)!.goodDay}, ${state.user?.displayName?.split(" ")[0]}!',
                 textAlign: TextAlign.left,
                 style: TextStyle(
                   color: Colors.white,

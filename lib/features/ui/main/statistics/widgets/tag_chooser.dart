@@ -22,44 +22,47 @@ class TagChooser extends StatelessWidget {
           1: AppLocalizations.of(context)!.income,
           2: AppLocalizations.of(context)!.expense,
         };
-        return Row(
-          children: tagFlow.entries.map(
-            (e) {
-              return GestureDetector(
-                onTap: () {
-                  context.read<StatisticsBloc>().add(
-                        TypeCategoriesEvent(type: e.key),
-                      );
-                },
-                child: Container(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 16.wmea,
-                    vertical: 8.hmea,
-                  ),
-                  margin: EdgeInsets.only(right: 12.wmea),
-                  decoration: ShapeDecoration(
-                    color: (e.key == state.typeCategories)
-                        ? const Color(0xFFF599DA)
-                        : const Color(0xFF343437),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
+        return SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: tagFlow.entries.map(
+              (e) {
+                return GestureDetector(
+                  onTap: () {
+                    context.read<StatisticsBloc>().add(
+                          TypeCategoriesEvent(type: e.key),
+                        );
+                  },
+                  child: Container(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 16.wmea,
+                      vertical: 8.hmea,
                     ),
-                  ),
-                  child: Text(
-                    e.value,
-                    style: TextStyle(
+                    margin: EdgeInsets.only(right: 12.wmea),
+                    decoration: ShapeDecoration(
                       color: (e.key == state.typeCategories)
-                          ? const Color(0xFF101010)
-                          : Colors.white,
-                      fontSize: 13.5.sp,
-                      fontFamily: FontFamily.cabinetGrotesk,
-                      fontWeight: FontWeight.w700,
+                          ? const Color(0xFFF599DA)
+                          : const Color(0xFF343437),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    child: Text(
+                      e.value,
+                      style: TextStyle(
+                        color: (e.key == state.typeCategories)
+                            ? const Color(0xFF101010)
+                            : Colors.white,
+                        fontSize: 13.5.sp,
+                        fontFamily: FontFamily.cabinetGrotesk,
+                        fontWeight: FontWeight.w700,
+                      ),
                     ),
                   ),
-                ),
-              );
-            },
-          ).toList(),
+                );
+              },
+            ).toList(),
+          ),
         );
       },
     );

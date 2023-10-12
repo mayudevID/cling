@@ -70,7 +70,7 @@ class DatabaseRepository {
         IncomeMeta.date: data.date.toIso8601String(),
         IncomeMeta.amount: data.amount,
         IncomeMeta.desc: data.desc,
-        IncomeSourceMeta.id: foreignId,
+        IncomeMeta.idIncomeSource: foreignId,
       },
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
@@ -88,7 +88,7 @@ class DatabaseRepository {
         ExpenseMeta.date: data.date.toIso8601String(),
         ExpenseMeta.amount: data.amount,
         ExpenseMeta.item: data.item,
-        ExpenseCategoriesMeta.id: foreignId,
+        ExpenseMeta.idCategories: foreignId,
       },
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
@@ -325,6 +325,58 @@ class DatabaseRepository {
         ${IncomeSourceMeta.nameTable}.${IncomeSourceMeta.id} 
         GROUP BY Categories;
       ''',
+    );
+
+    return result;
+  }
+
+  Future<List<Map<String, Object?>>> getExpenseBreakdown() async {
+    final result = await db.rawQuery(
+      '''
+        SELECT ${ExpenseCategoriesMeta.nameTable}.${ExpenseCategoriesMeta.expenseCategories} AS Categories, 
+        SUM(${ExpenseMeta.amount}) AS TotalExpense
+        FROM ${ExpenseMeta.nameTable}
+        INNER JOIN ${ExpenseCategoriesMeta.nameTable} 
+        ON ${ExpenseMeta.nameTable}.${ExpenseCategoriesMeta.id} 
+        = 
+        ${ExpenseCategoriesMeta.nameTable}.${ExpenseCategoriesMeta.id} 
+        GROUP BY Categories;
+      ''',
+    );
+
+    return result;
+  }
+
+  Future<List<ExpenseModel>> getExpenseRangeDate({
+    required DateTime dateLeft,
+    required DateTime dateRight,
+  }) async {
+    List<ExpenseModel> listData = [];
+    final result = await db.rawQuery(
+      '''
+        SELECT * FROM ${ExpenseMeta.nameTable}
+        WHERE date(${ExpenseMeta.date}) >= date(?)
+        AND date(${ExpenseMeta.date}) <= date(?)
+      ''',
+      [dateLeft.toIso8601String(), dateRight.toIso8601String()],
+    );
+
+    for (var element in result) {
+      listData.add(ExpenseModel.fromDatabase(element));
+    }
+    return listData;
+  }
+
+  Future<List<Map<String, Object?>>> getGoalDetailSave(int goalId) async {
+    final result = await db.rawQuery(
+      '''
+        SELECT ${GoalSavingMeta.date} AS Date,
+        SUM(${GoalSavingMeta.amount}) AS TotalSavings 
+        FROM ${GoalSavingMeta.nameTable}
+        WHERE ${GoalSavingMeta.idGoal} = ?
+        GROUP BY Date;
+      ''',
+      [goalId],
     );
 
     return result;

@@ -47,7 +47,7 @@ class IncomeModel extends Equatable {
         IncomeMeta.date: date.toIso8601String(),
         IncomeMeta.desc: desc ?? "-",
         IncomeMeta.amount: amount,
-        IncomeMeta.incomeSource: incomeSource,
+        IncomeMeta.idIncomeSource: incomeSource,
       };
 
   @override

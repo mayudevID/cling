@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:cling/core/logger.dart';
+import 'package:cling/features/model/pie_data_expense.dart';
 import 'package:cling/features/model/pie_data_expense_savings.dart';
 import 'package:cling/features/repository/database_repository.dart';
 import 'package:cling/features/ui/main/main_page.dart';
@@ -22,6 +23,10 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
     on<GetIncomeBreakdown>(_getIncomeBreakdown);
     on<GetIncomeExpenseTotalAllMonth>(_getIncomeExpenseTotalAllMonth);
     on<GetYearlyIncome>(_getYearlyIncome);
+    on<GetExpenseBreakdown>(_getExpenseBreakdown);
+    on<ClickDateLeft>(_clickDateLeftGetExpense);
+    on<ClickDateRight>(_clickDateRightGetExpense);
+    on<GetExpenseDateRange>(_getExpenseDateRange);
   }
 
   final DatabaseRepository _dbRepo;
@@ -106,13 +111,54 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
   void _getIncomeBreakdown(event, emit) async {
     final result = await _dbRepo.getIncomeBreakdown();
 
-    emit(state.copyWith(incomeBreakdownList: result));
+    if (result.isNotEmpty) {
+      emit(state.copyWith(incomeBreakdownList: result));
+    }
+  }
+
+  void _getExpenseBreakdown(event, emit) async {
+    List<PieDataExpense> expenseBreakdownList = List.empty(growable: true);
+    final result = await _dbRepo.getExpenseBreakdown();
+
+    if (result.isNotEmpty) {
+      for (Map element in result) {
+        final getCat = element["Categories"].toString();
+
+        final cat = getCat.substring(getCat.indexOf(" ") + 1);
+
+        final total = element["TotalExpense"] / 100.0;
+        expenseBreakdownList.add(
+          PieDataExpense(
+            nameCategories: cat,
+            amount: total,
+          ),
+        );
+      }
+
+      emit(state.copyWith(expenseBreakdownList: expenseBreakdownList));
+    }
   }
 
   void _getMostExpense(event, emit) async {
     final result = await _dbRepo.getMostExpense();
 
-    emit(state.copyWith(mostExpenseList: result));
+    if (result.isNotEmpty) {
+      emit(state.copyWith(mostExpenseList: result));
+    }
+  }
+
+  void _getExpenseDateRange(event, emit) async {
+    final dateRight = state.dateRight;
+    final dateLeft = dateRight.subtract(const Duration(days: 7));
+
+    final result = await _dbRepo.getExpenseRangeDate(
+      dateLeft: dateLeft,
+      dateRight: dateRight,
+    );
+
+    if (result.isNotEmpty) {
+      emit(state.copyWith(expenseDateRangeList: result));
+    }
   }
 
   void _getYearlyIncome(event, emit) async {
@@ -140,6 +186,16 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
         maxValIncome: max.toDouble(),
       ));
     }
+  }
+
+  void _clickDateLeftGetExpense(event, emit) {
+    final dateNew = state.dateRight.subtract(const Duration(days: 8));
+    emit(state.copyWith(dateRight: dateNew));
+  }
+
+  void _clickDateRightGetExpense(event, emit) {
+    final dateNew = state.dateRight.add(const Duration(days: 8));
+    emit(state.copyWith(dateRight: dateNew));
   }
 
   String monthDataInExToString({

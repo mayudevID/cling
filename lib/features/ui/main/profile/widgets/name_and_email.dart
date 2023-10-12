@@ -28,8 +28,11 @@ Widget nameAndEmail(BuildContext context) {
                   return p.user?.displayName != c.user?.displayName;
                 },
                 builder: (context, state) {
+                  final name =
+                      (state.user != null) ? state.user!.displayName! : "User";
+
                   return Text(
-                    state.user!.displayName!,
+                    name,
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 14.sp,
@@ -49,8 +52,11 @@ Widget nameAndEmail(BuildContext context) {
                       return p.user?.email != c.user?.email;
                     },
                     builder: (context, state) {
+                      final email =
+                          (state.user != null) ? state.user!.email! : "Email";
+
                       return Text(
-                        state.user!.email!,
+                        email,
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 10.5.sp,
@@ -78,12 +84,13 @@ Widget nameAndEmail(BuildContext context) {
                             current.user?.emailVerified;
                       },
                       builder: (context, state) {
+                        final isVerified = (state.user != null)
+                            ? state.user!.emailVerified
+                            : false;
                         return Text(
-                          (state.user!.emailVerified)
-                              ? "Verified"
-                              : "Not Verified",
+                          (isVerified) ? "Verified" : "Not Verified",
                           style: TextStyle(
-                            color: (state.user!.emailVerified)
+                            color: (isVerified)
                                 ? Colors.green.shade800
                                 : Colors.red.shade800,
                             fontFamily: FontFamily.cabinetGrotesk,

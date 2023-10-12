@@ -6,45 +6,45 @@ import 'package:onesignal_flutter/onesignal_flutter.dart';
 class NotificationClass {
   static void init() {
     //Remove this method to stop OneSignal Debugging
-    if (kDebugMode) {
-      OneSignal.shared.setLogLevel(OSLogLevel.verbose, OSLogLevel.none);
-    }
+    // if (kDebugMode) {
+    //   OneSignal.Debug.setLogLevel(OSLogLevel.verbose);
+    // }
 
-    OneSignal.shared.setAppId(EnvApp.oneSignalAppId);
+    // OneSignal.initialize(EnvApp.oneSignalAppId);
 
-    // The promptForPushNotificationsWithUserResponse function will show the iOS or Android push notification prompt. We recommend removing the following code and instead using an In-App Message to prompt for notification permission
-    OneSignal.shared
-        .promptUserForPushNotificationPermission(
-      fallbackToSettings: true,
-    )
-        .then((accepted) {
-      if (kDebugMode) print("Accepted permission: $accepted");
-    });
+    // // The promptForPushNotificationsWithUserResponse function will show the iOS or Android push notification prompt. We recommend removing the following code and instead using an In-App Message to prompt for notification permission
+    // OneSignal.Notifications.requestPermission(true).then((accepted) {
+    //   if (kDebugMode) print("Accepted permission: $accepted");
+    // });
+
+    // OneSignal.User.pushSubscription.optIn();
 
     //* Listener
 
     //??? Handle when notification opened on Mobile
-    OneSignal.shared.setNotificationOpenedHandler(
-      NotificationHandler.handleNotificationOpened,
-    );
+
+    // OneSignal.shared.setNotificationOpenedHandler(
+    //   NotificationHandler.handleNotificationOpened,
+    // );
 
     //??? Handle when notification received on Mobile
-    OneSignal.shared.setNotificationWillShowInForegroundHandler(
-      NotificationHandler.handleNotificationReceived,
-    );
+
+    // OneSignal.shared.setNotificationWillShowInForegroundHandler(
+    //   NotificationHandler.handleNotificationReceived,
+    // );
   }
 }
 
-class NotificationHandler {
-  static handleNotificationOpened(OSNotificationOpenedResult result) {
-    Logger.White.log("Handle Notification Opened");
-  }
+// class NotificationHandler {
+//   static handleNotificationOpened(OSNotificationOpenedResult result) {
+//     Logger.White.log("Handle Notification Opened");
+//   }
 
-  static void handleNotificationReceived(OSNotificationReceivedEvent event) {
-    Logger.White.log("Handle Notification Received");
-    event.complete(event.notification);
-  }
-}
+//   static void handleNotificationReceived(OSNotificationReceivedEvent event) {
+//     Logger.White.log("Handle Notification Received");
+//     event.complete(event.notification);
+//   }
+// }
 
 // static handleNotificationOpened(OSNotificationOpenedResult result) async {
 //     OSNotification notification = result.notification; // Notification object

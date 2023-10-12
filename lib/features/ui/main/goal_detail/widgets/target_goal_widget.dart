@@ -1,16 +1,17 @@
-import 'package:cling/core/common_widget.dart';
 import 'package:cling/core/utils.dart';
-import 'package:cling/features/ui/main/profile/bloc/profile_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nil/nil.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../../../../core/common_widget.dart';
 import '../../../../../resources/gen/fonts.gen.dart';
 import '../../../language_currency/lang_export.dart';
-import '../bloc/home_bloc.dart';
+import '../../home/bloc/home_bloc.dart';
+import '../../profile/bloc/profile_bloc.dart';
+import '../bloc/goal_detail_bloc.dart';
 
-Widget monthlyBudget(BuildContext context) {
+Widget targetGoalWidget(BuildContext context) {
   return Container(
     margin: EdgeInsets.symmetric(horizontal: 20.wmea),
     padding: EdgeInsets.symmetric(
@@ -31,7 +32,7 @@ Widget monthlyBudget(BuildContext context) {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              AppLocalizations.of(context)!.monthlyBudget,
+              AppLocalizations.of(context)!.target,
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Colors.white,
@@ -40,22 +41,11 @@ Widget monthlyBudget(BuildContext context) {
                 fontWeight: FontWeight.w700,
               ),
             ),
-            BlocBuilder<ProfileBloc, ProfileState>(
+            BlocBuilder<GoalDetailBloc, GoalDetailState>(
               buildWhen: (p, c) {
-                return p.userModel.monthlyBudget != c.userModel.monthlyBudget;
+                return p.goalModel.target != c.goalModel.target;
               },
               builder: (context, state) {
-                if (state.userModel.monthlyBudget == 0) {
-                  return Text(
-                    "Haven't set a monthly budget",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 12.sp,
-                      fontFamily: FontFamily.cabinetGrotesk,
-                    ),
-                  );
-                }
-
                 return NominalMoneyFormatter(
                   textStyle: TextStyle(
                     color: Colors.white,
@@ -63,7 +53,7 @@ Widget monthlyBudget(BuildContext context) {
                     fontFamily: FontFamily.cabinetGrotesk,
                     fontWeight: FontWeight.w700,
                   ),
-                  amount: state.userModel.monthlyBudget,
+                  amount: state.goalModel.target,
                   decimalDigits: 2,
                   isWithName: true,
                 );
@@ -116,17 +106,6 @@ Widget monthlyBudget(BuildContext context) {
         const SizedBox(height: 16),
         Row(
           children: [
-            Text(
-              AppLocalizations.of(context)!.spent,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 10.5.sp,
-                fontFamily: FontFamily.cabinetGrotesk,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            const SizedBox(width: 8),
             BlocBuilder<HomeBloc, HomeState>(
               builder: (context, state) {
                 return NominalMoneyFormatter(

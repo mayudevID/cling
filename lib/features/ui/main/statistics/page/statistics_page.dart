@@ -52,9 +52,9 @@ class StatisticsPage extends StatelessWidget {
                 return CustomIndexedStack(
                   curve: Curves.fastOutSlowIn,
                   index: state.typeCategories,
-                  children: [
-                    const StatsAll(),
-                    const StatsIncome(),
+                  children: const [
+                    StatsAll(),
+                    StatsIncome(),
                     StatsExpense(),
                   ],
                 );

@@ -56,8 +56,8 @@ FutureOr<void> initDatabaseTable(Database db, int version) async {
             ${IncomeMeta.date} TEXT, 
             ${IncomeMeta.desc} TEXT,
             ${IncomeMeta.amount} INTEGER,
-            ${IncomeSourceMeta.id} INTEGER,
-            FOREIGN KEY (${IncomeSourceMeta.id}) 
+            ${IncomeMeta.idIncomeSource} INTEGER,
+            FOREIGN KEY (${IncomeMeta.idIncomeSource}) 
             REFERENCES ${IncomeSourceMeta.nameTable} 
             (${IncomeSourceMeta.id}) 
           )
@@ -70,8 +70,8 @@ FutureOr<void> initDatabaseTable(Database db, int version) async {
             ${ExpenseMeta.date} TEXT, 
             ${ExpenseMeta.item} TEXT,
             ${ExpenseMeta.amount} INTEGER,
-            ${ExpenseCategoriesMeta.id} INTEGER,
-            FOREIGN KEY (${ExpenseCategoriesMeta.id}) 
+            ${ExpenseMeta.idCategories} INTEGER,
+            FOREIGN KEY (${ExpenseMeta.idCategories}) 
             REFERENCES ${ExpenseCategoriesMeta.nameTable} 
             (${ExpenseCategoriesMeta.id}) 
           )
@@ -88,6 +88,17 @@ FutureOr<void> initDatabaseTable(Database db, int version) async {
           )
           ''',
     ),
+    db.execute('''
+         CREATE TABLE ${GoalSavingMeta.nameTable}(
+            ${GoalSavingMeta.id} INTEGER PRIMARY KEY AUTOINCREMENT,
+            ${GoalSavingMeta.idGoal} INTEGER,
+            ${GoalSavingMeta.date} TEXT,
+            ${GoalSavingMeta.amount} INTEGER,
+            FOREIGN KEY (${GoalSavingMeta.idGoal}) 
+            REFERENCES ${GoalMeta.nameTable} 
+            (${GoalMeta.id}) 
+         ) 
+      '''),
   ]);
 
   for (var i = 0; i < inSourceData.length; i++) {

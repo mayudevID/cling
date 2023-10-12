@@ -1,5 +1,7 @@
 import 'package:cling/core/utils.dart';
 import 'package:cling/features/model/goal_model.dart';
+import 'package:cling/features/repository/database_repository.dart';
+import 'package:cling/injection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
@@ -16,7 +18,9 @@ class GoalDetailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => GoalDetailBloc()..add(InitGoal(goalModel)),
+      create: (_) => GoalDetailBloc(
+        dbRepo: getIt<DatabaseRepository>(),
+      )..add(InitGoal(goalModel)),
       child: const GoalDetailPageContent(),
     );
   }
@@ -65,6 +69,9 @@ class GoalDetailPageContent extends StatelessWidget {
             height: 32.hmea,
           ),
           editGoalLogoPicker(context),
+          SizedBox(
+            height: 24.hmea,
+          ),
         ],
       ),
     );

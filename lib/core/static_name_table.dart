@@ -4,7 +4,7 @@ class IncomeMeta {
   static const date = 'date';
   static const desc = 'desc';
   static const amount = 'amount';
-  static const incomeSource = 'income_source';
+  static const idIncomeSource = 'income_source_id';
 }
 
 class ExpenseMeta {
@@ -13,7 +13,7 @@ class ExpenseMeta {
   static const date = 'date';
   static const item = 'item';
   static const amount = 'amount';
-  static const categories = 'categories';
+  static const idCategories = 'expense_source_id';
 }
 
 class IncomeSourceMeta {
@@ -35,4 +35,12 @@ class GoalMeta {
   static const name = 'goal_name';
   static const target = 'goal_target';
   static const collected = 'goal_collected';
+}
+
+class GoalSavingMeta {
+  static const nameTable = 'goal_saving_meta';
+  static const id = 'goal_saving_id';
+  static const idGoal = 'goal_id';
+  static const date = 'date_input';
+  static const amount = 'amount_input';
 }

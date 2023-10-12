@@ -33,11 +33,15 @@ class HomePage extends StatelessWidget {
           ),
           monthlyBudget(context),
           ...tagNameHome(
+            context,
             AppLocalizations.of(context)!.overview,
             withDate: true,
           ),
           incomeAndExpense(context),
-          ...tagNameHome(AppLocalizations.of(context)!.goals),
+          ...tagNameHome(
+            context,
+            AppLocalizations.of(context)!.goals,
+          ),
           BlocBuilder<HomeBloc, HomeState>(
             buildWhen: (prev, next) {
               return prev.listGoals != next.listGoals;
@@ -110,6 +114,7 @@ class HomePage extends StatelessWidget {
                   children: state.listGoals.asMap().entries.map(
                     (e) {
                       return widgetGoals(
+                        context,
                         e.key,
                         e.value,
                         state.listGoals.length,
@@ -120,7 +125,10 @@ class HomePage extends StatelessWidget {
               );
             },
           ),
-          ...tagNameHome(AppLocalizations.of(context)!.todayExpenses),
+          ...tagNameHome(
+            context,
+            AppLocalizations.of(context)!.todayExpenses,
+          ),
           BlocBuilder<HomeBloc, HomeState>(
             buildWhen: (prev, next) {
               return prev.listTodayExpenses != next.listTodayExpenses;

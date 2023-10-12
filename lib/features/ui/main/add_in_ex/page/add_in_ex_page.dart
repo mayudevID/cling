@@ -10,6 +10,7 @@ import 'package:currency_text_input_formatter/currency_text_input_formatter.dart
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../../resources/gen/fonts.gen.dart';
@@ -132,11 +133,17 @@ class AddIncomeExpensePageContent extends StatelessWidget {
                         return prev.selectedDate != curr.selectedDate;
                       },
                       builder: (context, state) {
-                        final day = state.selectedDate.day;
-                        final month = state.selectedDate.month;
-                        final year = state.selectedDate.year;
+                        final date = DateFormat.yMd(
+                          context.select(
+                            (LangCurrencyBloc bloc) {
+                              return bloc.state.selectedLanguage.value
+                                  .toLanguageTag();
+                            },
+                          ),
+                        ).format(state.selectedDate);
+
                         return Text(
-                          '$day/$month/$year',
+                          date,
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             color: Colors.white,
