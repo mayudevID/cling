@@ -12,7 +12,7 @@ import '../bloc/home_bloc.dart';
 
 Widget monthlyBudget(BuildContext context) {
   return Container(
-    margin: EdgeInsets.symmetric(horizontal: 20.wmea),
+    margin: EdgeInsets.symmetric(horizontal: 24.wmea),
     padding: EdgeInsets.symmetric(
       horizontal: 16.wmea,
       vertical: 16.hmea,

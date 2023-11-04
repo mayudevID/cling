@@ -49,7 +49,7 @@ class HomePage extends StatelessWidget {
             builder: (context, state) {
               if (state.listGoals.isEmpty) {
                 return Container(
-                  margin: EdgeInsets.symmetric(horizontal: 20.wmea),
+                  margin: EdgeInsets.symmetric(horizontal: 24.wmea),
                   decoration: BoxDecoration(
                     color: const Color(0x3D787880),
                     borderRadius: BorderRadius.circular(10),

@@ -12,7 +12,7 @@ import '../../../language_currency/lang_export.dart';
 Widget incomeAndExpense(BuildContext context) {
   return Container(
     margin: EdgeInsets.symmetric(
-      horizontal: 20.wmea,
+      horizontal: 24.wmea,
     ),
     width: double.infinity,
     padding: EdgeInsets.symmetric(

@@ -1,4 +1,5 @@
 import 'package:cling/core/utils.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nil/nil.dart';
@@ -7,13 +8,10 @@ import 'package:sizer/sizer.dart';
 import '../../../../../core/common_widget.dart';
 import '../../../../../resources/gen/fonts.gen.dart';
 import '../../../language_currency/lang_export.dart';
-import '../../home/bloc/home_bloc.dart';
-import '../../profile/bloc/profile_bloc.dart';
 import '../bloc/goal_detail_bloc.dart';
 
 Widget targetGoalWidget(BuildContext context) {
   return Container(
-    margin: EdgeInsets.symmetric(horizontal: 20.wmea),
     padding: EdgeInsets.symmetric(
       horizontal: 16.wmea,
       vertical: 16.hmea,
@@ -72,32 +70,25 @@ Widget targetGoalWidget(BuildContext context) {
                 color: Colors.white.withOpacity(0.76),
               ),
             ),
-            BlocBuilder<ProfileBloc, ProfileState>(
+            BlocBuilder<GoalDetailBloc, GoalDetailState>(
               buildWhen: (p, c) {
-                return p.userModel.monthlyBudget != c.userModel.monthlyBudget;
+                return p.goalModel.collected != c.goalModel.collected ||
+                    p.goalModel.target != c.goalModel.target;
               },
-              builder: (context, profileState) {
-                return BlocBuilder<HomeBloc, HomeState>(
-                  buildWhen: (p, c) {
-                    return p.amountExpenseThisMonth != c.amountExpenseThisMonth;
-                  },
-                  builder: (context, homeState) {
-                    if (profileState.userModel.monthlyBudget < 1) {
-                      return nil;
-                    }
+              builder: (context, state) {
+                if (state.goalModel.collected < 1) {
+                  return nil;
+                }
 
-                    final length =
-                        (homeState.amountExpenseThisMonth * 358.wmea) /
-                            profileState.userModel.monthlyBudget;
-                    return Container(
-                      width: length,
-                      height: 16.hmea,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(100),
-                        color: const Color(0xFF006DE9),
-                      ),
-                    );
-                  },
+                final length = (state.goalModel.collected * 358.wmea) /
+                    state.goalModel.target;
+                return Container(
+                  width: length,
+                  height: 16.hmea,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(100),
+                    color: const Color(0xFF006DE9),
+                  ),
                 );
               },
             ),
@@ -106,7 +97,7 @@ Widget targetGoalWidget(BuildContext context) {
         const SizedBox(height: 16),
         Row(
           children: [
-            BlocBuilder<HomeBloc, HomeState>(
+            BlocBuilder<GoalDetailBloc, GoalDetailState>(
               builder: (context, state) {
                 return NominalMoneyFormatter(
                   textStyle: TextStyle(
@@ -115,49 +106,43 @@ Widget targetGoalWidget(BuildContext context) {
                     fontFamily: FontFamily.cabinetGrotesk,
                     fontWeight: FontWeight.w700,
                   ),
-                  amount: state.amountExpenseThisMonth,
+                  amount: state.goalModel.collected,
                   decimalDigits: 2,
                   isWithName: true,
                 );
               },
             ),
-            BlocBuilder<ProfileBloc, ProfileState>(
+            BlocBuilder<GoalDetailBloc, GoalDetailState>(
               buildWhen: (p, c) {
-                return p.userModel.monthlyBudget != c.userModel.monthlyBudget;
+                return p.goalModel.target != c.goalModel.target ||
+                    p.goalModel.collected != p.goalModel.collected;
               },
-              builder: (context, profileState) {
-                return BlocBuilder<HomeBloc, HomeState>(
-                  buildWhen: (p, c) {
-                    return p.amountExpenseThisMonth != c.amountExpenseThisMonth;
-                  },
-                  builder: (context, homeState) {
-                    if (profileState.userModel.monthlyBudget < 1) {
-                      return Text(
-                        ' / 0%',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 10.5.sp,
-                          fontFamily: FontFamily.cabinetGrotesk,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      );
-                    }
+              builder: (context, state) {
+                if (state.goalModel.collected < 1) {
+                  return Text(
+                    ' / 0%',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 10.5.sp,
+                      fontFamily: FontFamily.cabinetGrotesk,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  );
+                }
 
-                    final amount = (homeState.amountExpenseThisMonth /
-                            profileState.userModel.monthlyBudget) *
+                final amount =
+                    (state.goalModel.collected / state.goalModel.target) *
                         100.0;
-                    return Text(
-                      ' / ${amount.round()}%',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 10.5.sp,
-                        fontFamily: FontFamily.cabinetGrotesk,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    );
-                  },
+                return Text(
+                  ' / ${amount.round()}%',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 10.5.sp,
+                    fontFamily: FontFamily.cabinetGrotesk,
+                    fontWeight: FontWeight.w700,
+                  ),
                 );
               },
             ),
