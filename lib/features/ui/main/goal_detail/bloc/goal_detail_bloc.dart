@@ -19,8 +19,6 @@ class GoalDetailBloc extends Bloc<GoalDetailEvent, GoalDetailState> {
   void _initGoal(InitGoal event, emit) async {
     final result = await _dbRepo.getGoalDetailSave(event.goalModel.id!);
 
-    print(result);
-
     emit(state.copyWith(
       goalModel: event.goalModel,
       dataSavingsList: result,
