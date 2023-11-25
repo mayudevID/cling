@@ -1,5 +1,7 @@
 import 'package:cling/core/utils.dart';
+import 'package:cling/features/ui/main/goal_detail/bloc/goal_detail_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../../core/init_database.dart';
@@ -56,9 +58,9 @@ Future<void> dialogPickEditGoalLogo(BuildContext mainContext) async {
                   itemBuilder: (BuildContext context, int index) {
                     return GestureDetector(
                       onTap: () {
-                        // mainContext.read<HomeBloc>().add(
-                        //       SetLogoGoal(emotLogo[index]),
-                        //     );
+                        mainContext.read<GoalDetailBloc>().add(
+                              ChangeIcon(emotLogo[index]),
+                            );
                         Navigator.pop(context);
                       },
                       child: Center(

@@ -45,18 +45,48 @@ class DatabaseRepository {
     Logger.Green.log("Database Created");
   }
 
-  Future<void> insertGoal(GoalModel data) async {
+  //* ================ GOAL CRUD ================
+
+  Future<void> insertGoal(GoalModel goalModel) async {
     await db.insert(
       GoalMeta.nameTable,
       {
-        GoalMeta.name: data.name,
-        GoalMeta.image: data.image,
-        GoalMeta.target: data.target,
-        GoalMeta.collected: data.collected,
+        GoalMeta.name: goalModel.name,
+        GoalMeta.image: goalModel.image,
+        GoalMeta.target: goalModel.target,
+        GoalMeta.collected: goalModel.collected,
       },
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }
+
+  Future<void> updateImageGoal(GoalModel goalModel) async {
+    await db.rawUpdate(
+      '''
+        UPDATE ${GoalMeta.nameTable} 
+        SET ${GoalMeta.image} = ? 
+        WHERE ${GoalMeta.id} = ?
+        ''',
+      [goalModel.image, goalModel.id],
+    );
+  }
+
+  Future<List<Map<String, Object?>>> getGoalDetailSave(int goalId) async {
+    final result = await db.rawQuery(
+      '''
+        SELECT ${GoalSavingMeta.date} AS Date,
+        SUM(${GoalSavingMeta.amount}) AS TotalSavings 
+        FROM ${GoalSavingMeta.nameTable}
+        WHERE ${GoalSavingMeta.idGoal} = ?
+        GROUP BY Date;
+      ''',
+      [goalId],
+    );
+
+    return result;
+  }
+
+  //* ================ INCOME CRUD ================
 
   Future<void> insertIncome(IncomeModel data) async {
     final foreignId = data.incomeSource.substring(
@@ -76,6 +106,71 @@ class DatabaseRepository {
     );
   }
 
+  Future<List<IncomeSourceModel>> getIncomeSource() async {
+    List<IncomeSourceModel> listData = [];
+    List<Map<String, dynamic>> maps = await db.query(
+      IncomeSourceMeta.nameTable,
+    );
+    for (var element in maps) {
+      listData.add(IncomeSourceModel.fromMap(element));
+    }
+    return listData;
+  }
+
+  Future<num> getTotalIncome() async {
+    List<Map<String, dynamic>> maps = await db.rawQuery('''
+        SELECT SUM(${IncomeMeta.amount}) 
+        FROM ${IncomeMeta.nameTable}
+      ''');
+    return maps.first['SUM(${IncomeMeta.amount})'] ?? 0;
+  }
+
+  Future<Map<String, dynamic>> getYearlyIncome() async {
+    var uniqueData = emptyData;
+
+    final now = DateTime.now();
+    final firstDate = DateTime(now.year, 1, 1).toIso8601String();
+    final lastDate = DateTime(now.year, 12, 31).toIso8601String();
+
+    final result = await db.rawQuery(
+      '''
+        SELECT strftime('%Y-%m', ${IncomeMeta.date}) AS Month, 
+        SUM(${IncomeMeta.amount}) AS TotalIncome 
+        FROM ${IncomeMeta.nameTable}
+        WHERE date(${IncomeMeta.date}) >= date(?)
+        AND date(${IncomeMeta.date}) <= date(?)
+        GROUP BY Month
+      ''',
+      [firstDate, lastDate],
+    );
+
+    for (Map<String, Object?> item in result) {
+      final month = item["Month"].toString();
+      uniqueData[month] = item["TotalIncome"];
+    }
+
+    return uniqueData;
+  }
+
+  Future<List<Map<String, Object?>>> getIncomeBreakdown() async {
+    final result = await db.rawQuery(
+      '''
+        SELECT ${IncomeSourceMeta.nameTable}.${IncomeSourceMeta.incomeSource} AS Categories, 
+        SUM(${IncomeMeta.amount}) AS TotalIncome
+        FROM ${IncomeMeta.nameTable}
+        INNER JOIN ${IncomeSourceMeta.nameTable} 
+        ON ${IncomeMeta.nameTable}.${IncomeSourceMeta.id} 
+        = 
+        ${IncomeSourceMeta.nameTable}.${IncomeSourceMeta.id} 
+        GROUP BY Categories;
+      ''',
+    );
+
+    return result;
+  }
+
+  //* ================ EXPENSE CRUD ================
+
   Future<void> insertExpense(ExpenseModel data) async {
     final foreignId = data.categories.substring(
       0,
@@ -92,17 +187,6 @@ class DatabaseRepository {
       },
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
-  }
-
-  Future<List<IncomeSourceModel>> getIncomeSource() async {
-    List<IncomeSourceModel> listData = [];
-    List<Map<String, dynamic>> maps = await db.query(
-      IncomeSourceMeta.nameTable,
-    );
-    for (var element in maps) {
-      listData.add(IncomeSourceModel.fromMap(element));
-    }
-    return listData;
   }
 
   Future<List<ExpenseCategoriesModel>> getExpenseCategories() async {
@@ -129,14 +213,6 @@ class DatabaseRepository {
       listData.add(ExpenseModel.fromDatabase(element));
     }
     return listData;
-  }
-
-  Future<num> getTotalIncome() async {
-    List<Map<String, dynamic>> maps = await db.rawQuery('''
-        SELECT SUM(${IncomeMeta.amount}) 
-        FROM ${IncomeMeta.nameTable}
-      ''');
-    return maps.first['SUM(${IncomeMeta.amount})'] ?? 0;
   }
 
   Future<num> getTotalExpense() async {
@@ -286,50 +362,6 @@ class DatabaseRepository {
     return dataList;
   }
 
-  Future<Map<String, dynamic>> getYearlyIncome() async {
-    var uniqueData = emptyData;
-
-    final now = DateTime.now();
-    final firstDate = DateTime(now.year, 1, 1).toIso8601String();
-    final lastDate = DateTime(now.year, 12, 31).toIso8601String();
-
-    final result = await db.rawQuery(
-      '''
-        SELECT strftime('%Y-%m', ${IncomeMeta.date}) AS Month, 
-        SUM(${IncomeMeta.amount}) AS TotalIncome 
-        FROM ${IncomeMeta.nameTable}
-        WHERE date(${IncomeMeta.date}) >= date(?)
-        AND date(${IncomeMeta.date}) <= date(?)
-        GROUP BY Month
-      ''',
-      [firstDate, lastDate],
-    );
-
-    for (Map<String, Object?> item in result) {
-      final month = item["Month"].toString();
-      uniqueData[month] = item["TotalIncome"];
-    }
-
-    return uniqueData;
-  }
-
-  Future<List<Map<String, Object?>>> getIncomeBreakdown() async {
-    final result = await db.rawQuery(
-      '''
-        SELECT ${IncomeSourceMeta.nameTable}.${IncomeSourceMeta.incomeSource} AS Categories, 
-        SUM(${IncomeMeta.amount}) AS TotalIncome
-        FROM ${IncomeMeta.nameTable}
-        INNER JOIN ${IncomeSourceMeta.nameTable} 
-        ON ${IncomeMeta.nameTable}.${IncomeSourceMeta.id} 
-        = 
-        ${IncomeSourceMeta.nameTable}.${IncomeSourceMeta.id} 
-        GROUP BY Categories;
-      ''',
-    );
-
-    return result;
-  }
-
   Future<List<Map<String, Object?>>> getExpenseBreakdown() async {
     final result = await db.rawQuery(
       '''
@@ -365,21 +397,6 @@ class DatabaseRepository {
       listData.add(ExpenseModel.fromDatabase(element));
     }
     return listData;
-  }
-
-  Future<List<Map<String, Object?>>> getGoalDetailSave(int goalId) async {
-    final result = await db.rawQuery(
-      '''
-        SELECT ${GoalSavingMeta.date} AS Date,
-        SUM(${GoalSavingMeta.amount}) AS TotalSavings 
-        FROM ${GoalSavingMeta.nameTable}
-        WHERE ${GoalSavingMeta.idGoal} = ?
-        GROUP BY Date;
-      ''',
-      [goalId],
-    );
-
-    return result;
   }
 
   //! ================ DELETE ALL ================

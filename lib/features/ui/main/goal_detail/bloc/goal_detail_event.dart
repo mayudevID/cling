@@ -13,4 +13,8 @@ class InitGoal extends GoalDetailEvent {
   const InitGoal(this.goalModel);
 }
 
-class ChangeIcon extends GoalDetailEvent {}
+class ChangeIcon extends GoalDetailEvent {
+  final String icon;
+
+  const ChangeIcon(this.icon);
+}

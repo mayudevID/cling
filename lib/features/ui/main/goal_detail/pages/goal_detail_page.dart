@@ -26,7 +26,7 @@ class GoalDetailPage extends StatelessWidget {
       create: (_) => GoalDetailBloc(
         dbRepo: getIt<DatabaseRepository>(),
       )..add(InitGoal(goalModel)),
-      child: const GoalDetailPageContent(),
+      child: GoalDetailPageContent(),
     );
   }
 }
@@ -115,15 +115,17 @@ class GoalDetailPageContent extends StatelessWidget {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(DateFormat.yMd(
-                                context.select(
-                                  (LangCurrencyBloc bloc) {
-                                    return bloc.state.selectedLanguage.value
-                                        .toLanguageTag();
-                                  },
-                                ),
-                              ).format(
-                                  state.dataSavingsList[index] as DateTime))
+                              Text(
+                                DateFormat.yMd(
+                                  context.select(
+                                    (LangCurrencyBloc bloc) {
+                                      return bloc.state.selectedLanguage.value
+                                          .toLanguageTag();
+                                    },
+                                  ),
+                                ).format(
+                                    state.dataSavingsList[index] as DateTime),
+                              ),
                             ],
                           ),
                         );

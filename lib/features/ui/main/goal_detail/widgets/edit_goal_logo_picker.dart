@@ -28,6 +28,9 @@ Widget editGoalLogoPicker(BuildContext context) {
           ),
           child: Center(
             child: BlocBuilder<GoalDetailBloc, GoalDetailState>(
+              buildWhen: (previous, current) {
+                return previous.goalModel.image != current.goalModel.image;
+              },
               builder: (context, state) {
                 if (state.goalModel.image.trim().isNotEmpty ||
                     state.goalModel.image != "") {
