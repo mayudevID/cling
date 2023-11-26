@@ -26,7 +26,7 @@ class GoalDetailPage extends StatelessWidget {
       create: (_) => GoalDetailBloc(
         dbRepo: getIt<DatabaseRepository>(),
       )..add(InitGoal(goalModel)),
-      child: GoalDetailPageContent(),
+      child: const GoalDetailPageContent(),
     );
   }
 }

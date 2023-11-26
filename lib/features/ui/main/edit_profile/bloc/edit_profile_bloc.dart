@@ -1,4 +1,5 @@
 // ignore_for_file: use_build_context_synchronously
+import 'package:cling/core/logger.dart';
 import 'package:cling/features/repository/auth_repository.dart';
 import 'package:cling/features/repository/settings_repository.dart';
 import 'package:cling/features/ui/main/edit_profile/widget/text_field_email_edit_profile.dart';
@@ -102,7 +103,9 @@ class EditProfileBloc extends Bloc<EditProfileEvent, EditProfileState> {
       emit(state.copyWith(initName: newName, isNameSame: true));
 
       Navigator.of(_context).pop();
-    } catch (e) {}
+    } catch (e) {
+      Logger.Black.log(e.toString());
+    }
   }
 
   void _saveNewEmail(event, emit) async {
