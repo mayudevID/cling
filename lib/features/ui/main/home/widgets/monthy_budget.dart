@@ -3,7 +3,6 @@ import 'package:cling/core/utils.dart';
 import 'package:cling/features/ui/main/profile/bloc/profile_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:nil/nil.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../../resources/gen/fonts.gen.dart';
@@ -93,7 +92,7 @@ Widget monthlyBudget(BuildContext context) {
                   },
                   builder: (context, homeState) {
                     if (profileState.userModel.monthlyBudget < 1) {
-                      return nil;
+                      return const SizedBox();
                     }
 
                     final length =

@@ -66,8 +66,19 @@ class DatabaseRepository {
         UPDATE ${GoalMeta.nameTable} 
         SET ${GoalMeta.image} = ? 
         WHERE ${GoalMeta.id} = ?
-        ''',
+      ''',
       [goalModel.image, goalModel.id],
+    );
+  }
+
+  Future<void> updateCollectedGoal(GoalModel goalModel) async {
+    await db.rawUpdate(
+      '''
+        UPDATE ${GoalMeta.nameTable} 
+        SET ${GoalMeta.collected} = ? 
+        WHERE ${GoalMeta.id} = ?
+      ''',
+      [goalModel.collected, goalModel.id],
     );
   }
 
@@ -84,6 +95,22 @@ class DatabaseRepository {
     );
 
     return result;
+  }
+
+  Future<void> saveGoalSaving(
+    int idGoal,
+    DateTime date,
+    double amount,
+  ) async {
+    await db.insert(
+      GoalSavingMeta.nameTable,
+      {
+        GoalSavingMeta.idGoal: idGoal,
+        GoalSavingMeta.date: date.toIso8601String(),
+        GoalSavingMeta.amount: amount,
+      },
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
   }
 
   //* ================ INCOME CRUD ================

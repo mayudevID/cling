@@ -2,7 +2,6 @@ import 'package:cling/core/utils.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:nil/nil.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../../core/common_widget.dart';
@@ -77,7 +76,7 @@ Widget targetGoalWidget(BuildContext context) {
               },
               builder: (context, state) {
                 if (state.goalModel.collected < 1) {
-                  return nil;
+                  return const SizedBox();
                 }
 
                 final length = (state.goalModel.collected * 358.wmea) /
@@ -115,7 +114,7 @@ Widget targetGoalWidget(BuildContext context) {
             BlocBuilder<GoalDetailBloc, GoalDetailState>(
               buildWhen: (p, c) {
                 return p.goalModel.target != c.goalModel.target ||
-                    p.goalModel.collected != p.goalModel.collected;
+                    p.goalModel.collected != c.goalModel.collected;
               },
               builder: (context, state) {
                 if (state.goalModel.collected < 1) {

@@ -140,7 +140,7 @@ List<Widget> listAccountSettings(BuildContext context) {
     ///* Change Language
     GestureDetector(
       onTap: () {
-        showBottomsheetChooseLang(context);
+        showBottomSheetChooseLang(context);
       },
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,

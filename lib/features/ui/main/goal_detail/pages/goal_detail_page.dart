@@ -1,8 +1,8 @@
 import 'package:cling/core/common_widget.dart';
-import 'package:cling/core/route.dart';
 import 'package:cling/core/utils.dart';
 import 'package:cling/features/model/goal_model.dart';
 import 'package:cling/features/repository/database_repository.dart';
+import 'package:cling/features/ui/main/goal_detail/widgets/add_goal_saving_bottom_sheet.dart';
 import 'package:cling/injection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -102,7 +102,30 @@ class GoalDetailPageContent extends StatelessWidget {
               ),
               Expanded(
                 child: BlocBuilder<GoalDetailBloc, GoalDetailState>(
+                  buildWhen: (previous, current) {
+                    return previous.dataSavingsList != current.dataSavingsList;
+                  },
                   builder: (context, state) {
+                    if (state.dataSavingsList.isEmpty) {
+                      return const Align(
+                        alignment: Alignment.center,
+                        child: Text(
+                          "No Saving :(",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontFamily: FontFamily.cabinetGrotesk,
+                          ),
+                        ),
+                      );
+                    }
+
+                    final formatCurr = context.select(
+                      (LangCurrencyBloc bloc) {
+                        return bloc.state.selectedLanguage.value
+                            .toLanguageTag();
+                      },
+                    );
+
                     return ListView.separated(
                       shrinkWrap: true,
                       itemCount: state.dataSavingsList.length,
@@ -112,19 +135,41 @@ class GoalDetailPageContent extends StatelessWidget {
                             horizontal: 16.wmea,
                             vertical: 16.wmea,
                           ),
+                          decoration: ShapeDecoration(
+                            color: const Color(0x3D787880),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                DateFormat.yMd(
-                                  context.select(
-                                    (LangCurrencyBloc bloc) {
-                                      return bloc.state.selectedLanguage.value
-                                          .toLanguageTag();
-                                    },
+                                DateFormat.yMd(formatCurr).format(
+                                  DateTime.parse(
+                                    state.dataSavingsList[index]['Date']
+                                        .toString(),
                                   ),
-                                ).format(
-                                    state.dataSavingsList[index] as DateTime),
+                                ),
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 10.5.sp,
+                                  fontFamily: FontFamily.cabinetGrotesk,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              NominalMoneyFormatter(
+                                textStyle: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 10.5.sp,
+                                  fontFamily: FontFamily.cabinetGrotesk,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                                amount: double.parse(state
+                                    .dataSavingsList[index]['TotalSavings']
+                                    .toString()),
+                                decimalDigits: 2,
+                                isWithName: true,
                               ),
                             ],
                           ),
@@ -142,7 +187,7 @@ class GoalDetailPageContent extends StatelessWidget {
               ),
               PinkButton(
                 onTap: () {
-                  Navigator.pushNamed(context, RouteName.addGoal);
+                  addGoalSavingBottomSheet(context);
                 },
                 name: "Add Saving",
               ),

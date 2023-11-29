@@ -1,11 +1,14 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'package:cling/core/utils.dart';
 import 'package:cling/features/model/goal_model.dart';
 import 'package:cling/features/repository/database_repository.dart';
 import 'package:cling/features/ui/main/main_page.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../../core/common_widget.dart';
+import '../../../language_currency/lang_export.dart';
 import '../../home/bloc/home_bloc.dart';
 
 part 'goal_detail_event.dart';
@@ -17,6 +20,9 @@ class GoalDetailBloc extends Bloc<GoalDetailEvent, GoalDetailState> {
         super(GoalDetailState()) {
     on<InitGoal>(_initGoal);
     on<ChangeIcon>(_changeIcon);
+    on<SetDateGoalInput>(_setDateInput);
+    on<SetAmountInput>(_setAmountInput);
+    on<AddSaving>(_addSaving);
   }
 
   final DatabaseRepository _dbRepo;
@@ -24,7 +30,6 @@ class GoalDetailBloc extends Bloc<GoalDetailEvent, GoalDetailState> {
 
   void _initGoal(InitGoal event, emit) async {
     final result = await _dbRepo.getGoalDetailSave(event.goalModel.id!);
-    print("ISINYA: ${event.goalModel.id}");
     emit(
       state.copyWith(
         goalModel: event.goalModel,
@@ -46,5 +51,56 @@ class GoalDetailBloc extends Bloc<GoalDetailEvent, GoalDetailState> {
     mainContext.read<HomeBloc>().add(GetGoals());
 
     emit(state.copyWith(goalModel: newGoalModel));
+  }
+
+  void _setDateInput(SetDateGoalInput event, emit) {
+    emit(state.copyWith(selectedDate: event.time));
+  }
+
+  void _setAmountInput(SetAmountInput event, emit) {
+    final replaceDot = event.amount.removeDot;
+    emit(state.copyWith(amount: replaceDot));
+  }
+
+  void _addSaving(event, emit) async {
+    if (state.amount.trim().isEmpty || state.amount.trim() == "0") {
+      errorToast(AppLocalizations.of(mainContext)!.pleaseFillAmount);
+      return;
+    }
+
+    try {
+      final newAmount = double.parse(state.amount);
+      final newGoalModel = GoalModel(
+        id: state.goalModel.id,
+        name: state.goalModel.name,
+        image: state.goalModel.image,
+        target: state.goalModel.target,
+        collected: state.goalModel.collected + newAmount,
+      );
+      await Future.wait([
+        _dbRepo.saveGoalSaving(
+          state.goalModel.id!,
+          DateTime(
+            state.selectedDate.year,
+            state.selectedDate.month,
+            state.selectedDate.day,
+          ),
+          newAmount,
+        ),
+        _dbRepo.updateCollectedGoal(newGoalModel),
+      ]);
+
+      mainContext.read<HomeBloc>().add(GetGoals());
+
+      final result = await _dbRepo.getGoalDetailSave(state.goalModel.id!);
+      emit(state.copyWith(
+        dataSavingsList: result,
+        goalModel: newGoalModel,
+      ));
+    } on FormatException {
+      errorToast(
+        AppLocalizations.of(mainContext)!.invalidAmount,
+      );
+    }
   }
 }

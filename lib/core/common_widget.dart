@@ -220,7 +220,7 @@ class NominalMoneyFormatter extends StatelessWidget {
 }
 
 ///* Choose Language Bottomsheet
-Future<void> showBottomsheetChooseLang(BuildContext context) async {
+Future<void> showBottomSheetChooseLang(BuildContext context) async {
   ListView listLanguage(LangCurrencyState state) {
     return ListView.separated(
       shrinkWrap: true,

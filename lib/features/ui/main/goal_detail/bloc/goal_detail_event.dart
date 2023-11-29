@@ -18,3 +18,17 @@ class ChangeIcon extends GoalDetailEvent {
 
   const ChangeIcon(this.icon);
 }
+
+class SetDateGoalInput extends GoalDetailEvent {
+  final DateTime time;
+
+  const SetDateGoalInput(this.time);
+}
+
+class SetAmountInput extends GoalDetailEvent {
+  final String amount;
+
+  const SetAmountInput(this.amount);
+}
+
+class AddSaving extends GoalDetailEvent {}

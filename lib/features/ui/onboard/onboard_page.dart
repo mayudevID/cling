@@ -76,7 +76,7 @@ class OnboardPage extends StatelessWidget {
                 children: [
                   GestureDetector(
                     onTap: () async {
-                      await showBottomsheetChooseLang(context);
+                      await showBottomSheetChooseLang(context);
                     },
                     child: Container(
                       width: 57.hmea,
