@@ -1,4 +1,5 @@
 // ignore_for_file: use_build_context_synchronously
+import 'package:cling/core/exception.dart';
 import 'package:cling/core/logger.dart';
 import 'package:cling/features/repository/auth_repository.dart';
 import 'package:cling/features/repository/settings_repository.dart';
@@ -8,12 +9,13 @@ import 'package:cling/features/ui/main/profile/bloc/profile_bloc.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:equatable/equatable.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../core/common_widget.dart';
 import '../../../language_currency/lang_export.dart';
-import '../widget/dialog_change_email.dart';
+import '../widget/dialog_change_email_or_pass.dart';
 import '../widget/text_field_name_edit_profile.dart';
 
 part 'edit_profile_event.dart';
@@ -34,6 +36,7 @@ class EditProfileBloc extends Bloc<EditProfileEvent, EditProfileState> {
     on<SaveNewEmail>(_saveNewEmail);
     on<CheckEmail>(_checkEmail);
     on<CheckName>(_checkName);
+    on<ChangePassword>(_changePassword);
   }
 
   final SettingsRepository _settingsRepo;
@@ -104,7 +107,7 @@ class EditProfileBloc extends Bloc<EditProfileEvent, EditProfileState> {
 
       Navigator.of(_context).pop();
     } catch (e) {
-      Logger.Black.log(e.toString());
+      Logger.Red.log(e.toString());
     }
   }
 
@@ -133,7 +136,9 @@ class EditProfileBloc extends Bloc<EditProfileEvent, EditProfileState> {
     }
 
     if (newEmail != state.initEmail) {
-      await dialogChangeEmail(_context);
+      final result = await dialogChangeEmailOrPassword(_context, "email");
+      Logger.Green.log("ChangeE? $result");
+      if (!result) return;
     }
 
     loadingAuth(_context);
@@ -148,6 +153,19 @@ class EditProfileBloc extends Bloc<EditProfileEvent, EditProfileState> {
       emit(state.copyWith(initEmail: newEmail, isEmailSame: true));
 
       Navigator.of(_context).pop();
-    } catch (e) {}
+    } on FirebaseAuthException catch (e) {
+      errorSnackbar(
+        mainContext,
+        EditProfileFailure.fromCode(e.code).message,
+      );
+    }
+  }
+
+  void _changePassword(ChangePassword event, _) async {
+    final result = await dialogChangeEmailOrPassword(_context, "pass");
+    Logger.Green.log("ChangeP? $result");
+    if (!result) return;
+
+    await _authRepo.sendResetPassword(state.initEmail);
   }
 }

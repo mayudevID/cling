@@ -1,7 +1,7 @@
 import 'package:cling/features/model/goal_model.dart';
 import 'package:cling/features/ui/main/add_in_ex/page/add_in_ex_page.dart';
 import 'package:cling/features/ui/main/edit_monthly/page/edit_budget_or_income.dart';
-import 'package:cling/features/ui/main/edit_profile/page/edit_profile.dart';
+import 'package:cling/features/ui/main/edit_profile/page/edit_profile_page.dart';
 import 'package:flutter/material.dart';
 import '../features/ui/forgot_password/page/check_email_page.dart';
 import '../features/ui/forgot_password/page/forgot_password_page.dart';

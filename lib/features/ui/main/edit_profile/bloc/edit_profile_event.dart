@@ -22,3 +22,5 @@ class CheckEmail extends EditProfileEvent {}
 class SaveNewName extends EditProfileEvent {}
 
 class SaveNewEmail extends EditProfileEvent {}
+
+class ChangePassword extends EditProfileEvent {}

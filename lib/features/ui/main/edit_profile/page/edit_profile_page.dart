@@ -10,9 +10,9 @@ import 'package:sizer/sizer.dart';
 
 import '../../../../../core/common_widget.dart';
 import '../../../language_currency/lang_export.dart';
+import '../widget/dialog_change_email_or_pass.dart';
 import '../widget/text_field_email_edit_profile.dart';
 import '../widget/text_field_name_edit_profile.dart';
-import '../widget/text_field_password_edit_profile.dart';
 
 class EditProfilePage extends StatelessWidget {
   const EditProfilePage({super.key});
@@ -142,7 +142,12 @@ class EditProfilePageContent extends StatelessWidget {
               SizedBox(
                 height: 8.hmea,
               ),
-              const TextFieldPasswordEditProfile(),
+              PinkButton(
+                onTap: () async {
+                  context.read<EditProfileBloc>().add(ChangePassword());
+                },
+                name: "Change Password",
+              ),
             ],
           ),
         ),

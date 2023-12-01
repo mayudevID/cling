@@ -177,6 +177,10 @@ class AuthRepository {
     await _firebaseAuth.sendPasswordResetEmail(email: email);
   }
 
+  Future<void> changePassword(String email) async {
+    await _firebaseAuth.sendPasswordResetEmail(email: email);
+  }
+
   // //* Update User Profile
 
   // Future<void> updateDisplayName(String displayName) async {

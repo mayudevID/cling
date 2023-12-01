@@ -76,6 +76,35 @@ class LogInWithEmailAndPasswordFailure implements Exception {
   final String message;
 }
 
+class EditProfileFailure implements Exception {
+  const EditProfileFailure([
+    this.message = 'An unknown exception occurred.',
+  ]);
+
+  factory EditProfileFailure.fromCode(String code) {
+    switch (code) {
+      case 'invalid-email':
+        return EditProfileFailure(
+          AppLocalizations.of(MainApp.navKeyGlobal.currentContext!)!
+              .invalidEmailFailure,
+        );
+      case 'email-already-in-use':
+        return EditProfileFailure(
+          AppLocalizations.of(MainApp.navKeyGlobal.currentContext!)!
+              .emailAlreadyFailure,
+        );
+      case 'requires-recent-login':
+        return const EditProfileFailure(
+          "Requires recent login, Please re-login and try again.",
+        );
+      default:
+        return const EditProfileFailure();
+    }
+  }
+
+  final String message;
+}
+
 class LogOutFailure implements Exception {}
 
 class EmailNotVerifiedException implements Exception {}

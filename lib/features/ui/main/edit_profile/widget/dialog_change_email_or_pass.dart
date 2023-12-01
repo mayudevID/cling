@@ -6,8 +6,11 @@ import 'package:sizer/sizer.dart';
 
 import '../../../../../resources/gen/fonts.gen.dart';
 
-Future<void> dialogChangeEmail(BuildContext context) async {
-  await showDialog(
+Future<bool> dialogChangeEmailOrPassword(
+  BuildContext context,
+  String type,
+) async {
+  return await showDialog(
     context: context,
     barrierDismissible: false,
     builder: (_) => WillPopScope(
@@ -35,7 +38,9 @@ Future<void> dialogChangeEmail(BuildContext context) async {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                AppLocalizations.of(context)!.changingEmail,
+                (type == "email")
+                    ? AppLocalizations.of(context)!.changingEmail
+                    : "Changing Password",
                 style: TextStyle(
                   fontFamily: FontFamily.cabinetGrotesk,
                   fontWeight: FontWeight.bold,
@@ -47,7 +52,9 @@ Future<void> dialogChangeEmail(BuildContext context) async {
                 height: 8.hmea,
               ),
               Text(
-                AppLocalizations.of(context)!.changeEmailVerifyDialog,
+                (type == "email")
+                    ? AppLocalizations.of(context)!.changeEmailVerifyDialog
+                    : " Password akan diganti, cek email untuk lanjut mengganti",
                 style: TextStyle(
                   fontFamily: FontFamily.cabinetGrotesk,
                   fontSize: 12.sp,
@@ -59,8 +66,8 @@ Future<void> dialogChangeEmail(BuildContext context) async {
                 height: 12.hmea,
               ),
               GestureDetector(
-                onTap: () async {
-                  Navigator.pop(context);
+                onTap: () {
+                  Navigator.pop(context, true);
                 },
                 child: Container(
                   padding: EdgeInsets.all(12.hmea),
@@ -77,6 +84,33 @@ Future<void> dialogChangeEmail(BuildContext context) async {
                         fontFamily: FontFamily.cabinetGrotesk,
                         fontSize: 12.sp,
                         color: Colors.black,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 8.hmea,
+              ),
+              GestureDetector(
+                onTap: () {
+                  Navigator.pop(context, false);
+                },
+                child: Container(
+                  padding: EdgeInsets.all(12.hmea),
+                  decoration: BoxDecoration(
+                    color: Colors.black,
+                    borderRadius: BorderRadius.circular(24),
+                  ),
+                  alignment: Alignment.center,
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: Text(
+                      AppLocalizations.of(context)!.cancel,
+                      style: TextStyle(
+                        fontFamily: FontFamily.cabinetGrotesk,
+                        fontSize: 12.sp,
+                        color: Colors.white,
                       ),
                     ),
                   ),
