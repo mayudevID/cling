@@ -24,8 +24,8 @@ Future<void> dialogAddSuccess(
   await showDialog(
     context: context,
     barrierDismissible: false,
-    builder: (_) => WillPopScope(
-      onWillPop: () async => false,
+    builder: (_) => PopScope(
+      canPop: false,
       child: Dialog(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),

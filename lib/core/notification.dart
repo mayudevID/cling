@@ -4,34 +4,38 @@ import 'package:flutter/foundation.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 class NotificationClass {
-  static void init() {
-    //Remove this method to stop OneSignal Debugging
-    // if (kDebugMode) {
-    //   OneSignal.Debug.setLogLevel(OSLogLevel.verbose);
-    // }
+  static void init() async {
+    if (kDebugMode) {
+      OneSignal.Debug.setLogLevel(OSLogLevel.verbose);
+    }
 
-    // OneSignal.initialize(EnvApp.oneSignalAppId);
+    OneSignal.initialize(EnvApp.oneSignalAppId);
 
-    // // The promptForPushNotificationsWithUserResponse function will show the iOS or Android push notification prompt. We recommend removing the following code and instead using an In-App Message to prompt for notification permission
-    // OneSignal.Notifications.requestPermission(true).then((accepted) {
-    //   if (kDebugMode) print("Accepted permission: $accepted");
-    // });
+    // ignore: unused_local_variable
+    var permissionNative = await OneSignal.Notifications.permissionNative();
+    // ignore: unused_local_variable
+    var canRequest = await OneSignal.Notifications.canRequest();
 
-    // OneSignal.User.pushSubscription.optIn();
+    OneSignal.Notifications.requestPermission(true).then((accepted) {
+      if (kDebugMode) print("Accepted permission: $accepted");
+    });
+
+    OneSignal.User.pushSubscription.optIn();
 
     //* Listener
 
     //??? Handle when notification opened on Mobile
 
-    // OneSignal.shared.setNotificationOpenedHandler(
-    //   NotificationHandler.handleNotificationOpened,
-    // );
+    OneSignal.Notifications.addClickListener((event) {
+      Logger.White.log('NOTIFICATION CLICK LISTENER CALLED WITH EVENT: $event');
+      //OSNotification notification = event.notification;
+    });
 
     //??? Handle when notification received on Mobile
 
-    // OneSignal.shared.setNotificationWillShowInForegroundHandler(
-    //   NotificationHandler.handleNotificationReceived,
-    // );
+    OneSignal.Notifications.addForegroundWillDisplayListener((event) {
+      event.notification.display();
+    });
   }
 }
 

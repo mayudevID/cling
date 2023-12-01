@@ -10,7 +10,6 @@ import 'package:sizer/sizer.dart';
 
 import '../../../../../core/common_widget.dart';
 import '../../../language_currency/lang_export.dart';
-import '../widget/dialog_change_email_or_pass.dart';
 import '../widget/text_field_email_edit_profile.dart';
 import '../widget/text_field_name_edit_profile.dart';
 

@@ -5,7 +5,7 @@
 //  Created by Maulana Yusuf on 05/08/23.
 //
 
-#import <OneSignal/OneSignal.h>
+#import <OneSignalExtension/OneSignalExtension.h>
 
 #import "NotificationService.h"
 
@@ -39,7 +39,7 @@
     
     // Uncomment this line to set the default log level of NSE to VERBOSE so we get all logs from NSE logic
     //[OneSignal setLogLevel:ONE_S_LL_VERBOSE visualLevel:ONE_S_LL_NONE];
-    [OneSignal didReceiveNotificationExtensionRequest:self.receivedRequest
+    [OneSignalNotificationServiceExtensionHandler didReceiveNotificationExtensionRequest:self.receivedRequest
                        withMutableNotificationContent:self.bestAttemptContent
                                    withContentHandler:self.contentHandler];
 }
@@ -48,7 +48,7 @@
     // Called just before the extension will be terminated by the system.
     // Use this as an opportunity to deliver your "best attempt" at modified content, otherwise the original push payload will be used.
     
-    [OneSignal serviceExtensionTimeWillExpireRequest:self.receivedRequest withMutableNotificationContent:self.bestAttemptContent];
+    [OneSignalNotificationServiceExtensionHandler serviceExtensionTimeWillExpireRequest:self.receivedRequest withMutableNotificationContent:self.bestAttemptContent];
     
     self.contentHandler(self.bestAttemptContent);
 }

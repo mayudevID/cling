@@ -109,8 +109,8 @@ void loadingAuth(BuildContext context) {
   showDialog(
     context: context,
     barrierDismissible: false,
-    builder: (_) => WillPopScope(
-      onWillPop: () async => false,
+    builder: (_) => PopScope(
+      canPop: false,
       child: Center(
         child: Container(
           decoration: BoxDecoration(
