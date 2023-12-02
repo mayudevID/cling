@@ -58,7 +58,7 @@ Widget lineColumnStatsIncomeWidget(BuildContext mainContext) {
             interval: setInterval(state.maxValIncome),
             labelStyle: TextStyle(
               color: Colors.white,
-              fontSize: 10.5.sp,
+              fontSize: 9.5.sp,
               fontFamily: FontFamily.cabinetGrotesk,
               fontWeight: FontWeight.w700,
             ),

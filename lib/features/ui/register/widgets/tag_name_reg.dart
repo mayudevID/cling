@@ -14,7 +14,7 @@ class TagNameReg extends StatelessWidget {
         name,
         style: TextStyle(
           color: Colors.white,
-          fontSize: 12.sp,
+          fontSize: 10.sp,
           fontFamily: FontFamily.cabinetGrotesk,
           fontWeight: FontWeight.w800,
         ),

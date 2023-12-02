@@ -25,7 +25,7 @@ List<Widget> tagNameHome(
           text: name,
           style: TextStyle(
             color: Colors.white,
-            fontSize: 14.sp,
+            fontSize: 12.5.sp,
             fontFamily: FontFamily.cabinetGrotesk,
             fontWeight: FontWeight.w700,
           ),
@@ -35,7 +35,7 @@ List<Widget> tagNameHome(
                     text: " / ",
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 14.sp,
+                      fontSize: 12.5.sp,
                       fontFamily: FontFamily.cabinetGrotesk,
                       fontWeight: FontWeight.w700,
                     ),

@@ -37,7 +37,7 @@ Widget editGoalLogoPicker(BuildContext context) {
                   return Text(
                     state.goalModel.image,
                     style: TextStyle(
-                      fontSize: 48.sp,
+                      fontSize: 43.sp,
                     ),
                   );
                 }

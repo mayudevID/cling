@@ -64,7 +64,7 @@ class _TextFieldEmailRegState extends State<TextFieldEmailEditProfile> {
         cursorColor: Colors.white,
         style: TextStyle(
           color: Colors.white,
-          fontSize: 12.5.sp,
+          fontSize: 10.5.sp,
           fontFamily: FontFamily.cabinetGrotesk,
           fontWeight: FontWeight.w500,
         ),
@@ -72,7 +72,7 @@ class _TextFieldEmailRegState extends State<TextFieldEmailEditProfile> {
           hintText: AppLocalizations.of(context)!.email,
           hintStyle: TextStyle(
             color: Colors.grey,
-            fontSize: 12.5.sp,
+            fontSize: 10.5.sp,
             fontFamily: FontFamily.cabinetGrotesk,
             fontWeight: FontWeight.w500,
           ),

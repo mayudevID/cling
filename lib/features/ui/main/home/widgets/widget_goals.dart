@@ -48,7 +48,7 @@ Widget widgetGoals(
             ),
             child: Text(
               goalModel.image,
-              style: TextStyle(fontSize: 24.sp),
+              style: TextStyle(fontSize: 22.sp),
             ),
           ),
           SizedBox(
@@ -59,7 +59,7 @@ Widget widgetGoals(
             textAlign: TextAlign.center,
             style: TextStyle(
               color: Colors.white,
-              fontSize: 12.sp,
+              fontSize: 10.sp,
               fontFamily: FontFamily.cabinetGrotesk,
               fontWeight: FontWeight.w500,
             ),
@@ -95,7 +95,7 @@ Widget widgetGoals(
               NominalMoneyFormatter(
                 textStyle: TextStyle(
                   color: Colors.white,
-                  fontSize: 10.5.sp,
+                  fontSize: 9.5.sp,
                   fontFamily: FontFamily.cabinetGrotesk,
                   fontWeight: FontWeight.w500,
                 ),
@@ -107,7 +107,7 @@ Widget widgetGoals(
                 " / $percent%",
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: 10.5.sp,
+                  fontSize: 9.5.sp,
                   fontFamily: FontFamily.cabinetGrotesk,
                   fontWeight: FontWeight.w500,
                 ),

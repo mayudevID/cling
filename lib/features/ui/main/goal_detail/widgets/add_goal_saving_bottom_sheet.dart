@@ -60,7 +60,7 @@ void addGoalSavingBottomSheet(BuildContext mainContext) {
                     'Saving Date',
                     style: TextStyle(
                       color: Colors.black,
-                      fontSize: 12.sp,
+                      fontSize: 10.sp,
                       fontFamily: FontFamily.cabinetGrotesk,
                       fontWeight: FontWeight.w800,
                     ),
@@ -101,7 +101,7 @@ void addGoalSavingBottomSheet(BuildContext mainContext) {
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               color: Colors.black,
-                              fontSize: 12.5.sp,
+                              fontSize: 10.5.sp,
                               fontFamily: FontFamily.cabinetGrotesk,
                               fontWeight: FontWeight.w500,
                             ),
@@ -146,7 +146,7 @@ void addGoalSavingBottomSheet(BuildContext mainContext) {
                         '${AppLocalizations.of(context)!.amount} (${state.selectedCurrency.name})',
                         style: TextStyle(
                           color: Colors.black,
-                          fontSize: 12.sp,
+                          fontSize: 10.sp,
                           fontFamily: FontFamily.cabinetGrotesk,
                           fontWeight: FontWeight.w800,
                         ),
@@ -180,7 +180,7 @@ void addGoalSavingBottomSheet(BuildContext mainContext) {
                             state.selectedCurrency.name,
                             style: TextStyle(
                               color: Colors.black,
-                              fontSize: 12.sp,
+                              fontSize: 10.sp,
                               fontFamily: FontFamily.cabinetGrotesk,
                               fontWeight: FontWeight.w800,
                             ),
@@ -216,7 +216,7 @@ void addGoalSavingBottomSheet(BuildContext mainContext) {
                               cursorColor: Colors.black,
                               style: TextStyle(
                                 color: Colors.black,
-                                fontSize: 12.5.sp,
+                                fontSize: 10.5.sp,
                                 fontFamily: FontFamily.cabinetGrotesk,
                                 fontWeight: FontWeight.w500,
                               ),
@@ -224,7 +224,7 @@ void addGoalSavingBottomSheet(BuildContext mainContext) {
                                 hintText: '0',
                                 hintStyle: TextStyle(
                                   color: Colors.grey,
-                                  fontSize: 12.5.sp,
+                                  fontSize: 10.5.sp,
                                   fontFamily: FontFamily.cabinetGrotesk,
                                   fontWeight: FontWeight.w500,
                                 ),

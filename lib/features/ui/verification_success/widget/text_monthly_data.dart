@@ -14,7 +14,7 @@ class TextMonthlyData extends StatelessWidget {
       textAlign: TextAlign.center,
       style: TextStyle(
         color: Colors.white,
-        fontSize: 16.sp,
+        fontSize: 14.5.sp,
         fontFamily: FontFamily.cabinetGrotesk,
         fontWeight: FontWeight.w500,
       ),

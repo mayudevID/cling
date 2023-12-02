@@ -63,7 +63,7 @@ class GoalDetailPageContent extends StatelessWidget {
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             color: Colors.white,
-                            fontSize: 16.sp,
+                            fontSize: 14.5.sp,
                             fontFamily: FontFamily.cabinetGrotesk,
                             fontWeight: FontWeight.w500,
                           ),
@@ -91,7 +91,7 @@ class GoalDetailPageContent extends StatelessWidget {
                   "Saving History",
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 14.sp,
+                    fontSize: 12.5.sp,
                     fontFamily: FontFamily.cabinetGrotesk,
                     fontWeight: FontWeight.w700,
                   ),
@@ -153,7 +153,7 @@ class GoalDetailPageContent extends StatelessWidget {
                                 ),
                                 style: TextStyle(
                                   color: Colors.white,
-                                  fontSize: 10.5.sp,
+                                  fontSize: 9.5.sp,
                                   fontFamily: FontFamily.cabinetGrotesk,
                                   fontWeight: FontWeight.w500,
                                 ),
@@ -161,7 +161,7 @@ class GoalDetailPageContent extends StatelessWidget {
                               NominalMoneyFormatter(
                                 textStyle: TextStyle(
                                   color: Colors.white,
-                                  fontSize: 10.5.sp,
+                                  fontSize: 9.5.sp,
                                   fontFamily: FontFamily.cabinetGrotesk,
                                   fontWeight: FontWeight.w700,
                                 ),

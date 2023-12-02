@@ -32,7 +32,7 @@ class StatsExpense extends StatelessWidget {
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Colors.white,
-                fontSize: 13.5.sp,
+                fontSize: 11.5.sp,
                 fontFamily: FontFamily.cabinetGrotesk,
                 fontWeight: FontWeight.w700,
               ),
@@ -68,7 +68,7 @@ class StatsExpense extends StatelessWidget {
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 10.5.sp,
+                    fontSize: 9.5.sp,
                     fontFamily: FontFamily.cabinetGrotesk,
                     fontWeight: FontWeight.w500,
                   ),

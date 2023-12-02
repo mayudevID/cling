@@ -34,7 +34,7 @@ Widget monthlyBudget(BuildContext context) {
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Colors.white,
-                fontSize: 12.sp,
+                fontSize: 10.sp,
                 fontFamily: FontFamily.cabinetGrotesk,
                 fontWeight: FontWeight.w700,
               ),
@@ -46,10 +46,10 @@ Widget monthlyBudget(BuildContext context) {
               builder: (context, state) {
                 if (state.userModel.monthlyBudget == 0) {
                   return Text(
-                    "Haven't set a monthly budget",
+                    ("---"),
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 12.sp,
+                      fontSize: 10.sp,
                       fontFamily: FontFamily.cabinetGrotesk,
                     ),
                   );
@@ -58,7 +58,7 @@ Widget monthlyBudget(BuildContext context) {
                 return NominalMoneyFormatter(
                   textStyle: TextStyle(
                     color: Colors.white,
-                    fontSize: 12.sp,
+                    fontSize: 10.sp,
                     fontFamily: FontFamily.cabinetGrotesk,
                     fontWeight: FontWeight.w700,
                   ),
@@ -120,7 +120,7 @@ Widget monthlyBudget(BuildContext context) {
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Colors.white,
-                fontSize: 10.5.sp,
+                fontSize: 9.5.sp,
                 fontFamily: FontFamily.cabinetGrotesk,
                 fontWeight: FontWeight.w500,
               ),
@@ -131,7 +131,7 @@ Widget monthlyBudget(BuildContext context) {
                 return NominalMoneyFormatter(
                   textStyle: TextStyle(
                     color: Colors.white,
-                    fontSize: 10.5.sp,
+                    fontSize: 9.5.sp,
                     fontFamily: FontFamily.cabinetGrotesk,
                     fontWeight: FontWeight.w700,
                   ),
@@ -157,7 +157,7 @@ Widget monthlyBudget(BuildContext context) {
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 10.5.sp,
+                          fontSize: 9.5.sp,
                           fontFamily: FontFamily.cabinetGrotesk,
                           fontWeight: FontWeight.w700,
                         ),
@@ -172,7 +172,7 @@ Widget monthlyBudget(BuildContext context) {
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 10.5.sp,
+                        fontSize: 9.5.sp,
                         fontFamily: FontFamily.cabinetGrotesk,
                         fontWeight: FontWeight.w700,
                       ),

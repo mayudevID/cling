@@ -35,7 +35,7 @@ class ProfilePage extends StatelessWidget {
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: 12.sp,
+                  fontSize: 10.sp,
                   fontFamily: FontFamily.cabinetGrotesk,
                   fontWeight: FontWeight.w500,
                 ),
@@ -47,7 +47,7 @@ class ProfilePage extends StatelessWidget {
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 12.sp,
+                      fontSize: 10.sp,
                       fontFamily: FontFamily.cabinetGrotesk,
                       fontWeight: FontWeight.w800,
                     ),
@@ -66,7 +66,7 @@ class ProfilePage extends StatelessWidget {
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Colors.white,
-                fontSize: 14.sp,
+                fontSize: 12.5.sp,
                 fontFamily: FontFamily.cabinetGrotesk,
                 fontWeight: FontWeight.w700,
               ),
@@ -86,7 +86,7 @@ class ProfilePage extends StatelessWidget {
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Colors.white,
-                fontSize: 14.sp,
+                fontSize: 12.5.sp,
                 fontFamily: FontFamily.cabinetGrotesk,
                 fontWeight: FontWeight.w700,
               ),
@@ -110,7 +110,7 @@ class ProfilePage extends StatelessWidget {
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: 12.sp,
+                  fontSize: 10.sp,
                   fontFamily: FontFamily.cabinetGrotesk,
                   fontWeight: FontWeight.w500,
                 ),
@@ -150,7 +150,7 @@ class ProfilePage extends StatelessWidget {
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: 13.5.sp,
+                  fontSize: 11.5.sp,
                   fontFamily: FontFamily.cabinetGrotesk,
                   fontWeight: FontWeight.w700,
                 ),

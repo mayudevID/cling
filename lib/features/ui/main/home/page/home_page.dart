@@ -64,7 +64,7 @@ class HomePage extends StatelessWidget {
                         AppLocalizations.of(context)!.goalEmpty,
                         style: TextStyle(
                           fontFamily: FontFamily.cabinetGrotesk,
-                          fontSize: 12.sp,
+                          fontSize: 10.sp,
                           color: Colors.white,
                         ),
                       ),

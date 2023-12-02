@@ -32,7 +32,7 @@ Widget dropDownCurrency(BuildContext context) {
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 12.5.sp,
+                    fontSize: 10.5.sp,
                     fontFamily: FontFamily.cabinetGrotesk,
                     fontWeight: FontWeight.w500,
                   ),
@@ -50,7 +50,7 @@ Widget dropDownCurrency(BuildContext context) {
                     item.name,
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 12.5.sp,
+                      fontSize: 10.5.sp,
                       fontFamily: FontFamily.cabinetGrotesk,
                       fontWeight: FontWeight.w500,
                     ),

@@ -51,7 +51,7 @@ Future<void> dialogAddSuccess(
               Text(
                 "✅",
                 style: TextStyle(
-                  fontSize: 48.sp,
+                  fontSize: 43.sp,
                   fontWeight: FontWeight.w500,
                 ),
               ),
@@ -67,7 +67,7 @@ Future<void> dialogAddSuccess(
                 style: TextStyle(
                   fontFamily: FontFamily.cabinetGrotesk,
                   fontWeight: FontWeight.w500,
-                  fontSize: 16.sp,
+                  fontSize: 14.5.sp,
                   color: Colors.white,
                 ),
                 textAlign: TextAlign.center,

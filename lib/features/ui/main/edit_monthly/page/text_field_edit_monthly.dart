@@ -49,7 +49,7 @@ class _TextFieldEditMonthlyState extends State<TextFieldEditMonthly> {
         cursorColor: Colors.white,
         style: TextStyle(
           color: Colors.white,
-          fontSize: 12.5.sp,
+          fontSize: 10.5.sp,
           fontFamily: FontFamily.cabinetGrotesk,
           fontWeight: FontWeight.w500,
         ),
@@ -57,7 +57,7 @@ class _TextFieldEditMonthlyState extends State<TextFieldEditMonthly> {
           hintText: '0',
           hintStyle: TextStyle(
             color: Colors.grey,
-            fontSize: 12.5.sp,
+            fontSize: 10.5.sp,
             fontFamily: FontFamily.cabinetGrotesk,
             fontWeight: FontWeight.w500,
           ),

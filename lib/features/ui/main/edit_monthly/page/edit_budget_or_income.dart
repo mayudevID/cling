@@ -71,7 +71,7 @@ class EditMonBudgetOrIncomePageContent extends StatelessWidget {
                       "Target (${state.selectedCurrency.name})",
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 12.sp,
+                        fontSize: 10.sp,
                         fontFamily: FontFamily.cabinetGrotesk,
                         fontWeight: FontWeight.w800,
                       ),
@@ -105,7 +105,7 @@ class EditMonBudgetOrIncomePageContent extends StatelessWidget {
                           state.selectedCurrency.name,
                           style: TextStyle(
                             color: Colors.white,
-                            fontSize: 12.sp,
+                            fontSize: 10.sp,
                             fontFamily: FontFamily.cabinetGrotesk,
                             fontWeight: FontWeight.w800,
                           ),

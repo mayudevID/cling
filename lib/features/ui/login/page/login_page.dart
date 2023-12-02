@@ -54,7 +54,7 @@ class LoginPageContent extends StatelessWidget {
                   AppLocalizations.of(context)!.welcomeBack,
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 22.sp,
+                    fontSize: 20.sp,
                     fontFamily: FontFamily.bungee,
                     fontWeight: FontWeight.w400,
                   ),
@@ -67,7 +67,7 @@ class LoginPageContent extends StatelessWidget {
                 AppLocalizations.of(context)!.descWelcomeBack,
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: 13.sp,
+                  fontSize: 11.sp,
                   fontFamily: FontFamily.cabinetGrotesk,
                   fontWeight: FontWeight.w500,
                 ),
@@ -101,7 +101,7 @@ class LoginPageContent extends StatelessWidget {
                     child: Text(
                       "or",
                       style: TextStyle(
-                        fontSize: 12.sp,
+                        fontSize: 10.sp,
                         color: Colors.white,
                         fontFamily: FontFamily.cabinetGrotesk,
                       ),
@@ -149,7 +149,7 @@ class LoginPageContent extends StatelessWidget {
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 13.5.sp,
+                          fontSize: 11.5.sp,
                           fontFamily: FontFamily.cabinetGrotesk,
                           fontWeight: FontWeight.w700,
                         ),
@@ -166,7 +166,7 @@ class LoginPageContent extends StatelessWidget {
                       text: AppLocalizations.of(context)!.dontHaveAnAccount,
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 12.sp,
+                        fontSize: 10.sp,
                         fontFamily: FontFamily.cabinetGrotesk,
                         fontWeight: FontWeight.w400,
                       ),
@@ -176,7 +176,7 @@ class LoginPageContent extends StatelessWidget {
                           ' ${AppLocalizations.of(context)!.createNewAccount}',
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 12.sp,
+                        fontSize: 10.sp,
                         fontFamily: FontFamily.cabinetGrotesk,
                         fontWeight: FontWeight.w700,
                       ),

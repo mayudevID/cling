@@ -39,7 +39,7 @@ Future<void> dialogEmailNotVerified(BuildContext context) async {
                 style: TextStyle(
                   fontFamily: FontFamily.cabinetGrotesk,
                   fontWeight: FontWeight.bold,
-                  fontSize: 12.sp,
+                  fontSize: 10.sp,
                   color: Colors.black,
                 ),
               ),
@@ -50,7 +50,7 @@ Future<void> dialogEmailNotVerified(BuildContext context) async {
                 AppLocalizations.of(context)!.goVerify,
                 style: TextStyle(
                   fontFamily: FontFamily.cabinetGrotesk,
-                  fontSize: 12.sp,
+                  fontSize: 10.sp,
                   color: Colors.black,
                 ),
                 textAlign: TextAlign.center,
@@ -77,7 +77,7 @@ Future<void> dialogEmailNotVerified(BuildContext context) async {
                       "Go to mail",
                       style: TextStyle(
                         fontFamily: FontFamily.cabinetGrotesk,
-                        fontSize: 12.sp,
+                        fontSize: 10.sp,
                         color: Colors.black,
                       ),
                     ),

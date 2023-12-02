@@ -51,7 +51,7 @@ class _TextFieldMonthlyDataState extends State<TextFieldMonthlyData> {
       maxLines: 1,
       style: TextStyle(
         color: Colors.white,
-        fontSize: 22.sp,
+        fontSize: 20.sp,
         fontFamily: FontFamily.cabinetGrotesk,
         fontWeight: FontWeight.w700,
       ),
@@ -59,7 +59,7 @@ class _TextFieldMonthlyDataState extends State<TextFieldMonthlyData> {
         hintText: "0",
         hintStyle: TextStyle(
           color: Colors.grey,
-          fontSize: 22.sp,
+          fontSize: 20.sp,
           fontFamily: FontFamily.cabinetGrotesk,
           fontWeight: FontWeight.w700,
         ),

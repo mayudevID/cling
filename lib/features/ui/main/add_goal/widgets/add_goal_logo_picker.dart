@@ -33,7 +33,7 @@ Widget addGoalLogoPicker(BuildContext context) {
                   return Text(
                     state.logoGoal,
                     style: TextStyle(
-                      fontSize: 48.sp,
+                      fontSize: 43.sp,
                     ),
                   );
                 }

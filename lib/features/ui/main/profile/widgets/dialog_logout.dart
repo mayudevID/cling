@@ -39,7 +39,7 @@ Future<void> dialogLogout(BuildContext context) async {
                 style: TextStyle(
                   fontFamily: FontFamily.cabinetGrotesk,
                   fontWeight: FontWeight.bold,
-                  fontSize: 12.sp,
+                  fontSize: 10.sp,
                   color: Colors.black,
                 ),
               ),
@@ -50,7 +50,7 @@ Future<void> dialogLogout(BuildContext context) async {
                 "Are you sure want to logout? Make sure backup your data before logout.",
                 style: TextStyle(
                   fontFamily: FontFamily.cabinetGrotesk,
-                  fontSize: 12.sp,
+                  fontSize: 10.sp,
                   color: Colors.black,
                 ),
                 textAlign: TextAlign.center,
@@ -78,7 +78,7 @@ Future<void> dialogLogout(BuildContext context) async {
                           "Yes",
                           style: TextStyle(
                             fontFamily: FontFamily.cabinetGrotesk,
-                            fontSize: 12.sp,
+                            fontSize: 10.sp,
                             color: Colors.white,
                           ),
                         ),
@@ -105,7 +105,7 @@ Future<void> dialogLogout(BuildContext context) async {
                           "Back",
                           style: TextStyle(
                             fontFamily: FontFamily.cabinetGrotesk,
-                            fontSize: 12.sp,
+                            fontSize: 10.sp,
                             color: Colors.white,
                           ),
                         ),

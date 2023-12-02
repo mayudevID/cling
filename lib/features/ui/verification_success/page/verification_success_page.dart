@@ -124,7 +124,7 @@ class VerificationSuccessPage extends StatelessWidget {
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 22.sp,
+                    fontSize: 20.sp,
                     fontFamily: FontFamily.bungee,
                     fontWeight: FontWeight.w400,
                   ),
@@ -139,7 +139,7 @@ class VerificationSuccessPage extends StatelessWidget {
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 13.sp,
+                      fontSize: 11.sp,
                       fontFamily: FontFamily.cabinetGrotesk,
                       fontWeight: FontWeight.w500,
                     ),

@@ -33,7 +33,7 @@ Widget mostExpense(ExpenseModel data) {
                 0,
                 data.categories.indexOf(" "),
               ),
-              style: TextStyle(fontSize: 24.sp),
+              style: TextStyle(fontSize: 22.sp),
             ),
           ),
         ),
@@ -45,7 +45,7 @@ Widget mostExpense(ExpenseModel data) {
           textAlign: TextAlign.center,
           style: TextStyle(
             color: Colors.white,
-            fontSize: 12.sp,
+            fontSize: 10.sp,
             fontFamily: FontFamily.cabinetGrotesk,
             fontWeight: FontWeight.w500,
           ),
@@ -54,7 +54,7 @@ Widget mostExpense(ExpenseModel data) {
         NominalMoneyFormatter(
           textStyle: TextStyle(
             color: Colors.white,
-            fontSize: 10.5.sp,
+            fontSize: 9.5.sp,
             fontFamily: FontFamily.cabinetGrotesk,
             fontWeight: FontWeight.w500,
           ),

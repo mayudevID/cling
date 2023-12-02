@@ -37,7 +37,7 @@ List<Widget> listAccountSettings(BuildContext context) {
             textAlign: TextAlign.center,
             style: TextStyle(
               color: Colors.white,
-              fontSize: 12.sp,
+              fontSize: 10.sp,
               fontFamily: FontFamily.cabinetGrotesk,
               fontWeight: FontWeight.w500,
             ),
@@ -51,7 +51,7 @@ List<Widget> listAccountSettings(BuildContext context) {
               return NominalMoneyFormatter(
                 textStyle: TextStyle(
                   color: Colors.white,
-                  fontSize: 10.5.sp,
+                  fontSize: 9.5.sp,
                   fontFamily: FontFamily.cabinetGrotesk,
                   fontWeight: FontWeight.w400,
                 ),
@@ -99,7 +99,7 @@ List<Widget> listAccountSettings(BuildContext context) {
             textAlign: TextAlign.center,
             style: TextStyle(
               color: Colors.white,
-              fontSize: 12.sp,
+              fontSize: 10.sp,
               fontFamily: FontFamily.cabinetGrotesk,
               fontWeight: FontWeight.w500,
             ),
@@ -113,7 +113,7 @@ List<Widget> listAccountSettings(BuildContext context) {
               return NominalMoneyFormatter(
                 textStyle: TextStyle(
                   color: Colors.white,
-                  fontSize: 10.5.sp,
+                  fontSize: 9.5.sp,
                   fontFamily: FontFamily.cabinetGrotesk,
                   fontWeight: FontWeight.w400,
                 ),
@@ -157,7 +157,7 @@ List<Widget> listAccountSettings(BuildContext context) {
             textAlign: TextAlign.center,
             style: TextStyle(
               color: Colors.white,
-              fontSize: 12.sp,
+              fontSize: 10.sp,
               fontFamily: FontFamily.cabinetGrotesk,
               fontWeight: FontWeight.w500,
             ),

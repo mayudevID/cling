@@ -51,7 +51,7 @@ class PinkButton extends StatelessWidget {
           textAlign: TextAlign.center,
           style: TextStyle(
             color: const Color(0xFF101010),
-            fontSize: 13.5.sp,
+            fontSize: 11.5.sp,
             fontFamily: FontFamily.cabinetGrotesk,
             fontWeight: FontWeight.w700,
           ),
@@ -94,7 +94,7 @@ class BlackButton extends StatelessWidget {
           textAlign: TextAlign.center,
           style: TextStyle(
             color: const Color(0xFFF599DA),
-            fontSize: 13.5.sp,
+            fontSize: 11.5.sp,
             fontFamily: FontFamily.cabinetGrotesk,
             fontWeight: FontWeight.w700,
           ),
@@ -176,7 +176,7 @@ void errorToast(String msg) {
               msg,
               style: TextStyle(
                 fontFamily: FontFamily.cabinetGrotesk,
-                fontSize: 10.5.sp,
+                fontSize: 9.5.sp,
                 color: Colors.white,
                 fontWeight: FontWeight.w700,
               ),
@@ -245,7 +245,7 @@ Future<void> showBottomSheetChooseLang(BuildContext context) async {
               Language.values[index].text.indexOf(" "),
             ),
             style: TextStyle(
-              fontSize: 13.sp,
+              fontSize: 11.sp,
               fontFamily: FontFamily.cabinetGrotesk,
             ),
           ),
@@ -308,7 +308,7 @@ Future<void> showBottomSheetChooseLang(BuildContext context) async {
                       AppLocalizations.of(context)!.chooseLang,
                       style: TextStyle(
                         fontFamily: FontFamily.cabinetGrotesk,
-                        fontSize: 12.sp,
+                        fontSize: 10.sp,
                       ),
                     ),
                     const Spacer(),
@@ -367,7 +367,7 @@ Widget appBarProfile({
           textAlign: TextAlign.center,
           style: TextStyle(
             color: Colors.white,
-            fontSize: 16.sp,
+            fontSize: 14.5.sp,
             fontFamily: FontFamily.cabinetGrotesk,
             fontWeight: FontWeight.w500,
           ),
@@ -391,7 +391,7 @@ Widget appBarProfile({
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: const Color(0xFF101010),
-                  fontSize: 12.sp,
+                  fontSize: 10.sp,
                   fontFamily: FontFamily.cabinetGrotesk,
                   fontWeight: FontWeight.w700,
                 ),

@@ -54,7 +54,7 @@ class OnboardPage extends StatelessWidget {
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: 16.sp,
+                  fontSize: 14.5.sp,
                   fontFamily: FontFamily.cabinetGrotesk,
                   fontWeight: FontWeight.w700,
                 ),
@@ -95,7 +95,7 @@ class OnboardPage extends StatelessWidget {
                                 0,
                                 state.selectedLanguage.text.indexOf(" "),
                               ),
-                              style: TextStyle(fontSize: 24.sp),
+                              style: TextStyle(fontSize: 22.sp),
                             );
                           },
                         ),
@@ -112,7 +112,7 @@ class OnboardPage extends StatelessWidget {
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: const Color(0xFFF599DA),
-                        fontSize: 13.5.sp,
+                        fontSize: 11.5.sp,
                         fontFamily: FontFamily.cabinetGrotesk,
                         fontWeight: FontWeight.w700,
                       ),

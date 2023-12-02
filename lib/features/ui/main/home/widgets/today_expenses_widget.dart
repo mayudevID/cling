@@ -34,7 +34,7 @@ Widget todayExpensesWidget(ExpenseModel expenseModel) {
                 0,
                 expenseModel.categories.indexOf(" "),
               ),
-              style: TextStyle(fontSize: 24.sp),
+              style: TextStyle(fontSize: 22.sp),
             ),
           ),
         ),
@@ -46,7 +46,7 @@ Widget todayExpensesWidget(ExpenseModel expenseModel) {
           textAlign: TextAlign.center,
           style: TextStyle(
             color: Colors.white,
-            fontSize: 12.sp,
+            fontSize: 10.sp,
             fontFamily: FontFamily.cabinetGrotesk,
             fontWeight: FontWeight.w500,
           ),
@@ -55,7 +55,7 @@ Widget todayExpensesWidget(ExpenseModel expenseModel) {
         NominalMoneyFormatter(
           textStyle: TextStyle(
             color: Colors.white,
-            fontSize: 10.5.sp,
+            fontSize: 9.5.sp,
             fontFamily: FontFamily.cabinetGrotesk,
             fontWeight: FontWeight.w500,
           ),

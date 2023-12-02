@@ -50,7 +50,7 @@ class RegisterPageContent extends StatelessWidget {
                   AppLocalizations.of(context)!.helloThere,
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 22.sp,
+                    fontSize: 20.sp,
                     fontFamily: FontFamily.bungee,
                     fontWeight: FontWeight.w400,
                   ),
@@ -63,7 +63,7 @@ class RegisterPageContent extends StatelessWidget {
                 AppLocalizations.of(context)!.descHelloThere,
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: 13.sp,
+                  fontSize: 11.sp,
                   fontFamily: FontFamily.cabinetGrotesk,
                   fontWeight: FontWeight.w500,
                 ),
@@ -89,7 +89,7 @@ class RegisterPageContent extends StatelessWidget {
                       text: AppLocalizations.of(context)!.haveAccountTwo,
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 12.sp,
+                        fontSize: 10.sp,
                         fontFamily: FontFamily.cabinetGrotesk,
                         fontWeight: FontWeight.w400,
                       ),
@@ -98,7 +98,7 @@ class RegisterPageContent extends StatelessWidget {
                       text: ' ${AppLocalizations.of(context)!.login}',
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 12.sp,
+                        fontSize: 10.sp,
                         fontFamily: FontFamily.cabinetGrotesk,
                         fontWeight: FontWeight.w700,
                       ),

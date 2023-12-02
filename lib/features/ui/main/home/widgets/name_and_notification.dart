@@ -26,7 +26,7 @@ Widget nameAndNotification() {
                 textAlign: TextAlign.left,
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: 22.sp,
+                  fontSize: 18.sp,
                   fontFamily: FontFamily.cabinetGrotesk,
                   fontWeight: FontWeight.w700,
                 ),

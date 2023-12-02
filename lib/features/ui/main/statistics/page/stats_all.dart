@@ -25,7 +25,7 @@ class StatsAll extends StatelessWidget {
         //     textAlign: TextAlign.center,
         //     style: TextStyle(
         //       color: Colors.white,
-        //       fontSize: 12.sp,
+        //       fontSize: 10.sp,
         //       fontFamily: FontFamily.cabinetGrotesk,
         //       fontWeight: FontWeight.w700,
         //     ),
@@ -44,7 +44,7 @@ class StatsAll extends StatelessWidget {
           textAlign: TextAlign.center,
           style: TextStyle(
             color: Colors.white,
-            fontSize: 12.sp,
+            fontSize: 10.sp,
             fontFamily: FontFamily.cabinetGrotesk,
             fontWeight: FontWeight.w500,
           ),
@@ -60,7 +60,7 @@ class StatsAll extends StatelessWidget {
           AppLocalizations.of(context)!.mostExpense,
           style: TextStyle(
             color: Colors.white,
-            fontSize: 13.5.sp,
+            fontSize: 11.5.sp,
             fontFamily: FontFamily.cabinetGrotesk,
             fontWeight: FontWeight.w700,
           ),

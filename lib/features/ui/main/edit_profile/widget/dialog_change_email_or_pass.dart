@@ -44,7 +44,7 @@ Future<bool> dialogChangeEmailOrPassword(
                 style: TextStyle(
                   fontFamily: FontFamily.cabinetGrotesk,
                   fontWeight: FontWeight.bold,
-                  fontSize: 12.sp,
+                  fontSize: 10.sp,
                   color: Colors.black,
                 ),
               ),
@@ -57,7 +57,7 @@ Future<bool> dialogChangeEmailOrPassword(
                     : " Password akan diganti, cek email untuk lanjut mengganti",
                 style: TextStyle(
                   fontFamily: FontFamily.cabinetGrotesk,
-                  fontSize: 12.sp,
+                  fontSize: 10.sp,
                   color: Colors.black,
                 ),
                 textAlign: TextAlign.center,
@@ -82,7 +82,7 @@ Future<bool> dialogChangeEmailOrPassword(
                       "OK",
                       style: TextStyle(
                         fontFamily: FontFamily.cabinetGrotesk,
-                        fontSize: 12.sp,
+                        fontSize: 10.sp,
                         color: Colors.black,
                       ),
                     ),
@@ -109,7 +109,7 @@ Future<bool> dialogChangeEmailOrPassword(
                       AppLocalizations.of(context)!.cancel,
                       style: TextStyle(
                         fontFamily: FontFamily.cabinetGrotesk,
-                        fontSize: 12.sp,
+                        fontSize: 10.sp,
                         color: Colors.white,
                       ),
                     ),

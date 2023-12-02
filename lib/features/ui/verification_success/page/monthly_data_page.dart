@@ -58,7 +58,7 @@ class MonthlyDataPageContent extends StatelessWidget {
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 16.sp,
+                    fontSize: 14.5.sp,
                     fontFamily: FontFamily.bungee,
                     fontWeight: FontWeight.w400,
                   ),
@@ -98,7 +98,7 @@ class MonthlyDataPageContent extends StatelessWidget {
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 22.sp,
+                        fontSize: 20.sp,
                         fontFamily: FontFamily.cabinetGrotesk,
                         fontWeight: FontWeight.w700,
                       ),

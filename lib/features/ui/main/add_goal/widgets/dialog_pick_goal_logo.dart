@@ -40,7 +40,7 @@ Future<void> dialogPickGoalLogo(BuildContext mainContext) async {
                 style: TextStyle(
                   fontFamily: FontFamily.cabinetGrotesk,
                   fontWeight: FontWeight.bold,
-                  fontSize: 12.sp,
+                  fontSize: 10.sp,
                   color: Colors.black,
                 ),
               ),

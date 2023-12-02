@@ -12,7 +12,7 @@ List<Widget> rowCategories(String data) {
         data.indexOf(" "),
       ),
       style: TextStyle(
-        fontSize: 16.sp,
+        fontSize: 14.5.sp,
         fontFamily: FontFamily.cabinetGrotesk,
       ),
     ),
@@ -25,7 +25,7 @@ List<Widget> rowCategories(String data) {
       ),
       style: TextStyle(
         color: Colors.white,
-        fontSize: 12.5.sp,
+        fontSize: 10.5.sp,
         fontFamily: FontFamily.cabinetGrotesk,
         fontWeight: FontWeight.w500,
       ),

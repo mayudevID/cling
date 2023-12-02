@@ -53,7 +53,7 @@ class TagChooser extends StatelessWidget {
                         color: (e.key == state.typeCategories)
                             ? const Color(0xFF101010)
                             : Colors.white,
-                        fontSize: 13.5.sp,
+                        fontSize: 11.5.sp,
                         fontFamily: FontFamily.cabinetGrotesk,
                         fontWeight: FontWeight.w700,
                       ),

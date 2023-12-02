@@ -18,7 +18,7 @@ Widget customButtonFab(String text) {
       text,
       style: TextStyle(
         color: Colors.black,
-        fontSize: 13.5.sp,
+        fontSize: 11.5.sp,
         fontFamily: FontFamily.cabinetGrotesk,
         fontWeight: FontWeight.w400,
       ),

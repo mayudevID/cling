@@ -67,7 +67,7 @@ class _TextFieldPassLoginState extends State<TextFieldPassLogin> {
                   cursorColor: Colors.white,
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 12.5.sp,
+                    fontSize: 10.5.sp,
                     fontFamily: FontFamily.cabinetGrotesk,
                     fontWeight: FontWeight.w500,
                   ),
@@ -75,7 +75,7 @@ class _TextFieldPassLoginState extends State<TextFieldPassLogin> {
                     hintText: AppLocalizations.of(context)!.password,
                     hintStyle: TextStyle(
                       color: Colors.grey,
-                      fontSize: 12.5.sp,
+                      fontSize: 10.5.sp,
                       fontFamily: FontFamily.cabinetGrotesk,
                       fontWeight: FontWeight.w500,
                     ),
