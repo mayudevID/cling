@@ -116,7 +116,7 @@
   "@wrongPasswordFailure": {},
   "emailAlreadyFailure": "Akun sudah ada.",
   "@emailAlreadyFailure": {},
-  "operationNotAllowedFailure": "Operasi tidak diperbolehkan. Silakan hubungi dukungan.",
+  "operationNotAllowedFailure": "Operasi tidak diperbolehkan. Silakan hubungi Dukungan.",
   "@operationNotAllowedFailure": {},
   "weakPasswordFailure": "Harap masukkan kata sandi yang lebih kuat.",
   "@weakPasswordFailure": {},
@@ -166,7 +166,7 @@
   "@currentBalance": {},
   "loginWithAnon": "Login dengan Anonim",
   "@loginWithAnon": {},
-  "goalName": "Nama tujuan",
+  "goalName": "Nama Tujuan",
   "@goalName": {},
   "target": "Target",
   "@target": {},
@@ -251,5 +251,13 @@
   "changeEmailVerifyDialog": "Kamu akan mengganti email. Setelah mengganti email, harap untuk melakukan verifikasi email kembali",
   "@changeEmailVerifyDialog": {},
   "changingEmail": "Penggantian Email",
-  "@changingEmail": {}
+  "@changingEmail": {},
+  "changingPass": "Penggatntian Password",
+  "@changingPass": {},
+  "enterGoal": "Masukkan nama tujuan",
+  "@enterGoal": {},
+  "or": "Atau",
+  "@or": {},
+  "changePassVerifyDialog": "Kamu akan mengganti password. Silahkan cek email",
+  "@changePassVerifyDialog": {}
 }

@@ -166,7 +166,7 @@
   "@currentBalance": {},
   "loginWithAnon": "Login with Anonymous",
   "@loginWithAnon": {},
-  "goalName": "Goal name",
+  "goalName": "Goal Name",
   "@goalName": {},
   "target": "Target",
   "@target": {},
@@ -250,6 +250,14 @@
   "@goVerify": {},
   "changeEmailVerifyDialog": "You will change your email. After changing your email, please verify your email again.",
   "@changeEmailVerifyDialog": {},
-  "changingEmail": "Email changing",
-  "@changingEmail": {}
+  "changingEmail": "Email Changing",
+  "@changingEmail": {},
+  "changingPass": "Password Changing",
+  "@changingPass": {},
+  "enterGoal": "Enter Goal",
+  "@enterGoal": {},
+  "or": "Or",
+  "@or": {},
+  "changePassVerifyDialog": "You will change your password. Please check an email",
+  "@changePassVerifyDialog": {}
 }

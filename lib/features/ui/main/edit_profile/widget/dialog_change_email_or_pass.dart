@@ -40,7 +40,7 @@ Future<bool> dialogChangeEmailOrPassword(
               Text(
                 (type == "email")
                     ? AppLocalizations.of(context)!.changingEmail
-                    : "Changing Password",
+                    : AppLocalizations.of(context)!.changingPass,
                 style: TextStyle(
                   fontFamily: FontFamily.cabinetGrotesk,
                   fontWeight: FontWeight.bold,
@@ -54,7 +54,7 @@ Future<bool> dialogChangeEmailOrPassword(
               Text(
                 (type == "email")
                     ? AppLocalizations.of(context)!.changeEmailVerifyDialog
-                    : " Password akan diganti, cek email untuk lanjut mengganti",
+                    : AppLocalizations.of(context)!.changePassVerifyDialog,
                 style: TextStyle(
                   fontFamily: FontFamily.cabinetGrotesk,
                   fontSize: 10.sp,

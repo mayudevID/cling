@@ -99,7 +99,7 @@ class LoginPageContent extends StatelessWidget {
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 24.wmea),
                     child: Text(
-                      "or",
+                      AppLocalizations.of(context)!.or,
                       style: TextStyle(
                         fontSize: 10.sp,
                         color: Colors.white,
@@ -145,7 +145,7 @@ class LoginPageContent extends StatelessWidget {
                         width: 10.wmea,
                       ),
                       Text(
-                        "Login with Anonymous",
+                        AppLocalizations.of(context)!.loginWithAnon,
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: Colors.white,
