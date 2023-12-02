@@ -7,6 +7,7 @@ import 'package:sizer/sizer.dart';
 import '../../../../../resources/gen/fonts.gen.dart';
 import '../../../language_currency/lang_export.dart';
 import '../bloc/statistics_bloc.dart';
+import '../widgets/change_range_date.dart';
 import '../widgets/income_breakdown.dart';
 
 class StatsIncome extends StatelessWidget {
@@ -43,6 +44,10 @@ class StatsIncome extends StatelessWidget {
             fontWeight: FontWeight.w700,
           ),
         ),
+        SizedBox(
+          height: 16.hmea,
+        ),
+        changeRangeDate(context),
         SizedBox(
           height: 16.hmea,
         ),

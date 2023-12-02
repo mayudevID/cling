@@ -47,8 +47,8 @@ class MainPage extends StatelessWidget {
             ..add(GetMostExpense()) // All 2
             ..add(GetYearlyIncome()) // Income 1
             ..add(GetIncomeBreakdown()) // Income 2
-            ..add(GetExpenseBreakdown()) // Expense 1
-            ..add(GetExpenseDateRange()), // Expense 2
+            ..add(GetExpenseBreakdown()), // Expense 1
+          //..add(GetExpenseDateRange()), // Expense 2
         ),
         BlocProvider(
           create: (_) => ProfileBloc(

@@ -24,9 +24,7 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
     on<GetIncomeExpenseTotalAllMonth>(_getIncomeExpenseTotalAllMonth);
     on<GetYearlyIncome>(_getYearlyIncome);
     on<GetExpenseBreakdown>(_getExpenseBreakdown);
-    on<ClickDateLeft>(_clickDateLeftGetExpense);
-    on<ClickDateRight>(_clickDateRightGetExpense);
-    on<GetExpenseDateRange>(_getExpenseDateRange);
+    on<ChangeRangeDate>(_changeRangeDate);
   }
 
   final DatabaseRepository _dbRepo;
@@ -147,20 +145,6 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
     }
   }
 
-  void _getExpenseDateRange(event, emit) async {
-    final dateRight = state.dateRight;
-    final dateLeft = dateRight.subtract(const Duration(days: 7));
-
-    final result = await _dbRepo.getExpenseRangeDate(
-      dateLeft: dateLeft,
-      dateRight: dateRight,
-    );
-
-    if (result.isNotEmpty) {
-      emit(state.copyWith(expenseDateRangeList: result));
-    }
-  }
-
   void _getYearlyIncome(event, emit) async {
     List<ChartData> yearlyIncomeList = List.empty(growable: true);
     double max = 0;
@@ -188,14 +172,8 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
     }
   }
 
-  void _clickDateLeftGetExpense(event, emit) {
-    final dateNew = state.dateRight.subtract(const Duration(days: 8));
-    emit(state.copyWith(dateRight: dateNew));
-  }
-
-  void _clickDateRightGetExpense(event, emit) {
-    final dateNew = state.dateRight.add(const Duration(days: 8));
-    emit(state.copyWith(dateRight: dateNew));
+  void _changeRangeDate(ChangeRangeDate event, emit) {
+    emit(state.copyWith(rangeDate: event.rangeDate));
   }
 
   String monthDataInExToString({

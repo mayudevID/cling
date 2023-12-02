@@ -39,7 +39,7 @@ class StatsExpense extends StatelessWidget {
             ),
             const Spacer(),
             GestureDetector(
-              onTap: () => context.read<StatisticsBloc>().add(ClickDateLeft()),
+              onTap: () {},
               child:
                   Assets.lib.resources.images.fluentChevronLeft24Filled.svg(),
             ),
@@ -48,10 +48,11 @@ class StatsExpense extends StatelessWidget {
             ),
             BlocBuilder<StatisticsBloc, StatisticsState>(
               buildWhen: (p, c) {
-                return p.dateRight != c.dateRight;
+                //return p.dateRight != c.dateRight;
+                return false;
               },
               builder: (context, state) {
-                final dateRight = state.dateRight;
+                final dateRight = DateTime.now();
                 final dateLeft = dateRight.subtract(const Duration(days: 7));
 
                 final locale = context.select(
@@ -79,7 +80,7 @@ class StatsExpense extends StatelessWidget {
               width: 8.wmea,
             ),
             GestureDetector(
-              onTap: () => context.read<StatisticsBloc>().add(ClickDateRight()),
+              onTap: () {},
               child: Transform.rotate(
                 angle: math.pi,
                 child:

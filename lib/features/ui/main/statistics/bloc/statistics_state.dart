@@ -2,6 +2,8 @@
 
 part of 'statistics_bloc.dart';
 
+enum RangeDate { daily, weekly, monthy, yearly }
+
 class StatisticsState extends Equatable {
   int typeCategories;
   List<PieDataExSav> pieDataExSavList;
@@ -13,14 +15,17 @@ class StatisticsState extends Equatable {
   List<Map<String, Object?>> incomeBreakdownList;
   List<PieDataExpense> expenseBreakdownList;
   List expenseDateRangeList;
-  DateTime dateRight;
   double maxValAll;
   double maxValIncome;
+  RangeDate rangeDate;
+  DateTime dateLeft;
+  DateTime dateRight;
 
   StatisticsState({
     this.typeCategories = 0,
     this.maxValAll = 0,
     this.maxValIncome = 0,
+    this.rangeDate = RangeDate.yearly,
     List<PieDataExSav>? pieDataExSavList,
     List<ExpenseModel>? mostExpenseList,
     List<ChartData>? yearlyIncomeList,
@@ -41,6 +46,7 @@ class StatisticsState extends Equatable {
         chartDataSavingsList = chartDataSavingsList ?? List.empty(),
         expenseBreakdownList = expenseBreakdownList ?? List.empty(),
         expenseDateRangeList = expenseDateRangeList ?? List.empty(),
+        dateLeft = dateLeft ?? DateTime.now().subtract(const Duration(days: 8)),
         dateRight = dateRight ?? DateTime.now();
 
   @override
@@ -58,6 +64,8 @@ class StatisticsState extends Equatable {
         incomeBreakdownList,
         expenseBreakdownList,
         expenseDateRangeList,
+        rangeDate,
+        dateLeft,
         dateRight,
       ];
 
@@ -74,7 +82,9 @@ class StatisticsState extends Equatable {
     List<Map<String, Object?>>? incomeBreakdownList,
     List<PieDataExpense>? expenseBreakdownList,
     List? expenseDateRangeList,
+    DateTime? dateLeft,
     DateTime? dateRight,
+    RangeDate? rangeDate,
   }) {
     return StatisticsState(
       maxValAll: maxValAll ?? this.maxValAll,
@@ -89,6 +99,8 @@ class StatisticsState extends Equatable {
       incomeBreakdownList: incomeBreakdownList ?? this.incomeBreakdownList,
       expenseBreakdownList: expenseBreakdownList ?? this.expenseBreakdownList,
       expenseDateRangeList: expenseDateRangeList ?? this.expenseDateRangeList,
+      rangeDate: rangeDate ?? this.rangeDate,
+      dateLeft: dateLeft ?? this.dateLeft,
       dateRight: dateRight ?? this.dateRight,
     );
   }

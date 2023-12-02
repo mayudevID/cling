@@ -49,7 +49,7 @@ Widget lineColumnStatsIncomeWidget(BuildContext mainContext) {
             interval: 1,
             labelStyle: TextStyle(
               color: Colors.white,
-              fontSize: 9.sp,
+              fontSize: 7.5.sp,
               fontFamily: FontFamily.cabinetGrotesk,
               fontWeight: FontWeight.w700,
             ),

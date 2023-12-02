@@ -259,5 +259,13 @@
   "or": "Atau",
   "@or": {},
   "changePassVerifyDialog": "Kamu akan mengganti password. Silahkan cek email",
-  "@changePassVerifyDialog": {}
+  "@changePassVerifyDialog": {},
+  "monthly": "Bulanan",
+  "@monthly": {},
+  "daily": "Harian",
+  "@daily": {},
+  "weekly": "Mingguan",
+  "@weekly": {},
+  "yearly": "Tahunan",
+  "@yearly": {}
 }

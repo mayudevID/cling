@@ -219,6 +219,7 @@ class AddIncomeExpensePageContent extends StatelessWidget {
                           horizontal: 16.wmea,
                         ),
                         child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             if (state.selectedCategories ==
                                 const MapEntry(0, "")) ...[
@@ -236,7 +237,6 @@ class AddIncomeExpensePageContent extends StatelessWidget {
                               ...rowCategories(
                                 state.selectedCategories.value,
                               ),
-                            const Spacer(),
                             Assets
                                 .lib.resources.images.fluentChevronDown24Filled
                                 .svg(),

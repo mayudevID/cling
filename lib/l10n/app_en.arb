@@ -259,5 +259,13 @@
   "or": "Or",
   "@or": {},
   "changePassVerifyDialog": "You will change your password. Please check an email",
-  "@changePassVerifyDialog": {}
+  "@changePassVerifyDialog": {},
+  "monthly": "Monthly",
+  "@monthly": {},
+  "daily": "Daily",
+  "@daily": {},
+  "weekly": "Weekly",
+  "@weekly": {},
+  "yearly": "Yearly",
+  "@yearly": {}
 }

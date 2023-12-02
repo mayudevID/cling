@@ -25,6 +25,8 @@ class GetYearlyIncome extends StatisticsEvent {}
 
 class GetExpenseDateRange extends StatisticsEvent {}
 
-class ClickDateLeft extends StatisticsEvent {}
+class ChangeRangeDate extends StatisticsEvent {
+  final RangeDate rangeDate;
 
-class ClickDateRight extends StatisticsEvent {}
+  const ChangeRangeDate(this.rangeDate);
+}
