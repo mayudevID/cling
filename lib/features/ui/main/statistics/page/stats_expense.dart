@@ -1,5 +1,6 @@
 import 'package:cling/core/utils.dart';
 import 'package:cling/features/ui/main/statistics/bloc/statistics_bloc.dart';
+import 'package:cling/features/ui/main/statistics/widgets/change_date_widget/choose_date_range.dart';
 import 'package:cling/features/ui/main/statistics/widgets/pie_chart_stats_expense.dart';
 import 'package:cling/resources/gen/assets.gen.dart';
 import 'package:flutter/material.dart';
@@ -89,6 +90,8 @@ class StatsExpense extends StatelessWidget {
             ),
           ],
         ),
+        SizedBox(height: 16.hmea),
+        ...chooseDateRange(context),
         SizedBox(height: 16.hmea),
         BlocBuilder<StatisticsBloc, StatisticsState>(
           buildWhen: (p, c) {

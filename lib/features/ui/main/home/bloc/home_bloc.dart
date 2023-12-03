@@ -19,6 +19,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     on<GetIncomeExpenseAmountTotalCurrMonth>(_getTotalIncomeExpenseCurrMonth);
     on<GetGoals>(_getGoals);
     on<GetTodayExpenses>(_getTodayExpenses);
+    on<FreeResourcesHome>(_freeResources);
   }
 
   final DatabaseRepository _dbRepo;
@@ -45,5 +46,14 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   void _getTodayExpenses(_, emit) async {
     final listData = await _dbRepo.getTodayExpenses();
     emit(state.copyWith(listTodayExpenses: listData));
+  }
+
+  void _freeResources(FreeResourcesHome event, emit) {
+    emit(state.copyWith(
+      listTodayExpenses: List.empty(),
+      listGoals: List.empty(),
+      amountIncomeThisMonth: 0,
+      amountExpenseThisMonth: 0,
+    ));
   }
 }

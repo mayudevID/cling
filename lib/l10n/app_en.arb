@@ -264,8 +264,8 @@
   "@monthly": {},
   "daily": "Daily",
   "@daily": {},
-  "weekly": "Weekly",
-  "@weekly": {},
+  "period": "Period",
+  "@period": {},
   "yearly": "Yearly",
   "@yearly": {}
 }

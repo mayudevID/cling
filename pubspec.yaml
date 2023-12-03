@@ -44,6 +44,7 @@ dependencies:
   smooth_page_indicator: ^1.1.0
   sqflite: ^2.3.0
   syncfusion_flutter_charts: ^23.1.39
+  syncfusion_flutter_datepicker: ^23.2.6
   transitioned_indexed_stack: ^1.0.2
 
 dev_dependencies:

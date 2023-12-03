@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../../../../resources/gen/assets.gen.dart';
-import '../../../../../resources/gen/fonts.gen.dart';
-import '../bloc/statistics_bloc.dart';
+import '../../../../../../resources/gen/assets.gen.dart';
+import '../../../../../../resources/gen/fonts.gen.dart';
+import '../../bloc/statistics_bloc.dart';
 
 Widget changeRangeDate(BuildContext context) {
   String setName(RangeDate rangeDate) {
@@ -15,8 +15,8 @@ Widget changeRangeDate(BuildContext context) {
     switch (rangeDate) {
       case RangeDate.daily:
         return appContext.daily;
-      case RangeDate.weekly:
-        return appContext.weekly;
+      case RangeDate.period:
+        return appContext.period;
       case RangeDate.monthy:
         return appContext.monthly;
       case RangeDate.yearly:

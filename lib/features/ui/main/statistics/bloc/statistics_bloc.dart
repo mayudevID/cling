@@ -25,9 +25,12 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
     on<GetYearlyIncome>(_getYearlyIncome);
     on<GetExpenseBreakdown>(_getExpenseBreakdown);
     on<ChangeRangeDate>(_changeRangeDate);
+    on<ChangeDaily>(_changeDaily);
+    on<FreeResourcesStats>(_freeResources);
   }
 
   final DatabaseRepository _dbRepo;
+  var mainContext = MainPage.navKeyMain.currentContext!;
 
   void _typeCategories(
     TypeCategoriesEvent event,
@@ -210,5 +213,47 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
       default:
         return "-";
     }
+  }
+
+  void _changeDaily(ChangeDaily event, emit) async {
+    if (event.leftOrRightOrPick == 0) {
+      emit(
+        state.copyWith(
+          dateRight: state.dateRight.subtract(const Duration(days: 1)),
+        ),
+      );
+    } else if (event.leftOrRightOrPick == 1) {
+      emit(
+        state.copyWith(
+          dateRight: state.dateRight.add(const Duration(days: 1)),
+        ),
+      );
+    } else {
+      DateTime? pickedDate = await showDatePicker(
+        context: mainContext,
+        initialDate: state.dateRight,
+        firstDate: DateTime(1970, 1, 1),
+        lastDate: state.dateRight,
+      );
+      if (pickedDate != null) {
+        emit(
+          state.copyWith(dateRight: pickedDate),
+        );
+      }
+    }
+  }
+
+  void _freeResources(FreeResourcesStats event, emit) {
+    emit(state.copyWith(
+      pieDataExSavList: List.empty(),
+      yearlyIncomeList: List.empty(),
+      mostExpenseList: List.empty(),
+      incomeBreakdownList: List.empty(),
+      chartDataIncomeList: List.empty(),
+      chartDataExpenseList: List.empty(),
+      chartDataSavingsList: List.empty(),
+      expenseBreakdownList: List.empty(),
+      expenseDateRangeList: List.empty(),
+    ));
   }
 }

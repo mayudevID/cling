@@ -264,8 +264,8 @@
   "@monthly": {},
   "daily": "Harian",
   "@daily": {},
-  "weekly": "Mingguan",
-  "@weekly": {},
+  "period": "Waktu tertentu",
+  "@period": {},
   "yearly": "Tahunan",
   "@yearly": {}
 }

@@ -30,3 +30,11 @@ class ChangeRangeDate extends StatisticsEvent {
 
   const ChangeRangeDate(this.rangeDate);
 }
+
+class ChangeDaily extends StatisticsEvent {
+  final int? leftOrRightOrPick;
+
+  const ChangeDaily(this.leftOrRightOrPick);
+}
+
+class FreeResourcesStats extends StatisticsEvent {}

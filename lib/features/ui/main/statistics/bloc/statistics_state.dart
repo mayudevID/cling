@@ -2,7 +2,7 @@
 
 part of 'statistics_bloc.dart';
 
-enum RangeDate { daily, weekly, monthy, yearly }
+enum RangeDate { daily, monthy, yearly, period }
 
 class StatisticsState extends Equatable {
   int typeCategories;

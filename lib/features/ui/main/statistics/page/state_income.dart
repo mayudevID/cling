@@ -7,7 +7,7 @@ import 'package:sizer/sizer.dart';
 import '../../../../../resources/gen/fonts.gen.dart';
 import '../../../language_currency/lang_export.dart';
 import '../bloc/statistics_bloc.dart';
-import '../widgets/change_range_date.dart';
+import '../widgets/change_date_widget/choose_date_range.dart';
 import '../widgets/income_breakdown.dart';
 
 class StatsIncome extends StatelessWidget {
@@ -47,7 +47,7 @@ class StatsIncome extends StatelessWidget {
         SizedBox(
           height: 16.hmea,
         ),
-        changeRangeDate(context),
+        ...chooseDateRange(context),
         SizedBox(
           height: 16.hmea,
         ),

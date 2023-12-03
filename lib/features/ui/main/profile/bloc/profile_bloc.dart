@@ -3,7 +3,9 @@ import 'package:cling/core/exception.dart';
 import 'package:cling/features/model/currency.dart';
 import 'package:cling/features/model/user_model.dart';
 import 'package:cling/features/repository/database_repository.dart';
+import 'package:cling/features/ui/main/home/bloc/home_bloc.dart';
 import 'package:cling/features/ui/main/main_page.dart';
+import 'package:cling/features/ui/main/statistics/bloc/statistics_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -35,6 +37,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     try {
       Navigator.pop(mainContext);
       loadingAuth(mainContext);
+      _freeResources();
       Future.wait([
         _authRepo.logOut(),
         _dbRepo.deleteAllTable(),
@@ -67,5 +70,10 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     final isVerified =
         (_authRepo.currentUserFirebase!.emailVerified == false) ? false : true;
     emit(state.copyWith(isVerified: isVerified));
+  }
+
+  void _freeResources() async {
+    mainContext.read<HomeBloc>().add(FreeResourcesHome());
+    mainContext.read<StatisticsBloc>().add(FreeResourcesStats());
   }
 }
