@@ -18,6 +18,7 @@ class StatisticsState extends Equatable {
   double maxValAll;
   double maxValIncome;
   RangeDate rangeDate;
+  DateRangePickerView dateRangePickerView;
   DateTime dateLeft;
   DateTime dateRight;
 
@@ -26,6 +27,7 @@ class StatisticsState extends Equatable {
     this.maxValAll = 0,
     this.maxValIncome = 0,
     this.rangeDate = RangeDate.yearly,
+    this.dateRangePickerView = DateRangePickerView.month,
     List<PieDataExSav>? pieDataExSavList,
     List<ExpenseModel>? mostExpenseList,
     List<ChartData>? yearlyIncomeList,
@@ -46,8 +48,18 @@ class StatisticsState extends Equatable {
         chartDataSavingsList = chartDataSavingsList ?? List.empty(),
         expenseBreakdownList = expenseBreakdownList ?? List.empty(),
         expenseDateRangeList = expenseDateRangeList ?? List.empty(),
-        dateLeft = dateLeft ?? DateTime.now().subtract(const Duration(days: 8)),
-        dateRight = dateRight ?? DateTime.now();
+        dateLeft = dateLeft ??
+            DateTime(
+              DateTime.now().year,
+              DateTime.now().month,
+              DateTime.now().day,
+            ).subtract(const Duration(days: 8)),
+        dateRight = dateRight ??
+            DateTime(
+              DateTime.now().year,
+              DateTime.now().month,
+              DateTime.now().day,
+            );
 
   @override
   List<Object> get props => [
@@ -65,6 +77,7 @@ class StatisticsState extends Equatable {
         expenseBreakdownList,
         expenseDateRangeList,
         rangeDate,
+        dateRangePickerView,
         dateLeft,
         dateRight,
       ];
@@ -85,6 +98,7 @@ class StatisticsState extends Equatable {
     DateTime? dateLeft,
     DateTime? dateRight,
     RangeDate? rangeDate,
+    DateRangePickerView? dateRangePickerView,
   }) {
     return StatisticsState(
       maxValAll: maxValAll ?? this.maxValAll,
@@ -99,6 +113,7 @@ class StatisticsState extends Equatable {
       incomeBreakdownList: incomeBreakdownList ?? this.incomeBreakdownList,
       expenseBreakdownList: expenseBreakdownList ?? this.expenseBreakdownList,
       expenseDateRangeList: expenseDateRangeList ?? this.expenseDateRangeList,
+      dateRangePickerView: dateRangePickerView ?? this.dateRangePickerView,
       rangeDate: rangeDate ?? this.rangeDate,
       dateLeft: dateLeft ?? this.dateLeft,
       dateRight: dateRight ?? this.dateRight,

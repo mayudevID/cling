@@ -37,4 +37,10 @@ class ChangeDaily extends StatisticsEvent {
   const ChangeDaily(this.leftOrRightOrPick);
 }
 
+class ChangeDateRangePickerView extends StatisticsEvent {
+  final DateRangePickerView dateRangePickerView;
+
+  const ChangeDateRangePickerView(this.dateRangePickerView);
+}
+
 class FreeResourcesStats extends StatisticsEvent {}

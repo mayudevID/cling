@@ -6,6 +6,7 @@ import 'package:cling/features/repository/database_repository.dart';
 import 'package:cling/features/ui/main/main_page.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 import '../../../../model/chart_data.dart';
 import '../../../../model/expense_model.dart';
@@ -26,6 +27,7 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
     on<GetExpenseBreakdown>(_getExpenseBreakdown);
     on<ChangeRangeDate>(_changeRangeDate);
     on<ChangeDaily>(_changeDaily);
+    on<ChangeDateRangePickerView>(_changeDateRangePickerView);
     on<FreeResourcesStats>(_freeResources);
   }
 
@@ -241,6 +243,10 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
         );
       }
     }
+  }
+
+  void _changeDateRangePickerView(ChangeDateRangePickerView event, emit) {
+    emit(state.copyWith(dateRangePickerView: event.dateRangePickerView));
   }
 
   void _freeResources(FreeResourcesStats event, emit) {

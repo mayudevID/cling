@@ -91,9 +91,3 @@ class StatsIncome extends StatelessWidget {
     );
   }
 }
-
-class IncomeData {
-  IncomeData(this.x, this.y);
-  final String x;
-  final double y;
-}
