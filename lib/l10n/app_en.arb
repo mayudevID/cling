@@ -267,5 +267,11 @@
   "period": "Period",
   "@period": {},
   "yearly": "Yearly",
-  "@yearly": {}
+  "@yearly": {},
+  "byDay": "By Day",
+  "@byDay": {},
+  "byMonth": "By Month",
+  "@byMonth": {},
+  "byYear": "By Year",
+  "@byYear": {}
 }

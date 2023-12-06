@@ -1,8 +1,10 @@
+import 'package:cling/features/ui/main/statistics/widgets/change_date_widget/range_date_yearly.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../bloc/statistics_bloc.dart';
 import 'range_date_daily.dart';
+import 'range_date_monthly.dart';
 import 'range_date_period.dart';
 
 Widget chooseDateBasedRangeDate(BuildContext context) {
@@ -19,9 +21,9 @@ Widget chooseDateBasedRangeDate(BuildContext context) {
         case RangeDate.period:
           return rangeDatePeriod(context, state);
         case RangeDate.monthy:
-          return Container();
+          return rangeDateMonthly(context, state);
         case RangeDate.yearly:
-          return Container();
+          return rangeDateYearly(context, state);
       }
     },
   );

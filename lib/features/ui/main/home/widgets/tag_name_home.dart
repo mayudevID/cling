@@ -1,13 +1,11 @@
 import 'package:cling/core/utils.dart';
+import 'package:cling/features/ui/language_currency/lang_currency_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../../resources/gen/fonts.gen.dart';
-
-String monthAndYearNow(BuildContext context) {
-  final date = DateTime.now();
-  return '${monthIntToString(context: context, time: date, compact: false)} ${date.year}';
-}
 
 List<Widget> tagNameHome(
   BuildContext context,
@@ -41,7 +39,16 @@ List<Widget> tagNameHome(
                     ),
                   ),
                   TextSpan(
-                    text: monthAndYearNow(context),
+                    text: DateFormat.yMMMM(
+                      context.select(
+                        (LangCurrencyBloc bloc) {
+                          return bloc.state.selectedLanguage.value
+                              .toLanguageTag();
+                        },
+                      ),
+                    ).format(
+                      DateTime.now(),
+                    ),
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 10.sp,

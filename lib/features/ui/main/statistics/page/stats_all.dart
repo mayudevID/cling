@@ -40,7 +40,7 @@ class StatsAll extends StatelessWidget {
           height: 24.hmea,
         ),
         Text(
-          AppLocalizations.of(context)!.yearlyBreakdown,
+          '${AppLocalizations.of(context)!.yearlyBreakdown} / ${DateTime.now().year}',
           textAlign: TextAlign.center,
           style: TextStyle(
             color: Colors.white,

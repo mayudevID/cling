@@ -1,4 +1,6 @@
+import 'package:cling/core/logger.dart';
 import 'package:cling/core/utils.dart';
+import 'package:cling/features/ui/language_currency/lang_export.dart';
 import 'package:cling/features/ui/main/statistics/bloc/statistics_bloc.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
@@ -48,6 +50,24 @@ Widget rangeDatePeriod(BuildContext mainContext, StatisticsState state) {
 }
 
 void pickDateRangeBottomSheet(BuildContext mainContext) {
+  String convertEnumToDetailDate(DateRangePickerView dateRangePickerView) {
+    var appLocal = AppLocalizations.of(mainContext)!;
+
+    switch (dateRangePickerView) {
+      case DateRangePickerView.month:
+        return appLocal.byDay;
+      case DateRangePickerView.year:
+        return appLocal.byMonth;
+      case DateRangePickerView.decade:
+        return appLocal.byYear;
+      case DateRangePickerView.century:
+        return '';
+    }
+  }
+
+  var listDRPV = DateRangePickerView.values.toList(growable: true);
+  listDRPV.remove(DateRangePickerView.century);
+
   showMaterialModalBottomSheet(
     context: mainContext,
     isDismissible: false,
@@ -92,7 +112,9 @@ void pickDateRangeBottomSheet(BuildContext mainContext) {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              state.dateRangePickerView.name,
+                              convertEnumToDetailDate(
+                                state.dateRangePickerView,
+                              ),
                               style: const TextStyle(
                                 color: Colors.white,
                                 fontFamily: FontFamily.cabinetGrotesk,
@@ -105,21 +127,20 @@ void pickDateRangeBottomSheet(BuildContext mainContext) {
                           ],
                         ),
                       ),
-                      items: DateRangePickerView.values
-                          .map(
-                            (item) => DropdownMenuItem<DateRangePickerView>(
-                              value: item,
-                              child: Text(
-                                item.name,
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontFamily: FontFamily.cabinetGrotesk,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
+                      items: listDRPV.map((item) {
+                        return DropdownMenuItem<DateRangePickerView>(
+                          value: item,
+                          child: Text(
+                            convertEnumToDetailDate(item),
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontFamily: FontFamily.cabinetGrotesk,
+                              fontWeight: FontWeight.w600,
                             ),
-                          )
-                          .toList(),
+                          ),
+                        );
+                        //}
+                      }).toList(),
                       onChanged: (value) {
                         mainContext
                             .read<StatisticsBloc>()
@@ -146,6 +167,7 @@ void pickDateRangeBottomSheet(BuildContext mainContext) {
                       ),
                       showActionButtons: true,
                       onSubmit: (value) {
+                        Logger.Blue.log(value.toString());
                         Navigator.pop(context);
                       },
                       onCancel: () {

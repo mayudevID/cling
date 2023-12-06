@@ -267,5 +267,11 @@
   "period": "Waktu tertentu",
   "@period": {},
   "yearly": "Tahunan",
-  "@yearly": {}
+  "@yearly": {},
+  "byDay": "Berdasarkan Hari",
+  "@byDay": {},
+  "byMonth": "Berdasarkan Bulan",
+  "@byMonth": {},
+  "byYear": "Berdasarkan Tahun",
+  "@byYear": {}
 }

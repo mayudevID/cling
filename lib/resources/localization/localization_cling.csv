@@ -135,3 +135,6 @@ monthly,Monthly,Bulanan
 daily,Daily,Harian
 period,Period,Waktu tertentu
 yearly,Yearly,Tahunan
+byDay,By Day,Berdasarkan Hari
+byMonth,By Month,Berdasarkan Bulan
+byYear,By Year,Berdasarkan Tahun
