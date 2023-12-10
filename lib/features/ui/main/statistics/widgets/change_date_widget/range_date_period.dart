@@ -1,6 +1,5 @@
-import 'package:cling/core/logger.dart';
 import 'package:cling/core/utils.dart';
-import 'package:cling/features/ui/language_currency/lang_export.dart';
+
 import 'package:cling/features/ui/main/statistics/bloc/statistics_bloc.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
@@ -13,13 +12,39 @@ import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import '../../../../../../resources/gen/assets.gen.dart';
 import '../../../../../../resources/gen/fonts.gen.dart';
 import '../../../../language_currency/lang_currency_bloc.dart';
+import 'convert_enum_to_detail_date.dart';
 
-Widget rangeDatePeriod(BuildContext mainContext, StatisticsState state) {
+Widget rangeDatePeriod(BuildContext mainContext) {
   final formatCurr = mainContext.select(
     (LangCurrencyBloc bloc) {
       return bloc.state.selectedLanguage.value.toLanguageTag();
     },
   );
+
+  String dateFormatPeriod(StatisticsState state) {
+    DateFormat dateFormat;
+
+    switch (state.dateRangePickerView) {
+      case DateRangePickerView.month:
+        //* Day
+        dateFormat = DateFormat.yMMMMd(formatCurr);
+        break;
+      case DateRangePickerView.year:
+        //* Month
+        dateFormat = DateFormat.yMMMM(formatCurr);
+        break;
+      case DateRangePickerView.decade:
+        //* Year
+        dateFormat = DateFormat.y(formatCurr);
+        break;
+      case DateRangePickerView.century:
+        //* -
+        dateFormat = DateFormat.y(formatCurr);
+        break;
+    }
+
+    return "${dateFormat.format(state.dateLeft)} - ${dateFormat.format(state.dateRight)}";
+  }
 
   return GestureDetector(
     onTap: () {
@@ -35,12 +60,21 @@ Widget rangeDatePeriod(BuildContext mainContext, StatisticsState state) {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            "${DateFormat.yMMMMd(formatCurr).format(state.dateLeft)} - ${DateFormat.yMMMMd(formatCurr).format(state.dateRight)}",
-            style: const TextStyle(
-              color: Colors.white,
-              fontFamily: FontFamily.cabinetGrotesk,
-            ),
+          BlocBuilder<StatisticsBloc, StatisticsState>(
+            buildWhen: (p, c) {
+              return (p.dateLeft != c.dateLeft) ||
+                  (p.dateRight != c.dateRight) ||
+                  (p.dateRangePickerView != c.dateRangePickerView);
+            },
+            builder: (context, state) {
+              return Text(
+                dateFormatPeriod(state),
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontFamily: FontFamily.cabinetGrotesk,
+                ),
+              );
+            },
           ),
           Assets.lib.resources.images.calendar.svg(),
         ],
@@ -50,21 +84,6 @@ Widget rangeDatePeriod(BuildContext mainContext, StatisticsState state) {
 }
 
 void pickDateRangeBottomSheet(BuildContext mainContext) {
-  String convertEnumToDetailDate(DateRangePickerView dateRangePickerView) {
-    var appLocal = AppLocalizations.of(mainContext)!;
-
-    switch (dateRangePickerView) {
-      case DateRangePickerView.month:
-        return appLocal.byDay;
-      case DateRangePickerView.year:
-        return appLocal.byMonth;
-      case DateRangePickerView.decade:
-        return appLocal.byYear;
-      case DateRangePickerView.century:
-        return '';
-    }
-  }
-
   var listDRPV = DateRangePickerView.values.toList(growable: true);
   listDRPV.remove(DateRangePickerView.century);
 
@@ -113,6 +132,7 @@ void pickDateRangeBottomSheet(BuildContext mainContext) {
                           children: [
                             Text(
                               convertEnumToDetailDate(
+                                context,
                                 state.dateRangePickerView,
                               ),
                               style: const TextStyle(
@@ -131,7 +151,7 @@ void pickDateRangeBottomSheet(BuildContext mainContext) {
                         return DropdownMenuItem<DateRangePickerView>(
                           value: item,
                           child: Text(
-                            convertEnumToDetailDate(item),
+                            convertEnumToDetailDate(context, item),
                             style: const TextStyle(
                               color: Colors.white,
                               fontFamily: FontFamily.cabinetGrotesk,
@@ -167,7 +187,10 @@ void pickDateRangeBottomSheet(BuildContext mainContext) {
                       ),
                       showActionButtons: true,
                       onSubmit: (value) {
-                        Logger.Blue.log(value.toString());
+                        final val = value as PickerDateRange;
+                        mainContext.read<StatisticsBloc>().add(
+                              ChangeDateForPeriod(val.startDate, val.endDate),
+                            );
                         Navigator.pop(context);
                       },
                       onCancel: () {

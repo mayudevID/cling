@@ -10,20 +10,18 @@ import 'range_date_period.dart';
 Widget chooseDateBasedRangeDate(BuildContext context) {
   return BlocBuilder<StatisticsBloc, StatisticsState>(
     buildWhen: (p, c) {
-      return (p.rangeDate.name != c.rangeDate.name) ||
-          (p.dateRight != c.dateRight) ||
-          (p.dateLeft != c.dateLeft);
+      return p.rangeDate.name != c.rangeDate.name;
     },
     builder: (context, state) {
       switch (state.rangeDate) {
         case RangeDate.daily:
-          return rangeDateDaily(context, state);
+          return rangeDateDaily(context);
         case RangeDate.period:
-          return rangeDatePeriod(context, state);
+          return rangeDatePeriod(context);
         case RangeDate.monthy:
-          return rangeDateMonthly(context, state);
+          return rangeDateMonthly(context);
         case RangeDate.yearly:
-          return rangeDateYearly(context, state);
+          return rangeDateYearly(context);
       }
     },
   );

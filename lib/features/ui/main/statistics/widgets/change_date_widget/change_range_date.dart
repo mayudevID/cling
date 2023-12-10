@@ -8,6 +8,7 @@ import 'package:sizer/sizer.dart';
 import '../../../../../../resources/gen/assets.gen.dart';
 import '../../../../../../resources/gen/fonts.gen.dart';
 import '../../bloc/statistics_bloc.dart';
+import 'convert_enum_to_detail_date.dart';
 
 Widget changeRangeDate(BuildContext context) {
   String setName(RangeDate rangeDate) {
@@ -26,7 +27,8 @@ Widget changeRangeDate(BuildContext context) {
 
   return BlocBuilder<StatisticsBloc, StatisticsState>(
     buildWhen: (p, c) {
-      return p.rangeDate.name != c.rangeDate.name;
+      return (p.rangeDate.name != c.rangeDate.name) ||
+          (p.dateRangePickerView.name != c.dateRangePickerView.name);
     },
     builder: (context, state) {
       return DropdownButtonHideUnderline(
@@ -42,7 +44,7 @@ Widget changeRangeDate(BuildContext context) {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  setName(state.rangeDate),
+                  '${setName(state.rangeDate)} - ${(state.rangeDate == RangeDate.period) ? convertEnumToDetailDate(context, state.dateRangePickerView) : ""}',
                   style: TextStyle(
                     color: Colors.white,
                     fontFamily: FontFamily.cabinetGrotesk,

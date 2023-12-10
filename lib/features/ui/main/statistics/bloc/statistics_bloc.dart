@@ -1,17 +1,21 @@
-import 'package:bloc/bloc.dart';
 import 'package:cling/core/logger.dart';
 import 'package:cling/features/model/pie_data_expense.dart';
 import 'package:cling/features/model/pie_data_expense_savings.dart';
 import 'package:cling/features/repository/database_repository.dart';
+import 'package:cling/features/ui/language_currency/lang_currency_bloc.dart';
 import 'package:cling/features/ui/main/main_page.dart';
+import 'package:cling/resources/gen/fonts.gen.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:month_year_picker/month_year_picker.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 import '../../../../model/chart_data.dart';
 import '../../../../model/expense_model.dart';
 import '../../../language_currency/lang_export.dart';
+import '../widgets/change_date_widget/convert_enum_to_detail_date.dart';
 
 part 'statistics_event.dart';
 part 'statistics_state.dart';
@@ -31,6 +35,7 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
     on<ChangeMonthly>(_changeMonthly);
     on<ChangeYearly>(_changeYearly);
     on<ChangeDateRangePickerView>(_changeDateRangePickerView);
+    on<ChangeDateForPeriod>(_changeDateForPeriod);
     on<FreeResourcesStats>(_freeResources);
   }
 
@@ -186,14 +191,29 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
     }
   }
 
+  void _changeDateForPeriod(ChangeDateForPeriod event, emit) {
+    emit(
+      state.copyWith(
+        dateLeft: event.dateLeft,
+        dateRight: event.dateRight,
+      ),
+    );
+    Logger.Green.log(
+      "ChangeDateForPeriod (${convertEnumToDetailDate(mainContext, state.dateRangePickerView)})",
+    );
+    Logger.White.log(DateFormat.yMMMd().format(state.dateLeft));
+    Logger.White.log(DateFormat.yMMMd().format(state.dateRight));
+  }
+
   void _changeRangeDate(ChangeRangeDate event, emit) {
-    DateTime? dateLeft;
-    DateTime? dateRight;
+    DateTime dateLeft;
+    DateTime dateRight;
+    final now = DateTime.now();
     switch (event.rangeDate) {
       case RangeDate.daily:
-        dateRight = DateTime.now();
+        dateLeft = now;
+        dateRight = now;
         Logger.Green.log("ChangeRangeDate Daily");
-        Logger.White.log(DateFormat.yMMMd().format(dateRight));
         break;
       case RangeDate.monthy:
         dateLeft = DateTime(
@@ -207,24 +227,177 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
           _getDaysInMonth(state.dateRight.year, state.dateRight.month),
         );
         Logger.Green.log("ChangeRangeDate Monthly");
-        Logger.White.log(DateFormat.yMMMd().format(dateLeft));
-        Logger.White.log(DateFormat.yMMMd().format(dateRight));
         break;
       case RangeDate.yearly:
         dateLeft = DateTime(state.dateRight.year, 1, 1);
         dateRight = DateTime(state.dateRight.year, 12, 31);
         Logger.Green.log("ChangeRangeDate Yearly");
-        Logger.White.log(DateFormat.yMMMd().format(dateLeft));
-        Logger.White.log(DateFormat.yMMMd().format(dateRight));
         break;
       case RangeDate.period:
+        dateLeft = now.subtract(const Duration(days: 4));
+        dateRight = now;
         Logger.Green.log("ChangeRangeDate Period");
         break;
     }
+    emit(
+      state.copyWith(
+        rangeDate: event.rangeDate,
+        dateLeft: dateLeft,
+        dateRight: dateRight,
+        dateRangePickerView: (event.rangeDate == RangeDate.period)
+            ? DateRangePickerView.month
+            : null,
+      ),
+    );
+    Logger.White.log(DateFormat.yMMMd().format(state.dateLeft));
+    Logger.White.log(DateFormat.yMMMd().format(state.dateRight));
+  }
+
+  void _changeDaily(ChangeDaily event, emit) async {
+    Logger.Green.log("ChangeDaily");
+    switch (event.leftOrRightOrPick) {
+      case 0:
+        final newDate = state.dateRight.subtract(const Duration(days: 1));
+        emit(
+          state.copyWith(dateRight: newDate),
+        );
+
+        break;
+      case 1:
+        final newDate = state.dateRight.add(const Duration(days: 1));
+        emit(state.copyWith(dateRight: newDate));
+        break;
+      default:
+        DateTime? pickedDate = await showDatePicker(
+          context: mainContext,
+          initialDate: state.dateRight,
+          initialDatePickerMode: DatePickerMode.day,
+          firstDate: DateTime(1970, 1, 1),
+          lastDate: state.dateRight.add(const Duration(days: 1000)),
+        );
+        if (pickedDate != null) {
+          emit(
+            state.copyWith(dateRight: pickedDate),
+          );
+        }
+        break;
+    }
+    Logger.White.log(DateFormat.yMMMd().format(state.dateRight));
+  }
+
+  void _changeMonthly(ChangeMonthly event, emit) async {
+    Logger.Green.log("ChangeMonthly");
+    if (event.leftOrRightOrPick == 0 || event.leftOrRightOrPick == 1) {
+      int monthModifier = (event.leftOrRightOrPick == 0) ? -1 : 1;
+
+      final newDateLeft = DateTime(
+        state.dateLeft.year,
+        state.dateLeft.month + monthModifier,
+        1,
+      );
+      final newDateRight = DateTime(
+        state.dateRight.year,
+        state.dateRight.month + monthModifier,
+        _getDaysInMonth(
+          state.dateRight.year,
+          state.dateRight.month + monthModifier,
+        ),
+      );
+      emit(state.copyWith(dateLeft: newDateLeft, dateRight: newDateRight));
+    } else {
+      final pickedDate = await showMonthYearPicker(
+        locale:
+            mainContext.read<LangCurrencyBloc>().state.selectedLanguage.value,
+        context: mainContext,
+        initialDate: state.dateRight,
+        firstDate: DateTime.now().subtract(const Duration(days: 10000000)),
+        lastDate: DateTime.now().add(const Duration(days: 10000000)),
+      );
+      if (pickedDate != null) {
+        final newDateLeft = DateTime(pickedDate.year, pickedDate.month, 1);
+        final newDateRight = DateTime(
+          pickedDate.year,
+          pickedDate.month,
+          _getDaysInMonth(pickedDate.year, pickedDate.month),
+        );
+        emit(state.copyWith(dateLeft: newDateLeft, dateRight: newDateRight));
+      }
+    }
+    Logger.White.log(DateFormat.yMMMd().format(state.dateLeft));
+    Logger.White.log(DateFormat.yMMMd().format(state.dateRight));
+  }
+
+  void _changeYearly(ChangeYearly event, emit) async {
+    Logger.Green.log("ChangeYearly");
+    if (event.leftOrRightOrPick == 0 || event.leftOrRightOrPick == 1) {
+      int yearModifier = (event.leftOrRightOrPick == 0) ? -1 : 1;
+
+      final newDateLeft = DateTime(state.dateRight.year + yearModifier, 1, 1);
+      final newDateRight = DateTime(
+        state.dateRight.year + yearModifier,
+        12,
+        31,
+      );
+
+      emit(state.copyWith(dateLeft: newDateLeft, dateRight: newDateRight));
+    } else {
+      DateTime? pickedDate = await showDialog(
+        context: mainContext,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text(
+              "Select Year",
+              style: TextStyle(
+                fontFamily: FontFamily.cabinetGrotesk,
+              ),
+            ),
+            content: SizedBox(
+              width: 300,
+              height: 300,
+              child: YearPicker(
+                firstDate: DateTime(DateTime.now().year - 100, 1),
+                lastDate: DateTime(DateTime.now().year + 100, 1),
+                currentDate: DateTime.now(),
+                selectedDate: state.dateRight,
+                onChanged: (DateTime dateTime) {
+                  Navigator.pop(context, dateTime);
+                },
+              ),
+            ),
+          );
+        },
+      );
+
+      if (pickedDate != null) {
+        final newDateLeft = DateTime(pickedDate.year, 1, 1);
+        final newDateRight = DateTime(
+          pickedDate.year,
+          12,
+          _getDaysInMonth(pickedDate.year, pickedDate.month),
+        );
+        emit(state.copyWith(dateLeft: newDateLeft, dateRight: newDateRight));
+      }
+    }
+
+    Logger.White.log(DateFormat.yMMMd().format(state.dateLeft));
+    Logger.White.log(DateFormat.yMMMd().format(state.dateRight));
+  }
+
+  void _changeDateRangePickerView(ChangeDateRangePickerView event, emit) {
+    emit(state.copyWith(dateRangePickerView: event.dateRangePickerView));
+  }
+
+  void _freeResources(FreeResourcesStats event, emit) {
     emit(state.copyWith(
-      rangeDate: event.rangeDate,
-      dateLeft: dateLeft ?? state.dateLeft,
-      dateRight: dateRight ?? state.dateRight,
+      pieDataExSavList: List.empty(),
+      yearlyIncomeList: List.empty(),
+      mostExpenseList: List.empty(),
+      incomeBreakdownList: List.empty(),
+      chartDataIncomeList: List.empty(),
+      chartDataExpenseList: List.empty(),
+      chartDataSavingsList: List.empty(),
+      expenseBreakdownList: List.empty(),
+      expenseDateRangeList: List.empty(),
     ));
   }
 
@@ -263,125 +436,5 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
       default:
         return "-";
     }
-  }
-
-  void _changeDaily(ChangeDaily event, emit) async {
-    switch (event.leftOrRightOrPick) {
-      case 0:
-        final newDate = state.dateRight.subtract(const Duration(days: 1));
-        emit(
-          state.copyWith(dateRight: newDate),
-        );
-        Logger.Green.log("ChangeDaily");
-        Logger.White.log(DateFormat.yMMMd().format(newDate));
-        break;
-      case 1:
-        final newDate = state.dateRight.add(const Duration(days: 1));
-        emit(state.copyWith(dateRight: newDate));
-        Logger.Green.log("ChangeDaily");
-        Logger.White.log(DateFormat.yMMMd().format(newDate));
-        break;
-      default:
-        DateTime? pickedDate = await showDatePicker(
-          context: mainContext,
-          initialDate: state.dateRight,
-          firstDate: DateTime(1970, 1, 1),
-          lastDate: state.dateRight.add(const Duration(days: 1000)),
-        );
-        if (pickedDate != null) {
-          emit(
-            state.copyWith(dateRight: pickedDate),
-          );
-          Logger.Green.log("ChangeDaily");
-          Logger.White.log(DateFormat.yMMMd().format(pickedDate));
-        }
-        break;
-    }
-  }
-
-  void _changeMonthly(ChangeMonthly event, emit) async {
-    if (event.leftOrRightOrPick == 0 || event.leftOrRightOrPick == 1) {
-      int monthModifier = (event.leftOrRightOrPick == 0) ? -1 : 1;
-
-      final newDateLeft = DateTime(
-        state.dateLeft.year,
-        state.dateLeft.month + monthModifier,
-        1,
-      );
-      final newDateRight = DateTime(
-        state.dateRight.year,
-        state.dateRight.month + monthModifier,
-        _getDaysInMonth(
-          state.dateRight.year,
-          state.dateRight.month + monthModifier,
-        ),
-      );
-      emit(state.copyWith(dateLeft: newDateLeft, dateRight: newDateRight));
-      Logger.Green.log("ChangeMonthly");
-      Logger.White.log(DateFormat.yMMMd().format(newDateLeft));
-      Logger.White.log(DateFormat.yMMMd().format(newDateRight));
-    } else {
-      DateTime? pickedDate = await showDatePicker(
-        initialDatePickerMode: DatePickerMode.year,
-        context: mainContext,
-        initialDate: state.dateRight,
-        firstDate: DateTime(1970, 1, 1),
-        lastDate: state.dateRight,
-      );
-      if (pickedDate != null) {
-        emit(
-          state.copyWith(dateRight: pickedDate),
-        );
-      }
-    }
-  }
-
-  void _changeYearly(ChangeYearly event, emit) async {
-    if (event.leftOrRightOrPick == 0 || event.leftOrRightOrPick == 1) {
-      int yearModifier = (event.leftOrRightOrPick == 0) ? -1 : 1;
-
-      final newDateLeft = DateTime(state.dateRight.year + yearModifier, 1, 1);
-      final newDateRight = DateTime(
-        state.dateRight.year + yearModifier,
-        12,
-        31,
-      );
-
-      emit(state.copyWith(dateLeft: newDateLeft, dateRight: newDateRight));
-      Logger.Green.log("ChangeYearly");
-      Logger.White.log(DateFormat.yMMMd().format(newDateLeft));
-      Logger.White.log(DateFormat.yMMMd().format(newDateRight));
-    } else {
-      DateTime? pickedDate = await showDatePicker(
-        initialDatePickerMode: DatePickerMode.year,
-        context: mainContext,
-        initialDate: state.dateRight,
-        firstDate: DateTime(1970, 1, 1),
-        lastDate: state.dateRight,
-      );
-      if (pickedDate != null) {
-        emit(
-          state.copyWith(dateRight: pickedDate),
-        );
-      }
-    }
-  }
-
-  void _changeDateRangePickerView(ChangeDateRangePickerView event, emit) {
-    emit(state.copyWith(dateRangePickerView: event.dateRangePickerView));
-  }
-
-  void _freeResources(FreeResourcesStats event, emit) {
-    emit(state.copyWith(
-      pieDataExSavList: List.empty(),
-      yearlyIncomeList: List.empty(),
-      mostExpenseList: List.empty(),
-      incomeBreakdownList: List.empty(),
-      chartDataIncomeList: List.empty(),
-      chartDataExpenseList: List.empty(),
-      chartDataSavingsList: List.empty(),
-      expenseBreakdownList: List.empty(),
-      expenseDateRangeList: List.empty(),
-    ));
   }
 }

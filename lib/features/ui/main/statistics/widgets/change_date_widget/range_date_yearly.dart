@@ -9,7 +9,7 @@ import '../../../../language_currency/lang_currency_bloc.dart';
 import '../../bloc/statistics_bloc.dart';
 import "dart:math" as math;
 
-Widget rangeDateYearly(BuildContext context, StatisticsState state) {
+Widget rangeDateYearly(BuildContext context) {
   final formatCurr = context.select(
     (LangCurrencyBloc bloc) {
       return bloc.state.selectedLanguage.value.toLanguageTag();
@@ -37,16 +37,23 @@ Widget rangeDateYearly(BuildContext context, StatisticsState state) {
               borderRadius: BorderRadius.circular(5),
             ),
             child: Center(
-              child: AnimatedSwitcher(
-                duration: const Duration(milliseconds: 200),
-                child: Text(
-                  DateFormat.y(formatCurr).format(state.dateRight),
-                  key: ValueKey<String>(state.dateRight.toString()),
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontFamily: FontFamily.cabinetGrotesk,
-                  ),
-                ),
+              child: BlocBuilder<StatisticsBloc, StatisticsState>(
+                buildWhen: (p, c) {
+                  return p.dateRight != c.dateRight;
+                },
+                builder: (context, state) {
+                  return AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 200),
+                    child: Text(
+                      DateFormat.y(formatCurr).format(state.dateRight),
+                      key: ValueKey<String>(state.dateRight.toString()),
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontFamily: FontFamily.cabinetGrotesk,
+                      ),
+                    ),
+                  );
+                },
               ),
             ),
           ),

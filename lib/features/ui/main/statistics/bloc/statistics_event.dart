@@ -55,4 +55,14 @@ class ChangeDateRangePickerView extends StatisticsEvent {
   const ChangeDateRangePickerView(this.dateRangePickerView);
 }
 
+class ChangeDateForPeriod extends StatisticsEvent {
+  final DateTime? dateLeft;
+  final DateTime? dateRight;
+
+  const ChangeDateForPeriod(
+    this.dateLeft,
+    this.dateRight,
+  );
+}
+
 class FreeResourcesStats extends StatisticsEvent {}

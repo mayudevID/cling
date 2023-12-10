@@ -6,7 +6,9 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:month_year_picker/month_year_picker.dart';
 import 'package:sizer/sizer.dart';
 import 'core/route.dart';
 import 'features/repository/auth_repository.dart';
@@ -96,12 +98,14 @@ class MainApp extends StatelessWidget {
     return MaterialApp(
       builder: FToastBuilder(),
       navigatorKey: navKeyGlobal,
-      theme: ThemeData(
-        primaryColor: Colors.white,
-      ),
+      theme: ThemeData(primaryColor: Colors.white),
       locale: state.selectedLanguage.value,
       supportedLocales: AppLocalizations.supportedLocales,
-      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      localizationsDelegates: const [
+        ...AppLocalizations.localizationsDelegates,
+        GlobalMaterialLocalizations.delegate,
+        MonthYearPickerLocalizations.delegate,
+      ],
       onGenerateRoute: RouteGen.generateRoute,
       debugShowCheckedModeBanner: false,
     );

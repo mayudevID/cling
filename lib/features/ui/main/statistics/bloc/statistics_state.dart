@@ -26,7 +26,7 @@ class StatisticsState extends Equatable {
     this.typeCategories = 0,
     this.maxValAll = 0,
     this.maxValIncome = 0,
-    this.rangeDate = RangeDate.yearly,
+    this.rangeDate = RangeDate.daily,
     this.dateRangePickerView = DateRangePickerView.month,
     List<PieDataExSav>? pieDataExSavList,
     List<ExpenseModel>? mostExpenseList,

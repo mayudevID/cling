@@ -18,19 +18,6 @@ class StatsAll extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Align(
-        //   alignment: Alignment.center,
-        //   child: Text(
-        //     "${monthIntToString(context: context, time: DateTime.now())} ${DateTime.now().year}",
-        //     textAlign: TextAlign.center,
-        //     style: TextStyle(
-        //       color: Colors.white,
-        //       fontSize: 10.sp,
-        //       fontFamily: FontFamily.cabinetGrotesk,
-        //       fontWeight: FontWeight.w700,
-        //     ),
-        //   ),
-        // ),
         SizedBox(
           height: 8.hmea,
         ),
