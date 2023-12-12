@@ -29,7 +29,7 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
     on<GetIncomeBreakdown>(_getIncomeBreakdown);
     on<GetIncomeExpenseTotalAllMonth>(_getIncomeExpenseTotalAllMonth);
     on<GetYearlyIncome>(_getYearlyIncome);
-    on<GetExpenseBreakdown>(_getExpenseBreakdown);
+    on<GetPieDataExpense>(_getPieDataExpense);
     on<ChangeRangeDate>(_changeRangeDate);
     on<ChangeDaily>(_changeDaily);
     on<ChangeMonthly>(_changeMonthly);
@@ -126,15 +126,20 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
   }
 
   void _getIncomeBreakdown(event, emit) async {
-    final result = await _dbRepo.getIncomeBreakdown();
+    final result = await _dbRepo.getIncomeBreakdown(
+      state.dateLeft,
+      state.dateRight,
+    );
 
-    if (result.isNotEmpty) {
-      emit(state.copyWith(incomeBreakdownList: result));
-    }
+    emit(state.copyWith(
+      incomeBreakdownList: (result.isNotEmpty) ? result : List.empty(),
+    ));
+
+    Logger.Yellow.log("GetIncomeBreakdown Called");
   }
 
-  void _getExpenseBreakdown(event, emit) async {
-    List<PieDataExpense> expenseBreakdownList = List.empty(growable: true);
+  void _getPieDataExpense(event, emit) async {
+    List<PieDataExpense> pieDataExpenseList = List.empty(growable: true);
     final result = await _dbRepo.getExpenseBreakdown();
 
     if (result.isNotEmpty) {
@@ -144,7 +149,7 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
         final cat = getCat.substring(getCat.indexOf(" ") + 1);
 
         final total = element["TotalExpense"] / 100.0;
-        expenseBreakdownList.add(
+        pieDataExpenseList.add(
           PieDataExpense(
             nameCategories: cat,
             amount: total,
@@ -152,7 +157,7 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
         );
       }
 
-      emit(state.copyWith(expenseBreakdownList: expenseBreakdownList));
+      emit(state.copyWith(pieDataExpenseList: pieDataExpenseList));
     }
   }
 
@@ -203,6 +208,7 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
     );
     Logger.White.log(DateFormat.yMMMd().format(state.dateLeft));
     Logger.White.log(DateFormat.yMMMd().format(state.dateRight));
+    add(GetIncomeBreakdown());
   }
 
   void _changeRangeDate(ChangeRangeDate event, emit) {
@@ -251,6 +257,7 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
     );
     Logger.White.log(DateFormat.yMMMd().format(state.dateLeft));
     Logger.White.log(DateFormat.yMMMd().format(state.dateRight));
+    add(GetIncomeBreakdown());
   }
 
   void _changeDaily(ChangeDaily event, emit) async {
@@ -258,14 +265,11 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
     switch (event.leftOrRightOrPick) {
       case 0:
         final newDate = state.dateRight.subtract(const Duration(days: 1));
-        emit(
-          state.copyWith(dateRight: newDate),
-        );
-
+        emit(state.copyWith(dateLeft: newDate, dateRight: newDate));
         break;
       case 1:
         final newDate = state.dateRight.add(const Duration(days: 1));
-        emit(state.copyWith(dateRight: newDate));
+        emit(state.copyWith(dateLeft: newDate, dateRight: newDate));
         break;
       default:
         DateTime? pickedDate = await showDatePicker(
@@ -277,12 +281,13 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
         );
         if (pickedDate != null) {
           emit(
-            state.copyWith(dateRight: pickedDate),
+            state.copyWith(dateLeft: pickedDate, dateRight: pickedDate),
           );
         }
         break;
     }
     Logger.White.log(DateFormat.yMMMd().format(state.dateRight));
+    add(GetIncomeBreakdown());
   }
 
   void _changeMonthly(ChangeMonthly event, emit) async {
@@ -325,6 +330,7 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
     }
     Logger.White.log(DateFormat.yMMMd().format(state.dateLeft));
     Logger.White.log(DateFormat.yMMMd().format(state.dateRight));
+    add(GetIncomeBreakdown());
   }
 
   void _changeYearly(ChangeYearly event, emit) async {
@@ -378,13 +384,48 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
         emit(state.copyWith(dateLeft: newDateLeft, dateRight: newDateRight));
       }
     }
-
     Logger.White.log(DateFormat.yMMMd().format(state.dateLeft));
     Logger.White.log(DateFormat.yMMMd().format(state.dateRight));
+    add(GetIncomeBreakdown());
   }
 
   void _changeDateRangePickerView(ChangeDateRangePickerView event, emit) {
-    emit(state.copyWith(dateRangePickerView: event.dateRangePickerView));
+    DateTime? newDateLeft;
+    DateTime? newDateRight;
+
+    switch (event.dateRangePickerView) {
+      case DateRangePickerView.month:
+        newDateLeft = DateTime.now().subtract(const Duration(days: 4));
+        newDateRight = DateTime.now();
+        Logger.Green.log("ChangeDateRangePickerView (By Day)");
+        break;
+      case DateRangePickerView.year:
+        newDateLeft = DateTime(state.dateLeft.year, state.dateLeft.month, 1);
+        newDateRight = DateTime(
+          state.dateRight.year,
+          state.dateRight.month,
+          _getDaysInMonth(state.dateRight.year, state.dateRight.month),
+        );
+        Logger.Green.log("ChangeDateRangePickerView (By Month)");
+        break;
+      case DateRangePickerView.decade:
+        newDateLeft = DateTime(state.dateLeft.year, 1, 1);
+        newDateRight = DateTime(state.dateRight.year, 12, 31);
+        Logger.Green.log("ChangeDateRangePickerView (By Year)");
+        break;
+      case DateRangePickerView.century:
+        break;
+    }
+    emit(
+      state.copyWith(
+        dateRangePickerView: event.dateRangePickerView,
+        dateLeft: newDateLeft,
+        dateRight: newDateRight,
+      ),
+    );
+    Logger.White.log(DateFormat.yMMMd().format(state.dateLeft));
+    Logger.White.log(DateFormat.yMMMd().format(state.dateRight));
+    add(GetIncomeBreakdown());
   }
 
   void _freeResources(FreeResourcesStats event, emit) {
@@ -396,7 +437,7 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
       chartDataIncomeList: List.empty(),
       chartDataExpenseList: List.empty(),
       chartDataSavingsList: List.empty(),
-      expenseBreakdownList: List.empty(),
+      pieDataExpenseList: List.empty(),
       expenseDateRangeList: List.empty(),
     ));
   }

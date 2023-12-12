@@ -11,10 +11,10 @@ import '../../../../model/pie_data_expense.dart';
 Widget pieChartStatsExpense() {
   return BlocBuilder<StatisticsBloc, StatisticsState>(
     buildWhen: (p, c) {
-      return p.expenseBreakdownList != c.expenseBreakdownList;
+      return p.pieDataExpenseList != c.pieDataExpenseList;
     },
     builder: (context, state) {
-      final pieData = state.expenseBreakdownList;
+      final pieData = state.pieDataExpenseList;
       if (pieData.isEmpty) {
         return Padding(
           padding: EdgeInsets.only(top: 24.hmea),

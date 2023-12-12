@@ -92,6 +92,12 @@ void pickDateRangeBottomSheet(BuildContext mainContext) {
     isDismissible: false,
     enableDrag: false,
     duration: const Duration(milliseconds: 200),
+    shape: const BeveledRectangleBorder(
+      borderRadius: BorderRadius.only(
+        topLeft: Radius.circular(24),
+        topRight: Radius.circular(24),
+      ),
+    ),
     builder: (context) {
       return BlocProvider.value(
         value: BlocProvider.of<StatisticsBloc>(mainContext),
@@ -101,7 +107,13 @@ void pickDateRangeBottomSheet(BuildContext mainContext) {
           },
           builder: (context, state) {
             return Container(
-              color: Colors.white,
+              decoration: const BoxDecoration(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(24),
+                  topRight: Radius.circular(24),
+                ),
+                color: Colors.white,
+              ),
               height: 550.hmea,
               child: Column(
                 children: [
@@ -161,11 +173,13 @@ void pickDateRangeBottomSheet(BuildContext mainContext) {
                         );
                         //}
                       }).toList(),
-                      onChanged: (value) {
+                      onChanged: (value) async {
                         mainContext
                             .read<StatisticsBloc>()
                             .add(ChangeDateRangePickerView(value!));
                         Navigator.pop(context);
+                        await Future.delayed(const Duration(milliseconds: 150));
+                        // ignore: use_build_context_synchronously
                         pickDateRangeBottomSheet(mainContext);
                       },
                       dropdownStyleData: const DropdownStyleData(

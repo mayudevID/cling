@@ -17,7 +17,7 @@ class GetIncomeExpenseTotalAllMonth extends StatisticsEvent {}
 
 class GetIncomeBreakdown extends StatisticsEvent {}
 
-class GetExpenseBreakdown extends StatisticsEvent {}
+class GetPieDataExpense extends StatisticsEvent {}
 
 class GetMostExpense extends StatisticsEvent {}
 

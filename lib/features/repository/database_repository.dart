@@ -179,7 +179,10 @@ class DatabaseRepository {
     return uniqueData;
   }
 
-  Future<List<Map<String, Object?>>> getIncomeBreakdown() async {
+  Future<List<Map<String, Object?>>> getIncomeBreakdown(
+    DateTime dateLeft,
+    DateTime dateRight,
+  ) async {
     final result = await db.rawQuery(
       '''
         SELECT ${IncomeSourceMeta.nameTable}.${IncomeSourceMeta.incomeSource} AS Categories, 
@@ -189,8 +192,11 @@ class DatabaseRepository {
         ON ${IncomeMeta.nameTable}.${IncomeSourceMeta.id} 
         = 
         ${IncomeSourceMeta.nameTable}.${IncomeSourceMeta.id} 
+        WHERE date(${IncomeMeta.date}) >= date(?)
+        AND date(${IncomeMeta.date}) <= date(?)
         GROUP BY Categories;
       ''',
+      [dateLeft.toIso8601String(), dateRight.toIso8601String()],
     );
 
     return result;

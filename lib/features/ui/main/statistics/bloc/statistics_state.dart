@@ -13,7 +13,7 @@ class StatisticsState extends Equatable {
   List<ChartData> chartDataExpenseList;
   List<ChartData> chartDataSavingsList;
   List<Map<String, Object?>> incomeBreakdownList;
-  List<PieDataExpense> expenseBreakdownList;
+  List<PieDataExpense> pieDataExpenseList;
   List expenseDateRangeList;
   double maxValAll;
   double maxValIncome;
@@ -35,7 +35,7 @@ class StatisticsState extends Equatable {
     List<ChartData>? chartDataExpenseList,
     List<ChartData>? chartDataSavingsList,
     List<Map<String, Object?>>? incomeBreakdownList,
-    List<PieDataExpense>? expenseBreakdownList,
+    List<PieDataExpense>? pieDataExpenseList,
     List? expenseDateRangeList,
     DateTime? dateLeft,
     DateTime? dateRight,
@@ -46,14 +46,14 @@ class StatisticsState extends Equatable {
         chartDataIncomeList = chartDataIncomeList ?? List.empty(),
         chartDataExpenseList = chartDataExpenseList ?? List.empty(),
         chartDataSavingsList = chartDataSavingsList ?? List.empty(),
-        expenseBreakdownList = expenseBreakdownList ?? List.empty(),
+        pieDataExpenseList = pieDataExpenseList ?? List.empty(),
         expenseDateRangeList = expenseDateRangeList ?? List.empty(),
         dateLeft = dateLeft ??
             DateTime(
               DateTime.now().year,
               DateTime.now().month,
               DateTime.now().day,
-            ).subtract(const Duration(days: 8)),
+            ),
         dateRight = dateRight ??
             DateTime(
               DateTime.now().year,
@@ -74,7 +74,7 @@ class StatisticsState extends Equatable {
         chartDataExpenseList,
         chartDataSavingsList,
         incomeBreakdownList,
-        expenseBreakdownList,
+        pieDataExpenseList,
         expenseDateRangeList,
         rangeDate,
         dateRangePickerView,
@@ -93,7 +93,7 @@ class StatisticsState extends Equatable {
     List<ChartData>? chartDataExpenseList,
     List<ChartData>? chartDataSavingsList,
     List<Map<String, Object?>>? incomeBreakdownList,
-    List<PieDataExpense>? expenseBreakdownList,
+    List<PieDataExpense>? pieDataExpenseList,
     List? expenseDateRangeList,
     DateTime? dateLeft,
     DateTime? dateRight,
@@ -111,7 +111,7 @@ class StatisticsState extends Equatable {
       chartDataExpenseList: chartDataExpenseList ?? this.chartDataExpenseList,
       chartDataSavingsList: chartDataSavingsList ?? this.chartDataSavingsList,
       incomeBreakdownList: incomeBreakdownList ?? this.incomeBreakdownList,
-      expenseBreakdownList: expenseBreakdownList ?? this.expenseBreakdownList,
+      pieDataExpenseList: pieDataExpenseList ?? this.pieDataExpenseList,
       expenseDateRangeList: expenseDateRangeList ?? this.expenseDateRangeList,
       dateRangePickerView: dateRangePickerView ?? this.dateRangePickerView,
       rangeDate: rangeDate ?? this.rangeDate,

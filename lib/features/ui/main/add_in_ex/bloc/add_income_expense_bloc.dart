@@ -130,7 +130,7 @@ class AddIncomeExpenseBloc
           mainContext.read<HomeBloc>().add(GetTodayExpenses());
           mainContext.read<StatisticsBloc>()
             ..add(GetMostExpense())
-            ..add(GetExpenseBreakdown());
+            ..add(GetPieDataExpense());
 
           break;
       }
