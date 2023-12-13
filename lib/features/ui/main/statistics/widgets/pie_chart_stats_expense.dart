@@ -1,3 +1,5 @@
+import 'package:cling/core/common_widget.dart';
+import 'package:cling/core/logger.dart';
 import 'package:cling/core/utils.dart';
 import 'package:cling/features/ui/main/statistics/bloc/statistics_bloc.dart';
 import 'package:flutter/material.dart';
@@ -16,8 +18,8 @@ Widget pieChartStatsExpense() {
     builder: (context, state) {
       final pieData = state.pieDataExpenseList;
       if (pieData.isEmpty) {
-        return Padding(
-          padding: EdgeInsets.only(top: 24.hmea),
+        return SizedBox(
+          height: 248.5.wmea,
           child: const Center(
             child: Text(
               "No data :(",
@@ -36,6 +38,46 @@ Widget pieChartStatsExpense() {
         child: SfCircularChart(
           tooltipBehavior: TooltipBehavior(
             enable: true,
+            builder: (
+              dynamic data,
+              dynamic point,
+              dynamic series,
+              int pointIndex,
+              int seriesIndex,
+            ) {
+              final newData = data as PieDataExpense;
+              Logger.Red.log("${newData.amount}");
+              return Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      newData.nameCategories,
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontFamily: FontFamily.cabinetGrotesk,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    NominalMoneyFormatter(
+                      textStyle: const TextStyle(
+                        color: Colors.black,
+                        fontFamily: FontFamily.cabinetGrotesk,
+                      ),
+                      amount: newData.amount * 100,
+                      decimalDigits: 2,
+                      isWithName: true,
+                    ),
+                  ],
+                ),
+              );
+            },
           ),
           legend: Legend(
             isResponsive: true,
@@ -51,6 +93,7 @@ Widget pieChartStatsExpense() {
           series: <DoughnutSeries<PieDataExpense, String>>[
             DoughnutSeries<PieDataExpense, String>(
               dataSource: pieData,
+              legendIconType: LegendIconType.circle,
               xValueMapper: (PieDataExpense data, _) => data.nameCategories,
               yValueMapper: (PieDataExpense data, _) => data.amount,
               dataLabelMapper: (PieDataExpense data, _) {

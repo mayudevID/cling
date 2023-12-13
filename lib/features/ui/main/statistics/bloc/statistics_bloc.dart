@@ -168,14 +168,14 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
 
       emit(
         state.copyWith(
-          incomeBreakdownList: result,
+          expenseBreakdownList: result,
           pieDataExpenseList: pieDataExpenseList,
         ),
       );
     } else {
       emit(
         state.copyWith(
-          incomeBreakdownList: List.empty(),
+          expenseBreakdownList: List.empty(),
           pieDataExpenseList: List.empty(),
         ),
       );
@@ -245,6 +245,7 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
     Logger.White.log(DateFormat.yMMMd().format(state.startDate));
     Logger.White.log(DateFormat.yMMMd().format(state.endDate));
     add(GetIncomeBreakdown());
+    add(GetExpenseBreakdownAndPieData());
   }
 
   void _changeAllStatsChoose(ChangeAllStatsChoose event, emit) {
@@ -298,6 +299,7 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
     Logger.White.log(DateFormat.yMMMd().format(state.startDate));
     Logger.White.log(DateFormat.yMMMd().format(state.endDate));
     add(GetIncomeBreakdown());
+    add(GetExpenseBreakdownAndPieData());
   }
 
   void _changeDaily(ChangeDaily event, emit) async {
@@ -328,6 +330,7 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
     }
     Logger.White.log(DateFormat.yMMMd().format(state.endDate));
     add(GetIncomeBreakdown());
+    add(GetExpenseBreakdownAndPieData());
   }
 
   void _changeMonthly(ChangeMonthly event, emit) async {
@@ -371,6 +374,7 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
     Logger.White.log(DateFormat.yMMMd().format(state.startDate));
     Logger.White.log(DateFormat.yMMMd().format(state.endDate));
     add(GetIncomeBreakdown());
+    add(GetExpenseBreakdownAndPieData());
   }
 
   void _changeYearly(ChangeYearly event, emit) async {
@@ -427,6 +431,7 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
     Logger.White.log(DateFormat.yMMMd().format(state.startDate));
     Logger.White.log(DateFormat.yMMMd().format(state.endDate));
     add(GetIncomeBreakdown());
+    add(GetExpenseBreakdownAndPieData());
   }
 
   void _changeDateRangePickerView(ChangeDateRangePickerView event, emit) {
@@ -466,6 +471,7 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
     Logger.White.log(DateFormat.yMMMd().format(state.startDate));
     Logger.White.log(DateFormat.yMMMd().format(state.endDate));
     add(GetIncomeBreakdown());
+    add(GetExpenseBreakdownAndPieData());
   }
 
   void _freeResources(FreeResourcesStats event, emit) {

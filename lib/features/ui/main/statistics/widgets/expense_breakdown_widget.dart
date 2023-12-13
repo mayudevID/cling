@@ -7,12 +7,8 @@ import '../../../../../resources/gen/fonts.gen.dart';
 
 Widget expenseBreakdownWidget(Map<String, dynamic> data) {
   return Container(
-    margin: EdgeInsets.only(
-      bottom: 16.hmea,
-    ),
-    padding: EdgeInsets.all(
-      16.wmea,
-    ),
+    margin: EdgeInsets.only(bottom: 16.hmea),
+    padding: EdgeInsets.all(16.wmea),
     width: double.infinity,
     decoration: BoxDecoration(
       color: const Color(0x3D787880),
@@ -29,7 +25,7 @@ Widget expenseBreakdownWidget(Map<String, dynamic> data) {
           child: Center(
             child: Text(
               " ${data['Categories'].substring(0, data['Categories'].indexOf(" "))}",
-              style: TextStyle(fontSize: 22.sp),
+              style: TextStyle(fontSize: 9.sp),
             ),
           ),
         ),

@@ -17,12 +17,15 @@ Widget lineColumnStatsIncomeWidget(BuildContext mainContext) {
     },
     builder: (context, state) {
       if (state.yearlyIncomeList.isEmpty) {
-        return const Center(
-          child: Text(
-            "No data :(",
-            style: TextStyle(
-              fontFamily: FontFamily.cabinetGrotesk,
-              color: Colors.white,
+        return SizedBox(
+          height: 193.hmea,
+          child: const Center(
+            child: Text(
+              "No data :(",
+              style: TextStyle(
+                fontFamily: FontFamily.cabinetGrotesk,
+                color: Colors.white,
+              ),
             ),
           ),
         );

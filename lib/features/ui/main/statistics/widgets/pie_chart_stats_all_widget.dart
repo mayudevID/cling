@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
+import '../../../../../core/common_widget.dart';
 import '../../../../../resources/gen/fonts.gen.dart';
 import '../../../../model/pie_data_expense_savings.dart';
 import '../bloc/statistics_bloc.dart';
@@ -15,46 +16,84 @@ Widget pieChartStatsAllWidget() {
     },
     builder: (context, state) {
       final pieData = state.pieDataExSavList;
-      if (pieData.isEmpty) {
+      if (pieData.isEmpty ||
+          (pieData[0].amount == 0 && pieData[1].amount == 0)) {
         return Padding(
           padding: EdgeInsets.only(top: 24.hmea),
-          child: const Center(
-            child: Text(
-              "No data :(",
-              style: TextStyle(
-                fontFamily: FontFamily.cabinetGrotesk,
-                color: Colors.white,
+          child: SizedBox(
+            height: 200.hmea,
+            child: const Center(
+              child: Text(
+                "No data :(",
+                style: TextStyle(
+                  fontFamily: FontFamily.cabinetGrotesk,
+                  color: Colors.white,
+                ),
               ),
             ),
           ),
         );
       }
 
-      if (pieData[0].amount == 0 && pieData[1].amount == 0) {
-        return Padding(
-          padding: EdgeInsets.only(top: 24.hmea),
-          child: const Center(
-            child: Text(
-              "No data :(",
-              style: TextStyle(
-                fontFamily: FontFamily.cabinetGrotesk,
-                color: Colors.white,
-              ),
-            ),
-          ),
-        );
-      }
+      // if (pieData[0].amount == 0 && pieData[1].amount == 0) {
+      //   return Padding(
+      //     padding: EdgeInsets.only(top: 24.hmea),
+      //     child: const Center(
+      //       child: Text(
+      //         "No data :(",
+      //         style: TextStyle(
+      //           fontFamily: FontFamily.cabinetGrotesk,
+      //           color: Colors.white,
+      //         ),
+      //       ),
+      //     ),
+      //   );
+      // }
 
       return SizedBox(
         height: 248.5.hmea,
         child: SfCircularChart(
           tooltipBehavior: TooltipBehavior(
             enable: true,
-            decimalPlaces: 2,
-            textStyle: const TextStyle(
-              fontFamily: FontFamily.cabinetGrotesk,
-              fontWeight: FontWeight.w700,
-            ),
+            builder: (
+              dynamic data,
+              dynamic point,
+              dynamic series,
+              int pointIndex,
+              int seriesIndex,
+            ) {
+              final newData = data as PieDataExSav;
+              return Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      newData.nameData,
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontFamily: FontFamily.cabinetGrotesk,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    NominalMoneyFormatter(
+                      textStyle: const TextStyle(
+                        color: Colors.black,
+                        fontFamily: FontFamily.cabinetGrotesk,
+                      ),
+                      amount: newData.amount * 100,
+                      decimalDigits: 2,
+                      isWithName: true,
+                    ),
+                  ],
+                ),
+              );
+            },
           ),
           series: <DoughnutSeries<PieDataExSav, String>>[
             DoughnutSeries<PieDataExSav, String>(

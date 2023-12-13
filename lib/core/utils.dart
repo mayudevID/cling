@@ -15,8 +15,8 @@ double setInterval(double maxVal) {
   } else if (maxVal < 100000) {
     return 20000;
   } else if (maxVal < 500000) {
-    return 100000;
-  } else if (maxVal < 1000000) {
+    return 50000;
+  } else if (maxVal < 5000000) {
     return 200000;
   } else if (maxVal < 10000000) {
     return 500000;

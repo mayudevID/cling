@@ -195,11 +195,10 @@ class DatabaseRepository {
         ${IncomeSourceMeta.nameTable}.${IncomeSourceMeta.id} 
         WHERE date(${IncomeMeta.date}) >= date(?)
         AND date(${IncomeMeta.date}) <= date(?)
-        GROUP BY Categories;
+        GROUP BY Source;
       ''',
       [startDate.toIso8601String(), endDate.toIso8601String()],
     );
-
     return result;
   }
 

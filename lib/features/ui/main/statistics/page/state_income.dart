@@ -28,13 +28,9 @@ class StatsIncome extends StatelessWidget {
             fontWeight: FontWeight.w500,
           ),
         ),
-        SizedBox(
-          height: 24.hmea,
-        ),
+        SizedBox(height: 24.hmea),
         lineColumnStatsIncomeWidget(context),
-        SizedBox(
-          height: 24.hmea,
-        ),
+        SizedBox(height: 24.hmea),
         Text(
           AppLocalizations.of(context)!.incomeBreakdown,
           style: TextStyle(

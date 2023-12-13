@@ -22,12 +22,15 @@ Widget lineColumnStatsAllWidget(BuildContext mainContext) {
       if (state.chartDataExpenseList.isEmpty &&
           state.chartDataIncomeList.isEmpty &&
           state.chartDataSavingsList.isEmpty) {
-        return const Center(
-          child: Text(
-            "No data :(",
-            style: TextStyle(
-              fontFamily: FontFamily.cabinetGrotesk,
-              color: Colors.white,
+        return SizedBox(
+          height: 200.hmea,
+          child: const Center(
+            child: Text(
+              "No data :(",
+              style: TextStyle(
+                fontFamily: FontFamily.cabinetGrotesk,
+                color: Colors.white,
+              ),
             ),
           ),
         );

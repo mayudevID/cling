@@ -12,12 +12,12 @@ class StatisticsState extends Equatable {
   List<ChartData> yearlyIncomeList;
   List<Map<String, Object?>> mostExpenseList;
   List<Map<String, Object?>> mostIncomeList;
-  List<ChartData> chartDataIncomeList;
-  List<ChartData> chartDataExpenseList;
-  List<ChartData> chartDataSavingsList;
   List<Map<String, Object?>> incomeBreakdownList;
   List<Map<String, Object?>> expenseBreakdownList;
   List<PieDataExpense> pieDataExpenseList;
+  List<ChartData> chartDataIncomeList;
+  List<ChartData> chartDataExpenseList;
+  List<ChartData> chartDataSavingsList;
   double maxValAll;
   double maxValIncome;
   RangeDate rangeDate;

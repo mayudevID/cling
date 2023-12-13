@@ -36,13 +36,9 @@ class StatsAll extends StatelessWidget {
             fontWeight: FontWeight.w500,
           ),
         ),
-        SizedBox(
-          height: 8.hmea,
-        ),
+        SizedBox(height: 8.hmea),
         lineColumnStatsAllWidget(context),
-        SizedBox(
-          height: 8.hmea,
-        ),
+        SizedBox(height: 8.hmea),
         DropdownButtonHideUnderline(
           child: DropdownButton2(
             customButton: Container(
