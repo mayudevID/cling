@@ -39,14 +39,14 @@ Widget rangeDateYearly(BuildContext context) {
             child: Center(
               child: BlocBuilder<StatisticsBloc, StatisticsState>(
                 buildWhen: (p, c) {
-                  return p.dateRight != c.dateRight;
+                  return p.endDate != c.endDate;
                 },
                 builder: (context, state) {
                   return AnimatedSwitcher(
                     duration: const Duration(milliseconds: 200),
                     child: Text(
-                      DateFormat.y(formatCurr).format(state.dateRight),
-                      key: ValueKey<String>(state.dateRight.toString()),
+                      DateFormat.y(formatCurr).format(state.endDate),
+                      key: ValueKey<String>(state.endDate.toString()),
                       style: const TextStyle(
                         color: Colors.white,
                         fontFamily: FontFamily.cabinetGrotesk,

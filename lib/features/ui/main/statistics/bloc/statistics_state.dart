@@ -16,14 +16,14 @@ class StatisticsState extends Equatable {
   List<ChartData> chartDataExpenseList;
   List<ChartData> chartDataSavingsList;
   List<Map<String, Object?>> incomeBreakdownList;
+  List<Map<String, Object?>> expenseBreakdownList;
   List<PieDataExpense> pieDataExpenseList;
-  List expenseDateRangeList;
   double maxValAll;
   double maxValIncome;
   RangeDate rangeDate;
   DateRangePickerView dateRangePickerView;
-  DateTime dateLeft;
-  DateTime dateRight;
+  DateTime startDate;
+  DateTime endDate;
   AllStatsChoose allStatsChoose;
 
   StatisticsState({
@@ -41,10 +41,10 @@ class StatisticsState extends Equatable {
     List<ChartData>? chartDataExpenseList,
     List<ChartData>? chartDataSavingsList,
     List<Map<String, Object?>>? incomeBreakdownList,
+    List<Map<String, Object?>>? expenseBreakdownList,
     List<PieDataExpense>? pieDataExpenseList,
-    List? expenseDateRangeList,
-    DateTime? dateLeft,
-    DateTime? dateRight,
+    DateTime? startDate,
+    DateTime? endDate,
   })  : pieDataExSavList = pieDataExSavList ?? List.empty(),
         yearlyIncomeList = yearlyIncomeList ?? List.empty(),
         mostExpenseList = mostExpenseList ?? List.empty(),
@@ -54,14 +54,14 @@ class StatisticsState extends Equatable {
         chartDataExpenseList = chartDataExpenseList ?? List.empty(),
         chartDataSavingsList = chartDataSavingsList ?? List.empty(),
         pieDataExpenseList = pieDataExpenseList ?? List.empty(),
-        expenseDateRangeList = expenseDateRangeList ?? List.empty(),
-        dateLeft = dateLeft ??
+        expenseBreakdownList = expenseBreakdownList ?? List.empty(),
+        startDate = startDate ??
             DateTime(
               DateTime.now().year,
               DateTime.now().month,
               DateTime.now().day,
             ),
-        dateRight = dateRight ??
+        endDate = endDate ??
             DateTime(
               DateTime.now().year,
               DateTime.now().month,
@@ -83,11 +83,11 @@ class StatisticsState extends Equatable {
         chartDataSavingsList,
         incomeBreakdownList,
         pieDataExpenseList,
-        expenseDateRangeList,
+        expenseBreakdownList,
         rangeDate,
         dateRangePickerView,
-        dateLeft,
-        dateRight,
+        startDate,
+        endDate,
         allStatsChoose,
       ];
 
@@ -103,10 +103,10 @@ class StatisticsState extends Equatable {
     List<ChartData>? chartDataExpenseList,
     List<ChartData>? chartDataSavingsList,
     List<Map<String, Object?>>? incomeBreakdownList,
+    List<Map<String, Object?>>? expenseBreakdownList,
     List<PieDataExpense>? pieDataExpenseList,
-    List? expenseDateRangeList,
-    DateTime? dateLeft,
-    DateTime? dateRight,
+    DateTime? startDate,
+    DateTime? endDate,
     RangeDate? rangeDate,
     DateRangePickerView? dateRangePickerView,
     AllStatsChoose? allStatsChoose,
@@ -124,11 +124,11 @@ class StatisticsState extends Equatable {
       chartDataSavingsList: chartDataSavingsList ?? this.chartDataSavingsList,
       incomeBreakdownList: incomeBreakdownList ?? this.incomeBreakdownList,
       pieDataExpenseList: pieDataExpenseList ?? this.pieDataExpenseList,
-      expenseDateRangeList: expenseDateRangeList ?? this.expenseDateRangeList,
+      expenseBreakdownList: expenseBreakdownList ?? this.expenseBreakdownList,
       dateRangePickerView: dateRangePickerView ?? this.dateRangePickerView,
       rangeDate: rangeDate ?? this.rangeDate,
-      dateLeft: dateLeft ?? this.dateLeft,
-      dateRight: dateRight ?? this.dateRight,
+      startDate: startDate ?? this.startDate,
+      endDate: endDate ?? this.endDate,
       allStatsChoose: allStatsChoose ?? this.allStatsChoose,
     );
   }

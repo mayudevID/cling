@@ -5,7 +5,7 @@ import 'package:sizer/sizer.dart';
 
 import '../../../../../resources/gen/fonts.gen.dart';
 
-Widget incomeBreakdown(Map<String, dynamic> data) {
+Widget incomeBreakdownWidget(Map<String, dynamic> data) {
   return Container(
     margin: EdgeInsets.only(
       bottom: 16.hmea,
@@ -28,10 +28,7 @@ Widget incomeBreakdown(Map<String, dynamic> data) {
           ),
           child: Center(
             child: Text(
-              " ${data["Categories"].substring(
-                0,
-                data["Categories"].indexOf(" "),
-              )}",
+              " ${data["Source"].substring(0, data["Source"].indexOf(" "))}",
               style: TextStyle(fontSize: 9.sp),
             ),
           ),
@@ -40,9 +37,7 @@ Widget incomeBreakdown(Map<String, dynamic> data) {
           width: 12.wmea,
         ),
         Text(
-          data["Categories"].substring(
-            data["Categories"].indexOf(" ") + 1,
-          ),
+          data["Source"].substring(data["Source"].indexOf(" ") + 1),
           textAlign: TextAlign.center,
           style: TextStyle(
             color: Colors.white,

@@ -26,9 +26,9 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
     on<TypeCategoriesEvent>(_typeCategories);
     on<GetMost>(_getMost);
     on<GetIncomeBreakdown>(_getIncomeBreakdown);
+    on<GetExpenseBreakdownAndPieData>(_getExpenseBreakdownAndPieData);
     on<GetIncomeExpenseTotalAllMonth>(_getIncomeExpenseTotalAllMonth);
     on<GetYearlyIncome>(_getYearlyIncome);
-    on<GetPieDataExpense>(_getPieDataExpense);
     on<ChangeAllStatsChoose>(_changeAllStatsChoose);
     on<ChangeRangeDate>(_changeRangeDate);
     on<ChangeDaily>(_changeDaily);
@@ -47,15 +47,15 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
     );
   }
 
+  final DatabaseRepository _dbRepo;
+  var mainContext = MainPage.navKeyMain.currentContext!;
+
   int _getDaysInMonth(int year, int month) {
     DateTime lastDayOfMonth = DateTime(year, month + 1, 1).subtract(
       const Duration(days: 1),
     );
     return lastDayOfMonth.day;
   }
-
-  final DatabaseRepository _dbRepo;
-  var mainContext = MainPage.navKeyMain.currentContext!;
 
   void _typeCategories(
     TypeCategoriesEvent event,
@@ -136,8 +136,8 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
 
   void _getIncomeBreakdown(event, emit) async {
     final result = await _dbRepo.getIncomeBreakdown(
-      state.dateLeft,
-      state.dateRight,
+      state.startDate,
+      state.endDate,
     );
 
     emit(state.copyWith(
@@ -147,9 +147,12 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
     Logger.Yellow.log("GetIncomeBreakdown Called");
   }
 
-  void _getPieDataExpense(event, emit) async {
+  void _getExpenseBreakdownAndPieData(event, emit) async {
     List<PieDataExpense> pieDataExpenseList = List.empty(growable: true);
-    final result = await _dbRepo.getExpenseBreakdown();
+    final result = await _dbRepo.getExpenseBreakdown(
+      state.startDate,
+      state.endDate,
+    );
 
     if (result.isNotEmpty) {
       for (Map element in result) {
@@ -163,10 +166,22 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
         );
       }
 
-      emit(state.copyWith(pieDataExpenseList: pieDataExpenseList));
+      emit(
+        state.copyWith(
+          incomeBreakdownList: result,
+          pieDataExpenseList: pieDataExpenseList,
+        ),
+      );
     } else {
-      emit(state.copyWith(pieDataExpenseList: List.empty()));
+      emit(
+        state.copyWith(
+          incomeBreakdownList: List.empty(),
+          pieDataExpenseList: List.empty(),
+        ),
+      );
     }
+
+    Logger.Yellow.log("GetExpenseBreakdown Called");
   }
 
   void _getMost(event, emit) async {
@@ -220,15 +235,15 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
   void _changeDateForPeriod(ChangeDateForPeriod event, emit) {
     emit(
       state.copyWith(
-        dateLeft: event.dateLeft,
-        dateRight: event.dateRight,
+        startDate: event.startDate,
+        endDate: event.endDate,
       ),
     );
     Logger.Green.log(
       "ChangeDateForPeriod (${convertEnumToDetailDate(mainContext, state.dateRangePickerView)})",
     );
-    Logger.White.log(DateFormat.yMMMd().format(state.dateLeft));
-    Logger.White.log(DateFormat.yMMMd().format(state.dateRight));
+    Logger.White.log(DateFormat.yMMMd().format(state.startDate));
+    Logger.White.log(DateFormat.yMMMd().format(state.endDate));
     add(GetIncomeBreakdown());
   }
 
@@ -238,50 +253,50 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
   }
 
   void _changeRangeDate(ChangeRangeDate event, emit) {
-    DateTime dateLeft;
-    DateTime dateRight;
+    DateTime startDate;
+    DateTime endDate;
     switch (event.rangeDate) {
       case RangeDate.daily:
-        dateLeft = timeNow;
-        dateRight = timeNow;
+        startDate = timeNow;
+        endDate = timeNow;
         Logger.Green.log("ChangeRangeDate Daily");
         break;
       case RangeDate.monthy:
-        dateLeft = DateTime(
-          state.dateRight.year,
-          state.dateRight.month,
+        startDate = DateTime(
+          state.endDate.year,
+          state.endDate.month,
           1,
         );
-        dateRight = DateTime(
-          state.dateRight.year,
-          state.dateRight.month,
-          _getDaysInMonth(state.dateRight.year, state.dateRight.month),
+        endDate = DateTime(
+          state.endDate.year,
+          state.endDate.month,
+          _getDaysInMonth(state.endDate.year, state.endDate.month),
         );
         Logger.Green.log("ChangeRangeDate Monthly");
         break;
       case RangeDate.yearly:
-        dateLeft = DateTime(state.dateRight.year, 1, 1);
-        dateRight = DateTime(state.dateRight.year, 12, 31);
+        startDate = DateTime(state.endDate.year, 1, 1);
+        endDate = DateTime(state.endDate.year, 12, 31);
         Logger.Green.log("ChangeRangeDate Yearly");
         break;
       case RangeDate.period:
-        dateLeft = timeNow.subtract(const Duration(days: 4));
-        dateRight = timeNow;
+        startDate = timeNow.subtract(const Duration(days: 4));
+        endDate = timeNow;
         Logger.Green.log("ChangeRangeDate Period");
         break;
     }
     emit(
       state.copyWith(
         rangeDate: event.rangeDate,
-        dateLeft: dateLeft,
-        dateRight: dateRight,
+        startDate: startDate,
+        endDate: endDate,
         dateRangePickerView: (event.rangeDate == RangeDate.period)
             ? DateRangePickerView.month
             : null,
       ),
     );
-    Logger.White.log(DateFormat.yMMMd().format(state.dateLeft));
-    Logger.White.log(DateFormat.yMMMd().format(state.dateRight));
+    Logger.White.log(DateFormat.yMMMd().format(state.startDate));
+    Logger.White.log(DateFormat.yMMMd().format(state.endDate));
     add(GetIncomeBreakdown());
   }
 
@@ -289,29 +304,29 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
     Logger.Green.log("ChangeDaily");
     switch (event.leftOrRightOrPick) {
       case 0:
-        final newDate = state.dateRight.subtract(const Duration(days: 1));
-        emit(state.copyWith(dateLeft: newDate, dateRight: newDate));
+        final newDate = state.endDate.subtract(const Duration(days: 1));
+        emit(state.copyWith(startDate: newDate, endDate: newDate));
         break;
       case 1:
-        final newDate = state.dateRight.add(const Duration(days: 1));
-        emit(state.copyWith(dateLeft: newDate, dateRight: newDate));
+        final newDate = state.endDate.add(const Duration(days: 1));
+        emit(state.copyWith(startDate: newDate, endDate: newDate));
         break;
       default:
         DateTime? pickedDate = await showDatePicker(
           context: mainContext,
-          initialDate: state.dateRight,
+          initialDate: state.endDate,
           initialDatePickerMode: DatePickerMode.day,
           firstDate: DateTime(1970, 1, 1),
-          lastDate: state.dateRight.add(const Duration(days: 1000)),
+          lastDate: state.endDate.add(const Duration(days: 1000)),
         );
         if (pickedDate != null) {
           emit(
-            state.copyWith(dateLeft: pickedDate, dateRight: pickedDate),
+            state.copyWith(startDate: pickedDate, endDate: pickedDate),
           );
         }
         break;
     }
-    Logger.White.log(DateFormat.yMMMd().format(state.dateRight));
+    Logger.White.log(DateFormat.yMMMd().format(state.endDate));
     add(GetIncomeBreakdown());
   }
 
@@ -320,41 +335,41 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
     if (event.leftOrRightOrPick == 0 || event.leftOrRightOrPick == 1) {
       int monthModifier = (event.leftOrRightOrPick == 0) ? -1 : 1;
 
-      final newDateLeft = DateTime(
-        state.dateLeft.year,
-        state.dateLeft.month + monthModifier,
+      final newStartDate = DateTime(
+        state.startDate.year,
+        state.startDate.month + monthModifier,
         1,
       );
-      final newDateRight = DateTime(
-        state.dateRight.year,
-        state.dateRight.month + monthModifier,
+      final newEndDate = DateTime(
+        state.endDate.year,
+        state.endDate.month + monthModifier,
         _getDaysInMonth(
-          state.dateRight.year,
-          state.dateRight.month + monthModifier,
+          state.endDate.year,
+          state.endDate.month + monthModifier,
         ),
       );
-      emit(state.copyWith(dateLeft: newDateLeft, dateRight: newDateRight));
+      emit(state.copyWith(startDate: newStartDate, endDate: newEndDate));
     } else {
       final pickedDate = await showMonthYearPicker(
         locale:
             mainContext.read<LangCurrencyBloc>().state.selectedLanguage.value,
         context: mainContext,
-        initialDate: state.dateRight,
+        initialDate: state.endDate,
         firstDate: timeNow.subtract(const Duration(days: 10000000)),
         lastDate: timeNow.add(const Duration(days: 10000000)),
       );
       if (pickedDate != null) {
-        final newDateLeft = DateTime(pickedDate.year, pickedDate.month, 1);
-        final newDateRight = DateTime(
+        final newStartDate = DateTime(pickedDate.year, pickedDate.month, 1);
+        final newEndDate = DateTime(
           pickedDate.year,
           pickedDate.month,
           _getDaysInMonth(pickedDate.year, pickedDate.month),
         );
-        emit(state.copyWith(dateLeft: newDateLeft, dateRight: newDateRight));
+        emit(state.copyWith(startDate: newStartDate, endDate: newEndDate));
       }
     }
-    Logger.White.log(DateFormat.yMMMd().format(state.dateLeft));
-    Logger.White.log(DateFormat.yMMMd().format(state.dateRight));
+    Logger.White.log(DateFormat.yMMMd().format(state.startDate));
+    Logger.White.log(DateFormat.yMMMd().format(state.endDate));
     add(GetIncomeBreakdown());
   }
 
@@ -363,14 +378,14 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
     if (event.leftOrRightOrPick == 0 || event.leftOrRightOrPick == 1) {
       int yearModifier = (event.leftOrRightOrPick == 0) ? -1 : 1;
 
-      final newDateLeft = DateTime(state.dateRight.year + yearModifier, 1, 1);
-      final newDateRight = DateTime(
-        state.dateRight.year + yearModifier,
+      final newStartDate = DateTime(state.endDate.year + yearModifier, 1, 1);
+      final newEndDate = DateTime(
+        state.endDate.year + yearModifier,
         12,
         31,
       );
 
-      emit(state.copyWith(dateLeft: newDateLeft, dateRight: newDateRight));
+      emit(state.copyWith(startDate: newStartDate, endDate: newEndDate));
     } else {
       DateTime? pickedDate = await showDialog(
         context: mainContext,
@@ -389,7 +404,7 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
                 firstDate: DateTime(timeNow.year - 100, 1),
                 lastDate: DateTime(timeNow.year + 100, 1),
                 currentDate: timeNow,
-                selectedDate: state.dateRight,
+                selectedDate: state.endDate,
                 onChanged: (DateTime dateTime) {
                   Navigator.pop(context, dateTime);
                 },
@@ -400,42 +415,42 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
       );
 
       if (pickedDate != null) {
-        final newDateLeft = DateTime(pickedDate.year, 1, 1);
-        final newDateRight = DateTime(
+        final newStartDate = DateTime(pickedDate.year, 1, 1);
+        final newEndDate = DateTime(
           pickedDate.year,
           12,
           _getDaysInMonth(pickedDate.year, pickedDate.month),
         );
-        emit(state.copyWith(dateLeft: newDateLeft, dateRight: newDateRight));
+        emit(state.copyWith(startDate: newStartDate, endDate: newEndDate));
       }
     }
-    Logger.White.log(DateFormat.yMMMd().format(state.dateLeft));
-    Logger.White.log(DateFormat.yMMMd().format(state.dateRight));
+    Logger.White.log(DateFormat.yMMMd().format(state.startDate));
+    Logger.White.log(DateFormat.yMMMd().format(state.endDate));
     add(GetIncomeBreakdown());
   }
 
   void _changeDateRangePickerView(ChangeDateRangePickerView event, emit) {
-    DateTime? newDateLeft;
-    DateTime? newDateRight;
+    DateTime? newStartDate;
+    DateTime? newEndDate;
 
     switch (event.dateRangePickerView) {
       case DateRangePickerView.month:
-        newDateLeft = timeNow.subtract(const Duration(days: 4));
-        newDateRight = timeNow;
+        newStartDate = timeNow.subtract(const Duration(days: 4));
+        newEndDate = timeNow;
         Logger.Green.log("ChangeDateRangePickerView (By Day)");
         break;
       case DateRangePickerView.year:
-        newDateLeft = DateTime(state.dateLeft.year, state.dateLeft.month, 1);
-        newDateRight = DateTime(
-          state.dateRight.year,
-          state.dateRight.month,
-          _getDaysInMonth(state.dateRight.year, state.dateRight.month),
+        newStartDate = DateTime(state.startDate.year, state.startDate.month, 1);
+        newEndDate = DateTime(
+          state.endDate.year,
+          state.endDate.month,
+          _getDaysInMonth(state.endDate.year, state.endDate.month),
         );
         Logger.Green.log("ChangeDateRangePickerView (By Month)");
         break;
       case DateRangePickerView.decade:
-        newDateLeft = DateTime(state.dateLeft.year, 1, 1);
-        newDateRight = DateTime(state.dateRight.year, 12, 31);
+        newStartDate = DateTime(state.startDate.year, 1, 1);
+        newEndDate = DateTime(state.endDate.year, 12, 31);
         Logger.Green.log("ChangeDateRangePickerView (By Year)");
         break;
       case DateRangePickerView.century:
@@ -444,12 +459,12 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
     emit(
       state.copyWith(
         dateRangePickerView: event.dateRangePickerView,
-        dateLeft: newDateLeft,
-        dateRight: newDateRight,
+        startDate: newStartDate,
+        endDate: newEndDate,
       ),
     );
-    Logger.White.log(DateFormat.yMMMd().format(state.dateLeft));
-    Logger.White.log(DateFormat.yMMMd().format(state.dateRight));
+    Logger.White.log(DateFormat.yMMMd().format(state.startDate));
+    Logger.White.log(DateFormat.yMMMd().format(state.endDate));
     add(GetIncomeBreakdown());
   }
 
@@ -463,7 +478,7 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
       chartDataExpenseList: List.empty(),
       chartDataSavingsList: List.empty(),
       pieDataExpenseList: List.empty(),
-      expenseDateRangeList: List.empty(),
+      expenseBreakdownList: List.empty(),
     ));
   }
 

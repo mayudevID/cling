@@ -128,7 +128,9 @@ class AddIncomeExpenseBloc
 
           ///* Update UI
           mainContext.read<HomeBloc>().add(GetTodayExpenses());
-          mainContext.read<StatisticsBloc>().add(GetPieDataExpense());
+          mainContext
+              .read<StatisticsBloc>()
+              .add(GetExpenseBreakdownAndPieData());
 
           break;
       }

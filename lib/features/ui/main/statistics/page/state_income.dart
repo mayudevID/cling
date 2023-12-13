@@ -8,7 +8,7 @@ import '../../../../../resources/gen/fonts.gen.dart';
 import '../../../language_currency/lang_export.dart';
 import '../bloc/statistics_bloc.dart';
 import '../widgets/change_date_widget/choose_date_range.dart';
-import '../widgets/income_breakdown.dart';
+import '../widgets/income_breakdown_widget.dart';
 
 class StatsIncome extends StatelessWidget {
   const StatsIncome({super.key});
@@ -76,7 +76,9 @@ class StatsIncome extends StatelessWidget {
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 itemBuilder: (context, index) {
-                  return incomeBreakdown(state.incomeBreakdownList[index]);
+                  return incomeBreakdownWidget(
+                    state.incomeBreakdownList[index],
+                  );
                 },
               ),
             );

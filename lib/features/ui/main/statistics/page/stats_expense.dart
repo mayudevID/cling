@@ -7,7 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
 import '../../../../../resources/gen/fonts.gen.dart';
 import '../../../language_currency/lang_export.dart';
-import '../widgets/expense_date_range_widget.dart';
+import '../widgets/expense_breakdown_widget.dart';
 
 class StatsExpense extends StatelessWidget {
   const StatsExpense({super.key});
@@ -32,10 +32,10 @@ class StatsExpense extends StatelessWidget {
         SizedBox(height: 16.hmea),
         BlocBuilder<StatisticsBloc, StatisticsState>(
           buildWhen: (p, c) {
-            return p.expenseDateRangeList != c.expenseDateRangeList;
+            return p.expenseBreakdownList != c.expenseBreakdownList;
           },
           builder: (context, state) {
-            if (state.expenseDateRangeList.isEmpty) {
+            if (state.expenseBreakdownList.isEmpty) {
               return const Center(
                 child: Text(
                   "No data :(",
@@ -51,12 +51,12 @@ class StatsExpense extends StatelessWidget {
               context: context,
               removeTop: true,
               child: ListView.builder(
-                itemCount: state.expenseDateRangeList.length,
+                itemCount: state.expenseBreakdownList.length,
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 itemBuilder: (_, index) {
-                  return expenseDateRangeWidget(
-                    state.expenseDateRangeList[index],
+                  return expenseBreakdownWidget(
+                    state.expenseBreakdownList[index],
                   );
                 },
               ),

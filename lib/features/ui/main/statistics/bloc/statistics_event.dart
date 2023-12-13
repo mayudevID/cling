@@ -17,7 +17,7 @@ class GetIncomeExpenseTotalAllMonth extends StatisticsEvent {}
 
 class GetIncomeBreakdown extends StatisticsEvent {}
 
-class GetPieDataExpense extends StatisticsEvent {}
+class GetExpenseBreakdownAndPieData extends StatisticsEvent {}
 
 class GetMost extends StatisticsEvent {}
 
@@ -62,12 +62,12 @@ class ChangeDateRangePickerView extends StatisticsEvent {
 }
 
 class ChangeDateForPeriod extends StatisticsEvent {
-  final DateTime? dateLeft;
-  final DateTime? dateRight;
+  final DateTime? startDate;
+  final DateTime? endDate;
 
   const ChangeDateForPeriod(
-    this.dateLeft,
-    this.dateRight,
+    this.startDate,
+    this.endDate,
   );
 }
 

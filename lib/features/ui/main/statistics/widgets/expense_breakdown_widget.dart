@@ -4,9 +4,8 @@ import 'package:sizer/sizer.dart';
 
 import '../../../../../core/common_widget.dart';
 import '../../../../../resources/gen/fonts.gen.dart';
-import '../../../../model/expense_model.dart';
 
-Widget expenseDateRangeWidget(ExpenseModel data) {
+Widget expenseBreakdownWidget(Map<String, dynamic> data) {
   return Container(
     margin: EdgeInsets.only(
       bottom: 16.hmea,
@@ -29,10 +28,7 @@ Widget expenseDateRangeWidget(ExpenseModel data) {
           ),
           child: Center(
             child: Text(
-              data.categories.substring(
-                0,
-                data.categories.indexOf(" "),
-              ),
+              " ${data['Categories'].substring(0, data['Categories'].indexOf(" "))}",
               style: TextStyle(fontSize: 22.sp),
             ),
           ),
@@ -41,7 +37,7 @@ Widget expenseDateRangeWidget(ExpenseModel data) {
           width: 12.wmea,
         ),
         Text(
-          data.item,
+          data["Categories"].substring(data["Categories"].indexOf(" ") + 1),
           textAlign: TextAlign.center,
           style: TextStyle(
             color: Colors.white,
@@ -58,7 +54,7 @@ Widget expenseDateRangeWidget(ExpenseModel data) {
             fontFamily: FontFamily.cabinetGrotesk,
             fontWeight: FontWeight.w500,
           ),
-          amount: data.amount,
+          amount: data["TotalExpense"],
           decimalDigits: 2,
           isWithName: true,
         ),

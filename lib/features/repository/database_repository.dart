@@ -181,12 +181,12 @@ class DatabaseRepository {
   }
 
   Future<List<Map<String, Object?>>> getIncomeBreakdown(
-    DateTime dateLeft,
-    DateTime dateRight,
+    DateTime startDate,
+    DateTime endDate,
   ) async {
     final result = await db.rawQuery(
       '''
-        SELECT ${IncomeSourceMeta.nameTable}.${IncomeSourceMeta.incomeSource} AS Categories, 
+        SELECT ${IncomeSourceMeta.nameTable}.${IncomeSourceMeta.incomeSource} AS Source, 
         SUM(${IncomeMeta.amount}) AS TotalIncome
         FROM ${IncomeMeta.nameTable}
         INNER JOIN ${IncomeSourceMeta.nameTable} 
@@ -197,7 +197,7 @@ class DatabaseRepository {
         AND date(${IncomeMeta.date}) <= date(?)
         GROUP BY Categories;
       ''',
-      [dateLeft.toIso8601String(), dateRight.toIso8601String()],
+      [startDate.toIso8601String(), endDate.toIso8601String()],
     );
 
     return result;
@@ -409,10 +409,6 @@ class DatabaseRepository {
           ''',
           [first, last],
         );
-
-        // for (var element in result) {
-        //   dataList.add(ExpenseModel.fromDatabase(element));
-        // }
         return result;
       case AllStatsChoose.income:
         result = await db.rawQuery(
@@ -432,15 +428,14 @@ class DatabaseRepository {
           ''',
           [first, last],
         );
-
-        // for (var element in result) {
-        //   dataList.add(IncomeModel.fromDatabase(element));
-        // }
         return result;
     }
   }
 
-  Future<List<Map<String, Object?>>> getExpenseBreakdown() async {
+  Future<List<Map<String, Object?>>> getExpenseBreakdown(
+    DateTime startDate,
+    DateTime endDate,
+  ) async {
     final result = await db.rawQuery(
       '''
         SELECT ${ExpenseCategoriesMeta.nameTable}.${ExpenseCategoriesMeta.expenseCategories} AS Categories, 
@@ -450,16 +445,19 @@ class DatabaseRepository {
         ON ${ExpenseMeta.nameTable}.${ExpenseCategoriesMeta.id} 
         = 
         ${ExpenseCategoriesMeta.nameTable}.${ExpenseCategoriesMeta.id} 
+        WHERE date(${ExpenseMeta.date}) >= date(?)
+        AND date(${ExpenseMeta.date}) <= date(?)
         GROUP BY Categories;
       ''',
+      [startDate.toIso8601String(), endDate.toIso8601String()],
     );
 
     return result;
   }
 
   Future<List<ExpenseModel>> getExpenseRangeDate({
-    required DateTime dateLeft,
-    required DateTime dateRight,
+    required DateTime startDate,
+    required DateTime endDate,
   }) async {
     List<ExpenseModel> listData = [];
     final result = await db.rawQuery(
@@ -468,7 +466,7 @@ class DatabaseRepository {
         WHERE date(${ExpenseMeta.date}) >= date(?)
         AND date(${ExpenseMeta.date}) <= date(?)
       ''',
-      [dateLeft.toIso8601String(), dateRight.toIso8601String()],
+      [startDate.toIso8601String(), endDate.toIso8601String()],
     );
 
     for (var element in result) {

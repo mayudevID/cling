@@ -44,7 +44,7 @@ Widget rangeDatePeriod(BuildContext mainContext) {
         break;
     }
 
-    return "${dateFormat.format(state.dateLeft)} - ${dateFormat.format(state.dateRight)}";
+    return "${dateFormat.format(state.startDate)} - ${dateFormat.format(state.endDate)}";
   }
 
   return GestureDetector(
@@ -63,8 +63,8 @@ Widget rangeDatePeriod(BuildContext mainContext) {
         children: [
           BlocBuilder<StatisticsBloc, StatisticsState>(
             buildWhen: (p, c) {
-              return (p.dateLeft != c.dateLeft) ||
-                  (p.dateRight != c.dateRight) ||
+              return (p.startDate != c.startDate) ||
+                  (p.endDate != c.endDate) ||
                   (p.dateRangePickerView != c.dateRangePickerView);
             },
             builder: (context, state) {
@@ -197,8 +197,8 @@ void pickDateRangeBottomSheet(BuildContext mainContext) {
                       allowViewNavigation: false,
                       selectionMode: DateRangePickerSelectionMode.range,
                       initialSelectedRange: PickerDateRange(
-                        state.dateLeft,
-                        state.dateRight,
+                        state.startDate,
+                        state.endDate,
                       ),
                       showActionButtons: true,
                       onSubmit: (value) {
