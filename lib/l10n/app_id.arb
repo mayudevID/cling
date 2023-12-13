@@ -94,6 +94,10 @@
   "@yearlyBreakdown": {},
   "mostExpense": "Pengeluaran Terbesar",
   "@mostExpense": {},
+  "mostIncome": "Pemasukan Terbesar",
+  "@mostIncome": {},
+  "expenseBreakdown": "Rincian Pengeluaran",
+  "@expenseBreakdown": {},
   "incomeBreakdown": "Rincian Pendapatan",
   "@incomeBreakdown": {},
   "cashflow": "Arus kas",
@@ -273,5 +277,9 @@
   "byMonth": "Berdasarkan Bulan",
   "@byMonth": {},
   "byYear": "Berdasarkan Tahun",
-  "@byYear": {}
+  "@byYear": {},
+  "selectDateRange": "Pilih rentang tanggal",
+  "@selectDateRange": {},
+  "selectYear": "Pilih tahun",
+  "@selectYear": {}
 }

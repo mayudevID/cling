@@ -46,6 +46,8 @@ all,All,Semua
 savings,Savings,Tabungan
 yearlyBreakdown,Yearly Breakdown,Rincian Tahunan
 mostExpense,Most Expense,Pengeluaran Terbesar
+mostIncome,Most Income,Pemasukan Terbesar
+expenseBreakdown,Expense Breakdown,Rincian Pengeluaran
 incomeBreakdown,Income Breakdown,Rincian Pendapatan
 cashflow,Cashflow,Arus kas
 noExpenseToday,No expense today :D,Tidak ada pengeluaran hari ini :D
@@ -138,3 +140,5 @@ yearly,Yearly,Tahunan
 byDay,By Day,Berdasarkan Hari
 byMonth,By Month,Berdasarkan Bulan
 byYear,By Year,Berdasarkan Tahun
+selectDateRange,Select a date range,Pilih rentang tanggal
+selectYear,Select year,Pilih tahun

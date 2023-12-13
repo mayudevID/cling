@@ -39,21 +39,17 @@ Widget widgetGoals(
       child: Column(
         children: [
           Container(
-            padding: EdgeInsets.all(
-              8.wmea,
-            ),
+            padding: EdgeInsets.all(8.wmea),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(5),
             ),
             child: Text(
               goalModel.image,
-              style: TextStyle(fontSize: 22.sp),
+              style: TextStyle(fontSize: 18.sp),
             ),
           ),
-          SizedBox(
-            height: 12.hmea,
-          ),
+          SizedBox(height: 12.hmea),
           Text(
             goalModel.name,
             textAlign: TextAlign.center,
@@ -64,9 +60,7 @@ Widget widgetGoals(
               fontWeight: FontWeight.w500,
             ),
           ),
-          SizedBox(
-            height: 4.hmea,
-          ),
+          SizedBox(height: 4.hmea),
           Stack(
             children: [
               Container(
@@ -87,9 +81,7 @@ Widget widgetGoals(
               ),
             ],
           ),
-          SizedBox(
-            height: 4.hmea,
-          ),
+          SizedBox(height: 4.hmea),
           Row(
             children: [
               NominalMoneyFormatter(

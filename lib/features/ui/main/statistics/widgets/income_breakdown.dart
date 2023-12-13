@@ -28,11 +28,11 @@ Widget incomeBreakdown(Map<String, dynamic> data) {
           ),
           child: Center(
             child: Text(
-              data["Categories"].substring(
+              " ${data["Categories"].substring(
                 0,
                 data["Categories"].indexOf(" "),
-              ),
-              style: TextStyle(fontSize: 22.sp),
+              )}",
+              style: TextStyle(fontSize: 9.sp),
             ),
           ),
         ),

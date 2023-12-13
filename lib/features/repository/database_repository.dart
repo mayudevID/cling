@@ -6,6 +6,7 @@ import 'package:cling/features/model/expense_categories_model.dart';
 import 'package:cling/features/model/expense_model.dart';
 import 'package:cling/features/model/income_model.dart';
 import 'package:cling/features/model/income_source_model.dart';
+import 'package:cling/features/ui/main/statistics/bloc/statistics_bloc.dart';
 import 'package:sqflite/sqflite.dart';
 // ignore: depend_on_referenced_packages
 import 'package:path/path.dart';
@@ -383,16 +384,60 @@ class DatabaseRepository {
     return (combinedData.isEmpty) ? null : combinedData;
   }
 
-  Future<List<ExpenseModel>> getMostExpense() async {
-    List<ExpenseModel> dataList = [];
-    final result = await db.rawQuery(
-      "SELECT * FROM ${ExpenseMeta.nameTable} ORDER BY ${ExpenseMeta.amount} DESC LIMIT 7",
-    );
+  Future<List<Map<String, Object?>>> getMost(
+    AllStatsChoose allStatsChoose,
+  ) async {
+    final first = DateTime(DateTime.now().year, 1, 1).toIso8601String();
+    final last = DateTime(DateTime.now().year, 12, 31).toIso8601String();
+    List<Map<String, Object?>> result;
+    switch (allStatsChoose) {
+      case AllStatsChoose.expense:
+        result = await db.rawQuery(
+          '''
+            SELECT ${ExpenseCategoriesMeta.nameTable}.${ExpenseCategoriesMeta.expenseCategories} AS Categories, 
+            SUM(${ExpenseMeta.amount}) AS TotalExpense
+            FROM ${ExpenseMeta.nameTable}
+            INNER JOIN ${ExpenseCategoriesMeta.nameTable} 
+            ON ${ExpenseMeta.nameTable}.${ExpenseCategoriesMeta.id} 
+            = 
+            ${ExpenseCategoriesMeta.nameTable}.${ExpenseCategoriesMeta.id} 
+            WHERE date(${ExpenseMeta.date}) >= date(?)
+            AND date(${ExpenseMeta.date}) <= date(?)
+            GROUP BY Categories
+            ORDER BY TotalExpense
+            DESC LIMIT 7;
+          ''',
+          [first, last],
+        );
 
-    for (var element in result) {
-      dataList.add(ExpenseModel.fromDatabase(element));
+        // for (var element in result) {
+        //   dataList.add(ExpenseModel.fromDatabase(element));
+        // }
+        return result;
+      case AllStatsChoose.income:
+        result = await db.rawQuery(
+          '''
+            SELECT ${IncomeSourceMeta.nameTable}.${IncomeSourceMeta.incomeSource} AS Source, 
+            SUM(${IncomeMeta.amount}) AS TotalIncome
+            FROM ${IncomeMeta.nameTable}
+            INNER JOIN ${IncomeSourceMeta.nameTable} 
+            ON ${IncomeMeta.nameTable}.${IncomeSourceMeta.id} 
+            = 
+            ${IncomeSourceMeta.nameTable}.${IncomeSourceMeta.id} 
+            WHERE date(${IncomeMeta.date}) >= date(?)
+            AND date(${IncomeMeta.date}) <= date(?)
+            GROUP BY Source
+            ORDER BY TotalIncome
+            DESC LIMIT 7;
+          ''',
+          [first, last],
+        );
+
+        // for (var element in result) {
+        //   dataList.add(IncomeModel.fromDatabase(element));
+        // }
+        return result;
     }
-    return dataList;
   }
 
   Future<List<Map<String, Object?>>> getExpenseBreakdown() async {

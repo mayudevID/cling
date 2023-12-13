@@ -128,16 +128,16 @@ class AddIncomeExpenseBloc
 
           ///* Update UI
           mainContext.read<HomeBloc>().add(GetTodayExpenses());
-          mainContext.read<StatisticsBloc>()
-            ..add(GetMostExpense())
-            ..add(GetPieDataExpense());
+          mainContext.read<StatisticsBloc>().add(GetPieDataExpense());
 
           break;
       }
 
       ///* Update UI
       mainContext.read<HomeBloc>().add(GetIncomeExpenseAmountTotalCurrMonth());
-      mainContext.read<StatisticsBloc>().add(GetIncomeExpenseTotalAllMonth());
+      mainContext.read<StatisticsBloc>()
+        ..add(GetIncomeExpenseTotalAllMonth())
+        ..add(GetMost());
 
       dialogAddSuccess(_context, event.flowType);
     } on FormatException {

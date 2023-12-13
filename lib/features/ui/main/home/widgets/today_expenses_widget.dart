@@ -23,18 +23,18 @@ Widget todayExpensesWidget(ExpenseModel expenseModel) {
     child: Row(
       children: [
         Container(
-          padding: EdgeInsets.all(8.wmea),
+          padding: EdgeInsets.all(5.wmea),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(5),
           ),
           child: Center(
             child: Text(
-              expenseModel.categories.substring(
+              " ${expenseModel.categories.substring(
                 0,
                 expenseModel.categories.indexOf(" "),
-              ),
-              style: TextStyle(fontSize: 22.sp),
+              )}",
+              style: TextStyle(fontSize: 9.sp),
             ),
           ),
         ),

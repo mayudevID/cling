@@ -76,9 +76,7 @@ class StatsIncome extends StatelessWidget {
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 itemBuilder: (context, index) {
-                  return incomeBreakdown(
-                    state.incomeBreakdownList[index],
-                  );
+                  return incomeBreakdown(state.incomeBreakdownList[index]);
                 },
               ),
             );

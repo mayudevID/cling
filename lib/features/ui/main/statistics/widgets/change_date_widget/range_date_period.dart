@@ -1,4 +1,5 @@
 import 'package:cling/core/utils.dart';
+import 'package:cling/features/ui/language_currency/lang_export.dart';
 
 import 'package:cling/features/ui/main/statistics/bloc/statistics_bloc.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
@@ -120,7 +121,7 @@ void pickDateRangeBottomSheet(BuildContext mainContext) {
                   Padding(
                     padding: EdgeInsets.all(8.sp),
                     child: Text(
-                      "Pick Range Date",
+                      AppLocalizations.of(context)!.selectDateRange,
                       style: TextStyle(
                         fontFamily: FontFamily.cabinetGrotesk,
                         color: Colors.black,

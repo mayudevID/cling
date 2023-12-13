@@ -94,6 +94,10 @@
   "@yearlyBreakdown": {},
   "mostExpense": "Most Expense",
   "@mostExpense": {},
+  "mostIncome": "Most Income",
+  "@mostIncome": {},
+  "expenseBreakdown": "Expense Breakdown",
+  "@expenseBreakdown": {},
   "incomeBreakdown": "Income Breakdown",
   "@incomeBreakdown": {},
   "cashflow": "Cashflow",
@@ -273,5 +277,9 @@
   "byMonth": "By Month",
   "@byMonth": {},
   "byYear": "By Year",
-  "@byYear": {}
+  "@byYear": {},
+  "selectDateRange": "Select a date range",
+  "@selectDateRange": {},
+  "selectYear": "Select year",
+  "@selectYear": {}
 }

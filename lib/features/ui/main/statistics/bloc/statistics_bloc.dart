@@ -13,7 +13,6 @@ import 'package:month_year_picker/month_year_picker.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 import '../../../../model/chart_data.dart';
-import '../../../../model/expense_model.dart';
 import '../../../language_currency/lang_export.dart';
 import '../widgets/change_date_widget/convert_enum_to_detail_date.dart';
 
@@ -25,11 +24,12 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
       : _dbRepo = dbRepo,
         super(StatisticsState()) {
     on<TypeCategoriesEvent>(_typeCategories);
-    on<GetMostExpense>(_getMostExpense);
+    on<GetMost>(_getMost);
     on<GetIncomeBreakdown>(_getIncomeBreakdown);
     on<GetIncomeExpenseTotalAllMonth>(_getIncomeExpenseTotalAllMonth);
     on<GetYearlyIncome>(_getYearlyIncome);
     on<GetPieDataExpense>(_getPieDataExpense);
+    on<ChangeAllStatsChoose>(_changeAllStatsChoose);
     on<ChangeRangeDate>(_changeRangeDate);
     on<ChangeDaily>(_changeDaily);
     on<ChangeMonthly>(_changeMonthly);
@@ -39,9 +39,18 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
     on<FreeResourcesStats>(_freeResources);
   }
 
+  DateTime get timeNow {
+    return DateTime(
+      DateTime.now().year,
+      DateTime.now().month,
+      DateTime.now().day,
+    );
+  }
+
   int _getDaysInMonth(int year, int month) {
-    DateTime lastDayOfMonth =
-        DateTime(year, month + 1, 1).subtract(const Duration(days: 1));
+    DateTime lastDayOfMonth = DateTime(year, month + 1, 1).subtract(
+      const Duration(days: 1),
+    );
     return lastDayOfMonth.day;
   }
 
@@ -52,9 +61,9 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
     TypeCategoriesEvent event,
     Emitter<StatisticsState> emit,
   ) {
-    emit(state.copyWith(
-      typeCategories: event.type,
-    ));
+    emit(
+      state.copyWith(typeCategories: event.type),
+    );
   }
 
   void _getIncomeExpenseTotalAllMonth(
@@ -150,22 +159,34 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
 
         final total = element["TotalExpense"] / 100.0;
         pieDataExpenseList.add(
-          PieDataExpense(
-            nameCategories: cat,
-            amount: total,
-          ),
+          PieDataExpense(nameCategories: cat, amount: total),
         );
       }
 
       emit(state.copyWith(pieDataExpenseList: pieDataExpenseList));
+    } else {
+      emit(state.copyWith(pieDataExpenseList: List.empty()));
     }
   }
 
-  void _getMostExpense(event, emit) async {
-    final result = await _dbRepo.getMostExpense();
+  void _getMost(event, emit) async {
+    final result = await _dbRepo.getMost(state.allStatsChoose);
 
     if (result.isNotEmpty) {
-      emit(state.copyWith(mostExpenseList: result));
+      final isIncome = state.allStatsChoose == AllStatsChoose.income;
+      emit(
+        state.copyWith(
+          mostIncomeList: isIncome ? result : List.empty(),
+          mostExpenseList: isIncome ? List.empty() : result,
+        ),
+      );
+    } else {
+      emit(
+        state.copyWith(
+          mostIncomeList: List.empty(),
+          mostExpenseList: List.empty(),
+        ),
+      );
     }
   }
 
@@ -211,14 +232,18 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
     add(GetIncomeBreakdown());
   }
 
+  void _changeAllStatsChoose(ChangeAllStatsChoose event, emit) {
+    emit(state.copyWith(allStatsChoose: event.allStatsChoose));
+    add(GetMost());
+  }
+
   void _changeRangeDate(ChangeRangeDate event, emit) {
     DateTime dateLeft;
     DateTime dateRight;
-    final now = DateTime.now();
     switch (event.rangeDate) {
       case RangeDate.daily:
-        dateLeft = now;
-        dateRight = now;
+        dateLeft = timeNow;
+        dateRight = timeNow;
         Logger.Green.log("ChangeRangeDate Daily");
         break;
       case RangeDate.monthy:
@@ -240,8 +265,8 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
         Logger.Green.log("ChangeRangeDate Yearly");
         break;
       case RangeDate.period:
-        dateLeft = now.subtract(const Duration(days: 4));
-        dateRight = now;
+        dateLeft = timeNow.subtract(const Duration(days: 4));
+        dateRight = timeNow;
         Logger.Green.log("ChangeRangeDate Period");
         break;
     }
@@ -315,8 +340,8 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
             mainContext.read<LangCurrencyBloc>().state.selectedLanguage.value,
         context: mainContext,
         initialDate: state.dateRight,
-        firstDate: DateTime.now().subtract(const Duration(days: 10000000)),
-        lastDate: DateTime.now().add(const Duration(days: 10000000)),
+        firstDate: timeNow.subtract(const Duration(days: 10000000)),
+        lastDate: timeNow.add(const Duration(days: 10000000)),
       );
       if (pickedDate != null) {
         final newDateLeft = DateTime(pickedDate.year, pickedDate.month, 1);
@@ -361,9 +386,9 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
               width: 300,
               height: 300,
               child: YearPicker(
-                firstDate: DateTime(DateTime.now().year - 100, 1),
-                lastDate: DateTime(DateTime.now().year + 100, 1),
-                currentDate: DateTime.now(),
+                firstDate: DateTime(timeNow.year - 100, 1),
+                lastDate: DateTime(timeNow.year + 100, 1),
+                currentDate: timeNow,
                 selectedDate: state.dateRight,
                 onChanged: (DateTime dateTime) {
                   Navigator.pop(context, dateTime);
@@ -395,8 +420,8 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
 
     switch (event.dateRangePickerView) {
       case DateRangePickerView.month:
-        newDateLeft = DateTime.now().subtract(const Duration(days: 4));
-        newDateRight = DateTime.now();
+        newDateLeft = timeNow.subtract(const Duration(days: 4));
+        newDateRight = timeNow;
         Logger.Green.log("ChangeDateRangePickerView (By Day)");
         break;
       case DateRangePickerView.year:

@@ -7,10 +7,7 @@ import '../../../../../resources/gen/fonts.gen.dart';
 List<Widget> rowCategories(String data) {
   return [
     Text(
-      data.substring(
-        0,
-        data.indexOf(" "),
-      ),
+      data.substring(0, data.indexOf(" ")),
       style: TextStyle(
         fontSize: 14.5.sp,
         fontFamily: FontFamily.cabinetGrotesk,
@@ -20,9 +17,7 @@ List<Widget> rowCategories(String data) {
       width: 10.wmea,
     ),
     Text(
-      data.substring(
-        data.indexOf(" ") + 1,
-      ),
+      data.substring(data.indexOf(" ") + 1),
       style: TextStyle(
         color: Colors.white,
         fontSize: 10.5.sp,

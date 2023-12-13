@@ -44,11 +44,10 @@ class MainPage extends StatelessWidget {
             dbRepo: getIt<DatabaseRepository>(),
           )
             ..add(GetIncomeExpenseTotalAllMonth()) // All 1
-            ..add(GetMostExpense()) // All 2
+            ..add(GetMost()) // All 2
             ..add(GetYearlyIncome()) // Income 1
             ..add(GetIncomeBreakdown()) // Income 2
             ..add(GetPieDataExpense()), // Expense 1
-          //..add(GetExpenseDateRange()), // Expense 2
         ),
         BlocProvider(
           create: (_) => ProfileBloc(

@@ -37,7 +37,6 @@ Widget lineColumnStatsAllWidget(BuildContext mainContext) {
         width: double.infinity,
         height: 193.hmea,
         child: SfCartesianChart(
-          zoomPanBehavior: ZoomPanBehavior(enablePanning: true),
           tooltipBehavior: TooltipBehavior(
             enable: true,
             decimalPlaces: 2,

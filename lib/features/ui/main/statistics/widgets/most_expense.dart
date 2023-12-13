@@ -1,12 +1,16 @@
 import 'package:cling/core/common_widget.dart';
 import 'package:cling/core/utils.dart';
-import 'package:cling/features/model/expense_model.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../../resources/gen/fonts.gen.dart';
 
-Widget mostExpense(ExpenseModel data) {
+Widget mostExpense(Map<String, Object?> data) {
+  final categoryStr = data['Categories'].toString();
+  final categoryIcon = categoryStr.substring(0, categoryStr.indexOf(" "));
+  final categoryClass = categoryStr.substring(categoryStr.indexOf(" ") + 1);
+  final totalAmount = double.parse(data['TotalExpense'].toString());
+
   return Container(
     margin: EdgeInsets.only(
       bottom: 16.hmea,
@@ -29,25 +33,20 @@ Widget mostExpense(ExpenseModel data) {
           ),
           child: Center(
             child: Text(
-              data.categories.substring(
-                0,
-                data.categories.indexOf(" "),
-              ),
-              style: TextStyle(fontSize: 22.sp),
+              " $categoryIcon",
+              style: TextStyle(fontSize: 9.sp),
             ),
           ),
         ),
-        SizedBox(
-          width: 12.wmea,
-        ),
+        SizedBox(width: 12.wmea),
         Text(
-          data.item,
+          categoryClass,
           textAlign: TextAlign.center,
           style: TextStyle(
             color: Colors.white,
             fontSize: 10.sp,
             fontFamily: FontFamily.cabinetGrotesk,
-            fontWeight: FontWeight.w500,
+            fontWeight: FontWeight.bold,
           ),
         ),
         const Spacer(),
@@ -58,7 +57,7 @@ Widget mostExpense(ExpenseModel data) {
             fontFamily: FontFamily.cabinetGrotesk,
             fontWeight: FontWeight.w500,
           ),
-          amount: data.amount,
+          amount: totalAmount,
           decimalDigits: 2,
           isWithName: true,
         ),

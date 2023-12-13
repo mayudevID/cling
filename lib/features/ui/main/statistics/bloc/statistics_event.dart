@@ -19,11 +19,17 @@ class GetIncomeBreakdown extends StatisticsEvent {}
 
 class GetPieDataExpense extends StatisticsEvent {}
 
-class GetMostExpense extends StatisticsEvent {}
+class GetMost extends StatisticsEvent {}
 
 class GetYearlyIncome extends StatisticsEvent {}
 
 class GetExpenseDateRange extends StatisticsEvent {}
+
+class ChangeAllStatsChoose extends StatisticsEvent {
+  final AllStatsChoose allStatsChoose;
+
+  const ChangeAllStatsChoose(this.allStatsChoose);
+}
 
 class ChangeRangeDate extends StatisticsEvent {
   final RangeDate rangeDate;

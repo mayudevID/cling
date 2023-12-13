@@ -20,9 +20,9 @@ double setInterval(double maxVal) {
     return 200000;
   } else if (maxVal < 10000000) {
     return 500000;
+  } else if (maxVal < 50000000) {
+    return 1000000;
   } else if (maxVal < 100000000) {
-    return 10000000;
-  } else if (maxVal < 200000000) {
     return 15000000;
   } else {
     return 20000000;

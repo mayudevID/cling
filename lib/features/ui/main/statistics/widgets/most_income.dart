@@ -1,10 +1,16 @@
+import 'package:cling/core/common_widget.dart';
 import 'package:cling/core/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../../resources/gen/fonts.gen.dart';
 
-Widget expenseWidget(Map data) {
+Widget mostIncome(Map<String, Object?> data) {
+  final sourceStr = data['Source'].toString();
+  final sourceIcon = sourceStr.substring(0, sourceStr.indexOf(" "));
+  final sourceClass = sourceStr.substring(sourceStr.indexOf(" ") + 1);
+  final totalAmount = double.parse(data['TotalIncome'].toString());
+
   return Container(
     margin: EdgeInsets.only(
       bottom: 16.hmea,
@@ -25,32 +31,36 @@ Widget expenseWidget(Map data) {
             color: Colors.white,
             borderRadius: BorderRadius.circular(5),
           ),
-          child: data['image'],
+          child: Center(
+            child: Text(
+              " $sourceIcon",
+              style: TextStyle(fontSize: 9.sp),
+            ),
+          ),
         ),
-        SizedBox(
-          width: 12.wmea,
-        ),
+        SizedBox(width: 12.wmea),
         Text(
-          data['name'],
+          sourceClass,
           textAlign: TextAlign.center,
           style: TextStyle(
             color: Colors.white,
             fontSize: 10.sp,
             fontFamily: FontFamily.cabinetGrotesk,
-            fontWeight: FontWeight.w500,
+            fontWeight: FontWeight.bold,
           ),
         ),
         const Spacer(),
-        Text(
-          "IDR ${data['expense'].toString()}",
-          textAlign: TextAlign.center,
-          style: TextStyle(
+        NominalMoneyFormatter(
+          textStyle: TextStyle(
             color: Colors.white,
             fontSize: 9.5.sp,
             fontFamily: FontFamily.cabinetGrotesk,
             fontWeight: FontWeight.w500,
           ),
-        )
+          amount: totalAmount,
+          decimalDigits: 2,
+          isWithName: true,
+        ),
       ],
     ),
   );
