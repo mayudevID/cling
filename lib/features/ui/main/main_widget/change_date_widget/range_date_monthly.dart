@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
-import '../../../../../../resources/gen/assets.gen.dart';
-import '../../../../../../resources/gen/fonts.gen.dart';
-import '../../../../language_currency/lang_currency_bloc.dart';
-import '../../bloc/statistics_bloc.dart';
+import '../../../../../resources/gen/assets.gen.dart';
+import '../../../../../resources/gen/fonts.gen.dart';
+import '../../../language_currency/lang_currency_bloc.dart';
+import '../../statistics/bloc/statistics_bloc.dart';
 import "dart:math" as math;
 
 Widget rangeDateMonthly(BuildContext context) {

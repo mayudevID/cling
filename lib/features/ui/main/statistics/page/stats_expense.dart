@@ -1,6 +1,6 @@
 import 'package:cling/core/utils.dart';
 import 'package:cling/features/ui/main/statistics/bloc/statistics_bloc.dart';
-import 'package:cling/features/ui/main/statistics/widgets/change_date_widget/choose_date_range.dart';
+import 'package:cling/features/ui/main/main_widget/change_date_widget/choose_date_range.dart';
 import 'package:cling/features/ui/main/statistics/widgets/pie_chart_stats_expense.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

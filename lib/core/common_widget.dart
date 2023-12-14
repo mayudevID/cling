@@ -359,9 +359,7 @@ Widget appBarProfile({
           onTap: () => Navigator.pop(context),
           child: Assets.lib.resources.images.fluentChevronLeft24Filled.svg(),
         ),
-        SizedBox(
-          width: 8.wmea,
-        ),
+        SizedBox(width: 8.wmea),
         Text(
           title,
           textAlign: TextAlign.center,

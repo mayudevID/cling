@@ -9,12 +9,14 @@ import '../../../../../resources/gen/assets.gen.dart';
 import '../../../../../resources/gen/fonts.gen.dart';
 import '../../../language_currency/lang_export.dart';
 import '../bloc/statistics_bloc.dart';
-import '../widgets/most_expense.dart';
-import '../widgets/most_income.dart';
+import '../widgets/most_expense_widget.dart';
+import '../widgets/most_income_widget.dart';
 import '../widgets/tag_info.dart';
 
 class StatsAll extends StatelessWidget {
-  const StatsAll({super.key});
+  const StatsAll({super.key, required ScrollController scrollController})
+      : _scrollController = scrollController;
+  final ScrollController _scrollController;
 
   @override
   Widget build(BuildContext context) {
@@ -73,8 +75,17 @@ class StatsAll extends StatelessWidget {
                 ],
               ),
             ),
-            onChanged: (value) {
+            onChanged: (value) async {
+              final height = MediaQuery.of(context).size.height;
               context.read<StatisticsBloc>().add(ChangeAllStatsChoose(value!));
+              await Future.delayed(const Duration(milliseconds: 200));
+              _scrollController.animateTo(
+                (_scrollController.position.maxScrollExtent >= height * 2)
+                    ? height
+                    : _scrollController.position.maxScrollExtent,
+                duration: const Duration(milliseconds: 400),
+                curve: Curves.easeInOutCubic,
+              );
             },
             items: AllStatsChoose.values
                 .map(
@@ -127,10 +138,12 @@ class StatsAll extends StatelessWidget {
                 : state.mostExpenseList.length;
             final itemBuilder = boolean
                 ? (_, index) {
-                    return mostIncome(state.mostIncomeList[index]);
+                    return mostIncomeWidget(
+                        context, state.mostIncomeList[index]);
                   }
                 : (_, index) {
-                    return mostExpense(state.mostExpenseList[index]);
+                    return mostExpenseWidget(
+                        context, state.mostExpenseList[index]);
                   };
 
             final listWidget = MediaQuery.removePadding(

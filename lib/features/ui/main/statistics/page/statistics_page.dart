@@ -14,19 +14,20 @@ import 'stats_all.dart';
 import 'stats_expense.dart';
 
 class StatisticsPage extends StatelessWidget {
-  const StatisticsPage({super.key});
+  final ScrollController _scrollController = ScrollController();
+
+  StatisticsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
+      controller: _scrollController,
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 24.wmea),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(
-              height: 16.hmea,
-            ),
+            SizedBox(height: 16.hmea),
             Text(
               AppLocalizations.of(context)!.statistics,
               textAlign: TextAlign.center,
@@ -37,13 +38,9 @@ class StatisticsPage extends StatelessWidget {
                 fontWeight: FontWeight.w700,
               ),
             ),
-            SizedBox(
-              height: 24.hmea,
-            ),
+            SizedBox(height: 24.hmea),
             const TagChooser(),
-            SizedBox(
-              height: 24.hmea,
-            ),
+            SizedBox(height: 24.hmea),
             BlocBuilder<StatisticsBloc, StatisticsState>(
               buildWhen: (previous, current) {
                 return previous.typeCategories != current.typeCategories;
@@ -52,10 +49,10 @@ class StatisticsPage extends StatelessWidget {
                 return CustomIndexedStack(
                   curve: Curves.fastOutSlowIn,
                   index: state.typeCategories,
-                  children: const [
-                    StatsAll(),
-                    StatsIncome(),
-                    StatsExpense(),
+                  children: [
+                    StatsAll(scrollController: _scrollController),
+                    const StatsIncome(),
+                    const StatsExpense(),
                   ],
                 );
               },

@@ -88,10 +88,10 @@ class MainPageContent extends StatelessWidget {
                     duration: const Duration(milliseconds: 60),
                     beginOpacity: 0.75,
                     endOpacity: 1,
-                    children: const [
-                      HomePage(),
+                    children: [
+                      const HomePage(),
                       StatisticsPage(),
-                      ProfilePage(),
+                      const ProfilePage(),
                     ],
                   );
                 },

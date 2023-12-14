@@ -281,5 +281,7 @@
   "selectDateRange": "Pilih rentang tanggal",
   "@selectDateRange": {},
   "selectYear": "Pilih tahun",
-  "@selectYear": {}
+  "@selectYear": {},
+  "detail": "Rincian",
+  "@detail": {}
 }

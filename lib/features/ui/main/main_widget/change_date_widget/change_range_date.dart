@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../../../../../resources/gen/assets.gen.dart';
-import '../../../../../../resources/gen/fonts.gen.dart';
-import '../../bloc/statistics_bloc.dart';
+import '../../../../../resources/gen/assets.gen.dart';
+import '../../../../../resources/gen/fonts.gen.dart';
+import '../../statistics/bloc/statistics_bloc.dart';
 import 'convert_enum_to_detail_date.dart';
 
 Widget changeRangeDate(BuildContext context) {

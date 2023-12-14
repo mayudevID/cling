@@ -9,6 +9,7 @@ import '../features/ui/login/page/login_page.dart';
 import '../features/ui/main/add_goal/page/add_goal_page.dart';
 import '../features/ui/main/goal_detail/pages/goal_detail_page.dart';
 import '../features/ui/main/main_page.dart';
+import '../features/ui/main/stats_detail/page/stats_detail_per_categories_widget.dart';
 import '../features/ui/onboard/onboard_page.dart';
 import '../features/ui/register/page/register_page.dart';
 import '../features/ui/register/page/register_success_page.dart';
@@ -86,6 +87,12 @@ class RouteGen {
         return MaterialPageRoute(
           builder: (_) => const AddGoalPage(),
         );
+      case RouteName.statsDetailPerCategories:
+        return MaterialPageRoute(
+          builder: (_) => StatsDetailPerCategoriesPage(
+            categoryOrSource: data as String,
+          ),
+        );
 
       default:
         return _errorRoute();
@@ -120,4 +127,5 @@ class RouteName {
   static const String goalsDetail = "/goalsDetail";
   static const String addGoal = "/addGoal";
   static const String addInEx = "/addInEx";
+  static const String statsDetailPerCategories = "/statsDetailPerCategories";
 }

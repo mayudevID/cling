@@ -281,5 +281,7 @@
   "selectDateRange": "Select a date range",
   "@selectDateRange": {},
   "selectYear": "Select year",
-  "@selectYear": {}
+  "@selectYear": {},
+  "detail": "Detail",
+  "@detail": {}
 }
