@@ -283,5 +283,9 @@
   "selectYear": "Pilih tahun",
   "@selectYear": {},
   "detail": "Rincian",
-  "@detail": {}
+  "@detail": {},
+  "thisYear": "Tahun Ini",
+  "@thisYear": {},
+  "thisMonth": "Bulan Ini",
+  "@thisMonth": {}
 }

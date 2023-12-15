@@ -90,7 +90,7 @@ class RouteGen {
       case RouteName.statsDetailPerCategories:
         return MaterialPageRoute(
           builder: (_) => StatsDetailPerCategoriesPage(
-            categoryOrSource: data as String,
+            categoryOrSource: data as List<String>,
           ),
         );
 

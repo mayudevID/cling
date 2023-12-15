@@ -17,14 +17,14 @@ class ExpenseMeta {
 }
 
 class IncomeSourceMeta {
-  static const nameTable = 'income_source_meta';
+  static const nameTable = 'income_source_table';
   static const id = 'income_source_id';
   static const incomeSource = 'income_source';
 }
 
 class ExpenseCategoriesMeta {
-  static const nameTable = 'expense_source_meta';
-  static const id = 'expense_source_id';
+  static const nameTable = 'expense_categories_table';
+  static const id = 'expense_categories_id';
   static const expenseCategories = 'expense_categories';
 }
 

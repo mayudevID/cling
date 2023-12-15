@@ -190,7 +190,7 @@ class DatabaseRepository {
         SUM(${IncomeMeta.amount}) AS TotalIncome
         FROM ${IncomeMeta.nameTable}
         INNER JOIN ${IncomeSourceMeta.nameTable} 
-        ON ${IncomeMeta.nameTable}.${IncomeSourceMeta.id} 
+        ON ${IncomeMeta.nameTable}.${IncomeMeta.idIncomeSource} 
         = 
         ${IncomeSourceMeta.nameTable}.${IncomeSourceMeta.id} 
         WHERE date(${IncomeMeta.date}) >= date(?)
@@ -200,6 +200,45 @@ class DatabaseRepository {
       [startDate.toIso8601String(), endDate.toIso8601String()],
     );
     return result;
+  }
+
+  Future<List<IncomeModel>> getMostIncomeByCategories(String source) async {
+    List<IncomeModel> listData = [];
+
+    final now = DateTime.now();
+    final firstDate = DateTime(now.year, 1, 1).toIso8601String();
+    final lastDate = DateTime(now.year, 12, 31).toIso8601String();
+
+    final read = await db.rawQuery(
+      '''
+        SELECT ${IncomeSourceMeta.id} 
+        FROM ${IncomeSourceMeta.nameTable} 
+        WHERE ${IncomeSourceMeta.incomeSource} = ?
+      ''',
+      [source],
+    );
+
+    List<Map<String, dynamic>> maps = await db.rawQuery(
+      '''
+        SELECT *
+        FROM ${IncomeMeta.nameTable}
+        INNER JOIN ${IncomeSourceMeta.nameTable} 
+        ON ${IncomeMeta.nameTable}.${IncomeMeta.idIncomeSource} 
+        = 
+        ${IncomeSourceMeta.nameTable}.${IncomeSourceMeta.id} 
+        WHERE date(${IncomeMeta.date}) >= date(?)
+        AND date(${IncomeMeta.date}) <= date(?)
+        AND ${IncomeSourceMeta.nameTable}.${IncomeSourceMeta.id} = ?
+        ORDER BY ${IncomeMeta.amount} DESC
+      ''',
+      [firstDate, lastDate, read[0].values.first],
+    );
+
+    for (var element in maps) {
+      listData.add(IncomeModel.fromDatabase(element));
+    }
+
+    return listData;
   }
 
   //* ================ EXPENSE CRUD ================
@@ -246,14 +285,6 @@ class DatabaseRepository {
       listData.add(ExpenseModel.fromDatabase(element));
     }
     return listData;
-  }
-
-  Future<num> getTotalExpense() async {
-    List<Map<String, dynamic>> maps = await db.rawQuery('''
-        SELECT SUM(${ExpenseMeta.amount}) 
-        FROM ${ExpenseMeta.nameTable}
-      ''');
-    return maps.first['SUM(${ExpenseMeta.amount})'] ?? 0;
   }
 
   Future<List<GoalModel>> getGoals() async {
@@ -397,7 +428,7 @@ class DatabaseRepository {
             SUM(${ExpenseMeta.amount}) AS TotalExpense
             FROM ${ExpenseMeta.nameTable}
             INNER JOIN ${ExpenseCategoriesMeta.nameTable} 
-            ON ${ExpenseMeta.nameTable}.${ExpenseCategoriesMeta.id} 
+            ON ${ExpenseMeta.nameTable}.${ExpenseMeta.idCategories} 
             = 
             ${ExpenseCategoriesMeta.nameTable}.${ExpenseCategoriesMeta.id} 
             WHERE date(${ExpenseMeta.date}) >= date(?)
@@ -416,7 +447,7 @@ class DatabaseRepository {
             SUM(${IncomeMeta.amount}) AS TotalIncome
             FROM ${IncomeMeta.nameTable}
             INNER JOIN ${IncomeSourceMeta.nameTable} 
-            ON ${IncomeMeta.nameTable}.${IncomeSourceMeta.id} 
+            ON ${IncomeMeta.nameTable}.${IncomeMeta.idIncomeSource} 
             = 
             ${IncomeSourceMeta.nameTable}.${IncomeSourceMeta.id} 
             WHERE date(${IncomeMeta.date}) >= date(?)
@@ -441,7 +472,7 @@ class DatabaseRepository {
         SUM(${ExpenseMeta.amount}) AS TotalExpense
         FROM ${ExpenseMeta.nameTable}
         INNER JOIN ${ExpenseCategoriesMeta.nameTable} 
-        ON ${ExpenseMeta.nameTable}.${ExpenseCategoriesMeta.id} 
+        ON ${ExpenseMeta.nameTable}.${ExpenseMeta.idCategories} 
         = 
         ${ExpenseCategoriesMeta.nameTable}.${ExpenseCategoriesMeta.id} 
         WHERE date(${ExpenseMeta.date}) >= date(?)
@@ -454,23 +485,28 @@ class DatabaseRepository {
     return result;
   }
 
-  Future<List<ExpenseModel>> getExpenseRangeDate({
-    required DateTime startDate,
-    required DateTime endDate,
-  }) async {
+  Future<List<ExpenseModel>> getMostExpenseByCategories() async {
     List<ExpenseModel> listData = [];
-    final result = await db.rawQuery(
+
+    final now = DateTime.now();
+    final firstDate = DateTime(now.year, 1, 1).toIso8601String();
+    final lastDate = DateTime(now.year, 12, 31).toIso8601String();
+
+    List<Map<String, dynamic>> maps = await db.rawQuery(
       '''
-        SELECT * FROM ${ExpenseMeta.nameTable}
+        SELECT *
+        FROM ${ExpenseMeta.nameTable}
         WHERE date(${ExpenseMeta.date}) >= date(?)
         AND date(${ExpenseMeta.date}) <= date(?)
+        ORDER BY ${ExpenseMeta.amount} DESC
       ''',
-      [startDate.toIso8601String(), endDate.toIso8601String()],
+      [firstDate, lastDate],
     );
 
-    for (var element in result) {
+    for (var element in maps) {
       listData.add(ExpenseModel.fromDatabase(element));
     }
+
     return listData;
   }
 

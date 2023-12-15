@@ -9,8 +9,7 @@ import '../../../../../resources/gen/assets.gen.dart';
 import '../../../../../resources/gen/fonts.gen.dart';
 import '../../../language_currency/lang_export.dart';
 import '../bloc/statistics_bloc.dart';
-import '../widgets/most_expense_widget.dart';
-import '../widgets/most_income_widget.dart';
+import '../widgets/categories_with_amount_widget.dart';
 import '../widgets/tag_info.dart';
 
 class StatsAll extends StatelessWidget {
@@ -112,6 +111,10 @@ class StatsAll extends StatelessWidget {
             ),
           ),
         ),
+        // SizedBox(
+        //   height: 8.hmea,
+        // ),
+        // ...chooseDateRange(context),
         SizedBox(
           height: 16.hmea,
         ),
@@ -138,22 +141,33 @@ class StatsAll extends StatelessWidget {
                 : state.mostExpenseList.length;
             final itemBuilder = boolean
                 ? (_, index) {
-                    return mostIncomeWidget(
-                        context, state.mostIncomeList[index]);
+                    return categoriesWithAmount(
+                      context: context,
+                      data: state.mostIncomeList[index],
+                      type: ["income", "Source", "TotalIncome"],
+                      title: AppLocalizations.of(context)!.mostIncome,
+                    );
                   }
                 : (_, index) {
-                    return mostExpenseWidget(
-                        context, state.mostExpenseList[index]);
+                    return categoriesWithAmount(
+                      context: context,
+                      data: state.mostExpenseList[index],
+                      type: ["expense", "Categories", "TotalExpense"],
+                      title: AppLocalizations.of(context)!.mostExpense,
+                    );
                   };
 
             final listWidget = MediaQuery.removePadding(
               context: context,
               removeTop: true,
-              child: ListView.builder(
+              child: ListView.separated(
                 itemCount: itemCount,
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 itemBuilder: itemBuilder,
+                separatorBuilder: (context, index) {
+                  return SizedBox(height: 4.hmea);
+                },
               ),
             );
 

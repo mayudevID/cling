@@ -1,4 +1,5 @@
 import 'package:cling/core/utils.dart';
+import 'package:cling/features/ui/main/statistics/widgets/categories_with_amount_widget.dart';
 import 'package:cling/features/ui/main/statistics/widgets/line_column_stats_income.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,7 +9,6 @@ import '../../../../../resources/gen/fonts.gen.dart';
 import '../../../language_currency/lang_export.dart';
 import '../bloc/statistics_bloc.dart';
 import '../../main_widget/change_date_widget/choose_date_range.dart';
-import '../widgets/income_breakdown_widget.dart';
 
 class StatsIncome extends StatelessWidget {
   const StatsIncome({super.key});
@@ -67,14 +67,20 @@ class StatsIncome extends StatelessWidget {
             return MediaQuery.removePadding(
               context: context,
               removeTop: true,
-              child: ListView.builder(
+              child: ListView.separated(
                 itemCount: state.incomeBreakdownList.length,
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 itemBuilder: (context, index) {
-                  return incomeBreakdownWidget(
-                    state.incomeBreakdownList[index],
+                  return categoriesWithAmount(
+                    context: context,
+                    data: state.incomeBreakdownList[index],
+                    type: ["income", "Source", "TotalIncome"],
+                    title: AppLocalizations.of(context)!.incomeBreakdown,
                   );
+                },
+                separatorBuilder: (context, index) {
+                  return SizedBox(height: 4.hmea);
                 },
               ),
             );

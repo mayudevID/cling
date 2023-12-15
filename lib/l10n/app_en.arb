@@ -283,5 +283,9 @@
   "selectYear": "Select year",
   "@selectYear": {},
   "detail": "Detail",
-  "@detail": {}
+  "@detail": {},
+  "thisYear": "This Year",
+  "@thisYear": {},
+  "thisMonth": "This Month ",
+  "@thisMonth": {}
 }

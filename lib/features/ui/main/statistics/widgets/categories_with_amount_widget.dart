@@ -1,31 +1,32 @@
 import 'package:cling/core/common_widget.dart';
+import 'package:cling/core/route.dart';
 import 'package:cling/core/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../../../../core/route.dart';
 import '../../../../../resources/gen/fonts.gen.dart';
 
-Widget mostIncomeWidget(
-  BuildContext context,
-  Map<String, Object?> data,
-) {
-  final sourceStr = data['Source'].toString();
-  final sourceIcon = sourceStr.substring(0, sourceStr.indexOf(" "));
-  final sourceClass = sourceStr.substring(sourceStr.indexOf(" ") + 1);
-  final totalAmount = double.parse(data['TotalIncome'].toString());
+Widget categoriesWithAmount({
+  required BuildContext context,
+  required Map<String, Object?> data,
+  required List<String> type,
+  required String title,
+}) {
+  final categoryStr = data[type[1]].toString();
+  final categoryIcon = categoryStr.substring(0, categoryStr.indexOf(" "));
+  final categoryClass = categoryStr.substring(categoryStr.indexOf(" ") + 1);
+  final totalAmount = double.parse(data[type[2]].toString());
 
   return GestureDetector(
     onTap: () {
-      Navigator.pushNamed(context, RouteName.statsDetailPerCategories);
+      Navigator.pushNamed(
+        context,
+        RouteName.statsDetailPerCategories,
+        arguments: <String>[type[0], categoryStr, title],
+      );
     },
     child: Container(
-      margin: EdgeInsets.only(
-        bottom: 16.hmea,
-      ),
-      padding: EdgeInsets.all(
-        16.wmea,
-      ),
+      padding: EdgeInsets.all(16.wmea),
       width: double.infinity,
       decoration: BoxDecoration(
         color: const Color(0x3D787880),
@@ -41,14 +42,14 @@ Widget mostIncomeWidget(
             ),
             child: Center(
               child: Text(
-                " $sourceIcon",
+                " $categoryIcon",
                 style: TextStyle(fontSize: 9.sp),
               ),
             ),
           ),
           SizedBox(width: 12.wmea),
           Text(
-            sourceClass,
+            categoryClass,
             textAlign: TextAlign.center,
             style: TextStyle(
               color: Colors.white,
