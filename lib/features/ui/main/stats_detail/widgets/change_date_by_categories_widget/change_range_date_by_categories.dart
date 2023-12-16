@@ -1,17 +1,17 @@
 import 'package:cling/core/utils.dart';
+import 'package:cling/features/ui/main/stats_detail/bloc/stats_detail_bloc.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../../../../resources/gen/assets.gen.dart';
-import '../../../../../resources/gen/fonts.gen.dart';
-import '../../statistics/bloc/statistics_bloc.dart';
-import '../convert_enum_to_detail_date.dart';
-import '../enum_range_date.dart';
-import '../set_name.dart';
+import '../../../../../../resources/gen/assets.gen.dart';
+import '../../../../../../resources/gen/fonts.gen.dart';
+import '../../../main_widget/convert_enum_to_detail_date.dart';
+import '../../../main_widget/enum_range_date.dart';
+import '../../../main_widget/set_name.dart';
 
-Widget changeRangeDate(BuildContext context) {
+Widget changeRangeDateByCategories(BuildContext context) {
   return DropdownButtonHideUnderline(
     child: DropdownButton2(
       customButton: Container(
@@ -24,7 +24,7 @@ Widget changeRangeDate(BuildContext context) {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            BlocBuilder<StatisticsBloc, StatisticsState>(
+            BlocBuilder<StatsDetailBloc, StatsDetailState>(
               buildWhen: (p, c) {
                 return (p.rangeDate.name != c.rangeDate.name) ||
                     (p.dateRangePickerView.name != c.dateRangePickerView.name);
@@ -45,7 +45,7 @@ Widget changeRangeDate(BuildContext context) {
         ),
       ),
       onChanged: (value) {
-        context.read<StatisticsBloc>().add(ChangeRangeDate(value!));
+        context.read<StatsDetailBloc>().add(ChangeRangeDate(value!));
       },
       items: RangeDate.values
           .map(

@@ -10,12 +10,12 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:sizer/sizer.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
-import '../../../../../resources/gen/assets.gen.dart';
-import '../../../../../resources/gen/fonts.gen.dart';
-import '../../../language_currency/lang_currency_bloc.dart';
-import '../convert_enum_to_detail_date.dart';
+import '../../../../../../resources/gen/assets.gen.dart';
+import '../../../../../../resources/gen/fonts.gen.dart';
+import '../../../../language_currency/lang_currency_bloc.dart';
+import '../../../main_widget/convert_enum_to_detail_date.dart';
 
-Widget rangeDatePeriod(BuildContext mainContext) {
+Widget rangeDatePeriodByCategories(BuildContext mainContext) {
   final formatCurr = mainContext.select(
     (LangCurrencyBloc bloc) {
       return bloc.state.selectedLanguage.value.toLanguageTag();

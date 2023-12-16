@@ -14,7 +14,8 @@ import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 import '../../../../model/chart_data.dart';
 import '../../../language_currency/lang_export.dart';
-import '../../main_widget/change_date_widget/convert_enum_to_detail_date.dart';
+import '../../main_widget/convert_enum_to_detail_date.dart';
+import '../../main_widget/enum_range_date.dart';
 
 part 'statistics_event.dart';
 part 'statistics_state.dart';

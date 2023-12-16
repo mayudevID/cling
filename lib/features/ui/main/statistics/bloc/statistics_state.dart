@@ -2,8 +2,6 @@
 
 part of 'statistics_bloc.dart';
 
-enum RangeDate { daily, monthy, yearly, period }
-
 enum AllStatsChoose { income, expense }
 
 class StatisticsState extends Equatable {
