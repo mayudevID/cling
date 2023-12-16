@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import "dart:math" as math;
+
 import '../../../../../../resources/gen/assets.gen.dart';
 import '../../../../../../resources/gen/fonts.gen.dart';
-
 import '../../../../language_currency/lang_currency_bloc.dart';
 import '../../bloc/stats_detail_bloc.dart';
 
-Widget rangeDateMonthlyByCategories(BuildContext context) {
+Widget rangeDateYearlyByCategory(BuildContext context) {
   final formatCurr = context.select(
     (LangCurrencyBloc bloc) {
       return bloc.state.selectedLanguage.value.toLanguageTag();
@@ -20,7 +20,7 @@ Widget rangeDateMonthlyByCategories(BuildContext context) {
     children: [
       GestureDetector(
         onTap: () {
-          context.read<StatsDetailBloc>().add(const ChangeMonthly(0));
+          context.read<StatsDetailBloc>().add(const ChangeYearly(0));
         },
         child: Assets.lib.resources.images.fluentChevronLeft24Filled.svg(),
       ),
@@ -28,7 +28,7 @@ Widget rangeDateMonthlyByCategories(BuildContext context) {
       Expanded(
         child: GestureDetector(
           onTap: () {
-            context.read<StatsDetailBloc>().add(const ChangeMonthly(null));
+            context.read<StatsDetailBloc>().add(const ChangeYearly(null));
           },
           child: Container(
             padding: EdgeInsets.all(14.wmea),
@@ -45,7 +45,7 @@ Widget rangeDateMonthlyByCategories(BuildContext context) {
                   return AnimatedSwitcher(
                     duration: const Duration(milliseconds: 200),
                     child: Text(
-                      DateFormat.yMMMM(formatCurr).format(state.endDate),
+                      DateFormat.y(formatCurr).format(state.endDate),
                       key: ValueKey<String>(state.endDate.toString()),
                       style: const TextStyle(
                         color: Colors.white,
@@ -62,7 +62,7 @@ Widget rangeDateMonthlyByCategories(BuildContext context) {
       const SizedBox(width: 8),
       GestureDetector(
         onTap: () {
-          context.read<StatsDetailBloc>().add(const ChangeMonthly(1));
+          context.read<StatsDetailBloc>().add(const ChangeYearly(1));
         },
         child: Transform.rotate(
           angle: math.pi,

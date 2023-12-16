@@ -384,11 +384,7 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
       int yearModifier = (event.leftOrRightOrPick == 0) ? -1 : 1;
 
       final newStartDate = DateTime(state.endDate.year + yearModifier, 1, 1);
-      final newEndDate = DateTime(
-        state.endDate.year + yearModifier,
-        12,
-        31,
-      );
+      final newEndDate = DateTime(state.endDate.year + yearModifier, 12, 31);
 
       emit(state.copyWith(startDate: newStartDate, endDate: newEndDate));
     } else {
@@ -398,9 +394,7 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
           return AlertDialog(
             title: const Text(
               "Select Year",
-              style: TextStyle(
-                fontFamily: FontFamily.cabinetGrotesk,
-              ),
+              style: TextStyle(fontFamily: FontFamily.cabinetGrotesk),
             ),
             content: SizedBox(
               width: 300,

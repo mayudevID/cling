@@ -202,7 +202,7 @@ class DatabaseRepository {
     return result;
   }
 
-  Future<List<IncomeModel>> getMostIncomeByCategories(String source) async {
+  Future<List<IncomeModel>> getMostIncomeByCategory(String source) async {
     List<IncomeModel> listData = [];
 
     final now = DateTime.now();
@@ -485,22 +485,36 @@ class DatabaseRepository {
     return result;
   }
 
-  Future<List<ExpenseModel>> getMostExpenseByCategories() async {
+  Future<List<ExpenseModel>> getMostExpenseByCategory(String source) async {
     List<ExpenseModel> listData = [];
 
     final now = DateTime.now();
     final firstDate = DateTime(now.year, 1, 1).toIso8601String();
     final lastDate = DateTime(now.year, 12, 31).toIso8601String();
 
+    final read = await db.rawQuery(
+      '''
+        SELECT ${ExpenseCategoriesMeta.id} 
+        FROM ${ExpenseCategoriesMeta.nameTable} 
+        WHERE ${ExpenseCategoriesMeta.expenseCategories} = ?
+      ''',
+      [source],
+    );
+
     List<Map<String, dynamic>> maps = await db.rawQuery(
       '''
         SELECT *
         FROM ${ExpenseMeta.nameTable}
+        INNER JOIN ${ExpenseCategoriesMeta.nameTable} 
+        ON ${ExpenseMeta.nameTable}.${ExpenseMeta.idCategories} 
+        = 
+        ${ExpenseCategoriesMeta.nameTable}.${ExpenseCategoriesMeta.id} 
         WHERE date(${ExpenseMeta.date}) >= date(?)
         AND date(${ExpenseMeta.date}) <= date(?)
+        AND ${ExpenseCategoriesMeta.nameTable}.${ExpenseCategoriesMeta.id} = ?
         ORDER BY ${ExpenseMeta.amount} DESC
       ''',
-      [firstDate, lastDate],
+      [firstDate, lastDate, read[0].values.first],
     );
 
     for (var element in maps) {

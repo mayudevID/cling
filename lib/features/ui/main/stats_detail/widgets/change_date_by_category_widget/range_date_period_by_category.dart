@@ -15,7 +15,7 @@ import '../../../../../../resources/gen/fonts.gen.dart';
 import '../../../../language_currency/lang_currency_bloc.dart';
 import '../../../main_widget/convert_enum_to_detail_date.dart';
 
-Widget rangeDatePeriodByCategories(BuildContext mainContext) {
+Widget rangeDatePeriodByCategory(BuildContext mainContext) {
   final formatCurr = mainContext.select(
     (LangCurrencyBloc bloc) {
       return bloc.state.selectedLanguage.value.toLanguageTag();

@@ -9,7 +9,7 @@ import 'dart:math' as math;
 
 import '../../bloc/stats_detail_bloc.dart';
 
-Widget rangeDateDailyByCategories(BuildContext context) {
+Widget rangeDateDailyByCategory(BuildContext context) {
   final formatCurr = context.select(
     (LangCurrencyBloc bloc) {
       return bloc.state.selectedLanguage.value.toLanguageTag();

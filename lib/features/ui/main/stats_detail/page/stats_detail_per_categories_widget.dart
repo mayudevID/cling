@@ -10,7 +10,7 @@ import '../../../../../resources/gen/fonts.gen.dart';
 import '../../../language_currency/lang_export.dart';
 import '../../main_page.dart';
 import '../../main_widget/change_date_widget/choose_date_range.dart';
-import '../../statistics/bloc/statistics_bloc.dart';
+import '../../statistics/bloc/statistics_bloc.dart' as s_bloc;
 import '../bloc/stats_detail_bloc.dart';
 import '../widgets/item_date_expense_widget.dart';
 import '../widgets/item_date_income_widget.dart';
@@ -26,23 +26,27 @@ class StatsDetailPerCategoriesPage extends StatelessWidget {
   StatsDetailEvent getData(BuildContext context) {
     final appLoc = AppLocalizations.of(context)!;
     if (_categoryOrSource[2] == appLoc.mostIncome) {
-      return GetMostIncomeByCategories(_categoryOrSource[1]);
+      return GetMostIncomeByCategory();
     } else if (_categoryOrSource[2] == appLoc.mostExpense) {
-      return GetMostExpenseByCategories(_categoryOrSource[1]);
+      return GetMostExpenseByCategory();
+    } else if (_categoryOrSource[2] == appLoc.incomeBreakdown) {
+      return GetIncomeBreakdownByCategory();
     } else {
-      return GetMostIncomeByCategories(_categoryOrSource[1]);
+      return GetExpenseBreakdownByCategory();
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) {
-        return StatsDetailBloc(dbRepo: getIt<DatabaseRepository>())
-          ..add(getData(context));
-      },
+      create: (_) => StatsDetailBloc(
+        context: context,
+        type: _categoryOrSource[0],
+        categoryOrSource: _categoryOrSource[1],
+        dbRepo: getIt<DatabaseRepository>(),
+      )..add(getData(context)),
       child: BlocProvider.value(
-        value: BlocProvider.of<StatisticsBloc>(
+        value: BlocProvider.of<s_bloc.StatisticsBloc>(
           MainPage.navKeyMain.currentContext!,
         ),
         child: StatsDetailPerCategoriesPageContent(

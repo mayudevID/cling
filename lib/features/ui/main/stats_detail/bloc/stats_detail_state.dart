@@ -19,8 +19,18 @@ class StatsDetailState extends Equatable {
     this.dateRangePickerView = DateRangePickerView.month,
   })  : listExpenseModel = listExpenseModel ?? List.empty(),
         listIncomeModel = listIncomeModel ?? List.empty(),
-        startDate = startDate ?? DateTime.now(),
-        endDate = endDate ?? DateTime.now();
+        startDate = startDate ??
+            DateTime(
+              DateTime.now().year,
+              DateTime.now().month,
+              DateTime.now().day,
+            ),
+        endDate = endDate ??
+            DateTime(
+              DateTime.now().year,
+              DateTime.now().month,
+              DateTime.now().day,
+            );
 
   @override
   List<Object> get props => [

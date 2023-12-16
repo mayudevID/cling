@@ -11,7 +11,7 @@ import '../../../main_widget/convert_enum_to_detail_date.dart';
 import '../../../main_widget/enum_range_date.dart';
 import '../../../main_widget/set_name.dart';
 
-Widget changeRangeDateByCategories(BuildContext context) {
+Widget changeRangeDateByCategory(BuildContext context) {
   return DropdownButtonHideUnderline(
     child: DropdownButton2(
       customButton: Container(

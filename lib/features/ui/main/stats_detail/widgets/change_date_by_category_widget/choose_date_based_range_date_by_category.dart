@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../main_widget/enum_range_date.dart';
 import '../../bloc/stats_detail_bloc.dart';
-import 'range_date_daily_by_categories.dart';
-import 'range_date_monthly_by_categories.dart';
-import 'range_date_period_by_categories.dart';
-import 'range_date_yearly_by_categories.dart';
+import 'range_date_daily_by_category.dart';
+import 'range_date_monthly_by_category.dart';
+import 'range_date_period_by_category.dart';
+import 'range_date_yearly_by_category.dart';
 
-Widget chooseDateBasedRangeDateByCategories(BuildContext context) {
+Widget chooseDateBasedRangeDateByCategory(BuildContext context) {
   return BlocBuilder<StatsDetailBloc, StatsDetailState>(
     buildWhen: (p, c) {
       return p.rangeDate.name != c.rangeDate.name;
@@ -15,13 +15,13 @@ Widget chooseDateBasedRangeDateByCategories(BuildContext context) {
     builder: (context, state) {
       switch (state.rangeDate) {
         case RangeDate.daily:
-          return rangeDateDailyByCategories(context);
+          return rangeDateDailyByCategory(context);
         case RangeDate.period:
-          return rangeDatePeriodByCategories(context);
+          return rangeDatePeriodByCategory(context);
         case RangeDate.monthy:
-          return rangeDateMonthlyByCategories(context);
+          return rangeDateMonthlyByCategory(context);
         case RangeDate.yearly:
-          return rangeDateYearlyByCategories(context);
+          return rangeDateYearlyByCategory(context);
       }
     },
   );

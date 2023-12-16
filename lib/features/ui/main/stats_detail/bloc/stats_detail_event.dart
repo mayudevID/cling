@@ -7,19 +7,13 @@ sealed class StatsDetailEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class GetMostIncomeByCategories extends StatsDetailEvent {
-  final String source;
+class GetMostIncomeByCategory extends StatsDetailEvent {}
 
-  const GetMostIncomeByCategories(this.source);
-}
+class GetMostExpenseByCategory extends StatsDetailEvent {}
 
-class GetMostExpenseByCategories extends StatsDetailEvent {
-  final String source;
+class GetIncomeBreakdownByCategory extends StatsDetailEvent {}
 
-  const GetMostExpenseByCategories(this.source);
-}
-
-class ChangeDateIncomeBreakdown extends StatsDetailEvent {}
+class GetExpenseBreakdownByCategory extends StatsDetailEvent {}
 
 class ChangeRangeDate extends StatsDetailEvent {
   final RangeDate rangeDate;
