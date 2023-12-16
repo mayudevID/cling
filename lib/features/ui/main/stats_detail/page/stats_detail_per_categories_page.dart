@@ -1,17 +1,16 @@
 import 'package:cling/core/utils.dart';
-import 'package:cling/features/repository/database_repository.dart';
-import 'package:cling/injection.dart';
+import 'package:cling/features/model/detail_category_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../../../../injection.dart';
 import '../../../../../resources/gen/assets.gen.dart';
 import '../../../../../resources/gen/fonts.gen.dart';
+import '../../../../repository/database_repository.dart';
 import '../../../language_currency/lang_export.dart';
-import '../../main_page.dart';
-import '../../main_widget/change_date_widget/choose_date_range.dart';
-import '../../statistics/bloc/statistics_bloc.dart' as s_bloc;
 import '../bloc/stats_detail_bloc.dart';
+import '../widgets/change_date_by_category_widget/choose_date_range_by_category.dart';
 import '../widgets/item_date_expense_widget.dart';
 import '../widgets/item_date_income_widget.dart';
 import '../widgets/tag_categories_with_type_flow_widget.dart';
@@ -19,17 +18,17 @@ import '../widgets/tag_categories_with_type_flow_widget.dart';
 class StatsDetailPerCategoriesPage extends StatelessWidget {
   const StatsDetailPerCategoriesPage({
     super.key,
-    required List<String> categoryOrSource,
-  }) : _categoryOrSource = categoryOrSource;
-  final List<String> _categoryOrSource;
+    required DetailCategoryModel detailCategoryModel,
+  }) : _detailCategoryModel = detailCategoryModel;
+  final DetailCategoryModel _detailCategoryModel;
 
   StatsDetailEvent getData(BuildContext context) {
     final appLoc = AppLocalizations.of(context)!;
-    if (_categoryOrSource[2] == appLoc.mostIncome) {
+    if (_detailCategoryModel.title == appLoc.mostIncome) {
       return GetMostIncomeByCategory();
-    } else if (_categoryOrSource[2] == appLoc.mostExpense) {
+    } else if (_detailCategoryModel.title == appLoc.mostExpense) {
       return GetMostExpenseByCategory();
-    } else if (_categoryOrSource[2] == appLoc.incomeBreakdown) {
+    } else if (_detailCategoryModel.title == appLoc.incomeBreakdown) {
       return GetIncomeBreakdownByCategory();
     } else {
       return GetExpenseBreakdownByCategory();
@@ -41,25 +40,19 @@ class StatsDetailPerCategoriesPage extends StatelessWidget {
     return BlocProvider(
       create: (_) => StatsDetailBloc(
         context: context,
-        type: _categoryOrSource[0],
-        categoryOrSource: _categoryOrSource[1],
+        detailCategoryModel: _detailCategoryModel,
         dbRepo: getIt<DatabaseRepository>(),
       )..add(getData(context)),
-      child: BlocProvider.value(
-        value: BlocProvider.of<s_bloc.StatisticsBloc>(
-          MainPage.navKeyMain.currentContext!,
+      child: StatsDetailPerCategoriesPageContent(
+        type: _detailCategoryModel.type[0],
+        categoryOrSourceIcon: _detailCategoryModel.categoryStr.substring(
+          0,
+          _detailCategoryModel.categoryStr.indexOf(" "),
         ),
-        child: StatsDetailPerCategoriesPageContent(
-          type: _categoryOrSource[0],
-          categoryOrSourceIcon: _categoryOrSource[1].substring(
-            0,
-            _categoryOrSource[1].indexOf(" "),
-          ),
-          categoryOrSourceClass: _categoryOrSource[1].substring(
-            _categoryOrSource[1].indexOf(" ") + 1,
-          ),
-          title: _categoryOrSource[2],
+        categoryOrSourceClass: _detailCategoryModel.categoryStr.substring(
+          _detailCategoryModel.categoryStr.indexOf(" ") + 1,
         ),
+        title: _detailCategoryModel.title,
       ),
     );
   }
@@ -125,7 +118,7 @@ class StatsDetailPerCategoriesPageContent extends StatelessWidget {
               SizedBox(height: 16.hmea),
               if (_title == appLocalizations.incomeBreakdown ||
                   _title == appLocalizations.expenseBreakdown) ...[
-                ...chooseDateRange(context),
+                ...chooseDateRangeByCategory(context),
                 SizedBox(height: 16.hmea),
               ],
               BlocBuilder<StatsDetailBloc, StatsDetailState>(

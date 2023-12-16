@@ -202,12 +202,16 @@ class DatabaseRepository {
     return result;
   }
 
-  Future<List<IncomeModel>> getMostIncomeByCategory(String source) async {
+  Future<List<IncomeModel>> getMostIncomeByCategory({
+    required String source,
+    String? startDate,
+    String? endDate,
+  }) async {
     List<IncomeModel> listData = [];
 
     final now = DateTime.now();
-    final firstDate = DateTime(now.year, 1, 1).toIso8601String();
-    final lastDate = DateTime(now.year, 12, 31).toIso8601String();
+    startDate ??= DateTime(now.year, 1, 1).toIso8601String();
+    endDate ??= DateTime(now.year, 12, 31).toIso8601String();
 
     final read = await db.rawQuery(
       '''
@@ -231,7 +235,7 @@ class DatabaseRepository {
         AND ${IncomeSourceMeta.nameTable}.${IncomeSourceMeta.id} = ?
         ORDER BY ${IncomeMeta.amount} DESC
       ''',
-      [firstDate, lastDate, read[0].values.first],
+      [startDate, endDate, read[0].values.first],
     );
 
     for (var element in maps) {
@@ -485,12 +489,16 @@ class DatabaseRepository {
     return result;
   }
 
-  Future<List<ExpenseModel>> getMostExpenseByCategory(String source) async {
+  Future<List<ExpenseModel>> getMostExpenseByCategory({
+    required String source,
+    String? startDate,
+    String? endDate,
+  }) async {
     List<ExpenseModel> listData = [];
 
     final now = DateTime.now();
-    final firstDate = DateTime(now.year, 1, 1).toIso8601String();
-    final lastDate = DateTime(now.year, 12, 31).toIso8601String();
+    startDate ??= DateTime(now.year, 1, 1).toIso8601String();
+    endDate ??= DateTime(now.year, 12, 31).toIso8601String();
 
     final read = await db.rawQuery(
       '''
@@ -514,7 +522,7 @@ class DatabaseRepository {
         AND ${ExpenseCategoriesMeta.nameTable}.${ExpenseCategoriesMeta.id} = ?
         ORDER BY ${ExpenseMeta.amount} DESC
       ''',
-      [firstDate, lastDate, read[0].values.first],
+      [startDate, endDate, read[0].values.first],
     );
 
     for (var element in maps) {

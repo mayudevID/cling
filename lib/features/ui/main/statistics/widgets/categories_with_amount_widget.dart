@@ -1,7 +1,10 @@
 import 'package:cling/core/common_widget.dart';
 import 'package:cling/core/route.dart';
 import 'package:cling/core/utils.dart';
+import 'package:cling/features/model/detail_category_model.dart';
+import 'package:cling/features/ui/main/statistics/bloc/statistics_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../../resources/gen/fonts.gen.dart';
@@ -19,10 +22,20 @@ Widget categoriesWithAmount({
 
   return GestureDetector(
     onTap: () {
+      final statsBloc = context.read<StatisticsBloc>().state;
+      final detailCategoryModel = DetailCategoryModel(
+        type: type[0],
+        categoryStr: categoryStr,
+        title: title,
+        rangeDate: statsBloc.rangeDate,
+        dateRangePickerView: statsBloc.dateRangePickerView,
+        startDate: statsBloc.startDate,
+        endDate: statsBloc.endDate,
+      );
       Navigator.pushNamed(
         context,
         RouteName.statsDetailPerCategories,
-        arguments: <String>[type[0], categoryStr, title],
+        arguments: detailCategoryModel,
       );
     },
     child: Container(

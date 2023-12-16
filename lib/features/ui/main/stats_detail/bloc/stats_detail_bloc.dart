@@ -1,3 +1,4 @@
+import 'package:cling/features/model/detail_category_model.dart';
 import 'package:cling/features/model/income_model.dart';
 import 'package:cling/features/repository/database_repository.dart';
 import 'package:equatable/equatable.dart';
@@ -20,18 +21,25 @@ part 'stats_detail_state.dart';
 class StatsDetailBloc extends Bloc<StatsDetailEvent, StatsDetailState> {
   StatsDetailBloc({
     required BuildContext context,
-    required String type,
-    required String categoryOrSource,
     required DatabaseRepository dbRepo,
+    required DetailCategoryModel detailCategoryModel,
   })  : _context = context,
-        _type = type,
-        _categoryOrSource = categoryOrSource,
+        _type = detailCategoryModel.type,
+        _categoryOrSource = detailCategoryModel.categoryStr,
         _dbRepo = dbRepo,
-        super(StatsDetailState()) {
+        super(
+          StatsDetailState(
+            rangeDate: detailCategoryModel.rangeDate,
+            dateRangePickerView: detailCategoryModel.dateRangePickerView,
+            startDate: detailCategoryModel.startDate,
+            endDate: detailCategoryModel.endDate,
+          ),
+        ) {
     on<GetMostIncomeByCategory>(_getMostIncomeByCategory);
     on<GetMostExpenseByCategory>(_getMostExpenseByCategory);
     on<GetIncomeBreakdownByCategory>(_getIncomeBreakdownByCategory);
     on<GetExpenseBreakdownByCategory>(_getExpenseBreakdownByCategory);
+    on<ChangeDateRangePickerView>(_changeDateRangePickerView);
     on<ChangeRangeDate>(_changeRangeDate);
     on<ChangeDaily>(_changeDaily);
     on<ChangeMonthly>(_changeMonthly);
@@ -62,7 +70,8 @@ class StatsDetailBloc extends Bloc<StatsDetailEvent, StatsDetailState> {
   }
 
   void _getMostIncomeByCategory(GetMostIncomeByCategory event, emit) async {
-    final result = await _dbRepo.getMostIncomeByCategory(_categoryOrSource);
+    final result =
+        await _dbRepo.getMostIncomeByCategory(source: _categoryOrSource);
     emit(
       state.copyWith(
         listIncomeModel: (result.isNotEmpty) ? result : List.empty(),
@@ -71,7 +80,8 @@ class StatsDetailBloc extends Bloc<StatsDetailEvent, StatsDetailState> {
   }
 
   void _getMostExpenseByCategory(event, emit) async {
-    final result = await _dbRepo.getMostExpenseByCategory(_categoryOrSource);
+    final result =
+        await _dbRepo.getMostExpenseByCategory(source: _categoryOrSource);
     emit(
       state.copyWith(
         listExpenseModel: (result.isNotEmpty) ? result : List.empty(),
@@ -79,8 +89,33 @@ class StatsDetailBloc extends Bloc<StatsDetailEvent, StatsDetailState> {
     );
   }
 
-  void _getIncomeBreakdownByCategory(event, emit) async {}
-  void _getExpenseBreakdownByCategory(event, emit) async {}
+  void _getIncomeBreakdownByCategory(event, emit) async {
+    final result = await _dbRepo.getMostIncomeByCategory(
+      source: _categoryOrSource,
+      startDate: state.startDate.toIso8601String(),
+      endDate: state.endDate.toIso8601String(),
+    );
+    emit(
+      state.copyWith(
+        listIncomeModel: (result.isNotEmpty) ? result : List.empty(),
+      ),
+    );
+    Logger.Green.log("GetIncomeBreakdownByCategory");
+  }
+
+  void _getExpenseBreakdownByCategory(event, emit) async {
+    final result = await _dbRepo.getMostExpenseByCategory(
+      source: _categoryOrSource,
+      startDate: state.startDate.toIso8601String(),
+      endDate: state.endDate.toIso8601String(),
+    );
+    emit(
+      state.copyWith(
+        listExpenseModel: (result.isNotEmpty) ? result : List.empty(),
+      ),
+    );
+    Logger.Green.log("GetExpenseBreakdownByCategory");
+  }
 
   void _changeRangeDate(ChangeRangeDate event, emit) {
     DateTime startDate;

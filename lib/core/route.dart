@@ -1,3 +1,4 @@
+import 'package:cling/features/model/detail_category_model.dart';
 import 'package:cling/features/model/goal_model.dart';
 import 'package:cling/features/ui/main/add_in_ex/page/add_in_ex_page.dart';
 import 'package:cling/features/ui/main/edit_monthly/page/edit_budget_or_income.dart';
@@ -9,7 +10,7 @@ import '../features/ui/login/page/login_page.dart';
 import '../features/ui/main/add_goal/page/add_goal_page.dart';
 import '../features/ui/main/goal_detail/pages/goal_detail_page.dart';
 import '../features/ui/main/main_page.dart';
-import '../features/ui/main/stats_detail/page/stats_detail_per_categories_widget.dart';
+import '../features/ui/main/stats_detail/page/stats_detail_per_categories_page.dart';
 import '../features/ui/onboard/onboard_page.dart';
 import '../features/ui/register/page/register_page.dart';
 import '../features/ui/register/page/register_success_page.dart';
@@ -90,7 +91,7 @@ class RouteGen {
       case RouteName.statsDetailPerCategories:
         return MaterialPageRoute(
           builder: (_) => StatsDetailPerCategoriesPage(
-            categoryOrSource: data as List<String>,
+            detailCategoryModel: data as DetailCategoryModel,
           ),
         );
 
