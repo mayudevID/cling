@@ -7,14 +7,8 @@ import 'package:sizer/sizer.dart';
 
 Widget todayExpensesWidget(ExpenseModel expenseModel) {
   return Container(
-    margin: EdgeInsets.only(
-      left: 24.wmea,
-      right: 24.wmea,
-      bottom: 16.hmea,
-    ),
-    padding: EdgeInsets.all(
-      16.wmea,
-    ),
+    margin: EdgeInsets.only(left: 24.wmea, right: 24.wmea),
+    padding: EdgeInsets.all(16.wmea),
     width: double.infinity,
     decoration: BoxDecoration(
       color: const Color(0x3D787880),

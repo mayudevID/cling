@@ -279,9 +279,7 @@ Future<void> showBottomSheetChooseLang(BuildContext context) async {
         );
       },
       separatorBuilder: (BuildContext context, int index) {
-        return SizedBox(
-          height: 18.hmea,
-        );
+        return SizedBox(height: 18.hmea);
       },
     );
   }

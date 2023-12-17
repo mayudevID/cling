@@ -157,6 +157,9 @@ class $LibResourcesImagesGen {
   /// File path: lib/resources/images/smile.svg
   SvgGenImage get smile => const SvgGenImage('lib/resources/images/smile.svg');
 
+  SvgGenImage get warningTriangleSolid =>
+      const SvgGenImage('lib/resources/images/warning-triangle-solid.svg');
+
   /// List of all assets
   List<SvgGenImage> get values => [
         admissionTickets,
@@ -189,7 +192,8 @@ class $LibResourcesImagesGen {
         phone,
         plus,
         shallowPanOfFood,
-        smile
+        smile,
+        warningTriangleSolid
       ];
 }
 

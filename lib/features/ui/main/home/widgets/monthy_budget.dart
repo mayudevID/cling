@@ -1,13 +1,14 @@
 import 'package:cling/core/common_widget.dart';
 import 'package:cling/core/utils.dart';
-import 'package:cling/features/ui/main/profile/bloc/profile_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nil/nil.dart';
 import 'package:sizer/sizer.dart';
-
 import '../../../../../resources/gen/fonts.gen.dart';
 import '../../../language_currency/lang_export.dart';
+import '../../profile/bloc/profile_bloc.dart';
 import '../bloc/home_bloc.dart';
+import 'warning_amount_icon.dart';
 
 Widget monthlyBudget(BuildContext context) {
   return Container(
@@ -179,6 +180,27 @@ Widget monthlyBudget(BuildContext context) {
                     );
                   },
                 );
+              },
+            ),
+            SizedBox(width: 10.wmea),
+            BlocBuilder<ProfileBloc, ProfileState>(
+              buildWhen: (p, c) {
+                return p.userModel.monthlyBudget != c.userModel.monthlyBudget;
+              },
+              builder: (context, profileState) {
+                return BlocBuilder<HomeBloc, HomeState>(buildWhen: (p, c) {
+                  return p.amountExpenseThisMonth != c.amountExpenseThisMonth;
+                }, builder: (context, homeState) {
+                  final amount = (homeState.amountExpenseThisMonth /
+                          profileState.userModel.monthlyBudget) *
+                      100.0;
+
+                  if (amount > 100) {
+                    return const WarningAmountIcon();
+                  }
+
+                  return nil;
+                });
               },
             ),
           ],

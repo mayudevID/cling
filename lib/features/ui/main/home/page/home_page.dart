@@ -25,7 +25,7 @@ class HomePage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(height: 16.hmea),
-          nameAndNotification(),
+          nameAndNotification(context),
           SizedBox(height: 24.hmea),
           monthlyBudget(context),
           ...tagNameHome(
@@ -146,14 +146,15 @@ class HomePage extends StatelessWidget {
               return MediaQuery.removePadding(
                 context: context,
                 removeTop: true,
-                child: ListView.builder(
+                child: ListView.separated(
                   itemCount: state.listTodayExpenses.length,
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
                   itemBuilder: (context, index) {
-                    return todayExpensesWidget(
-                      state.listTodayExpenses[index],
-                    );
+                    return todayExpensesWidget(state.listTodayExpenses[index]);
+                  },
+                  separatorBuilder: (_, idx) {
+                    return SizedBox(height: 6.hmea);
                   },
                 ),
               );

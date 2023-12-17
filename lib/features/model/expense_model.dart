@@ -39,7 +39,7 @@ class ExpenseModel extends Equatable {
         date: DateTime.parse(json[ExpenseMeta.date]),
         item: json[ExpenseMeta.item],
         amount: json[ExpenseMeta.amount]?.toDouble(),
-        categories: exCategoriesData[json[ExpenseCategoriesMeta.id]],
+        categories: exCategoriesData[json[ExpenseMeta.idCategories]],
       );
 
   Map<String, dynamic> toMap() => {

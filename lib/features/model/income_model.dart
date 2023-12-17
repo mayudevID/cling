@@ -39,7 +39,7 @@ class IncomeModel extends Equatable {
         date: DateTime.parse(json[IncomeMeta.date]),
         desc: json[IncomeMeta.desc],
         amount: json[IncomeMeta.amount]?.toDouble(),
-        incomeSource: inSourceData[json[IncomeSourceMeta.id]],
+        incomeSource: inSourceData[json[IncomeMeta.idIncomeSource]],
       );
 
   Map<String, dynamic> toMap() => {

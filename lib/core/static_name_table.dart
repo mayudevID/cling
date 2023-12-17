@@ -44,3 +44,11 @@ class GoalSavingMeta {
   static const date = 'date_input';
   static const amount = 'amount_input';
 }
+
+class NotificationMeta {
+  static const nameTable = 'notification_meta';
+  static const id = 'notification_id';
+  static const title = 'title';
+  static const desc = 'desc';
+  static const date = 'date';
+}

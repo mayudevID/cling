@@ -1,6 +1,9 @@
+import 'package:cling/core/route.dart';
 import 'package:cling/core/utils.dart';
+import 'package:cling/features/ui/language_currency/lang_currency_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../../resources/gen/assets.gen.dart';
@@ -8,34 +11,97 @@ import '../../../../../resources/gen/fonts.gen.dart';
 import '../../../app_bloc/app_bloc.dart';
 import '../../../language_currency/lang_export.dart';
 
-Widget nameAndNotification() {
+Widget nameAndNotification(BuildContext context) {
+  final dateFormat = context
+      .read<LangCurrencyBloc>()
+      .state
+      .selectedLanguage
+      .value
+      .toLanguageTag();
   return Padding(
-    padding: EdgeInsets.symmetric(horizontal: 24.wmea),
+    padding: EdgeInsets.only(
+      left: 24.wmea,
+      right: 17.wmea,
+    ),
     child: Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Expanded(
-          child: BlocBuilder<AppBloc, AppState>(
-            buildWhen: (p, c) {
-              return p.user?.displayName != c.user?.displayName;
-            },
-            builder: (context, state) {
-              return Text(
-                '${AppLocalizations.of(context)!.goodDay}, ${state.user?.displayName?.split(" ")[0]}!',
-                textAlign: TextAlign.left,
-                style: TextStyle(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              BlocBuilder<AppBloc, AppState>(
+                buildWhen: (p, c) {
+                  return p.user?.displayName != c.user?.displayName;
+                },
+                builder: (context, state) {
+                  return Text(
+                    '${AppLocalizations.of(context)!.goodDay}, ${state.user?.displayName?.split(" ")[0]}!',
+                    textAlign: TextAlign.left,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18.sp,
+                      fontFamily: FontFamily.cabinetGrotesk,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  );
+                },
+              ),
+              Text(
+                DateFormat.yMMMMEEEEd(dateFormat).format(DateTime.now()),
+                style: const TextStyle(
                   color: Colors.white,
-                  fontSize: 18.sp,
                   fontFamily: FontFamily.cabinetGrotesk,
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.w500,
                 ),
-              );
-            },
+              ),
+            ],
           ),
         ),
-        SizedBox(width: 24.wmea),
-        Assets.lib.resources.images.bell.svg()
+        GestureDetector(
+          onTap: () {
+            Navigator.pushNamed(context, RouteName.notification);
+          },
+          child: SizedBox(
+            height: 30.hmea,
+            width: 28.wmea,
+            child: Stack(
+              children: [
+                Positioned(
+                  left: 0,
+                  bottom: 0,
+                  child: Assets.lib.resources.images.bell.svg(
+                    width: 21.91.wmea,
+                    height: 24.hmea,
+                  ),
+                ),
+                Positioned(
+                  top: 0,
+                  right: 0,
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      color: Colors.red,
+                      shape: BoxShape.circle,
+                    ),
+                    padding: const EdgeInsets.symmetric(horizontal: 5),
+                    child: Center(
+                      child: Text(
+                        "4",
+                        style: TextStyle(
+                          fontFamily: FontFamily.cabinetGrotesk,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w800,
+                          fontSize: 8.sp,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        )
       ],
     ),
   );

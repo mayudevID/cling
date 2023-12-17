@@ -285,6 +285,8 @@ class DatabaseRepository {
       whereArgs: [DateTime(now.year, now.month, now.day).toIso8601String()],
     );
 
+    Logger.Red.log(maps);
+
     for (var element in maps) {
       listData.add(ExpenseModel.fromDatabase(element));
     }

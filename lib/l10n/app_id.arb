@@ -287,5 +287,9 @@
   "thisYear": "Tahun Ini",
   "@thisYear": {},
   "thisMonth": "Bulan Ini",
-  "@thisMonth": {}
+  "@thisMonth": {},
+  "notification": "Notifikasi",
+  "@notification": {},
+  "warningMonthlyBudget": "Pengeluaranmu sudah melebihi anggaran bulanan yang ditetapkan!",
+  "@warningMonthlyBudget": {}
 }

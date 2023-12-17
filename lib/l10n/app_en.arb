@@ -287,5 +287,9 @@
   "thisYear": "This Year",
   "@thisYear": {},
   "thisMonth": "This Month ",
-  "@thisMonth": {}
+  "@thisMonth": {},
+  "notification": "Notification",
+  "@notification": {},
+  "warningMonthlyBudget": "Your expenses have exceeded your set monthly budget!",
+  "@warningMonthlyBudget": {}
 }
