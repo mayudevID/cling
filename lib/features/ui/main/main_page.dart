@@ -32,6 +32,14 @@ class MainPage extends StatelessWidget {
           create: (_) => MainBloc(),
         ),
         BlocProvider(
+          create: (_) => ProfileBloc(
+            authRepo: getIt<AuthRepository>(),
+            dbRepo: getIt<DatabaseRepository>(),
+          )
+            ..add(GetProfile())
+            ..add(GetVerifiedStatus()),
+        ),
+        BlocProvider(
           create: (_) => HomeBloc(
             dbRepo: getIt<DatabaseRepository>(),
           )
@@ -48,14 +56,6 @@ class MainPage extends StatelessWidget {
             ..add(GetYearlyIncome())
             ..add(GetIncomeBreakdown())
             ..add(GetExpenseBreakdownAndPieData()),
-        ),
-        BlocProvider(
-          create: (_) => ProfileBloc(
-            authRepo: getIt<AuthRepository>(),
-            dbRepo: getIt<DatabaseRepository>(),
-          )
-            ..add(GetProfile())
-            ..add(GetVerifiedStatus()),
         ),
       ],
       child: const MainPageContent(),

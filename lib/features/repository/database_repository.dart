@@ -7,12 +7,14 @@ import 'package:cling/features/model/expense_model.dart';
 import 'package:cling/features/model/income_model.dart';
 import 'package:cling/features/model/income_source_model.dart';
 import 'package:cling/features/ui/main/statistics/bloc/statistics_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:sqflite/sqflite.dart';
 // ignore: depend_on_referenced_packages
 import 'package:path/path.dart';
 
 import '../../core/init_database.dart';
 import '../model/goal_model.dart';
+import '../model/notification_model_class.dart';
 
 class DatabaseRepository {
   late Database db;
@@ -532,6 +534,35 @@ class DatabaseRepository {
     }
 
     return listData;
+  }
+
+  //* ================ MISC ======================
+
+  Future<bool> checkNotification() async {
+    final now = DateFormat('yyyy-MM').format(DateTime.now());
+    final checkNotification = await db.rawQuery(
+      '''
+        SELECT * FROM ${NotificationMeta.nameTable}
+        WHERE ${NotificationMeta.type} = ?
+        AND strftime('%Y-%m', date(${NotificationMeta.date}) = ?
+      ''',
+      ["0", now],
+    );
+
+    return (checkNotification.isNotEmpty) ? false : true;
+  }
+
+  Future<int> saveNotification(NotificationModelClass data) async {
+    return await db.insert(
+      NotificationMeta.nameTable,
+      {
+        NotificationMeta.title: data.title,
+        NotificationMeta.desc: data.desc,
+        NotificationMeta.date: data.date,
+        NotificationMeta.isRead: data.isRead,
+      },
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
   }
 
   //! ================ DELETE ALL ================

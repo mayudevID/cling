@@ -51,4 +51,6 @@ class NotificationMeta {
   static const title = 'title';
   static const desc = 'desc';
   static const date = 'date';
+  static const type = 'type';
+  static const isRead = 'is_read';
 }

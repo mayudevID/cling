@@ -291,5 +291,7 @@
   "notification": "Notifikasi",
   "@notification": {},
   "warningMonthlyBudget": "Pengeluaranmu sudah melebihi anggaran bulanan yang ditetapkan!",
-  "@warningMonthlyBudget": {}
+  "@warningMonthlyBudget": {},
+  "alert": "Peringatan",
+  "@alert": {}
 }

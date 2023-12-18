@@ -1,10 +1,14 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:cling/core/logger.dart';
+import 'package:cling/core/route.dart';
 import 'package:cling/env.dart';
+import 'package:cling/main.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 
-class NotificationClass {
-  static void init() async {
+class PushNotificationClass {
+  static Future<void> init() async {
     if (kDebugMode) {
       OneSignal.Debug.setLogLevel(OSLogLevel.verbose);
     }
@@ -36,6 +40,62 @@ class NotificationClass {
     OneSignal.Notifications.addForegroundWillDisplayListener((event) {
       event.notification.display();
     });
+
+    //* LOCAL NOTIFICATION
+
+    await AwesomeNotifications().initialize(
+      'resource://drawable/ic_stat_onesignal_default',
+      [
+        NotificationChannel(
+          channelGroupKey: 'basic_channel_group',
+          channelKey: 'basic_channel',
+          channelName: 'Warning Notification',
+          channelDescription:
+              'Warning Notification when user limited monthly budget',
+          defaultColor: Colors.blue,
+          ledColor: Colors.blue,
+        )
+      ],
+      channelGroups: [
+        NotificationChannelGroup(
+            channelGroupKey: 'basic_channel_group',
+            channelGroupName: 'Basic group')
+      ],
+      debug: kDebugMode,
+    );
+  }
+}
+
+class NotificationController {
+  /// Use this method to detect when a new notification or a schedule is created
+  @pragma("vm:entry-point")
+  static Future<void> onNotificationCreatedMethod(
+    ReceivedNotification receivedNotification,
+  ) async {}
+
+  /// Use this method to detect every time that a new notification is displayed
+  @pragma("vm:entry-point")
+  static Future<void> onNotificationDisplayedMethod(
+    ReceivedNotification receivedNotification,
+  ) async {}
+
+  /// Use this method to detect if the user dismissed a notification
+  @pragma("vm:entry-point")
+  static Future<void> onDismissActionReceivedMethod(
+    ReceivedAction receivedAction,
+  ) async {}
+
+  /// Use this method to detect when the user taps on a notification or action button
+  @pragma("vm:entry-point")
+  static Future<void> onActionReceivedMethod(
+    ReceivedAction receivedAction,
+  ) async {
+    // Navigate into pages, avoiding to open the notification details page over another details page already opened
+    MainApp.navKeyGlobal.currentState?.pushNamedAndRemoveUntil(
+        RouteName.notification,
+        (route) =>
+            (route.settings.name != RouteName.notification) || route.isFirst,
+        arguments: receivedAction);
   }
 }
 

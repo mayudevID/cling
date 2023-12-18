@@ -1,3 +1,4 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:cling/core/bloc_observer.dart';
 import 'package:cling/core/notification.dart';
 import 'package:cling/features/repository/settings_repository.dart';
@@ -22,8 +23,10 @@ void main() async {
   Bloc.observer = MyGlobalObserver();
   WidgetsFlutterBinding.ensureInitialized();
 
-  NotificationClass.init();
-  await initSl();
+  await Future.wait([
+    PushNotificationClass.init(),
+    initSl(),
+  ]);
 
   if (kDebugMode) {
     await getIt<FirebaseCrashlytics>().setCrashlyticsCollectionEnabled(false);
@@ -44,10 +47,30 @@ void main() async {
   );
 }
 
-class MainApp extends StatelessWidget {
+class MainApp extends StatefulWidget {
   const MainApp({super.key});
 
   static var navKeyGlobal = GlobalKey<NavigatorState>();
+
+  @override
+  State<MainApp> createState() => _MainAppState();
+}
+
+class _MainAppState extends State<MainApp> {
+  @override
+  void initState() {
+    AwesomeNotifications().setListeners(
+      onActionReceivedMethod: NotificationController.onActionReceivedMethod,
+      onNotificationCreatedMethod:
+          NotificationController.onNotificationCreatedMethod,
+      onNotificationDisplayedMethod:
+          NotificationController.onNotificationDisplayedMethod,
+      onDismissActionReceivedMethod:
+          NotificationController.onDismissActionReceivedMethod,
+    );
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -97,7 +120,7 @@ class MainApp extends StatelessWidget {
   MaterialApp materialApp(LangCurrencyState state) {
     return MaterialApp(
       builder: FToastBuilder(),
-      navigatorKey: navKeyGlobal,
+      navigatorKey: MainApp.navKeyGlobal,
       theme: ThemeData(primaryColor: Colors.white),
       locale: state.selectedLanguage.value,
       supportedLocales: AppLocalizations.supportedLocales,

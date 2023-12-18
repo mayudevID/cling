@@ -99,6 +99,15 @@ FutureOr<void> initDatabaseTable(Database db, int version) async {
             (${GoalMeta.id}) 
          ) 
       '''),
+    db.execute('''
+         CREATE TABLE ${NotificationMeta.nameTable}(
+            ${NotificationMeta.id} INTEGER PRIMARY KEY AUTOINCREMENT,
+            ${NotificationMeta.title} TEXT,
+            ${NotificationMeta.desc} TEXT,
+            ${NotificationMeta.date} TEXT,
+            ${NotificationMeta.isRead} INTEGER
+         ) 
+      '''),
   ]);
 
   for (var i = 0; i < inSourceData.length; i++) {
