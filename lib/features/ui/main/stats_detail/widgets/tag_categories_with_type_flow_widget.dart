@@ -1,3 +1,4 @@
+import 'package:cling/core/logger.dart';
 import 'package:cling/core/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
@@ -11,6 +12,7 @@ Widget tagCategoriesWithTypeFlowWidget(
   String categoryOrSourceIcon,
   String categoryOrSourceClass,
 ) {
+  Logger.Red.log(type);
   return Container(
     padding: EdgeInsets.all(16.hmea),
     decoration: BoxDecoration(

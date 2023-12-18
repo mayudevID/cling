@@ -48,7 +48,10 @@ Widget itemDateAmountExpenseWidget(BuildContext context, ExpenseModel data) {
           ],
         ),
         NominalMoneyFormatter(
-          textStyle: const TextStyle(color: Colors.white),
+          textStyle: const TextStyle(
+            color: Colors.white,
+            fontFamily: FontFamily.cabinetGrotesk,
+          ),
           amount: data.amount,
           decimalDigits: 2,
           isWithName: true,

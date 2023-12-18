@@ -44,7 +44,7 @@ class StatsDetailPerCategoriesPage extends StatelessWidget {
         dbRepo: getIt<DatabaseRepository>(),
       )..add(getData(context)),
       child: StatsDetailPerCategoriesPageContent(
-        type: _detailCategoryModel.type[0],
+        type: _detailCategoryModel.type,
         categoryOrSourceIcon: _detailCategoryModel.categoryStr.substring(
           0,
           _detailCategoryModel.categoryStr.indexOf(" "),

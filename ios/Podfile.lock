@@ -628,6 +628,18 @@ PODS:
     - abseil/base/base_internal
     - abseil/base/config
     - abseil/meta/type_traits
+  - awesome_notifications (0.8.1):
+    - Flutter
+    - IosAwnCore (~> 0.8.0)
+  - awesome_notifications_core (0.0.1):
+    - Flutter
+  - awesome_notifications_fcm (0.8.1):
+    - awesome_notifications
+    - Firebase/Messaging
+    - FirebaseCore
+    - Flutter
+    - IosAwnCore (~> 0.8.0)
+    - IosAwnFcmDist (~> 0.8.0)
   - BoringSSL-GRPC (0.0.24):
     - BoringSSL-GRPC/Implementation (= 0.0.24)
     - BoringSSL-GRPC/Interface (= 0.0.24)
@@ -878,6 +890,11 @@ PODS:
     - gRPC-Core/Interface (= 1.49.1)
   - gRPC-Core/Interface (1.49.1)
   - GTMSessionFetcher/Core (3.1.1)
+  - IosAwnCore (0.8.0)
+  - IosAwnFcmDist (0.8.0):
+    - FirebaseCore
+    - FirebaseMessaging
+    - IosAwnCore (~> 0.8.0)
   - leveldb-library (1.22.2)
   - nanopb (2.30909.0):
     - nanopb/decode (= 2.30909.0)
@@ -946,6 +963,9 @@ PODS:
     - Flutter
 
 DEPENDENCIES:
+  - awesome_notifications (from `.symlinks/plugins/awesome_notifications/ios`)
+  - awesome_notifications_core (from `.symlinks/plugins/awesome_notifications_core/ios`)
+  - awesome_notifications_fcm (from `.symlinks/plugins/awesome_notifications_fcm/ios`)
   - cloud_firestore (from `.symlinks/plugins/cloud_firestore/ios`)
   - connectivity_plus (from `.symlinks/plugins/connectivity_plus/ios`)
   - firebase_analytics (from `.symlinks/plugins/firebase_analytics/ios`)
@@ -988,6 +1008,8 @@ SPEC REPOS:
     - "gRPC-C++"
     - gRPC-Core
     - GTMSessionFetcher
+    - IosAwnCore
+    - IosAwnFcmDist
     - leveldb-library
     - nanopb
     - OneSignalXCFramework
@@ -998,6 +1020,12 @@ SPEC REPOS:
     - Toast
 
 EXTERNAL SOURCES:
+  awesome_notifications:
+    :path: ".symlinks/plugins/awesome_notifications/ios"
+  awesome_notifications_core:
+    :path: ".symlinks/plugins/awesome_notifications_core/ios"
+  awesome_notifications_fcm:
+    :path: ".symlinks/plugins/awesome_notifications_fcm/ios"
   cloud_firestore:
     :path: ".symlinks/plugins/cloud_firestore/ios"
   connectivity_plus:
@@ -1031,6 +1059,9 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   abseil: 926fb7a82dc6d2b8e1f2ed7f3a718bce691d1e46
+  awesome_notifications: db394d2e061e4583ba0f738ddea611e3986cc3fb
+  awesome_notifications_core: d02eed89738fa362d56cbd372850e9adcd2c6bef
+  awesome_notifications_fcm: 554a9088f81a91dbe8a318abee6b48f43e4a9417
   BoringSSL-GRPC: 3175b25143e648463a56daeaaa499c6cb86dad33
   cloud_firestore: d2707a9ead952efd2a89e82347e46dc4b9c32e8d
   connectivity_plus: bf0076dd84a130856aa636df1c71ccaff908fa1d
@@ -1063,6 +1094,8 @@ SPEC CHECKSUMS:
   "gRPC-C++": 2df8cba576898bdacd29f0266d5236fa0e26ba6a
   gRPC-Core: a21a60aefc08c68c247b439a9ef97174b0c54f96
   GTMSessionFetcher: e8647203b65cee28c5f73d0f473d096653945e72
+  IosAwnCore: ed1b2b6d84962a758354dbacd9ce525c72ce28a9
+  IosAwnFcmDist: 0ac4da8f9ef8f2db9e5ec5d0c10c8db793ce447d
   leveldb-library: f03246171cce0484482ec291f88b6d563699ee06
   nanopb: b552cce312b6c8484180ef47159bc0f65a1f0431
   onesignal_flutter: 2c2f01520fa953d93fad18162538cc98d6da009b
@@ -1077,6 +1110,6 @@ SPEC CHECKSUMS:
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
   url_launcher_ios: bf5ce03e0e2088bad9cc378ea97fa0ed5b49673b
 
-PODFILE CHECKSUM: e69ac68a2d12bb3f6c7b26f69ae46a3619c8f1d6
+PODFILE CHECKSUM: 0975bb30da9d983ac29533a15b9127644d551f4f
 
 COCOAPODS: 1.14.3

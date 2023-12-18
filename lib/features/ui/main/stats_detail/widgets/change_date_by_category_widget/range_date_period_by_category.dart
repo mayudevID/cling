@@ -1,7 +1,6 @@
 import 'package:cling/core/utils.dart';
 import 'package:cling/features/ui/language_currency/lang_export.dart';
-
-import 'package:cling/features/ui/main/statistics/bloc/statistics_bloc.dart';
+import 'package:cling/features/ui/main/stats_detail/bloc/stats_detail_bloc.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -22,7 +21,7 @@ Widget rangeDatePeriodByCategory(BuildContext mainContext) {
     },
   );
 
-  String dateFormatPeriod(StatisticsState state) {
+  String dateFormatPeriod(StatsDetailState state) {
     DateFormat dateFormat;
 
     switch (state.dateRangePickerView) {
@@ -61,7 +60,7 @@ Widget rangeDatePeriodByCategory(BuildContext mainContext) {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          BlocBuilder<StatisticsBloc, StatisticsState>(
+          BlocBuilder<StatsDetailBloc, StatsDetailState>(
             buildWhen: (p, c) {
               return (p.startDate != c.startDate) ||
                   (p.endDate != c.endDate) ||
@@ -101,8 +100,8 @@ void pickDateRangeBottomSheet(BuildContext mainContext) {
     ),
     builder: (context) {
       return BlocProvider.value(
-        value: BlocProvider.of<StatisticsBloc>(mainContext),
-        child: BlocBuilder<StatisticsBloc, StatisticsState>(
+        value: BlocProvider.of<StatsDetailBloc>(mainContext),
+        child: BlocBuilder<StatsDetailBloc, StatsDetailState>(
           buildWhen: (p, c) {
             return p.dateRangePickerView != c.dateRangePickerView;
           },
@@ -176,7 +175,7 @@ void pickDateRangeBottomSheet(BuildContext mainContext) {
                       }).toList(),
                       onChanged: (value) async {
                         mainContext
-                            .read<StatisticsBloc>()
+                            .read<StatsDetailBloc>()
                             .add(ChangeDateRangePickerView(value!));
                         Navigator.pop(context);
                         await Future.delayed(const Duration(milliseconds: 150));
@@ -203,7 +202,7 @@ void pickDateRangeBottomSheet(BuildContext mainContext) {
                       showActionButtons: true,
                       onSubmit: (value) {
                         final val = value as PickerDateRange;
-                        mainContext.read<StatisticsBloc>().add(
+                        mainContext.read<StatsDetailBloc>().add(
                               ChangeDateForPeriod(val.startDate, val.endDate),
                             );
                         Navigator.pop(context);

@@ -8,6 +8,9 @@ environment:
 
 dependencies:
   auto_size_text_field: ^2.2.1
+  awesome_notifications_core: ^0.8.1
+  awesome_notifications: any 
+  awesome_notifications_fcm: any
   bloc: ^8.1.2
   cloud_firestore: ^4.9.2
   connectivity_plus: ^5.0.0
@@ -48,6 +51,9 @@ dependencies:
   syncfusion_flutter_charts: ^23.1.39
   syncfusion_flutter_datepicker: ^23.2.6
   transitioned_indexed_stack: ^1.0.2
+
+dependency_overrides:
+  built_value: 8.6.0
 
 dev_dependencies:
   arb_generator: ^0.0.3
