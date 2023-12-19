@@ -4,6 +4,7 @@ import 'package:cling/features/ui/language_currency/lang_currency_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:nil/nil.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../../resources/gen/assets.gen.dart';
@@ -19,6 +20,7 @@ Widget nameAndNotification(BuildContext context) {
       .selectedLanguage
       .value
       .toLanguageTag();
+
   return Padding(
     padding: EdgeInsets.only(
       left: 24.wmea,
@@ -82,6 +84,10 @@ Widget nameAndNotification(BuildContext context) {
                     return previous.totalNotif != current.totalNotif;
                   },
                   builder: (context, state) {
+                    if (state.totalNotif == 0) {
+                      return nil;
+                    }
+
                     return Positioned(
                       top: 0,
                       right: 0,

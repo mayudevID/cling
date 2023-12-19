@@ -10,3 +10,5 @@ sealed class NotificationEvent extends Equatable {
 class GetNotificationCount extends NotificationEvent {}
 
 class GetNotificationList extends NotificationEvent {}
+
+class ClearList extends NotificationEvent {}

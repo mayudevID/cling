@@ -7,6 +7,7 @@ import 'package:cling/features/model/expense_model.dart';
 import 'package:cling/features/model/goal_model.dart';
 import 'package:cling/features/repository/database_repository.dart';
 import 'package:cling/features/ui/language_currency/lang_export.dart';
+import 'package:cling/features/ui/main/notification/bloc/notification_bloc.dart';
 import 'package:cling/features/ui/main/profile/bloc/profile_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -65,6 +66,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
             body: AppLocalizations.of(mainContext)!.warningMonthlyBudget,
           ),
         );
+        mainContext.read<NotificationBloc>().add(GetNotificationCount());
       }
     }
   }

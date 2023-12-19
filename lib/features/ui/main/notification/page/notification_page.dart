@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:cling/core/utils.dart';
 import 'package:cling/features/ui/language_currency/lang_export.dart';
 import 'package:cling/features/ui/main/main_page.dart';
@@ -10,28 +12,17 @@ import '../../../../../resources/gen/fonts.gen.dart';
 import '../bloc/notification_bloc.dart';
 import '../widgets/notification_widget.dart';
 
-class NotificationPage extends StatefulWidget {
-  const NotificationPage({super.key});
+class NotificationPage extends StatelessWidget {
+  NotificationPage({super.key});
 
-  @override
-  State<NotificationPage> createState() => _NotificationPageState();
-}
-
-class _NotificationPageState extends State<NotificationPage> {
-  @override
-  void initState() {
-    BlocProvider.of<NotificationBloc>(MainPage.navKeyMain.currentContext!)
-        .add(GetNotificationList());
-    super.initState();
-  }
+  var mainContext = MainPage.navKeyMain.currentContext!;
 
   @override
   Widget build(BuildContext context) {
     return PopScope(
       canPop: true,
       onPopInvoked: (didPop) {
-        BlocProvider.of<NotificationBloc>(MainPage.navKeyMain.currentContext!)
-            .add(GetNotificationList());
+        BlocProvider.of<NotificationBloc>(mainContext).add(ClearList());
       },
       child: SafeArea(
         child: Scaffold(
@@ -67,19 +58,10 @@ class _NotificationPageState extends State<NotificationPage> {
                   child: MediaQuery.removePadding(
                     context: context,
                     removeTop: true,
-                    child: BlocBuilder<NotificationBloc, NotificationState>(
-                      buildWhen: (p, c) {
-                        return p.listNotif != c.listNotif;
-                      },
-                      builder: (context, state) {
-                        return ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: 0,
-                          itemBuilder: (context, _) {
-                            return notificationWidget();
-                          },
-                        );
-                      },
+                    child: BlocProvider.value(
+                      value: BlocProvider.of<NotificationBloc>(mainContext)
+                        ..add(GetNotificationList()),
+                      child: listViewBuilder(),
                     ),
                   ),
                 ),
@@ -88,6 +70,23 @@ class _NotificationPageState extends State<NotificationPage> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget listViewBuilder() {
+    return BlocBuilder<NotificationBloc, NotificationState>(
+      buildWhen: (p, c) {
+        return p.listNotif != c.listNotif;
+      },
+      builder: (context, state) {
+        return ListView.builder(
+          shrinkWrap: true,
+          itemCount: state.listNotif.length,
+          itemBuilder: (context, idx) {
+            return notificationWidget(context, state.listNotif[idx]);
+          },
+        );
+      },
     );
   }
 }

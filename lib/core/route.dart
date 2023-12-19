@@ -97,7 +97,7 @@ class RouteGen {
         );
       case RouteName.notification:
         return MaterialPageRoute(
-          builder: (_) => const NotificationPage(),
+          builder: (_) => NotificationPage(),
         );
 
       default:

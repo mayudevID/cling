@@ -12,6 +12,7 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
         super(NotificationState()) {
     on<GetNotificationCount>(_getNotificationCount);
     on<GetNotificationList>(_getNotificationList);
+    on<ClearList>(_clearList);
   }
 
   final DatabaseRepository _dbRepo;
@@ -28,5 +29,9 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
         listNotif: (dataList.isNotEmpty) ? dataList : List.empty(),
       ),
     );
+  }
+
+  void _clearList(event, emit) async {
+    emit(state.copyWith(listNotif: List.empty()));
   }
 }
