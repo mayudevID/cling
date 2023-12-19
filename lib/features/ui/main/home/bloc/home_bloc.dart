@@ -59,6 +59,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
           content: NotificationContent(
             id: id,
             channelKey: 'basic_channel',
+            category: NotificationCategory.Error,
             actionType: ActionType.Default,
             title: AppLocalizations.of(mainContext)!.alert,
             body: AppLocalizations.of(mainContext)!.warningMonthlyBudget,

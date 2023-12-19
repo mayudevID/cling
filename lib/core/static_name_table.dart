@@ -46,7 +46,7 @@ class GoalSavingMeta {
 }
 
 class NotificationMeta {
-  static const nameTable = 'notification_meta';
+  static const nameTable = 'notification_table';
   static const id = 'notification_id';
   static const title = 'title';
   static const desc = 'desc';

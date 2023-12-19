@@ -1,20 +1,19 @@
 import 'dart:async';
-
 import 'package:cling/core/logger.dart';
 import 'package:cling/core/static_name_table.dart';
-import 'package:cling/features/model/expense_categories_model.dart';
-import 'package:cling/features/model/expense_model.dart';
-import 'package:cling/features/model/income_model.dart';
-import 'package:cling/features/model/income_source_model.dart';
-import 'package:cling/features/ui/main/statistics/bloc/statistics_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:sqflite/sqflite.dart';
 // ignore: depend_on_referenced_packages
 import 'package:path/path.dart';
 
 import '../../core/init_database.dart';
+import '../model/expense_categories_model.dart';
+import '../model/expense_model.dart';
 import '../model/goal_model.dart';
+import '../model/income_model.dart';
+import '../model/income_source_model.dart';
 import '../model/notification_model_class.dart';
+import '../ui/main/statistics/bloc/statistics_bloc.dart';
 
 class DatabaseRepository {
   late Database db;
@@ -538,15 +537,47 @@ class DatabaseRepository {
 
   //* ================ MISC ======================
 
+  Future<int> getNotificationCount() async {
+    final total = await db.rawQuery(
+      '''
+      SELECT COUNT(*) AS unread_count
+      FROM ${NotificationMeta.nameTable}
+      WHERE ${NotificationMeta.isRead} = ?
+    ''',
+      [0],
+    );
+
+    return total[0]['unread_count'] as int;
+  }
+
+  Future<List<NotificationModelClass>> getNotificationList() async {
+    List<NotificationModelClass> dataList = [];
+    List<Map<String, dynamic>> maps = await db.query(
+      NotificationMeta.nameTable,
+    );
+    for (var data in maps) {
+      dataList.add(
+        NotificationModelClass(
+          title: data[NotificationMeta.title],
+          desc: data[NotificationMeta.desc],
+          date: DateTime.parse(data[NotificationMeta.date]),
+          isRead: (data[NotificationMeta.isRead] == 0) ? false : true,
+          type: data[NotificationMeta.type],
+        ),
+      );
+    }
+    return dataList;
+  }
+
   Future<bool> checkNotification() async {
     final now = DateFormat('yyyy-MM').format(DateTime.now());
     final checkNotification = await db.rawQuery(
       '''
         SELECT * FROM ${NotificationMeta.nameTable}
         WHERE ${NotificationMeta.type} = ?
-        AND strftime('%Y-%m', date(${NotificationMeta.date}) = ?
+        AND strftime('%Y-%m', date(${NotificationMeta.date})) = ?
       ''',
-      ["0", now],
+      [0, now],
     );
 
     return (checkNotification.isNotEmpty) ? false : true;
@@ -558,8 +589,9 @@ class DatabaseRepository {
       {
         NotificationMeta.title: data.title,
         NotificationMeta.desc: data.desc,
-        NotificationMeta.date: data.date,
-        NotificationMeta.isRead: data.isRead,
+        NotificationMeta.date: data.date.toIso8601String(),
+        NotificationMeta.type: data.type,
+        NotificationMeta.isRead: 0,
       },
       conflictAlgorithm: ConflictAlgorithm.replace,
     );

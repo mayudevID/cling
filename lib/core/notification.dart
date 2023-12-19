@@ -50,6 +50,7 @@ class PushNotificationClass {
           channelGroupKey: 'basic_channel_group',
           channelKey: 'basic_channel',
           channelName: 'Warning Notification',
+          importance: NotificationImportance.Max,
           channelDescription:
               'Warning Notification when user limited monthly budget',
           defaultColor: Colors.blue,
@@ -92,10 +93,11 @@ class NotificationController {
   ) async {
     // Navigate into pages, avoiding to open the notification details page over another details page already opened
     MainApp.navKeyGlobal.currentState?.pushNamedAndRemoveUntil(
-        RouteName.notification,
-        (route) =>
-            (route.settings.name != RouteName.notification) || route.isFirst,
-        arguments: receivedAction);
+      RouteName.notification,
+      (route) =>
+          (route.settings.name != RouteName.notification) || route.isFirst,
+      arguments: receivedAction,
+    );
   }
 }
 

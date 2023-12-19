@@ -1,7 +1,3 @@
-import 'package:cling/features/repository/auth_repository.dart';
-import 'package:cling/features/ui/main/profile/bloc/profile_bloc.dart';
-import 'package:cling/features/ui/main/profile/page/profile_page.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
@@ -10,12 +6,16 @@ import 'package:sizer/sizer.dart';
 import 'package:transitioned_indexed_stack/transitioned_indexed_stack.dart';
 
 import '../../../injection.dart';
+import '../../repository/auth_repository.dart';
 import '../../repository/database_repository.dart';
 import 'home/bloc/home_bloc.dart';
 import 'home/page/home_page.dart';
 import 'main_bloc/main_bloc.dart';
 import 'main_widget/custom_fab.dart';
 import 'main_widget/custom_nav_bar.dart';
+import 'notification/bloc/notification_bloc.dart';
+import 'profile/bloc/profile_bloc.dart';
+import 'profile/page/profile_page.dart';
 import 'statistics/bloc/statistics_bloc.dart';
 import 'statistics/page/statistics_page.dart';
 
@@ -30,6 +30,11 @@ class MainPage extends StatelessWidget {
       providers: [
         BlocProvider(
           create: (_) => MainBloc(),
+        ),
+        BlocProvider(
+          create: (_) => NotificationBloc(
+            dbRepo: getIt<DatabaseRepository>(),
+          )..add(GetNotificationCount()),
         ),
         BlocProvider(
           create: (_) => ProfileBloc(

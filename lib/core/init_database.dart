@@ -104,6 +104,7 @@ FutureOr<void> initDatabaseTable(Database db, int version) async {
             ${NotificationMeta.id} INTEGER PRIMARY KEY AUTOINCREMENT,
             ${NotificationMeta.title} TEXT,
             ${NotificationMeta.desc} TEXT,
+            ${NotificationMeta.type} INTEGER,
             ${NotificationMeta.date} TEXT,
             ${NotificationMeta.isRead} INTEGER
          ) 

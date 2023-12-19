@@ -10,6 +10,7 @@ import '../../../../../resources/gen/assets.gen.dart';
 import '../../../../../resources/gen/fonts.gen.dart';
 import '../../../app_bloc/app_bloc.dart';
 import '../../../language_currency/lang_export.dart';
+import '../../notification/bloc/notification_bloc.dart';
 
 Widget nameAndNotification(BuildContext context) {
   final dateFormat = context
@@ -76,27 +77,34 @@ Widget nameAndNotification(BuildContext context) {
                     height: 24.hmea,
                   ),
                 ),
-                Positioned(
-                  top: 0,
-                  right: 0,
-                  child: Container(
-                    decoration: const BoxDecoration(
-                      color: Colors.red,
-                      shape: BoxShape.circle,
-                    ),
-                    padding: const EdgeInsets.symmetric(horizontal: 5),
-                    child: Center(
-                      child: Text(
-                        "4",
-                        style: TextStyle(
-                          fontFamily: FontFamily.cabinetGrotesk,
-                          color: Colors.white,
-                          fontWeight: FontWeight.w800,
-                          fontSize: 8.sp,
+                BlocBuilder<NotificationBloc, NotificationState>(
+                  buildWhen: (previous, current) {
+                    return previous.totalNotif != current.totalNotif;
+                  },
+                  builder: (context, state) {
+                    return Positioned(
+                      top: 0,
+                      right: 0,
+                      child: Container(
+                        decoration: const BoxDecoration(
+                          color: Colors.red,
+                          shape: BoxShape.circle,
+                        ),
+                        padding: const EdgeInsets.symmetric(horizontal: 5),
+                        child: Center(
+                          child: Text(
+                            state.totalNotif.toString(),
+                            style: TextStyle(
+                              fontFamily: FontFamily.cabinetGrotesk,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w800,
+                              fontSize: 8.sp,
+                            ),
+                          ),
                         ),
                       ),
-                    ),
-                  ),
+                    );
+                  },
                 ),
               ],
             ),
