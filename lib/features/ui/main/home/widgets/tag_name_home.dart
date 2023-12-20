@@ -13,9 +13,7 @@ List<Widget> tagNameHome(
   bool withDate = false,
 }) {
   return [
-    SizedBox(
-      height: 24.hmea,
-    ),
+    SizedBox(height: 24.hmea),
     Padding(
       padding: EdgeInsets.symmetric(horizontal: 24.wmea),
       child: RichText(

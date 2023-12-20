@@ -1,6 +1,5 @@
-import 'package:cling/core/route.dart';
+import 'package:cling/core/common_widget.dart';
 import 'package:cling/core/utils.dart';
-import 'package:cling/resources/gen/assets.gen.dart';
 import 'package:cling/resources/gen/fonts.gen.dart';
 
 import 'package:flutter/material.dart';
@@ -8,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
 import '../../../language_currency/lang_export.dart';
 import '../bloc/home_bloc.dart';
+import '../widgets/empty_goal_widget.dart';
 import '../widgets/income_and_expense.dart';
 import '../widgets/monthy_budget.dart';
 import '../widgets/name_and_notification.dart';
@@ -27,12 +27,57 @@ class HomePage extends StatelessWidget {
           SizedBox(height: 16.hmea),
           nameAndNotification(context),
           SizedBox(height: 24.hmea),
-          monthlyBudget(context),
+          Container(
+            margin: EdgeInsets.symmetric(horizontal: 24.wmea),
+            padding: EdgeInsets.symmetric(
+              horizontal: 16.wmea,
+              vertical: 16.hmea,
+            ),
+            decoration: BoxDecoration(
+              //color: Colors.white,
+              color: const Color(0x3D787880),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Total Balance",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 10.sp,
+                    fontFamily: FontFamily.cabinetGrotesk,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                BlocBuilder<HomeBloc, HomeState>(
+                  buildWhen: (p, c) {
+                    return p.totalBalance != c.totalBalance;
+                  },
+                  builder: (context, state) {
+                    return NominalMoneyFormatter(
+                      textStyle: TextStyle(
+                        color: Colors.white,
+                        fontSize: 14.sp,
+                        fontFamily: FontFamily.cabinetGrotesk,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      amount: state.totalBalance,
+                      decimalDigits: 2,
+                      isWithName: true,
+                    );
+                  },
+                ),
+              ],
+            ),
+          ),
           ...tagNameHome(
             context,
             AppLocalizations.of(context)!.overview,
             withDate: true,
           ),
+          monthlyBudget(context),
+          SizedBox(height: 16.hmea),
           incomeAndExpense(context),
           ...tagNameHome(
             context,
@@ -44,64 +89,7 @@ class HomePage extends StatelessWidget {
             },
             builder: (context, state) {
               if (state.listGoals.isEmpty) {
-                return Container(
-                  margin: EdgeInsets.symmetric(horizontal: 24.wmea),
-                  decoration: BoxDecoration(
-                    color: const Color(0x3D787880),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        height: 16.hmea,
-                      ),
-                      Text(
-                        AppLocalizations.of(context)!.goalEmpty,
-                        style: TextStyle(
-                          fontFamily: FontFamily.cabinetGrotesk,
-                          fontSize: 10.sp,
-                          color: Colors.white,
-                        ),
-                      ),
-                      SizedBox(
-                        height: 16.hmea,
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.pushNamed(
-                            context,
-                            RouteName.addGoal,
-                          );
-                        },
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Assets.lib.resources.images.plus.svg(
-                              // ignore: deprecated_member_use_from_same_package
-                              color: Colors.white,
-                              width: 14.wmea,
-                            ),
-                            SizedBox(
-                              width: 4.wmea,
-                            ),
-                            Text(
-                              AppLocalizations.of(context)!.addGoals,
-                              style: TextStyle(
-                                fontFamily: FontFamily.cabinetGrotesk,
-                                fontSize: 10.sp,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        height: 16.hmea,
-                      ),
-                    ],
-                  ),
-                );
+                return emptyGoalsWidget(context);
               }
 
               return SingleChildScrollView(

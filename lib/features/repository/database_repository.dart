@@ -537,6 +537,48 @@ class DatabaseRepository {
 
   //* ================ MISC ======================
 
+  Future<int> getTotalBalance() async {
+    final result = await Future.wait([
+      db.rawQuery(
+        '''
+        SELECT SUM(${IncomeMeta.amount}) AS TotalIncome
+        FROM ${IncomeMeta.nameTable}
+      ''',
+      ),
+      db.rawQuery(
+        '''
+        SELECT SUM(${ExpenseMeta.amount}) AS TotalExpense
+        FROM ${ExpenseMeta.nameTable}
+      ''',
+      ),
+    ]);
+    final income = (result[0][0]['TotalIncome'] ?? 0) as int;
+    final expense = (result[1][0]['TotalExpense'] ?? 0) as int;
+
+    return income - expense;
+  }
+
+  Future<void> updateNotificationIsRead(int id) async {
+    await db.rawQuery(
+      '''
+        UPDATE ${NotificationMeta.nameTable}
+        SET ${NotificationMeta.isRead} = ?
+        WHERE ${NotificationMeta.id} = ?
+      ''',
+      [1, id],
+    );
+  }
+
+  Future<void> updateNotificationIsReadAll() async {
+    await db.rawQuery(
+      '''
+        UPDATE ${NotificationMeta.nameTable}
+        SET ${NotificationMeta.isRead} = ?
+      ''',
+      [1],
+    );
+  }
+
   Future<int> getNotificationCount() async {
     final total = await db.rawQuery(
       '''
@@ -558,6 +600,7 @@ class DatabaseRepository {
     for (var data in maps) {
       dataList.add(
         NotificationModelClass(
+          id: data[NotificationMeta.id],
           title: data[NotificationMeta.title],
           desc: data[NotificationMeta.desc],
           date: DateTime.parse(data[NotificationMeta.date]),
@@ -575,7 +618,7 @@ class DatabaseRepository {
       '''
         SELECT * FROM ${NotificationMeta.nameTable}
         WHERE ${NotificationMeta.type} = ?
-        AND strftime('%Y-%m', date(${NotificationMeta.date})) = ?
+        AND strftime('%Y-%m', ${NotificationMeta.date}) = ?
       ''',
       [0, now],
     );
@@ -604,6 +647,8 @@ class DatabaseRepository {
       db.delete(IncomeMeta.nameTable),
       db.delete(ExpenseMeta.nameTable),
       db.delete(GoalMeta.nameTable),
+      db.delete(GoalSavingMeta.nameTable),
+      db.delete(NotificationMeta.nameTable),
     ]);
   }
 }

@@ -1,4 +1,4 @@
-// ignore_for_file: must_be_immutable
+// ignore_for_file: must_be_immutable, use_build_context_synchronously
 
 import 'package:cling/core/utils.dart';
 import 'package:cling/features/ui/language_currency/lang_export.dart';
@@ -21,7 +21,8 @@ class NotificationPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return PopScope(
       canPop: true,
-      onPopInvoked: (didPop) {
+      onPopInvoked: (didPop) async {
+        await Future.delayed(const Duration(milliseconds: 750));
         BlocProvider.of<NotificationBloc>(mainContext).add(ClearList());
       },
       child: SafeArea(
@@ -51,6 +52,21 @@ class NotificationPage extends StatelessWidget {
                         fontWeight: FontWeight.w700,
                       ),
                     ),
+                    const Spacer(),
+                    GestureDetector(
+                      onTap: () {
+                        BlocProvider.of<NotificationBloc>(mainContext)
+                            .add(MarkNotificationReadAll());
+                      },
+                      child: Text(
+                        AppLocalizations.of(context)!.markReadAll,
+                        style: TextStyle(
+                          color: Colors.blue[100],
+                          fontFamily: FontFamily.cabinetGrotesk,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    )
                   ],
                 ),
                 SizedBox(height: 16.hmea),
@@ -83,7 +99,11 @@ class NotificationPage extends StatelessWidget {
           shrinkWrap: true,
           itemCount: state.listNotif.length,
           itemBuilder: (context, idx) {
-            return notificationWidget(context, state.listNotif[idx]);
+            return notificationWidget(
+              context,
+              idx,
+              state.listNotif[idx],
+            );
           },
         );
       },

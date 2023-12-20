@@ -12,6 +12,12 @@ import '../enum_range_date.dart';
 import '../set_name.dart';
 
 Widget changeRangeDate(BuildContext context) {
+  String periodCheck(StatisticsState state) {
+    return (state.rangeDate == RangeDate.period)
+        ? "(${convertEnumToDetailDate(context, state.dateRangePickerView)})"
+        : "";
+  }
+
   return DropdownButtonHideUnderline(
     child: DropdownButton2(
       customButton: Container(
@@ -31,7 +37,7 @@ Widget changeRangeDate(BuildContext context) {
               },
               builder: (context, state) {
                 return Text(
-                  '${setName(context, state.rangeDate)} - ${(state.rangeDate == RangeDate.period) ? convertEnumToDetailDate(context, state.dateRangePickerView) : ""}',
+                  '${setName(context, state.rangeDate)} ${periodCheck(state)}',
                   style: TextStyle(
                     color: Colors.white,
                     fontFamily: FontFamily.cabinetGrotesk,

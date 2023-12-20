@@ -292,6 +292,8 @@
   "@notification": {},
   "warningMonthlyBudget": "Your expenses have exceeded your set monthly budget!",
   "@warningMonthlyBudget": {},
-  "alert": "Warning",
-  "@alert": {}
+  "alert": "Warning!",
+  "@alert": {},
+  "markReadAll": "Mark read all",
+  "@markReadAll": {}
 }

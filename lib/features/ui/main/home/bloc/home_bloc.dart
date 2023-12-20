@@ -3,17 +3,17 @@
 import 'dart:math';
 
 import 'package:awesome_notifications/awesome_notifications.dart';
-import 'package:cling/features/model/expense_model.dart';
-import 'package:cling/features/model/goal_model.dart';
-import 'package:cling/features/repository/database_repository.dart';
-import 'package:cling/features/ui/language_currency/lang_export.dart';
-import 'package:cling/features/ui/main/notification/bloc/notification_bloc.dart';
-import 'package:cling/features/ui/main/profile/bloc/profile_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../model/expense_model.dart';
+import '../../../../model/goal_model.dart';
 import '../../../../model/notification_model_class.dart';
+import '../../../../repository/database_repository.dart';
+import '../../../language_currency/lang_export.dart';
 import '../../main_page.dart';
+import '../../notification/bloc/notification_bloc.dart';
+import '../../profile/bloc/profile_bloc.dart';
 
 part 'home_event.dart';
 part 'home_state.dart';
@@ -33,11 +33,17 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   var mainContext = MainPage.navKeyMain.currentContext!;
 
   void _getTotalIncomeExpenseCurrMonth(_, emit) async {
-    final amount = await _dbRepo.getTotalIncomeExpenseCurrMonth();
+    final result = await Future.wait([
+      _dbRepo.getTotalIncomeExpenseCurrMonth(),
+      _dbRepo.getTotalBalance(),
+    ]);
+    final amount = result[0] as Map<String, double?>;
+    final totalBalance = result[1] as int;
     emit(
       state.copyWith(
         amountIncomeThisMonth: amount['income'],
         amountExpenseThisMonth: amount['expense'],
+        totalBalance: totalBalance.toDouble(),
       ),
     );
 
