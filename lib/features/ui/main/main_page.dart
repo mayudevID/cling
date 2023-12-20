@@ -1,3 +1,4 @@
+import 'package:cling/features/repository/settings_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
@@ -40,6 +41,7 @@ class MainPage extends StatelessWidget {
           create: (_) => ProfileBloc(
             authRepo: getIt<AuthRepository>(),
             dbRepo: getIt<DatabaseRepository>(),
+            settingsRepo: getIt<SettingsRepository>(),
           )
             ..add(GetProfile())
             ..add(GetVerifiedStatus()),

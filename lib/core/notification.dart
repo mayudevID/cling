@@ -2,9 +2,11 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:cling/core/logger.dart';
 import 'package:cling/core/route.dart';
 import 'package:cling/env.dart';
+import 'package:cling/features/ui/app_bloc/app_bloc.dart';
 import 'package:cling/main.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 class PushNotificationClass {
@@ -92,12 +94,15 @@ class NotificationController {
     ReceivedAction receivedAction,
   ) async {
     // Navigate into pages, avoiding to open the notification details page over another details page already opened
-    MainApp.navKeyGlobal.currentState?.pushNamedAndRemoveUntil(
-      RouteName.notification,
-      (route) =>
-          (route.settings.name != RouteName.notification) || route.isFirst,
-      arguments: receivedAction,
-    );
+    var context = MainApp.navKeyGlobal.currentContext;
+    if (context != null && context.read<AppBloc>().isRedirect) {
+      MainApp.navKeyGlobal.currentState?.pushNamedAndRemoveUntil(
+        RouteName.notification,
+        (route) =>
+            (route.settings.name != RouteName.notification) || route.isFirst,
+        arguments: receivedAction,
+      );
+    }
   }
 }
 

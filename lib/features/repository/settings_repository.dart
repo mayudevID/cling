@@ -1,19 +1,29 @@
+import 'dart:io';
+import 'package:cling/core/logger.dart';
+import 'package:cling/features/repository/database_repository.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sqflite/sqflite.dart';
 import '../model/user_model.dart';
+// ignore: depend_on_referenced_packages
+import 'package:path/path.dart';
 
 class SettingsRepository {
   final FirebaseAuth _firebaseAuth;
   final FirebaseFirestore _firestore;
+  final FirebaseStorage _firebaseStorage;
   final SharedPreferences _cache;
 
   SettingsRepository({
     required FirebaseAuth firebaseAuth,
     required FirebaseFirestore firestore,
+    required FirebaseStorage firebaseStorage,
     required SharedPreferences cache,
   })  : _cache = cache,
         _firestore = firestore,
+        _firebaseStorage = firebaseStorage,
         _firebaseAuth = firebaseAuth;
 
   static const userCacheKey = '__user_cache_key__';
@@ -54,7 +64,7 @@ class SettingsRepository {
     int monIncomeNew = monthlyIncome ?? userData.monthlyIncome.toInt();
     int monBudgetNew = monthlyBudget ?? userData.monthlyBudget.toInt();
 
-    final now = DateTime.now().toIso8601String();
+    final now = DateTime.now();
 
     await _firestore
         .collection("users")
@@ -62,29 +72,87 @@ class SettingsRepository {
         .update({
       "monthly_income": monIncomeNew,
       "monthly_budget": monBudgetNew,
-      "updated_at": now,
+      "updated_at": now.toIso8601String(),
     });
 
     final newUserData = userData.copyWith(
       monthlyBudget: monBudgetNew.toDouble(),
       monthlyIncome: monIncomeNew.toDouble(),
+      updatedAt: now,
     );
+
     await _cache.setString(
       userCacheKey,
       userModelToMap(newUserData),
     );
   }
 
-  Future<void> editProfileName({String? newName}) async {
+  Future<DateTime> editBackupUrl({
+    required String url,
+    required UserModel userModel,
+  }) async {
+    final userData = userModel;
+    final now = DateTime.now();
+
+    await _firestore
+        .collection("users")
+        .doc(_firebaseAuth.currentUser!.uid)
+        .update({
+      "backup_url": url,
+      "last_backup_time": now.toIso8601String(),
+    });
+
+    final newUserData = userData.copyWith(
+      backupUrl: url,
+      lastBackupTime: now,
+    );
+
+    await _cache.setString(
+      userCacheKey,
+      userModelToMap(newUserData),
+    );
+
+    return now;
+  }
+
+  Future<void> editProfileName({required String newName}) async {
     await _firebaseAuth.currentUser!.updateDisplayName(newName);
     await _firebaseAuth.currentUser!.reload();
   }
 
-  Future<void> editProfileEmail({String? newEmail}) async {
-    await _firebaseAuth.currentUser!.updateEmail(newEmail!);
+  Future<void> editProfileEmail({required String newEmail}) async {
+    await _firebaseAuth.currentUser!.updateEmail(newEmail);
     await _firebaseAuth.currentUser!.reload();
     await Future.delayed(const Duration(milliseconds: 150));
     await _firebaseAuth.currentUser!.sendEmailVerification();
     await _firebaseAuth.currentUser!.reload();
+  }
+
+  Future<String> backupData() async {
+    try {
+      final pathDb = await getDatabasesPath();
+
+      File fileData = File(join(pathDb, DatabaseRepository.databaseName));
+      var pathOld = fileData.path;
+      var lastSeparator = pathOld.lastIndexOf(Platform.pathSeparator);
+      var newPath = pathOld.substring(0, lastSeparator + 1) +
+          _firebaseAuth.currentUser!.uid;
+      final newFileData = await fileData.copy('$newPath.db');
+      Logger.White.log("Location DB: ${newFileData.path}");
+
+      final path = basename(newFileData.path);
+      final ref = _firebaseStorage.ref('backupDb/$path');
+
+      UploadTask uploadTask = ref.putFile(newFileData);
+      final snapshotData = await uploadTask.whenComplete(() {});
+      final dbDownload = await snapshotData.ref.getDownloadURL();
+
+      newFileData.delete();
+
+      return dbDownload;
+    } on FirebaseException catch (e) {
+      Logger.Red.log(e);
+      throw FirebaseException(plugin: '');
+    }
   }
 }

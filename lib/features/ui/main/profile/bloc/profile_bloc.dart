@@ -1,11 +1,15 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:cling/core/common_widget.dart';
 import 'package:cling/core/exception.dart';
 import 'package:cling/features/model/currency.dart';
 import 'package:cling/features/model/user_model.dart';
 import 'package:cling/features/repository/database_repository.dart';
+import 'package:cling/features/repository/settings_repository.dart';
 import 'package:cling/features/ui/main/home/bloc/home_bloc.dart';
 import 'package:cling/features/ui/main/main_page.dart';
 import 'package:cling/features/ui/main/statistics/bloc/statistics_bloc.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,6 +17,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../repository/auth_repository.dart';
 import '../../../app_bloc/app_bloc.dart';
 import '../../../language_currency/lang_currency_bloc.dart';
+import '../../../language_currency/lang_export.dart';
 
 part 'profile_event.dart';
 part 'profile_state.dart';
@@ -21,16 +26,20 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   ProfileBloc({
     required AuthRepository authRepo,
     required DatabaseRepository dbRepo,
+    required SettingsRepository settingsRepo,
   })  : _authRepo = authRepo,
         _dbRepo = dbRepo,
+        _settingsRepo = settingsRepo,
         super(ProfileState()) {
     on<SendLogout>(_sendLogout);
     on<GetProfile>(_getProfile);
     on<GetVerifiedStatus>(_getVerifiedStatus);
+    on<GoBackup>(_goBackup);
   }
 
   final AuthRepository _authRepo;
   final DatabaseRepository _dbRepo;
+  final SettingsRepository _settingsRepo;
   var mainContext = MainPage.navKeyMain.currentContext!;
 
   void _sendLogout(event, emit) async {
@@ -44,7 +53,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       ]).then((_) async {
         mainContext.read<AppBloc>().add(const Redirect());
         await Future.delayed(const Duration(milliseconds: 100));
-        // ignore: use_build_context_synchronously
+        // ignore: use_buildmainContext_synchronously
         mainContext.read<LangCurrencyBloc>().add(
               const ChangeCurrency(
                 selectedCurrency: Currency.idr,
@@ -70,6 +79,23 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     final isVerified =
         (_authRepo.currentUserFirebase!.emailVerified == false) ? false : true;
     emit(state.copyWith(isVerified: isVerified));
+  }
+
+  void _goBackup(event, emit) async {
+    final connectivityResult = await (Connectivity().checkConnectivity());
+    if (!(connectivityResult == ConnectivityResult.mobile ||
+        connectivityResult == ConnectivityResult.wifi)) {
+      errorSnackbar(
+        mainContext,
+        AppLocalizations.of(mainContext)!.noConnection,
+      );
+      return;
+    }
+    loadingAuth(mainContext);
+    final urlDb = await _settingsRepo.backupData();
+    await _settingsRepo.editBackupUrl(url: urlDb, userModel: state.userModel);
+    add(GetProfile());
+    Navigator.pop(mainContext);
   }
 
   void _freeResources() async {

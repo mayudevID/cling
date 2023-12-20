@@ -8,8 +8,8 @@ environment:
 
 dependencies:
   auto_size_text_field: ^2.2.1
+  awesome_notifications: any
   awesome_notifications_core: ^0.8.1
-  awesome_notifications: any 
   awesome_notifications_fcm: any
   bloc: ^8.1.2
   cloud_firestore: ^4.9.2
@@ -24,6 +24,7 @@ dependencies:
   firebase_core: ^2.15.0
   firebase_crashlytics: ^3.3.4
   firebase_messaging: ^14.6.5
+  firebase_storage: ^11.5.6
   flutter:
     sdk: flutter
   flutter_bloc: ^8.1.3

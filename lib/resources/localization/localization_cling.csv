@@ -59,7 +59,7 @@ userDisabledFailure,This user has been disabled. Please contact support for help
 userNotFoundFailure,"Email is not found, please create an account.","Email tidak ditemukan, silakan buat akun."
 wrongPasswordFailure,"Incorrect password, please try again.","Kata sandi yang salah, coba lagi."
 emailAlreadyFailure,An account already exists.,Akun sudah ada.
-operationNotAllowedFailure,Operation is not allowed. Please contact support.,Operasi tidak diperbolehkan. Silakan hubungi Dukungan.
+operationNotAllowedFailure,Operation is not allowed. Please contact support.,Operasi tidak diperbolehkan. Silakan hubungi dukungan.
 weakPasswordFailure,Please enter a stronger password.,Harap masukkan kata sandi yang lebih kuat.
 monthlyBudget,Monthly Budget,Anggaran bulanan
 spent,Spent,Dihabiskan
@@ -149,3 +149,5 @@ notification,Notification,Notifikasi
 warningMonthlyBudget,Your expenses have exceeded your set monthly budget!,Pengeluaranmu sudah melebihi anggaran bulanan yang ditetapkan!
 alert,Warning,Peringatan
 markReadAll,Mark read all,Tandai baca semua
+lastBackup,Last backup,Pencadangan terakhir
+backup,Backup,Cadangkan

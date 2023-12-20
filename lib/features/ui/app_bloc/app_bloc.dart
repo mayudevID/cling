@@ -58,15 +58,17 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     Logger.Green.log("loginProcess? ${_authRepo.loginProcess}");
     Logger.Green.log("registerProcess? ${_authRepo.registerProcess}");
 
-    final redirect = ((state.status == AppStatus.authenticated) &&
-        (_authRepo.loginProcess == false &&
-            _authRepo.registerProcess == false));
-
     Navigator.pushNamedAndRemoveUntil(
       MainApp.navKeyGlobal.currentContext!,
-      redirect ? RouteName.main : RouteName.onboard,
+      isRedirect ? RouteName.main : RouteName.onboard,
       (route) => false,
     );
+  }
+
+  bool get isRedirect {
+    return ((state.status == AppStatus.authenticated) &&
+        (_authRepo.loginProcess == false &&
+            _authRepo.registerProcess == false));
   }
 
   @override

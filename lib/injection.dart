@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get_it/get_it.dart';
@@ -28,6 +29,9 @@ Future<void> initSl() async {
   final firestore = FirebaseFirestore.instance;
   getIt.registerLazySingleton<FirebaseFirestore>(() => firestore);
 
+  final firebaseStorage = FirebaseStorage.instance;
+  getIt.registerLazySingleton<FirebaseStorage>(() => firebaseStorage);
+
   final cache = await SharedPreferences.getInstance();
   getIt.registerLazySingleton<SharedPreferences>(() => cache);
 
@@ -47,6 +51,7 @@ Future<void> initSl() async {
   final settingsRepo = SettingsRepository(
     firebaseAuth: getIt<FirebaseAuth>(),
     firestore: getIt<FirebaseFirestore>(),
+    firebaseStorage: getIt<FirebaseStorage>(),
     cache: getIt<SharedPreferences>(),
   );
   getIt.registerLazySingleton<SettingsRepository>(() => settingsRepo);

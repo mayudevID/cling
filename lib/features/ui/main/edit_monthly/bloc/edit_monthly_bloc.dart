@@ -33,7 +33,7 @@ class EditMonthlyBloc extends Bloc<EditMonthlyEvent, EditMonthlyState> {
         _settingsRepo = settingsRepo,
         _authRepo = authRepo,
         super(EditMonthlyState()) {
-    on<SetAmountInput>(_setAmountInput);
+    //on<SetAmountInput>(_setAmountInput);
     on<SaveNewMonthly>(_saveNewMonthly);
     on<InitialValue>(_initVal);
   }
@@ -67,7 +67,7 @@ class EditMonthlyBloc extends Bloc<EditMonthlyEvent, EditMonthlyState> {
     TextFieldEditMonthly.textEditingController.text = initMonthly;
   }
 
-  void _setAmountInput(event, emit) async {}
+  // void _setAmountInput(event, emit) async {}
 
   void _saveNewMonthly(SaveNewMonthly event, _) async {
     final connectivityResult = await (Connectivity().checkConnectivity());

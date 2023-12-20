@@ -1,4 +1,5 @@
 import 'package:cling/core/utils.dart';
+import 'package:cling/features/ui/language_currency/lang_currency_bloc.dart';
 import 'package:cling/features/ui/language_currency/lang_export.dart';
 import 'package:cling/features/ui/main/profile/widgets/dialog_logout.dart';
 import 'package:cling/features/ui/main/profile/widgets/name_and_email.dart';
@@ -6,6 +7,7 @@ import 'package:cling/resources/gen/assets.gen.dart';
 import 'package:cling/resources/gen/fonts.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:sizer/sizer.dart';
 
 import '../bloc/profile_bloc.dart';
@@ -16,6 +18,8 @@ class ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final dateFormat = context.select((LangCurrencyBloc bloc) =>
+        bloc.state.selectedLanguage.value.toLanguageTag());
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 24.wmea),
       child: Column(
@@ -92,19 +96,13 @@ class ProfilePage extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(
-            height: 24.hmea,
-          ),
+          SizedBox(height: 24.hmea),
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              SizedBox(
-                width: 8.wmea,
-              ),
+              SizedBox(width: 8.wmea),
               Assets.lib.resources.images.fluentStar24Filled.svg(),
-              SizedBox(
-                width: 10.wmea,
-              ),
+              SizedBox(width: 10.wmea),
               Text(
                 AppLocalizations.of(context)!.rateCling,
                 textAlign: TextAlign.center,
@@ -122,8 +120,78 @@ class ProfilePage extends StatelessWidget {
               ),
             ],
           ),
+          SizedBox(height: 24.hmea),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                AppLocalizations.of(context)!.lastBackup,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontFamily: FontFamily.cabinetGrotesk,
+                  fontSize: 9.5.sp,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              BlocBuilder<ProfileBloc, ProfileState>(
+                buildWhen: (p, c) {
+                  return p.userModel.lastBackupTime !=
+                      c.userModel.lastBackupTime;
+                },
+                builder: (context, state) {
+                  final date = (state.userModel.lastBackupTime == null)
+                      ? "---"
+                      : DateFormat.yMd(dateFormat)
+                          .add_jm()
+                          .format(state.userModel.lastBackupTime!);
+                  return Text(
+                    date,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontFamily: FontFamily.cabinetGrotesk,
+                      fontSize: 9.5.sp,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  );
+                },
+              )
+            ],
+          ),
+          SizedBox(height: 16.hmea),
           SizedBox(
-            height: 40.hmea,
+            width: 390.wmea,
+            height: 45.hmea,
+            child: ElevatedButton(
+              onPressed: () {
+                context.read<ProfileBloc>().add(GoBackup());
+              },
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(
+                  const Color(0x3D787880),
+                ),
+                overlayColor: MaterialStateProperty.all(
+                  Colors.white60,
+                ),
+                shape: MaterialStateProperty.all(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+              ),
+              child: Text(
+                AppLocalizations.of(context)!.backup,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 11.5.sp,
+                  fontFamily: FontFamily.cabinetGrotesk,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 16.hmea,
           ),
           SizedBox(
             width: 390.wmea,
