@@ -3,6 +3,8 @@ import 'package:cling/core/route.dart';
 import 'package:cling/core/utils.dart';
 
 import 'package:cling/features/repository/auth_repository.dart';
+import 'package:cling/features/repository/database_repository.dart';
+import 'package:cling/features/repository/settings_repository.dart';
 import 'package:cling/resources/gen/assets.gen.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -26,6 +28,8 @@ class LoginPage extends StatelessWidget {
       create: (_) => LoginBloc(
         context: context,
         authRepo: getIt<AuthRepository>(),
+        settingsRepo: getIt<SettingsRepository>(),
+        dbRepo: getIt<DatabaseRepository>(),
       ),
       child: const LoginPageContent(),
     );
@@ -81,6 +85,7 @@ class LoginPageContent extends StatelessWidget {
               ),
               PinkButton(
                 onTap: () async {
+                  FocusManager.instance.primaryFocus?.unfocus();
                   context.read<LoginBloc>().add(const SendLogin());
                 },
                 name: AppLocalizations.of(context)!.login,

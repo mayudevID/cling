@@ -47,6 +47,10 @@ class DatabaseRepository {
     Logger.Green.log("Database Created");
   }
 
+  Future<void> close() async {
+    await db.close();
+  }
+
   //* ================ GOAL CRUD ================
 
   Future<void> insertGoal(GoalModel goalModel) async {

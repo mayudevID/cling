@@ -1,14 +1,24 @@
 import 'package:cling/core/utils.dart';
-import 'package:cling/features/ui/language_currency/lang_export.dart';
-import 'package:cling/features/ui/main/profile/bloc/profile_bloc.dart';
+import 'package:cling/features/ui/language_currency/lang_currency_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../../../../resources/gen/fonts.gen.dart';
+import '../../../../resources/gen/fonts.gen.dart';
+import '../../language_currency/lang_export.dart';
 
-Future<void> dialogLogout(BuildContext context) async {
-  await showDialog(
+Future<bool> dialogGetBackup(
+  BuildContext context,
+  DateTime dateOfLastBackup,
+) async {
+  final dateFormat = context
+      .read<LangCurrencyBloc>()
+      .state
+      .selectedLanguage
+      .value
+      .toLanguageTag();
+  return await showDialog(
     context: context,
     barrierDismissible: false,
     builder: (_) => PopScope(
@@ -36,7 +46,7 @@ Future<void> dialogLogout(BuildContext context) async {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                AppLocalizations.of(context)!.confirmLogout,
+                AppLocalizations.of(context)!.backupFound,
                 style: TextStyle(
                   fontFamily: FontFamily.cabinetGrotesk,
                   fontWeight: FontWeight.bold,
@@ -47,14 +57,47 @@ Future<void> dialogLogout(BuildContext context) async {
               SizedBox(
                 height: 8.hmea,
               ),
-              Text(
-                AppLocalizations.of(context)!.wantLogout,
-                style: TextStyle(
-                  fontFamily: FontFamily.cabinetGrotesk,
-                  fontSize: 10.sp,
-                  color: Colors.black,
+              Align(
+                alignment: Alignment.centerLeft,
+                child: RichText(
+                  text: TextSpan(
+                    text: AppLocalizations.of(context)!.lastBackup,
+                    style: TextStyle(
+                      fontFamily: FontFamily.cabinetGrotesk,
+                      fontSize: 10.sp,
+                      color: Colors.black,
+                    ),
+                    children: [
+                      const TextSpan(text: " "),
+                      TextSpan(
+                        text: DateFormat.yMd(dateFormat)
+                            .add_jm()
+                            .format(dateOfLastBackup),
+                        style: TextStyle(
+                          fontFamily: FontFamily.cabinetGrotesk,
+                          fontSize: 10.sp,
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      )
+                    ],
+                  ),
                 ),
-                textAlign: TextAlign.center,
+              ),
+              SizedBox(
+                height: 8.hmea,
+              ),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  AppLocalizations.of(context)!.useThisBackup,
+                  style: TextStyle(
+                    fontFamily: FontFamily.cabinetGrotesk,
+                    fontSize: 10.sp,
+                    color: Colors.black,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
               ),
               SizedBox(
                 height: 12.hmea,
@@ -63,8 +106,8 @@ Future<void> dialogLogout(BuildContext context) async {
                 children: [
                   const Spacer(),
                   GestureDetector(
-                    onTap: () async {
-                      context.read<ProfileBloc>().add(SendLogout());
+                    onTap: () {
+                      Navigator.pop(context, true);
                     },
                     child: Container(
                       padding: EdgeInsets.all(12.hmea),
@@ -76,7 +119,7 @@ Future<void> dialogLogout(BuildContext context) async {
                       child: Align(
                         alignment: Alignment.center,
                         child: Text(
-                          AppLocalizations.of(context)!.continueLogout,
+                          AppLocalizations.of(context)!.yes,
                           style: TextStyle(
                             fontFamily: FontFamily.cabinetGrotesk,
                             fontSize: 10.sp,
@@ -90,8 +133,8 @@ Future<void> dialogLogout(BuildContext context) async {
                     width: 10.wmea,
                   ),
                   GestureDetector(
-                    onTap: () async {
-                      Navigator.pop(context);
+                    onTap: () {
+                      Navigator.pop(context, false);
                     },
                     child: Container(
                       padding: EdgeInsets.all(12.hmea),
@@ -103,7 +146,7 @@ Future<void> dialogLogout(BuildContext context) async {
                       child: Align(
                         alignment: Alignment.center,
                         child: Text(
-                          AppLocalizations.of(context)!.back,
+                          AppLocalizations.of(context)!.skip,
                           style: TextStyle(
                             fontFamily: FontFamily.cabinetGrotesk,
                             fontSize: 10.sp,

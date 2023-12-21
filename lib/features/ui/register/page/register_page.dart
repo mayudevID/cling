@@ -76,7 +76,8 @@ class RegisterPageContent extends StatelessWidget {
                 height: 40.hmea,
               ),
               PinkButton(
-                onTap: () {
+                onTap: () async {
+                  FocusManager.instance.primaryFocus?.unfocus();
                   context.read<RegisterBloc>().add(const SendRegister());
                 },
                 name: AppLocalizations.of(context)!.createNewAccount,

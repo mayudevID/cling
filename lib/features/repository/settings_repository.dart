@@ -143,7 +143,7 @@ class SettingsRepository {
       final path = basename(newFileData.path);
       final ref = _firebaseStorage.ref('backupDb/$path');
 
-      UploadTask uploadTask = ref.putFile(newFileData);
+      var uploadTask = ref.putFile(newFileData);
       final snapshotData = await uploadTask.whenComplete(() {});
       final dbDownload = await snapshotData.ref.getDownloadURL();
 
@@ -152,7 +152,25 @@ class SettingsRepository {
       return dbDownload;
     } on FirebaseException catch (e) {
       Logger.Red.log(e);
-      throw FirebaseException(plugin: '');
+      throw Exception();
+    }
+  }
+
+  Future<void> getBackup() async {
+    try {
+      final pathDb = await getDatabasesPath();
+
+      final dbRef =
+          _firebaseStorage.ref('backupDb/${_firebaseAuth.currentUser!.uid}.db');
+
+      File fileNew = File(join(pathDb, DatabaseRepository.databaseName));
+      await fileNew.delete();
+
+      var downloadTask = dbRef.writeToFile(fileNew);
+      await downloadTask.whenComplete(() {});
+    } on FirebaseException catch (e) {
+      Logger.Red.log(e);
+      throw Exception(e.message);
     }
   }
 }

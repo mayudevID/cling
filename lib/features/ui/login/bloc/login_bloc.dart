@@ -3,14 +3,17 @@ import 'dart:io';
 import 'package:cling/core/exception.dart';
 import 'package:cling/core/logger.dart';
 import 'package:cling/features/repository/auth_repository.dart';
+import 'package:cling/features/repository/database_repository.dart';
+import 'package:cling/features/repository/settings_repository.dart';
 import 'package:cling/features/ui/language_currency/lang_export.dart';
 import 'package:cling/features/ui/login/widgets/dialog_email_not_verified.dart';
+import 'package:cling/features/ui/login/widgets/dialog_get_backup.dart';
+import 'package:cling/features/ui/login/widgets/dialog_no_internet_get_backup.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../core/common_widget.dart';
 import '../../app_bloc/app_bloc.dart';
@@ -21,9 +24,13 @@ part 'login_state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   LoginBloc({
+    required DatabaseRepository dbRepo,
+    required SettingsRepository settingsRepo,
     required AuthRepository authRepo,
     required BuildContext context,
-  })  : _authRepo = authRepo,
+  })  : _dbRepo = dbRepo,
+        _settingsRepo = settingsRepo,
+        _authRepo = authRepo,
         _context = context,
         super(LoginState()) {
     on<ToggleEye>(_toggleEye);
@@ -33,6 +40,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     on<LoginAnonymous>(_loginAnony);
   }
 
+  final DatabaseRepository _dbRepo;
+  final SettingsRepository _settingsRepo;
   final AuthRepository _authRepo;
   final BuildContext _context;
 
@@ -57,21 +66,24 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     }
 
     if (state.email.trim().isEmpty || state.password.trim().isEmpty) {
-      errorToast(
+      errorSnackbar(
+        _context,
         AppLocalizations.of(_context)!.formEmpty,
       );
       return;
     }
 
     if (!EmailValidator.validate(state.email)) {
-      errorToast(
+      errorSnackbar(
+        _context,
         AppLocalizations.of(_context)!.invalidEmailFailure,
       );
       return;
     }
 
     if (state.password.trim().length < 8) {
-      errorToast(
+      errorSnackbar(
+        _context,
         AppLocalizations.of(_context)!.passwordLengthFailure,
       );
       return;
@@ -91,6 +103,19 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
               selectedCurrency: _authRepo.currentUserModel!.currency,
             ),
           );
+
+      //* ~~~~ CHECK BACKUP ~~~~
+      if (_authRepo.currentUserModel!.backupUrl != null &&
+          _authRepo.currentUserModel!.backupUrl!.trim().isNotEmpty) {
+        Navigator.pop(_context);
+        final result = await dialogGetBackup(
+          _context,
+          _authRepo.currentUserModel!.lastBackupTime!,
+        );
+        loadingAuth(_context);
+        if (result) await _getBackup();
+      }
+
       await Future.delayed(const Duration(milliseconds: 100));
 
       _context.read<AppBloc>().add(const Redirect());
@@ -103,7 +128,10 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       Logger.Red.log("FirebaseAuthException: $e");
       await _authRepo.logOut();
       Navigator.pop(_context);
-      errorToast(LogInWithEmailAndPasswordFailure.fromCode(e.code).message);
+      errorSnackbar(
+        _context,
+        LogInWithEmailAndPasswordFailure.fromCode(e.code).message,
+      );
     } on SocketException catch (e) {
       Logger.Red.log("SocketException: $e");
       await _authRepo.logOut();
@@ -113,9 +141,30 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       Logger.Red.log("Exception: $e");
       await _authRepo.logOut();
       Navigator.pop(_context);
-      errorToast(const LogInWithEmailAndPasswordFailure().message);
+      errorSnackbar(_context, const LogInWithEmailAndPasswordFailure().message);
     }
   }
 
   void _loginAnony(LoginAnonymous event, emit) {}
+
+  Future<void> _getBackup() async {
+    late bool result;
+    do {
+      final connectivityResult = await (Connectivity().checkConnectivity());
+      if (!(connectivityResult == ConnectivityResult.mobile ||
+          connectivityResult == ConnectivityResult.wifi)) {
+        //* No Connection
+        result = await dialogNoInternetGetBackup(_context);
+      } else {
+        try {
+          await _dbRepo.close();
+          await _settingsRepo.getBackup();
+          await _dbRepo.open();
+        } on Exception catch (_) {
+          errorSnackbar(_context, AppLocalizations.of(_context)!.noConnection);
+        }
+        result = false;
+      }
+    } while (result);
+  }
 }

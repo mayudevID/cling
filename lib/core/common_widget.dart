@@ -144,7 +144,7 @@ void errorSnackbar(BuildContext context, String msg) {
           style: TextStyle(
             fontFamily: FontFamily.cabinetGrotesk,
             fontWeight: FontWeight.w600,
-            fontSize: 11.5.sp,
+            fontSize: 10.sp,
           ),
         ),
       ),

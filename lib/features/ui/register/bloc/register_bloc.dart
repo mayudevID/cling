@@ -111,28 +111,32 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
         state.password.trim().isEmpty ||
         state.name.trim().isEmpty ||
         state.confirmPassword.trim().isEmpty) {
-      errorToast(
+      errorSnackbar(
+        _context,
         AppLocalizations.of(_context)!.formEmpty,
       );
       return;
     }
 
     if (!EmailValidator.validate(state.email)) {
-      errorToast(
+      errorSnackbar(
+        _context,
         AppLocalizations.of(_context)!.invalidEmailFailure,
       );
       return;
     }
 
     if (state.password.trim().length < 8) {
-      errorToast(
+      errorSnackbar(
+        _context,
         AppLocalizations.of(_context)!.passwordLengthFailure,
       );
       return;
     }
 
     if (state.password.trim() != state.confirmPassword.trim()) {
-      errorToast(
+      errorSnackbar(
+        _context,
         AppLocalizations.of(_context)!.passConfPassFailure,
       );
       return;
@@ -155,7 +159,8 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     } on FirebaseAuthException catch (e) {
       Logger.Red.log("FirebaseAuthException: $e");
       Navigator.pop(_context);
-      errorToast(SignUpWithEmailAndPasswordFailure.fromCode(e.code).message);
+      errorSnackbar(
+          _context, SignUpWithEmailAndPasswordFailure.fromCode(e.code).message);
     } on SocketException catch (e) {
       Logger.Red.log("SocketException: $e");
       Navigator.pop(_context);
@@ -163,7 +168,10 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     } catch (e) {
       Logger.Red.log("FirebaseAuthException: $e");
       Navigator.pop(_context);
-      errorToast(const SignUpWithEmailAndPasswordFailure().message);
+      errorSnackbar(
+        _context,
+        const SignUpWithEmailAndPasswordFailure().message,
+      );
     }
 
     await _authRepository.logOut();
