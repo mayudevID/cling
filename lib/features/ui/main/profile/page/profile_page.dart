@@ -1,25 +1,25 @@
+import 'dart:async';
+
 import 'package:cling/core/utils.dart';
-import 'package:cling/features/ui/language_currency/lang_currency_bloc.dart';
-import 'package:cling/features/ui/language_currency/lang_export.dart';
-import 'package:cling/features/ui/main/profile/widgets/dialog_logout.dart';
-import 'package:cling/features/ui/main/profile/widgets/name_and_email.dart';
 import 'package:cling/resources/gen/assets.gen.dart';
 import 'package:cling/resources/gen/fonts.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 import 'package:sizer/sizer.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
+import '../../../language_currency/lang_currency_bloc.dart';
+import '../../../language_currency/lang_export.dart';
 import '../bloc/profile_bloc.dart';
+import '../widgets/dialog_logout.dart';
 import '../widgets/list_account_settings.dart';
+import '../widgets/name_and_email.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final dateFormat = context.select((LangCurrencyBloc bloc) =>
-        bloc.state.selectedLanguage.value.toLanguageTag());
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 24.wmea),
       child: Column(
@@ -139,19 +139,23 @@ class ProfilePage extends StatelessWidget {
                       c.userModel.lastBackupTime;
                 },
                 builder: (context, state) {
-                  final date = (state.userModel.lastBackupTime == null)
-                      ? "---"
-                      : DateFormat.yMd(dateFormat)
-                          .add_jm()
-                          .format(state.userModel.lastBackupTime!);
-                  return Text(
-                    date,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontFamily: FontFamily.cabinetGrotesk,
-                      fontSize: 9.5.sp,
-                      fontWeight: FontWeight.w500,
-                    ),
+                  final textStyle = TextStyle(
+                    color: Colors.white,
+                    fontFamily: FontFamily.cabinetGrotesk,
+                    fontSize: 9.5.sp,
+                    fontWeight: FontWeight.w500,
+                  );
+
+                  if (state.userModel.lastBackupTime == null) {
+                    return Text(
+                      "---",
+                      style: textStyle,
+                    );
+                  }
+
+                  return TimeBackup(
+                    date: state.userModel.lastBackupTime!,
+                    textStyle: textStyle,
                   );
                 },
               )
@@ -204,9 +208,7 @@ class ProfilePage extends StatelessWidget {
                 backgroundColor: MaterialStateProperty.all(
                   const Color(0xFFF8312F),
                 ),
-                overlayColor: MaterialStateProperty.all(
-                  Colors.redAccent,
-                ),
+                overlayColor: MaterialStateProperty.all(Colors.redAccent),
                 shape: MaterialStateProperty.all(
                   RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
@@ -227,6 +229,54 @@ class ProfilePage extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class TimeBackup extends StatefulWidget {
+  const TimeBackup({super.key, required this.date, required this.textStyle});
+  final DateTime date;
+  final TextStyle textStyle;
+
+  @override
+  State<TimeBackup> createState() => _TimeBackupState();
+}
+
+class _TimeBackupState extends State<TimeBackup> {
+  late Timer timer;
+
+  @override
+  void initState() {
+    timeago.setLocaleMessages("id", timeago.IdMessages());
+
+    timer = Timer.periodic(
+      const Duration(seconds: 12),
+      (Timer t) {
+        setState(() {});
+      },
+    );
+
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    timer.cancel();
+
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final locale = context.select(
+      (LangCurrencyBloc bloc) => bloc.state.selectedLanguage.value.languageCode,
+    );
+    return Text(
+      timeago.format(
+        widget.date,
+        locale: locale,
+      ),
+      style: widget.textStyle,
     );
   }
 }
