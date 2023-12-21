@@ -160,6 +160,9 @@ class $LibResourcesImagesGen {
   SvgGenImage get warningTriangleSolid =>
       const SvgGenImage('lib/resources/images/warning-triangle-solid.svg');
 
+  SvgGenImage get databaseBackup =>
+      const SvgGenImage("lib/resources/images/database-backup.svg");
+
   /// List of all assets
   List<SvgGenImage> get values => [
         admissionTickets,
@@ -171,6 +174,7 @@ class $LibResourcesImagesGen {
         calendar,
         chevronRight16,
         dismiss,
+        databaseBackup,
         editBig,
         editPencil,
         eyeOff,

@@ -309,5 +309,11 @@
   "useThisBackup": "Use this backup?",
   "@useThisBackup": {},
   "yes": "Yes",
-  "@yes": {}
+  "@yes": {},
+  "alertMonthlyBudget": "Warning - Monthly Budget exceeded",
+  "@alertMonthlyBudget": {},
+  "backupForDialog": "Data backup",
+  "@backupForDialog": {},
+  "backupForDialogContent": "Do you want to backup data? Previous data backup will be overwritten.",
+  "@backupForDialogContent": {}
 }

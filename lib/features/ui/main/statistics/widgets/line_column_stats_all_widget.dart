@@ -51,7 +51,6 @@ Widget lineColumnStatsAllWidget(BuildContext mainContext) {
           plotAreaBorderWidth: 0,
           plotAreaBorderColor: Colors.transparent,
           primaryXAxis: CategoryAxis(
-            visibleMaximum: 4,
             labelStyle: TextStyle(
               color: Colors.white,
               fontSize: 8.sp,

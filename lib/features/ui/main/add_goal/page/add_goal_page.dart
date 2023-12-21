@@ -217,6 +217,7 @@ class AddGoalPageContent extends StatelessWidget {
               ),
               PinkButton(
                 onTap: () {
+                  FocusManager.instance.primaryFocus?.unfocus();
                   context.read<AddGoalBloc>().add(SaveDataGoal());
                 },
                 name: AppLocalizations.of(context)!.submit,
@@ -226,12 +227,7 @@ class AddGoalPageContent extends StatelessWidget {
               ),
               BlackButton(
                 onTap: () {
-                  // context.read<MainBloc>().add(
-                  //       const TabChange(
-                  //         tabIndex: 0,
-                  //       ),
-                  //     );
-                  // context.read<AddGoalBloc>().add(ClearDataForm());
+                  FocusManager.instance.primaryFocus?.unfocus();
                   Navigator.pop(context);
                 },
                 name: AppLocalizations.of(context)!.cancel,

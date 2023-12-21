@@ -1,14 +1,12 @@
 import 'package:cling/core/utils.dart';
 import 'package:cling/features/ui/language_currency/lang_export.dart';
-import 'package:cling/features/ui/main/profile/bloc/profile_bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../../resources/gen/fonts.gen.dart';
 
-Future<void> dialogLogout(BuildContext context) async {
-  await showDialog(
+Future<bool> dialogGoBackup(BuildContext context) async {
+  return await showDialog(
     context: context,
     barrierDismissible: false,
     builder: (_) => PopScope(
@@ -36,7 +34,7 @@ Future<void> dialogLogout(BuildContext context) async {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                AppLocalizations.of(context)!.confirmLogout,
+                AppLocalizations.of(context)!.backupForDialog,
                 style: TextStyle(
                   fontFamily: FontFamily.cabinetGrotesk,
                   fontWeight: FontWeight.bold,
@@ -48,7 +46,7 @@ Future<void> dialogLogout(BuildContext context) async {
                 height: 8.hmea,
               ),
               Text(
-                AppLocalizations.of(context)!.wantLogout,
+                AppLocalizations.of(context)!.backupForDialogContent,
                 style: TextStyle(
                   fontFamily: FontFamily.cabinetGrotesk,
                   fontSize: 10.sp,
@@ -64,7 +62,7 @@ Future<void> dialogLogout(BuildContext context) async {
                   const Spacer(),
                   GestureDetector(
                     onTap: () async {
-                      context.read<ProfileBloc>().add(SendLogout());
+                      Navigator.pop(context, true);
                     },
                     child: Container(
                       padding: EdgeInsets.all(12.hmea),
@@ -76,7 +74,7 @@ Future<void> dialogLogout(BuildContext context) async {
                       child: Align(
                         alignment: Alignment.center,
                         child: Text(
-                          AppLocalizations.of(context)!.continueLogout,
+                          AppLocalizations.of(context)!.yes,
                           style: TextStyle(
                             fontFamily: FontFamily.cabinetGrotesk,
                             fontSize: 10.sp,
@@ -92,7 +90,7 @@ Future<void> dialogLogout(BuildContext context) async {
                   ),
                   GestureDetector(
                     onTap: () async {
-                      Navigator.pop(context);
+                      Navigator.pop(context, false);
                     },
                     child: Container(
                       padding: EdgeInsets.all(12.hmea),

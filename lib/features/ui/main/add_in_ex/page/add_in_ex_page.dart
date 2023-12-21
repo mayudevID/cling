@@ -442,6 +442,7 @@ class AddIncomeExpensePageContent extends StatelessWidget {
               ),
               PinkButton(
                 onTap: () {
+                  FocusManager.instance.primaryFocus?.unfocus();
                   context.read<AddIncomeExpenseBloc>().add(SaveData(flowType));
                 },
                 name: AppLocalizations.of(context)!.submit,
@@ -452,6 +453,7 @@ class AddIncomeExpensePageContent extends StatelessWidget {
               BlackButton(
                 name: AppLocalizations.of(context)!.cancel,
                 onTap: () {
+                  FocusManager.instance.primaryFocus?.unfocus();
                   Navigator.pop(context);
                 },
               ),

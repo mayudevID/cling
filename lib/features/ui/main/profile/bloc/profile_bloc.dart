@@ -8,6 +8,7 @@ import 'package:cling/features/repository/database_repository.dart';
 import 'package:cling/features/repository/settings_repository.dart';
 import 'package:cling/features/ui/main/home/bloc/home_bloc.dart';
 import 'package:cling/features/ui/main/main_page.dart';
+import 'package:cling/features/ui/main/profile/widgets/dialog_go_backup.dart';
 import 'package:cling/features/ui/main/statistics/bloc/statistics_bloc.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:equatable/equatable.dart';
@@ -82,6 +83,10 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   }
 
   void _goBackup(event, emit) async {
+    final resultDialog = await dialogGoBackup(mainContext);
+    if (!resultDialog) {
+      return;
+    }
     final connectivityResult = await (Connectivity().checkConnectivity());
     if (!(connectivityResult == ConnectivityResult.mobile ||
         connectivityResult == ConnectivityResult.wifi)) {

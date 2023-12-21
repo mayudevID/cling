@@ -182,15 +182,22 @@ class ProfilePage extends StatelessWidget {
                   ),
                 ),
               ),
-              child: Text(
-                AppLocalizations.of(context)!.backup,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 11.5.sp,
-                  fontFamily: FontFamily.cabinetGrotesk,
-                  fontWeight: FontWeight.w700,
-                ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Assets.lib.resources.images.databaseBackup.svg(),
+                  SizedBox(width: 8.wmea),
+                  Text(
+                    AppLocalizations.of(context)!.backup,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 11.5.sp,
+                      fontFamily: FontFamily.cabinetGrotesk,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
