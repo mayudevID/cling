@@ -630,6 +630,20 @@ class DatabaseRepository {
     return (checkNotification.isNotEmpty) ? false : true;
   }
 
+  Future<bool> checkNotificationCurrentBalance() async {
+    final now = DateFormat('yyyy-MM').format(DateTime.now());
+    final checkNotification = await db.rawQuery(
+      '''
+        SELECT * FROM ${NotificationMeta.nameTable}
+        WHERE ${NotificationMeta.type} = ?
+        AND strftime('%Y-%m', ${NotificationMeta.date}) = ?
+      ''',
+      [1, now],
+    );
+
+    return (checkNotification.isNotEmpty) ? false : true;
+  }
+
   Future<bool> checkNotificationTotalBalance() async {
     final now = DateFormat('yyyy-MM-dd').format(DateTime.now());
     final checkNotification = await db.rawQuery(

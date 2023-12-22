@@ -47,11 +47,14 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       ),
     );
 
-    ///* CHECK TOTAL BALANCE / TYPE 2
-    await _totalBalanceCheck();
-
     ///* CHECK MONTHLY BUDGET / TYPE 0
     await _monthlyBudgetCheck();
+
+    ///* CHECK CURRENT BALANCE / TYPE 1
+    await _currentBalanceCheck();
+
+    ///* CHECK TOTAL BALANCE / TYPE 2
+    await _totalBalanceCheck();
   }
 
   void _getGoals(event, emit) async {
@@ -62,34 +65,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   void _getTodayExpenses(_, emit) async {
     final listData = await _dbRepo.getTodayExpenses();
     emit(state.copyWith(listTodayExpenses: listData));
-  }
-
-  Future<void> _totalBalanceCheck() async {
-    if (state.totalBalance < 0) {
-      final sendNotifResult = await _dbRepo.checkNotificationTotalBalance();
-      if (sendNotifResult) {
-        final id = await _dbRepo.saveNotification(
-          NotificationModelClass(
-            title: Random().nextInt(253654).toString(),
-            desc: Random().nextInt(253654).toString(),
-            isRead: false,
-            date: DateTime.now(),
-            type: 2,
-          ),
-        );
-        await AwesomeNotifications().createNotification(
-          content: NotificationContent(
-            id: id,
-            channelKey: 'basic_channel',
-            category: NotificationCategory.Error,
-            actionType: ActionType.Default,
-            title: AppLocalizations.of(mainContext)!.alertTotalBalance,
-            body: AppLocalizations.of(mainContext)!.warningTotalBalance,
-          ),
-        );
-        mainContext.read<NotificationBloc>().add(GetNotificationCount());
-      }
-    }
   }
 
   Future<void> _monthlyBudgetCheck() async {
@@ -116,6 +91,62 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
             actionType: ActionType.Default,
             title: AppLocalizations.of(mainContext)!.alertMonthlyBudget,
             body: AppLocalizations.of(mainContext)!.warningMonthlyBudget,
+          ),
+        );
+        mainContext.read<NotificationBloc>().add(GetNotificationCount());
+      }
+    }
+  }
+
+  Future<void> _currentBalanceCheck() async {
+    if (state.amountExpenseThisMonth > state.amountIncomeThisMonth) {
+      final sendNotifResult = await _dbRepo.checkNotificationCurrentBalance();
+      if (sendNotifResult) {
+        final id = await _dbRepo.saveNotification(
+          NotificationModelClass(
+            title: Random().nextInt(253654).toString(),
+            desc: Random().nextInt(253654).toString(),
+            isRead: false,
+            date: DateTime.now(),
+            type: 1,
+          ),
+        );
+        await AwesomeNotifications().createNotification(
+          content: NotificationContent(
+            id: id,
+            channelKey: 'basic_channel',
+            category: NotificationCategory.Error,
+            actionType: ActionType.Default,
+            title: AppLocalizations.of(mainContext)!.alertCurrentBalance,
+            body: AppLocalizations.of(mainContext)!.warningCurrentBalance,
+          ),
+        );
+        mainContext.read<NotificationBloc>().add(GetNotificationCount());
+      }
+    }
+  }
+
+  Future<void> _totalBalanceCheck() async {
+    if (state.totalBalance < 0) {
+      final sendNotifResult = await _dbRepo.checkNotificationTotalBalance();
+      if (sendNotifResult) {
+        final id = await _dbRepo.saveNotification(
+          NotificationModelClass(
+            title: Random().nextInt(253654).toString(),
+            desc: Random().nextInt(253654).toString(),
+            isRead: false,
+            date: DateTime.now(),
+            type: 2,
+          ),
+        );
+        await AwesomeNotifications().createNotification(
+          content: NotificationContent(
+            id: id,
+            channelKey: 'basic_channel',
+            category: NotificationCategory.Error,
+            actionType: ActionType.Default,
+            title: AppLocalizations.of(mainContext)!.alertTotalBalance,
+            body: AppLocalizations.of(mainContext)!.warningTotalBalance,
           ),
         );
         mainContext.read<NotificationBloc>().add(GetNotificationCount());
