@@ -47,38 +47,57 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       ),
     );
 
+    ///* CHECK TOTAL BALANCE / TYPE 2
+    await _totalBalanceCheck();
+
+    ///* CHECK MONTHLY BUDGET / TYPE 0
+    await _monthlyBudgetCheck();
+  }
+
+  void _getGoals(event, emit) async {
+    final listData = await _dbRepo.getGoals();
+    emit(state.copyWith(listGoals: listData));
+  }
+
+  void _getTodayExpenses(_, emit) async {
+    final listData = await _dbRepo.getTodayExpenses();
+    emit(state.copyWith(listTodayExpenses: listData));
+  }
+
+  Future<void> _totalBalanceCheck() async {
+    if (state.totalBalance < 0) {
+      final sendNotifResult = await _dbRepo.checkNotificationTotalBalance();
+      if (sendNotifResult) {
+        final id = await _dbRepo.saveNotification(
+          NotificationModelClass(
+            title: Random().nextInt(253654).toString(),
+            desc: Random().nextInt(253654).toString(),
+            isRead: false,
+            date: DateTime.now(),
+            type: 2,
+          ),
+        );
+        await AwesomeNotifications().createNotification(
+          content: NotificationContent(
+            id: id,
+            channelKey: 'basic_channel',
+            category: NotificationCategory.Error,
+            actionType: ActionType.Default,
+            title: AppLocalizations.of(mainContext)!.alertTotalBalance,
+            body: AppLocalizations.of(mainContext)!.warningTotalBalance,
+          ),
+        );
+        mainContext.read<NotificationBloc>().add(GetNotificationCount());
+      }
+    }
+  }
+
+  Future<void> _monthlyBudgetCheck() async {
     final monthlyBudget =
         mainContext.read<ProfileBloc>().state.userModel.monthlyBudget;
 
-    ///* CHECK TOTAL BALANCE / TYPE 2
-    if (state.totalBalance < 0) {
-      //final sendNotifResult = await _dbRepo.checkNotification();
-
-      final id = await _dbRepo.saveNotification(
-        NotificationModelClass(
-          title: Random().nextInt(253654).toString(),
-          desc: Random().nextInt(253654).toString(),
-          isRead: false,
-          date: DateTime.now(),
-          type: 2,
-        ),
-      );
-      await AwesomeNotifications().createNotification(
-        content: NotificationContent(
-          id: id,
-          channelKey: 'basic_channel',
-          category: NotificationCategory.Error,
-          actionType: ActionType.Default,
-          title: AppLocalizations.of(mainContext)!.alertTotalBalance,
-          body: AppLocalizations.of(mainContext)!.warningTotalBalance,
-        ),
-      );
-      mainContext.read<NotificationBloc>().add(GetNotificationCount());
-    }
-
-    ///* CHECK MONTHLY BUDGET / TYPE 0
     if (state.amountExpenseThisMonth > monthlyBudget) {
-      final sendNotifResult = await _dbRepo.checkNotification();
+      final sendNotifResult = await _dbRepo.checkNotificationMonthlyBudget();
       if (sendNotifResult) {
         final id = await _dbRepo.saveNotification(
           NotificationModelClass(
@@ -102,16 +121,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         mainContext.read<NotificationBloc>().add(GetNotificationCount());
       }
     }
-  }
-
-  void _getGoals(event, emit) async {
-    final listData = await _dbRepo.getGoals();
-    emit(state.copyWith(listGoals: listData));
-  }
-
-  void _getTodayExpenses(_, emit) async {
-    final listData = await _dbRepo.getTodayExpenses();
-    emit(state.copyWith(listTodayExpenses: listData));
   }
 
   void _freeResources(FreeResourcesHome event, emit) {

@@ -616,7 +616,7 @@ class DatabaseRepository {
     return dataList;
   }
 
-  Future<bool> checkNotification() async {
+  Future<bool> checkNotificationMonthlyBudget() async {
     final now = DateFormat('yyyy-MM').format(DateTime.now());
     final checkNotification = await db.rawQuery(
       '''
@@ -625,6 +625,20 @@ class DatabaseRepository {
         AND strftime('%Y-%m', ${NotificationMeta.date}) = ?
       ''',
       [0, now],
+    );
+
+    return (checkNotification.isNotEmpty) ? false : true;
+  }
+
+  Future<bool> checkNotificationTotalBalance() async {
+    final now = DateFormat('yyyy-MM-dd').format(DateTime.now());
+    final checkNotification = await db.rawQuery(
+      '''
+        SELECT * FROM ${NotificationMeta.nameTable}
+        WHERE ${NotificationMeta.type} = ?
+        AND strftime('%Y-%m-%d', ${NotificationMeta.date}) = ?
+      ''',
+      [2, now],
     );
 
     return (checkNotification.isNotEmpty) ? false : true;
