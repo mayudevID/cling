@@ -37,7 +37,6 @@ Widget lineColumnStatsAllWidget(BuildContext mainContext) {
       }
 
       return SizedBox(
-        width: double.infinity,
         height: 193.hmea,
         child: SfCartesianChart(
           tooltipBehavior: TooltipBehavior(
@@ -51,6 +50,7 @@ Widget lineColumnStatsAllWidget(BuildContext mainContext) {
           plotAreaBorderWidth: 0,
           plotAreaBorderColor: Colors.transparent,
           primaryXAxis: CategoryAxis(
+            maximum: 4,
             labelStyle: TextStyle(
               color: Colors.white,
               fontSize: 8.sp,
@@ -59,7 +59,7 @@ Widget lineColumnStatsAllWidget(BuildContext mainContext) {
             ),
           ),
           primaryYAxis: NumericAxis(
-            enableAutoIntervalOnZooming: false,
+            //enableAutoIntervalOnZooming: true,
             interval: setInterval(state.maxValAll),
             labelStyle: TextStyle(
               color: Colors.white,
@@ -124,9 +124,7 @@ Widget lineColumnStatsAllWidget(BuildContext mainContext) {
               dataSource: state.chartDataSavingsList,
               xValueMapper: (ChartData data, _) => data.x,
               yValueMapper: (ChartData data, _) => data.y,
-              borderRadius: const BorderRadius.all(
-                Radius.circular(8),
-              ),
+              borderRadius: const BorderRadius.all(Radius.circular(8)),
               width: 1,
               spacing: 0.4,
             )

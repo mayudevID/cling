@@ -2,7 +2,6 @@ import 'package:cling/core/common_widget.dart';
 import 'package:cling/core/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:nil/nil.dart';
 import 'package:sizer/sizer.dart';
 import '../../../../../resources/gen/fonts.gen.dart';
 import '../../../language_currency/lang_export.dart';
@@ -188,19 +187,24 @@ Widget monthlyBudget(BuildContext context) {
                 return p.userModel.monthlyBudget != c.userModel.monthlyBudget;
               },
               builder: (context, profileState) {
-                return BlocBuilder<HomeBloc, HomeState>(buildWhen: (p, c) {
-                  return p.amountExpenseThisMonth != c.amountExpenseThisMonth;
-                }, builder: (context, homeState) {
-                  final amount = (homeState.amountExpenseThisMonth /
-                          profileState.userModel.monthlyBudget) *
-                      100.0;
+                return BlocBuilder<HomeBloc, HomeState>(
+                  buildWhen: (p, c) {
+                    return p.amountExpenseThisMonth != c.amountExpenseThisMonth;
+                  },
+                  builder: (context, homeState) {
+                    final amount = (homeState.amountExpenseThisMonth /
+                            profileState.userModel.monthlyBudget) *
+                        100.0;
 
-                  if (amount > 100) {
-                    return const WarningAmountIcon();
-                  }
-
-                  return nil;
-                });
+                    if (amount <= 100) {
+                      return const SizedBox();
+                    }
+                    return WarningAmountIcon(
+                      content:
+                          AppLocalizations.of(context)!.warningMonthlyBudget,
+                    );
+                  },
+                );
               },
             ),
           ],

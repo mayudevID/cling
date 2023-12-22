@@ -8,9 +8,13 @@ import 'package:cling/resources/gen/fonts.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:sizer/sizer.dart';
 
 Widget notificationWidget(
-    BuildContext context, int idx, NotificationModelClass data) {
+  BuildContext context,
+  int idx,
+  NotificationModelClass data,
+) {
   String title = "";
   String desc = "";
   final timeLocale = context
@@ -20,9 +24,22 @@ Widget notificationWidget(
       .value
       .toLanguageTag();
 
+  //* TYPE 0: warning monthly budget
+  //* TYPE 1: warning current balance this month
+  //* TYPE 2: warning total balance
+
+  bool isNeedDateContext = false;
+
   if (data.type == 0) {
-    title = AppLocalizations.of(context)!.alert;
+    title = AppLocalizations.of(context)!.alertMonthlyBudget;
     desc = AppLocalizations.of(context)!.warningMonthlyBudget;
+    isNeedDateContext = true;
+  }
+
+  String checkConditionText() {
+    return (isNeedDateContext)
+        ? '( ${DateFormat.yMMMM(timeLocale).format(data.date)} )'
+        : "";
   }
 
   return Container(
@@ -45,13 +62,17 @@ Widget notificationWidget(
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        title,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontFamily: FontFamily.cabinetGrotesk,
-                          fontWeight: FontWeight.bold,
+                      SizedBox(
+                        width: 263.3.wmea,
+                        child: Text(
+                          title,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontFamily: FontFamily.cabinetGrotesk,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                       Text(
@@ -60,12 +81,13 @@ Widget notificationWidget(
                           color: Colors.grey[300],
                           fontFamily: FontFamily.cabinetGrotesk,
                           fontWeight: FontWeight.w200,
+                          fontSize: 8.5.sp,
                         ),
                       ),
                     ],
                   ),
                   Text(
-                    desc,
+                    '$desc ${checkConditionText()}',
                     maxLines: 5,
                     style: const TextStyle(
                       color: Colors.white,

@@ -1,12 +1,12 @@
 import 'package:cling/core/utils.dart';
-import 'package:cling/features/ui/language_currency/lang_export.dart';
 import 'package:cling/resources/gen/assets.gen.dart';
 import 'package:cling/resources/gen/fonts.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:super_tooltip/super_tooltip.dart';
 
 class WarningAmountIcon extends StatefulWidget {
-  const WarningAmountIcon({super.key});
+  const WarningAmountIcon({super.key, required this.content});
+  final String content;
 
   @override
   State<WarningAmountIcon> createState() => _WarningAmountIconState();
@@ -28,13 +28,16 @@ class _WarningAmountIconState extends State<WarningAmountIcon> {
         hasShadow: false,
         fadeOutDuration: const Duration(milliseconds: 150),
         content: Text(
-          AppLocalizations.of(context)!.warningMonthlyBudget,
+          widget.content,
           style: const TextStyle(
             fontFamily: FontFamily.cabinetGrotesk,
             fontWeight: FontWeight.bold,
           ),
         ),
-        child: Assets.lib.resources.images.warningTriangleSolid.svg(),
+        child: Container(
+          margin: EdgeInsets.only(bottom: 1.8.hmea),
+          child: Assets.lib.resources.images.warningTriangleSolid.svg(),
+        ),
       ),
     );
   }

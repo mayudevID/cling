@@ -1,5 +1,6 @@
 import 'package:cling/core/common_widget.dart';
 import 'package:cling/core/utils.dart';
+import 'package:cling/features/ui/main/home/widgets/warning_amount_icon.dart';
 import 'package:cling/resources/gen/fonts.gen.dart';
 
 import 'package:flutter/material.dart';
@@ -39,10 +40,10 @@ class HomePage extends StatelessWidget {
               borderRadius: BorderRadius.circular(10),
             ),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
-                  "Total Balance",
+                  AppLocalizations.of(context)!.totalBalance,
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 10.sp,
@@ -50,6 +51,21 @@ class HomePage extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
+                const Spacer(),
+                BlocBuilder<HomeBloc, HomeState>(
+                  buildWhen: (p, c) {
+                    return p.totalBalance != c.totalBalance;
+                  },
+                  builder: (context, state) {
+                    if (state.totalBalance > 0) return const SizedBox();
+
+                    return WarningAmountIcon(
+                      content:
+                          AppLocalizations.of(context)!.warningTotalBalance,
+                    );
+                  },
+                ),
+                SizedBox(width: 8.wmea),
                 BlocBuilder<HomeBloc, HomeState>(
                   buildWhen: (p, c) {
                     return p.totalBalance != c.totalBalance;

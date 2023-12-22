@@ -50,6 +50,33 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     final monthlyBudget =
         mainContext.read<ProfileBloc>().state.userModel.monthlyBudget;
 
+    ///* CHECK TOTAL BALANCE / TYPE 2
+    if (state.totalBalance < 0) {
+      //final sendNotifResult = await _dbRepo.checkNotification();
+
+      final id = await _dbRepo.saveNotification(
+        NotificationModelClass(
+          title: Random().nextInt(253654).toString(),
+          desc: Random().nextInt(253654).toString(),
+          isRead: false,
+          date: DateTime.now(),
+          type: 2,
+        ),
+      );
+      await AwesomeNotifications().createNotification(
+        content: NotificationContent(
+          id: id,
+          channelKey: 'basic_channel',
+          category: NotificationCategory.Error,
+          actionType: ActionType.Default,
+          title: AppLocalizations.of(mainContext)!.alertTotalBalance,
+          body: AppLocalizations.of(mainContext)!.warningTotalBalance,
+        ),
+      );
+      mainContext.read<NotificationBloc>().add(GetNotificationCount());
+    }
+
+    ///* CHECK MONTHLY BUDGET / TYPE 0
     if (state.amountExpenseThisMonth > monthlyBudget) {
       final sendNotifResult = await _dbRepo.checkNotification();
       if (sendNotifResult) {
@@ -68,7 +95,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
             channelKey: 'basic_channel',
             category: NotificationCategory.Error,
             actionType: ActionType.Default,
-            title: AppLocalizations.of(mainContext)!.alert,
+            title: AppLocalizations.of(mainContext)!.alertMonthlyBudget,
             body: AppLocalizations.of(mainContext)!.warningMonthlyBudget,
           ),
         );
