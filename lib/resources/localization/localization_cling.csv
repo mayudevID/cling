@@ -59,7 +59,7 @@ userDisabledFailure,This user has been disabled. Please contact support for help
 userNotFoundFailure,"Email is not found, please create an account.","Email tidak ditemukan, silakan buat akun."
 wrongPasswordFailure,"Incorrect password, please try again.","Kata sandi yang salah, coba lagi."
 emailAlreadyFailure,An account already exists.,Akun sudah ada.
-operationNotAllowedFailure,Operation is not allowed. Please contact support.,Operasi tidak diperbolehkan. Silakan hubungi Dukungan.
+operationNotAllowedFailure,Operation is not allowed. Please contact support.,Operasi tidak diperbolehkan. Silakan hubungi dukungan.
 weakPasswordFailure,Please enter a stronger password.,Harap masukkan kata sandi yang lebih kuat.
 monthlyBudget,Monthly Budget,Anggaran bulanan
 spent,Spent,Dihabiskan
@@ -146,11 +146,11 @@ detail,Detail,Rincian
 thisYear,This Year,Tahun Ini
 thisMonth,This Month ,Bulan Ini
 notification,Notification,Notifikasi
-warningTotalBalance,Your total expenses have exceeded total income,Total pengeluaran sudah melebihi total pendapatan Anda
+warningTotalBalance,Your total expenses have exceeded total income,Total pengeluaran anda sudah melebihi total pemasukan
 alertTotalBalance,Warning - Total Balance,Peringatan - Total Saldo
 warningMonthlyBudget,Your expenses have exceeded your set monthly budget,Pengeluaran anda sudah melebihi anggaran bulanan yang ditetapkan
 alertMonthlyBudget,Warning - Monthly Budget,Peringatan - Anggaran Bulanan
-warningCurrentBalance,Your monthly expenses have exceeded your monthly income,Pengeluaran bulanan kamu sudah melebihi pendapatan bulanan
+warningCurrentBalance,"This month, your expenses have exceeded your income","Bulan ini, Pengeluaran anda sudah melebihi pemasukan"
 alertCurrentBalance,Warning - Current Balance this month,Peringatan - Saldo bulan ini
 alert,Warning,Peringatan
 markReadAll,Mark read all,Tandai baca semua
@@ -159,10 +159,11 @@ backup,Backup,Cadangkan
 confirmLogout,Confirmation,Konfirmasi
 continueLogout,Continue,Lanjutkan
 backupFound,Backup Found,Ditemukan cadangan
-useThisBackup,Use this backup?,Gunakan cadangan ini?
+useThisBackup,Restore this backup?,Gunakan cadangan ini?
 yes,Yes,Ya
 skip,"No, skip","Tidak, lewat"
-alertMonthlyBudget,Warning - Monthly Budget exceeded,Peringatan - Anggaran Bulanan terlampaui
 backupForDialog,Data backup,Pencadangan data
 backupForDialogContent,Do you want to backup data? Previous data backup will be overwritten.,Apakah Anda ingin membuat cadangan data? cadangan data sebelumnya akan ditimpa.
 totalBalance,Total balance,Total saldo
+today,Today,Hari ini
+noData,No data :(,Tidak ada data :(

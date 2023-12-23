@@ -596,11 +596,35 @@ class DatabaseRepository {
     return total[0]['unread_count'] as int;
   }
 
-  Future<List<NotificationModelClass>> getNotificationList() async {
-    List<NotificationModelClass> dataList = [];
-    List<Map<String, dynamic>> maps = await db.query(
-      NotificationMeta.nameTable,
+  Future<int?> checkLastRow() async {
+    final maps = await db.rawQuery(
+      '''
+        SELECT ${NotificationMeta.id} AS id
+        FROM ${NotificationMeta.nameTable}
+        ORDER BY ${NotificationMeta.id} DESC
+        LIMIT 1
+      ''',
     );
+
+    return (maps.isEmpty) ? null : maps[0]['id'] as int;
+  }
+
+  Future<List<NotificationModelClass>> getNotificationList(
+    String timeOffset,
+    int idOffset,
+  ) async {
+    List<NotificationModelClass> dataList = [];
+    List<Map<String, dynamic>> maps = await db.rawQuery(
+      '''
+        SELECT * FROM ${NotificationMeta.nameTable}
+        WHERE (date(${NotificationMeta.date}) = ? AND ${NotificationMeta.id} < ?) 
+        OR date(${NotificationMeta.date}) < ?
+        ORDER BY ${NotificationMeta.date} DESC
+        LIMIT 25
+      ''',
+      [timeOffset, idOffset, timeOffset],
+    );
+
     for (var data in maps) {
       dataList.add(
         NotificationModelClass(

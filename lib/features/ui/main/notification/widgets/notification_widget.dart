@@ -34,6 +34,13 @@ Widget notificationWidget(
     title = AppLocalizations.of(context)!.alertMonthlyBudget;
     desc = AppLocalizations.of(context)!.warningMonthlyBudget;
     isNeedDateContext = true;
+  } else if (data.type == 1) {
+    title = AppLocalizations.of(context)!.alertCurrentBalance;
+    desc = AppLocalizations.of(context)!.warningCurrentBalance;
+    isNeedDateContext = true;
+  } else {
+    title = AppLocalizations.of(context)!.alertTotalBalance;
+    desc = AppLocalizations.of(context)!.warningTotalBalance;
   }
 
   String checkConditionText() {
@@ -42,10 +49,13 @@ Widget notificationWidget(
         : "";
   }
 
-  return Container(
+  return AnimatedContainer(
+    duration: const Duration(milliseconds: 500),
     padding: const EdgeInsets.all(16),
+    //margin: EdgeInsets.only(bottom: 8.hmea),
+    curve: Curves.fastOutSlowIn,
     decoration: BoxDecoration(
-      color: const Color(0x3D787880),
+      color: (data.isRead) ? const Color(0x3D787880) : Colors.blueGrey[700],
       borderRadius: BorderRadius.circular(10),
     ),
     child: Column(
@@ -116,10 +126,10 @@ Widget notificationWidget(
                       .read<NotificationBloc>()
                       .add(MarkNotificationRead(idx, data));
                 },
-                child: Text(
+                child: const Text(
                   "OK",
                   style: TextStyle(
-                    color: Colors.blue[100],
+                    color: Colors.white,
                     fontFamily: FontFamily.cabinetGrotesk,
                   ),
                 ),

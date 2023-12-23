@@ -1,10 +1,12 @@
 // ignore_for_file: must_be_immutable, use_build_context_synchronously
 
 import 'package:cling/core/utils.dart';
+import 'package:cling/features/ui/language_currency/lang_currency_bloc.dart';
 import 'package:cling/features/ui/language_currency/lang_export.dart';
 import 'package:cling/features/ui/main/main_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../../resources/gen/assets.gen.dart';
@@ -77,7 +79,7 @@ class NotificationPage extends StatelessWidget {
                     child: BlocProvider.value(
                       value: BlocProvider.of<NotificationBloc>(mainContext)
                         ..add(GetNotificationList()),
-                      child: listViewBuilder(),
+                      child: listViewBuilder(context),
                     ),
                   ),
                 ),
@@ -89,22 +91,92 @@ class NotificationPage extends StatelessWidget {
     );
   }
 
-  Widget listViewBuilder() {
+  Widget listViewBuilder(BuildContext context) {
+    final dateLocale = context.select(
+      (LangCurrencyBloc bloc) =>
+          bloc.state.selectedLanguage.value.toLanguageTag(),
+    );
+    final dateFormat = DateFormat.yMMMMEEEEd(dateLocale);
+    final today = DateTime(
+      DateTime.now().year,
+      DateTime.now().month,
+      DateTime.now().day,
+    );
+
     return BlocBuilder<NotificationBloc, NotificationState>(
       buildWhen: (p, c) {
         return p.listNotif != c.listNotif;
       },
       builder: (context, state) {
-        return ListView.builder(
+        return ListView.separated(
           shrinkWrap: true,
           itemCount: state.listNotif.length,
           itemBuilder: (context, idx) {
-            return notificationWidget(
-              context,
-              idx,
-              state.listNotif[idx],
+            final itemDate = DateTime(
+              state.listNotif[idx].date.year,
+              state.listNotif[idx].date.month,
+              state.listNotif[idx].date.day,
             );
+
+            final isDateDifferent = idx > 0
+                ? !itemDate.isAtSameMomentAs(
+                    DateTime(
+                      state.listNotif[idx - 1].date.year,
+                      state.listNotif[idx - 1].date.month,
+                      state.listNotif[idx - 1].date.day,
+                    ),
+                  )
+                : true;
+
+            return (isDateDifferent)
+                ? Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Container(
+                              height: 1.hmea,
+                              color: Colors.grey,
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 8),
+                            child: Text(
+                              (itemDate.isAtSameMomentAs(today))
+                                  ? "Today"
+                                  : dateFormat.format(itemDate),
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontFamily: FontFamily.cabinetGrotesk,
+                                fontWeight: FontWeight.w700,
+                                fontSize: 9.2.sp,
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: Container(
+                              height: 1.hmea,
+                              color: Colors.grey,
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 8.hmea),
+                      notificationWidget(
+                        context,
+                        idx,
+                        state.listNotif[idx],
+                      ),
+                    ],
+                  )
+                : notificationWidget(
+                    context,
+                    idx,
+                    state.listNotif[idx],
+                  );
           },
+          separatorBuilder: (_, idx) => SizedBox(height: 8.hmea),
         );
       },
     );

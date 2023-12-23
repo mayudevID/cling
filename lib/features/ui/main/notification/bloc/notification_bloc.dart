@@ -18,14 +18,38 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
   }
 
   final DatabaseRepository _dbRepo;
+  DateTime? _timeOffset;
+  int? _idOffset;
+  bool _firstAttempt = true;
+  bool _loadAgain = true;
 
   void _getNotificationCount(event, emit) async {
     final total = await _dbRepo.getNotificationCount();
+
     emit(state.copyWith(totalNotif: total));
   }
 
   void _getNotificationList(event, emit) async {
-    final dataList = await _dbRepo.getNotificationList();
+    if (_firstAttempt) {
+      _timeOffset = DateTime.now();
+      _idOffset = await _dbRepo.checkLastRow();
+      _firstAttempt = false;
+    }
+
+    if (_idOffset == null || _timeOffset == null) return;
+
+    final dataList = await _dbRepo.getNotificationList(
+      _timeOffset!.toIso8601String(),
+      _idOffset!,
+    );
+
+    if (dataList.length < 25) _loadAgain = false;
+
+    if (_loadAgain) {
+      _timeOffset = dataList.last.date;
+      _idOffset = dataList.last.id;
+    }
+
     emit(
       state.copyWith(
         listNotif: (dataList.isNotEmpty) ? dataList : List.empty(),
@@ -50,5 +74,9 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
 
   void _clearList(event, emit) async {
     emit(state.copyWith(listNotif: List.empty()));
+    _timeOffset = null;
+    _idOffset = null;
+    _firstAttempt = true;
+    _loadAgain = true;
   }
 }

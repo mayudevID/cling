@@ -296,9 +296,9 @@
   "@alertTotalBalance": {},
   "warningMonthlyBudget": "Your expenses have exceeded your set monthly budget",
   "@warningMonthlyBudget": {},
-  "alertMonthlyBudget": "Warning - Monthly Budget exceeded",
+  "alertMonthlyBudget": "Warning - Monthly Budget",
   "@alertMonthlyBudget": {},
-  "warningCurrentBalance": "Your monthly expenses have exceeded your monthly income",
+  "warningCurrentBalance": "This month, your expenses have exceeded your income",
   "@warningCurrentBalance": {},
   "alertCurrentBalance": "Warning - Current Balance this month",
   "@alertCurrentBalance": {},
@@ -316,7 +316,7 @@
   "@continueLogout": {},
   "backupFound": "Backup Found",
   "@backupFound": {},
-  "useThisBackup": "Use this backup?",
+  "useThisBackup": "Restore this backup?",
   "@useThisBackup": {},
   "yes": "Yes",
   "@yes": {},
@@ -325,5 +325,9 @@
   "backupForDialogContent": "Do you want to backup data? Previous data backup will be overwritten.",
   "@backupForDialogContent": {},
   "totalBalance": "Total balance",
-  "@totalBalance": {}
+  "@totalBalance": {},
+  "today": "Today",
+  "@today": {},
+  "noData": "No data :(",
+  "@noData": {}
 }

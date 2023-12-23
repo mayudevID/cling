@@ -8,6 +8,7 @@ import 'package:sizer/sizer.dart';
 
 import '../../../../../resources/gen/fonts.gen.dart';
 import '../../../language_currency/lang_export.dart';
+import 'warning_amount_icon.dart';
 
 Widget incomeAndExpense(BuildContext context) {
   return Container(
@@ -38,6 +39,19 @@ Widget incomeAndExpense(BuildContext context) {
               ),
             ),
             const Spacer(),
+            BlocBuilder<HomeBloc, HomeState>(buildWhen: (p, c) {
+              return p.amountIncomeThisMonth != c.amountIncomeThisMonth ||
+                  p.amountExpenseThisMonth != c.amountExpenseThisMonth;
+            }, builder: (context, state) {
+              final currBalance =
+                  state.amountIncomeThisMonth - state.amountExpenseThisMonth;
+              if (currBalance > 0) return const SizedBox();
+
+              return WarningAmountIcon(
+                content: AppLocalizations.of(context)!.warningMonthlyBudget,
+              );
+            }),
+            SizedBox(width: 8.wmea),
             BlocBuilder<HomeBloc, HomeState>(
               buildWhen: (p, c) {
                 return p.amountIncomeThisMonth != c.amountIncomeThisMonth ||

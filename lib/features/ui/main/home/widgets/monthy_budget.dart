@@ -196,9 +196,8 @@ Widget monthlyBudget(BuildContext context) {
                             profileState.userModel.monthlyBudget) *
                         100.0;
 
-                    if (amount <= 100) {
-                      return const SizedBox();
-                    }
+                    if (amount <= 100) return const SizedBox();
+
                     return WarningAmountIcon(
                       content:
                           AppLocalizations.of(context)!.warningMonthlyBudget,
