@@ -329,5 +329,7 @@
   "today": "Hari ini",
   "@today": {},
   "noData": "Tidak ada data :(",
-  "@noData": {}
+  "@noData": {},
+  "savingDate": "Tanggal menabung",
+  "@savingDate": {}
 }

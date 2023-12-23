@@ -39,18 +39,18 @@ class GoalDetailBloc extends Bloc<GoalDetailEvent, GoalDetailState> {
   }
 
   void _changeIcon(ChangeIcon event, emit) async {
-    final newGoalModel = GoalModel(
-      id: state.goalModel.id,
-      name: state.goalModel.name,
-      image: event.icon,
-      target: state.goalModel.target,
-      collected: state.goalModel.collected,
-    );
-    await _dbRepo.updateImageGoal(newGoalModel);
+    // final newGoalModel = GoalModel(
+    //   id: state.goalModel.id,
+    //   name: state.goalModel.name,
+    //   image: event.icon,
+    //   target: state.goalModel.target,
+    //   collected: state.goalModel.collected,
+    // );
+    // await _dbRepo.updateImageGoal(newGoalModel);
 
-    mainContext.read<HomeBloc>().add(GetGoals());
+    // mainContext.read<HomeBloc>().add(GetGoals());
 
-    emit(state.copyWith(goalModel: newGoalModel));
+    // emit(state.copyWith(goalModel: newGoalModel));
   }
 
   void _setDateInput(SetDateGoalInput event, emit) {
@@ -63,19 +63,26 @@ class GoalDetailBloc extends Bloc<GoalDetailEvent, GoalDetailState> {
   }
 
   void _addSaving(event, emit) async {
-    if (state.amount.trim().isEmpty || state.amount.trim() == "0") {
+    if (state.amount.trim().isEmpty ||
+        state.amount.trim() == "0" ||
+        state.amount.trim() == "000") {
       errorToast(AppLocalizations.of(mainContext)!.pleaseFillAmount);
       return;
     }
 
     try {
-      final newAmount = double.parse(state.amount);
+      final amount = double.parse(state.amount);
+      if (amount > state.goalModel.target - state.goalModel.collected) {
+        errorToast("Jumlah melebihi sisa tabungan");
+        return;
+      }
+
       final newGoalModel = GoalModel(
         id: state.goalModel.id,
         name: state.goalModel.name,
         image: state.goalModel.image,
         target: state.goalModel.target,
-        collected: state.goalModel.collected + newAmount,
+        collected: state.goalModel.collected + amount,
       );
       await Future.wait([
         _dbRepo.saveGoalSaving(
@@ -85,7 +92,7 @@ class GoalDetailBloc extends Bloc<GoalDetailEvent, GoalDetailState> {
             state.selectedDate.month,
             state.selectedDate.day,
           ),
-          newAmount,
+          amount,
         ),
         _dbRepo.updateCollectedGoal(newGoalModel),
       ]);

@@ -19,8 +19,8 @@ void addGoalSavingBottomSheet(BuildContext mainContext) {
     context: mainContext,
     shape: const BeveledRectangleBorder(
       borderRadius: BorderRadius.only(
-        topLeft: Radius.circular(24),
-        topRight: Radius.circular(24),
+        topLeft: Radius.circular(10),
+        topRight: Radius.circular(10),
       ),
     ),
     builder: (context) {

@@ -5,9 +5,9 @@ import 'package:sizer/sizer.dart';
 
 import '../../../../../resources/gen/assets.gen.dart';
 import '../bloc/goal_detail_bloc.dart';
-import 'dialog_pick_edit_goal_logo.dart';
+import 'edit_goal/show_edit_goal_bottom_sheet.dart';
 
-Widget editGoalLogoPicker(BuildContext context) {
+Widget logoGoalWidget(BuildContext context) {
   return SizedBox(
     width: 140.wmea,
     height: 140.wmea,
@@ -21,7 +21,7 @@ Widget editGoalLogoPicker(BuildContext context) {
             vertical: 16.hmea,
           ),
           decoration: ShapeDecoration(
-            color: const Color(0xFF313131),
+            color: Colors.white,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20),
             ),
@@ -52,7 +52,7 @@ Widget editGoalLogoPicker(BuildContext context) {
           right: 0,
           child: GestureDetector(
             onTap: () {
-              dialogPickEditGoalLogo(context);
+              showEditGoalBottomSheet(context);
             },
             child: Container(
               width: 36.wmea,

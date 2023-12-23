@@ -2,6 +2,7 @@ import 'package:cling/core/common_widget.dart';
 import 'package:cling/core/utils.dart';
 import 'package:cling/features/model/goal_model.dart';
 import 'package:cling/features/repository/database_repository.dart';
+import 'package:cling/features/ui/language_currency/lang_export.dart';
 import 'package:cling/features/ui/main/goal_detail/widgets/add_goal_saving_bottom_sheet.dart';
 import 'package:cling/injection.dart';
 import 'package:flutter/material.dart';
@@ -13,12 +14,14 @@ import '../../../../../resources/gen/assets.gen.dart';
 import '../../../../../resources/gen/fonts.gen.dart';
 import '../../../language_currency/lang_currency_bloc.dart';
 import '../bloc/goal_detail_bloc.dart';
-import '../widgets/edit_goal_logo_picker.dart';
+import '../widgets/logo_goal_widget.dart';
 import '../widgets/target_goal_widget.dart';
 
 class GoalDetailPage extends StatelessWidget {
   const GoalDetailPage({super.key, required this.goalModel});
   final GoalModel goalModel;
+
+  static GlobalKey<NavigatorState> navKeyMain = GlobalKey<NavigatorState>();
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +40,7 @@ class GoalDetailPageContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
+      key: GoalDetailPage.navKeyMain,
       child: Scaffold(
         backgroundColor: Colors.black,
         body: Padding(
@@ -77,7 +81,7 @@ class GoalDetailPageContent extends StatelessWidget {
               SizedBox(
                 height: 32.hmea,
               ),
-              editGoalLogoPicker(context),
+              logoGoalWidget(context),
               SizedBox(
                 height: 24.hmea,
               ),
@@ -88,7 +92,7 @@ class GoalDetailPageContent extends StatelessWidget {
               Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  "Saving History",
+                  AppLocalizations.of(context)!.savingDate,
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 12.5.sp,

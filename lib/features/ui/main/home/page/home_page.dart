@@ -57,7 +57,7 @@ class HomePage extends StatelessWidget {
                     return p.totalBalance != c.totalBalance;
                   },
                   builder: (context, state) {
-                    if (state.totalBalance > 0) return const SizedBox();
+                    if (state.totalBalance >= 0) return const SizedBox();
 
                     return WarningAmountIcon(
                       content:

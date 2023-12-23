@@ -144,7 +144,7 @@ class NotificationPage extends StatelessWidget {
                             padding: const EdgeInsets.symmetric(horizontal: 8),
                             child: Text(
                               (itemDate.isAtSameMomentAs(today))
-                                  ? "Today"
+                                  ? AppLocalizations.of(context)!.today
                                   : dateFormat.format(itemDate),
                               style: TextStyle(
                                 color: Colors.white,

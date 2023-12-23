@@ -329,5 +329,7 @@
   "today": "Today",
   "@today": {},
   "noData": "No data :(",
-  "@noData": {}
+  "@noData": {},
+  "savingDate": "Saving date",
+  "@savingDate": {}
 }

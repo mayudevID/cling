@@ -1,11 +1,12 @@
 import 'package:cling/core/utils.dart';
 import 'package:cling/features/ui/main/goal_detail/bloc/goal_detail_bloc.dart';
+import 'package:cling/features/ui/main/goal_detail/pages/goal_detail_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../../../../core/init_database.dart';
-import '../../../../../resources/gen/fonts.gen.dart';
+import '../../../../../../core/init_database.dart';
+import '../../../../../../resources/gen/fonts.gen.dart';
 
 Future<void> dialogPickEditGoalLogo(BuildContext mainContext) async {
   await showDialog(
@@ -14,9 +15,7 @@ Future<void> dialogPickEditGoalLogo(BuildContext mainContext) async {
     builder: (_) => PopScope(
       canPop: false,
       child: Dialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         elevation: 0,
         backgroundColor: Colors.transparent,
         child: Container(
@@ -58,9 +57,9 @@ Future<void> dialogPickEditGoalLogo(BuildContext mainContext) async {
                   itemBuilder: (BuildContext context, int index) {
                     return GestureDetector(
                       onTap: () {
-                        mainContext.read<GoalDetailBloc>().add(
-                              ChangeIcon(emotLogo[index]),
-                            );
+                        GoalDetailPage.navKeyMain.currentContext!
+                            .read<GoalDetailBloc>()
+                            .add(ChangeIcon(emotLogo[index]));
                         Navigator.pop(context);
                       },
                       child: Center(
