@@ -1,56 +1,84 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:cling/core/utils.dart';
-import 'package:cling/features/model/goal_model.dart';
-import 'package:cling/features/repository/database_repository.dart';
-import 'package:cling/features/ui/main/main_page.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 
 import '../../../../../core/common_widget.dart';
+import '../../../../model/currency.dart';
+import '../../../../model/goal_model.dart';
+import '../../../../repository/database_repository.dart';
+import '../../../../repository/settings_repository.dart';
 import '../../../language_currency/lang_export.dart';
 import '../../home/bloc/home_bloc.dart';
+import '../../main_page.dart';
+import '../widgets/edit_goal/text_field_amount_edit_goal.dart';
+import '../widgets/edit_goal/text_field_name_edit_goal.dart';
 
 part 'goal_detail_event.dart';
 part 'goal_detail_state.dart';
 
 class GoalDetailBloc extends Bloc<GoalDetailEvent, GoalDetailState> {
-  GoalDetailBloc({required DatabaseRepository dbRepo})
-      : _dbRepo = dbRepo,
+  GoalDetailBloc({
+    required DatabaseRepository dbRepo,
+    required SettingsRepository settingsRepo,
+  })  : _dbRepo = dbRepo,
+        _settingsRepo = settingsRepo,
         super(GoalDetailState()) {
     on<InitGoal>(_initGoal);
+    on<InitNameEdit>(_initNameEdit);
+    on<InitAmountEdit>(_initAmountEdit);
     on<ChangeIcon>(_changeIcon);
     on<SetDateGoalInput>(_setDateInput);
     on<SetAmountInput>(_setAmountInput);
     on<AddSaving>(_addSaving);
+    on<SaveEdit>(_saveEdit);
+    on<DeleteGoal>(_deleteGoal);
   }
 
   final DatabaseRepository _dbRepo;
+  final SettingsRepository _settingsRepo;
   var mainContext = MainPage.navKeyMain.currentContext!;
 
   void _initGoal(InitGoal event, emit) async {
     final result = await _dbRepo.getGoalDetailSave(event.goalModel.id!);
+
     emit(
       state.copyWith(
         goalModel: event.goalModel,
+        tempLogoGoal: event.goalModel.image,
         dataSavingsList: result,
       ),
     );
   }
 
+  void _initNameEdit(event, emit) {
+    TextFieldNameEditGoal.textEditingController.text = state.goalModel.name;
+    emit(state.copyWith(tempLogoGoal: state.goalModel.image));
+  }
+
+  void _initAmountEdit(event, _) {
+    final currentCurr = _settingsRepo.getCurrentCurrency();
+    final currency = currentCurr != null
+        ? Currency.values
+            .where((item) => item.value.countryCode == currentCurr)
+            .first
+        : Currency.idr;
+
+    final numFormat = NumberFormat.currency(
+      locale: currency.value.toLanguageTag(),
+      decimalDigits: 2,
+      customPattern: '\u00a4###,###.00',
+      name: "",
+    );
+
+    TextFieldAmountEditGoal.textEditingController.text =
+        numFormat.format(state.goalModel.target / 100.0);
+  }
+
   void _changeIcon(ChangeIcon event, emit) async {
-    // final newGoalModel = GoalModel(
-    //   id: state.goalModel.id,
-    //   name: state.goalModel.name,
-    //   image: event.icon,
-    //   target: state.goalModel.target,
-    //   collected: state.goalModel.collected,
-    // );
-    // await _dbRepo.updateImageGoal(newGoalModel);
-
-    // mainContext.read<HomeBloc>().add(GetGoals());
-
-    // emit(state.copyWith(goalModel: newGoalModel));
+    emit(state.copyWith(tempLogoGoal: event.icon));
   }
 
   void _setDateInput(SetDateGoalInput event, emit) {
@@ -73,17 +101,15 @@ class GoalDetailBloc extends Bloc<GoalDetailEvent, GoalDetailState> {
     try {
       final amount = double.parse(state.amount);
       if (amount > state.goalModel.target - state.goalModel.collected) {
-        errorToast("Jumlah melebihi sisa tabungan");
+        errorToast(
+          AppLocalizations.of(mainContext)!.amountExceedsRemainingSaving,
+        );
         return;
       }
-
-      final newGoalModel = GoalModel(
-        id: state.goalModel.id,
-        name: state.goalModel.name,
-        image: state.goalModel.image,
-        target: state.goalModel.target,
+      final newGoalModel = state.goalModel.copyWith(
         collected: state.goalModel.collected + amount,
       );
+
       await Future.wait([
         _dbRepo.saveGoalSaving(
           state.goalModel.id!,
@@ -109,5 +135,59 @@ class GoalDetailBloc extends Bloc<GoalDetailEvent, GoalDetailState> {
         AppLocalizations.of(mainContext)!.invalidAmount,
       );
     }
+  }
+
+  void _saveEdit(event, emit) async {
+    final newName = TextFieldNameEditGoal.textEditingController.text.trim();
+    final newTarget = TextFieldAmountEditGoal.textEditingController.text.trim();
+    if (newName.isEmpty || newName == "") {
+      errorSnackbar(mainContext, AppLocalizations.of(mainContext)!.nameEmpty);
+      return;
+    }
+
+    if (newTarget.isEmpty || newTarget == "000" || newTarget == "0") {
+      errorSnackbar(
+        mainContext,
+        AppLocalizations.of(mainContext)!.pleaseFillAmount,
+      );
+      return;
+    }
+
+    late double resultAmountTarget;
+
+    try {
+      resultAmountTarget = double.parse(newTarget.removeDot);
+      if (state.goalModel.collected > resultAmountTarget) {
+        errorSnackbar(
+          mainContext,
+          AppLocalizations.of(mainContext)!.collectedHigher,
+        );
+        return;
+      }
+    } on FormatException catch (_) {
+      errorSnackbar(
+        mainContext,
+        AppLocalizations.of(mainContext)!.invalidAmount,
+      );
+      return;
+    }
+
+    final stateGoalModel = state.goalModel;
+    final newGoalModel = stateGoalModel.copyWith(
+      target: resultAmountTarget,
+      name: newName,
+      image: state.tempLogoGoal,
+    );
+
+    await _dbRepo.updateGoal(newGoalModel);
+    mainContext.read<HomeBloc>().add(GetGoals());
+    emit(
+      state.copyWith(goalModel: newGoalModel, tempLogoGoal: state.tempLogoGoal),
+    );
+  }
+
+  void _deleteGoal(event, emit) async {
+    await _dbRepo.deleteGoalWithSaving(state.goalModel.id!);
+    mainContext.read<HomeBloc>().add(GetGoals());
   }
 }

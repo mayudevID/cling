@@ -151,6 +151,25 @@ void errorSnackbar(BuildContext context, String msg) {
     );
 }
 
+///* Success Snackbar
+void successSnackbar(BuildContext context, String msg) {
+  ScaffoldMessenger.of(context)
+    ..hideCurrentSnackBar()
+    ..showSnackBar(
+      SnackBar(
+        backgroundColor: Colors.red.shade400,
+        content: Text(
+          msg,
+          style: TextStyle(
+            fontFamily: FontFamily.cabinetGrotesk,
+            fontWeight: FontWeight.w600,
+            fontSize: 10.sp,
+          ),
+        ),
+      ),
+    );
+}
+
 ///* Error Toast
 void errorToast(String msg) {
   getIt<FToast>()
@@ -396,6 +415,111 @@ Widget appBarProfile({
           )
         ]
       ],
+    ),
+  );
+}
+
+///* Dialog Delete
+Future<bool> dialogDelete(BuildContext context) async {
+  return await showDialog(
+    context: context,
+    barrierDismissible: false,
+    builder: (_) => PopScope(
+      canPop: false,
+      child: Dialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        child: Container(
+          decoration: ShapeDecoration(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+            color: Colors.white,
+          ),
+          padding: EdgeInsets.only(
+            top: 18.hmea,
+            left: 18.wmea,
+            right: 18.wmea,
+            bottom: 18.hmea,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                AppLocalizations.of(context)!.deleteConfirmation,
+                style: TextStyle(
+                  fontFamily: FontFamily.cabinetGrotesk,
+                  fontSize: 10.sp,
+                  color: Colors.black,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(
+                height: 12.hmea,
+              ),
+              Row(
+                children: [
+                  const Spacer(),
+                  GestureDetector(
+                    onTap: () async {
+                      Navigator.pop(context, true);
+                    },
+                    child: Container(
+                      padding: EdgeInsets.all(12.hmea),
+                      decoration: BoxDecoration(
+                        color: Colors.red,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      alignment: Alignment.center,
+                      child: Align(
+                        alignment: Alignment.center,
+                        child: Text(
+                          AppLocalizations.of(context)!.yes,
+                          style: TextStyle(
+                            fontFamily: FontFamily.cabinetGrotesk,
+                            fontSize: 10.sp,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 10.wmea),
+                  GestureDetector(
+                    onTap: () async {
+                      Navigator.pop(context, false);
+                    },
+                    child: Container(
+                      padding: EdgeInsets.all(12.hmea),
+                      decoration: BoxDecoration(
+                        color: Colors.black,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      alignment: Alignment.center,
+                      child: Align(
+                        alignment: Alignment.center,
+                        child: Text(
+                          AppLocalizations.of(context)!.no,
+                          style: TextStyle(
+                            fontFamily: FontFamily.cabinetGrotesk,
+                            fontSize: 10.sp,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
     ),
   );
 }

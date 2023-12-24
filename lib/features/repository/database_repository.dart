@@ -51,6 +51,191 @@ class DatabaseRepository {
     await db.close();
   }
 
+  Future<Map<String, double?>> getTotalIncomeExpenseCurrMonth() async {
+    final monthNow = DateTime.now();
+    final monthNowFirstDay = DateTime(
+      monthNow.year,
+      monthNow.month,
+      1,
+    ).toIso8601String();
+
+    final monthNowLastDay = monthNow.toIso8601String();
+
+    final result = await Future.wait([
+      db.rawQuery(
+        '''
+        SELECT strftime('%Y-%m', ${IncomeMeta.date}) AS Month,
+        SUM(${IncomeMeta.amount}) AS TotalIncome
+        FROM ${IncomeMeta.nameTable}
+        WHERE date(${IncomeMeta.date}) >= date(?)
+        AND date(${IncomeMeta.date}) <= date(?)
+        GROUP BY Month
+      ''',
+        [monthNowFirstDay, monthNowLastDay],
+      ),
+      db.rawQuery(
+        '''
+        SELECT strftime('%Y-%m', ${ExpenseMeta.date}) AS Month,
+        SUM(${ExpenseMeta.amount}) AS TotalExpense
+        FROM ${ExpenseMeta.nameTable}
+        WHERE date(${ExpenseMeta.date}) >= date(?)
+        AND date(${ExpenseMeta.date}) <= date(?)
+        GROUP BY Month
+      ''',
+        [monthNowFirstDay, monthNowLastDay],
+      ),
+    ]);
+
+    //* Empty: []
+    //* Non Empty: [{....}]
+
+    double? incomeParse;
+    double? expenseParse;
+
+    if (result[0].isNotEmpty) {
+      final income = result[0][0]['TotalIncome'];
+      incomeParse = double.parse(income.toString());
+    }
+
+    if (result[1].isNotEmpty) {
+      final expense = result[1][0]['TotalExpense'] ?? 0;
+      expenseParse = double.parse(expense.toString());
+    }
+
+    return {"income": incomeParse, "expense": expenseParse};
+  }
+
+  Future<int> getTotalBalance() async {
+    final result = await Future.wait([
+      db.rawQuery(
+        '''
+        SELECT SUM(${IncomeMeta.amount}) AS TotalIncome
+        FROM ${IncomeMeta.nameTable}
+      ''',
+      ),
+      db.rawQuery(
+        '''
+        SELECT SUM(${ExpenseMeta.amount}) AS TotalExpense
+        FROM ${ExpenseMeta.nameTable}
+      ''',
+      ),
+    ]);
+    final income = (result[0][0]['TotalIncome'] ?? 0) as int;
+    final expense = (result[1][0]['TotalExpense'] ?? 0) as int;
+
+    return income - expense;
+  }
+
+  Future<Map<String, Map<String, dynamic>>?>
+      getTotalIncomeExpenseAllMonth() async {
+    final now = DateTime.now();
+
+    final monthNowFormatted = DateTime(
+      now.year,
+      now.month,
+      DateTime(now.year, now.month + 1, 0).day,
+    ).toIso8601String();
+
+    final fourMonthsAgoFormatted = DateTime(
+      now.year,
+      1,
+      1,
+    ).toIso8601String();
+
+    final result = await Future.wait([
+      db.rawQuery(
+        '''
+        SELECT strftime('%Y-%m', ${IncomeMeta.date}) AS Month, 
+        SUM(${IncomeMeta.amount}) AS TotalIncome 
+        FROM ${IncomeMeta.nameTable}
+        WHERE date(${IncomeMeta.date}) >= date(?)
+        AND date(${IncomeMeta.date}) <= date(?)
+        GROUP BY Month
+      ''',
+        [fourMonthsAgoFormatted, monthNowFormatted],
+      ),
+      db.rawQuery(
+        '''
+        SELECT strftime('%Y-%m', ${ExpenseMeta.date}) AS Month, 
+        SUM(${ExpenseMeta.amount}) AS TotalExpense
+        FROM ${ExpenseMeta.nameTable}
+        WHERE date(${ExpenseMeta.date}) >= date(?)
+        AND date(${ExpenseMeta.date}) <= date(?)
+        GROUP BY Month
+      ''',
+        [fourMonthsAgoFormatted, monthNowFormatted],
+      ),
+    ]);
+
+    Map<String, Map<String, dynamic>> combinedData = {};
+
+    if (result[0].isNotEmpty) {
+      for (var income in result[0]) {
+        var month = income["Month"] as String;
+        combinedData[month] ??= {"TotalIncome": 0, "TotalExpense": 0};
+        combinedData[month]!["TotalIncome"] = income["TotalIncome"];
+      }
+    }
+
+    if (result[1].isNotEmpty) {
+      for (var expense in result[1]) {
+        var month = expense["Month"] as String;
+        combinedData[month] ??= {"TotalIncome": 0, "TotalExpense": 0};
+        combinedData[month]!["TotalExpense"] = expense["TotalExpense"];
+      }
+    }
+
+    return (combinedData.isEmpty) ? null : combinedData;
+  }
+
+  Future<List<Map<String, Object?>>> getMost(
+    AllStatsChoose allStatsChoose,
+  ) async {
+    final first = DateTime(DateTime.now().year, 1, 1).toIso8601String();
+    final last = DateTime(DateTime.now().year, 12, 31).toIso8601String();
+    List<Map<String, Object?>> result;
+    switch (allStatsChoose) {
+      case AllStatsChoose.expense:
+        result = await db.rawQuery(
+          '''
+            SELECT ${ExpenseCategoriesMeta.nameTable}.${ExpenseCategoriesMeta.expenseCategories} AS Categories, 
+            SUM(${ExpenseMeta.amount}) AS TotalExpense
+            FROM ${ExpenseMeta.nameTable}
+            INNER JOIN ${ExpenseCategoriesMeta.nameTable} 
+            ON ${ExpenseMeta.nameTable}.${ExpenseMeta.idCategories} 
+            = 
+            ${ExpenseCategoriesMeta.nameTable}.${ExpenseCategoriesMeta.id} 
+            WHERE date(${ExpenseMeta.date}) >= date(?)
+            AND date(${ExpenseMeta.date}) <= date(?)
+            GROUP BY Categories
+            ORDER BY TotalExpense
+            DESC LIMIT 7;
+          ''',
+          [first, last],
+        );
+        return result;
+      case AllStatsChoose.income:
+        result = await db.rawQuery(
+          '''
+            SELECT ${IncomeSourceMeta.nameTable}.${IncomeSourceMeta.incomeSource} AS Source, 
+            SUM(${IncomeMeta.amount}) AS TotalIncome
+            FROM ${IncomeMeta.nameTable}
+            INNER JOIN ${IncomeSourceMeta.nameTable} 
+            ON ${IncomeMeta.nameTable}.${IncomeMeta.idIncomeSource} 
+            = 
+            ${IncomeSourceMeta.nameTable}.${IncomeSourceMeta.id} 
+            WHERE date(${IncomeMeta.date}) >= date(?)
+            AND date(${IncomeMeta.date}) <= date(?)
+            GROUP BY Source
+            ORDER BY TotalIncome
+            DESC LIMIT 7;
+          ''',
+          [first, last],
+        );
+        return result;
+    }
+  }
+
   //* ================ GOAL CRUD ================
 
   Future<void> insertGoal(GoalModel goalModel) async {
@@ -66,14 +251,21 @@ class DatabaseRepository {
     );
   }
 
-  Future<void> updateImageGoal(GoalModel goalModel) async {
+  Future<void> updateGoal(GoalModel goalModel) async {
     await db.rawUpdate(
       '''
         UPDATE ${GoalMeta.nameTable} 
-        SET ${GoalMeta.image} = ? 
+        SET ${GoalMeta.name} = ?,
+        ${GoalMeta.image} = ?,
+        ${GoalMeta.target} = ?
         WHERE ${GoalMeta.id} = ?
       ''',
-      [goalModel.image, goalModel.id],
+      [
+        goalModel.name,
+        goalModel.image,
+        goalModel.target,
+        goalModel.id,
+      ],
     );
   }
 
@@ -117,6 +309,32 @@ class DatabaseRepository {
       },
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
+  }
+
+  Future<List<GoalModel>> getGoals() async {
+    List<GoalModel> dataList = [];
+    List<Map<String, dynamic>> maps = await db.query(
+      GoalMeta.nameTable,
+    );
+    for (var element in maps) {
+      dataList.add(GoalModel.fromDatabase(element));
+    }
+    return dataList;
+  }
+
+  Future<void> deleteGoalWithSaving(int id) async {
+    await Future.wait([
+      db.delete(
+        GoalMeta.nameTable,
+        where: "${GoalMeta.id} = ?",
+        whereArgs: [id],
+      ),
+      db.delete(
+        GoalSavingMeta.nameTable,
+        where: "${GoalSavingMeta.idGoal} = ?",
+        whereArgs: [id],
+      ),
+    ]);
   }
 
   //* ================ INCOME CRUD ================
@@ -298,181 +516,6 @@ class DatabaseRepository {
     return listData;
   }
 
-  Future<List<GoalModel>> getGoals() async {
-    List<GoalModel> dataList = [];
-    List<Map<String, dynamic>> maps = await db.query(
-      GoalMeta.nameTable,
-    );
-    for (var element in maps) {
-      dataList.add(GoalModel.fromDatabase(element));
-    }
-    return dataList;
-  }
-
-  Future<Map<String, double?>> getTotalIncomeExpenseCurrMonth() async {
-    final monthNow = DateTime.now();
-    final monthNowFirstDay = DateTime(
-      monthNow.year,
-      monthNow.month,
-      1,
-    ).toIso8601String();
-
-    final monthNowLastDay = monthNow.toIso8601String();
-
-    final result = await Future.wait([
-      db.rawQuery(
-        '''
-        SELECT strftime('%Y-%m', ${IncomeMeta.date}) AS Month,
-        SUM(${IncomeMeta.amount}) AS TotalIncome
-        FROM ${IncomeMeta.nameTable}
-        WHERE date(${IncomeMeta.date}) >= date(?)
-        AND date(${IncomeMeta.date}) <= date(?)
-        GROUP BY Month
-      ''',
-        [monthNowFirstDay, monthNowLastDay],
-      ),
-      db.rawQuery(
-        '''
-        SELECT strftime('%Y-%m', ${ExpenseMeta.date}) AS Month,
-        SUM(${ExpenseMeta.amount}) AS TotalExpense
-        FROM ${ExpenseMeta.nameTable}
-        WHERE date(${ExpenseMeta.date}) >= date(?)
-        AND date(${ExpenseMeta.date}) <= date(?)
-        GROUP BY Month
-      ''',
-        [monthNowFirstDay, monthNowLastDay],
-      ),
-    ]);
-
-    //* Empty: []
-    //* Non Empty: [{....}]
-
-    double? incomeParse;
-    double? expenseParse;
-
-    if (result[0].isNotEmpty) {
-      final income = result[0][0]['TotalIncome'];
-      incomeParse = double.parse(income.toString());
-    }
-
-    if (result[1].isNotEmpty) {
-      final expense = result[1][0]['TotalExpense'] ?? 0;
-      expenseParse = double.parse(expense.toString());
-    }
-
-    return {"income": incomeParse, "expense": expenseParse};
-  }
-
-  Future<Map<String, Map<String, dynamic>>?>
-      getTotalIncomeExpenseAllMonth() async {
-    final now = DateTime.now();
-
-    final monthNowFormatted = DateTime(
-      now.year,
-      now.month,
-      DateTime(now.year, now.month + 1, 0).day,
-    ).toIso8601String();
-
-    final fourMonthsAgoFormatted = DateTime(
-      now.year,
-      1,
-      1,
-    ).toIso8601String();
-
-    final result = await Future.wait([
-      db.rawQuery(
-        '''
-        SELECT strftime('%Y-%m', ${IncomeMeta.date}) AS Month, 
-        SUM(${IncomeMeta.amount}) AS TotalIncome 
-        FROM ${IncomeMeta.nameTable}
-        WHERE date(${IncomeMeta.date}) >= date(?)
-        AND date(${IncomeMeta.date}) <= date(?)
-        GROUP BY Month
-      ''',
-        [fourMonthsAgoFormatted, monthNowFormatted],
-      ),
-      db.rawQuery(
-        '''
-        SELECT strftime('%Y-%m', ${ExpenseMeta.date}) AS Month, 
-        SUM(${ExpenseMeta.amount}) AS TotalExpense
-        FROM ${ExpenseMeta.nameTable}
-        WHERE date(${ExpenseMeta.date}) >= date(?)
-        AND date(${ExpenseMeta.date}) <= date(?)
-        GROUP BY Month
-      ''',
-        [fourMonthsAgoFormatted, monthNowFormatted],
-      ),
-    ]);
-
-    Map<String, Map<String, dynamic>> combinedData = {};
-
-    if (result[0].isNotEmpty) {
-      for (var income in result[0]) {
-        var month = income["Month"] as String;
-        combinedData[month] ??= {"TotalIncome": 0, "TotalExpense": 0};
-        combinedData[month]!["TotalIncome"] = income["TotalIncome"];
-      }
-    }
-
-    if (result[1].isNotEmpty) {
-      for (var expense in result[1]) {
-        var month = expense["Month"] as String;
-        combinedData[month] ??= {"TotalIncome": 0, "TotalExpense": 0};
-        combinedData[month]!["TotalExpense"] = expense["TotalExpense"];
-      }
-    }
-
-    return (combinedData.isEmpty) ? null : combinedData;
-  }
-
-  Future<List<Map<String, Object?>>> getMost(
-    AllStatsChoose allStatsChoose,
-  ) async {
-    final first = DateTime(DateTime.now().year, 1, 1).toIso8601String();
-    final last = DateTime(DateTime.now().year, 12, 31).toIso8601String();
-    List<Map<String, Object?>> result;
-    switch (allStatsChoose) {
-      case AllStatsChoose.expense:
-        result = await db.rawQuery(
-          '''
-            SELECT ${ExpenseCategoriesMeta.nameTable}.${ExpenseCategoriesMeta.expenseCategories} AS Categories, 
-            SUM(${ExpenseMeta.amount}) AS TotalExpense
-            FROM ${ExpenseMeta.nameTable}
-            INNER JOIN ${ExpenseCategoriesMeta.nameTable} 
-            ON ${ExpenseMeta.nameTable}.${ExpenseMeta.idCategories} 
-            = 
-            ${ExpenseCategoriesMeta.nameTable}.${ExpenseCategoriesMeta.id} 
-            WHERE date(${ExpenseMeta.date}) >= date(?)
-            AND date(${ExpenseMeta.date}) <= date(?)
-            GROUP BY Categories
-            ORDER BY TotalExpense
-            DESC LIMIT 7;
-          ''',
-          [first, last],
-        );
-        return result;
-      case AllStatsChoose.income:
-        result = await db.rawQuery(
-          '''
-            SELECT ${IncomeSourceMeta.nameTable}.${IncomeSourceMeta.incomeSource} AS Source, 
-            SUM(${IncomeMeta.amount}) AS TotalIncome
-            FROM ${IncomeMeta.nameTable}
-            INNER JOIN ${IncomeSourceMeta.nameTable} 
-            ON ${IncomeMeta.nameTable}.${IncomeMeta.idIncomeSource} 
-            = 
-            ${IncomeSourceMeta.nameTable}.${IncomeSourceMeta.id} 
-            WHERE date(${IncomeMeta.date}) >= date(?)
-            AND date(${IncomeMeta.date}) <= date(?)
-            GROUP BY Source
-            ORDER BY TotalIncome
-            DESC LIMIT 7;
-          ''',
-          [first, last],
-        );
-        return result;
-    }
-  }
-
   Future<List<Map<String, Object?>>> getExpenseBreakdown(
     DateTime startDate,
     DateTime endDate,
@@ -539,28 +582,7 @@ class DatabaseRepository {
     return listData;
   }
 
-  //* ================ MISC ======================
-
-  Future<int> getTotalBalance() async {
-    final result = await Future.wait([
-      db.rawQuery(
-        '''
-        SELECT SUM(${IncomeMeta.amount}) AS TotalIncome
-        FROM ${IncomeMeta.nameTable}
-      ''',
-      ),
-      db.rawQuery(
-        '''
-        SELECT SUM(${ExpenseMeta.amount}) AS TotalExpense
-        FROM ${ExpenseMeta.nameTable}
-      ''',
-      ),
-    ]);
-    final income = (result[0][0]['TotalIncome'] ?? 0) as int;
-    final expense = (result[1][0]['TotalExpense'] ?? 0) as int;
-
-    return income - expense;
-  }
+  //* ================ NOTIFICATION CRUD ======================
 
   Future<void> updateNotificationIsRead(int id) async {
     await db.rawQuery(
@@ -596,31 +618,41 @@ class DatabaseRepository {
     return total[0]['unread_count'] as int;
   }
 
-  Future<int?> checkLastRow() async {
+  Future<NotificationModelClass?> checkLastRow() async {
     final maps = await db.rawQuery(
       '''
-        SELECT ${NotificationMeta.id} AS id
+        SELECT *
         FROM ${NotificationMeta.nameTable}
         ORDER BY ${NotificationMeta.id} DESC
         LIMIT 1
       ''',
     );
 
-    return (maps.isEmpty) ? null : maps[0]['id'] as int;
+    return (maps.isEmpty)
+        ? null
+        : NotificationModelClass(
+            id: maps[0][NotificationMeta.id] as int,
+            title: maps[0][NotificationMeta.title] as String,
+            desc: maps[0][NotificationMeta.desc] as String,
+            date: DateTime.parse(maps[0][NotificationMeta.date] as String),
+            isRead: (maps[0][NotificationMeta.isRead] == 0) ? false : true,
+            type: maps[0][NotificationMeta.type] as int,
+          );
   }
 
   Future<List<NotificationModelClass>> getNotificationList(
     String timeOffset,
     int idOffset,
   ) async {
+    Logger.Green.log('time: $timeOffset id: $idOffset');
     List<NotificationModelClass> dataList = [];
     List<Map<String, dynamic>> maps = await db.rawQuery(
       '''
         SELECT * FROM ${NotificationMeta.nameTable}
-        WHERE (date(${NotificationMeta.date}) = ? AND ${NotificationMeta.id} < ?) 
-        OR date(${NotificationMeta.date}) < ?
+        WHERE (date(${NotificationMeta.date}) = date(?) AND ${NotificationMeta.id} < ?) 
+        OR date(${NotificationMeta.date}) < date(?)
         ORDER BY ${NotificationMeta.date} DESC
-        LIMIT 25
+        LIMIT 12
       ''',
       [timeOffset, idOffset, timeOffset],
     );
@@ -699,12 +731,24 @@ class DatabaseRepository {
   //! ================ DELETE ALL ================
 
   Future<void> deleteAllTable() async {
-    await Future.wait([
-      db.delete(IncomeMeta.nameTable),
-      db.delete(ExpenseMeta.nameTable),
-      db.delete(GoalMeta.nameTable),
-      db.delete(GoalSavingMeta.nameTable),
-      db.delete(NotificationMeta.nameTable),
-    ]);
+    final table = [
+      IncomeMeta.nameTable,
+      ExpenseMeta.nameTable,
+      GoalMeta.nameTable,
+      GoalSavingMeta.nameTable,
+      NotificationMeta.nameTable,
+    ];
+
+    await Future.wait(table.map((e) => db.delete(e)).toList());
+    await Future.wait(
+      table
+          .map(
+            (e) => db.rawUpdate(
+              "UPDATE SQLITE_SEQUENCE SET SEQ=0 WHERE NAME = ?",
+              [e],
+            ),
+          )
+          .toList(),
+    );
   }
 }

@@ -27,13 +27,13 @@ void addGoalSavingBottomSheet(BuildContext mainContext) {
       return BlocProvider.value(
         value: BlocProvider.of<GoalDetailBloc>(mainContext),
         child: Container(
-          padding: EdgeInsets.symmetric(
-            horizontal: 20.hmea,
-            vertical: 20.hmea,
-          ),
-          decoration: BoxDecoration(
+          padding: EdgeInsets.all(24.wmea),
+          decoration: const BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(10),
+              topRight: Radius.circular(10),
+            ),
           ),
           child: Padding(
             padding: EdgeInsets.only(
@@ -66,9 +66,7 @@ void addGoalSavingBottomSheet(BuildContext mainContext) {
                     ),
                   ),
                 ),
-                SizedBox(
-                  height: 8.hmea,
-                ),
+                SizedBox(height: 8.hmea),
                 Container(
                   decoration: ShapeDecoration(
                     color: const Color.fromARGB(255, 224, 224, 224),
@@ -132,9 +130,7 @@ void addGoalSavingBottomSheet(BuildContext mainContext) {
                     ],
                   ),
                 ),
-                SizedBox(
-                  height: 16.hmea,
-                ),
+                SizedBox(height: 16.hmea),
                 Align(
                   alignment: Alignment.centerLeft,
                   child: BlocBuilder<LangCurrencyBloc, LangCurrencyState>(
@@ -154,9 +150,7 @@ void addGoalSavingBottomSheet(BuildContext mainContext) {
                     },
                   ),
                 ),
-                SizedBox(
-                  height: 8.hmea,
-                ),
+                SizedBox(height: 8.hmea),
                 Container(
                   decoration: ShapeDecoration(
                     color: const Color.fromARGB(255, 224, 224, 224),
@@ -236,9 +230,7 @@ void addGoalSavingBottomSheet(BuildContext mainContext) {
                     ],
                   ),
                 ),
-                SizedBox(
-                  height: 24.hmea,
-                ),
+                SizedBox(height: 24.hmea),
                 PinkButton(
                   onTap: () {
                     mainContext.read<GoalDetailBloc>().add(
@@ -248,9 +240,7 @@ void addGoalSavingBottomSheet(BuildContext mainContext) {
                   },
                   name: "Add Saving",
                 ),
-                SizedBox(
-                  height: 24.hmea,
-                ),
+                SizedBox(height: 24.hmea),
               ],
             ),
           ),

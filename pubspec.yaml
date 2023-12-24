@@ -42,6 +42,7 @@ dependencies:
   nil: ^1.1.1
   onesignal_flutter: ^5.0.4
   open_mail_app: ^0.4.5
+  pull_to_refresh_flutter3: ^2.0.2
   rename: ^3.0.0
   shared_preferences: ^2.2.0
   sizer: ^2.0.15

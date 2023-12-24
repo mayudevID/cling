@@ -161,6 +161,7 @@ continueLogout,Continue,Lanjutkan
 backupFound,Backup Found,Ditemukan cadangan
 useThisBackup,Restore this backup?,Gunakan cadangan ini?
 yes,Yes,Ya
+no,No,Tidak
 skip,"No, skip","Tidak, lewat"
 backupForDialog,Data backup,Pencadangan data
 backupForDialogContent,Do you want to backup data? Previous data backup will be overwritten.,Apakah Anda ingin membuat cadangan data? cadangan data sebelumnya akan ditimpa.
@@ -168,3 +169,7 @@ totalBalance,Total balance,Total saldo
 today,Today,Hari ini
 noData,No data :(,Tidak ada data :(
 savingDate,Saving date,Tanggal menabung
+chooseLogo,Choose logo,Pilih logo
+collectedHigher,The savings target is not less than what has been accumulated,Target tabungan tidak kurang dari yang sudah terkumpul
+deleteConfirmation,Are you sure you want to delete this?,Apakah Anda yakin ingin menghapus ini?
+amountExceedsRemainingSaving,The amount exceeds the remaining savings,Jumlah melebihi sisa tabungan

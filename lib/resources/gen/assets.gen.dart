@@ -163,6 +163,9 @@ class $LibResourcesImagesGen {
   SvgGenImage get databaseBackup =>
       const SvgGenImage("lib/resources/images/database-backup.svg");
 
+  SvgGenImage get jamTrash =>
+      const SvgGenImage("lib/resources/images/jam_trash.svg");
+
   /// List of all assets
   List<SvgGenImage> get values => [
         admissionTickets,
@@ -177,6 +180,7 @@ class $LibResourcesImagesGen {
         databaseBackup,
         editBig,
         editPencil,
+        jamTrash,
         eyeOff,
         eyeOn,
         faSolidWallet,

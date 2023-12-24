@@ -320,6 +320,8 @@
   "@useThisBackup": {},
   "yes": "Ya",
   "@yes": {},
+  "no": "Tidak",
+  "@no": {},
   "backupForDialog": "Pencadangan data",
   "@backupForDialog": {},
   "backupForDialogContent": "Apakah Anda ingin membuat cadangan data? cadangan data sebelumnya akan ditimpa.",
@@ -331,5 +333,13 @@
   "noData": "Tidak ada data :(",
   "@noData": {},
   "savingDate": "Tanggal menabung",
-  "@savingDate": {}
+  "@savingDate": {},
+  "chooseLogo": "Pilih logo",
+  "@chooseLogo": {},
+  "collectedHigher": "Target tabungan tidak kurang dari yang sudah terkumpul",
+  "@collectedHigher": {},
+  "deleteConfirmation": "Apakah Anda yakin ingin menghapus ini?",
+  "@deleteConfirmation": {},
+  "amountExceedsRemainingSaving": "Jumlah melebihi sisa tabungan",
+  "@amountExceedsRemainingSaving": {}
 }

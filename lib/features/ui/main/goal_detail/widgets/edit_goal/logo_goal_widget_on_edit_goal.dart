@@ -29,13 +29,13 @@ Widget logoGoalWidgetOnEditGoal(BuildContext context) {
           child: Center(
             child: BlocBuilder<GoalDetailBloc, GoalDetailState>(
               buildWhen: (previous, current) {
-                return previous.goalModel.image != current.goalModel.image;
+                return previous.tempLogoGoal != current.tempLogoGoal;
               },
               builder: (context, state) {
-                if (state.goalModel.image.trim().isNotEmpty ||
-                    state.goalModel.image != "") {
+                if (state.tempLogoGoal.trim().isNotEmpty ||
+                    state.tempLogoGoal != "") {
                   return Text(
-                    state.goalModel.image,
+                    state.tempLogoGoal,
                     style: TextStyle(
                       fontSize: 43.sp,
                     ),

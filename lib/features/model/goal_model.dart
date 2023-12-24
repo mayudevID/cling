@@ -27,6 +27,22 @@ class GoalModel extends Equatable {
         collected: json[GoalMeta.collected]?.toDouble(),
       );
 
+  GoalModel copyWith({
+    int? id,
+    String? name,
+    String? image,
+    double? target,
+    double? collected,
+  }) {
+    return GoalModel(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      image: image ?? this.image,
+      target: target ?? this.target,
+      collected: collected ?? this.collected,
+    );
+  }
+
   factory GoalModel.empty() => GoalModel(
         id: null,
         name: "",

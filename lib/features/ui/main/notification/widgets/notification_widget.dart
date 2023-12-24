@@ -74,15 +74,13 @@ Widget notificationWidget(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(
-                        width: 263.3.wmea,
-                        child: Text(
-                          title,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontFamily: FontFamily.cabinetGrotesk,
-                            fontWeight: FontWeight.bold,
-                          ),
+                      Text(
+                        title,
+                        maxLines: 5,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontFamily: FontFamily.cabinetGrotesk,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                       Text(

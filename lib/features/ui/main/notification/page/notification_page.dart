@@ -7,6 +7,7 @@ import 'package:cling/features/ui/main/main_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../../resources/gen/assets.gen.dart';
@@ -59,6 +60,7 @@ class NotificationPage extends StatelessWidget {
                       onTap: () {
                         BlocProvider.of<NotificationBloc>(mainContext)
                             .add(MarkNotificationReadAll());
+                        Navigator.of(context).pop();
                       },
                       child: Text(
                         AppLocalizations.of(context)!.markReadAll,
@@ -105,78 +107,123 @@ class NotificationPage extends StatelessWidget {
 
     return BlocBuilder<NotificationBloc, NotificationState>(
       buildWhen: (p, c) {
-        return p.listNotif != c.listNotif;
+        return p.listNotif != c.listNotif ||
+            p.refreshController != c.refreshController;
       },
       builder: (context, state) {
-        return ListView.separated(
-          shrinkWrap: true,
-          itemCount: state.listNotif.length,
-          itemBuilder: (context, idx) {
-            final itemDate = DateTime(
-              state.listNotif[idx].date.year,
-              state.listNotif[idx].date.month,
-              state.listNotif[idx].date.day,
-            );
+        return SmartRefresher(
+          controller: state.refreshController,
+          enablePullDown: true,
+          enablePullUp: true,
+          onLoading: () {
+            context.read<NotificationBloc>().add(GetNotificationList());
+          },
+          onRefresh: () {},
+          footer: CustomFooter(
+            builder: (BuildContext context, LoadStatus? mode) {
+              Widget body;
+              const styleText = TextStyle(
+                color: Colors.white,
+                fontFamily: FontFamily.cabinetGrotesk,
+              );
+              switch (mode) {
+                case null:
+                  body = const Text("EMPTY", style: styleText);
+                  break;
+                case LoadStatus.idle:
+                  body = const Text("~~~", style: styleText);
+                  break;
+                case LoadStatus.canLoading:
+                  body = const Text("Can load...", style: styleText);
+                  break;
+                case LoadStatus.loading:
+                  body = const CircularProgressIndicator(color: Colors.white);
+                  break;
+                case LoadStatus.noMore:
+                  body = const Text("Itu saja.", style: styleText);
+                  break;
+                case LoadStatus.failed:
+                  body = const Text("Error.", style: styleText);
+                  break;
+              }
 
-            final isDateDifferent = idx > 0
-                ? !itemDate.isAtSameMomentAs(
-                    DateTime(
-                      state.listNotif[idx - 1].date.year,
-                      state.listNotif[idx - 1].date.month,
-                      state.listNotif[idx - 1].date.day,
-                    ),
-                  )
-                : true;
+              return SizedBox(
+                height: 55.hmea,
+                child: Center(child: body),
+              );
+            },
+          ),
+          child: ListView.separated(
+            shrinkWrap: true,
+            itemCount: state.listNotif.length,
+            itemBuilder: (context, idx) {
+              final itemDate = DateTime(
+                state.listNotif[idx].date.year,
+                state.listNotif[idx].date.month,
+                state.listNotif[idx].date.day,
+              );
 
-            return (isDateDifferent)
-                ? Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Container(
-                              height: 1.hmea,
-                              color: Colors.grey,
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 8),
-                            child: Text(
-                              (itemDate.isAtSameMomentAs(today))
-                                  ? AppLocalizations.of(context)!.today
-                                  : dateFormat.format(itemDate),
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontFamily: FontFamily.cabinetGrotesk,
-                                fontWeight: FontWeight.w700,
-                                fontSize: 9.2.sp,
+              final isDateDifferent = idx > 0
+                  ? !itemDate.isAtSameMomentAs(
+                      DateTime(
+                        state.listNotif[idx - 1].date.year,
+                        state.listNotif[idx - 1].date.month,
+                        state.listNotif[idx - 1].date.day,
+                      ),
+                    )
+                  : true;
+
+              return (isDateDifferent)
+                  ? Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Container(
+                                height: 1.hmea,
+                                color: Colors.grey,
                               ),
                             ),
-                          ),
-                          Expanded(
-                            child: Container(
-                              height: 1.hmea,
-                              color: Colors.grey,
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 8),
+                              child: Text(
+                                (itemDate.isAtSameMomentAs(today))
+                                    ? AppLocalizations.of(context)!.today
+                                    : dateFormat.format(itemDate),
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: FontFamily.cabinetGrotesk,
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 9.2.sp,
+                                ),
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 8.hmea),
-                      notificationWidget(
-                        context,
-                        idx,
-                        state.listNotif[idx],
-                      ),
-                    ],
-                  )
-                : notificationWidget(
-                    context,
-                    idx,
-                    state.listNotif[idx],
-                  );
-          },
-          separatorBuilder: (_, idx) => SizedBox(height: 8.hmea),
+                            Expanded(
+                              child: Container(
+                                height: 1.hmea,
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 8.hmea),
+                        notificationWidget(
+                          context,
+                          idx,
+                          state.listNotif[idx],
+                        ),
+                      ],
+                    )
+                  : notificationWidget(
+                      context,
+                      idx,
+                      state.listNotif[idx],
+                    );
+            },
+            separatorBuilder: (_, idx) => SizedBox(height: 8.hmea),
+          ),
         );
       },
     );

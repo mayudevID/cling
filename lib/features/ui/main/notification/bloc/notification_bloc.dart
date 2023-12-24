@@ -1,7 +1,9 @@
 import 'package:bloc/bloc.dart';
+import 'package:cling/core/logger.dart';
 import 'package:cling/features/model/notification_model_class.dart';
 import 'package:cling/features/repository/database_repository.dart';
 import 'package:equatable/equatable.dart';
+import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
 part 'notification_event.dart';
 part 'notification_state.dart';
@@ -30,31 +32,58 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
   }
 
   void _getNotificationList(event, emit) async {
-    if (_firstAttempt) {
-      _timeOffset = DateTime.now();
-      _idOffset = await _dbRepo.checkLastRow();
-      _firstAttempt = false;
+    if (_loadAgain == false) {
+      Logger.Yellow.log("Loader: No DATA");
+      state.refreshController.loadNoData();
+      return;
     }
 
-    if (_idOffset == null || _timeOffset == null) return;
+    NotificationModelClass? lastRowData;
+    if (_firstAttempt) {
+      Logger.Green.log("FIRST ATTEMPT");
+      lastRowData = await _dbRepo.checkLastRow();
+      if (lastRowData == null) {
+        state.refreshController.loadNoData();
+        return;
+      } else {
+        _timeOffset = lastRowData.date;
+        _idOffset = lastRowData.id;
+      }
+    }
+
+    if (_idOffset == null || _timeOffset == null) {
+      Logger.Yellow.log("Loader: FAIL");
+      state.refreshController.loadFailed();
+      return;
+    }
 
     final dataList = await _dbRepo.getNotificationList(
       _timeOffset!.toIso8601String(),
       _idOffset!,
     );
 
-    if (dataList.length < 25) _loadAgain = false;
+    await Future.delayed(const Duration(milliseconds: 250));
 
-    if (_loadAgain) {
+    if (dataList.isNotEmpty) {
+      var dataListNew = state.listNotif.toList(growable: true);
+      if (_firstAttempt) {
+        _firstAttempt = false;
+        dataListNew.add(lastRowData!);
+      }
+      dataListNew.addAll(dataList);
+      emit(state.copyWith(listNotif: dataListNew));
+    }
+
+    if (dataList.length < 12) {
+      _loadAgain = false;
+      Logger.Yellow.log("Loader: No DATA");
+      state.refreshController.loadNoData();
+    } else {
+      Logger.Yellow.log("Loader: Load Complete/Possible Next");
+      state.refreshController.loadComplete();
       _timeOffset = dataList.last.date;
       _idOffset = dataList.last.id;
     }
-
-    emit(
-      state.copyWith(
-        listNotif: (dataList.isNotEmpty) ? dataList : List.empty(),
-      ),
-    );
   }
 
   void _markNotificationRead(MarkNotificationRead event, emit) async {

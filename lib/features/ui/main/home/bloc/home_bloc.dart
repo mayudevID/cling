@@ -83,6 +83,20 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
             type: 0,
           ),
         );
+
+        //! DEBUG TEST
+        for (var i = 0; i < 73; i++) {
+          await _dbRepo.saveNotification(
+            NotificationModelClass(
+              title: Random().nextInt(253654).toString(),
+              desc: Random().nextInt(253654).toString(),
+              isRead: false,
+              date: DateTime.now(),
+              type: 0,
+            ),
+          );
+        }
+
         await AwesomeNotifications().createNotification(
           content: NotificationContent(
             id: id,
