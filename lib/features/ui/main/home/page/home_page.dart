@@ -1,19 +1,20 @@
 import 'package:cling/core/common_widget.dart';
 import 'package:cling/core/utils.dart';
-import 'package:cling/features/ui/main/home/widgets/warning_amount_icon.dart';
-import 'package:cling/resources/gen/fonts.gen.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
+import '../../../../../resources/gen/fonts.gen.dart';
 import '../../../language_currency/lang_export.dart';
 import '../bloc/home_bloc.dart';
 import '../widgets/empty_goal_widget.dart';
 import '../widgets/income_and_expense.dart';
 import '../widgets/monthy_budget.dart';
 import '../widgets/name_and_notification.dart';
+import '../widgets/see_all_widget.dart';
 import '../widgets/tag_name_home.dart';
 import '../widgets/today_expenses_widget.dart';
+import '../widgets/warning_amount_icon.dart';
 import '../widgets/widget_goals.dart';
 
 class HomePage extends StatelessWidget {
@@ -115,15 +116,14 @@ class HomePage extends StatelessWidget {
                   itemCount: length,
                   itemBuilder: (context, idx) {
                     if (idx == 5) {
-                      return Container(
-                          width: 100, height: 100, color: Colors.amber);
+                      return seeAllWidget(context);
                     }
 
                     return widgetGoals(
                       context,
                       idx,
                       state.listGoals[idx],
-                      state.listGoals.length,
+                      length,
                     );
                   },
                 ),

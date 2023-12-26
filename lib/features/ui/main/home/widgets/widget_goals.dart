@@ -26,7 +26,7 @@ Widget widgetGoals(
     child: Container(
       margin: EdgeInsets.only(
         left: (index == 0) ? 24.wmea : 12.wmea,
-        right: (index == length - 1) ? 20.wmea : 0,
+        right: (index == length - 1) ? 24.wmea : 0,
       ),
       padding: EdgeInsets.symmetric(vertical: 16.wmea, horizontal: 16.wmea),
       decoration: BoxDecoration(

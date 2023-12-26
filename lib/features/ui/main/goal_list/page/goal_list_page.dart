@@ -1,15 +1,16 @@
 import 'package:cling/core/utils.dart';
-import 'package:cling/features/repository/database_repository.dart';
-import 'package:cling/features/ui/main/goal_list/bloc/goal_list_bloc.dart';
-import 'package:cling/injection.dart';
+import 'package:cling/features/ui/main/goal_list/widget/goal_list_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../../../../injection.dart';
 import '../../../../../resources/gen/assets.gen.dart';
 import '../../../../../resources/gen/fonts.gen.dart';
+import '../../../../repository/database_repository.dart';
 import '../../../language_currency/lang_export.dart';
+import '../bloc/goal_list_bloc.dart';
 
 class GoalListPage extends StatelessWidget {
   const GoalListPage({super.key});
@@ -17,7 +18,8 @@ class GoalListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => GoalListBloc(dbRepo: getIt<DatabaseRepository>()),
+      create: (context) => GoalListBloc(dbRepo: getIt<DatabaseRepository>())
+        ..add(GetGoalsList()),
       child: const GoalListPageContent(),
     );
   }
@@ -28,68 +30,105 @@ class GoalListPageContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.black,
-      body: Column(
-        children: [
-          SizedBox(height: 16.hmea),
-          Row(
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: Colors.black,
+        body: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 24.wmea),
+          child: Column(
             children: [
-              GestureDetector(
-                onTap: () => Navigator.pop(context),
-                child:
-                    Assets.lib.resources.images.fluentChevronLeft24Filled.svg(),
-              ),
-              SizedBox(width: 16.wmea),
-              Text(
-                AppLocalizations.of(context)!.goals,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 16.sp,
-                  fontFamily: FontFamily.cabinetGrotesk,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-              const Spacer(),
-              GestureDetector(
-                onTap: () => Navigator.of(context).pop(),
-                child: Text(
-                  AppLocalizations.of(context)!.markReadAll,
-                  style: TextStyle(
-                    color: Colors.blue[100],
-                    fontFamily: FontFamily.cabinetGrotesk,
-                    fontWeight: FontWeight.w600,
+              SizedBox(height: 16.hmea),
+              Row(
+                children: [
+                  GestureDetector(
+                    onTap: () => Navigator.pop(context),
+                    child: Assets.lib.resources.images.fluentChevronLeft24Filled
+                        .svg(),
                   ),
+                  SizedBox(width: 16.wmea),
+                  Text(
+                    AppLocalizations.of(context)!.goals,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16.sp,
+                      fontFamily: FontFamily.cabinetGrotesk,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  const Spacer(),
+                ],
+              ),
+              SizedBox(height: 16.hmea),
+              Expanded(
+                child: MediaQuery.removePadding(
+                  context: context,
+                  removeTop: true,
+                  child: _listViewBuilder(context),
                 ),
-              )
+              ),
             ],
           ),
-          SizedBox(height: 16.hmea),
-          Expanded(
-            child: MediaQuery.removePadding(
-              context: context,
-              removeTop: true,
-              child: _listViewBuilder(context),
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }
 
   Widget _listViewBuilder(BuildContext context) {
-    return SmartRefresher(
-      controller: RefreshController(),
-      child: ListView.separated(
-        itemBuilder: (_, context) {
-          return Container();
-        },
-        separatorBuilder: (_, context) {
-          return Container();
-        },
-        itemCount: 3,
-      ),
+    return BlocBuilder<GoalListBloc, GoalListState>(
+      buildWhen: (p, c) {
+        return p.listGoalModel.length != c.listGoalModel.length ||
+            p.refreshController != c.refreshController;
+      },
+      builder: (context, state) {
+        return SmartRefresher(
+          enablePullUp: true,
+          enablePullDown: false,
+          controller: state.refreshController,
+          onLoading: () {},
+          footer: CustomFooter(
+            builder: (BuildContext context, LoadStatus? mode) {
+              Widget body;
+              const styleText = TextStyle(
+                color: Colors.white,
+                fontFamily: FontFamily.cabinetGrotesk,
+              );
+              switch (mode) {
+                case null:
+                  body = const Text("EMPTY", style: styleText);
+                  break;
+                case LoadStatus.idle:
+                  body = const Text("~~~", style: styleText);
+                  break;
+                case LoadStatus.canLoading:
+                  body = const Text("Can load...", style: styleText);
+                  break;
+                case LoadStatus.loading:
+                  body = const CircularProgressIndicator(color: Colors.white);
+                  break;
+                case LoadStatus.noMore:
+                  body = const Text("Itu saja.", style: styleText);
+                  break;
+                case LoadStatus.failed:
+                  body = const Text("Error.", style: styleText);
+                  break;
+              }
+
+              return SizedBox(
+                height: 55.hmea,
+                child: Center(child: body),
+              );
+            },
+          ),
+          child: ListView.separated(
+            itemCount: state.listGoalModel.length,
+            itemBuilder: (context, index) {
+              return goalListWidget(context, state.listGoalModel[index]);
+            },
+            separatorBuilder: (_, x) => SizedBox(height: 8.hmea),
+          ),
+        );
+      },
     );
   }
 }

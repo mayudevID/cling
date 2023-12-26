@@ -8,7 +8,7 @@ import '../../../../../core/common_widget.dart';
 import '../../../../../core/route.dart';
 import '../../../../../resources/gen/fonts.gen.dart';
 import '../../language_currency/lang_export.dart';
-import '../widget/dialog_close_verif_onboar.dart';
+import '../widget/dialog_close_verif_onboard.dart';
 
 class VerificationSuccessPage extends StatelessWidget {
   const VerificationSuccessPage({super.key});
@@ -17,9 +17,7 @@ class VerificationSuccessPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return PopScope(
       canPop: false,
-      onPopInvoked: (didPop) {
-        dialogCloseVerifOnboard(context);
-      },
+      onPopInvoked: (didPop) => dialogCloseVerifOnboard(context),
       child: AnnotatedRegion<SystemUiOverlayStyle>(
         value: SystemUiOverlayStyle.light,
         child: SafeArea(

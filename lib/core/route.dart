@@ -1,14 +1,15 @@
-import 'package:cling/features/model/detail_category_model.dart';
-import 'package:cling/features/model/goal_model.dart';
-import 'package:cling/features/ui/main/add_in_ex/page/add_in_ex_page.dart';
-import 'package:cling/features/ui/main/edit_monthly/page/edit_budget_or_income.dart';
-import 'package:cling/features/ui/main/edit_profile/page/edit_profile_page.dart';
 import 'package:flutter/material.dart';
+import '../features/model/detail_category_model.dart';
+import '../features/model/goal_model.dart';
 import '../features/ui/forgot_password/page/check_email_page.dart';
 import '../features/ui/forgot_password/page/forgot_password_page.dart';
 import '../features/ui/login/page/login_page.dart';
 import '../features/ui/main/add_goal/page/add_goal_page.dart';
+import '../features/ui/main/add_in_ex/page/add_in_ex_page.dart';
+import '../features/ui/main/edit_monthly/page/edit_budget_or_income.dart';
+import '../features/ui/main/edit_profile/page/edit_profile_page.dart';
 import '../features/ui/main/goal_detail/pages/goal_detail_page.dart';
+import '../features/ui/main/goal_list/page/goal_list_page.dart';
 import '../features/ui/main/main_page.dart';
 import '../features/ui/main/notification/page/notification_page.dart';
 import '../features/ui/main/stats_detail/page/stats_detail_per_categories_page.dart';
@@ -97,7 +98,11 @@ class RouteGen {
         );
       case RouteName.notification:
         return MaterialPageRoute(
-          builder: (_) => NotificationPage(),
+          builder: (_) => const NotificationPage(),
+        );
+      case RouteName.goalList:
+        return MaterialPageRoute(
+          builder: (_) => const GoalListPage(),
         );
 
       default:
@@ -135,4 +140,5 @@ class RouteName {
   static const String addInEx = "/addInEx";
   static const String notification = "/notification";
   static const String statsDetailPerCategories = "/statsDetailPerCategories";
+  static const String goalList = "/goalList";
 }

@@ -120,7 +120,7 @@
   "@wrongPasswordFailure": {},
   "emailAlreadyFailure": "Akun sudah ada.",
   "@emailAlreadyFailure": {},
-  "operationNotAllowedFailure": "Operasi tidak diperbolehkan. Silakan hubungi dukungan.",
+  "operationNotAllowedFailure": "Operasi tidak diperbolehkan. Silakan hubungi Dukungan.",
   "@operationNotAllowedFailure": {},
   "weakPasswordFailure": "Harap masukkan kata sandi yang lebih kuat.",
   "@weakPasswordFailure": {},
@@ -341,5 +341,7 @@
   "deleteConfirmation": "Apakah Anda yakin ingin menghapus ini?",
   "@deleteConfirmation": {},
   "amountExceedsRemainingSaving": "Jumlah melebihi sisa tabungan",
-  "@amountExceedsRemainingSaving": {}
+  "@amountExceedsRemainingSaving": {},
+  "seeAll": "Lihat semua",
+  "@seeAll": {}
 }

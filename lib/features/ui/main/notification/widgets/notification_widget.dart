@@ -49,93 +49,92 @@ Widget notificationWidget(
         : "";
   }
 
-  return AnimatedContainer(
-    duration: const Duration(milliseconds: 500),
-    padding: const EdgeInsets.all(16),
-    //margin: EdgeInsets.only(bottom: 8.hmea),
-    curve: Curves.fastOutSlowIn,
-    decoration: BoxDecoration(
-      color: (data.isRead) ? const Color(0x3D787880) : Colors.blueGrey[700],
-      borderRadius: BorderRadius.circular(10),
-    ),
-    child: Column(
-      children: [
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
+  return BlocBuilder<NotificationBloc, NotificationState>(
+    buildWhen: (p, c) {
+      return p.listNotif[idx].isRead != c.listNotif[idx].isRead;
+    },
+    builder: (context, state) {
+      return AnimatedContainer(
+        duration: const Duration(milliseconds: 500),
+        padding: const EdgeInsets.all(16),
+        curve: Curves.fastOutSlowIn,
+        decoration: BoxDecoration(
+          color: (state.listNotif[idx].isRead)
+              ? const Color(0x3D787880)
+              : Colors.blueGrey[700],
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Column(
           children: [
-            Assets.lib.resources.images.warningTriangleSolid
-                .svg(width: 40.wmea),
-            SizedBox(width: 16.wmea),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Assets.lib.resources.images.warningTriangleSolid
+                    .svg(width: 40.wmea),
+                SizedBox(width: 16.wmea),
+                Expanded(
+                  child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            title,
+                            maxLines: 5,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontFamily: FontFamily.cabinetGrotesk,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Text(
+                            DateFormat.jm(timeLocale).format(data.date),
+                            style: TextStyle(
+                              color: Colors.grey[300],
+                              fontFamily: FontFamily.cabinetGrotesk,
+                              fontWeight: FontWeight.w200,
+                              fontSize: 8.5.sp,
+                            ),
+                          ),
+                        ],
+                      ),
                       Text(
-                        title,
+                        '$desc ${checkConditionText()}',
                         maxLines: 5,
                         style: const TextStyle(
                           color: Colors.white,
                           fontFamily: FontFamily.cabinetGrotesk,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Text(
-                        DateFormat.jm(timeLocale).format(data.date),
-                        style: TextStyle(
-                          color: Colors.grey[300],
-                          fontFamily: FontFamily.cabinetGrotesk,
-                          fontWeight: FontWeight.w200,
-                          fontSize: 8.5.sp,
                         ),
                       ),
                     ],
                   ),
-                  Text(
-                    '$desc ${checkConditionText()}',
-                    maxLines: 5,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontFamily: FontFamily.cabinetGrotesk,
+                ),
+              ],
+            ),
+            (state.listNotif[idx].isRead)
+                ? const SizedBox()
+                : Align(
+                    alignment: Alignment.centerRight,
+                    child: GestureDetector(
+                      onTap: () async {
+                        context
+                            .read<NotificationBloc>()
+                            .add(MarkNotificationRead(idx, data));
+                      },
+                      child: const Text(
+                        "OK",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontFamily: FontFamily.cabinetGrotesk,
+                        ),
+                      ),
                     ),
                   ),
-                ],
-              ),
-            ),
           ],
         ),
-        BlocBuilder<NotificationBloc, NotificationState>(
-          buildWhen: (p, c) {
-            return p.listNotif[idx] != c.listNotif[idx];
-          },
-          builder: (context, state) {
-            if (state.listNotif[idx].isRead) {
-              return const SizedBox();
-            }
-
-            return Align(
-              alignment: Alignment.centerRight,
-              child: GestureDetector(
-                onTap: () async {
-                  context
-                      .read<NotificationBloc>()
-                      .add(MarkNotificationRead(idx, data));
-                },
-                child: const Text(
-                  "OK",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontFamily: FontFamily.cabinetGrotesk,
-                  ),
-                ),
-              ),
-            );
-          },
-        ),
-      ],
-    ),
+      );
+    },
   );
 }

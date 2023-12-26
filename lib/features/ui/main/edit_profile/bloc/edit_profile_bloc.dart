@@ -105,7 +105,7 @@ class EditProfileBloc extends Bloc<EditProfileEvent, EditProfileState> {
 
       emit(state.copyWith(initName: newName, isNameSame: true));
 
-      Navigator.of(_context).pop();
+      Navigator.pop(_context);
     } catch (e) {
       Logger.Red.log(e.toString());
     }
@@ -152,7 +152,7 @@ class EditProfileBloc extends Bloc<EditProfileEvent, EditProfileState> {
 
       emit(state.copyWith(initEmail: newEmail, isEmailSame: true));
 
-      Navigator.of(_context).pop();
+      Navigator.pop(_context);
     } on FirebaseAuthException catch (e) {
       errorSnackbar(
         mainContext,

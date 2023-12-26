@@ -109,7 +109,7 @@ class NotificationPageContent extends StatelessWidget {
 
     return BlocBuilder<NotificationBloc, NotificationState>(
       buildWhen: (p, c) {
-        return p.listNotif != c.listNotif ||
+        return p.listNotif.length != c.listNotif.length ||
             p.refreshController != c.refreshController;
       },
       builder: (context, state) {
