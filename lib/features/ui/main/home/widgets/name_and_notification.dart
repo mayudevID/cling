@@ -1,17 +1,16 @@
-import 'package:cling/core/route.dart';
 import 'package:cling/core/utils.dart';
-import 'package:cling/features/ui/language_currency/lang_currency_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:nil/nil.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../../../../core/route.dart';
 import '../../../../../resources/gen/assets.gen.dart';
 import '../../../../../resources/gen/fonts.gen.dart';
 import '../../../app_bloc/app_bloc.dart';
+import '../../../language_currency/lang_currency_bloc.dart';
 import '../../../language_currency/lang_export.dart';
-import '../../notification/bloc/notification_bloc.dart';
+import '../bloc/home_bloc.dart';
 
 Widget nameAndNotification(BuildContext context) {
   final dateFormat = context
@@ -22,10 +21,7 @@ Widget nameAndNotification(BuildContext context) {
       .toLanguageTag();
 
   return Padding(
-    padding: EdgeInsets.only(
-      left: 24.wmea,
-      right: 17.wmea,
-    ),
+    padding: EdgeInsets.only(left: 24.wmea, right: 17.wmea),
     child: Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -79,14 +75,12 @@ Widget nameAndNotification(BuildContext context) {
                     height: 24.hmea,
                   ),
                 ),
-                BlocBuilder<NotificationBloc, NotificationState>(
+                BlocBuilder<HomeBloc, HomeState>(
                   buildWhen: (previous, current) {
                     return previous.totalNotif != current.totalNotif;
                   },
                   builder: (context, state) {
-                    if (state.totalNotif == 0) {
-                      return nil;
-                    }
+                    if (state.totalNotif == 0) return const SizedBox();
 
                     return Positioned(
                       top: 0,

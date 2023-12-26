@@ -5,14 +5,17 @@ part of 'notification_bloc.dart';
 class NotificationState extends Equatable {
   int totalNotif;
   List<NotificationModelClass> listNotif;
-  RefreshController refreshController = RefreshController();
+  RefreshController refreshController;
 
   NotificationState({
     this.totalNotif = 0,
     RefreshController? refreshController,
     List<NotificationModelClass>? listNotif,
   })  : listNotif = listNotif ?? List.empty(),
-        refreshController = refreshController ?? RefreshController();
+        refreshController = refreshController ??
+            RefreshController(
+              initialLoadStatus: LoadStatus.loading,
+            );
 
   @override
   List<Object> get props => [

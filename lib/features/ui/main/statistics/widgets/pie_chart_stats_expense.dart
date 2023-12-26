@@ -82,6 +82,7 @@ Widget pieChartStatsExpense() {
           legend: Legend(
             isResponsive: true,
             isVisible: true,
+            position: LegendPosition.right,
             overflowMode: LegendItemOverflowMode.wrap,
             textStyle: TextStyle(
               color: Colors.white,

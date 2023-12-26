@@ -123,7 +123,7 @@ class GoalDetailBloc extends Bloc<GoalDetailEvent, GoalDetailState> {
         _dbRepo.updateCollectedGoal(newGoalModel),
       ]);
 
-      mainContext.read<HomeBloc>().add(GetGoals());
+      mainContext.read<HomeBloc>().add(GetGoalsHome());
 
       final result = await _dbRepo.getGoalDetailSave(state.goalModel.id!);
       emit(state.copyWith(
@@ -180,7 +180,7 @@ class GoalDetailBloc extends Bloc<GoalDetailEvent, GoalDetailState> {
     );
 
     await _dbRepo.updateGoal(newGoalModel);
-    mainContext.read<HomeBloc>().add(GetGoals());
+    mainContext.read<HomeBloc>().add(GetGoalsHome());
     emit(
       state.copyWith(goalModel: newGoalModel, tempLogoGoal: state.tempLogoGoal),
     );
@@ -188,6 +188,8 @@ class GoalDetailBloc extends Bloc<GoalDetailEvent, GoalDetailState> {
 
   void _deleteGoal(event, emit) async {
     await _dbRepo.deleteGoalWithSaving(state.goalModel.id!);
-    mainContext.read<HomeBloc>().add(GetGoals());
+    mainContext.read<HomeBloc>()
+      ..add(GetGoalsHome())
+      ..add(GetGoalsCount());
   }
 }

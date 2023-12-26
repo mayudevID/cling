@@ -311,15 +311,56 @@ class DatabaseRepository {
     );
   }
 
-  Future<List<GoalModel>> getGoals() async {
+  Future<List<GoalModel>> getGoalsHome() async {
     List<GoalModel> dataList = [];
     List<Map<String, dynamic>> maps = await db.query(
       GoalMeta.nameTable,
+      limit: 5,
     );
     for (var element in maps) {
       dataList.add(GoalModel.fromDatabase(element));
     }
     return dataList;
+  }
+
+  Future<List<GoalModel>> getGoalsList(int id) async {
+    List<GoalModel> dataList = [];
+    final maps = await db.rawQuery(
+      '''
+        SELECT * FROM ${GoalMeta.nameTable}
+        WHERE ${GoalMeta.id} < ?
+        ORDER BY ${GoalMeta.id} DESC LIMIT 12
+      ''',
+      [id],
+    );
+    for (var data in maps) {
+      dataList.add(GoalModel.fromDatabase(data));
+    }
+
+    return dataList;
+  }
+
+  Future<GoalModel?> checkLastRowGoals() async {
+    final maps = await db.rawQuery(
+      '''
+        SELECT *
+        FROM ${GoalMeta.nameTable}
+        ORDER BY ${GoalMeta.id} DESC
+        LIMIT 1
+      ''',
+    );
+    return (maps.isEmpty) ? null : GoalModel.fromDatabase(maps[0]);
+  }
+
+  Future<int> getGoalsCount() async {
+    final total = await db.rawQuery(
+      '''
+      SELECT COUNT(*) AS goals_count
+      FROM ${GoalMeta.nameTable}
+    ''',
+    );
+
+    return total[0]['goals_count'] as int;
   }
 
   Future<void> deleteGoalWithSaving(int id) async {
@@ -618,7 +659,7 @@ class DatabaseRepository {
     return total[0]['unread_count'] as int;
   }
 
-  Future<NotificationModelClass?> checkLastRow() async {
+  Future<NotificationModelClass?> checkLastRowNotification() async {
     final maps = await db.rawQuery(
       '''
         SELECT *

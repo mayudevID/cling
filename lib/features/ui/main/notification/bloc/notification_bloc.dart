@@ -1,9 +1,13 @@
-import 'package:bloc/bloc.dart';
-import 'package:cling/core/logger.dart';
-import 'package:cling/features/model/notification_model_class.dart';
-import 'package:cling/features/repository/database_repository.dart';
+// ignore_for_file: use_build_context_synchronously
 import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
+
+import '../../../../../core/logger.dart';
+import '../../../../model/notification_model_class.dart';
+import '../../../../repository/database_repository.dart';
+import '../../home/bloc/home_bloc.dart';
+import '../../main_page.dart';
 
 part 'notification_event.dart';
 part 'notification_state.dart';
@@ -12,7 +16,6 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
   NotificationBloc({required DatabaseRepository dbRepo})
       : _dbRepo = dbRepo,
         super(NotificationState()) {
-    on<GetNotificationCount>(_getNotificationCount);
     on<GetNotificationList>(_getNotificationList);
     on<MarkNotificationRead>(_markNotificationRead);
     on<MarkNotificationReadAll>(_markNotificationReadAll);
@@ -24,12 +27,7 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
   int? _idOffset;
   bool _firstAttempt = true;
   bool _loadAgain = true;
-
-  void _getNotificationCount(event, emit) async {
-    final total = await _dbRepo.getNotificationCount();
-
-    emit(state.copyWith(totalNotif: total));
-  }
+  var mainContext = MainPage.navKeyMain.currentContext!;
 
   void _getNotificationList(event, emit) async {
     if (_loadAgain == false) {
@@ -41,7 +39,7 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
     NotificationModelClass? lastRowData;
     if (_firstAttempt) {
       Logger.Green.log("FIRST ATTEMPT");
-      lastRowData = await _dbRepo.checkLastRow();
+      lastRowData = await _dbRepo.checkLastRowNotification();
       if (lastRowData == null) {
         state.refreshController.loadNoData();
         return;
@@ -61,8 +59,6 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
       _timeOffset!.toIso8601String(),
       _idOffset!,
     );
-
-    await Future.delayed(const Duration(milliseconds: 250));
 
     if (dataList.isNotEmpty) {
       var dataListNew = state.listNotif.toList(growable: true);
@@ -92,13 +88,13 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
     var newModel = event.notifData.copyWith(isRead: true);
     oldDataList[event.idx] = newModel;
     emit(state.copyWith(listNotif: oldDataList));
-    add(GetNotificationCount());
+    mainContext.read<HomeBloc>().add(GetNotificationCount());
   }
 
   void _markNotificationReadAll(event, emit) async {
     await _dbRepo.updateNotificationIsReadAll();
-    add(GetNotificationCount());
-    add(GetNotificationList());
+    mainContext.read<HomeBloc>().add(GetNotificationCount());
+    //add(GetNotificationList());
   }
 
   void _clearList(event, emit) async {

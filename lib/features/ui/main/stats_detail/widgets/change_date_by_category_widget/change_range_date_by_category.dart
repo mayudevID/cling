@@ -1,5 +1,4 @@
 import 'package:cling/core/utils.dart';
-import 'package:cling/features/ui/main/stats_detail/bloc/stats_detail_bloc.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,8 +9,15 @@ import '../../../../../../resources/gen/fonts.gen.dart';
 import '../../../main_widget/convert_enum_to_detail_date.dart';
 import '../../../main_widget/enum_range_date.dart';
 import '../../../main_widget/set_name.dart';
+import '../../bloc/stats_detail_bloc.dart';
 
 Widget changeRangeDateByCategory(BuildContext context) {
+  String periodCheck(StatsDetailState state) {
+    return (state.rangeDate == RangeDate.period)
+        ? "(${convertEnumToDetailDate(context, state.dateRangePickerView)})"
+        : "";
+  }
+
   return DropdownButtonHideUnderline(
     child: DropdownButton2(
       customButton: Container(
@@ -31,7 +37,7 @@ Widget changeRangeDateByCategory(BuildContext context) {
               },
               builder: (context, state) {
                 return Text(
-                  '${setName(context, state.rangeDate)} - ${(state.rangeDate == RangeDate.period) ? convertEnumToDetailDate(context, state.dateRangePickerView) : ""}',
+                  '${setName(context, state.rangeDate)} ${periodCheck(state)}',
                   style: TextStyle(
                     color: Colors.white,
                     fontFamily: FontFamily.cabinetGrotesk,

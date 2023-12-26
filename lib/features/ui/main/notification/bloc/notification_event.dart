@@ -7,8 +7,6 @@ sealed class NotificationEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class GetNotificationCount extends NotificationEvent {}
-
 class GetNotificationList extends NotificationEvent {}
 
 class MarkNotificationRead extends NotificationEvent {

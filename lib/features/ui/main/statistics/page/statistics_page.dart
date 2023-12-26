@@ -14,9 +14,9 @@ import 'stats_all.dart';
 import 'stats_expense.dart';
 
 class StatisticsPage extends StatelessWidget {
-  final ScrollController _scrollController = ScrollController();
-
   StatisticsPage({super.key});
+
+  final ScrollController _scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {

@@ -95,40 +95,42 @@ class HomePage extends StatelessWidget {
           monthlyBudget(context),
           SizedBox(height: 16.hmea),
           incomeAndExpense(context),
-          ...tagNameHome(
-            context,
-            AppLocalizations.of(context)!.goals,
-          ),
+          ...tagNameHome(context, AppLocalizations.of(context)!.goals),
           BlocBuilder<HomeBloc, HomeState>(
             buildWhen: (prev, next) {
-              return prev.listGoals != next.listGoals;
+              return prev.listGoals != next.listGoals ||
+                  prev.totalGoals != next.totalGoals;
             },
             builder: (context, state) {
-              if (state.listGoals.isEmpty) {
-                return emptyGoalsWidget(context);
-              }
+              if (state.listGoals.isEmpty) return emptyGoalsWidget(context);
 
-              return SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: state.listGoals.asMap().entries.map(
-                    (e) {
-                      return widgetGoals(
-                        context,
-                        e.key,
-                        e.value,
-                        state.listGoals.length,
-                      );
-                    },
-                  ).toList(),
+              final isMoreThanFive = state.totalGoals > 5;
+              final length = isMoreThanFive ? 6 : state.listGoals.length;
+
+              return SizedBox(
+                height: 156.855.hmea,
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  scrollDirection: Axis.horizontal,
+                  itemCount: length,
+                  itemBuilder: (context, idx) {
+                    if (idx == 5) {
+                      return Container(
+                          width: 100, height: 100, color: Colors.amber);
+                    }
+
+                    return widgetGoals(
+                      context,
+                      idx,
+                      state.listGoals[idx],
+                      state.listGoals.length,
+                    );
+                  },
                 ),
               );
             },
           ),
-          ...tagNameHome(
-            context,
-            AppLocalizations.of(context)!.todayExpenses,
-          ),
+          ...tagNameHome(context, AppLocalizations.of(context)!.todayExpenses),
           BlocBuilder<HomeBloc, HomeState>(
             buildWhen: (prev, next) {
               return prev.listTodayExpenses != next.listTodayExpenses;

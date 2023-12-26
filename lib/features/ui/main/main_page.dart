@@ -9,12 +9,12 @@ import 'package:transitioned_indexed_stack/transitioned_indexed_stack.dart';
 import '../../../injection.dart';
 import '../../repository/auth_repository.dart';
 import '../../repository/database_repository.dart';
+import 'budgeting/page/budgeting_page.dart';
 import 'home/bloc/home_bloc.dart';
 import 'home/page/home_page.dart';
 import 'main_bloc/main_bloc.dart';
 import 'main_widget/custom_fab.dart';
 import 'main_widget/custom_nav_bar.dart';
-import 'notification/bloc/notification_bloc.dart';
 import 'profile/bloc/profile_bloc.dart';
 import 'profile/page/profile_page.dart';
 import 'statistics/bloc/statistics_bloc.dart';
@@ -33,11 +33,6 @@ class MainPage extends StatelessWidget {
           create: (_) => MainBloc(),
         ),
         BlocProvider(
-          create: (_) => NotificationBloc(
-            dbRepo: getIt<DatabaseRepository>(),
-          )..add(GetNotificationCount()),
-        ),
-        BlocProvider(
           create: (_) => ProfileBloc(
             authRepo: getIt<AuthRepository>(),
             dbRepo: getIt<DatabaseRepository>(),
@@ -51,8 +46,10 @@ class MainPage extends StatelessWidget {
             dbRepo: getIt<DatabaseRepository>(),
           )
             ..add(GetIncomeExpenseAmountTotalCurrMonth())
-            ..add(GetGoals())
-            ..add(GetTodayExpenses()),
+            ..add(GetGoalsHome())
+            ..add(GetGoalsCount())
+            ..add(GetTodayExpenses())
+            ..add(GetNotificationCount()),
         ),
         BlocProvider(
           create: (_) => StatisticsBloc(
@@ -98,6 +95,7 @@ class MainPageContent extends StatelessWidget {
                     children: [
                       const HomePage(),
                       StatisticsPage(),
+                      const BudgetingPage(),
                       const ProfilePage(),
                     ],
                   );

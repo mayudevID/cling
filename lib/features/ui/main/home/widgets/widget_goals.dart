@@ -28,10 +28,7 @@ Widget widgetGoals(
         left: (index == 0) ? 24.wmea : 12.wmea,
         right: (index == length - 1) ? 20.wmea : 0,
       ),
-      padding: EdgeInsets.symmetric(
-        vertical: 16.wmea,
-        horizontal: 16.wmea,
-      ),
+      padding: EdgeInsets.symmetric(vertical: 16.wmea, horizontal: 16.wmea),
       decoration: BoxDecoration(
         color: const Color(0x3D787880),
         borderRadius: BorderRadius.circular(10),
@@ -44,15 +41,13 @@ Widget widgetGoals(
               color: Colors.white,
               borderRadius: BorderRadius.circular(5),
             ),
-            child: Text(
-              goalModel.image,
-              style: TextStyle(fontSize: 18.sp),
-            ),
+            child: Text(goalModel.image, style: TextStyle(fontSize: 18.sp)),
           ),
           SizedBox(height: 12.hmea),
           Text(
             goalModel.name,
             textAlign: TextAlign.center,
+            maxLines: 1,
             style: TextStyle(
               color: Colors.white,
               fontSize: 10.sp,

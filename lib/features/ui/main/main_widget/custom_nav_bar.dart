@@ -63,8 +63,21 @@ class CustomNavBar extends StatelessWidget {
               return buildTabButton(
                 state: state,
                 onPressed: () => changeTab(state, context, 2),
-                icon: Assets.lib.resources.images.iconamoonProfileFill.svg(),
+                icon: Assets.lib.resources.images.faSolidWallet.svg(),
                 isSelected: state.tabIndex == 2,
+              );
+            },
+          ),
+          BlocBuilder<MainBloc, MainState>(
+            buildWhen: (p, c) {
+              return isStartBuild(p, c, 3);
+            },
+            builder: (context, state) {
+              return buildTabButton(
+                state: state,
+                onPressed: () => changeTab(state, context, 3),
+                icon: Assets.lib.resources.images.iconamoonProfileFill.svg(),
+                isSelected: state.tabIndex == 3,
               );
             },
           ),

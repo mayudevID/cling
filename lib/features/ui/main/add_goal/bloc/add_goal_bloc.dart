@@ -72,7 +72,9 @@ class AddGoalBloc extends Bloc<AddGoalEvent, AddGoalState> {
         collected: 0,
       );
       await _dbRepo.insertGoal(goalData);
-      mainContext.read<HomeBloc>().add(GetGoals());
+      mainContext.read<HomeBloc>()
+        ..add(GetGoalsHome())
+        ..add(GetGoalsCount());
 
       dialogAddSuccess(_context, null);
     } on FormatException {

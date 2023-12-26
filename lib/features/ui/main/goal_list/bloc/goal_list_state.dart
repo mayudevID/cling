@@ -1,0 +1,28 @@
+// ignore_for_file: must_be_immutable
+
+part of 'goal_list_bloc.dart';
+
+class GoalListState extends Equatable {
+  List<GoalModel> listGoalModel;
+  RefreshController refreshController;
+
+  GoalListState({
+    List<GoalModel>? listGoalModel,
+    RefreshController? refreshController,
+  })  : listGoalModel = listGoalModel ?? List.empty(),
+        refreshController = refreshController ??
+            RefreshController(initialLoadStatus: LoadStatus.loading);
+
+  @override
+  List<Object> get props => [listGoalModel, refreshController];
+
+  GoalListState copyWith({
+    List<GoalModel>? listGoalModel,
+    RefreshController? refreshController,
+  }) {
+    return GoalListState(
+      listGoalModel: listGoalModel ?? this.listGoalModel,
+      refreshController: refreshController ?? this.refreshController,
+    );
+  }
+}
