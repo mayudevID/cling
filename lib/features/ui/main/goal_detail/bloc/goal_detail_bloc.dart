@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:cling/core/utils.dart';
+import 'package:cling/features/model/goal_saving_model.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -37,6 +38,7 @@ class GoalDetailBloc extends Bloc<GoalDetailEvent, GoalDetailState> {
     on<SetAmountInput>(_setAmountInput);
     on<AddSaving>(_addSaving);
     on<SaveEdit>(_saveEdit);
+    on<DeleteSaving>(_deleteSaving);
     on<DeleteGoal>(_deleteGoal);
   }
 
@@ -55,7 +57,7 @@ class GoalDetailBloc extends Bloc<GoalDetailEvent, GoalDetailState> {
       state.copyWith(
         goalModel: result[1] as GoalModel,
         tempLogoGoal: (result[1] as GoalModel).image,
-        dataSavingsList: result[0] as List<Map<String, Object?>>,
+        dataSavingsList: result[0] as List<GoalSavingModel>,
       ),
     );
   }
@@ -134,10 +136,12 @@ class GoalDetailBloc extends Bloc<GoalDetailEvent, GoalDetailState> {
       goalListContext?.read<GoalListBloc>().add(UpdateGoalFromGL(newGoalModel));
 
       final result = await _dbRepo.getGoalDetailSave(state.goalModel.id!);
-      emit(state.copyWith(
-        dataSavingsList: result,
-        goalModel: newGoalModel,
-      ));
+      emit(
+        state.copyWith(
+          dataSavingsList: result,
+          goalModel: newGoalModel,
+        ),
+      );
     } on FormatException {
       errorToast(
         AppLocalizations.of(mainContext)!.invalidAmount,
@@ -194,6 +198,10 @@ class GoalDetailBloc extends Bloc<GoalDetailEvent, GoalDetailState> {
     emit(
       state.copyWith(goalModel: newGoalModel, tempLogoGoal: state.tempLogoGoal),
     );
+  }
+
+  void _deleteSaving(DeleteSaving event, emit) async {
+    await _dbRepo.deleteSingleSaving(event.goalSaving[0]);
   }
 
   void _deleteGoal(event, emit) async {

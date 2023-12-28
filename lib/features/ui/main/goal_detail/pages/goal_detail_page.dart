@@ -3,7 +3,6 @@ import 'package:cling/core/utils.dart';
 import 'package:cling/injection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../../resources/gen/assets.gen.dart';
@@ -14,6 +13,8 @@ import '../../../language_currency/lang_currency_bloc.dart';
 import '../../../language_currency/lang_export.dart';
 import '../bloc/goal_detail_bloc.dart';
 import '../widgets/add_goal_saving_bottom_sheet.dart';
+import '../widgets/list_savings_and_date_container.dart';
+import '../widgets/list_savings_goal.dart';
 import '../widgets/logo_goal_widget.dart';
 import '../widgets/target_goal_widget.dart';
 
@@ -140,53 +141,37 @@ class GoalDetailPageContent extends StatelessWidget {
                     return ListView.separated(
                       shrinkWrap: true,
                       itemCount: state.dataSavingsList.length,
-                      itemBuilder: (context, index) {
-                        return Container(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 16.wmea,
-                            vertical: 16.wmea,
-                          ),
-                          decoration: ShapeDecoration(
-                            color: const Color(0x3D787880),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                DateFormat.yMd(formatCurr).format(
-                                  DateTime.parse(
-                                    state.dataSavingsList[index]['Date']
-                                        .toString(),
-                                  ),
-                                ),
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 9.5.sp,
-                                  fontFamily: FontFamily.cabinetGrotesk,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                              NominalMoneyFormatter(
-                                textStyle: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 9.5.sp,
-                                  fontFamily: FontFamily.cabinetGrotesk,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                                amount: double.parse(state
-                                    .dataSavingsList[index]['TotalSavings']
-                                    .toString()),
-                                decimalDigits: 2,
-                                isWithName: true,
-                              ),
-                            ],
-                          ),
+                      itemBuilder: (context, idx) {
+                        final itemDate = DateTime(
+                          state.dataSavingsList[idx].date.year,
+                          state.dataSavingsList[idx].date.month,
+                          state.dataSavingsList[idx].date.day,
                         );
+
+                        final container = listSavingsGoal(
+                          formatCurr,
+                          state.dataSavingsList[idx],
+                        );
+
+                        final isDateDifferent = idx > 0
+                            ? !itemDate.isAtSameMomentAs(
+                                DateTime(
+                                  state.dataSavingsList[idx - 1].date.year,
+                                  state.dataSavingsList[idx - 1].date.month,
+                                  state.dataSavingsList[idx - 1].date.day,
+                                ),
+                              )
+                            : true;
+
+                        return isDateDifferent
+                            ? listSavingsWithDateContainer(
+                                context,
+                                itemDate,
+                                container,
+                              )
+                            : container;
                       },
-                      separatorBuilder: (cntxt, _) => SizedBox(height: 16.hmea),
+                      separatorBuilder: (cntxt, _) => SizedBox(height: 6.hmea),
                     );
                   },
                 ),

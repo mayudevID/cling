@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:cling/core/logger.dart';
 import 'package:cling/core/static_name_table.dart';
+import 'package:cling/features/model/goal_saving_model.dart';
 import 'package:intl/intl.dart';
 import 'package:sqflite/sqflite.dart';
 // ignore: depend_on_referenced_packages
@@ -47,9 +48,7 @@ class DatabaseRepository {
     Logger.Green.log("Database Created");
   }
 
-  Future<void> close() async {
-    await db.close();
-  }
+  Future<void> close() async => await db.close();
 
   Future<Map<String, double?>> getTotalIncomeExpenseCurrMonth() async {
     final monthNow = DateTime.now();
@@ -280,19 +279,22 @@ class DatabaseRepository {
     );
   }
 
-  Future<List<Map<String, Object?>>> getGoalDetailSave(int goalId) async {
+  Future<List<GoalSavingModel>> getGoalDetailSave(int goalId) async {
+    List<GoalSavingModel> dataList = [];
     final result = await db.rawQuery(
       '''
-        SELECT ${GoalSavingMeta.date} AS Date,
-        SUM(${GoalSavingMeta.amount}) AS TotalSavings 
-        FROM ${GoalSavingMeta.nameTable}
+        SELECT * FROM ${GoalSavingMeta.nameTable} 
         WHERE ${GoalSavingMeta.idGoal} = ?
-        GROUP BY Date;
+        ORDER BY ${GoalSavingMeta.date} DESC
       ''',
       [goalId],
     );
 
-    return result;
+    for (var data in result) {
+      dataList.add(GoalSavingModel.fromDatabase(data));
+    }
+
+    return dataList;
   }
 
   Future<GoalModel> getSingleGoalModel(int goalId) async {
@@ -388,6 +390,16 @@ class DatabaseRepository {
         whereArgs: [id],
       ),
     ]);
+  }
+
+  Future<void> deleteSingleSaving(int id) async {
+    await db.rawQuery(
+      '''
+        DELETE FROM ${GoalSavingMeta.nameTable}
+        WHERE ${GoalSavingMeta.id} = ?  
+      ''',
+      [id],
+    );
   }
 
   //* ================ INCOME CRUD ================

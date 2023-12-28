@@ -3,15 +3,14 @@ part of 'goal_detail_bloc.dart';
 // ignore: must_be_immutable
 class GoalDetailState extends Equatable {
   GoalModel goalModel;
-  List<Map<String, Object?>> dataSavingsList;
+  List<GoalSavingModel> dataSavingsList;
   DateTime selectedDate;
   String amount;
-
   String tempLogoGoal;
 
   GoalDetailState({
     GoalModel? goalModel,
-    List<Map<String, Object?>>? dataSavingsList,
+    List<GoalSavingModel>? dataSavingsList,
     DateTime? selectedDate,
     this.tempLogoGoal = "",
     this.amount = "0",
@@ -30,7 +29,7 @@ class GoalDetailState extends Equatable {
 
   GoalDetailState copyWith({
     GoalModel? goalModel,
-    List<Map<String, Object?>>? dataSavingsList,
+    List<GoalSavingModel>? dataSavingsList,
     DateTime? selectedDate,
     String? amount,
     String? tempLogoGoal,

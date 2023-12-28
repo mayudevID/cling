@@ -175,7 +175,7 @@ class NotificationPageContent extends StatelessWidget {
                     )
                   : true;
 
-              return (isDateDifferent)
+              return isDateDifferent
                   ? Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
