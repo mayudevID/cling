@@ -1,8 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:cling/core/utils.dart';
-import 'package:cling/features/repository/database_repository.dart';
-import 'package:cling/features/ui/main/main_page.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,9 +9,11 @@ import 'package:sqflite/sqflite.dart';
 import '../../../../../core/common_widget.dart';
 import '../../../../../core/logger.dart';
 import '../../../../model/goal_model.dart';
+import '../../../../repository/database_repository.dart';
 import '../../../language_currency/lang_export.dart';
 import '../../add_in_ex/widgets/dialog_add_success.dart';
 import '../../home/bloc/home_bloc.dart';
+import '../../main_page.dart';
 
 part 'add_goal_event.dart';
 part 'add_goal_state.dart';
@@ -72,15 +72,11 @@ class AddGoalBloc extends Bloc<AddGoalEvent, AddGoalState> {
         collected: 0,
       );
       await _dbRepo.insertGoal(goalData);
-      mainContext.read<HomeBloc>()
-        ..add(GetGoalsHome())
-        ..add(GetGoalsCount());
+      mainContext.read<HomeBloc>().add(GetGoalsHomeWithCount());
 
       dialogAddSuccess(_context, null);
     } on FormatException {
-      errorToast(
-        AppLocalizations.of(_context)!.invalidAmount,
-      );
+      errorToast(AppLocalizations.of(_context)!.invalidAmount);
     } on DatabaseException catch (e) {
       errorToast(e.toString());
       Logger.Red.log(e.toString());

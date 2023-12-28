@@ -8,9 +8,9 @@ sealed class GoalDetailEvent extends Equatable {
 }
 
 class InitGoal extends GoalDetailEvent {
-  final GoalModel goalModel;
+  final int goalModelId;
 
-  const InitGoal(this.goalModel);
+  const InitGoal(this.goalModelId);
 }
 
 class ChangeIcon extends GoalDetailEvent {

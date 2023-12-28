@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../features/model/detail_category_model.dart';
-import '../features/model/goal_model.dart';
 import '../features/ui/forgot_password/page/check_email_page.dart';
 import '../features/ui/forgot_password/page/forgot_password_page.dart';
 import '../features/ui/login/page/login_page.dart';
@@ -76,15 +75,11 @@ class RouteGen {
         );
       case RouteName.goalsDetail:
         return MaterialPageRoute(
-          builder: (_) => GoalDetailPage(
-            goalModel: data as GoalModel,
-          ),
+          builder: (_) => GoalDetailPage(goalModelId: data as int),
         );
       case RouteName.addInEx:
         return MaterialPageRoute(
-          builder: (_) => AddIncomeExpensePage(
-            flowType: data as FlowType,
-          ),
+          builder: (_) => AddIncomeExpensePage(flowType: data as FlowType),
         );
       case RouteName.addGoal:
         return MaterialPageRoute(

@@ -23,10 +23,9 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   })  : _dbRepo = dbRepo,
         super(HomeState()) {
     on<GetIncomeExpenseAmountTotalCurrMonth>(_getTotalIncomeExpenseCurrMonth);
-    on<GetGoalsHome>(_getGoalsHome);
+    on<GetGoalsHomeWithCount>(_getGoalsHomeWithCount);
     on<GetTodayExpenses>(_getTodayExpenses);
     on<GetNotificationCount>(_getNotificationCount);
-    on<GetGoalsCount>(_getGoalsCount);
     on<FreeResourcesHome>(_freeResources);
   }
 
@@ -63,14 +62,16 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     emit(state.copyWith(totalNotif: total));
   }
 
-  void _getGoalsCount(event, emit) async {
-    final total = await _dbRepo.getGoalsCount();
-    emit(state.copyWith(totalGoals: total));
-  }
+  void _getGoalsHomeWithCount(event, emit) async {
+    final result = await Future.wait([
+      _dbRepo.getGoalsHome(),
+      _dbRepo.getGoalsCount(),
+    ]);
 
-  void _getGoalsHome(event, emit) async {
-    final listData = await _dbRepo.getGoalsHome();
-    emit(state.copyWith(listGoals: listData));
+    emit(state.copyWith(
+      listGoals: result[0] as List<GoalModel>,
+      totalGoals: result[1] as int,
+    ));
   }
 
   void _getTodayExpenses(_, emit) async {

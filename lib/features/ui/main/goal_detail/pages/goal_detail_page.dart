@@ -1,10 +1,5 @@
 import 'package:cling/core/common_widget.dart';
 import 'package:cling/core/utils.dart';
-import 'package:cling/features/model/goal_model.dart';
-import 'package:cling/features/repository/database_repository.dart';
-import 'package:cling/features/repository/settings_repository.dart';
-import 'package:cling/features/ui/language_currency/lang_export.dart';
-import 'package:cling/features/ui/main/goal_detail/widgets/add_goal_saving_bottom_sheet.dart';
 import 'package:cling/injection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,14 +8,18 @@ import 'package:sizer/sizer.dart';
 
 import '../../../../../resources/gen/assets.gen.dart';
 import '../../../../../resources/gen/fonts.gen.dart';
+import '../../../../repository/database_repository.dart';
+import '../../../../repository/settings_repository.dart';
 import '../../../language_currency/lang_currency_bloc.dart';
+import '../../../language_currency/lang_export.dart';
 import '../bloc/goal_detail_bloc.dart';
+import '../widgets/add_goal_saving_bottom_sheet.dart';
 import '../widgets/logo_goal_widget.dart';
 import '../widgets/target_goal_widget.dart';
 
 class GoalDetailPage extends StatelessWidget {
-  const GoalDetailPage({super.key, required this.goalModel});
-  final GoalModel goalModel;
+  const GoalDetailPage({super.key, required this.goalModelId});
+  final int goalModelId;
 
   static GlobalKey<NavigatorState> navKeyMain = GlobalKey<NavigatorState>();
 
@@ -30,7 +29,7 @@ class GoalDetailPage extends StatelessWidget {
       create: (_) => GoalDetailBloc(
         dbRepo: getIt<DatabaseRepository>(),
         settingsRepo: getIt<SettingsRepository>(),
-      )..add(InitGoal(goalModel)),
+      )..add(InitGoal(goalModelId)),
       child: const GoalDetailPageContent(),
     );
   }
@@ -81,8 +80,6 @@ class GoalDetailPageContent extends StatelessWidget {
                         if (result) {
                           // ignore: use_build_context_synchronously
                           context.read<GoalDetailBloc>().add(DeleteGoal());
-                          // ignore: use_build_context_synchronously
-                          Navigator.pop(context);
                         }
                       },
                       child: Assets.lib.resources.images.jamTrash.svg(),
@@ -113,9 +110,7 @@ class GoalDetailPageContent extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(
-                height: 16.hmea,
-              ),
+              SizedBox(height: 16.hmea),
               Expanded(
                 child: BlocBuilder<GoalDetailBloc, GoalDetailState>(
                   buildWhen: (previous, current) {
@@ -191,25 +186,17 @@ class GoalDetailPageContent extends StatelessWidget {
                           ),
                         );
                       },
-                      separatorBuilder: (context, index) {
-                        return SizedBox(height: 16.hmea);
-                      },
+                      separatorBuilder: (cntxt, _) => SizedBox(height: 16.hmea),
                     );
                   },
                 ),
               ),
-              SizedBox(
-                height: 16.hmea,
-              ),
+              SizedBox(height: 16.hmea),
               PinkButton(
-                onTap: () {
-                  addGoalSavingBottomSheet(context);
-                },
-                name: "Add Saving",
+                onTap: () => addGoalSavingBottomSheet(context),
+                name: AppLocalizations.of(context)!.addSaving,
               ),
-              SizedBox(
-                height: 16.hmea,
-              ),
+              SizedBox(height: 16.hmea),
             ],
           ),
         ),

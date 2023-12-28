@@ -211,18 +211,10 @@ class NotificationPageContent extends StatelessWidget {
                           ],
                         ),
                         SizedBox(height: 8.hmea),
-                        notificationWidget(
-                          context,
-                          idx,
-                          state.listNotif[idx],
-                        ),
+                        notificationWidget(idx),
                       ],
                     )
-                  : notificationWidget(
-                      context,
-                      idx,
-                      state.listNotif[idx],
-                    );
+                  : notificationWidget(idx);
             },
             separatorBuilder: (_, idx) => SizedBox(height: 8.hmea),
           ),

@@ -1,4 +1,3 @@
-import 'package:cling/features/repository/settings_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
@@ -9,6 +8,7 @@ import 'package:transitioned_indexed_stack/transitioned_indexed_stack.dart';
 import '../../../injection.dart';
 import '../../repository/auth_repository.dart';
 import '../../repository/database_repository.dart';
+import '../../repository/settings_repository.dart';
 import 'budgeting/page/budgeting_page.dart';
 import 'home/bloc/home_bloc.dart';
 import 'home/page/home_page.dart';
@@ -46,8 +46,7 @@ class MainPage extends StatelessWidget {
             dbRepo: getIt<DatabaseRepository>(),
           )
             ..add(GetIncomeExpenseAmountTotalCurrMonth())
-            ..add(GetGoalsHome())
-            ..add(GetGoalsCount())
+            ..add(GetGoalsHomeWithCount())
             ..add(GetTodayExpenses())
             ..add(GetNotificationCount()),
         ),

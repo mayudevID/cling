@@ -343,5 +343,9 @@
   "amountExceedsRemainingSaving": "The amount exceeds the remaining savings",
   "@amountExceedsRemainingSaving": {},
   "seeAll": "See all",
-  "@seeAll": {}
+  "@seeAll": {},
+  "collected": "Collected",
+  "@collected": {},
+  "addSaving": "Add saving",
+  "@addSaving": {}
 }

@@ -15,6 +15,8 @@ import '../bloc/goal_list_bloc.dart';
 class GoalListPage extends StatelessWidget {
   const GoalListPage({super.key});
 
+  static GlobalKey<NavigatorState> keyState = GlobalKey<NavigatorState>();
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -31,6 +33,7 @@ class GoalListPageContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
+      key: GoalListPage.keyState,
       child: Scaffold(
         backgroundColor: Colors.black,
         body: Padding(
@@ -77,7 +80,7 @@ class GoalListPageContent extends StatelessWidget {
   Widget _listViewBuilder(BuildContext context) {
     return BlocBuilder<GoalListBloc, GoalListState>(
       buildWhen: (p, c) {
-        return p.listGoalModel.length != c.listGoalModel.length ||
+        return p.listGoalModel != c.listGoalModel ||
             p.refreshController != c.refreshController;
       },
       builder: (context, state) {

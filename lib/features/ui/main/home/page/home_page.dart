@@ -98,32 +98,26 @@ class HomePage extends StatelessWidget {
           incomeAndExpense(context),
           ...tagNameHome(context, AppLocalizations.of(context)!.goals),
           BlocBuilder<HomeBloc, HomeState>(
-            buildWhen: (prev, next) {
-              return prev.listGoals != next.listGoals ||
-                  prev.totalGoals != next.totalGoals;
-            },
+            buildWhen: (p, c) => p.listGoals != c.listGoals,
             builder: (context, state) {
               if (state.listGoals.isEmpty) return emptyGoalsWidget(context);
 
-              final isMoreThanFive = state.totalGoals > 5;
-              final length = isMoreThanFive ? 6 : state.listGoals.length;
+              final lengthD = state.totalGoals > 5 ? 6 : state.listGoals.length;
 
               return SizedBox(
                 height: 156.855.hmea,
                 child: ListView.builder(
                   shrinkWrap: true,
                   scrollDirection: Axis.horizontal,
-                  itemCount: length,
+                  itemCount: lengthD,
                   itemBuilder: (context, idx) {
-                    if (idx == 5) {
-                      return seeAllWidget(context);
-                    }
+                    if (idx == 5) return seeAllWidget(context);
 
                     return widgetGoals(
                       context,
                       idx,
                       state.listGoals[idx],
-                      length,
+                      lengthD,
                     );
                   },
                 ),

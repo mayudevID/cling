@@ -120,7 +120,7 @@
   "@wrongPasswordFailure": {},
   "emailAlreadyFailure": "Akun sudah ada.",
   "@emailAlreadyFailure": {},
-  "operationNotAllowedFailure": "Operasi tidak diperbolehkan. Silakan hubungi Dukungan.",
+  "operationNotAllowedFailure": "Operasi tidak diperbolehkan. Silakan hubungi dukungan.",
   "@operationNotAllowedFailure": {},
   "weakPasswordFailure": "Harap masukkan kata sandi yang lebih kuat.",
   "@weakPasswordFailure": {},
@@ -343,5 +343,9 @@
   "amountExceedsRemainingSaving": "Jumlah melebihi sisa tabungan",
   "@amountExceedsRemainingSaving": {},
   "seeAll": "Lihat semua",
-  "@seeAll": {}
+  "@seeAll": {},
+  "collected": "Terkumpul",
+  "@collected": {},
+  "addSaving": "Tambah tabungan",
+  "@addSaving": {}
 }

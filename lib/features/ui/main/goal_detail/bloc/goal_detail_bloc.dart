@@ -2,6 +2,7 @@
 
 import 'package:cling/core/utils.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
@@ -11,6 +12,8 @@ import '../../../../model/goal_model.dart';
 import '../../../../repository/database_repository.dart';
 import '../../../../repository/settings_repository.dart';
 import '../../../language_currency/lang_export.dart';
+import '../../goal_list/bloc/goal_list_bloc.dart';
+import '../../goal_list/page/goal_list_page.dart';
 import '../../home/bloc/home_bloc.dart';
 import '../../main_page.dart';
 import '../widgets/edit_goal/text_field_amount_edit_goal.dart';
@@ -40,15 +43,19 @@ class GoalDetailBloc extends Bloc<GoalDetailEvent, GoalDetailState> {
   final DatabaseRepository _dbRepo;
   final SettingsRepository _settingsRepo;
   var mainContext = MainPage.navKeyMain.currentContext!;
+  var goalListContext = GoalListPage.keyState.currentContext;
 
   void _initGoal(InitGoal event, emit) async {
-    final result = await _dbRepo.getGoalDetailSave(event.goalModel.id!);
+    final result = await Future.wait([
+      _dbRepo.getGoalDetailSave(event.goalModelId),
+      _dbRepo.getSingleGoalModel(event.goalModelId),
+    ]);
 
     emit(
       state.copyWith(
-        goalModel: event.goalModel,
-        tempLogoGoal: event.goalModel.image,
-        dataSavingsList: result,
+        goalModel: result[1] as GoalModel,
+        tempLogoGoal: (result[1] as GoalModel).image,
+        dataSavingsList: result[0] as List<Map<String, Object?>>,
       ),
     );
   }
@@ -123,7 +130,8 @@ class GoalDetailBloc extends Bloc<GoalDetailEvent, GoalDetailState> {
         _dbRepo.updateCollectedGoal(newGoalModel),
       ]);
 
-      mainContext.read<HomeBloc>().add(GetGoalsHome());
+      mainContext.read<HomeBloc>().add(GetGoalsHomeWithCount());
+      goalListContext?.read<GoalListBloc>().add(UpdateGoalFromGL(newGoalModel));
 
       final result = await _dbRepo.getGoalDetailSave(state.goalModel.id!);
       emit(state.copyWith(
@@ -180,7 +188,9 @@ class GoalDetailBloc extends Bloc<GoalDetailEvent, GoalDetailState> {
     );
 
     await _dbRepo.updateGoal(newGoalModel);
-    mainContext.read<HomeBloc>().add(GetGoalsHome());
+    mainContext.read<HomeBloc>().add(GetGoalsHomeWithCount());
+    goalListContext?.read<GoalListBloc>().add(UpdateGoalFromGL(newGoalModel));
+
     emit(
       state.copyWith(goalModel: newGoalModel, tempLogoGoal: state.tempLogoGoal),
     );
@@ -188,8 +198,11 @@ class GoalDetailBloc extends Bloc<GoalDetailEvent, GoalDetailState> {
 
   void _deleteGoal(event, emit) async {
     await _dbRepo.deleteGoalWithSaving(state.goalModel.id!);
-    mainContext.read<HomeBloc>()
-      ..add(GetGoalsHome())
-      ..add(GetGoalsCount());
+    mainContext.read<HomeBloc>().add(GetGoalsHomeWithCount());
+    goalListContext
+        ?.read<GoalListBloc>()
+        .add(DeleteGoalFromGL(state.goalModel.id!));
+
+    Navigator.pop(mainContext);
   }
 }

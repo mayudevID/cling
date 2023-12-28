@@ -9,7 +9,7 @@ extension RemoveDot on String {
   String get removeDot => replaceAll(RegExp(r'[^0-9]'), '');
 }
 
-double setInterval(double maxVal) {
+double? setInterval(double maxVal) {
   if (maxVal < 50000) {
     return 10000;
   } else if (maxVal < 100000) {
@@ -25,6 +25,6 @@ double setInterval(double maxVal) {
   } else if (maxVal < 100000000) {
     return 15000000;
   } else {
-    return 20000000;
+    return null;
   }
 }

@@ -295,6 +295,18 @@ class DatabaseRepository {
     return result;
   }
 
+  Future<GoalModel> getSingleGoalModel(int goalId) async {
+    final result = await db.rawQuery(
+      '''
+        SELECT * FROM ${GoalMeta.nameTable}
+        WHERE ${GoalMeta.id} = ? 
+      ''',
+      [goalId],
+    );
+
+    return GoalModel.fromDatabase(result[0]);
+  }
+
   Future<void> saveGoalSaving(
     int idGoal,
     DateTime date,

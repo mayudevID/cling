@@ -256,12 +256,9 @@ class _TimeBackupState extends State<TimeBackup> {
   void initState() {
     timeago.setLocaleMessages("id", timeago.IdMessages());
 
-    timer = Timer.periodic(
-      const Duration(seconds: 12),
-      (Timer t) {
-        setState(() {});
-      },
-    );
+    timer = Timer.periodic(const Duration(seconds: 12), (Timer t) {
+      setState(() {});
+    });
 
     super.initState();
   }

@@ -8,3 +8,15 @@ sealed class GoalListEvent extends Equatable {
 }
 
 class GetGoalsList extends GoalListEvent {}
+
+class DeleteGoalFromGL extends GoalListEvent {
+  final int id;
+
+  const DeleteGoalFromGL(this.id);
+}
+
+class UpdateGoalFromGL extends GoalListEvent {
+  final GoalModel newGoalModel;
+
+  const UpdateGoalFromGL(this.newGoalModel);
+}

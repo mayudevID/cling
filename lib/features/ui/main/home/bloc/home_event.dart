@@ -11,10 +11,8 @@ class GetIncomeExpenseAmountTotalCurrMonth extends HomeEvent {}
 
 class GetTodayExpenses extends HomeEvent {}
 
-class GetGoalsHome extends HomeEvent {}
+class GetGoalsHomeWithCount extends HomeEvent {}
 
 class GetNotificationCount extends HomeEvent {}
-
-class GetGoalsCount extends HomeEvent {}
 
 class FreeResourcesHome extends HomeEvent {}

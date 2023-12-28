@@ -20,7 +20,7 @@ Widget widgetGoals(
       Navigator.pushNamed(
         context,
         RouteName.goalsDetail,
-        arguments: goalModel,
+        arguments: goalModel.id!,
       );
     },
     child: Container(

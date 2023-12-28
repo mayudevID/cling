@@ -14,6 +14,8 @@ class GoalListBloc extends Bloc<GoalListEvent, GoalListState> {
       : _dbRepo = dbRepo,
         super(GoalListState()) {
     on<GetGoalsList>(_getGoalsList);
+    on<UpdateGoalFromGL>(_updateGoalFromGL);
+    on<DeleteGoalFromGL>(_deleteGoalFromGL);
   }
 
   final DatabaseRepository _dbRepo;
@@ -67,5 +69,19 @@ class GoalListBloc extends Bloc<GoalListEvent, GoalListState> {
       state.refreshController.loadComplete();
       _idOffset = dataList.last.id;
     }
+  }
+
+  void _updateGoalFromGL(UpdateGoalFromGL event, emit) {
+    var dataList = state.listGoalModel.toList(growable: true);
+    final idxLoc = dataList.indexWhere((e) => e.id == event.newGoalModel.id);
+    if (idxLoc == -1) return;
+    dataList[idxLoc] = event.newGoalModel;
+    emit(state.copyWith(listGoalModel: dataList));
+  }
+
+  void _deleteGoalFromGL(DeleteGoalFromGL event, emit) {
+    var dataList = state.listGoalModel.toList(growable: true);
+    dataList.removeWhere((e) => e.id == event.id);
+    emit(state.copyWith(listGoalModel: dataList));
   }
 }
