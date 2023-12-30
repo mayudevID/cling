@@ -256,13 +256,15 @@ class DatabaseRepository {
         UPDATE ${GoalMeta.nameTable} 
         SET ${GoalMeta.name} = ?,
         ${GoalMeta.image} = ?,
-        ${GoalMeta.target} = ?
+        ${GoalMeta.target} = ?,
+        ${GoalMeta.collected} = ?
         WHERE ${GoalMeta.id} = ?
       ''',
       [
         goalModel.name,
         goalModel.image,
         goalModel.target,
+        goalModel.collected,
         goalModel.id,
       ],
     );

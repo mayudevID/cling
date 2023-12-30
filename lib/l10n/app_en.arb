@@ -347,5 +347,7 @@
   "collected": "Collected",
   "@collected": {},
   "addSaving": "Add saving",
-  "@addSaving": {}
+  "@addSaving": {},
+  "delete": "Delete",
+  "@delete": {}
 }

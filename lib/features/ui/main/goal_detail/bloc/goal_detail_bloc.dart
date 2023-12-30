@@ -201,7 +201,22 @@ class GoalDetailBloc extends Bloc<GoalDetailEvent, GoalDetailState> {
   }
 
   void _deleteSaving(DeleteSaving event, emit) async {
-    await _dbRepo.deleteSingleSaving(event.goalSaving[0]);
+    //* Update Goal Model
+    final newGoalModel = state.goalModel.copyWith(
+      collected: state.goalModel.collected - event.goalSaving.amount,
+    );
+    //* Update List Savings
+    var listSavings = state.dataSavingsList.toList(growable: true);
+    listSavings.removeWhere((e) => e.id == event.goalSaving.id);
+
+    await Future.wait([
+      _dbRepo.deleteSingleSaving(event.goalSaving.id!),
+      _dbRepo.updateGoal(newGoalModel),
+    ]);
+
+    mainContext.read<HomeBloc>().add(GetGoalsHomeWithCount());
+    goalListContext?.read<GoalListBloc>().add(UpdateGoalFromGL(newGoalModel));
+    emit(state.copyWith(goalModel: newGoalModel, dataSavingsList: listSavings));
   }
 
   void _deleteGoal(event, emit) async {

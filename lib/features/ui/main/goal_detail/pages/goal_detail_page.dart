@@ -148,9 +148,10 @@ class GoalDetailPageContent extends StatelessWidget {
                           state.dataSavingsList[idx].date.day,
                         );
 
-                        final container = listSavingsGoal(
-                          formatCurr,
-                          state.dataSavingsList[idx],
+                        final container = savingItem(
+                          context: context,
+                          formatCurr: formatCurr,
+                          data: state.dataSavingsList[idx],
                         );
 
                         final isDateDifferent = idx > 0

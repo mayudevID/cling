@@ -198,7 +198,7 @@ Widget monthlyBudget(BuildContext context) {
 
                     if (amount <= 100) return const SizedBox();
 
-                    return WarningAmountIcon(
+                    return warningAmountIcon(
                       content:
                           AppLocalizations.of(context)!.warningMonthlyBudget,
                     );

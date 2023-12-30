@@ -47,7 +47,7 @@ Widget incomeAndExpense(BuildContext context) {
                   state.amountIncomeThisMonth - state.amountExpenseThisMonth;
               if (currBalance >= 0) return const SizedBox();
 
-              return WarningAmountIcon(
+              return warningAmountIcon(
                 content: AppLocalizations.of(context)!.warningMonthlyBudget,
               );
             }),

@@ -40,7 +40,7 @@ class SetAmountInput extends GoalDetailEvent {
 class AddSaving extends GoalDetailEvent {}
 
 class DeleteSaving extends GoalDetailEvent {
-  final List goalSaving;
+  final GoalSavingModel goalSaving;
 
   const DeleteSaving(this.goalSaving);
 }

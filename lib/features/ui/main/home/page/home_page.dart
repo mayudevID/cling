@@ -31,12 +31,9 @@ class HomePage extends StatelessWidget {
           SizedBox(height: 24.hmea),
           Container(
             margin: EdgeInsets.symmetric(horizontal: 24.wmea),
-            padding: EdgeInsets.symmetric(
-              horizontal: 16.wmea,
-              vertical: 16.hmea,
-            ),
+            padding:
+                EdgeInsets.symmetric(horizontal: 16.wmea, vertical: 16.hmea),
             decoration: BoxDecoration(
-              //color: Colors.white,
               color: const Color(0x3D787880),
               borderRadius: BorderRadius.circular(10),
             ),
@@ -60,7 +57,7 @@ class HomePage extends StatelessWidget {
                   builder: (context, state) {
                     if (state.totalBalance >= 0) return const SizedBox();
 
-                    return WarningAmountIcon(
+                    return warningAmountIcon(
                       content:
                           AppLocalizations.of(context)!.warningTotalBalance,
                     );
