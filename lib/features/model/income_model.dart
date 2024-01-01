@@ -1,13 +1,16 @@
 // ignore_for_file: must_be_immutable
 
-import 'package:cling/core/init_database.dart';
-import 'package:cling/core/static_name_table.dart';
-import 'package:equatable/equatable.dart';
+import '../../core/init_database.dart';
+import '../../core/static_name_table.dart';
+import 'transaction_model.dart';
 
-class IncomeModel extends Equatable {
+class IncomeModel implements TransactionModel {
+  @override
   int? id;
+  @override
   DateTime date;
   String? desc;
+  @override
   double amount;
   String incomeSource;
 
@@ -51,6 +54,9 @@ class IncomeModel extends Equatable {
       };
 
   @override
+  TransactionType getType() => TransactionType.income;
+
+  @override
   List<Object?> get props => [
         id,
         date,
@@ -58,4 +64,7 @@ class IncomeModel extends Equatable {
         amount,
         incomeSource,
       ];
+
+  @override
+  bool? get stringify => true;
 }

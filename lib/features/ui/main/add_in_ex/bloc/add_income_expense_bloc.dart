@@ -3,6 +3,7 @@
 import 'package:cling/core/utils.dart';
 import 'package:cling/features/repository/database_repository.dart';
 import 'package:cling/features/ui/main/main_page.dart';
+import 'package:cling/features/ui/main/transaction/bloc/transaction_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -137,6 +138,7 @@ class AddIncomeExpenseBloc
 
       ///* Update UI
       mainContext.read<HomeBloc>().add(GetIncomeExpenseAmountTotalCurrMonth());
+      mainContext.read<TransactionBloc>().add(GetData());
       mainContext.read<StatisticsBloc>()
         ..add(GetIncomeExpenseTotalAllMonth())
         ..add(GetMost());

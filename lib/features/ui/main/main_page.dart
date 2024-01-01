@@ -1,3 +1,4 @@
+import 'package:cling/features/ui/main/transaction/bloc/transaction_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
@@ -9,7 +10,6 @@ import '../../../injection.dart';
 import '../../repository/auth_repository.dart';
 import '../../repository/database_repository.dart';
 import '../../repository/settings_repository.dart';
-import 'budgeting/page/budgeting_page.dart';
 import 'home/bloc/home_bloc.dart';
 import 'home/page/home_page.dart';
 import 'main_bloc/main_bloc.dart';
@@ -19,6 +19,7 @@ import 'profile/bloc/profile_bloc.dart';
 import 'profile/page/profile_page.dart';
 import 'statistics/bloc/statistics_bloc.dart';
 import 'statistics/page/statistics_page.dart';
+import 'transaction/page/transaction_page.dart';
 
 class MainPage extends StatelessWidget {
   const MainPage({super.key});
@@ -29,9 +30,7 @@ class MainPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(
-          create: (_) => MainBloc(),
-        ),
+        BlocProvider(create: (_) => MainBloc()),
         BlocProvider(
           create: (_) => ProfileBloc(
             authRepo: getIt<AuthRepository>(),
@@ -40,6 +39,11 @@ class MainPage extends StatelessWidget {
           )
             ..add(GetProfile())
             ..add(GetVerifiedStatus()),
+        ),
+        BlocProvider(
+          create: (_) => TransactionBloc(
+            dbRepo: getIt<DatabaseRepository>(),
+          ),
         ),
         BlocProvider(
           create: (_) => HomeBloc(
@@ -93,8 +97,8 @@ class MainPageContent extends StatelessWidget {
                     endOpacity: 1,
                     children: [
                       const HomePage(),
+                      const TransactionPage(),
                       StatisticsPage(),
-                      const BudgetingPage(),
                       const ProfilePage(),
                     ],
                   );
@@ -110,9 +114,7 @@ class MainPageContent extends StatelessWidget {
         floatingActionButtonLocation: ExpandableFab.location,
         floatingActionButton: BlocBuilder<MainBloc, MainState>(
           builder: (context, state) {
-            if (state.tabIndex == 0) {
-              return customFloatingActionButton(context);
-            }
+            if (state.tabIndex == 0) return customFloatingActionButton(context);
 
             return nil;
           },

@@ -157,9 +157,7 @@ class HomePage extends StatelessWidget {
               );
             },
           ),
-          SizedBox(
-            height: 180.hmea,
-          ),
+          SizedBox(height: 180.hmea),
         ],
       ),
     );

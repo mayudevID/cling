@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:cling/core/logger.dart';
 import 'package:cling/core/static_name_table.dart';
 import 'package:cling/features/model/goal_saving_model.dart';
+import 'package:cling/features/model/transaction_model.dart';
 import 'package:intl/intl.dart';
 import 'package:sqflite/sqflite.dart';
 // ignore: depend_on_referenced_packages
@@ -233,6 +234,46 @@ class DatabaseRepository {
         );
         return result;
     }
+  }
+
+  Future<List<TransactionModel>> getTransaction(DateTime date) async {
+    List<IncomeModel> incomeData = [];
+    List<ExpenseModel> expenseData = [];
+
+    final start = DateTime(date.year, date.month, 1).toIso8601String();
+    final end = DateTime(
+      date.year,
+      date.month,
+      DateTime(date.year, date.month + 1, 0).day,
+    ).toIso8601String();
+
+    final res = await Future.wait([
+      db.rawQuery(
+        '''
+        SELECT * FROM ${IncomeMeta.nameTable}
+        WHERE date(${IncomeMeta.date}) >= date(?)
+        AND date(${IncomeMeta.date}) <= date(?)
+      ''',
+        [start, end],
+      ),
+      db.rawQuery(
+        '''
+        SELECT * FROM ${ExpenseMeta.nameTable}
+        WHERE date(${ExpenseMeta.date}) >= date(?)
+        AND date(${ExpenseMeta.date}) <= date(?)
+      ''',
+        [start, end],
+      ),
+    ]);
+
+    for (var data in res[0]) {
+      incomeData.add(IncomeModel.fromDatabase(data));
+    }
+    for (var data in res[1]) {
+      expenseData.add(ExpenseModel.fromDatabase(data));
+    }
+
+    return <TransactionModel>[...incomeData, ...expenseData];
   }
 
   //* ================ GOAL CRUD ================

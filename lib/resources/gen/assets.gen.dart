@@ -166,6 +166,9 @@ class $LibResourcesImagesGen {
   SvgGenImage get jamTrash =>
       const SvgGenImage("lib/resources/images/jam_trash.svg");
 
+  SvgGenImage get transaction =>
+      const SvgGenImage("lib/resources/images/icons_transaction.svg");
+
   /// List of all assets
   List<SvgGenImage> get values => [
         admissionTickets,
@@ -201,7 +204,8 @@ class $LibResourcesImagesGen {
         plus,
         shallowPanOfFood,
         smile,
-        warningTriangleSolid
+        warningTriangleSolid,
+        transaction,
       ];
 }
 

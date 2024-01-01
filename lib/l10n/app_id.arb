@@ -120,7 +120,7 @@
   "@wrongPasswordFailure": {},
   "emailAlreadyFailure": "Akun sudah ada.",
   "@emailAlreadyFailure": {},
-  "operationNotAllowedFailure": "Operasi tidak diperbolehkan. Silakan hubungi Dukungan.",
+  "operationNotAllowedFailure": "Operasi tidak diperbolehkan. Silakan hubungi dukungan.",
   "@operationNotAllowedFailure": {},
   "weakPasswordFailure": "Harap masukkan kata sandi yang lebih kuat.",
   "@weakPasswordFailure": {},
@@ -349,5 +349,7 @@
   "addSaving": "Tambah tabungan",
   "@addSaving": {},
   "delete": "Hapus",
-  "@delete": {}
+  "@delete": {},
+  "transaction": "Transaksi",
+  "@transaction": {}
 }

@@ -349,5 +349,7 @@
   "addSaving": "Add saving",
   "@addSaving": {},
   "delete": "Delete",
-  "@delete": {}
+  "@delete": {},
+  "transaction": "Transaction",
+  "@transaction": {}
 }

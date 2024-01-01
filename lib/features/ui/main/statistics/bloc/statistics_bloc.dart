@@ -52,10 +52,7 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
   var mainContext = MainPage.navKeyMain.currentContext!;
 
   int _getDaysInMonth(int year, int month) {
-    DateTime lastDayOfMonth = DateTime(year, month + 1, 1).subtract(
-      const Duration(days: 1),
-    );
-    return lastDayOfMonth.day;
+    return DateTime(year, month + 1, 0).day;
   }
 
   void _typeCategories(

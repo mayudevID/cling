@@ -50,7 +50,7 @@ class CustomNavBar extends StatelessWidget {
               return buildTabButton(
                 state: state,
                 onPressed: () => changeTab(state, context, 1),
-                icon: Assets.lib.resources.images.biBarChartFill.svg(),
+                icon: Assets.lib.resources.images.transaction.svg(),
                 isSelected: state.tabIndex == 1,
               );
             },
@@ -63,7 +63,7 @@ class CustomNavBar extends StatelessWidget {
               return buildTabButton(
                 state: state,
                 onPressed: () => changeTab(state, context, 2),
-                icon: Assets.lib.resources.images.faSolidWallet.svg(),
+                icon: Assets.lib.resources.images.biBarChartFill.svg(),
                 isSelected: state.tabIndex == 2,
               );
             },
