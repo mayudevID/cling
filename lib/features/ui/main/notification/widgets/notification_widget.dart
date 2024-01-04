@@ -120,12 +120,12 @@ Widget notificationWidget(int idx) {
                     alignment: Alignment.centerRight,
                     child: GestureDetector(
                       onTap: () async {
-                        context
-                            .read<NotificationBloc>()
-                            .add(MarkNotificationRead(
-                              idx,
-                              state.listNotif[idx],
-                            ));
+                        context.read<NotificationBloc>().add(
+                              MarkNotificationRead(
+                                idx,
+                                state.listNotif[idx],
+                              ),
+                            );
                       },
                       child: const Text(
                         "OK",

@@ -1,4 +1,5 @@
 import 'package:cling/core/utils.dart';
+import 'package:cling/features/ui/language_currency/lang_export.dart';
 import '../../../../../resources/gen/fonts.gen.dart';
 import 'package:flutter/material.dart';
 
@@ -36,8 +37,8 @@ Widget emptyTransactionWidget(BuildContext context) {
       ),
       SizedBox(height: 8.hmea),
       Text(
-        "Empty Transaction",
-        style: TextStyle(
+        AppLocalizations.of(context)!.emptyTransaction,
+        style: const TextStyle(
           color: Colors.white,
           fontFamily: FontFamily.cabinetGrotesk,
           fontWeight: FontWeight.bold,

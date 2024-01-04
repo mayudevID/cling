@@ -19,6 +19,9 @@ import 'features/ui/language_currency/lang_export.dart';
 import 'features/ui/language_currency/lang_currency_bloc.dart';
 import 'injection.dart';
 
+// adb shell "pm uninstall com.maul.cling"
+// adb shell "rm -rf /data/app/com.maul.cling-*"
+
 void main() async {
   Bloc.observer = MyGlobalObserver();
   WidgetsFlutterBinding.ensureInitialized();

@@ -1,7 +1,6 @@
 import 'package:bloc/bloc.dart';
-import 'package:cling/core/debouncer.dart';
-import 'package:cling/features/model/transaction_model.dart';
 import 'package:equatable/equatable.dart';
+import '../../../../model/transaction_model.dart';
 import '../../../../repository/database_repository.dart';
 
 part 'transaction_event.dart';
@@ -17,7 +16,7 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
   }
 
   final DatabaseRepository _dbRepo;
-  final _debouncer = Debouncer(milliseconds: 750);
+  //final _debouncer = Debouncer(milliseconds: 750);
 
   void _clickLeft(event, emit) {
     emit(

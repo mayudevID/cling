@@ -17,6 +17,12 @@ class SetDate extends AddIncomeExpenseEvent {
   final DateTime date;
 }
 
+class SetTime extends AddIncomeExpenseEvent {
+  const SetTime(this.time);
+
+  final DateTime time;
+}
+
 class SetCategories extends AddIncomeExpenseEvent {
   const SetCategories(this.categories);
 

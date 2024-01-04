@@ -1,12 +1,15 @@
 import 'package:cling/core/common_widget.dart';
 import 'package:cling/core/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../../resources/gen/fonts.gen.dart';
 import '../../../../model/expense_model.dart';
 import '../../../../model/income_model.dart';
 import '../../../../model/transaction_model.dart';
+import '../../../language_currency/lang_currency_bloc.dart';
 import '../../../language_currency/lang_export.dart';
 
 Widget listTransaction(
@@ -16,6 +19,12 @@ Widget listTransaction(
   final data = getTextAndCategories(context, transactionModel);
   final icon = data[1].substring(0, data[1].indexOf(" "));
   final cat = data[1].substring(data[1].indexOf(" ") + 1);
+  final dateFormat = context
+      .read<LangCurrencyBloc>()
+      .state
+      .selectedLanguage
+      .value
+      .toLanguageTag();
 
   return Container(
     padding: const EdgeInsets.all(11),
@@ -75,14 +84,28 @@ Widget listTransaction(
             ],
           ),
         ),
-        NominalMoneyFormatter(
-          textStyle: const TextStyle(
-            color: Colors.white,
-            fontFamily: FontFamily.cabinetGrotesk,
-          ),
-          amount: transactionModel.amount,
-          decimalDigits: 2,
-          isWithName: true,
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            NominalMoneyFormatter(
+              textStyle: const TextStyle(
+                color: Colors.white,
+                fontFamily: FontFamily.cabinetGrotesk,
+              ),
+              amount: transactionModel.amount,
+              decimalDigits: 2,
+              isWithName: true,
+            ),
+            Text(
+              DateFormat.jm(dateFormat).format(transactionModel.date),
+              style: TextStyle(
+                color: Colors.grey.shade300,
+                fontFamily: FontFamily.cabinetGrotesk,
+                fontSize: 8.5.sp,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
         )
       ],
     ),

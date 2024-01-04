@@ -11,7 +11,7 @@ import '../../../../../core/logger.dart';
 import '../../../../model/goal_model.dart';
 import '../../../../repository/database_repository.dart';
 import '../../../language_currency/lang_export.dart';
-import '../../add_in_ex/widgets/dialog_add_success.dart';
+import '../../main_widget/dialog_add_success.dart';
 import '../../home/bloc/home_bloc.dart';
 import '../../main_page.dart';
 

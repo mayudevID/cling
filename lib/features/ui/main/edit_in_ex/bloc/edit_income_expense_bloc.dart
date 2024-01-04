@@ -16,22 +16,22 @@ import '../../../../repository/database_repository.dart';
 import '../../../language_currency/lang_export.dart';
 import '../../home/bloc/home_bloc.dart';
 import '../../main_page.dart';
+import '../../main_widget/dialog_add_success.dart';
 import '../../main_widget/enum_flowtype.dart';
 import '../../transaction/bloc/transaction_bloc.dart';
-import '../../main_widget/dialog_add_success.dart';
 import '../../statistics/bloc/statistics_bloc.dart';
 
-part 'add_income_expense_event.dart';
-part 'add_income_expense_state.dart';
+part 'edit_income_expense_event.dart';
+part 'edit_income_expense_state.dart';
 
-class AddIncomeExpenseBloc
-    extends Bloc<AddIncomeExpenseEvent, AddIncomeExpenseState> {
-  AddIncomeExpenseBloc({
+class EditIncomeExpenseBloc
+    extends Bloc<EditIncomeExpenseEvent, EditIncomeExpenseState> {
+  EditIncomeExpenseBloc({
     required BuildContext context,
     required DatabaseRepository dbRepo,
   })  : _context = context,
         _dbRepo = dbRepo,
-        super(AddIncomeExpenseState()) {
+        super(EditIncomeExpenseState()) {
     on<SetDate>(_setDate);
     on<SetTime>(_setTime);
     on<SetCategories>(_setCategories);
@@ -96,14 +96,14 @@ class AddIncomeExpenseBloc
 
   void _setDescOrItem(
     SetDescOrItem event,
-    Emitter<AddIncomeExpenseState> emit,
+    Emitter<EditIncomeExpenseState> emit,
   ) {
     emit(state.copyWith(descOrItem: event.descOrItem));
   }
 
   void _setAmountInput(
     SetAmountInput event,
-    Emitter<AddIncomeExpenseState> emit,
+    Emitter<EditIncomeExpenseState> emit,
   ) {
     final replaceDot = event.amountInput.removeDot;
     emit(state.copyWith(amountInput: replaceDot));

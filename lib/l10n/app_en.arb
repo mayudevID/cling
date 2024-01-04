@@ -351,5 +351,7 @@
   "delete": "Delete",
   "@delete": {},
   "transaction": "Transaction",
-  "@transaction": {}
+  "@transaction": {},
+  "emptyTransaction": "Empty Transaction",
+  "@emptyTransaction": {}
 }

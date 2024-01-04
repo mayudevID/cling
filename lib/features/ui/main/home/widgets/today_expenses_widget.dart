@@ -1,14 +1,23 @@
 import 'package:cling/core/common_widget.dart';
 import 'package:cling/core/utils.dart';
 import 'package:cling/features/model/expense_model.dart';
+import 'package:cling/features/ui/language_currency/lang_currency_bloc.dart';
 import 'package:cling/resources/gen/fonts.gen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:sizer/sizer.dart';
 
-Widget todayExpensesWidget(ExpenseModel expenseModel) {
+Widget todayExpensesWidget(BuildContext context, ExpenseModel expenseModel) {
+  final dateFormat = context
+      .read<LangCurrencyBloc>()
+      .state
+      .selectedLanguage
+      .value
+      .toLanguageTag();
   return Container(
     margin: EdgeInsets.only(left: 24.wmea, right: 24.wmea),
-    padding: EdgeInsets.all(16.wmea),
+    padding: EdgeInsets.symmetric(vertical: 8.hmea, horizontal: 16.wmea),
     width: double.infinity,
     decoration: BoxDecoration(
       color: const Color(0x3D787880),
@@ -32,9 +41,7 @@ Widget todayExpensesWidget(ExpenseModel expenseModel) {
             ),
           ),
         ),
-        SizedBox(
-          width: 12.wmea,
-        ),
+        SizedBox(width: 12.wmea),
         Text(
           expenseModel.item,
           textAlign: TextAlign.center,
@@ -46,17 +53,31 @@ Widget todayExpensesWidget(ExpenseModel expenseModel) {
           ),
         ),
         const Spacer(),
-        NominalMoneyFormatter(
-          textStyle: TextStyle(
-            color: Colors.white,
-            fontSize: 9.5.sp,
-            fontFamily: FontFamily.cabinetGrotesk,
-            fontWeight: FontWeight.w500,
-          ),
-          amount: expenseModel.amount,
-          decimalDigits: 2,
-          isWithName: true,
-        ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            NominalMoneyFormatter(
+              textStyle: TextStyle(
+                color: Colors.white,
+                fontSize: 10.sp,
+                fontFamily: FontFamily.cabinetGrotesk,
+                fontWeight: FontWeight.w500,
+              ),
+              amount: expenseModel.amount,
+              decimalDigits: 2,
+              isWithName: true,
+            ),
+            Text(
+              DateFormat.jm(dateFormat).format(expenseModel.date),
+              style: TextStyle(
+                color: Colors.grey.shade300,
+                fontFamily: FontFamily.cabinetGrotesk,
+                fontSize: 8.5.sp,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        )
       ],
     ),
   );

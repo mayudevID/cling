@@ -15,30 +15,30 @@ import '../../../../repository/database_repository.dart';
 import '../../../language_currency/lang_currency_bloc.dart';
 import '../../../language_currency/lang_export.dart';
 import '../../home/widgets/categories_row.dart';
-import '../../main_widget/enum_flowtype.dart';
-import '../bloc/add_income_expense_bloc.dart';
 import '../../main_widget/datetime_add_time.dart';
+import '../../main_widget/enum_flowtype.dart';
+import '../bloc/edit_income_expense_bloc.dart';
 
-class AddIncomeExpensePage extends StatelessWidget {
-  const AddIncomeExpensePage({super.key, required this.flowType});
+class EditIncomeExpensePage extends StatelessWidget {
+  const EditIncomeExpensePage({super.key, required this.flowType});
   final FlowType flowType;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => AddIncomeExpenseBloc(
+      create: (_) => EditIncomeExpenseBloc(
         context: context,
         dbRepo: getIt<DatabaseRepository>(),
       )..add((flowType == FlowType.income)
           ? GetIncomeSource()
           : GetExpenseCategories()),
-      child: AddIncomeExpensePageContent(flowType: flowType),
+      child: EditIncomeExpensePageContent(flowType: flowType),
     );
   }
 }
 
-class AddIncomeExpensePageContent extends StatelessWidget {
-  const AddIncomeExpensePageContent({super.key, required this.flowType});
+class EditIncomeExpensePageContent extends StatelessWidget {
+  const EditIncomeExpensePageContent({super.key, required this.flowType});
   final FlowType flowType;
 
   List<DropdownMenuItem> menuItemExpense(
@@ -124,7 +124,7 @@ class AddIncomeExpensePageContent extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 8.hmea),
-              BlocBuilder<AddIncomeExpenseBloc, AddIncomeExpenseState>(
+              BlocBuilder<EditIncomeExpenseBloc, EditIncomeExpenseState>(
                 buildWhen: (prev, curr) {
                   switch (flowType) {
                     case FlowType.income:
@@ -187,7 +187,7 @@ class AddIncomeExpensePageContent extends StatelessWidget {
                           case FlowType.income:
                             newVal = value as IncomeSourceModel;
                             context
-                                .read<AddIncomeExpenseBloc>()
+                                .read<EditIncomeExpenseBloc>()
                                 .add(SetCategories(
                                   MapEntry(newVal.id, newVal.incomeSource),
                                 ));
@@ -195,7 +195,7 @@ class AddIncomeExpensePageContent extends StatelessWidget {
                           case FlowType.expense:
                             newVal = value as ExpenseCategoriesModel;
                             context
-                                .read<AddIncomeExpenseBloc>()
+                                .read<EditIncomeExpenseBloc>()
                                 .add(SetCategories(
                                   MapEntry(newVal.id, newVal.expenseCategories),
                                 ));
@@ -240,7 +240,7 @@ class AddIncomeExpensePageContent extends StatelessWidget {
                 child: TextFormField(
                   onChanged: (value) {
                     context
-                        .read<AddIncomeExpenseBloc>()
+                        .read<EditIncomeExpenseBloc>()
                         .add(SetDescOrItem(value));
                   },
                   cursorColor: Colors.white,
@@ -336,7 +336,7 @@ class AddIncomeExpensePageContent extends StatelessWidget {
                             keyboardType: TextInputType.number,
                             onChanged: (value) {
                               context
-                                  .read<AddIncomeExpenseBloc>()
+                                  .read<EditIncomeExpenseBloc>()
                                   .add(SetAmountInput(value));
                             },
                             cursorColor: Colors.white,
@@ -368,7 +368,7 @@ class AddIncomeExpensePageContent extends StatelessWidget {
               PinkButton(
                 onTap: () {
                   FocusManager.instance.primaryFocus?.unfocus();
-                  context.read<AddIncomeExpenseBloc>().add(SaveData(flowType));
+                  context.read<EditIncomeExpenseBloc>().add(SaveData(flowType));
                 },
                 name: AppLocalizations.of(context)!.submit,
               ),

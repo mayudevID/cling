@@ -10,6 +10,7 @@ import '../features/ui/main/edit_profile/page/edit_profile_page.dart';
 import '../features/ui/main/goal_detail/pages/goal_detail_page.dart';
 import '../features/ui/main/goal_list/page/goal_list_page.dart';
 import '../features/ui/main/main_page.dart';
+import '../features/ui/main/main_widget/enum_flowtype.dart';
 import '../features/ui/main/notification/page/notification_page.dart';
 import '../features/ui/main/stats_detail/page/stats_detail_per_categories_page.dart';
 import '../features/ui/onboard/onboard_page.dart';

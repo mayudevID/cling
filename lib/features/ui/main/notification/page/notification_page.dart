@@ -149,10 +149,7 @@ class NotificationPageContent extends StatelessWidget {
                   break;
               }
 
-              return SizedBox(
-                height: 55.hmea,
-                child: Center(child: body),
-              );
+              return SizedBox(height: 55.hmea, child: Center(child: body));
             },
           ),
           child: ListView.separated(

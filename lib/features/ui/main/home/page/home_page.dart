@@ -148,16 +148,17 @@ class HomePage extends StatelessWidget {
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
                   itemBuilder: (context, index) {
-                    return todayExpensesWidget(state.listTodayExpenses[index]);
+                    return todayExpensesWidget(
+                      context,
+                      state.listTodayExpenses[index],
+                    );
                   },
-                  separatorBuilder: (_, idx) {
-                    return SizedBox(height: 6.hmea);
-                  },
+                  separatorBuilder: (_, idx) => SizedBox(height: 6.hmea),
                 ),
               );
             },
           ),
-          SizedBox(height: 180.hmea),
+          SizedBox(height: 185.hmea),
         ],
       ),
     );
