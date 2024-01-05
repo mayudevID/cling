@@ -78,7 +78,7 @@ class GoalDetailBloc extends Bloc<GoalDetailEvent, GoalDetailState> {
     final numFormat = NumberFormat.currency(
       locale: currency.value.toLanguageTag(),
       decimalDigits: 2,
-      customPattern: '\u00a4###,###.00',
+      //customPattern: '\u00a4###,###.00',
       name: "",
     );
 

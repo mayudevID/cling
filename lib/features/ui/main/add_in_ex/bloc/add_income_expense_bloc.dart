@@ -76,7 +76,7 @@ class AddIncomeExpenseBloc
 
   void _getIncomeSource(GetIncomeSource event, emit) async {
     final dataIncomeSource = await _dbRepo.getIncomeSource();
-    await Future.delayed(const Duration(milliseconds: 250));
+    //await Future.delayed(const Duration(milliseconds: 250));
     emit(
       state.copyWith(
         listInSource: dataIncomeSource,
@@ -86,7 +86,7 @@ class AddIncomeExpenseBloc
 
   void _getExpenseCategories(GetExpenseCategories event, emit) async {
     final dataExCategories = await _dbRepo.getExpenseCategories();
-    await Future.delayed(const Duration(milliseconds: 250));
+    //await Future.delayed(const Duration(milliseconds: 250));
     emit(
       state.copyWith(
         listExCategories: dataExCategories,

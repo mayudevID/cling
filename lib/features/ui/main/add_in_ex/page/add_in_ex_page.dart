@@ -17,7 +17,7 @@ import '../../../language_currency/lang_export.dart';
 import '../../home/widgets/categories_row.dart';
 import '../../main_widget/enum_flowtype.dart';
 import '../bloc/add_income_expense_bloc.dart';
-import '../../main_widget/datetime_add_time.dart';
+import '../widget/datetime_add_time.dart';
 
 class AddIncomeExpensePage extends StatelessWidget {
   const AddIncomeExpensePage({super.key, required this.flowType});

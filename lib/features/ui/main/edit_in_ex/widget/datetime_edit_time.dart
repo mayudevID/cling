@@ -4,12 +4,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../../../resources/gen/assets.gen.dart';
-import '../../../../resources/gen/fonts.gen.dart';
-import '../../language_currency/lang_currency_bloc.dart';
-import '../add_in_ex/bloc/add_income_expense_bloc.dart';
+import '../../../../../resources/gen/assets.gen.dart';
+import '../../../../../resources/gen/fonts.gen.dart';
+import '../../../language_currency/lang_currency_bloc.dart';
+import '../bloc/edit_income_expense_bloc.dart';
 
-Widget datetimeAddWidget(BuildContext context) {
+Widget datetimeEditWidget(BuildContext context) {
   return Row(
     children: [
       Expanded(
@@ -26,7 +26,7 @@ Widget datetimeAddWidget(BuildContext context) {
           ),
           child: Row(
             children: [
-              BlocBuilder<AddIncomeExpenseBloc, AddIncomeExpenseState>(
+              BlocBuilder<EditIncomeExpenseBloc, EditIncomeExpenseState>(
                 buildWhen: (prev, curr) {
                   return prev.selectedDate != curr.selectedDate;
                 },
@@ -56,7 +56,7 @@ Widget datetimeAddWidget(BuildContext context) {
               GestureDetector(
                 onTap: () async {
                   final now =
-                      context.read<AddIncomeExpenseBloc>().state.selectedDate;
+                      context.read<EditIncomeExpenseBloc>().state.selectedDate;
                   DateTime? pickDate = await showDatePicker(
                     context: context,
                     initialDate: now,
@@ -65,7 +65,9 @@ Widget datetimeAddWidget(BuildContext context) {
                   );
                   if (pickDate != null) {
                     // ignore: use_build_context_synchronously
-                    context.read<AddIncomeExpenseBloc>().add(SetDate(pickDate));
+                    context
+                        .read<EditIncomeExpenseBloc>()
+                        .add(SetDate(pickDate));
                   }
                 },
                 child: Assets.lib.resources.images.calendar.svg(),
@@ -89,7 +91,7 @@ Widget datetimeAddWidget(BuildContext context) {
           ),
           child: Row(
             children: [
-              BlocBuilder<AddIncomeExpenseBloc, AddIncomeExpenseState>(
+              BlocBuilder<EditIncomeExpenseBloc, EditIncomeExpenseState>(
                 buildWhen: (prev, curr) {
                   return prev.selectedDate != curr.selectedDate;
                 },
@@ -119,7 +121,7 @@ Widget datetimeAddWidget(BuildContext context) {
               GestureDetector(
                 onTap: () async {
                   final now =
-                      context.read<AddIncomeExpenseBloc>().state.selectedDate;
+                      context.read<EditIncomeExpenseBloc>().state.selectedDate;
                   final TimeOfDay? pickedTime = await showTimePicker(
                     context: context,
                     initialTime: TimeOfDay.fromDateTime(now),
@@ -134,7 +136,9 @@ Widget datetimeAddWidget(BuildContext context) {
                       pickedTime.minute,
                     );
                     // ignore: use_build_context_synchronously
-                    context.read<AddIncomeExpenseBloc>().add(SetTime(dateTime));
+                    context
+                        .read<EditIncomeExpenseBloc>()
+                        .add(SetTime(dateTime));
                   }
                 },
                 child: const Icon(

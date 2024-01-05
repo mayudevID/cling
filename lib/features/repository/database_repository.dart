@@ -614,9 +614,8 @@ class DatabaseRepository {
       ExpenseMeta.nameTable,
       where: "date(${ExpenseMeta.date}) = date(?)",
       whereArgs: [DateTime(now.year, now.month, now.day).toIso8601String()],
+      orderBy: "${ExpenseMeta.date} DESC",
     );
-
-    Logger.Red.log(maps);
 
     for (var element in maps) {
       listData.add(ExpenseModel.fromDatabase(element));

@@ -43,7 +43,7 @@ class MainPage extends StatelessWidget {
         BlocProvider(
           create: (_) => TransactionBloc(
             dbRepo: getIt<DatabaseRepository>(),
-          ),
+          )..add(GetData()),
         ),
         BlocProvider(
           create: (_) => HomeBloc(

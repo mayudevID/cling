@@ -10,17 +10,26 @@ import '../../../../../injection.dart';
 import '../../../../../resources/gen/assets.gen.dart';
 import '../../../../../resources/gen/fonts.gen.dart';
 import '../../../../model/expense_categories_model.dart';
+import '../../../../model/expense_model.dart';
+import '../../../../model/income_model.dart';
 import '../../../../model/income_source_model.dart';
+import '../../../../model/transaction_model.dart';
 import '../../../../repository/database_repository.dart';
+import '../../../../repository/settings_repository.dart';
 import '../../../language_currency/lang_currency_bloc.dart';
 import '../../../language_currency/lang_export.dart';
 import '../../home/widgets/categories_row.dart';
-import '../../main_widget/datetime_add_time.dart';
 import '../../main_widget/enum_flowtype.dart';
 import '../bloc/edit_income_expense_bloc.dart';
+import '../widget/datetime_edit_time.dart';
 
 class EditIncomeExpensePage extends StatelessWidget {
-  const EditIncomeExpensePage({super.key, required this.flowType});
+  const EditIncomeExpensePage({
+    super.key,
+    required this.flowType,
+    required this.transactionModel,
+  });
+  final TransactionModel transactionModel;
   final FlowType flowType;
 
   @override
@@ -28,10 +37,14 @@ class EditIncomeExpensePage extends StatelessWidget {
     return BlocProvider(
       create: (_) => EditIncomeExpenseBloc(
         context: context,
+        transactionModel: transactionModel,
+        flowType: flowType,
         dbRepo: getIt<DatabaseRepository>(),
+        settingsRepo: getIt<SettingsRepository>(),
       )..add((flowType == FlowType.income)
-          ? GetIncomeSource()
-          : GetExpenseCategories()),
+          ? GetIncomeSource((transactionModel as IncomeModel).incomeSource)
+          : GetExpenseCategories(
+              (transactionModel as ExpenseModel).categories)),
       child: EditIncomeExpensePageContent(flowType: flowType),
     );
   }
@@ -41,9 +54,7 @@ class EditIncomeExpensePageContent extends StatelessWidget {
   const EditIncomeExpensePageContent({super.key, required this.flowType});
   final FlowType flowType;
 
-  List<DropdownMenuItem> menuItemExpense(
-    List<ExpenseCategoriesModel> data,
-  ) {
+  List<DropdownMenuItem> menuItemExpense(List<ExpenseCategoriesModel> data) {
     return data
         .map(
           (item) => DropdownMenuItem<ExpenseCategoriesModel>(
@@ -80,13 +91,11 @@ class EditIncomeExpensePageContent extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(
-                height: 16.hmea,
-              ),
+              SizedBox(height: 16.hmea),
               Text(
                 (flowType == FlowType.income)
-                    ? AppLocalizations.of(context)!.addIncome
-                    : AppLocalizations.of(context)!.addExpenses,
+                    ? AppLocalizations.of(context)!.editIncome
+                    : AppLocalizations.of(context)!.editExpenses,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Colors.white,
@@ -95,9 +104,7 @@ class EditIncomeExpensePageContent extends StatelessWidget {
                   fontWeight: FontWeight.w700,
                 ),
               ),
-              SizedBox(
-                height: 24.hmea,
-              ),
+              SizedBox(height: 24.hmea),
               Text(
                 (flowType == FlowType.income)
                     ? AppLocalizations.of(context)!.date
@@ -110,7 +117,7 @@ class EditIncomeExpensePageContent extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 8.hmea),
-              datetimeAddWidget(context),
+              datetimeEditWidget(context),
               SizedBox(height: 8.hmea),
               Text(
                 (flowType == FlowType.income)
@@ -175,12 +182,8 @@ class EditIncomeExpensePageContent extends StatelessWidget {
                         ),
                       ),
                       items: (flowType == FlowType.income)
-                          ? menuItemIncome(
-                              state.listInSource,
-                            )
-                          : menuItemExpense(
-                              state.listExCategories,
-                            ),
+                          ? menuItemIncome(state.listInSource)
+                          : menuItemExpense(state.listExCategories),
                       onChanged: (value) {
                         dynamic newVal;
                         switch (flowType) {
@@ -238,6 +241,8 @@ class EditIncomeExpensePageContent extends StatelessWidget {
                   horizontal: 16.wmea,
                 ),
                 child: TextFormField(
+                  initialValue:
+                      context.read<EditIncomeExpenseBloc>().state.descOrItem,
                   onChanged: (value) {
                     context
                         .read<EditIncomeExpenseBloc>()
@@ -280,9 +285,7 @@ class EditIncomeExpensePageContent extends StatelessWidget {
                   );
                 },
               ),
-              SizedBox(
-                height: 8.hmea,
-              ),
+              SizedBox(height: 8.hmea),
               Container(
                 decoration: ShapeDecoration(
                   color: const Color(0xFF313131),
@@ -313,9 +316,7 @@ class EditIncomeExpensePageContent extends StatelessWidget {
                         );
                       },
                     ),
-                    SizedBox(
-                      width: 10.wmea,
-                    ),
+                    SizedBox(width: 10.wmea),
                     Expanded(
                       child: BlocBuilder<LangCurrencyBloc, LangCurrencyState>(
                         buildWhen: (p, c) {
@@ -324,6 +325,10 @@ class EditIncomeExpensePageContent extends StatelessWidget {
                         },
                         builder: (context, state) {
                           return TextFormField(
+                            initialValue: context
+                                .read<EditIncomeExpenseBloc>()
+                                .state
+                                .amountInput,
                             inputFormatters: [
                               CurrencyTextInputFormatter(
                                 locale: state.selectedCurrency.value

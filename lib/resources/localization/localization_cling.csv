@@ -28,7 +28,9 @@ overview,Overview,Ringkasan
 goals,Goals,Tujuan
 todayExpenses,Today Expenses,Pengeluaran Hari Ini
 addExpenses,Add Expenses,Tambah Pengeluaran
-addIncome,Add Income,Tambah Penghasilan
+addIncome,Add Income,Tambah Pemasukan
+editExpenses,Edit Expenses,Edit Pengeluaran
+editIncome,Edit Income,Edit Pemasukan
 purchaseDate,Purchase Date,Tanggal Pembelian
 categories,Categories,Kategori
 items,Items,Item

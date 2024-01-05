@@ -7,9 +7,23 @@ sealed class EditIncomeExpenseEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class GetIncomeSource extends EditIncomeExpenseEvent {}
+class InitModel extends EditIncomeExpenseEvent {
+  const InitModel(this.categoriesOrSource);
 
-class GetExpenseCategories extends EditIncomeExpenseEvent {}
+  final String categoriesOrSource;
+}
+
+class GetIncomeSource extends EditIncomeExpenseEvent {
+  const GetIncomeSource(this.categoriesOrSource);
+
+  final String categoriesOrSource;
+}
+
+class GetExpenseCategories extends EditIncomeExpenseEvent {
+  const GetExpenseCategories(this.categoriesOrSource);
+
+  final String categoriesOrSource;
+}
 
 class SetDate extends EditIncomeExpenseEvent {
   const SetDate(this.date);

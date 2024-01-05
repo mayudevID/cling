@@ -1,3 +1,4 @@
+import 'package:cling/features/model/transaction_model.dart';
 import 'package:flutter/material.dart';
 import '../features/model/detail_category_model.dart';
 import '../features/ui/forgot_password/page/check_email_page.dart';
@@ -5,6 +6,7 @@ import '../features/ui/forgot_password/page/forgot_password_page.dart';
 import '../features/ui/login/page/login_page.dart';
 import '../features/ui/main/add_goal/page/add_goal_page.dart';
 import '../features/ui/main/add_in_ex/page/add_in_ex_page.dart';
+import '../features/ui/main/edit_in_ex/page/edit_in_ex_page.dart';
 import '../features/ui/main/edit_monthly/page/edit_budget_or_income.dart';
 import '../features/ui/main/edit_profile/page/edit_profile_page.dart';
 import '../features/ui/main/goal_detail/pages/goal_detail_page.dart';
@@ -82,6 +84,13 @@ class RouteGen {
         return MaterialPageRoute(
           builder: (_) => AddIncomeExpensePage(flowType: data as FlowType),
         );
+      case RouteName.editInEx:
+        return MaterialPageRoute(
+          builder: (_) => EditIncomeExpensePage(
+            transactionModel: (data as List)[0] as TransactionModel,
+            flowType: data[1] as FlowType,
+          ),
+        );
       case RouteName.addGoal:
         return MaterialPageRoute(
           builder: (_) => const AddGoalPage(),
@@ -137,4 +146,5 @@ class RouteName {
   static const String notification = "/notification";
   static const String statsDetailPerCategories = "/statsDetailPerCategories";
   static const String goalList = "/goalList";
+  static const String editInEx = "/editInEx";
 }

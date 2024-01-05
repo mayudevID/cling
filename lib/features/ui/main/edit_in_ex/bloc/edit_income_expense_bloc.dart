@@ -4,15 +4,19 @@ import 'package:cling/core/utils.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:sqflite/sqflite.dart';
 
 import '../../../../../core/common_widget.dart';
 import '../../../../../core/logger.dart';
+import '../../../../model/currency.dart';
 import '../../../../model/expense_categories_model.dart';
 import '../../../../model/expense_model.dart';
 import '../../../../model/income_model.dart';
 import '../../../../model/income_source_model.dart';
+import '../../../../model/transaction_model.dart';
 import '../../../../repository/database_repository.dart';
+import '../../../../repository/settings_repository.dart';
 import '../../../language_currency/lang_export.dart';
 import '../../home/bloc/home_bloc.dart';
 import '../../main_page.dart';
@@ -28,10 +32,35 @@ class EditIncomeExpenseBloc
     extends Bloc<EditIncomeExpenseEvent, EditIncomeExpenseState> {
   EditIncomeExpenseBloc({
     required BuildContext context,
+    required FlowType flowType,
+    required TransactionModel transactionModel,
     required DatabaseRepository dbRepo,
+    required SettingsRepository settingsRepo,
   })  : _context = context,
         _dbRepo = dbRepo,
-        super(EditIncomeExpenseState()) {
+        super(
+          EditIncomeExpenseState(
+            flowType: flowType,
+            selectedDate: transactionModel.date,
+            descOrItem: (flowType == FlowType.income)
+                ? (transactionModel as IncomeModel).desc ?? ""
+                : (transactionModel as ExpenseModel).item,
+            amountInput: NumberFormat.currency(
+              locale: (settingsRepo.getCurrentCurrency() != null
+                      ? Currency.values
+                          .where((item) =>
+                              item.value.countryCode ==
+                              settingsRepo.getCurrentCurrency())
+                          .first
+                      : Currency.idr)
+                  .value
+                  .toLanguageTag(),
+              decimalDigits: 2,
+              //customPattern: '\u00a4###,###.00',
+              name: "",
+            ).format(transactionModel.amount / 100.0),
+          ),
+        ) {
     on<SetDate>(_setDate);
     on<SetTime>(_setTime);
     on<SetCategories>(_setCategories);
@@ -76,22 +105,30 @@ class EditIncomeExpenseBloc
 
   void _getIncomeSource(GetIncomeSource event, emit) async {
     final dataIncomeSource = await _dbRepo.getIncomeSource();
-    await Future.delayed(const Duration(milliseconds: 250));
-    emit(
-      state.copyWith(
-        listInSource: dataIncomeSource,
-      ),
+    //await Future.delayed(const Duration(milliseconds: 250));
+
+    final loc = dataIncomeSource.firstWhere(
+      (e) => event.categoriesOrSource == e.incomeSource,
     );
+
+    emit(state.copyWith(
+      listInSource: dataIncomeSource,
+      selectedCategories: MapEntry(loc.id, loc.incomeSource),
+    ));
   }
 
   void _getExpenseCategories(GetExpenseCategories event, emit) async {
     final dataExCategories = await _dbRepo.getExpenseCategories();
-    await Future.delayed(const Duration(milliseconds: 250));
-    emit(
-      state.copyWith(
-        listExCategories: dataExCategories,
-      ),
+    //await Future.delayed(const Duration(milliseconds: 250));
+
+    final loc = dataExCategories.firstWhere(
+      (e) => event.categoriesOrSource == e.expenseCategories,
     );
+    Logger.Red.log(loc);
+    emit(state.copyWith(
+      listExCategories: dataExCategories,
+      selectedCategories: MapEntry(loc.id, loc.expenseCategories),
+    ));
   }
 
   void _setDescOrItem(
