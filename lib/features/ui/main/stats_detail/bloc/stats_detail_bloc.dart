@@ -1,6 +1,3 @@
-import 'package:cling/features/model/detail_category_model.dart';
-import 'package:cling/features/model/income_model.dart';
-import 'package:cling/features/repository/database_repository.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,8 +7,11 @@ import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 import '../../../../../core/logger.dart';
 import '../../../../../resources/gen/fonts.gen.dart';
-import '../../../../model/expense_model.dart';
+import '../../../../model/detail_category_model.dart';
+import '../../../../model/transaction_model.dart';
+import '../../../../repository/database_repository.dart';
 import '../../../language_currency/lang_currency_bloc.dart';
+import '../../../language_currency/lang_export.dart';
 import '../../main_widget/convert_enum_to_detail_date.dart';
 import '../../main_widget/enum_range_date.dart';
 
@@ -45,6 +45,8 @@ class StatsDetailBloc extends Bloc<StatsDetailEvent, StatsDetailState> {
     on<ChangeMonthly>(_changeMonthly);
     on<ChangeYearly>(_changeYearly);
     on<ChangeDateForPeriod>(_changeDateForPeriod);
+    on<UpdateFromEdit>(_updateFromEdit);
+    on<DeleteFromEdit>(_deleteFromEdit);
   }
 
   final BuildContext _context;
@@ -74,7 +76,7 @@ class StatsDetailBloc extends Bloc<StatsDetailEvent, StatsDetailState> {
         await _dbRepo.getMostIncomeByCategory(source: _categoryOrSource);
     emit(
       state.copyWith(
-        listIncomeModel: (result.isNotEmpty) ? result : List.empty(),
+        listTransactionModel: (result.isNotEmpty) ? result : List.empty(),
       ),
     );
   }
@@ -84,7 +86,7 @@ class StatsDetailBloc extends Bloc<StatsDetailEvent, StatsDetailState> {
         await _dbRepo.getMostExpenseByCategory(source: _categoryOrSource);
     emit(
       state.copyWith(
-        listExpenseModel: (result.isNotEmpty) ? result : List.empty(),
+        listTransactionModel: (result.isNotEmpty) ? result : List.empty(),
       ),
     );
   }
@@ -97,7 +99,7 @@ class StatsDetailBloc extends Bloc<StatsDetailEvent, StatsDetailState> {
     );
     emit(
       state.copyWith(
-        listIncomeModel: (result.isNotEmpty) ? result : List.empty(),
+        listTransactionModel: (result.isNotEmpty) ? result : List.empty(),
       ),
     );
     Logger.Green.log("GetIncomeBreakdownByCategory");
@@ -111,7 +113,7 @@ class StatsDetailBloc extends Bloc<StatsDetailEvent, StatsDetailState> {
     );
     emit(
       state.copyWith(
-        listExpenseModel: (result.isNotEmpty) ? result : List.empty(),
+        listTransactionModel: (result.isNotEmpty) ? result : List.empty(),
       ),
     );
     Logger.Green.log("GetExpenseBreakdownByCategory");
@@ -261,9 +263,9 @@ class StatsDetailBloc extends Bloc<StatsDetailEvent, StatsDetailState> {
         context: _context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: const Text(
-              "Select Year",
-              style: TextStyle(fontFamily: FontFamily.cabinetGrotesk),
+            title: Text(
+              AppLocalizations.of(context)!.selectYear,
+              style: const TextStyle(fontFamily: FontFamily.cabinetGrotesk),
             ),
             content: SizedBox(
               width: 300,
@@ -356,5 +358,21 @@ class StatsDetailBloc extends Bloc<StatsDetailEvent, StatsDetailState> {
           ? GetIncomeBreakdownByCategory()
           : GetExpenseBreakdownByCategory(),
     );
+  }
+
+  void _updateFromEdit(UpdateFromEdit event, emit) {
+    var listData = state.listTransactionModel.toList(growable: true);
+    final idx = state.listTransactionModel.indexWhere(
+      (element) => element.id == event.transactionModel.id,
+    );
+    if (idx == -1) return;
+    listData[idx] = event.transactionModel;
+    emit(state.copyWith(listTransactionModel: listData));
+  }
+
+  void _deleteFromEdit(DeleteFromEdit event, emit) {
+    var listData = state.listTransactionModel.toList(growable: true);
+    listData.removeWhere((element) => element.id == event.id);
+    emit(state.copyWith(listTransactionModel: listData));
   }
 }

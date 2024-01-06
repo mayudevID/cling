@@ -159,10 +159,14 @@ class AddIncomeExpenseBloc
 
       ///* Update UI
       mainContext.read<HomeBloc>().add(GetIncomeExpenseAmountTotalCurrMonth());
-      mainContext.read<TransactionBloc>().add(GetData());
       mainContext.read<StatisticsBloc>()
         ..add(GetIncomeExpenseTotalAllMonth())
         ..add(GetMost());
+
+      if (mainContext.read<TransactionBloc>().state.date ==
+          DateTime(DateTime.now().year, DateTime.now().month, 1)) {
+        mainContext.read<TransactionBloc>().add(GetData());
+      }
 
       dialogAddSuccess(_context, event.flowType);
     } on FormatException {

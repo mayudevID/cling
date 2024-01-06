@@ -6,6 +6,7 @@ class EditIncomeExpenseState extends Equatable {
   List<IncomeSourceModel> listInSource;
   List<ExpenseCategoriesModel> listExCategories;
   DateTime selectedDate;
+  int id;
   FlowType flowType;
   String descOrItem;
   String amountInput;
@@ -16,6 +17,7 @@ class EditIncomeExpenseState extends Equatable {
     List<ExpenseCategoriesModel>? listExCategories,
     MapEntry<int, String>? selectedCategories,
     DateTime? selectedDate,
+    this.id = 99,
     this.flowType = FlowType.income,
     this.descOrItem = "",
     this.amountInput = "",
@@ -33,6 +35,7 @@ class EditIncomeExpenseState extends Equatable {
         descOrItem,
         amountInput,
         flowType,
+        id,
       ];
 
   EditIncomeExpenseState copyWith({
@@ -43,8 +46,10 @@ class EditIncomeExpenseState extends Equatable {
     String? descOrItem,
     String? amountInput,
     FlowType? flowType,
+    int? id,
   }) {
     return EditIncomeExpenseState(
+      id: id ?? this.id,
       listInSource: listInSource ?? this.listInSource,
       listExCategories: listExCategories ?? this.listExCategories,
       selectedDate: selectedDate ?? this.selectedDate,

@@ -14,15 +14,15 @@ class InitModel extends EditIncomeExpenseEvent {
 }
 
 class GetIncomeSource extends EditIncomeExpenseEvent {
-  const GetIncomeSource(this.categoriesOrSource);
+  const GetIncomeSource(this.transactionModel);
 
-  final String categoriesOrSource;
+  final TransactionModel transactionModel;
 }
 
 class GetExpenseCategories extends EditIncomeExpenseEvent {
-  const GetExpenseCategories(this.categoriesOrSource);
+  const GetExpenseCategories(this.transactionModel);
 
-  final String categoriesOrSource;
+  final TransactionModel transactionModel;
 }
 
 class SetDate extends EditIncomeExpenseEvent {
@@ -60,3 +60,5 @@ class SaveData extends EditIncomeExpenseEvent {
 
   final FlowType flowType;
 }
+
+class DeleteData extends EditIncomeExpenseEvent {}

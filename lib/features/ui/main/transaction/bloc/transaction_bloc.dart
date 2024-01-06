@@ -20,9 +20,7 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
 
   void _clickLeft(event, emit) {
     emit(
-      state.copyWith(
-        date: DateTime(state.date.year, state.date.month - 1),
-      ),
+      state.copyWith(date: DateTime(state.date.year, state.date.month - 1, 1)),
     );
 
     add(GetData());
@@ -30,9 +28,7 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
 
   void _clickRight(event, emit) {
     emit(
-      state.copyWith(
-        date: DateTime(state.date.year, state.date.month + 1),
-      ),
+      state.copyWith(date: DateTime(state.date.year, state.date.month + 1, 1)),
     );
 
     add(GetData());

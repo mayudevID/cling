@@ -79,16 +79,12 @@ class StatsIncome extends StatelessWidget {
                     title: AppLocalizations.of(context)!.incomeBreakdown,
                   );
                 },
-                separatorBuilder: (context, index) {
-                  return SizedBox(height: 4.hmea);
-                },
+                separatorBuilder: (context, index) => SizedBox(height: 4.hmea),
               ),
             );
           },
         ),
-        SizedBox(
-          height: 90.hmea,
-        ),
+        SizedBox(height: 90.hmea),
       ],
     );
   }

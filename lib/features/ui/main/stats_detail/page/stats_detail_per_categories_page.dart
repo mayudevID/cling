@@ -1,5 +1,4 @@
 import 'package:cling/core/utils.dart';
-import 'package:cling/features/model/detail_category_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
@@ -7,12 +6,12 @@ import 'package:sizer/sizer.dart';
 import '../../../../../injection.dart';
 import '../../../../../resources/gen/assets.gen.dart';
 import '../../../../../resources/gen/fonts.gen.dart';
+import '../../../../model/detail_category_model.dart';
 import '../../../../repository/database_repository.dart';
 import '../../../language_currency/lang_export.dart';
 import '../bloc/stats_detail_bloc.dart';
 import '../widgets/change_date_by_category_widget/choose_date_range_by_category.dart';
-import '../widgets/item_date_expense_widget.dart';
-import '../widgets/item_date_income_widget.dart';
+import '../widgets/item_date_amount_widget.dart';
 import '../widgets/tag_categories_with_type_flow_widget.dart';
 
 class StatsDetailPerCategoriesPage extends StatelessWidget {
@@ -21,6 +20,8 @@ class StatsDetailPerCategoriesPage extends StatelessWidget {
     required DetailCategoryModel detailCategoryModel,
   }) : _detailCategoryModel = detailCategoryModel;
   final DetailCategoryModel _detailCategoryModel;
+
+  static GlobalKey<NavigatorState> navKey = GlobalKey<NavigatorState>();
 
   StatsDetailEvent getData(BuildContext context) {
     final appLoc = AppLocalizations.of(context)!;
@@ -81,6 +82,7 @@ class StatsDetailPerCategoriesPageContent extends StatelessWidget {
         _title == appLocalizations.incomeBreakdown);
 
     return SafeArea(
+      key: StatsDetailPerCategoriesPage.navKey,
       child: Scaffold(
         backgroundColor: Colors.black,
         body: Padding(
@@ -123,40 +125,24 @@ class StatsDetailPerCategoriesPageContent extends StatelessWidget {
               ],
               BlocBuilder<StatsDetailBloc, StatsDetailState>(
                 buildWhen: (p, c) {
-                  if (isIncome) {
-                    return p.listIncomeModel != c.listIncomeModel;
-                  } else {
-                    return p.listExpenseModel != c.listExpenseModel;
-                  }
+                  return p.listTransactionModel != c.listTransactionModel;
                 },
                 builder: (context, state) {
-                  final itemBuilder = isIncome
-                      ? (_, index) {
-                          return itemDateAmountIncomeWidget(
-                            context,
-                            state.listIncomeModel[index],
-                          );
-                        }
-                      : (_, index) {
-                          return itemDateAmountExpenseWidget(
-                            context,
-                            state.listExpenseModel[index],
-                          );
-                        };
-
                   return Expanded(
                     child: MediaQuery.removePadding(
                       context: context,
                       removeTop: true,
                       child: ListView.separated(
                         shrinkWrap: true,
-                        itemBuilder: itemBuilder,
-                        separatorBuilder: (_, index) {
-                          return SizedBox(height: 4.hmea);
+                        itemBuilder: (_, index) {
+                          return itemDateAmountWidget(
+                            context,
+                            state.listTransactionModel[index],
+                            isIncome,
+                          );
                         },
-                        itemCount: (isIncome)
-                            ? state.listIncomeModel.length
-                            : state.listExpenseModel.length,
+                        separatorBuilder: (_, idx) => SizedBox(height: 4.hmea),
+                        itemCount: state.listTransactionModel.length,
                       ),
                     ),
                   );

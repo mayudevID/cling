@@ -10,7 +10,9 @@ extension RemoveDot on String {
 }
 
 double? setInterval(double maxVal) {
-  if (maxVal < 50000) {
+  if (maxVal < 10000) {
+    return 2000;
+  } else if (maxVal < 50000) {
     return 10000;
   } else if (maxVal < 100000) {
     return 20000;

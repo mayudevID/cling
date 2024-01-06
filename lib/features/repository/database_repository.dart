@@ -25,21 +25,6 @@ class DatabaseRepository {
     open();
   }
 
-  Map<String, dynamic> emptyData = {
-    "2023-01": 0,
-    "2023-02": 0,
-    "2023-03": 0,
-    "2023-04": 0,
-    "2023-05": 0,
-    "2023-06": 0,
-    "2023-07": 0,
-    "2023-08": 0,
-    "2023-09": 0,
-    "2023-10": 0,
-    "2023-11": 0,
-    "2023-12": 0,
-  };
-
   Future<void> open() async {
     db = await openDatabase(
       join(await getDatabasesPath(), databaseName),
@@ -465,6 +450,33 @@ class DatabaseRepository {
     );
   }
 
+  Future<void> updateIncome(IncomeModel data) async {
+    final foreignId = data.incomeSource.substring(
+      0,
+      data.incomeSource.indexOf(" "),
+    );
+
+    await db.update(
+      IncomeMeta.nameTable,
+      {
+        IncomeMeta.id: data.id,
+        IncomeMeta.date: data.date.toIso8601String(),
+        IncomeMeta.amount: data.amount,
+        IncomeMeta.desc: data.desc,
+        IncomeMeta.idIncomeSource: foreignId,
+      },
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
+  Future<void> deleteIncome(int id) async {
+    await db.delete(
+      IncomeMeta.nameTable,
+      where: "${IncomeMeta.id} = ?",
+      whereArgs: [id],
+    );
+  }
+
   Future<List<IncomeSourceModel>> getIncomeSource() async {
     List<IncomeSourceModel> listData = [];
     List<Map<String, dynamic>> maps = await db.query(
@@ -485,7 +497,22 @@ class DatabaseRepository {
   }
 
   Future<Map<String, dynamic>> getYearlyIncome() async {
-    var uniqueData = emptyData;
+    final nowYear = DateTime.now().year;
+
+    Map<String, dynamic> uniqueData = {
+      "$nowYear-01": 0,
+      "$nowYear-02": 0,
+      "$nowYear-03": 0,
+      "$nowYear-04": 0,
+      "$nowYear-05": 0,
+      "$nowYear-06": 0,
+      "$nowYear-07": 0,
+      "$nowYear-08": 0,
+      "$nowYear-09": 0,
+      "$nowYear-10": 0,
+      "$nowYear-11": 0,
+      "$nowYear-12": 0,
+    };
 
     final now = DateTime.now();
     final firstDate = DateTime(now.year, 1, 1).toIso8601String();
@@ -506,6 +533,7 @@ class DatabaseRepository {
     for (Map<String, Object?> item in result) {
       final month = item["Month"].toString();
       uniqueData[month] = item["TotalIncome"];
+      Logger.Red.log(item["TotalIncome"]);
     }
 
     return uniqueData;
@@ -593,6 +621,33 @@ class DatabaseRepository {
         ExpenseMeta.idCategories: foreignId,
       },
       conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
+  Future<void> updateExpense(ExpenseModel data) async {
+    final foreignId = data.categories.substring(
+      0,
+      data.categories.indexOf(" "),
+    );
+
+    await db.update(
+      ExpenseMeta.nameTable,
+      {
+        ExpenseMeta.id: data.id,
+        ExpenseMeta.date: data.date.toIso8601String(),
+        ExpenseMeta.amount: data.amount,
+        ExpenseMeta.item: data.item,
+        ExpenseMeta.idCategories: foreignId,
+      },
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
+  Future<void> deleteExpense(int id) async {
+    await db.delete(
+      ExpenseMeta.nameTable,
+      where: "${ExpenseMeta.id} = ?",
+      whereArgs: [id],
     );
   }
 

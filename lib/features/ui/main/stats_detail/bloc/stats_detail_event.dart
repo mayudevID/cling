@@ -54,3 +54,15 @@ class ChangeDateForPeriod extends StatsDetailEvent {
     this.endDate,
   );
 }
+
+class UpdateFromEdit extends StatsDetailEvent {
+  final TransactionModel transactionModel;
+
+  const UpdateFromEdit(this.transactionModel);
+}
+
+class DeleteFromEdit extends StatsDetailEvent {
+  final int id;
+
+  const DeleteFromEdit(this.id);
+}

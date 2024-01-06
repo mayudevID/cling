@@ -9,19 +9,11 @@ class TransactionState extends Equatable {
   TransactionState({
     DateTime? date,
     List<TransactionModel>? listTransaction,
-  })  : date = date ??
-            DateTime(
-              DateTime.now().year,
-              DateTime.now().month,
-              1,
-            ),
+  })  : date = date ?? DateTime(DateTime.now().year, DateTime.now().month, 1),
         listTransaction = listTransaction ?? List.empty();
 
   @override
-  List<Object> get props => [
-        date,
-        listTransaction,
-      ];
+  List<Object> get props => [date, listTransaction];
 
   TransactionState copyWith({
     DateTime? date,

@@ -93,9 +93,7 @@ Widget lineColumnStatsIncomeWidget(BuildContext mainContext) {
               xValueMapper: (ChartData data, _) => data.x,
               yValueMapper: (ChartData data, _) => data.y,
               // Sets the corner radius
-              borderRadius: const BorderRadius.all(
-                Radius.circular(8),
-              ),
+              borderRadius: const BorderRadius.all(Radius.circular(8)),
               width: 0.6,
               spacing: 0.2,
             ),

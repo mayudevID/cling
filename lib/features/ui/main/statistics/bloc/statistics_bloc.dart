@@ -59,9 +59,7 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
     TypeCategoriesEvent event,
     Emitter<StatisticsState> emit,
   ) {
-    emit(
-      state.copyWith(typeCategories: event.type),
-    );
+    emit(state.copyWith(typeCategories: event.type));
   }
 
   void _getIncomeExpenseTotalAllMonth(
@@ -75,6 +73,7 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
     List<ChartData> incomeData = List.empty(growable: true);
     List<ChartData> expenseData = List.empty(growable: true);
     List<ChartData> savingsData = List.empty(growable: true);
+    List<PieDataExSav> pieData = List.empty(growable: true);
 
     final result = await _dbRepo.getTotalIncomeExpenseAllMonth();
 
@@ -107,7 +106,7 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
 
       Logger.White.log("MaxAll: $max");
 
-      final pieData = [
+      pieData = [
         PieDataExSav(
           nameData: "Expense",
           amount: totalExpense,
@@ -119,17 +118,17 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
           text: "Save",
         ),
       ];
-
-      emit(
-        state.copyWith(
-          chartDataIncomeList: incomeData,
-          chartDataExpenseList: expenseData,
-          chartDataSavingsList: savingsData,
-          maxValAll: max,
-          pieDataExSavList: pieData,
-        ),
-      );
     }
+
+    emit(
+      state.copyWith(
+        chartDataIncomeList: incomeData,
+        chartDataExpenseList: expenseData,
+        chartDataSavingsList: savingsData,
+        maxValAll: max,
+        pieDataExSavList: pieData,
+      ),
+    );
   }
 
   void _getIncomeBreakdown(event, emit) async {
@@ -222,6 +221,8 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
 
         max = (value > max) ? value : max;
       });
+
+      Logger.Red.log(yearlyIncomeList.first.y);
 
       emit(state.copyWith(
         yearlyIncomeList: yearlyIncomeList,

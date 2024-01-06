@@ -1,4 +1,5 @@
 import 'package:cling/core/utils.dart';
+import 'package:cling/features/model/income_model.dart';
 import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +12,6 @@ import '../../../../../resources/gen/assets.gen.dart';
 import '../../../../../resources/gen/fonts.gen.dart';
 import '../../../../model/expense_categories_model.dart';
 import '../../../../model/expense_model.dart';
-import '../../../../model/income_model.dart';
 import '../../../../model/income_source_model.dart';
 import '../../../../model/transaction_model.dart';
 import '../../../../repository/database_repository.dart';
@@ -37,14 +37,17 @@ class EditIncomeExpensePage extends StatelessWidget {
     return BlocProvider(
       create: (_) => EditIncomeExpenseBloc(
         context: context,
-        transactionModel: transactionModel,
-        flowType: flowType,
         dbRepo: getIt<DatabaseRepository>(),
         settingsRepo: getIt<SettingsRepository>(),
-      )..add((flowType == FlowType.income)
-          ? GetIncomeSource((transactionModel as IncomeModel).incomeSource)
-          : GetExpenseCategories(
-              (transactionModel as ExpenseModel).categories)),
+        descOrItem: (flowType == FlowType.income)
+            ? (transactionModel as IncomeModel).desc ?? ""
+            : (transactionModel as ExpenseModel).item,
+        amount: transactionModel.amount,
+      )..add(
+          (flowType == FlowType.income)
+              ? GetIncomeSource(transactionModel)
+              : GetExpenseCategories(transactionModel),
+        ),
       child: EditIncomeExpensePageContent(flowType: flowType),
     );
   }
@@ -92,17 +95,28 @@ class EditIncomeExpensePageContent extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(height: 16.hmea),
-              Text(
-                (flowType == FlowType.income)
-                    ? AppLocalizations.of(context)!.editIncome
-                    : AppLocalizations.of(context)!.editExpenses,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20.sp,
-                  fontFamily: FontFamily.cabinetGrotesk,
-                  fontWeight: FontWeight.w700,
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    (flowType == FlowType.income)
+                        ? AppLocalizations.of(context)!.editIncome
+                        : AppLocalizations.of(context)!.editExpenses,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20.sp,
+                      fontFamily: FontFamily.cabinetGrotesk,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () async {
+                      context.read<EditIncomeExpenseBloc>().add(DeleteData());
+                    },
+                    child: Assets.lib.resources.images.jamTrash.svg(),
+                  ),
+                ],
               ),
               SizedBox(height: 24.hmea),
               Text(

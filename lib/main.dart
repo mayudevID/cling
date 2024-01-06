@@ -1,7 +1,5 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
-import 'package:cling/core/bloc_observer.dart';
-import 'package:cling/core/notification.dart';
-import 'package:cling/features/repository/settings_repository.dart';
+
 import 'package:device_preview/device_preview.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
@@ -11,9 +9,12 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:month_year_picker/month_year_picker.dart';
 import 'package:sizer/sizer.dart';
+import 'core/bloc_observer.dart';
+import 'core/notification.dart';
 import 'core/route.dart';
 import 'features/repository/auth_repository.dart';
 
+import 'features/repository/settings_repository.dart';
 import 'features/ui/app_bloc/app_bloc.dart';
 import 'features/ui/language_currency/lang_export.dart';
 import 'features/ui/language_currency/lang_currency_bloc.dart';

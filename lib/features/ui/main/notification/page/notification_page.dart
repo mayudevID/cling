@@ -142,7 +142,10 @@ class NotificationPageContent extends StatelessWidget {
                   body = const CircularProgressIndicator(color: Colors.white);
                   break;
                 case LoadStatus.noMore:
-                  body = const Text("Itu saja.", style: styleText);
+                  body = Text(
+                    AppLocalizations.of(context)!.noMore,
+                    style: styleText,
+                  );
                   break;
                 case LoadStatus.failed:
                   body = const Text("Error.", style: styleText);

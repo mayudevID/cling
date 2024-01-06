@@ -427,9 +427,7 @@ Future<bool> dialogDelete(BuildContext context) async {
     builder: (_) => PopScope(
       canPop: false,
       child: Dialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         elevation: 0,
         backgroundColor: Colors.transparent,
         child: Container(
