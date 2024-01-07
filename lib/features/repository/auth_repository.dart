@@ -70,7 +70,7 @@ class AuthRepository {
         "currency": currency,
         "created_at": DateTime.now().toIso8601String(),
         "last_backup_time": null,
-        "backup_url": null,
+        "recurring_day": 0,
         "verified_process": false,
         "monthly_budget": 0,
         "monthly_income": 0,
@@ -180,40 +180,4 @@ class AuthRepository {
   Future<void> changePassword(String email) async {
     await _firebaseAuth.sendPasswordResetEmail(email: email);
   }
-
-  // //* Update User Profile
-
-  // Future<void> updateDisplayName(String displayName) async {
-  //   try {
-  //     //await _firebaseAuth.currentUser!.updateDisplayName(displayName);
-  //   } on PostgrestException catch (e) {
-  //     throw PostgrestException(message: e.message);
-  //   }
-  // }
 }
-
-// extension on User {
-//   UserModel get toUser {
-//     return UserModel(
-//       id: uid,
-//       email: email,
-//       name: displayName,
-//       photo: photoURL,
-//       emailVerified: emailVerified,
-//     );
-//   }
-// }
-
-// UserModel? userModel = UserModel(
-//   id: userResultLogin.user!.id,
-//   name: userFromQuery['full_name'],
-//   email: email,
-//   lastBackupTime: userFromQuery['last_backup_time'],
-//   verifiedProcess: userFromQuery['verified_process'],
-//   currency: Currency.values.firstWhere(
-//     (item) => item.value.countryCode == userFromQuery['currency'],
-//     orElse: () => Currency.idr,
-//   ),
-//   monthlyBudget: userFromQuery["monthly_budget"].toDouble(),
-//   monthlyIncome: userFromQuery["monthly_income"].toDouble(),
-// );

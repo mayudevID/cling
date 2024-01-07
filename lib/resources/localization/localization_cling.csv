@@ -184,3 +184,5 @@ emptyTransaction,Empty Transaction,Transaksi Kosong
 selectYear,Select year,Pilih tahun
 noMore,No more ~~,Itu saja ~~
 settings,Settings,Pengaturan
+recurringEveryDate,Recurring every date:,Berulang setiap tanggal:
+change,Change,Ubah

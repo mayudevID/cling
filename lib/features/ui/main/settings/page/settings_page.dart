@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cling/core/logger.dart';
 import 'package:cling/core/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -64,6 +65,7 @@ class SettingsPageContent extends StatelessWidget {
               SizedBox(height: 24.hmea),
               GestureDetector(
                 onTap: () => showBottomSheetChooseLang(context),
+                behavior: HitTestBehavior.opaque,
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
@@ -232,8 +234,11 @@ class _TimeBackupState extends State<TimeBackup> {
   void initState() {
     timeago.setLocaleMessages("id", timeago.IdMessages());
 
+    Logger.Yellow.log(widget.date.toString());
+
     timer = Timer.periodic(const Duration(seconds: 12), (Timer t) {
       setState(() {});
+      Logger.Yellow.log(widget.date.toString());
     });
 
     super.initState();

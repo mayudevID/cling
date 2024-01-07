@@ -2,23 +2,23 @@
 
 import 'package:cling/core/common_widget.dart';
 import 'package:cling/core/exception.dart';
-import 'package:cling/features/model/currency.dart';
-import 'package:cling/features/model/user_model.dart';
-import 'package:cling/features/repository/database_repository.dart';
-import 'package:cling/features/repository/settings_repository.dart';
-import 'package:cling/features/ui/main/home/bloc/home_bloc.dart';
-import 'package:cling/features/ui/main/main_page.dart';
-import 'package:cling/features/ui/main/settings/widget/dialog_go_backup.dart';
-import 'package:cling/features/ui/main/statistics/bloc/statistics_bloc.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../model/currency.dart';
+import '../../../../model/user_model.dart';
 import '../../../../repository/auth_repository.dart';
+import '../../../../repository/database_repository.dart';
+import '../../../../repository/settings_repository.dart';
 import '../../../app_bloc/app_bloc.dart';
 import '../../../language_currency/lang_currency_bloc.dart';
 import '../../../language_currency/lang_export.dart';
+import '../../home/bloc/home_bloc.dart';
+import '../../main_page.dart';
+import '../../settings/widget/dialog_go_backup.dart';
+import '../../statistics/bloc/statistics_bloc.dart';
 
 part 'profile_event.dart';
 part 'profile_state.dart';
@@ -97,8 +97,8 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       return;
     }
     loadingAuth(mainContext);
-    final urlDb = await _settingsRepo.backupData();
-    await _settingsRepo.editBackupUrl(url: urlDb, userModel: state.userModel);
+    await _settingsRepo.backupData();
+    await _settingsRepo.editBackupTime(userModel: state.userModel);
     add(GetProfile());
     Navigator.pop(mainContext);
   }

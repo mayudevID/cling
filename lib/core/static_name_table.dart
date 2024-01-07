@@ -54,3 +54,12 @@ class NotificationMeta {
   static const type = 'type';
   static const isRead = 'is_read';
 }
+
+class RecurringMeta {
+  static const nameTable = 'recurring_table';
+  static const id = 'recurring_id';
+  static const idModel = 'recurring_model';
+  static const recurringDay = 'recurring_day';
+  static const recurringLast = 'last_time';
+  static const type = 'recurring_type';
+}

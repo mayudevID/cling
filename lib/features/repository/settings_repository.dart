@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:cling/core/logger.dart';
-import 'package:cling/features/repository/database_repository.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -9,6 +8,8 @@ import 'package:sqflite/sqflite.dart';
 import '../model/user_model.dart';
 // ignore: depend_on_referenced_packages
 import 'package:path/path.dart';
+
+import 'database_repository.dart';
 
 class SettingsRepository {
   final FirebaseAuth _firebaseAuth;
@@ -58,11 +59,13 @@ class SettingsRepository {
     required UserModel userModel,
     int? monthlyIncome,
     int? monthlyBudget,
+    int? recurringDay,
   }) async {
     final userData = userModel;
 
     int monIncomeNew = monthlyIncome ?? userData.monthlyIncome.toInt();
     int monBudgetNew = monthlyBudget ?? userData.monthlyBudget.toInt();
+    int recurringNew = recurringDay ?? userData.recurringDay;
 
     final now = DateTime.now();
 
@@ -72,12 +75,14 @@ class SettingsRepository {
         .update({
       "monthly_income": monIncomeNew,
       "monthly_budget": monBudgetNew,
+      "recurring_day": recurringNew,
       "updated_at": now.toIso8601String(),
     });
 
     final newUserData = userData.copyWith(
       monthlyBudget: monBudgetNew.toDouble(),
       monthlyIncome: monIncomeNew.toDouble(),
+      recurringDay: recurringNew,
       updatedAt: now,
     );
 
@@ -87,10 +92,7 @@ class SettingsRepository {
     );
   }
 
-  Future<DateTime> editBackupUrl({
-    required String url,
-    required UserModel userModel,
-  }) async {
+  Future<DateTime> editBackupTime({required UserModel userModel}) async {
     final userData = userModel;
     final now = DateTime.now();
 
@@ -98,14 +100,10 @@ class SettingsRepository {
         .collection("users")
         .doc(_firebaseAuth.currentUser!.uid)
         .update({
-      "backup_url": url,
       "last_backup_time": now.toIso8601String(),
     });
 
-    final newUserData = userData.copyWith(
-      backupUrl: url,
-      lastBackupTime: now,
-    );
+    final newUserData = userData.copyWith(lastBackupTime: now);
 
     await _cache.setString(
       userCacheKey,
@@ -128,7 +126,7 @@ class SettingsRepository {
     await _firebaseAuth.currentUser!.reload();
   }
 
-  Future<String> backupData() async {
+  Future<void> backupData() async {
     try {
       final pathDb = await getDatabasesPath();
 
@@ -144,12 +142,8 @@ class SettingsRepository {
       final ref = _firebaseStorage.ref('backupDb/$path');
 
       var uploadTask = ref.putFile(newFileData);
-      final snapshotData = await uploadTask.whenComplete(() {});
-      final dbDownload = await snapshotData.ref.getDownloadURL();
-
-      newFileData.delete(recursive: true);
-
-      return dbDownload;
+      await uploadTask.whenComplete(() {});
+      await newFileData.delete(recursive: true);
     } on FirebaseException catch (e) {
       Logger.Red.log(e);
       throw Exception();

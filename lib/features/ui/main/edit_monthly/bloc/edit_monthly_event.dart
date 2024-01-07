@@ -12,6 +12,12 @@ class SetAmountInput extends EditMonthlyEvent {
   const SetAmountInput(this.newValue);
 }
 
+class ChangeTempRecDay extends EditMonthlyEvent {
+  final int value;
+
+  const ChangeTempRecDay(this.value);
+}
+
 class SaveNewMonthly extends EditMonthlyEvent {}
 
 class InitialValue extends EditMonthlyEvent {}

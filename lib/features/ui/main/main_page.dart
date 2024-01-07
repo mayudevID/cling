@@ -1,4 +1,3 @@
-import 'package:cling/features/ui/main/transaction/bloc/transaction_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
@@ -19,6 +18,7 @@ import 'profile/bloc/profile_bloc.dart';
 import 'profile/page/profile_page.dart';
 import 'statistics/bloc/statistics_bloc.dart';
 import 'statistics/page/statistics_page.dart';
+import 'transaction/bloc/transaction_bloc.dart';
 import 'transaction/page/transaction_page.dart';
 
 class MainPage extends StatelessWidget {

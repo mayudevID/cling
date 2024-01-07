@@ -361,5 +361,9 @@
   "noMore": "Itu saja ~~",
   "@noMore": {},
   "settings": "Pengaturan",
-  "@settings": {}
+  "@settings": {},
+  "recurringEveryDate": "Berulang setiap tanggal:",
+  "@recurringEveryDate": {},
+  "change": "Ubah",
+  "@change": {}
 }

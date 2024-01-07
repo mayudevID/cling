@@ -105,8 +105,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           );
 
       //* ~~~~ CHECK BACKUP ~~~~
-      if (_authRepo.currentUserModel!.backupUrl != null &&
-          _authRepo.currentUserModel!.backupUrl!.trim().isNotEmpty) {
+      if (_authRepo.currentUserModel!.lastBackupTime != null) {
         Navigator.pop(_context);
         final result = await dialogGetBackup(
           _context,

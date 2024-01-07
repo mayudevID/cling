@@ -1,17 +1,17 @@
 import 'package:cling/core/common_widget.dart';
 import 'package:cling/core/utils.dart';
-import 'package:cling/features/repository/auth_repository.dart';
-import 'package:cling/features/repository/settings_repository.dart';
-import 'package:cling/features/ui/language_currency/lang_currency_bloc.dart';
-import 'package:cling/features/ui/language_currency/lang_export.dart';
-import 'package:cling/features/ui/main/edit_monthly/bloc/edit_monthly_bloc.dart';
-import 'package:cling/features/ui/main/edit_monthly/page/text_field_edit_monthly.dart';
 import 'package:cling/injection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../../resources/gen/fonts.gen.dart';
+import '../../../../repository/auth_repository.dart';
+import '../../../../repository/settings_repository.dart';
+import '../../../language_currency/lang_currency_bloc.dart';
+import '../../../language_currency/lang_export.dart';
+import '../bloc/edit_monthly_bloc.dart';
+import '../widget/text_field_edit_monthly.dart';
 
 enum EditMonthlyMode { budget, income }
 
@@ -60,9 +60,7 @@ class EditMonBudgetOrIncomePageContent extends StatelessWidget {
                   context.read<EditMonthlyBloc>().add(SaveNewMonthly());
                 },
               ),
-              SizedBox(
-                height: 32.hmea,
-              ),
+              SizedBox(height: 32.hmea),
               Align(
                 alignment: Alignment.centerLeft,
                 child: BlocBuilder<LangCurrencyBloc, LangCurrencyState>(
@@ -79,9 +77,7 @@ class EditMonBudgetOrIncomePageContent extends StatelessWidget {
                   },
                 ),
               ),
-              SizedBox(
-                height: 8.hmea,
-              ),
+              SizedBox(height: 8.hmea),
               Container(
                 decoration: ShapeDecoration(
                   color: const Color(0xFF313131),
@@ -112,13 +108,58 @@ class EditMonBudgetOrIncomePageContent extends StatelessWidget {
                         );
                       },
                     ),
-                    SizedBox(
-                      width: 10.wmea,
-                    ),
+                    SizedBox(width: 10.wmea),
                     const TextFieldEditMonthly(),
                   ],
                 ),
               ),
+              if (monthlyMode == EditMonthlyMode.income) ...[
+                SizedBox(height: 32.hmea),
+                Row(
+                  children: [
+                    Text(
+                      AppLocalizations.of(context)!.recurringEveryDate,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontFamily: FontFamily.cabinetGrotesk,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    const Spacer(),
+                    BlocBuilder<EditMonthlyBloc, EditMonthlyState>(
+                      buildWhen: (p, c) {
+                        return p.changeDateRec != c.changeDateRec;
+                      },
+                      builder: (context, state) {
+                        return Text(
+                          getRankString(state.changeDateRec),
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontFamily: FontFamily.cabinetGrotesk,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        );
+                      },
+                    ),
+                    SizedBox(width: 8.wmea),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        color: const Color(0xFFF599DA),
+                      ),
+                      child: Text(
+                        AppLocalizations.of(context)!.change,
+                        style: TextStyle(
+                          fontFamily: FontFamily.cabinetGrotesk,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 9.5.sp,
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ]
             ],
           ),
         ),

@@ -3,7 +3,6 @@
 import 'dart:math';
 
 import 'package:awesome_notifications/awesome_notifications.dart';
-import 'package:cling/core/logger.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -40,7 +39,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     ]);
     final amount = result[0] as Map<String, double?>;
     final totalBalance = result[1] as int;
-    Logger.Red.log("aetm: ${amount['expense']}");
+
     emit(
       state.copyWith(
         amountIncomeThisMonth: amount['income'] ?? 0,

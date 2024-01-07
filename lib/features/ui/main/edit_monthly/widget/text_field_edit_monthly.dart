@@ -1,4 +1,3 @@
-import 'package:cling/features/ui/main/edit_monthly/bloc/edit_monthly_bloc.dart';
 import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -6,6 +5,7 @@ import 'package:sizer/sizer.dart';
 
 import '../../../../../resources/gen/fonts.gen.dart';
 import '../../../language_currency/lang_currency_bloc.dart';
+import '../bloc/edit_monthly_bloc.dart';
 
 class TextFieldEditMonthly extends StatefulWidget {
   const TextFieldEditMonthly({super.key});

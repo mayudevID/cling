@@ -2,11 +2,6 @@
 import 'dart:io';
 
 import 'package:bloc/bloc.dart';
-import 'package:cling/core/exception.dart';
-import 'package:cling/core/logger.dart';
-import 'package:cling/core/route.dart';
-import 'package:cling/features/model/currency.dart';
-import 'package:cling/features/ui/language_currency/lang_export.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:equatable/equatable.dart';
@@ -14,7 +9,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../../core/common_widget.dart';
+import '../../../../core/exception.dart';
+import '../../../../core/logger.dart';
+import '../../../../core/route.dart';
+import '../../../model/currency.dart';
 import '../../../repository/auth_repository.dart';
+import '../../language_currency/lang_export.dart';
 
 part 'register_event.dart';
 part 'register_state.dart';

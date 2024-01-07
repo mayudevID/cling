@@ -361,5 +361,9 @@
   "noMore": "No more ~~",
   "@noMore": {},
   "settings": "Settings",
-  "@settings": {}
+  "@settings": {},
+  "recurringEveryDate": "Recurring every date:",
+  "@recurringEveryDate": {},
+  "change": "Change",
+  "@change": {}
 }

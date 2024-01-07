@@ -15,7 +15,7 @@ class UserModel extends Equatable {
     required this.verifiedProcess,
     required this.currency,
     this.lastBackupTime,
-    this.backupUrl,
+    required this.recurringDay,
     required this.monthlyBudget,
     required this.monthlyIncome,
     required this.createdAt,
@@ -25,7 +25,7 @@ class UserModel extends Equatable {
   String uid;
   bool verifiedProcess;
   DateTime? lastBackupTime;
-  String? backupUrl;
+  int recurringDay;
   Currency currency;
   double monthlyBudget;
   double monthlyIncome;
@@ -36,7 +36,7 @@ class UserModel extends Equatable {
   List<Object?> get props => [
         uid,
         lastBackupTime,
-        backupUrl,
+        recurringDay,
         verifiedProcess,
         currency,
         monthlyBudget,
@@ -48,7 +48,7 @@ class UserModel extends Equatable {
   factory UserModel.fromMap(Map<String, dynamic> json) => UserModel(
         uid: json["uid"],
         lastBackupTime: DateTime.tryParse(json["last_backup_time"] ?? ""),
-        backupUrl: json['backup_url'],
+        recurringDay: json["recurring_day"],
         verifiedProcess: json["verified_process"],
         currency: Currency.values.firstWhere(
           (e) => e.value.countryCode == json["currency"],
@@ -63,7 +63,7 @@ class UserModel extends Equatable {
   Map<String, dynamic> toMap() => {
         "uid": uid,
         "last_backup_time": lastBackupTime?.toIso8601String(),
-        "backup_url": backupUrl,
+        "recurring_day": recurringDay,
         "verified_process": verifiedProcess,
         "currency": currency.value.countryCode,
         "monthly_budget": monthlyBudget,
@@ -77,7 +77,7 @@ class UserModel extends Equatable {
         verifiedProcess: false,
         currency: Currency.idr,
         lastBackupTime: null,
-        backupUrl: null,
+        recurringDay: 0,
         monthlyBudget: 0.0,
         monthlyIncome: 0.0,
         createdAt: DateTime(0),
@@ -87,7 +87,7 @@ class UserModel extends Equatable {
   UserModel copyWith({
     String? uid,
     DateTime? lastBackupTime,
-    String? backupUrl,
+    int? recurringDay,
     bool? verifiedProcess,
     Currency? currency,
     double? monthlyBudget,
@@ -98,7 +98,7 @@ class UserModel extends Equatable {
     return UserModel(
       uid: uid ?? this.uid,
       lastBackupTime: lastBackupTime ?? this.lastBackupTime,
-      backupUrl: backupUrl ?? this.backupUrl,
+      recurringDay: recurringDay ?? this.recurringDay,
       verifiedProcess: verifiedProcess ?? this.verifiedProcess,
       currency: currency ?? this.currency,
       monthlyBudget: monthlyBudget ?? this.monthlyBudget,
