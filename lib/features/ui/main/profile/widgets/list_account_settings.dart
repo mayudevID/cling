@@ -15,6 +15,7 @@ List<Widget> listAccountSettings(BuildContext context) {
   return [
     ///* Monthly Budget
     GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onTap: () {
         Navigator.pushNamed(
           context,
@@ -25,13 +26,9 @@ List<Widget> listAccountSettings(BuildContext context) {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          SizedBox(
-            width: 8.wmea,
-          ),
+          SizedBox(width: 8.wmea),
           Assets.lib.resources.images.money.svg(),
-          SizedBox(
-            width: 10.wmea,
-          ),
+          SizedBox(width: 10.wmea),
           Text(
             AppLocalizations.of(context)!.monthlyBudget,
             textAlign: TextAlign.center,
@@ -61,22 +58,17 @@ List<Widget> listAccountSettings(BuildContext context) {
               );
             },
           ),
-          SizedBox(
-            width: 10.wmea,
-          ),
+          SizedBox(width: 10.wmea),
           Assets.lib.resources.images.chevronRight16.svg(),
-          SizedBox(
-            width: 8.wmea,
-          ),
+          SizedBox(width: 8.wmea),
         ],
       ),
     ),
-    SizedBox(
-      height: 32.hmea,
-    ),
+    SizedBox(height: 32.hmea),
 
     ///* Monthly Income
     GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onTap: () {
         Navigator.pushNamed(
           context,
@@ -87,13 +79,9 @@ List<Widget> listAccountSettings(BuildContext context) {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          SizedBox(
-            width: 8.wmea,
-          ),
+          SizedBox(width: 8.wmea),
           Assets.lib.resources.images.moneyHand.svg(),
-          SizedBox(
-            width: 10.wmea,
-          ),
+          SizedBox(width: 10.wmea),
           Text(
             AppLocalizations.of(context)!.monthlyIncome,
             textAlign: TextAlign.center,
@@ -123,50 +111,9 @@ List<Widget> listAccountSettings(BuildContext context) {
               );
             },
           ),
-          SizedBox(
-            width: 10.wmea,
-          ),
+          SizedBox(width: 10.wmea),
           Assets.lib.resources.images.chevronRight16.svg(),
-          SizedBox(
-            width: 8.wmea,
-          ),
-        ],
-      ),
-    ),
-    SizedBox(
-      height: 32.hmea,
-    ),
-
-    ///* Change Language
-    GestureDetector(
-      onTap: () {
-        showBottomSheetChooseLang(context);
-      },
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          SizedBox(
-            width: 8.wmea,
-          ),
-          Assets.lib.resources.images.globe.svg(),
-          SizedBox(
-            width: 10.wmea,
-          ),
-          Text(
-            AppLocalizations.of(context)!.changeLanguage,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 10.sp,
-              fontFamily: FontFamily.cabinetGrotesk,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-          const Spacer(),
-          Assets.lib.resources.images.chevronRight16.svg(),
-          SizedBox(
-            width: 8.wmea,
-          ),
+          SizedBox(width: 8.wmea),
         ],
       ),
     ),

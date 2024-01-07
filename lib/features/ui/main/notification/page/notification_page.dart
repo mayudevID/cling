@@ -80,7 +80,7 @@ class NotificationPageContent extends StatelessWidget {
                   )
                 ],
               ),
-              SizedBox(height: 16.hmea),
+              SizedBox(height: 24.hmea),
               Expanded(
                 child: MediaQuery.removePadding(
                   context: context,

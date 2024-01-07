@@ -359,5 +359,7 @@
   "emptyTransaction": "Transaksi Kosong",
   "@emptyTransaction": {},
   "noMore": "Itu saja ~~",
-  "@noMore": {}
+  "@noMore": {},
+  "settings": "Pengaturan",
+  "@settings": {}
 }

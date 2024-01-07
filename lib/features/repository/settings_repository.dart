@@ -147,7 +147,7 @@ class SettingsRepository {
       final snapshotData = await uploadTask.whenComplete(() {});
       final dbDownload = await snapshotData.ref.getDownloadURL();
 
-      newFileData.delete();
+      newFileData.delete(recursive: true);
 
       return dbDownload;
     } on FirebaseException catch (e) {

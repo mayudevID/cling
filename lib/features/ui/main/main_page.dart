@@ -104,10 +104,7 @@ class MainPageContent extends StatelessWidget {
                   );
                 },
               ),
-              const Positioned(
-                bottom: 0,
-                child: CustomNavBar(),
-              ),
+              const Positioned(bottom: 0, child: CustomNavBar()),
             ],
           ),
         ),

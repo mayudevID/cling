@@ -359,5 +359,7 @@
   "emptyTransaction": "Empty Transaction",
   "@emptyTransaction": {},
   "noMore": "No more ~~",
-  "@noMore": {}
+  "@noMore": {},
+  "settings": "Settings",
+  "@settings": {}
 }

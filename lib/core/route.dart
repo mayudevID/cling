@@ -14,6 +14,7 @@ import '../features/ui/main/goal_list/page/goal_list_page.dart';
 import '../features/ui/main/main_page.dart';
 import '../features/ui/main/main_widget/enum_flowtype.dart';
 import '../features/ui/main/notification/page/notification_page.dart';
+import '../features/ui/main/settings/page/settings_page.dart';
 import '../features/ui/main/stats_detail/page/stats_detail_per_categories_page.dart';
 import '../features/ui/onboard/onboard_page.dart';
 import '../features/ui/register/page/register_page.dart';
@@ -109,6 +110,12 @@ class RouteGen {
         return MaterialPageRoute(
           builder: (_) => const GoalListPage(),
         );
+      case RouteName.settings:
+        return MaterialPageRoute(
+          builder: (_) => SettingsPage(
+            profileContext: data as BuildContext,
+          ),
+        );
 
       default:
         return _errorRoute();
@@ -147,4 +154,5 @@ class RouteName {
   static const String statsDetailPerCategories = "/statsDetailPerCategories";
   static const String goalList = "/goalList";
   static const String editInEx = "/editInEx";
+  static const String settings = "/settings";
 }
