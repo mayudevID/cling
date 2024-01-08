@@ -229,9 +229,8 @@ class NominalMoneyFormatter extends StatelessWidget {
       NumberFormat.currency(
         locale: data.value.toLanguageTag(),
         decimalDigits: decimalDigits,
-        //customPattern: '\u00a4###,###.00',
         name: (isWithName) ? "${data.name} " : "",
-      ).format(amount / 100.0),
+      ).format(amount),
       style: textStyle,
       textAlign: textAlign,
     );

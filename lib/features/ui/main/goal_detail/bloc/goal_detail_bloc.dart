@@ -83,7 +83,7 @@ class GoalDetailBloc extends Bloc<GoalDetailEvent, GoalDetailState> {
     );
 
     TextFieldAmountEditGoal.textEditingController.text =
-        numFormat.format(state.goalModel.target / 100.0);
+        numFormat.format(state.goalModel.target);
   }
 
   void _changeIcon(ChangeIcon event, emit) async {

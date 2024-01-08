@@ -215,8 +215,6 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
           time: splitKey[1],
         );
 
-        value = value / 100.0;
-
         yearlyIncomeList.add(ChartData(x: key, y: value));
 
         max = (value > max) ? value : max;

@@ -57,13 +57,13 @@ class EditMonthlyBloc extends Bloc<EditMonthlyEvent, EditMonthlyState> {
     final numFormat = NumberFormat.currency(
       locale: currency.value.toLanguageTag(),
       decimalDigits: 2,
-      customPattern: '\u00a4###,###.00',
+      //customPattern: '\u00a4###,###.00',
       name: "",
     );
 
     initMonthly = numFormat.format((_monthlyMode == EditMonthlyMode.income)
-        ? _authRepo.currentUserModel!.monthlyIncome / 100.0
-        : _authRepo.currentUserModel!.monthlyBudget / 100.0);
+        ? _authRepo.currentUserModel!.monthlyIncome
+        : _authRepo.currentUserModel!.monthlyBudget);
 
     TextFieldEditMonthly.textEditingController.text = initMonthly;
 

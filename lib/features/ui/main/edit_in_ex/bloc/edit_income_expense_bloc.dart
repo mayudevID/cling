@@ -53,9 +53,8 @@ class EditIncomeExpenseBloc
                   .value
                   .toLanguageTag(),
               decimalDigits: 2,
-              //customPattern: '\u00a4###,###.00',
               name: "",
-            ).format(amount / 100.0),
+            ).format(amount),
           ),
         ) {
     on<SetDate>(_setDate);
