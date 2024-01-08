@@ -22,7 +22,7 @@ class SetLogoGoal extends AddGoalEvent {
 class SetAmountInput extends AddGoalEvent {
   const SetAmountInput(this.amountInput);
 
-  final String amountInput;
+  final double amountInput;
 }
 
 class SaveDataGoal extends AddGoalEvent {}

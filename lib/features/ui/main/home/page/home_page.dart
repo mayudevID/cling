@@ -77,7 +77,6 @@ class HomePage extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                       ),
                       amount: state.totalBalance,
-                      decimalDigits: 2,
                       isWithName: true,
                     );
                   },

@@ -1,11 +1,11 @@
-import 'package:cling/core/common_widget.dart';
-import 'package:cling/core/route.dart';
 import 'package:cling/core/utils.dart';
-import 'package:cling/features/model/goal_model.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../../../../core/common_widget.dart';
+import '../../../../../core/route.dart';
 import '../../../../../resources/gen/fonts.gen.dart';
+import '../../../../model/goal_model.dart';
 
 Widget widgetGoals(
   BuildContext context,
@@ -87,7 +87,6 @@ Widget widgetGoals(
                   fontWeight: FontWeight.w500,
                 ),
                 amount: goalModel.target,
-                decimalDigits: 2,
                 isWithName: true,
               ),
               Text(

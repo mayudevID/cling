@@ -68,7 +68,6 @@ Widget savingItem({
               fontWeight: FontWeight.w700,
             ),
             amount: data.amount,
-            decimalDigits: 2,
             isWithName: true,
           ),
         ],

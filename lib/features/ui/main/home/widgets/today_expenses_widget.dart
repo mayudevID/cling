@@ -76,7 +76,6 @@ Widget todayExpensesWidget(BuildContext context, ExpenseModel expenseModel) {
                   fontWeight: FontWeight.w500,
                 ),
                 amount: expenseModel.amount,
-                decimalDigits: 2,
                 isWithName: true,
               ),
               Text(

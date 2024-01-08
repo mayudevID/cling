@@ -63,7 +63,6 @@ Widget monthlyBudget(BuildContext context) {
                     fontWeight: FontWeight.w700,
                   ),
                   amount: state.userModel.monthlyBudget,
-                  decimalDigits: 2,
                   isWithName: true,
                 );
               },
@@ -136,7 +135,6 @@ Widget monthlyBudget(BuildContext context) {
                     fontWeight: FontWeight.w700,
                   ),
                   amount: state.amountExpenseThisMonth,
-                  decimalDigits: 2,
                   isWithName: true,
                 );
               },

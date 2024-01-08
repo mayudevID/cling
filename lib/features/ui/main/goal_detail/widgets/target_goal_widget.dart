@@ -51,7 +51,6 @@ Widget targetGoalWidget(BuildContext context) {
                     fontWeight: FontWeight.w700,
                   ),
                   amount: state.goalModel.target,
-                  decimalDigits: 2,
                   isWithName: true,
                 );
               },
@@ -106,7 +105,6 @@ Widget targetGoalWidget(BuildContext context) {
                     fontWeight: FontWeight.w700,
                   ),
                   amount: state.goalModel.collected,
-                  decimalDigits: 2,
                   isWithName: true,
                 );
               },

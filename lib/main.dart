@@ -1,5 +1,4 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
-import 'package:cling/features/ui/calculator/page/calculator_page.dart';
 
 import 'package:device_preview/device_preview.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -134,8 +133,7 @@ class _MainAppState extends State<MainApp> {
         GlobalMaterialLocalizations.delegate,
         MonthYearPickerLocalizations.delegate,
       ],
-      home: CalculatorPage(),
-      //onGenerateRoute: RouteGen.generateRoute,
+      onGenerateRoute: RouteGen.generateRoute,
       debugShowCheckedModeBanner: false,
     );
   }

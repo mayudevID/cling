@@ -68,7 +68,6 @@ Widget incomeAndExpense(BuildContext context) {
                     fontWeight: FontWeight.w700,
                   ),
                   amount: currBalance,
-                  decimalDigits: 2,
                   isWithName: true,
                 );
               },
@@ -122,7 +121,6 @@ Widget incomeAndExpense(BuildContext context) {
                               fontWeight: FontWeight.w500,
                             ),
                             amount: state.amountIncomeThisMonth,
-                            decimalDigits: 2,
                             isWithName: false,
                             textAlign: TextAlign.right,
                           );
@@ -177,7 +175,6 @@ Widget incomeAndExpense(BuildContext context) {
                               fontWeight: FontWeight.w500,
                             ),
                             amount: state.amountExpenseThisMonth,
-                            decimalDigits: 2,
                             isWithName: false,
                             textAlign: TextAlign.right,
                           );

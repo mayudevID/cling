@@ -1,20 +1,21 @@
 import 'package:cling/core/utils.dart';
-import 'package:cling/features/ui/language_currency/lang_export.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
 import '../../../../resources/gen/assets.gen.dart';
 import '../../../../resources/gen/fonts.gen.dart';
+import '../../language_currency/lang_export.dart';
 import '../bloc/calc_bloc.dart';
 import '../widget/build_button_calculator.dart';
 
 class CalculatorPage extends StatelessWidget {
-  const CalculatorPage({super.key});
+  const CalculatorPage({super.key, required this.amount});
+  final double? amount;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => CalcBloc(),
+      create: (context) => CalcBloc(context: context),
       child: const CalculatorPageContent(),
     );
   }
@@ -36,7 +37,7 @@ class CalculatorPageContent extends StatelessWidget {
               child: Row(
                 children: [
                   GestureDetector(
-                    onTap: () => Navigator.pop(context),
+                    onTap: () => Navigator.pop(context, [false]),
                     child: Assets.lib.resources.images.fluentChevronLeft24Filled
                         .svg(),
                   ),
@@ -102,7 +103,6 @@ class CalculatorPageContent extends StatelessWidget {
                 ),
               ),
             ),
-            const Divider(),
             Column(
               children: [
                 Row(
@@ -168,20 +168,25 @@ class CalculatorPageContent extends StatelessWidget {
                 ),
                 Row(
                   children: [
-                    Container(
-                      height: 72.hmea,
-                      width: MediaQuery.of(context).size.width / 2,
-                      decoration: const BoxDecoration(
-                        color: Colors.green,
-                      ),
-                      child: Center(
-                        child: Text(
-                          AppLocalizations.of(context)!.save,
-                          style: TextStyle(
-                            fontSize: 15.sp,
-                            color: Colors.white,
-                            fontWeight: FontWeight.w700,
-                            fontFamily: FontFamily.cabinetGrotesk,
+                    GestureDetector(
+                      onTap: () {
+                        context.read<CalcBloc>().add(
+                              AddExpression(AppLocalizations.of(context)!.save),
+                            );
+                      },
+                      child: Container(
+                        height: 72.hmea,
+                        width: MediaQuery.of(context).size.width / 2,
+                        decoration: const BoxDecoration(color: Colors.green),
+                        child: Center(
+                          child: Text(
+                            AppLocalizations.of(context)!.save,
+                            style: TextStyle(
+                              fontSize: 15.sp,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w700,
+                              fontFamily: FontFamily.cabinetGrotesk,
+                            ),
                           ),
                         ),
                       ),

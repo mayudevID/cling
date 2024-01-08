@@ -108,7 +108,6 @@ Widget listTransaction(
                   fontFamily: FontFamily.cabinetGrotesk,
                 ),
                 amount: transactionModel.amount,
-                decimalDigits: 2,
                 isWithName: true,
               ),
               Text(

@@ -71,7 +71,6 @@ Widget pieChartStatsExpense() {
                         fontFamily: FontFamily.cabinetGrotesk,
                       ),
                       amount: newData.amount * 100,
-                      decimalDigits: 2,
                       isWithName: true,
                     ),
                   ],

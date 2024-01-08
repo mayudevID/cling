@@ -6,7 +6,7 @@ extension Resizing on num {
 }
 
 extension RemoveDot on String {
-  String get removeDot => replaceAll(RegExp(r'[^0-9]'), '');
+  String get removeDot => replaceAll(',', '');
 }
 
 double? setInterval(double maxVal) {

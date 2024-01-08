@@ -53,7 +53,6 @@ List<Widget> listAccountSettings(BuildContext context) {
                   fontWeight: FontWeight.w400,
                 ),
                 amount: state.userModel.monthlyBudget,
-                decimalDigits: 2,
                 isWithName: true,
               );
             },
@@ -106,7 +105,6 @@ List<Widget> listAccountSettings(BuildContext context) {
                   fontWeight: FontWeight.w400,
                 ),
                 amount: state.userModel.monthlyIncome,
-                decimalDigits: 2,
                 isWithName: true,
               );
             },

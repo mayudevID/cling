@@ -71,7 +71,6 @@ Widget itemDateAmountWidget(
               fontFamily: FontFamily.cabinetGrotesk,
             ),
             amount: data.amount,
-            decimalDigits: 2,
             isWithName: true,
           ),
         ],

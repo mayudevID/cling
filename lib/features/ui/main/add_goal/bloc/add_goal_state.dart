@@ -5,11 +5,11 @@ part of 'add_goal_bloc.dart';
 class AddGoalState extends Equatable {
   String nameGoal;
   String logoGoal;
-  String amountInput;
+  double amountInput;
   AddGoalState({
     this.nameGoal = "",
     this.logoGoal = "",
-    this.amountInput = "0",
+    this.amountInput = 0,
   });
 
   @override
@@ -22,7 +22,7 @@ class AddGoalState extends Equatable {
   AddGoalState copyWith({
     String? nameGoal,
     String? logoGoal,
-    String? amountInput,
+    double? amountInput,
   }) {
     return AddGoalState(
       nameGoal: nameGoal ?? this.nameGoal,

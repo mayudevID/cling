@@ -1,7 +1,9 @@
 // ignore_for_file: unused_local_variable, non_constant_identifier_names
 
 import 'package:bloc/bloc.dart';
+import 'package:cling/features/ui/language_currency/lang_export.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:math_expressions/math_expressions.dart';
 
@@ -11,11 +13,14 @@ part 'calc_event.dart';
 part 'calc_state.dart';
 
 class CalcBloc extends Bloc<CalcEvent, CalcState> {
-  CalcBloc() : super(CalcState()) {
+  CalcBloc({required BuildContext context})
+      : _context = context,
+        super(CalcState()) {
     on<AddExpression>(_addExpression);
   }
 
   final operate = [" / ", " * ", " + ", " - "];
+  final BuildContext _context;
 
   void _addExpression(AddExpression event, emit) {
     final VAL = event.value;
@@ -30,6 +35,8 @@ class CalcBloc extends Bloc<CalcEvent, CalcState> {
       _clearCalc(event, emit);
     } else if (VAL == 'Del') {
       _deleteCalc(event, emit);
+    } else if (VAL == AppLocalizations.of(_context)!.save) {
+      _saveValue(event, emit);
     } else {
       _addValue(event, emit);
     }
@@ -116,5 +123,13 @@ class CalcBloc extends Bloc<CalcEvent, CalcState> {
       Logger.Red.log(last);
     }
     emit(state.copyWith(listInput: listInput));
+  }
+
+  void _saveValue(event, emit) {
+    final listInput = state.listInput;
+    if (listInput.length == 1 &&
+        (listInput.first != "Error" || listInput.first != "")) {
+      Navigator.pop(_context, [true, listInput.first]);
+    }
   }
 }

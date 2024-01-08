@@ -212,13 +212,11 @@ class NominalMoneyFormatter extends StatelessWidget {
     super.key,
     required this.textStyle,
     required this.amount,
-    required this.decimalDigits,
     required this.isWithName,
     this.textAlign,
   });
   final TextStyle textStyle;
   final num amount;
-  final int decimalDigits;
   final bool isWithName;
   TextAlign? textAlign;
 
@@ -228,7 +226,7 @@ class NominalMoneyFormatter extends StatelessWidget {
     return Text(
       NumberFormat.currency(
         locale: data.value.toLanguageTag(),
-        decimalDigits: decimalDigits,
+        decimalDigits: (amount % 1 == 0) ? 0 : 2,
         name: (isWithName) ? "${data.name} " : "",
       ).format(amount),
       style: textStyle,

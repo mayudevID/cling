@@ -80,7 +80,6 @@ Widget categoriesWithAmount({
               fontWeight: FontWeight.w500,
             ),
             amount: totalAmount,
-            decimalDigits: 2,
             isWithName: true,
           ),
         ],

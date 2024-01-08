@@ -1,6 +1,4 @@
 // ignore_for_file: use_build_context_synchronously
-
-import 'package:cling/core/utils.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -44,8 +42,7 @@ class AddGoalBloc extends Bloc<AddGoalEvent, AddGoalState> {
   }
 
   void _setAmountInput(SetAmountInput event, Emitter<AddGoalState> emit) {
-    final replaceDot = event.amountInput.removeDot;
-    emit(state.copyWith(amountInput: replaceDot));
+    emit(state.copyWith(amountInput: event.amountInput));
   }
 
   void _saveDataGoal(SaveDataGoal event, Emitter<AddGoalState> emit) async {
@@ -59,7 +56,7 @@ class AddGoalBloc extends Bloc<AddGoalEvent, AddGoalState> {
       return;
     }
 
-    if (state.amountInput.trim().isEmpty || state.amountInput.trim() == "0") {
+    if (state.amountInput == 0) {
       errorToast(AppLocalizations.of(_context)!.pleaseFillAmount);
       return;
     }
@@ -68,7 +65,7 @@ class AddGoalBloc extends Bloc<AddGoalEvent, AddGoalState> {
       final goalData = GoalModel(
         name: state.nameGoal.trim(),
         image: state.logoGoal,
-        target: double.parse(state.amountInput),
+        target: state.amountInput,
         collected: 0,
       );
       await _dbRepo.insertGoal(goalData);

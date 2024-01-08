@@ -1,6 +1,7 @@
-import 'package:cling/features/model/transaction_model.dart';
 import 'package:flutter/material.dart';
 import '../features/model/detail_category_model.dart';
+import '../features/model/transaction_model.dart';
+import '../features/ui/calculator/page/calculator_page.dart';
 import '../features/ui/forgot_password/page/check_email_page.dart';
 import '../features/ui/forgot_password/page/forgot_password_page.dart';
 import '../features/ui/login/page/login_page.dart';
@@ -116,6 +117,12 @@ class RouteGen {
             profileContext: data as BuildContext,
           ),
         );
+      case RouteName.calc:
+        return MaterialPageRoute(
+          builder: (_) => CalculatorPage(
+            amount: data as double?,
+          ),
+        );
 
       default:
         return _errorRoute();
@@ -155,4 +162,5 @@ class RouteName {
   static const String goalList = "/goalList";
   static const String editInEx = "/editInEx";
   static const String settings = "/settings";
+  static const String calc = "/calc";
 }
