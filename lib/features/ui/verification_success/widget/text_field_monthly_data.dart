@@ -41,7 +41,7 @@ class _TextFieldMonthlyDataState extends State<TextFieldMonthlyData> {
                 bloc.state.selectedCurrency.value.toLanguageTag(),
           ),
           symbol: "",
-          decimalDigits: 2,
+          decimalDigits: 0,
         ),
       ],
       cursorColor: Colors.white,

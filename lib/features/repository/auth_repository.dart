@@ -2,11 +2,8 @@ import 'package:cling/core/logger.dart';
 import 'package:cling/features/model/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../core/exception.dart';
-import '../../core/route.dart';
-import '../../main.dart';
 
 class AuthRepository {
   final FirebaseAuth _firebaseAuth;
@@ -81,7 +78,7 @@ class AuthRepository {
     await userCredential.user!.sendEmailVerification();
   }
 
-  Future<void> logInWithEmailAndPassword({
+  Future<bool> logInWithEmailAndPassword({
     required String email,
     required String password,
   }) async {
@@ -131,16 +128,9 @@ class AuthRepository {
       Logger.Green.log(
         "User not pass verified process. Go to verif onboard...",
       );
-      Future.delayed(
-        const Duration(milliseconds: 1250),
-        () {
-          Navigator.pushNamed(
-            MainApp.navKeyGlobal.currentContext!,
-            RouteName.verifOnboard,
-          );
-        },
-      );
     }
+
+    return isVerifiedProcessNotPassed;
   }
 
   Future<void> logOut() async {

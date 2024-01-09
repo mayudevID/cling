@@ -69,13 +69,9 @@ class SettingsPageContent extends StatelessWidget {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    SizedBox(
-                      width: 8.wmea,
-                    ),
+                    SizedBox(width: 8.wmea),
                     Assets.lib.resources.images.globe.svg(),
-                    SizedBox(
-                      width: 10.wmea,
-                    ),
+                    SizedBox(width: 10.wmea),
                     Text(
                       AppLocalizations.of(context)!.changeLanguage,
                       textAlign: TextAlign.center,
@@ -88,13 +84,21 @@ class SettingsPageContent extends StatelessWidget {
                     ),
                     const Spacer(),
                     Assets.lib.resources.images.chevronRight16.svg(),
-                    SizedBox(
-                      width: 8.wmea,
-                    ),
+                    SizedBox(width: 8.wmea),
                   ],
                 ),
               ),
               SizedBox(height: 48.hmea),
+              Text(
+                context.read<ProfileBloc>().state.version,
+                style: TextStyle(
+                  fontFamily: FontFamily.cabinetGrotesk,
+                  color: const Color.fromARGB(255, 189, 189, 189),
+                  fontSize: 9.sp,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(height: 12.hmea),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 8.wmea),
                 child: Row(

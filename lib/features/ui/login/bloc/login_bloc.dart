@@ -16,6 +16,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../core/common_widget.dart';
+import '../../../../core/route.dart';
+import '../../../../main.dart';
 import '../../app_bloc/app_bloc.dart';
 import '../../language_currency/lang_currency_bloc.dart';
 
@@ -93,7 +95,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     await _authRepo.logOut();
 
     try {
-      await _authRepo.logInWithEmailAndPassword(
+      final isVerifiedNotPassed = await _authRepo.logInWithEmailAndPassword(
         email: state.email.trim(),
         password: state.password.trim(),
       );
@@ -118,6 +120,25 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       await Future.delayed(const Duration(milliseconds: 100));
 
       _context.read<AppBloc>().add(const Redirect());
+
+      if (isVerifiedNotPassed) {
+        Future.delayed(
+          const Duration(milliseconds: 1250),
+          () {
+            Navigator.pushNamed(
+              MainApp.navKeyGlobal.currentContext!,
+              RouteName.verifOnboard,
+            );
+            // Navigator.pushNamedAndRemoveUntil(
+            //   MainApp.navKeyGlobal.currentContext!,
+            //   RouteName.verifOnboard,
+            //   (route) =>
+            //       (route.settings.name != RouteName.verifOnboard) ||
+            //       route.isFirst,
+            // );
+          },
+        );
+      }
     } on EmailNotVerifiedException catch (_) {
       Logger.Red.log("EmailNotVerified");
       await _authRepo.logOut();

@@ -13,6 +13,12 @@ class SetIncome extends MonthlyDataEvent {}
 
 class SetBudget extends MonthlyDataEvent {}
 
+class RecDay extends MonthlyDataEvent {
+  RecDay(this.dateRec);
+
+  int dateRec;
+}
+
 class SetState extends MonthlyDataEvent {
   SetState(this.state);
 

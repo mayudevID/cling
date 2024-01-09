@@ -6,7 +6,7 @@ extension Resizing on num {
 }
 
 extension RemoveDot on String {
-  String get removeDot => replaceAll(',', '');
+  String get removeDot => replaceAll(RegExp(r'[^0-9]'), '');
 }
 
 double? setInterval(double maxVal) {
@@ -36,6 +36,10 @@ double? setInterval(double maxVal) {
 }
 
 String getRankString(int number) {
+  if (number == 0) {
+    return "-";
+  }
+
   if (number >= 11 && number <= 13) {
     return '${number}th';
   }

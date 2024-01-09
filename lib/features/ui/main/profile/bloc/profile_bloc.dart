@@ -6,6 +6,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 import '../../../../model/currency.dart';
 import '../../../../model/user_model.dart';
@@ -73,7 +74,13 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     GetProfile event,
     Emitter<ProfileState> emit,
   ) async {
-    emit(state.copyWith(userModel: _authRepo.currentUserModel));
+    final packageInfo = await PackageInfo.fromPlatform();
+    emit(
+      state.copyWith(
+        userModel: _authRepo.currentUserModel,
+        version: "v${packageInfo.version} + ${packageInfo.buildNumber}",
+      ),
+    );
   }
 
   void _getVerifiedStatus(event, emit) {

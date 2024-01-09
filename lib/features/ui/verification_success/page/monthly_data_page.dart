@@ -5,13 +5,13 @@ import 'package:cling/features/repository/auth_repository.dart';
 import 'package:cling/features/repository/settings_repository.dart';
 import 'package:cling/features/ui/language_currency/lang_currency_bloc.dart';
 import 'package:cling/features/ui/language_currency/lang_export.dart';
+import 'package:cling/features/ui/verification_success/widget/rec_day_picker_widget.dart';
 import 'package:cling/injection.dart';
 import 'package:cling/resources/gen/fonts.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-
 import '../bloc/monthly_data_bloc.dart';
 import '../widget/text_field_monthly_data.dart';
 import '../widget/text_monthly_data.dart';
@@ -41,14 +41,12 @@ class MonthlyDataPageContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         backgroundColor: Colors.black,
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            SizedBox(
-              width: 100.w,
-              height: 58.hmea,
-            ),
+            SizedBox(width: 100.w, height: 58.hmea),
             BlocBuilder<MonthlyDataBloc, MonthlyDataState>(
               builder: (context, state) {
                 return Text(
@@ -65,9 +63,7 @@ class MonthlyDataPageContent extends StatelessWidget {
                 );
               },
             ),
-            SizedBox(
-              height: 100.hmea,
-            ),
+            SizedBox(height: 100.hmea),
             BlocBuilder<MonthlyDataBloc, MonthlyDataState>(
               builder: (context, state) {
                 switch (state.state) {
@@ -85,11 +81,10 @@ class MonthlyDataPageContent extends StatelessWidget {
                 }
               },
             ),
-            SizedBox(
-              height: 92.hmea,
-            ),
+            SizedBox(height: 92.hmea),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 BlocBuilder<LangCurrencyBloc, LangCurrencyState>(
                   builder: (context, state) {
@@ -98,21 +93,28 @@ class MonthlyDataPageContent extends StatelessWidget {
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 20.sp,
+                        fontSize: 15.sp,
                         fontFamily: FontFamily.cabinetGrotesk,
                         fontWeight: FontWeight.w700,
                       ),
                     );
                   },
                 ),
-                SizedBox(
-                  width: 6.wmea,
-                ),
+                SizedBox(width: 6.wmea),
                 const TextFieldMonthlyData(),
               ],
             ),
-            SizedBox(
-              height: 93.5.hmea,
+            BlocBuilder<MonthlyDataBloc, MonthlyDataState>(
+              buildWhen: (p, c) {
+                return p.state != c.state;
+              },
+              builder: (context, state) {
+                if (state.state == VerifOnboardPos.income) {
+                  return recDayPickerWidget(context);
+                }
+
+                return SizedBox(height: 200.hmea);
+              },
             ),
             BlocBuilder<MonthlyDataBloc, MonthlyDataState>(
               builder: (context, state) {
@@ -128,9 +130,7 @@ class MonthlyDataPageContent extends StatelessWidget {
                 );
               },
             ),
-            SizedBox(
-              height: 93.5.hmea,
-            ),
+            SizedBox(height: 48.hmea),
             BlocBuilder<MonthlyDataBloc, MonthlyDataState>(
               builder: (context, state) {
                 return PinkButton(
@@ -144,7 +144,7 @@ class MonthlyDataPageContent extends StatelessWidget {
                         break;
                     }
                   },
-                  name: "Next",
+                  name: AppLocalizations.of(context)!.next,
                 );
               },
             ),

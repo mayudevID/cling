@@ -2,9 +2,11 @@
 
 import 'dart:io';
 import 'package:cling/core/utils.dart';
+import 'package:cling/main.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../core/logger.dart';
@@ -32,12 +34,17 @@ class MonthlyDataBloc extends Bloc<MonthlyDataEvent, MonthlyDataState> {
     on<SetBudget>(_setBudget);
     on<SetState>(_setState);
     on<SetFinish>(_setFinish);
+    on<RecDay>(_recDay);
   }
 
   final SettingsRepository _settingsRepo;
   final BuildContext _context;
   final AuthRepository _authRepo;
   var mainContext = MainPage.navKeyMain.currentContext!;
+
+  void _recDay(RecDay event, emit) {
+    emit(state.copyWith(dateRec: event.dateRec));
+  }
 
   void _setIncome(SetIncome event, emit) {
     final data = TextFieldMonthlyData.textEditingController.text;
@@ -131,21 +138,24 @@ class MonthlyDataBloc extends Bloc<MonthlyDataEvent, MonthlyDataState> {
 
     loadingAuth(_context);
     try {
-      final monIncome = int.parse(state.monIncome.removeDot);
-      final monBudget = int.parse(state.monBudget.removeDot);
+      final monIncome = double.parse(state.monIncome.removeDot);
+      final monBudget = double.parse(state.monBudget.removeDot);
 
       await _settingsRepo.saveMonthlyBudgetAndIncome(
         userModel: _authRepo.currentUserModel!,
         monthlyIncome: monIncome.toDouble(),
         monthlyBudget: monBudget.toDouble(),
+        recurringDay: state.dateRec,
       );
 
       mainContext.read<ProfileBloc>().add(GetProfile());
 
-      Navigator.of(_context)
-        ..pop()
-        ..pop()
-        ..pop();
+      SchedulerBinding.instance.addPostFrameCallback((_) {
+        Navigator.popUntil(
+          MainApp.navKeyGlobal.currentContext!,
+          (route) => route.isFirst,
+        );
+      });
     } on SocketException catch (e) {
       Logger.Red.log(e.message);
 
