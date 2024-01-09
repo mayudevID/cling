@@ -50,14 +50,14 @@ class EditMonthlyBloc extends Bloc<EditMonthlyEvent, EditMonthlyState> {
     initDateRec = _authRepo.currentUserModel!.recurringDay;
     emit(
       state.copyWith(
-        amount: initMonthly * 1.0,
+        amount: initMonthly,
         dateRec: initDateRec,
       ),
     );
   }
 
   void _setAmountInput(SetAmountInput event, emit) {
-    emit(state.copyWith(amount: event.newValue * 1.0));
+    emit(state.copyWith(amount: event.newValue));
   }
 
   void _chnageTempRecDay(ChangeTempRecDay event, emit) {

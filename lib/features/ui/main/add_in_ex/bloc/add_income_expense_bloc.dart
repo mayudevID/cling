@@ -104,7 +104,7 @@ class AddIncomeExpenseBloc
     SetAmountInput event,
     Emitter<AddIncomeExpenseState> emit,
   ) {
-    emit(state.copyWith(amountInput: event.amountInput * 1.0));
+    emit(state.copyWith(amountInput: event.amountInput));
   }
 
   void _saveData(SaveData event, emit) async {
