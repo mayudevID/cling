@@ -24,7 +24,6 @@ class MonthlyDataPage extends StatelessWidget {
     return BlocProvider(
       create: (context) {
         return MonthlyDataBloc(
-          context: context,
           settingsRepo: getIt<SettingsRepository>(),
           authRepo: getIt<AuthRepository>(),
         );

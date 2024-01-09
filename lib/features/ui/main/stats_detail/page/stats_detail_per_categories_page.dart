@@ -40,7 +40,6 @@ class StatsDetailPerCategoriesPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => StatsDetailBloc(
-        context: context,
         detailCategoryModel: _detailCategoryModel,
         dbRepo: getIt<DatabaseRepository>(),
       )..add(getData(context)),

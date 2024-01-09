@@ -1,6 +1,6 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_buildmainContext_synchronously, use_build_context_synchronously
+import 'package:cling/main.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -11,17 +11,14 @@ import '../../../../repository/database_repository.dart';
 import '../../../language_currency/lang_export.dart';
 import '../../main_widget/dialog_add_success.dart';
 import '../../home/bloc/home_bloc.dart';
-import '../../main_page.dart';
 
 part 'add_goal_event.dart';
 part 'add_goal_state.dart';
 
 class AddGoalBloc extends Bloc<AddGoalEvent, AddGoalState> {
   AddGoalBloc({
-    required BuildContext context,
     required DatabaseRepository dbRepo,
-  })  : _context = context,
-        _dbRepo = dbRepo,
+  })  : _dbRepo = dbRepo,
         super(AddGoalState()) {
     on<SetNameGoal>(_setNameGoal);
     on<SetLogoGoal>(_setLogoGoal);
@@ -29,9 +26,8 @@ class AddGoalBloc extends Bloc<AddGoalEvent, AddGoalState> {
     on<SetAmountInput>(_setAmountInput);
   }
 
-  final BuildContext _context;
   final DatabaseRepository _dbRepo;
-  var mainContext = MainPage.navKeyMain.currentContext!;
+  var mainContext = MainApp.navKeyGlobal.currentContext!;
 
   void _setNameGoal(SetNameGoal event, Emitter<AddGoalState> emit) {
     emit(state.copyWith(nameGoal: event.nameGoal));
@@ -47,17 +43,17 @@ class AddGoalBloc extends Bloc<AddGoalEvent, AddGoalState> {
 
   void _saveDataGoal(SaveDataGoal event, Emitter<AddGoalState> emit) async {
     if (state.logoGoal.trim().isEmpty) {
-      errorToast(AppLocalizations.of(_context)!.pleaseSelectLogo);
+      errorToast(AppLocalizations.of(mainContext)!.pleaseSelectLogo);
       return;
     }
 
     if (state.nameGoal.trim().isEmpty) {
-      errorToast(AppLocalizations.of(_context)!.pleaseFillName);
+      errorToast(AppLocalizations.of(mainContext)!.pleaseFillName);
       return;
     }
 
     if (state.amountInput == 0) {
-      errorToast(AppLocalizations.of(_context)!.pleaseFillAmount);
+      errorToast(AppLocalizations.of(mainContext)!.pleaseFillAmount);
       return;
     }
 
@@ -71,9 +67,9 @@ class AddGoalBloc extends Bloc<AddGoalEvent, AddGoalState> {
       await _dbRepo.insertGoal(goalData);
       mainContext.read<HomeBloc>().add(GetGoalsHomeWithCount());
 
-      dialogAddSuccess(_context, null);
+      dialogAddSuccess(mainContext, null);
     } on FormatException {
-      errorToast(AppLocalizations.of(_context)!.invalidAmount);
+      errorToast(AppLocalizations.of(mainContext)!.invalidAmount);
     } on DatabaseException catch (e) {
       errorToast(e.toString());
       Logger.Red.log(e.toString());

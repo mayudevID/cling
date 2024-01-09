@@ -20,7 +20,6 @@ class ForgotPasswordPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => ForgotPasswordCubit(
-        context: context,
         authRepo: getIt<AuthRepository>(),
       ),
       child: const ForgotPasswordPageContent(),

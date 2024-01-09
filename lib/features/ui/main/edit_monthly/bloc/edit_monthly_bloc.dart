@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_buildmainContext_synchronously, use_build_context_synchronously
 
 import 'dart:io';
 import 'package:connectivity_plus/connectivity_plus.dart';
@@ -8,10 +8,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../core/common_widget.dart';
 import '../../../../../core/logger.dart';
+import '../../../../../main.dart';
 import '../../../../repository/auth_repository.dart';
 import '../../../../repository/settings_repository.dart';
 import '../../../language_currency/lang_export.dart';
-import '../../main_page.dart';
 import '../../profile/bloc/profile_bloc.dart';
 import '../page/edit_budget_or_income.dart';
 
@@ -20,12 +20,10 @@ part 'edit_monthly_state.dart';
 
 class EditMonthlyBloc extends Bloc<EditMonthlyEvent, EditMonthlyState> {
   EditMonthlyBloc({
-    required BuildContext context,
     required EditMonthlyMode monthlyMode,
     required SettingsRepository settingsRepo,
     required AuthRepository authRepo,
   })  : _monthlyMode = monthlyMode,
-        _context = context,
         _settingsRepo = settingsRepo,
         _authRepo = authRepo,
         super(EditMonthlyState()) {
@@ -38,8 +36,7 @@ class EditMonthlyBloc extends Bloc<EditMonthlyEvent, EditMonthlyState> {
   final EditMonthlyMode _monthlyMode;
   final SettingsRepository _settingsRepo;
   final AuthRepository _authRepo;
-  final BuildContext _context;
-  var mainContext = MainPage.navKeyMain.currentContext!;
+  var mainContext = MainApp.navKeyGlobal.currentContext!;
   late double initMonthly;
   late int initDateRec;
 
@@ -68,7 +65,8 @@ class EditMonthlyBloc extends Bloc<EditMonthlyEvent, EditMonthlyState> {
     final connectivityResult = await (Connectivity().checkConnectivity());
     if (!(connectivityResult == ConnectivityResult.mobile ||
         connectivityResult == ConnectivityResult.wifi)) {
-      errorSnackbar(_context, AppLocalizations.of(_context)!.noConnection);
+      errorSnackbar(
+          mainContext, AppLocalizations.of(mainContext)!.noConnection);
       return;
     }
 
@@ -78,7 +76,7 @@ class EditMonthlyBloc extends Bloc<EditMonthlyEvent, EditMonthlyState> {
       return;
     }
 
-    loadingAuth(_context);
+    loadingAuth(mainContext);
     try {
       final monValue = state.amount;
       final newRecDay = state.dateRec;
@@ -95,16 +93,16 @@ class EditMonthlyBloc extends Bloc<EditMonthlyEvent, EditMonthlyState> {
 
       mainContext.read<ProfileBloc>().add(GetProfile());
 
-      Navigator.of(_context)
+      Navigator.of(mainContext)
         ..pop()
         ..pop();
     } on SocketException catch (e) {
       Logger.Red.log(e.message);
 
-      Navigator.pop(_context);
+      Navigator.pop(mainContext);
       errorSnackbar(
-        _context,
-        AppLocalizations.of(_context)!.noConnection,
+        mainContext,
+        AppLocalizations.of(mainContext)!.noConnection,
       );
     }
   }

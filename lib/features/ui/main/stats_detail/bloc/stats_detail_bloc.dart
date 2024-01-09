@@ -6,6 +6,7 @@ import 'package:month_year_picker/month_year_picker.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 import '../../../../../core/logger.dart';
+import '../../../../../main.dart';
 import '../../../../../resources/gen/fonts.gen.dart';
 import '../../../../model/detail_category_model.dart';
 import '../../../../model/transaction_model.dart';
@@ -20,11 +21,9 @@ part 'stats_detail_state.dart';
 
 class StatsDetailBloc extends Bloc<StatsDetailEvent, StatsDetailState> {
   StatsDetailBloc({
-    required BuildContext context,
     required DatabaseRepository dbRepo,
     required DetailCategoryModel detailCategoryModel,
-  })  : _context = context,
-        _type = detailCategoryModel.type,
+  })  : _type = detailCategoryModel.type,
         _categoryOrSource = detailCategoryModel.categoryStr,
         _dbRepo = dbRepo,
         super(
@@ -49,10 +48,10 @@ class StatsDetailBloc extends Bloc<StatsDetailEvent, StatsDetailState> {
     on<DeleteFromEdit>(_deleteFromEdit);
   }
 
-  final BuildContext _context;
   final DatabaseRepository _dbRepo;
   final String _type;
   final String _categoryOrSource;
+  var mainContext = MainApp.navKeyGlobal.currentContext!;
 
   bool get isIncome => _type == 'income';
 
@@ -184,7 +183,7 @@ class StatsDetailBloc extends Bloc<StatsDetailEvent, StatsDetailState> {
         break;
       default:
         DateTime? pickedDate = await showDatePicker(
-          context: _context,
+          context: mainContext,
           initialDate: state.endDate,
           initialDatePickerMode: DatePickerMode.day,
           firstDate: DateTime(1970, 1, 1),
@@ -224,8 +223,9 @@ class StatsDetailBloc extends Bloc<StatsDetailEvent, StatsDetailState> {
       emit(state.copyWith(startDate: newStartDate, endDate: newEndDate));
     } else {
       final pickedDate = await showMonthYearPicker(
-        locale: _context.read<LangCurrencyBloc>().state.selectedLanguage.value,
-        context: _context,
+        locale:
+            mainContext.read<LangCurrencyBloc>().state.selectedLanguage.value,
+        context: mainContext,
         initialDate: state.endDate,
         firstDate: timeNow.subtract(const Duration(days: 10000000)),
         lastDate: timeNow.add(const Duration(days: 10000000)),
@@ -260,7 +260,7 @@ class StatsDetailBloc extends Bloc<StatsDetailEvent, StatsDetailState> {
       emit(state.copyWith(startDate: newStartDate, endDate: newEndDate));
     } else {
       DateTime? pickedDate = await showDialog(
-        context: _context,
+        context: mainContext,
         builder: (BuildContext context) {
           return AlertDialog(
             title: Text(
@@ -349,7 +349,7 @@ class StatsDetailBloc extends Bloc<StatsDetailEvent, StatsDetailState> {
   void _changeDateForPeriod(ChangeDateForPeriod event, emit) {
     emit(state.copyWith(startDate: event.startDate, endDate: event.endDate));
     Logger.Green.log(
-      "ChangeDateForPeriodCategory (${convertEnumToDetailDate(_context, state.dateRangePickerView)})",
+      "ChangeDateForPeriodCategory (${convertEnumToDetailDate(mainContext, state.dateRangePickerView)})",
     );
     Logger.White.log(DateFormat.yMMMd().format(state.startDate));
     Logger.White.log(DateFormat.yMMMd().format(state.endDate));

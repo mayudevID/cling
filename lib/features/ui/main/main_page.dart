@@ -4,67 +4,21 @@ import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
 import 'package:nil/nil.dart';
 import 'package:sizer/sizer.dart';
 import 'package:transitioned_indexed_stack/transitioned_indexed_stack.dart';
-
-import '../../../injection.dart';
-import '../../repository/auth_repository.dart';
-import '../../repository/database_repository.dart';
-import '../../repository/settings_repository.dart';
-import 'home/bloc/home_bloc.dart';
 import 'home/page/home_page.dart';
 import 'main_bloc/main_bloc.dart';
 import 'main_widget/custom_fab.dart';
 import 'main_widget/custom_nav_bar.dart';
-import 'profile/bloc/profile_bloc.dart';
 import 'profile/page/profile_page.dart';
-import 'statistics/bloc/statistics_bloc.dart';
 import 'statistics/page/statistics_page.dart';
-import 'transaction/bloc/transaction_bloc.dart';
 import 'transaction/page/transaction_page.dart';
 
 class MainPage extends StatelessWidget {
   const MainPage({super.key});
 
-  static GlobalKey<NavigatorState> navKeyMain = GlobalKey<NavigatorState>();
-
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(create: (_) => MainBloc()),
-        BlocProvider(
-          create: (_) => ProfileBloc(
-            authRepo: getIt<AuthRepository>(),
-            dbRepo: getIt<DatabaseRepository>(),
-            settingsRepo: getIt<SettingsRepository>(),
-          )
-            ..add(GetProfile())
-            ..add(GetVerifiedStatus()),
-        ),
-        BlocProvider(
-          create: (_) => TransactionBloc(
-            dbRepo: getIt<DatabaseRepository>(),
-          )..add(GetData()),
-        ),
-        BlocProvider(
-          create: (_) => HomeBloc(
-            dbRepo: getIt<DatabaseRepository>(),
-          )
-            ..add(GetIncomeExpenseAmountTotalCurrMonth())
-            ..add(GetGoalsHomeWithCount())
-            ..add(GetTodayExpenses())
-            ..add(GetNotificationCount()),
-        ),
-        BlocProvider(
-          create: (_) => StatisticsBloc(
-            dbRepo: getIt<DatabaseRepository>(),
-          )
-            ..add(GetIncomeExpenseTotalAllMonth())
-            ..add(GetMost())
-            ..add(GetYearlyIncome())
-            ..add(GetIncomeBreakdown())
-            ..add(GetExpenseBreakdownAndPieData()),
-        ),
-      ],
+    return BlocProvider(
+      create: (_) => MainBloc(),
       child: const MainPageContent(),
     );
   }
@@ -77,7 +31,6 @@ class MainPageContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        key: MainPage.navKeyMain,
         resizeToAvoidBottomInset: false,
         backgroundColor: const Color(0xFF101010),
         body: SizedBox(

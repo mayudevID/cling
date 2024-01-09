@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_buildmainContext_synchronously, use_build_context_synchronously
 import 'dart:io';
 
 import 'package:bloc/bloc.dart';
@@ -12,6 +12,7 @@ import '../../../../../core/common_widget.dart';
 import '../../../../core/exception.dart';
 import '../../../../core/logger.dart';
 import '../../../../core/route.dart';
+import '../../../../main.dart';
 import '../../../model/currency.dart';
 import '../../../repository/auth_repository.dart';
 import '../../language_currency/lang_export.dart';
@@ -21,10 +22,8 @@ part 'register_state.dart';
 
 class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   RegisterBloc({
-    required BuildContext context,
     required AuthRepository authRepo,
   })  : _authRepository = authRepo,
-        _context = context,
         super(RegisterState()) {
     on<ToggleEyePass>(_toggleEyePass);
     on<ToggleEyeConfirmPass>(_toggleEyeConfirmPass);
@@ -37,7 +36,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   }
 
   final AuthRepository _authRepository;
-  final BuildContext _context;
+  var mainContext = MainApp.navKeyGlobal.currentContext!;
 
   void _toggleEyePass(
     ToggleEyePass event,
@@ -101,8 +100,8 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     if (!(connectivityResult == ConnectivityResult.mobile ||
         connectivityResult == ConnectivityResult.wifi)) {
       errorSnackbar(
-        _context,
-        AppLocalizations.of(_context)!.noConnection,
+        mainContext,
+        AppLocalizations.of(mainContext)!.noConnection,
       );
       return;
     }
@@ -112,37 +111,37 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
         state.name.trim().isEmpty ||
         state.confirmPassword.trim().isEmpty) {
       errorSnackbar(
-        _context,
-        AppLocalizations.of(_context)!.formEmpty,
+        mainContext,
+        AppLocalizations.of(mainContext)!.formEmpty,
       );
       return;
     }
 
     if (!EmailValidator.validate(state.email)) {
       errorSnackbar(
-        _context,
-        AppLocalizations.of(_context)!.invalidEmailFailure,
+        mainContext,
+        AppLocalizations.of(mainContext)!.invalidEmailFailure,
       );
       return;
     }
 
     if (state.password.trim().length < 8) {
       errorSnackbar(
-        _context,
-        AppLocalizations.of(_context)!.passwordLengthFailure,
+        mainContext,
+        AppLocalizations.of(mainContext)!.passwordLengthFailure,
       );
       return;
     }
 
     if (state.password.trim() != state.confirmPassword.trim()) {
       errorSnackbar(
-        _context,
-        AppLocalizations.of(_context)!.passConfPassFailure,
+        mainContext,
+        AppLocalizations.of(mainContext)!.passConfPassFailure,
       );
       return;
     }
 
-    loadingAuth(_context);
+    loadingAuth(mainContext);
     await _authRepository.logOut();
 
     try {
@@ -153,23 +152,24 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
         currency: state.selectedCurrency.value.countryCode!,
       );
 
-      Navigator.of(_context)
+      Navigator.of(mainContext)
         ..pop()
         ..pushReplacementNamed(RouteName.registerSuccess);
     } on FirebaseAuthException catch (e) {
       Logger.Red.log("FirebaseAuthException: $e");
-      Navigator.pop(_context);
-      errorSnackbar(
-          _context, SignUpWithEmailAndPasswordFailure.fromCode(e.code).message);
+      Navigator.pop(mainContext);
+      errorSnackbar(mainContext,
+          SignUpWithEmailAndPasswordFailure.fromCode(e.code).message);
     } on SocketException catch (e) {
       Logger.Red.log("SocketException: $e");
-      Navigator.pop(_context);
-      errorSnackbar(_context, AppLocalizations.of(_context)!.noConnection);
+      Navigator.pop(mainContext);
+      errorSnackbar(
+          mainContext, AppLocalizations.of(mainContext)!.noConnection);
     } catch (e) {
       Logger.Red.log("FirebaseAuthException: $e");
-      Navigator.pop(_context);
+      Navigator.pop(mainContext);
       errorSnackbar(
-        _context,
+        mainContext,
         const SignUpWithEmailAndPasswordFailure().message,
       );
     }

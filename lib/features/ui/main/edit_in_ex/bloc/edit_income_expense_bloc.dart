@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_buildmainContext_synchronously, use_build_context_synchronously
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +7,7 @@ import 'package:sqflite/sqflite.dart';
 
 import '../../../../../core/common_widget.dart';
 import '../../../../../core/logger.dart';
+import '../../../../../main.dart';
 import '../../../../model/expense_categories_model.dart';
 import '../../../../model/expense_model.dart';
 import '../../../../model/income_model.dart';
@@ -16,7 +17,6 @@ import '../../../../repository/database_repository.dart';
 import '../../../../repository/settings_repository.dart';
 import '../../../language_currency/lang_export.dart';
 import '../../home/bloc/home_bloc.dart';
-import '../../main_page.dart';
 import '../../main_widget/enum_flowtype.dart';
 import '../../stats_detail/bloc/stats_detail_bloc.dart';
 import '../../stats_detail/page/stats_detail_per_categories_page.dart';
@@ -29,13 +29,11 @@ part 'edit_income_expense_state.dart';
 class EditIncomeExpenseBloc
     extends Bloc<EditIncomeExpenseEvent, EditIncomeExpenseState> {
   EditIncomeExpenseBloc({
-    required BuildContext context,
     required DatabaseRepository dbRepo,
     required SettingsRepository settingsRepo,
     required String descOrItem,
     required double amount,
-  })  : _context = context,
-        _dbRepo = dbRepo,
+  })  : _dbRepo = dbRepo,
         super(
           EditIncomeExpenseState(
             descOrItem: descOrItem,
@@ -53,9 +51,8 @@ class EditIncomeExpenseBloc
     on<DeleteData>(_deleteData);
   }
 
-  final BuildContext _context;
   final DatabaseRepository _dbRepo;
-  var mainContext = MainPage.navKeyMain.currentContext!;
+  var mainContext = MainApp.navKeyGlobal.currentContext!;
   var detailStatsContext = StatsDetailPerCategoriesPage.navKey.currentContext;
 
   void _setDate(SetDate event, emit) {
@@ -142,12 +139,12 @@ class EditIncomeExpenseBloc
 
   void _saveData(SaveData event, emit) async {
     if (state.selectedCategories == const MapEntry(0, "")) {
-      errorToast(AppLocalizations.of(_context)!.pleaseSelectCategories);
+      errorToast(AppLocalizations.of(mainContext)!.pleaseSelectCategories);
       return;
     }
 
     if (state.amountInput == 0) {
-      errorToast(AppLocalizations.of(_context)!.pleaseFillAmount);
+      errorToast(AppLocalizations.of(mainContext)!.pleaseFillAmount);
       return;
     }
 
@@ -205,7 +202,7 @@ class EditIncomeExpenseBloc
 
       Navigator.pop(mainContext);
     } on FormatException {
-      errorToast(AppLocalizations.of(_context)!.invalidAmount);
+      errorToast(AppLocalizations.of(mainContext)!.invalidAmount);
     } on DatabaseException catch (e) {
       errorToast(e.toString());
       Logger.Red.log(e.toString());
@@ -213,7 +210,7 @@ class EditIncomeExpenseBloc
   }
 
   void _deleteData(DeleteData event, emit) async {
-    final result = await dialogDelete(_context);
+    final result = await dialogDelete(mainContext);
     if (!result) return;
 
     switch (state.flowType) {
@@ -251,6 +248,6 @@ class EditIncomeExpenseBloc
     }
 
     Logger.Green.log("Updated --> Back");
-    Navigator.pop(_context);
+    Navigator.pop(mainContext);
   }
 }

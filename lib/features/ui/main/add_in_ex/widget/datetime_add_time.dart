@@ -1,4 +1,5 @@
 import 'package:cling/core/utils.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -61,7 +62,9 @@ Widget datetimeAddWidget(BuildContext context) {
                     context: context,
                     initialDate: now,
                     firstDate: now.subtract(const Duration(days: 186)),
-                    lastDate: now,
+                    lastDate: (kDebugMode)
+                        ? now.add(const Duration(days: 100000))
+                        : now,
                   );
                   if (pickDate != null) {
                     // ignore: use_build_context_synchronously

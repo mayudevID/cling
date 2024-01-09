@@ -1,10 +1,9 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_buildmainContext_synchronously, use_build_context_synchronously
 import 'package:cling/core/exception.dart';
 import 'package:cling/core/logger.dart';
 import 'package:cling/features/repository/auth_repository.dart';
 import 'package:cling/features/repository/settings_repository.dart';
 import 'package:cling/features/ui/main/edit_profile/widget/text_field_email_edit_profile.dart';
-import 'package:cling/features/ui/main/main_page.dart';
 import 'package:cling/features/ui/main/profile/bloc/profile_bloc.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:email_validator/email_validator.dart';
@@ -14,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../core/common_widget.dart';
+import '../../../../../main.dart';
 import '../../../language_currency/lang_export.dart';
 import '../widget/dialog_change_email_or_pass.dart';
 import '../widget/text_field_name_edit_profile.dart';
@@ -25,9 +25,7 @@ class EditProfileBloc extends Bloc<EditProfileEvent, EditProfileState> {
   EditProfileBloc({
     required SettingsRepository settingsRepo,
     required AuthRepository authRepo,
-    required BuildContext context,
-  })  : _context = context,
-        _settingsRepo = settingsRepo,
+  })  : _settingsRepo = settingsRepo,
         _authRepo = authRepo,
         super(EditProfileState()) {
     on<ToggleEyeEditProfile>(_toggleEye);
@@ -41,8 +39,7 @@ class EditProfileBloc extends Bloc<EditProfileEvent, EditProfileState> {
 
   final SettingsRepository _settingsRepo;
   final AuthRepository _authRepo;
-  final BuildContext _context;
-  var mainContext = MainPage.navKeyMain.currentContext!;
+  var mainContext = MainApp.navKeyGlobal.currentContext!;
 
   void _initVal(InitialValueEdit event, emit) {
     final userOld = _authRepo.currentUserFirebase;
@@ -82,8 +79,8 @@ class EditProfileBloc extends Bloc<EditProfileEvent, EditProfileState> {
     if (!(connectivityResult == ConnectivityResult.mobile ||
         connectivityResult == ConnectivityResult.wifi)) {
       errorSnackbar(
-        _context,
-        AppLocalizations.of(_context)!.noConnection,
+        mainContext,
+        AppLocalizations.of(mainContext)!.noConnection,
       );
       return;
     }
@@ -92,11 +89,11 @@ class EditProfileBloc extends Bloc<EditProfileEvent, EditProfileState> {
         TextFieldNameEditProfile.textEditingController.text.trim();
 
     if (newName.isEmpty || newName.length <= 4) {
-      errorToast(AppLocalizations.of(_context)!.nameEmpty);
+      errorToast(AppLocalizations.of(mainContext)!.nameEmpty);
       return;
     }
 
-    loadingAuth(_context);
+    loadingAuth(mainContext);
 
     try {
       await _settingsRepo.editProfileName(newName: newName);
@@ -105,7 +102,7 @@ class EditProfileBloc extends Bloc<EditProfileEvent, EditProfileState> {
 
       emit(state.copyWith(initName: newName, isNameSame: true));
 
-      Navigator.pop(_context);
+      Navigator.pop(mainContext);
     } catch (e) {
       Logger.Red.log(e.toString());
     }
@@ -116,8 +113,8 @@ class EditProfileBloc extends Bloc<EditProfileEvent, EditProfileState> {
     if (!(connectivityResult == ConnectivityResult.mobile ||
         connectivityResult == ConnectivityResult.wifi)) {
       errorSnackbar(
-        _context,
-        AppLocalizations.of(_context)!.noConnection,
+        mainContext,
+        AppLocalizations.of(mainContext)!.noConnection,
       );
       return;
     }
@@ -126,22 +123,22 @@ class EditProfileBloc extends Bloc<EditProfileEvent, EditProfileState> {
         TextFieldEmailEditProfile.textEditingController.text.trim();
 
     if (newEmail.isEmpty) {
-      errorToast(AppLocalizations.of(_context)!.emailEmpty);
+      errorToast(AppLocalizations.of(mainContext)!.emailEmpty);
       return;
     }
 
     if (!EmailValidator.validate(newEmail)) {
-      errorToast(AppLocalizations.of(_context)!.invalidEmailFailure);
+      errorToast(AppLocalizations.of(mainContext)!.invalidEmailFailure);
       return;
     }
 
     if (newEmail != state.initEmail) {
-      final result = await dialogChangeEmailOrPassword(_context, "email");
+      final result = await dialogChangeEmailOrPassword(mainContext, "email");
       Logger.Green.log("ChangeE? $result");
       if (!result) return;
     }
 
-    loadingAuth(_context);
+    loadingAuth(mainContext);
 
     try {
       await _settingsRepo.editProfileEmail(newEmail: newEmail);
@@ -152,7 +149,7 @@ class EditProfileBloc extends Bloc<EditProfileEvent, EditProfileState> {
 
       emit(state.copyWith(initEmail: newEmail, isEmailSame: true));
 
-      Navigator.pop(_context);
+      Navigator.pop(mainContext);
     } on FirebaseAuthException catch (e) {
       errorSnackbar(
         mainContext,
@@ -162,7 +159,7 @@ class EditProfileBloc extends Bloc<EditProfileEvent, EditProfileState> {
   }
 
   void _changePassword(ChangePassword event, _) async {
-    final result = await dialogChangeEmailOrPassword(_context, "pass");
+    final result = await dialogChangeEmailOrPassword(mainContext, "pass");
     Logger.Green.log("ChangeP? $result");
     if (!result) return;
 

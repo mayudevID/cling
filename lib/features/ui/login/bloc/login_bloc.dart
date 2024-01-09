@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_buildmainContext_synchronously, use_build_context_synchronously
 import 'dart:io';
 import 'package:cling/core/exception.dart';
 import 'package:cling/core/logger.dart';
@@ -29,11 +29,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     required DatabaseRepository dbRepo,
     required SettingsRepository settingsRepo,
     required AuthRepository authRepo,
-    required BuildContext context,
   })  : _dbRepo = dbRepo,
         _settingsRepo = settingsRepo,
         _authRepo = authRepo,
-        _context = context,
         super(LoginState()) {
     on<ToggleEye>(_toggleEye);
     on<ChangeEmail>(_changeEmail);
@@ -45,7 +43,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final DatabaseRepository _dbRepo;
   final SettingsRepository _settingsRepo;
   final AuthRepository _authRepo;
-  final BuildContext _context;
+  var mainContext = MainApp.navKeyGlobal.currentContext!;
 
   void _toggleEye(ToggleEye event, Emitter<LoginState> emit) {
     emit(state.copyWith(isObscure: !state.isObscure));
@@ -63,35 +61,36 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     final connectivityResult = await (Connectivity().checkConnectivity());
     if (!(connectivityResult == ConnectivityResult.mobile ||
         connectivityResult == ConnectivityResult.wifi)) {
-      errorSnackbar(_context, AppLocalizations.of(_context)!.noConnection);
+      errorSnackbar(
+          mainContext, AppLocalizations.of(mainContext)!.noConnection);
       return;
     }
 
     if (state.email.trim().isEmpty || state.password.trim().isEmpty) {
       errorSnackbar(
-        _context,
-        AppLocalizations.of(_context)!.formEmpty,
+        mainContext,
+        AppLocalizations.of(mainContext)!.formEmpty,
       );
       return;
     }
 
     if (!EmailValidator.validate(state.email)) {
       errorSnackbar(
-        _context,
-        AppLocalizations.of(_context)!.invalidEmailFailure,
+        mainContext,
+        AppLocalizations.of(mainContext)!.invalidEmailFailure,
       );
       return;
     }
 
     if (state.password.trim().length < 8) {
       errorSnackbar(
-        _context,
-        AppLocalizations.of(_context)!.passwordLengthFailure,
+        mainContext,
+        AppLocalizations.of(mainContext)!.passwordLengthFailure,
       );
       return;
     }
 
-    loadingAuth(_context);
+    loadingAuth(mainContext);
     await _authRepo.logOut();
 
     try {
@@ -100,7 +99,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         password: state.password.trim(),
       );
 
-      _context.read<LangCurrencyBloc>().add(
+      mainContext.read<LangCurrencyBloc>().add(
             ChangeCurrency(
               selectedCurrency: _authRepo.currentUserModel!.currency,
             ),
@@ -108,18 +107,18 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
       //* ~~~~ CHECK BACKUP ~~~~
       if (_authRepo.currentUserModel!.lastBackupTime != null) {
-        Navigator.pop(_context);
+        Navigator.pop(mainContext);
         final result = await dialogGetBackup(
-          _context,
+          mainContext,
           _authRepo.currentUserModel!.lastBackupTime!,
         );
-        loadingAuth(_context);
+        loadingAuth(mainContext);
         if (result) await _getBackup();
       }
 
       await Future.delayed(const Duration(milliseconds: 100));
 
-      _context.read<AppBloc>().add(const Redirect());
+      mainContext.read<AppBloc>().add(const Redirect());
 
       if (isVerifiedNotPassed) {
         Future.delayed(
@@ -142,26 +141,28 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     } on EmailNotVerifiedException catch (_) {
       Logger.Red.log("EmailNotVerified");
       await _authRepo.logOut();
-      Navigator.pop(_context);
-      dialogEmailNotVerified(_context);
+      Navigator.pop(mainContext);
+      dialogEmailNotVerified(mainContext);
     } on FirebaseAuthException catch (e) {
       Logger.Red.log("FirebaseAuthException: $e");
       await _authRepo.logOut();
-      Navigator.pop(_context);
+      Navigator.pop(mainContext);
       errorSnackbar(
-        _context,
+        mainContext,
         LogInWithEmailAndPasswordFailure.fromCode(e.code).message,
       );
     } on SocketException catch (e) {
       Logger.Red.log("SocketException: $e");
       await _authRepo.logOut();
-      Navigator.pop(_context);
-      errorSnackbar(_context, AppLocalizations.of(_context)!.noConnection);
+      Navigator.pop(mainContext);
+      errorSnackbar(
+          mainContext, AppLocalizations.of(mainContext)!.noConnection);
     } on Exception catch (e) {
       Logger.Red.log("Exception: $e");
       await _authRepo.logOut();
-      Navigator.pop(_context);
-      errorSnackbar(_context, const LogInWithEmailAndPasswordFailure().message);
+      Navigator.pop(mainContext);
+      errorSnackbar(
+          mainContext, const LogInWithEmailAndPasswordFailure().message);
     }
   }
 
@@ -174,14 +175,15 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       if (!(connectivityResult == ConnectivityResult.mobile ||
           connectivityResult == ConnectivityResult.wifi)) {
         //* No Connection
-        result = await dialogNoInternetGetBackup(_context);
+        result = await dialogNoInternetGetBackup(mainContext);
       } else {
         try {
           await _dbRepo.close();
           await _settingsRepo.getBackup();
           await _dbRepo.open();
         } on Exception catch (_) {
-          errorSnackbar(_context, AppLocalizations.of(_context)!.noConnection);
+          errorSnackbar(
+              mainContext, AppLocalizations.of(mainContext)!.noConnection);
         }
         result = false;
       }

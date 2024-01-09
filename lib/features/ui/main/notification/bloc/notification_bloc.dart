@@ -4,10 +4,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
 import '../../../../../core/logger.dart';
+import '../../../../../main.dart';
 import '../../../../model/notification_model_class.dart';
 import '../../../../repository/database_repository.dart';
 import '../../home/bloc/home_bloc.dart';
-import '../../main_page.dart';
 
 part 'notification_event.dart';
 part 'notification_state.dart';
@@ -27,7 +27,7 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
   int? _idOffset;
   bool _firstAttempt = true;
   bool _loadAgain = true;
-  var mainContext = MainPage.navKeyMain.currentContext!;
+  var mainContext = MainApp.navKeyGlobal.currentContext!;
 
   void _getNotificationList(event, emit) async {
     if (_loadAgain == false) {

@@ -15,7 +15,7 @@ class CalculatorPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => CalcBloc(context: context)..add(InitAmount(amount)),
+      create: (context) => CalcBloc()..add(InitAmount(amount)),
       child: const CalculatorPageContent(),
     );
   }

@@ -19,10 +19,7 @@ class RegisterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => RegisterBloc(
-        context: context,
-        authRepo: getIt<AuthRepository>(),
-      ),
+      create: (_) => RegisterBloc(authRepo: getIt<AuthRepository>()),
       child: const RegisterPageContent(),
     );
   }

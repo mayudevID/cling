@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:month_year_picker/month_year_picker.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
+import '../../../../../main.dart';
 import '../../../../../resources/gen/fonts.gen.dart';
 import '../../../../model/chart_data.dart';
 import '../../../../model/pie_data_expense.dart';
@@ -13,7 +14,6 @@ import '../../../../model/pie_data_expense_savings.dart';
 import '../../../../repository/database_repository.dart';
 import '../../../language_currency/lang_currency_bloc.dart';
 import '../../../language_currency/lang_export.dart';
-import '../../main_page.dart';
 import '../../main_widget/convert_enum_to_detail_date.dart';
 import '../../main_widget/enum_range_date.dart';
 
@@ -49,7 +49,7 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
   }
 
   final DatabaseRepository _dbRepo;
-  var mainContext = MainPage.navKeyMain.currentContext!;
+  var mainContext = MainApp.navKeyGlobal.currentContext!;
 
   int _getDaysInMonth(int year, int month) {
     return DateTime(year, month + 1, 0).day;
@@ -78,15 +78,17 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
     final result = await _dbRepo.getTotalIncomeExpenseAllMonth();
 
     if (result != null) {
-      result.forEach((key, value) {
+      var sortedKeys = result.keys.toList()..sort();
+      final sortedByKey = {for (var key in sortedKeys) key: result[key]};
+      sortedByKey.forEach((key, value) {
         final splitKey = key.split("-");
         key = "${monthDataInExToString(
-          context: MainPage.navKeyMain.currentContext!,
+          context: mainContext,
           time: splitKey[1],
         )} ${splitKey[0]}";
 
         Logger.White.log("Month Year: $key");
-        Logger.White.log("Income ${value['TotalIncome']}");
+        Logger.White.log("Income ${value!['TotalIncome']}");
         Logger.White.log("Expense ${value['TotalExpense']}");
 
         final income = value['TotalIncome'].toDouble();
@@ -211,7 +213,7 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
       result.forEach((key, value) {
         final splitKey = key.split("-");
         key = monthDataInExToString(
-          context: MainPage.navKeyMain.currentContext!,
+          context: mainContext,
           time: splitKey[1],
         );
 

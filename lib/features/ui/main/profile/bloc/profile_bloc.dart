@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
+import '../../../../../main.dart';
 import '../../../../model/currency.dart';
 import '../../../../model/user_model.dart';
 import '../../../../repository/auth_repository.dart';
@@ -17,7 +18,6 @@ import '../../../app_bloc/app_bloc.dart';
 import '../../../language_currency/lang_currency_bloc.dart';
 import '../../../language_currency/lang_export.dart';
 import '../../home/bloc/home_bloc.dart';
-import '../../main_page.dart';
 import '../../settings/widget/dialog_go_backup.dart';
 import '../../statistics/bloc/statistics_bloc.dart';
 
@@ -42,7 +42,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   final AuthRepository _authRepo;
   final DatabaseRepository _dbRepo;
   final SettingsRepository _settingsRepo;
-  var mainContext = MainPage.navKeyMain.currentContext!;
+  var mainContext = MainApp.navKeyGlobal.currentContext!;
 
   void _sendLogout(event, emit) async {
     try {

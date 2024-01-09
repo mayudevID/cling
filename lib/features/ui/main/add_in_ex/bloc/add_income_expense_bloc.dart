@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_buildmainContext_synchronously, use_build_context_synchronously
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +7,7 @@ import 'package:sqflite/sqflite.dart';
 
 import '../../../../../core/common_widget.dart';
 import '../../../../../core/logger.dart';
+import '../../../../../main.dart';
 import '../../../../model/expense_categories_model.dart';
 import '../../../../model/expense_model.dart';
 import '../../../../model/income_model.dart';
@@ -14,7 +15,6 @@ import '../../../../model/income_source_model.dart';
 import '../../../../repository/database_repository.dart';
 import '../../../language_currency/lang_export.dart';
 import '../../home/bloc/home_bloc.dart';
-import '../../main_page.dart';
 import '../../main_widget/enum_flowtype.dart';
 import '../../transaction/bloc/transaction_bloc.dart';
 import '../../main_widget/dialog_add_success.dart';
@@ -28,7 +28,7 @@ class AddIncomeExpenseBloc
   AddIncomeExpenseBloc({
     required BuildContext context,
     required DatabaseRepository dbRepo,
-  })  : _context = context,
+  })  : mainContext = context,
         _dbRepo = dbRepo,
         super(AddIncomeExpenseState()) {
     on<SetDate>(_setDate);
@@ -41,9 +41,8 @@ class AddIncomeExpenseBloc
     on<GetExpenseCategories>(_getExpenseCategories);
   }
 
-  final BuildContext _context;
   final DatabaseRepository _dbRepo;
-  var mainContext = MainPage.navKeyMain.currentContext!;
+  var mainContext = MainApp.navKeyGlobal.currentContext!;
 
   void _setDate(SetDate event, emit) {
     DateTime oldDateTime = state.selectedDate;
@@ -109,12 +108,12 @@ class AddIncomeExpenseBloc
 
   void _saveData(SaveData event, emit) async {
     if (state.selectedCategories == const MapEntry(0, "")) {
-      errorToast(AppLocalizations.of(_context)!.pleaseSelectCategories);
+      errorToast(AppLocalizations.of(mainContext)!.pleaseSelectCategories);
       return;
     }
 
     if (state.amountInput == 0) {
-      errorToast(AppLocalizations.of(_context)!.pleaseFillAmount);
+      errorToast(AppLocalizations.of(mainContext)!.pleaseFillAmount);
       return;
     }
 
@@ -166,9 +165,9 @@ class AddIncomeExpenseBloc
         mainContext.read<TransactionBloc>().add(GetData());
       }
 
-      dialogAddSuccess(_context, event.flowType);
+      dialogAddSuccess(mainContext, event.flowType);
     } on FormatException {
-      errorToast(AppLocalizations.of(_context)!.invalidAmount);
+      errorToast(AppLocalizations.of(mainContext)!.invalidAmount);
     } on DatabaseException catch (e) {
       errorToast(e.toString());
       Logger.Red.log(e.toString());

@@ -28,7 +28,6 @@ class EditMonBudgetOrIncomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => EditMonthlyBloc(
-        context: context,
         monthlyMode: monthlyMode,
         settingsRepo: getIt<SettingsRepository>(),
         authRepo: getIt<AuthRepository>(),

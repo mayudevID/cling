@@ -7,23 +7,21 @@ import 'package:intl/intl.dart';
 import 'package:math_expressions/math_expressions.dart';
 
 import '../../../../core/logger.dart';
+import '../../../../main.dart';
 import '../../language_currency/lang_export.dart';
 
 part 'calc_event.dart';
 part 'calc_state.dart';
 
 class CalcBloc extends Bloc<CalcEvent, CalcState> {
-  CalcBloc({
-    required BuildContext context,
-  })  : _context = context,
-        super(CalcState()) {
+  CalcBloc() : super(CalcState()) {
     on<InitAmount>(_initAmount);
     on<AddExpression>(_addExpression);
   }
 
   final operate = [" / ", " * ", " + ", " - "];
   final operateError = ["Error", ""];
-  final BuildContext _context;
+  var mainContext = MainApp.navKeyGlobal.currentContext!;
 
   void _initAmount(InitAmount event, emit) {
     if (event.amount != null && event.amount != 0) {
@@ -54,7 +52,7 @@ class CalcBloc extends Bloc<CalcEvent, CalcState> {
       _clearCalc(event, emit);
     } else if (VAL == 'Del') {
       _deleteCalc(event, emit);
-    } else if (VAL == AppLocalizations.of(_context)!.save) {
+    } else if (VAL == AppLocalizations.of(mainContext)!.save) {
       _saveValue(event, emit);
     } else {
       _addValue(event, emit);
@@ -149,7 +147,7 @@ class CalcBloc extends Bloc<CalcEvent, CalcState> {
   void _saveValue(event, emit) async {
     if (state.listInput.length == 1 &&
         !operateError.contains(state.listInput.first)) {
-      Navigator.pop(_context, [
+      Navigator.pop(mainContext, [
         true,
         double.parse(state.listInput.first.replaceAll(",", "")),
       ]);
@@ -157,7 +155,7 @@ class CalcBloc extends Bloc<CalcEvent, CalcState> {
       _countResult(event, emit);
       await Future.delayed(const Duration(milliseconds: 200));
       if (!operateError.contains(state.listInput.first)) {
-        Navigator.pop(_context, [
+        Navigator.pop(mainContext, [
           true,
           double.parse(state.listInput.first.replaceAll(",", "")),
         ]);

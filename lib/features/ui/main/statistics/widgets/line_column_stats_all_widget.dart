@@ -36,6 +36,8 @@ Widget lineColumnStatsAllWidget(BuildContext mainContext) {
         );
       }
 
+      double monthNow = DateTime.now().month.toDouble();
+
       return SizedBox(
         height: 193.hmea,
         child: SfCartesianChart(
@@ -47,10 +49,14 @@ Widget lineColumnStatsAllWidget(BuildContext mainContext) {
               fontWeight: FontWeight.w700,
             ),
           ),
+          zoomPanBehavior: ZoomPanBehavior(
+            enablePanning: true,
+          ),
           plotAreaBorderWidth: 0,
           plotAreaBorderColor: Colors.transparent,
           primaryXAxis: CategoryAxis(
-            maximum: 4,
+            initialVisibleMinimum: monthNow - 2,
+            initialVisibleMaximum: monthNow + 2,
             labelStyle: TextStyle(
               color: Colors.white,
               fontSize: 8.sp,
@@ -99,9 +105,7 @@ Widget lineColumnStatsAllWidget(BuildContext mainContext) {
               xValueMapper: (ChartData data, _) => data.x,
               yValueMapper: (ChartData data, _) => data.y,
               // Sets the corner radius
-              borderRadius: const BorderRadius.all(
-                Radius.circular(8),
-              ),
+              borderRadius: const BorderRadius.all(Radius.circular(5)),
               width: 1,
               spacing: 0.4,
             ),
@@ -112,9 +116,7 @@ Widget lineColumnStatsAllWidget(BuildContext mainContext) {
               xValueMapper: (ChartData data, _) => data.x,
               yValueMapper: (ChartData data, _) => data.y,
               // Sets the corner radius
-              borderRadius: const BorderRadius.all(
-                Radius.circular(8),
-              ),
+              borderRadius: const BorderRadius.all(Radius.circular(5)),
               width: 1,
               spacing: 0.4,
             ),
@@ -124,7 +126,7 @@ Widget lineColumnStatsAllWidget(BuildContext mainContext) {
               dataSource: state.chartDataSavingsList,
               xValueMapper: (ChartData data, _) => data.x,
               yValueMapper: (ChartData data, _) => data.y,
-              borderRadius: const BorderRadius.all(Radius.circular(8)),
+              borderRadius: const BorderRadius.all(Radius.circular(5)),
               width: 1,
               spacing: 0.4,
             )

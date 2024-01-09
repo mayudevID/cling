@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_buildmainContext_synchronously, use_build_context_synchronously
 
 import 'dart:io';
 import 'package:cling/core/utils.dart';
@@ -14,7 +14,6 @@ import '../../../../core/common_widget.dart';
 import '../../../repository/auth_repository.dart';
 import '../../../repository/settings_repository.dart';
 import '../../language_currency/lang_export.dart';
-import '../../main/main_page.dart';
 import '../../main/profile/bloc/profile_bloc.dart';
 import '../widget/text_field_monthly_data.dart';
 
@@ -23,11 +22,9 @@ part 'monthly_data_state.dart';
 
 class MonthlyDataBloc extends Bloc<MonthlyDataEvent, MonthlyDataState> {
   MonthlyDataBloc({
-    required BuildContext context,
     required SettingsRepository settingsRepo,
     required AuthRepository authRepo,
   })  : _settingsRepo = settingsRepo,
-        _context = context,
         _authRepo = authRepo,
         super(MonthlyDataState()) {
     on<SetIncome>(_setIncome);
@@ -38,9 +35,8 @@ class MonthlyDataBloc extends Bloc<MonthlyDataEvent, MonthlyDataState> {
   }
 
   final SettingsRepository _settingsRepo;
-  final BuildContext _context;
   final AuthRepository _authRepo;
-  var mainContext = MainPage.navKeyMain.currentContext!;
+  var mainContext = MainApp.navKeyGlobal.currentContext!;
 
   void _recDay(RecDay event, emit) {
     emit(state.copyWith(dateRec: event.dateRec));
@@ -51,8 +47,8 @@ class MonthlyDataBloc extends Bloc<MonthlyDataEvent, MonthlyDataState> {
     final amount = data.removeDot;
     if (amount == "0" || amount.trim().isEmpty) {
       errorSnackbar(
-        _context,
-        AppLocalizations.of(_context)!.incomeMustAbove0,
+        mainContext,
+        AppLocalizations.of(mainContext)!.incomeMustAbove0,
       );
     } else {
       try {
@@ -65,8 +61,8 @@ class MonthlyDataBloc extends Bloc<MonthlyDataEvent, MonthlyDataState> {
         add(SetState(VerifOnboardPos.budget));
       } on FormatException {
         errorSnackbar(
-          _context,
-          AppLocalizations.of(_context)!.invalidAmount,
+          mainContext,
+          AppLocalizations.of(mainContext)!.invalidAmount,
         );
       }
     }
@@ -77,8 +73,8 @@ class MonthlyDataBloc extends Bloc<MonthlyDataEvent, MonthlyDataState> {
     final amount = data.removeDot;
     if (amount == "0" || amount.trim().isEmpty) {
       errorSnackbar(
-        _context,
-        AppLocalizations.of(_context)!.budgetMustAbove0,
+        mainContext,
+        AppLocalizations.of(mainContext)!.budgetMustAbove0,
       );
     } else {
       try {
@@ -93,8 +89,8 @@ class MonthlyDataBloc extends Bloc<MonthlyDataEvent, MonthlyDataState> {
         add(SetFinish());
       } on FormatException {
         errorSnackbar(
-          _context,
-          AppLocalizations.of(_context)!.invalidAmount,
+          mainContext,
+          AppLocalizations.of(mainContext)!.invalidAmount,
         );
       }
     }
@@ -130,13 +126,13 @@ class MonthlyDataBloc extends Bloc<MonthlyDataEvent, MonthlyDataState> {
     if (!(connectivityResult == ConnectivityResult.mobile ||
         connectivityResult == ConnectivityResult.wifi)) {
       errorSnackbar(
-        _context,
-        AppLocalizations.of(_context)!.noConnection,
+        mainContext,
+        AppLocalizations.of(mainContext)!.noConnection,
       );
       return;
     }
 
-    loadingAuth(_context);
+    loadingAuth(mainContext);
     try {
       final monIncome = double.parse(state.monIncome.removeDot);
       final monBudget = double.parse(state.monBudget.removeDot);
@@ -159,10 +155,10 @@ class MonthlyDataBloc extends Bloc<MonthlyDataEvent, MonthlyDataState> {
     } on SocketException catch (e) {
       Logger.Red.log(e.message);
 
-      Navigator.pop(_context);
+      Navigator.pop(mainContext);
       errorSnackbar(
-        _context,
-        AppLocalizations.of(_context)!.noConnection,
+        mainContext,
+        AppLocalizations.of(mainContext)!.noConnection,
       );
     }
   }

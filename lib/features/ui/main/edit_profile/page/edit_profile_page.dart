@@ -20,7 +20,6 @@ class EditProfilePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => EditProfileBloc(
-        context: context,
         settingsRepo: getIt<SettingsRepository>(),
         authRepo: getIt<AuthRepository>(),
       ),

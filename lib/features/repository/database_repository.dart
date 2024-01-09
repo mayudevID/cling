@@ -124,17 +124,8 @@ class DatabaseRepository {
       getTotalIncomeExpenseAllMonth() async {
     final now = DateTime.now();
 
-    final monthNowFormatted = DateTime(
-      now.year,
-      now.month,
-      DateTime(now.year, now.month + 1, 0).day,
-    ).toIso8601String();
-
-    final fourMonthsAgoFormatted = DateTime(
-      now.year,
-      1,
-      1,
-    ).toIso8601String();
+    final monthNowFormatted = DateTime(now.year, 12, 31).toIso8601String();
+    final fourMonthsAgoFormatted = DateTime(now.year, 1, 1).toIso8601String();
 
     final result = await Future.wait([
       db.rawQuery(
@@ -144,7 +135,8 @@ class DatabaseRepository {
         FROM ${IncomeMeta.nameTable}
         WHERE date(${IncomeMeta.date}) >= date(?)
         AND date(${IncomeMeta.date}) <= date(?)
-        GROUP BY Month
+        GROUP BY Month 
+        ORDER BY Month
       ''',
         [fourMonthsAgoFormatted, monthNowFormatted],
       ),
@@ -155,7 +147,8 @@ class DatabaseRepository {
         FROM ${ExpenseMeta.nameTable}
         WHERE date(${ExpenseMeta.date}) >= date(?)
         AND date(${ExpenseMeta.date}) <= date(?)
-        GROUP BY Month
+        GROUP BY Month 
+        ORDER BY Month
       ''',
         [fourMonthsAgoFormatted, monthNowFormatted],
       ),

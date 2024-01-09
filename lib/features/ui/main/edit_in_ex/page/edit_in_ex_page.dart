@@ -36,7 +36,6 @@ class EditIncomeExpensePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => EditIncomeExpenseBloc(
-        context: context,
         dbRepo: getIt<DatabaseRepository>(),
         settingsRepo: getIt<SettingsRepository>(),
         descOrItem: (flowType == FlowType.income)

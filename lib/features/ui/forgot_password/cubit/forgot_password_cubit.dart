@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_buildmainContext_synchronously
 
 import 'package:bloc/bloc.dart';
 import 'package:cling/core/common_widget.dart';
@@ -10,42 +10,42 @@ import 'package:email_validator/email_validator.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 
+import '../../../../main.dart';
+
 part 'forgot_password_state.dart';
 
 class ForgotPasswordCubit extends Cubit<ForgotPasswordState> {
   ForgotPasswordCubit({
-    required BuildContext context,
     required AuthRepository authRepo,
   })  : _authRepo = authRepo,
-        _context = context,
         super(ForgotPasswordState());
 
-  final BuildContext _context;
   final AuthRepository _authRepo;
+  var mainContext = MainApp.navKeyGlobal.currentContext!;
 
   void changeEmail(String email) {
     emit(state.copyWith(emailTarget: email));
   }
 
   void sendResetPassword() async {
-    loadingAuth(_context);
+    loadingAuth(mainContext);
 
     if (!EmailValidator.validate(state.emailTarget)) {
       errorSnackbar(
-        _context,
-        AppLocalizations.of(_context)!.invalidEmailFailure,
+        mainContext,
+        AppLocalizations.of(mainContext)!.invalidEmailFailure,
       );
       return;
     }
 
     try {
       await _authRepo.sendResetPassword(state.emailTarget);
-      Navigator.of(_context)
+      Navigator.of(mainContext)
         ..pop()
         ..pushReplacementNamed(RouteName.checkEmail);
     } on Exception catch (e) {
       Logger.Red.log(e);
-      Navigator.pop(_context);
+      Navigator.pop(mainContext);
     }
   }
 }

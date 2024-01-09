@@ -20,10 +20,7 @@ class AddGoalPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => AddGoalBloc(
-        context: context,
-        dbRepo: getIt<DatabaseRepository>(),
-      ),
+      create: (_) => AddGoalBloc(dbRepo: getIt<DatabaseRepository>()),
       child: AddGoalPageContent(),
     );
   }

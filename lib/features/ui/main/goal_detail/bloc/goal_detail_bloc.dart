@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../core/common_widget.dart';
+import '../../../../../main.dart';
 import '../../../../model/goal_model.dart';
 import '../../../../model/goal_saving_model.dart';
 import '../../../../repository/database_repository.dart';
@@ -12,7 +13,6 @@ import '../../../language_currency/lang_export.dart';
 import '../../goal_list/bloc/goal_list_bloc.dart';
 import '../../goal_list/page/goal_list_page.dart';
 import '../../home/bloc/home_bloc.dart';
-import '../../main_page.dart';
 import '../widgets/edit_goal/text_field_name_edit_goal.dart';
 
 part 'goal_detail_event.dart';
@@ -37,7 +37,7 @@ class GoalDetailBloc extends Bloc<GoalDetailEvent, GoalDetailState> {
 
   final DatabaseRepository _dbRepo;
 
-  var mainContext = MainPage.navKeyMain.currentContext!;
+  var mainContext = MainApp.navKeyGlobal.currentContext!;
   var goalListContext = GoalListPage.keyState.currentContext;
 
   void _initGoal(InitGoal event, emit) async {

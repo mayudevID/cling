@@ -6,12 +6,12 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../../main.dart';
 import '../../../../model/expense_model.dart';
 import '../../../../model/goal_model.dart';
 import '../../../../model/notification_model_class.dart';
 import '../../../../repository/database_repository.dart';
 import '../../../language_currency/lang_export.dart';
-import '../../main_page.dart';
 import '../../profile/bloc/profile_bloc.dart';
 
 part 'home_event.dart';
@@ -30,7 +30,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   }
 
   final DatabaseRepository _dbRepo;
-  var mainContext = MainPage.navKeyMain.currentContext!;
+  var mainContext = MainApp.navKeyGlobal.currentContext!;
 
   void _getTotalIncomeExpenseCurrMonth(_, emit) async {
     final result = await Future.wait([
