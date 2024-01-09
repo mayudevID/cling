@@ -8,7 +8,6 @@ import 'package:sizer/sizer.dart';
 import '../../../../../resources/gen/assets.gen.dart';
 import '../../../../../resources/gen/fonts.gen.dart';
 import '../../../../repository/database_repository.dart';
-import '../../../../repository/settings_repository.dart';
 import '../../../language_currency/lang_currency_bloc.dart';
 import '../../../language_currency/lang_export.dart';
 import '../bloc/goal_detail_bloc.dart';
@@ -29,7 +28,7 @@ class GoalDetailPage extends StatelessWidget {
     return BlocProvider(
       create: (_) => GoalDetailBloc(
         dbRepo: getIt<DatabaseRepository>(),
-        settingsRepo: getIt<SettingsRepository>(),
+        //settingsRepo: getIt<SettingsRepository>(),
       )..add(InitGoal(goalModelId)),
       child: const GoalDetailPageContent(),
     );

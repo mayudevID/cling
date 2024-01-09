@@ -57,14 +57,14 @@ class SettingsRepository {
 
   Future<void> saveMonthlyBudgetAndIncome({
     required UserModel userModel,
-    int? monthlyIncome,
-    int? monthlyBudget,
+    double? monthlyIncome,
+    double? monthlyBudget,
     int? recurringDay,
   }) async {
     final userData = userModel;
 
-    int monIncomeNew = monthlyIncome ?? userData.monthlyIncome.toInt();
-    int monBudgetNew = monthlyBudget ?? userData.monthlyBudget.toInt();
+    double monIncomeNew = monthlyIncome ?? userData.monthlyIncome;
+    double monBudgetNew = monthlyBudget ?? userData.monthlyBudget;
     int recurringNew = recurringDay ?? userData.recurringDay;
 
     final now = DateTime.now();
@@ -80,8 +80,8 @@ class SettingsRepository {
     });
 
     final newUserData = userData.copyWith(
-      monthlyBudget: monBudgetNew.toDouble(),
-      monthlyIncome: monIncomeNew.toDouble(),
+      monthlyBudget: monBudgetNew,
+      monthlyIncome: monIncomeNew,
       recurringDay: recurringNew,
       updatedAt: now,
     );

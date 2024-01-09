@@ -1,12 +1,11 @@
 import 'package:cling/core/utils.dart';
 import 'package:cling/features/model/income_model.dart';
-import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
-import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../../core/common_widget.dart';
+import '../../../../../core/route.dart';
 import '../../../../../injection.dart';
 import '../../../../../resources/gen/assets.gen.dart';
 import '../../../../../resources/gen/fonts.gen.dart';
@@ -22,6 +21,7 @@ import '../../home/widgets/categories_row.dart';
 import '../../main_widget/enum_flowtype.dart';
 import '../bloc/edit_income_expense_bloc.dart';
 import '../widget/datetime_edit_time.dart';
+import '../widget/dropdown_edit_categories.dart';
 
 class EditIncomeExpensePage extends StatelessWidget {
   const EditIncomeExpensePage({
@@ -145,91 +145,7 @@ class EditIncomeExpensePageContent extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 8.hmea),
-              BlocBuilder<EditIncomeExpenseBloc, EditIncomeExpenseState>(
-                buildWhen: (prev, curr) {
-                  switch (flowType) {
-                    case FlowType.income:
-                      return (prev.listInSource != curr.listInSource ||
-                          prev.selectedCategories != curr.selectedCategories);
-                    case FlowType.expense:
-                      return (prev.listExCategories != curr.listExCategories ||
-                          prev.selectedCategories != curr.selectedCategories);
-                  }
-                },
-                builder: (context, state) {
-                  return DropdownButtonHideUnderline(
-                    child: DropdownButton2(
-                      customButton: Container(
-                        decoration: ShapeDecoration(
-                          color: const Color(0xFF313131),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        ),
-                        padding: EdgeInsets.symmetric(
-                          vertical: 16.hmea,
-                          horizontal: 16.wmea,
-                        ),
-                        child: Row(
-                          children: [
-                            if (state.selectedCategories ==
-                                const MapEntry(0, "")) ...[
-                              Text(
-                                AppLocalizations.of(context)!.selectCategories,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 10.5.sp,
-                                  fontFamily: FontFamily.cabinetGrotesk,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ] else
-                              ...rowCategories(
-                                state.selectedCategories.value,
-                              ),
-                            const Spacer(),
-                            Assets
-                                .lib.resources.images.fluentChevronDown24Filled
-                                .svg(),
-                          ],
-                        ),
-                      ),
-                      items: (flowType == FlowType.income)
-                          ? menuItemIncome(state.listInSource)
-                          : menuItemExpense(state.listExCategories),
-                      onChanged: (value) {
-                        dynamic newVal;
-                        switch (flowType) {
-                          case FlowType.income:
-                            newVal = value as IncomeSourceModel;
-                            context
-                                .read<EditIncomeExpenseBloc>()
-                                .add(SetCategories(
-                                  MapEntry(newVal.id, newVal.incomeSource),
-                                ));
-                            break;
-                          case FlowType.expense:
-                            newVal = value as ExpenseCategoriesModel;
-                            context
-                                .read<EditIncomeExpenseBloc>()
-                                .add(SetCategories(
-                                  MapEntry(newVal.id, newVal.expenseCategories),
-                                ));
-                            break;
-                        }
-                      },
-                      dropdownStyleData: DropdownStyleData(
-                        width: 390.wmea,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: const Color(0xFF313131),
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              ),
+              dropDownEditCategories(flowType: flowType),
               SizedBox(height: 8.hmea),
               Text(
                 (flowType == FlowType.income)
@@ -300,85 +216,75 @@ class EditIncomeExpensePageContent extends StatelessWidget {
                 },
               ),
               SizedBox(height: 8.hmea),
-              Container(
-                decoration: ShapeDecoration(
-                  color: const Color(0xFF313131),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-                padding: EdgeInsets.symmetric(
-                  vertical: 16.hmea,
-                  horizontal: 16.wmea,
-                ),
-                child: Row(
-                  children: [
-                    BlocBuilder<LangCurrencyBloc, LangCurrencyState>(
-                      buildWhen: (p, c) {
-                        return p.selectedCurrency.name !=
-                            c.selectedCurrency.name;
-                      },
-                      builder: (context, state) {
-                        return Text(
-                          state.selectedCurrency.name,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 10.sp,
-                            fontFamily: FontFamily.cabinetGrotesk,
-                            fontWeight: FontWeight.w800,
-                          ),
-                        );
-                      },
+              GestureDetector(
+                onTap: () async {
+                  final amountRes = await Navigator.pushNamed(
+                    context,
+                    RouteName.calc,
+                    arguments:
+                        context.read<EditIncomeExpenseBloc>().state.amountInput,
+                  );
+
+                  if ((amountRes! as List)[0] == true) {
+                    // ignore: use_build_context_synchronously
+                    context
+                        .read<EditIncomeExpenseBloc>()
+                        .add(SetAmountInput((amountRes as List)[1]));
+                  }
+                },
+                child: Container(
+                  decoration: ShapeDecoration(
+                    color: const Color(0xFF313131),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
                     ),
-                    SizedBox(width: 10.wmea),
-                    Expanded(
-                      child: BlocBuilder<LangCurrencyBloc, LangCurrencyState>(
+                  ),
+                  padding: EdgeInsets.symmetric(
+                    vertical: 16.hmea,
+                    horizontal: 16.wmea,
+                  ),
+                  child: Row(
+                    children: [
+                      BlocBuilder<LangCurrencyBloc, LangCurrencyState>(
                         buildWhen: (p, c) {
                           return p.selectedCurrency.name !=
                               c.selectedCurrency.name;
                         },
                         builder: (context, state) {
-                          return TextFormField(
-                            initialValue: context
-                                .read<EditIncomeExpenseBloc>()
-                                .state
-                                .amountInput,
-                            inputFormatters: [
-                              CurrencyTextInputFormatter(
-                                locale: state.selectedCurrency.value
-                                    .toLanguageTag(),
-                                symbol: "",
-                                decimalDigits: 2,
-                              ),
-                            ],
-                            enableInteractiveSelection: false,
-                            keyboardType: TextInputType.number,
-                            onChanged: (value) {
-                              context
-                                  .read<EditIncomeExpenseBloc>()
-                                  .add(SetAmountInput(value));
-                            },
-                            cursorColor: Colors.white,
+                          return Text(
+                            state.selectedCurrency.name,
                             style: TextStyle(
                               color: Colors.white,
-                              fontSize: 10.5.sp,
+                              fontSize: 10.sp,
                               fontFamily: FontFamily.cabinetGrotesk,
-                              fontWeight: FontWeight.w500,
-                            ),
-                            decoration: InputDecoration.collapsed(
-                              hintText: '0',
-                              hintStyle: TextStyle(
-                                color: Colors.grey,
-                                fontSize: 10.5.sp,
-                                fontFamily: FontFamily.cabinetGrotesk,
-                                fontWeight: FontWeight.w500,
-                              ),
+                              fontWeight: FontWeight.w800,
                             ),
                           );
                         },
                       ),
-                    ),
-                  ],
+                      SizedBox(width: 10.wmea),
+                      Expanded(
+                        child: BlocBuilder<EditIncomeExpenseBloc,
+                            EditIncomeExpenseState>(
+                          buildWhen: (p, c) {
+                            return p.amountInput != c.amountInput;
+                          },
+                          builder: (context, state) {
+                            return NominalMoneyFormatter(
+                              textStyle: TextStyle(
+                                color: Colors.white,
+                                fontSize: 10.sp,
+                                fontFamily: FontFamily.cabinetGrotesk,
+                                fontWeight: FontWeight.w500,
+                              ),
+                              amount: state.amountInput,
+                              isWithName: false,
+                            );
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
               SizedBox(

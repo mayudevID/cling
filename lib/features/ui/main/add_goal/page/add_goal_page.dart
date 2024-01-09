@@ -125,7 +125,7 @@ class AddGoalPageContent extends StatelessWidget {
                   final amountRes = await Navigator.pushNamed(
                     context,
                     RouteName.calc,
-                    arguments: null,
+                    arguments: context.read<AddGoalBloc>().state.amountInput,
                   );
 
                   if ((amountRes! as List)[0] == true) {

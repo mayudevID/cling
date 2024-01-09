@@ -40,6 +40,7 @@ dependencies:
   money_formatter: ^0.0.4
   month_year_picker: ^0.3.0+1
   nil: ^1.1.1
+  numberpicker: ^2.1.2
   onesignal_flutter: ^5.0.4
   open_mail_app: ^0.4.5
   pull_to_refresh_flutter3: ^2.0.2

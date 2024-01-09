@@ -7,6 +7,11 @@ sealed class CalcEvent extends Equatable {
   List<Object> get props => [];
 }
 
+class InitAmount extends CalcEvent {
+  final double? amount;
+  const InitAmount(this.amount);
+}
+
 class AddExpression extends CalcEvent {
   final String value;
   const AddExpression(this.value);

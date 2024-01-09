@@ -5,7 +5,8 @@ class GoalDetailState extends Equatable {
   GoalModel goalModel;
   List<GoalSavingModel> dataSavingsList;
   DateTime selectedDate;
-  String amount;
+  double amount;
+  double tempAmount;
   String tempLogoGoal;
 
   GoalDetailState({
@@ -13,7 +14,8 @@ class GoalDetailState extends Equatable {
     List<GoalSavingModel>? dataSavingsList,
     DateTime? selectedDate,
     this.tempLogoGoal = "",
-    this.amount = "0",
+    this.tempAmount = 0,
+    this.amount = 0,
   })  : goalModel = goalModel ?? GoalModel.empty(),
         dataSavingsList = dataSavingsList ?? List.empty(),
         selectedDate = selectedDate ?? DateTime.now();
@@ -25,14 +27,16 @@ class GoalDetailState extends Equatable {
         selectedDate,
         amount,
         tempLogoGoal,
+        tempAmount,
       ];
 
   GoalDetailState copyWith({
     GoalModel? goalModel,
     List<GoalSavingModel>? dataSavingsList,
     DateTime? selectedDate,
-    String? amount,
+    double? amount,
     String? tempLogoGoal,
+    double? tempAmount,
   }) {
     return GoalDetailState(
       goalModel: goalModel ?? this.goalModel,

@@ -38,12 +38,12 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       _dbRepo.getTotalBalance(),
     ]);
     final amount = result[0] as Map<String, double?>;
-    final totalBalance = result[1] as int;
+    final totalBalance = result[1] as double;
 
     emit(
       state.copyWith(
-        amountIncomeThisMonth: amount['income'] ?? 0,
-        amountExpenseThisMonth: amount['expense'] ?? 0,
+        amountIncomeThisMonth: amount['income'] ?? 0.0,
+        amountExpenseThisMonth: amount['expense'] ?? 0.0,
         totalBalance: totalBalance.toDouble(),
       ),
     );

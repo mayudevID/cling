@@ -223,15 +223,19 @@ class NominalMoneyFormatter extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var data = context.watch<LangCurrencyBloc>().state.selectedCurrency;
-    return Text(
-      NumberFormat.currency(
-        locale: data.value.toLanguageTag(),
-        decimalDigits: (amount % 1 == 0) ? 0 : 2,
-        name: (isWithName) ? "${data.name} " : "",
-      ).format(amount),
-      style: textStyle,
-      textAlign: textAlign,
-    );
+    String formattedAmount = NumberFormat.currency(
+      locale: data.value.toLanguageTag(),
+      decimalDigits: (amount % 1 == 0) ? 0 : 2,
+      name: (isWithName) ? "${data.name} " : "",
+    ).format(amount);
+    if ((amount % 1 != 0) &&
+        (formattedAmount[formattedAmount.length - 1] == "0")) {
+      formattedAmount = formattedAmount.substring(
+        0,
+        formattedAmount.length - 1,
+      );
+    }
+    return Text(formattedAmount, style: textStyle, textAlign: textAlign);
   }
 }
 

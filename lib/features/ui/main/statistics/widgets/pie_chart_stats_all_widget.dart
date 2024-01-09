@@ -86,7 +86,7 @@ Widget pieChartStatsAllWidget() {
                         color: Colors.black,
                         fontFamily: FontFamily.cabinetGrotesk,
                       ),
-                      amount: newData.amount * 100,
+                      amount: newData.amount,
                       isWithName: true,
                     ),
                   ],

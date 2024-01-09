@@ -1,8 +1,5 @@
 import 'package:cling/core/utils.dart';
-import 'package:cling/features/ui/language_currency/lang_export.dart';
-import 'package:cling/features/ui/main/goal_detail/bloc/goal_detail_bloc.dart';
-import 'package:cling/resources/gen/fonts.gen.dart';
-import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -10,8 +7,12 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:sizer/sizer.dart';
 import 'dart:math' as math;
 import '../../../../../core/common_widget.dart';
+import '../../../../../core/route.dart';
 import '../../../../../resources/gen/assets.gen.dart';
+import '../../../../../resources/gen/fonts.gen.dart';
 import '../../../language_currency/lang_currency_bloc.dart';
+import '../../../language_currency/lang_export.dart';
+import '../bloc/goal_detail_bloc.dart';
 
 void addGoalSavingBottomSheet(BuildContext mainContext) {
   showMaterialModalBottomSheet(
@@ -151,83 +152,73 @@ void addGoalSavingBottomSheet(BuildContext mainContext) {
                   ),
                 ),
                 SizedBox(height: 8.hmea),
-                Container(
-                  decoration: ShapeDecoration(
-                    color: const Color.fromARGB(255, 224, 224, 224),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
+                GestureDetector(
+                  onTap: () async {
+                    final amountRes = await Navigator.pushNamed(
+                      context,
+                      RouteName.calc,
+                      arguments:
+                          mainContext.read<GoalDetailBloc>().state.amount,
+                    );
+
+                    if ((amountRes! as List)[0] == true) {
+                      // ignore: use_build_context_synchronously
+                      mainContext
+                          .read<GoalDetailBloc>()
+                          .add(SetAmountInput((amountRes as List)[1]));
+                    }
+                  },
+                  child: Container(
+                    decoration: ShapeDecoration(
+                      color: const Color.fromARGB(255, 224, 224, 224),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
                     ),
-                  ),
-                  padding: EdgeInsets.symmetric(
-                    vertical: 16.hmea,
-                    horizontal: 16.wmea,
-                  ),
-                  child: Row(
-                    children: [
-                      BlocBuilder<LangCurrencyBloc, LangCurrencyState>(
-                        buildWhen: (p, c) {
-                          return p.selectedCurrency.name !=
-                              c.selectedCurrency.name;
-                        },
-                        builder: (context, state) {
-                          return Text(
-                            state.selectedCurrency.name,
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 10.sp,
-                              fontFamily: FontFamily.cabinetGrotesk,
-                              fontWeight: FontWeight.w800,
-                            ),
-                          );
-                        },
-                      ),
-                      SizedBox(
-                        width: 10.wmea,
-                      ),
-                      Expanded(
-                        child: BlocBuilder<LangCurrencyBloc, LangCurrencyState>(
+                    padding: EdgeInsets.symmetric(
+                      vertical: 16.hmea,
+                      horizontal: 16.wmea,
+                    ),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        BlocBuilder<LangCurrencyBloc, LangCurrencyState>(
                           buildWhen: (p, c) {
                             return p.selectedCurrency.name !=
                                 c.selectedCurrency.name;
                           },
                           builder: (context, state) {
-                            return TextFormField(
-                              inputFormatters: [
-                                CurrencyTextInputFormatter(
-                                  locale: state.selectedCurrency.value
-                                      .toLanguageTag(),
-                                  symbol: "",
-                                  decimalDigits: 2,
-                                ),
-                              ],
-                              enableInteractiveSelection: false,
-                              keyboardType: TextInputType.number,
-                              onChanged: (value) {
-                                context
-                                    .read<GoalDetailBloc>()
-                                    .add(SetAmountInput(value));
-                              },
-                              cursorColor: Colors.black,
+                            return Text(
+                              state.selectedCurrency.name,
                               style: TextStyle(
                                 color: Colors.black,
-                                fontSize: 10.5.sp,
+                                fontSize: 10.sp,
                                 fontFamily: FontFamily.cabinetGrotesk,
-                                fontWeight: FontWeight.w500,
-                              ),
-                              decoration: InputDecoration.collapsed(
-                                hintText: '0',
-                                hintStyle: TextStyle(
-                                  color: Colors.grey,
-                                  fontSize: 10.5.sp,
-                                  fontFamily: FontFamily.cabinetGrotesk,
-                                  fontWeight: FontWeight.w500,
-                                ),
+                                fontWeight: FontWeight.w800,
                               ),
                             );
                           },
                         ),
-                      ),
-                    ],
+                        SizedBox(width: 10.wmea),
+                        Expanded(
+                          child: BlocBuilder<GoalDetailBloc, GoalDetailState>(
+                            buildWhen: (p, c) => p.amount != c.amount,
+                            builder: (context, state) {
+                              return NominalMoneyFormatter(
+                                textStyle: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 10.sp,
+                                  fontFamily: FontFamily.cabinetGrotesk,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                                amount: state.amount,
+                                isWithName: false,
+                              );
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 SizedBox(height: 24.hmea),

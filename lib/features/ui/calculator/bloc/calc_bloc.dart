@@ -1,26 +1,45 @@
-// ignore_for_file: unused_local_variable, non_constant_identifier_names
+// ignore_for_file: unused_local_variable, non_constant_identifier_names, use_build_context_synchronously
 
 import 'package:bloc/bloc.dart';
-import 'package:cling/features/ui/language_currency/lang_export.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:math_expressions/math_expressions.dart';
 
 import '../../../../core/logger.dart';
+import '../../language_currency/lang_export.dart';
 
 part 'calc_event.dart';
 part 'calc_state.dart';
 
 class CalcBloc extends Bloc<CalcEvent, CalcState> {
-  CalcBloc({required BuildContext context})
-      : _context = context,
+  CalcBloc({
+    required BuildContext context,
+  })  : _context = context,
         super(CalcState()) {
+    on<InitAmount>(_initAmount);
     on<AddExpression>(_addExpression);
   }
 
   final operate = [" / ", " * ", " + ", " - "];
+  final operateError = ["Error", ""];
   final BuildContext _context;
+
+  void _initAmount(InitAmount event, emit) {
+    if (event.amount != null && event.amount != 0) {
+      Logger.Red.log(event.amount);
+      String initA = NumberFormat.currency(
+        decimalDigits: (event.amount! % 1 == 0) ? 0 : 2,
+        name: "",
+      ).format(event.amount);
+
+      if ((event.amount! % 1 != 0) && (initA[initA.length - 1] == "0")) {
+        initA = initA.substring(0, initA.length - 1);
+      }
+
+      emit(state.copyWith(listInput: [initA]));
+    }
+  }
 
   void _addExpression(AddExpression event, emit) {
     final VAL = event.value;
@@ -55,11 +74,11 @@ class CalcBloc extends Bloc<CalcEvent, CalcState> {
         name: "",
       ).format(result);
 
-      res = (result % 1 != 0) && (res[res.length - 1] == "0")
-          ? res.substring(0, res.length - 1)
-          : res;
+      if ((result % 1 != 0) && (res[res.length - 1] == "0")) {
+        res = res.substring(0, res.length - 1);
+      }
 
-      Logger.Green.log(res);
+      if (res == "∞" || res == "NaN") throw Exception;
 
       emit(
         state.copyWith(
@@ -103,13 +122,15 @@ class CalcBloc extends Bloc<CalcEvent, CalcState> {
   void _addValue(event, emit) {
     final VAL = event.value;
     var listInput = state.listInput.toList(growable: true);
-    final someVal = operate.contains(VAL);
-    if (someVal) {
+
+    if (operate.contains(VAL)) {
       listInput.addAll([VAL, ""]);
     } else {
       String last = listInput[listInput.length - 1];
+
       if ((last.contains(VAL) && VAL == ".") ||
-          (last.length >= 3 && last[last.length - 3] == ".")) {
+          (last.length >= 3 && last[last.length - 3] == ".") ||
+          last == "Error") {
         return;
       }
       last += VAL;
@@ -125,11 +146,22 @@ class CalcBloc extends Bloc<CalcEvent, CalcState> {
     emit(state.copyWith(listInput: listInput));
   }
 
-  void _saveValue(event, emit) {
-    final listInput = state.listInput;
-    if (listInput.length == 1 &&
-        (listInput.first != "Error" || listInput.first != "")) {
-      Navigator.pop(_context, [true, listInput.first]);
+  void _saveValue(event, emit) async {
+    if (state.listInput.length == 1 &&
+        !operateError.contains(state.listInput.first)) {
+      Navigator.pop(_context, [
+        true,
+        double.parse(state.listInput.first.replaceAll(",", "")),
+      ]);
+    } else {
+      _countResult(event, emit);
+      await Future.delayed(const Duration(milliseconds: 200));
+      if (!operateError.contains(state.listInput.first)) {
+        Navigator.pop(_context, [
+          true,
+          double.parse(state.listInput.first.replaceAll(",", "")),
+        ]);
+      }
     }
   }
 }

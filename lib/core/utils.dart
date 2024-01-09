@@ -10,21 +10,25 @@ extension RemoveDot on String {
 }
 
 double? setInterval(double maxVal) {
-  if (maxVal < 10000) {
+  if (maxVal <= 10000) {
     return 2000;
-  } else if (maxVal < 50000) {
+  } else if (maxVal <= 50000) {
     return 10000;
-  } else if (maxVal < 100000) {
+  } else if (maxVal <= 100000) {
     return 20000;
-  } else if (maxVal < 500000) {
+  } else if (maxVal <= 200000) {
+    return 25000;
+  } else if (maxVal <= 500000) {
     return 50000;
-  } else if (maxVal < 5000000) {
+  } else if (maxVal <= 1000000) {
+    return 100000;
+  } else if (maxVal <= 1500000) {
     return 200000;
-  } else if (maxVal < 10000000) {
-    return 500000;
-  } else if (maxVal < 50000000) {
+  } else if (maxVal <= 10000000) {
     return 1000000;
-  } else if (maxVal < 100000000) {
+  } else if (maxVal <= 50000000) {
+    return 5000000;
+  } else if (maxVal <= 100000000) {
     return 15000000;
   } else {
     return null;

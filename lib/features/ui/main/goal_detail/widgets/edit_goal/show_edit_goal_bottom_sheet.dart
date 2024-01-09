@@ -13,7 +13,6 @@ import '../../../../language_currency/lang_export.dart';
 import '../../bloc/goal_detail_bloc.dart';
 import '../../pages/goal_detail_page.dart';
 import 'logo_goal_widget_on_edit_goal.dart';
-import 'text_field_amount_edit_goal.dart';
 import 'text_field_name_edit_goal.dart';
 
 void showEditGoalBottomSheet(BuildContext context) {
@@ -117,9 +116,7 @@ void showEditGoalBottomSheet(BuildContext context) {
                     },
                   ),
                 ),
-                SizedBox(
-                  height: 8.hmea,
-                ),
+                SizedBox(height: 8.hmea),
                 Container(
                   decoration: ShapeDecoration(
                     color: const Color.fromARGB(255, 224, 224, 224),
@@ -150,17 +147,23 @@ void showEditGoalBottomSheet(BuildContext context) {
                           );
                         },
                       ),
-                      SizedBox(
-                        width: 10.wmea,
-                      ),
+                      SizedBox(width: 10.wmea),
                       Expanded(
-                        child: BlocBuilder<LangCurrencyBloc, LangCurrencyState>(
+                        child: BlocBuilder<GoalDetailBloc, GoalDetailState>(
                           buildWhen: (p, c) {
-                            return p.selectedCurrency.name !=
-                                c.selectedCurrency.name;
+                            return p.tempAmount != c.tempAmount;
                           },
                           builder: (context, state) {
-                            return const TextFieldAmountEditGoal();
+                            return NominalMoneyFormatter(
+                              textStyle: TextStyle(
+                                color: Colors.black,
+                                fontSize: 10.sp,
+                                fontFamily: FontFamily.cabinetGrotesk,
+                                fontWeight: FontWeight.w500,
+                              ),
+                              amount: state.tempAmount,
+                              isWithName: false,
+                            );
                           },
                         ),
                       ),

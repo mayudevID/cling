@@ -83,14 +83,14 @@ class DatabaseRepository {
     }
 
     if (result[1].isNotEmpty) {
-      final expense = result[1][0]['TotalExpense'] ?? 0;
+      final expense = result[1][0]['TotalExpense'] ?? 0.0;
       expenseParse = double.parse(expense.toString());
     }
 
     return {"income": incomeParse, "expense": expenseParse};
   }
 
-  Future<int> getTotalBalance() async {
+  Future<double> getTotalBalance() async {
     final result = await Future.wait([
       db.rawQuery(
         '''
@@ -105,8 +105,17 @@ class DatabaseRepository {
       ''',
       ),
     ]);
-    final income = (result[0][0]['TotalIncome'] ?? 0) as int;
-    final expense = (result[1][0]['TotalExpense'] ?? 0) as int;
+
+    Object? totInc = result[0][0]['TotalIncome'];
+    Object? totEx = result[1][0]['TotalExpense'];
+
+    final income = totInc != null
+        ? (totInc is int ? totInc.toDouble() : totInc as double)
+        : 0.0;
+
+    final expense = totEx != null
+        ? (totEx is int ? totEx.toDouble() : totEx as double)
+        : 0.0;
 
     return income - expense;
   }
@@ -157,7 +166,7 @@ class DatabaseRepository {
     if (result[0].isNotEmpty) {
       for (var income in result[0]) {
         var month = income["Month"] as String;
-        combinedData[month] ??= {"TotalIncome": 0, "TotalExpense": 0};
+        combinedData[month] ??= {"TotalIncome": 0.0, "TotalExpense": 0.0};
         combinedData[month]!["TotalIncome"] = income["TotalIncome"];
       }
     }
@@ -165,7 +174,7 @@ class DatabaseRepository {
     if (result[1].isNotEmpty) {
       for (var expense in result[1]) {
         var month = expense["Month"] as String;
-        combinedData[month] ??= {"TotalIncome": 0, "TotalExpense": 0};
+        combinedData[month] ??= {"TotalIncome": 0.0, "TotalExpense": 0.0};
         combinedData[month]!["TotalExpense"] = expense["TotalExpense"];
       }
     }
@@ -496,22 +505,22 @@ class DatabaseRepository {
     return maps.first['SUM(${IncomeMeta.amount})'] ?? 0;
   }
 
-  Future<Map<String, dynamic>> getYearlyIncome() async {
+  Future<Map<String, double>> getYearlyIncome() async {
     final nowYear = DateTime.now().year;
 
-    Map<String, dynamic> uniqueData = {
-      "$nowYear-01": 0,
-      "$nowYear-02": 0,
-      "$nowYear-03": 0,
-      "$nowYear-04": 0,
-      "$nowYear-05": 0,
-      "$nowYear-06": 0,
-      "$nowYear-07": 0,
-      "$nowYear-08": 0,
-      "$nowYear-09": 0,
-      "$nowYear-10": 0,
-      "$nowYear-11": 0,
-      "$nowYear-12": 0,
+    Map<String, double> uniqueData = {
+      "$nowYear-01": 0.0,
+      "$nowYear-02": 0.0,
+      "$nowYear-03": 0.0,
+      "$nowYear-04": 0.0,
+      "$nowYear-05": 0.0,
+      "$nowYear-06": 0.0,
+      "$nowYear-07": 0.0,
+      "$nowYear-08": 0.0,
+      "$nowYear-09": 0.0,
+      "$nowYear-10": 0.0,
+      "$nowYear-11": 0.0,
+      "$nowYear-12": 0.0,
     };
 
     final now = DateTime.now();
@@ -531,8 +540,14 @@ class DatabaseRepository {
     );
 
     for (Map<String, Object?> item in result) {
+      Object? totInc = item["TotalIncome"];
+
+      final result = totInc != null
+          ? (totInc is int ? totInc.toDouble() : totInc as double)
+          : 0.0;
+
       final month = item["Month"].toString();
-      uniqueData[month] = item["TotalIncome"];
+      uniqueData[month] = result;
       Logger.Red.log(item["TotalIncome"]);
     }
 

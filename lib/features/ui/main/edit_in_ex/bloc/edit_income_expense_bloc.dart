@@ -1,15 +1,12 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:cling/core/utils.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 import 'package:sqflite/sqflite.dart';
 
 import '../../../../../core/common_widget.dart';
 import '../../../../../core/logger.dart';
-import '../../../../model/currency.dart';
 import '../../../../model/expense_categories_model.dart';
 import '../../../../model/expense_model.dart';
 import '../../../../model/income_model.dart';
@@ -42,19 +39,7 @@ class EditIncomeExpenseBloc
         super(
           EditIncomeExpenseState(
             descOrItem: descOrItem,
-            amountInput: NumberFormat.currency(
-              locale: (settingsRepo.getCurrentCurrency() != null
-                      ? Currency.values
-                          .where((item) =>
-                              item.value.countryCode ==
-                              settingsRepo.getCurrentCurrency())
-                          .first
-                      : Currency.idr)
-                  .value
-                  .toLanguageTag(),
-              decimalDigits: 2,
-              name: "",
-            ).format(amount),
+            amountInput: amount,
           ),
         ) {
     on<SetDate>(_setDate);
@@ -152,8 +137,7 @@ class EditIncomeExpenseBloc
     SetAmountInput event,
     Emitter<EditIncomeExpenseState> emit,
   ) {
-    final replaceDot = event.amountInput.removeDot;
-    emit(state.copyWith(amountInput: replaceDot));
+    emit(state.copyWith(amountInput: event.amountInput * 1.0));
   }
 
   void _saveData(SaveData event, emit) async {
@@ -162,7 +146,7 @@ class EditIncomeExpenseBloc
       return;
     }
 
-    if (state.amountInput.trim().isEmpty || state.amountInput.trim() == "0") {
+    if (state.amountInput == 0) {
       errorToast(AppLocalizations.of(_context)!.pleaseFillAmount);
       return;
     }
@@ -174,7 +158,7 @@ class EditIncomeExpenseBloc
           data = IncomeModel(
             id: state.id,
             date: state.selectedDate,
-            amount: double.parse(state.amountInput.removeDot),
+            amount: state.amountInput,
             desc: state.descOrItem,
             incomeSource:
                 '${state.selectedCategories.key} ${state.selectedCategories.value}',
@@ -191,7 +175,7 @@ class EditIncomeExpenseBloc
           data = ExpenseModel(
             id: state.id,
             date: state.selectedDate,
-            amount: double.parse(state.amountInput.removeDot),
+            amount: state.amountInput,
             item: state.descOrItem,
             categories:
                 '${state.selectedCategories.key} ${state.selectedCategories.value}',

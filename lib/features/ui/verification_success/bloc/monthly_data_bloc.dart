@@ -1,19 +1,19 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:io';
-import 'package:cling/core/common_widget.dart';
 import 'package:cling/core/utils.dart';
-import 'package:cling/features/repository/auth_repository.dart';
-import 'package:cling/features/repository/settings_repository.dart';
-import 'package:cling/features/ui/language_currency/lang_export.dart';
-import 'package:cling/features/ui/main/profile/bloc/profile_bloc.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../core/logger.dart';
+import '../../../../core/common_widget.dart';
+import '../../../repository/auth_repository.dart';
+import '../../../repository/settings_repository.dart';
+import '../../language_currency/lang_export.dart';
 import '../../main/main_page.dart';
+import '../../main/profile/bloc/profile_bloc.dart';
 import '../widget/text_field_monthly_data.dart';
 
 part 'monthly_data_event.dart';
@@ -136,8 +136,8 @@ class MonthlyDataBloc extends Bloc<MonthlyDataEvent, MonthlyDataState> {
 
       await _settingsRepo.saveMonthlyBudgetAndIncome(
         userModel: _authRepo.currentUserModel!,
-        monthlyIncome: monIncome,
-        monthlyBudget: monBudget,
+        monthlyIncome: monIncome.toDouble(),
+        monthlyBudget: monBudget.toDouble(),
       );
 
       mainContext.read<ProfileBloc>().add(GetProfile());

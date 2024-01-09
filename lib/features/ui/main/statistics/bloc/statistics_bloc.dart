@@ -1,10 +1,4 @@
 import 'package:cling/core/logger.dart';
-import 'package:cling/features/model/pie_data_expense.dart';
-import 'package:cling/features/model/pie_data_expense_savings.dart';
-import 'package:cling/features/repository/database_repository.dart';
-import 'package:cling/features/ui/language_currency/lang_currency_bloc.dart';
-import 'package:cling/features/ui/main/main_page.dart';
-import 'package:cling/resources/gen/fonts.gen.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,8 +6,14 @@ import 'package:intl/intl.dart';
 import 'package:month_year_picker/month_year_picker.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
+import '../../../../../resources/gen/fonts.gen.dart';
 import '../../../../model/chart_data.dart';
+import '../../../../model/pie_data_expense.dart';
+import '../../../../model/pie_data_expense_savings.dart';
+import '../../../../repository/database_repository.dart';
+import '../../../language_currency/lang_currency_bloc.dart';
 import '../../../language_currency/lang_export.dart';
+import '../../main_page.dart';
 import '../../main_widget/convert_enum_to_detail_date.dart';
 import '../../main_widget/enum_range_date.dart';
 
@@ -89,8 +89,8 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
         Logger.White.log("Income ${value['TotalIncome']}");
         Logger.White.log("Expense ${value['TotalExpense']}");
 
-        final income = value['TotalIncome'] / 100.0;
-        final expense = value['TotalExpense'] / 100.0;
+        final income = value['TotalIncome'].toDouble();
+        final expense = value['TotalExpense'].toDouble();
         final savings = income - expense;
 
         totalExpense += expense;
@@ -101,7 +101,7 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
 
         incomeData.add(ChartData(x: key, y: income));
         expenseData.add(ChartData(x: key, y: expense));
-        savingsData.add(ChartData(x: key, y: (savings < 0) ? 0 : savings));
+        savingsData.add(ChartData(x: key, y: (savings < 0) ? 0.0 : savings));
       });
 
       Logger.White.log("MaxAll: $max");
@@ -114,7 +114,7 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
         ),
         PieDataExSav(
           nameData: "Savings",
-          amount: (totalSavings < 0) ? 0 : totalSavings,
+          amount: (totalSavings < 0) ? 0.0 : totalSavings,
           text: "Save",
         ),
       ];
@@ -157,9 +157,9 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
 
         final cat = getCat.substring(getCat.indexOf(" ") + 1);
 
-        final total = element["TotalExpense"] / 100.0;
+        final total = element["TotalExpense"];
         pieDataExpenseList.add(
-          PieDataExpense(nameCategories: cat, amount: total),
+          PieDataExpense(nameCategories: cat, amount: total.toDouble()),
         );
       }
 
@@ -388,9 +388,9 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
         context: mainContext,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: const Text(
-              "Select Year",
-              style: TextStyle(fontFamily: FontFamily.cabinetGrotesk),
+            title: Text(
+              AppLocalizations.of(context)!.selectYear,
+              style: const TextStyle(fontFamily: FontFamily.cabinetGrotesk),
             ),
             content: SizedBox(
               width: 300,

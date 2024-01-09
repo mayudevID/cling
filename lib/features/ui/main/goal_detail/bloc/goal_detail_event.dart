@@ -19,9 +19,9 @@ class ChangeIcon extends GoalDetailEvent {
   const ChangeIcon(this.icon);
 }
 
-class InitNameEdit extends GoalDetailEvent {}
+class InitTempNameEdit extends GoalDetailEvent {}
 
-class InitAmountEdit extends GoalDetailEvent {}
+class InitTempAmountEdit extends GoalDetailEvent {}
 
 class SaveEdit extends GoalDetailEvent {}
 
@@ -31,8 +31,14 @@ class SetDateGoalInput extends GoalDetailEvent {
   const SetDateGoalInput(this.time);
 }
 
+class SetTempAmountInput extends GoalDetailEvent {
+  final double tempAmount;
+
+  const SetTempAmountInput(this.tempAmount);
+}
+
 class SetAmountInput extends GoalDetailEvent {
-  final String amount;
+  final double amount;
 
   const SetAmountInput(this.amount);
 }

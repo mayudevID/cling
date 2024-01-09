@@ -42,7 +42,7 @@ class AddGoalBloc extends Bloc<AddGoalEvent, AddGoalState> {
   }
 
   void _setAmountInput(SetAmountInput event, Emitter<AddGoalState> emit) {
-    emit(state.copyWith(amountInput: event.amountInput));
+    emit(state.copyWith(amountInput: event.amountInput * 1.0));
   }
 
   void _saveDataGoal(SaveDataGoal event, Emitter<AddGoalState> emit) async {

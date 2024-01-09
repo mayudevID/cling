@@ -9,7 +9,7 @@ class EditIncomeExpenseState extends Equatable {
   int id;
   FlowType flowType;
   String descOrItem;
-  String amountInput;
+  double amountInput;
   MapEntry<int, String> selectedCategories;
 
   EditIncomeExpenseState({
@@ -20,7 +20,7 @@ class EditIncomeExpenseState extends Equatable {
     this.id = 99,
     this.flowType = FlowType.income,
     this.descOrItem = "",
-    this.amountInput = "",
+    this.amountInput = 0,
   })  : listInSource = listInSource ?? List.empty(),
         selectedDate = selectedDate ?? DateTime.now(),
         selectedCategories = selectedCategories ?? const MapEntry(0, ""),
@@ -44,7 +44,7 @@ class EditIncomeExpenseState extends Equatable {
     DateTime? selectedDate,
     MapEntry<int, String>? selectedCategories,
     String? descOrItem,
-    String? amountInput,
+    double? amountInput,
     FlowType? flowType,
     int? id,
   }) {

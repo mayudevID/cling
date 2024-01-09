@@ -8,7 +8,7 @@ sealed class EditMonthlyEvent extends Equatable {
 }
 
 class SetAmountInput extends EditMonthlyEvent {
-  final String newValue;
+  final double newValue;
   const SetAmountInput(this.newValue);
 }
 

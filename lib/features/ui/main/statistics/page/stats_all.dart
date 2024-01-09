@@ -1,6 +1,4 @@
 import 'package:cling/core/utils.dart';
-import 'package:cling/features/ui/main/statistics/widgets/line_column_stats_all_widget.dart';
-import 'package:cling/features/ui/main/statistics/widgets/pie_chart_stats_all_widget.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,6 +8,8 @@ import '../../../../../resources/gen/fonts.gen.dart';
 import '../../../language_currency/lang_export.dart';
 import '../bloc/statistics_bloc.dart';
 import '../widgets/categories_with_amount_widget.dart';
+import '../widgets/line_column_stats_all_widget.dart';
+import '../widgets/pie_chart_stats_all_widget.dart';
 import '../widgets/tag_info.dart';
 
 class StatsAll extends StatelessWidget {

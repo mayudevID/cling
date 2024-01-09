@@ -52,7 +52,7 @@ class SetDescOrItem extends EditIncomeExpenseEvent {
 class SetAmountInput extends EditIncomeExpenseEvent {
   const SetAmountInput(this.amountInput);
 
-  final String amountInput;
+  final double amountInput;
 }
 
 class SaveData extends EditIncomeExpenseEvent {

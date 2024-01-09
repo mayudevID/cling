@@ -1,23 +1,19 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:io';
-import 'package:cling/core/utils.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 
 import '../../../../../core/common_widget.dart';
 import '../../../../../core/logger.dart';
-import '../../../../model/currency.dart';
 import '../../../../repository/auth_repository.dart';
 import '../../../../repository/settings_repository.dart';
 import '../../../language_currency/lang_export.dart';
 import '../../main_page.dart';
 import '../../profile/bloc/profile_bloc.dart';
 import '../page/edit_budget_or_income.dart';
-import '../widget/text_field_edit_monthly.dart';
 
 part 'edit_monthly_event.dart';
 part 'edit_monthly_state.dart';
@@ -33,7 +29,7 @@ class EditMonthlyBloc extends Bloc<EditMonthlyEvent, EditMonthlyState> {
         _settingsRepo = settingsRepo,
         _authRepo = authRepo,
         super(EditMonthlyState()) {
-    //on<SetAmountInput>(_setAmountInput);
+    on<SetAmountInput>(_setAmountInput);
     on<SaveNewMonthly>(_saveNewMonthly);
     on<InitialValue>(_initVal);
     on<ChangeTempRecDay>(_chnageTempRecDay);
@@ -44,35 +40,23 @@ class EditMonthlyBloc extends Bloc<EditMonthlyEvent, EditMonthlyState> {
   final AuthRepository _authRepo;
   final BuildContext _context;
   var mainContext = MainPage.navKeyMain.currentContext!;
-  late String initMonthly;
+  late double initMonthly;
 
   void _initVal(event, emit) {
-    final currentCurr = _settingsRepo.getCurrentCurrency();
-    final currency = currentCurr != null
-        ? Currency.values
-            .where((item) => item.value.countryCode == currentCurr)
-            .first
-        : Currency.idr;
-
-    final numFormat = NumberFormat.currency(
-      locale: currency.value.toLanguageTag(),
-      decimalDigits: 2,
-      //customPattern: '\u00a4###,###.00',
-      name: "",
-    );
-
-    initMonthly = numFormat.format((_monthlyMode == EditMonthlyMode.income)
+    initMonthly = (_monthlyMode == EditMonthlyMode.income)
         ? _authRepo.currentUserModel!.monthlyIncome
-        : _authRepo.currentUserModel!.monthlyBudget);
-
-    TextFieldEditMonthly.textEditingController.text = initMonthly;
-
+        : _authRepo.currentUserModel!.monthlyBudget;
     emit(
       state.copyWith(
+        amount: initMonthly * 1.0,
         initDateRec: _authRepo.currentUserModel!.recurringDay,
         changeDateRec: _authRepo.currentUserModel!.recurringDay,
       ),
     );
+  }
+
+  void _setAmountInput(SetAmountInput event, emit) {
+    emit(state.copyWith(amount: event.newValue * 1.0));
   }
 
   void _chnageTempRecDay(ChangeTempRecDay event, emit) {
@@ -87,14 +71,13 @@ class EditMonthlyBloc extends Bloc<EditMonthlyEvent, EditMonthlyState> {
       return;
     }
 
-    if (initMonthly == TextFieldEditMonthly.textEditingController.text) {
+    if (initMonthly == state.amount) {
       return;
     }
 
     loadingAuth(_context);
     try {
-      final monValue =
-          int.parse(TextFieldEditMonthly.textEditingController.text.removeDot);
+      final monValue = state.amount;
 
       await _settingsRepo.saveMonthlyBudgetAndIncome(
         userModel: _authRepo.currentUserModel!,

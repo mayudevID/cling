@@ -1,6 +1,5 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:cling/core/utils.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -105,8 +104,7 @@ class AddIncomeExpenseBloc
     SetAmountInput event,
     Emitter<AddIncomeExpenseState> emit,
   ) {
-    final replaceDot = event.amountInput.removeDot;
-    emit(state.copyWith(amountInput: replaceDot));
+    emit(state.copyWith(amountInput: event.amountInput * 1.0));
   }
 
   void _saveData(SaveData event, emit) async {
@@ -115,7 +113,7 @@ class AddIncomeExpenseBloc
       return;
     }
 
-    if (state.amountInput.trim().isEmpty || state.amountInput.trim() == "0") {
+    if (state.amountInput == 0) {
       errorToast(AppLocalizations.of(_context)!.pleaseFillAmount);
       return;
     }
@@ -125,7 +123,7 @@ class AddIncomeExpenseBloc
         case FlowType.income:
           final data = IncomeModel(
             date: state.selectedDate,
-            amount: double.parse(state.amountInput),
+            amount: state.amountInput,
             desc: state.descOrItem,
             incomeSource:
                 '${state.selectedCategories.key} ${state.selectedCategories.value}',
@@ -141,7 +139,7 @@ class AddIncomeExpenseBloc
         case FlowType.expense:
           final data = ExpenseModel(
             date: state.selectedDate,
-            amount: double.parse(state.amountInput),
+            amount: state.amountInput,
             item: state.descOrItem,
             categories:
                 '${state.selectedCategories.key} ${state.selectedCategories.value}',
