@@ -4,27 +4,23 @@ part of 'edit_monthly_bloc.dart';
 
 class EditMonthlyState extends Equatable {
   double amount;
-  int initDateRec;
-  int changeDateRec;
+  int dateRec;
 
   EditMonthlyState({
-    this.initDateRec = 0,
-    this.changeDateRec = 0,
+    this.dateRec = 0,
     this.amount = 0,
   });
 
   @override
-  List<dynamic> get props => [initDateRec, changeDateRec, amount];
+  List<dynamic> get props => [dateRec, amount];
 
   EditMonthlyState copyWith({
-    int? initDateRec,
-    int? changeDateRec,
+    int? dateRec,
     double? amount,
   }) {
     return EditMonthlyState(
       amount: amount ?? this.amount,
-      initDateRec: initDateRec ?? this.initDateRec,
-      changeDateRec: changeDateRec ?? this.changeDateRec,
+      dateRec: dateRec ?? this.dateRec,
     );
   }
 }

@@ -168,11 +168,8 @@ class EditMonBudgetOrIncomePageContent extends StatelessWidget {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        int day = context
-                                .read<EditMonthlyBloc>()
-                                .state
-                                .changeDateRec -
-                            1;
+                        int day =
+                            context.read<EditMonthlyBloc>().state.dateRec - 1;
                         context
                             .read<EditMonthlyBloc>()
                             .add(ChangeTempRecDay(day.clamp(0, 28)));
@@ -183,9 +180,7 @@ class EditMonBudgetOrIncomePageContent extends StatelessWidget {
                     ),
                     SizedBox(width: 16.wmea),
                     BlocBuilder<EditMonthlyBloc, EditMonthlyState>(
-                      buildWhen: (p, c) {
-                        return p.changeDateRec != c.changeDateRec;
-                      },
+                      buildWhen: (p, c) => p.dateRec != c.dateRec,
                       builder: (context, state) {
                         return NumberPicker(
                           itemCount: 1,
@@ -203,11 +198,12 @@ class EditMonBudgetOrIncomePageContent extends StatelessWidget {
                             fontWeight: FontWeight.w600,
                           ),
                           selectedTextStyle: TextStyle(
-                              color: Colors.white,
-                              fontFamily: FontFamily.cabinetGrotesk,
-                              fontWeight: FontWeight.w600,
-                              fontSize: 14.sp),
-                          value: state.changeDateRec,
+                            color: Colors.white,
+                            fontFamily: FontFamily.cabinetGrotesk,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 14.sp,
+                          ),
+                          value: state.dateRec,
                           minValue: 0,
                           maxValue: 28,
                           onChanged: (int value) {},
@@ -217,11 +213,8 @@ class EditMonBudgetOrIncomePageContent extends StatelessWidget {
                     SizedBox(width: 16.wmea),
                     GestureDetector(
                       onTap: () {
-                        int day = context
-                                .read<EditMonthlyBloc>()
-                                .state
-                                .changeDateRec +
-                            1;
+                        int day =
+                            context.read<EditMonthlyBloc>().state.dateRec + 1;
                         context
                             .read<EditMonthlyBloc>()
                             .add(ChangeTempRecDay(day.clamp(0, 28)));

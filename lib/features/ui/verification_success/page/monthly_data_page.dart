@@ -157,7 +157,7 @@ class MonthlyDataPageContent extends StatelessWidget {
                 return Padding(
                   padding: EdgeInsets.only(top: 8.hmea),
                   child: BlackButton(
-                    name: "Back",
+                    name: AppLocalizations.of(context)!.back,
                     onTap: () {
                       context.read<MonthlyDataBloc>().add(
                             SetState(

@@ -41,16 +41,17 @@ class EditMonthlyBloc extends Bloc<EditMonthlyEvent, EditMonthlyState> {
   final BuildContext _context;
   var mainContext = MainPage.navKeyMain.currentContext!;
   late double initMonthly;
+  late int initDateRec;
 
   void _initVal(event, emit) {
     initMonthly = (_monthlyMode == EditMonthlyMode.income)
         ? _authRepo.currentUserModel!.monthlyIncome
         : _authRepo.currentUserModel!.monthlyBudget;
+    initDateRec = _authRepo.currentUserModel!.recurringDay;
     emit(
       state.copyWith(
         amount: initMonthly * 1.0,
-        initDateRec: _authRepo.currentUserModel!.recurringDay,
-        changeDateRec: _authRepo.currentUserModel!.recurringDay,
+        dateRec: initDateRec,
       ),
     );
   }
@@ -60,7 +61,7 @@ class EditMonthlyBloc extends Bloc<EditMonthlyEvent, EditMonthlyState> {
   }
 
   void _chnageTempRecDay(ChangeTempRecDay event, emit) {
-    emit(state.copyWith(changeDateRec: event.value));
+    emit(state.copyWith(dateRec: event.value));
   }
 
   void _saveNewMonthly(SaveNewMonthly event, _) async {
@@ -71,13 +72,14 @@ class EditMonthlyBloc extends Bloc<EditMonthlyEvent, EditMonthlyState> {
       return;
     }
 
-    if (initMonthly == state.amount) {
+    if (initMonthly == state.amount || initDateRec == state.dateRec) {
       return;
     }
 
     loadingAuth(_context);
     try {
       final monValue = state.amount;
+      final newRecDay = state.dateRec;
 
       await _settingsRepo.saveMonthlyBudgetAndIncome(
         userModel: _authRepo.currentUserModel!,
@@ -85,7 +87,8 @@ class EditMonthlyBloc extends Bloc<EditMonthlyEvent, EditMonthlyState> {
             (_monthlyMode == EditMonthlyMode.income) ? monValue : null,
         monthlyBudget:
             (_monthlyMode == EditMonthlyMode.budget) ? monValue : null,
-        recurringDay: (_monthlyMode == EditMonthlyMode.income) ? 0 : null,
+        recurringDay:
+            (_monthlyMode == EditMonthlyMode.income) ? newRecDay : null,
       );
 
       mainContext.read<ProfileBloc>().add(GetProfile());

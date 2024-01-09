@@ -1,4 +1,5 @@
 import 'package:cling/core/utils.dart';
+import 'package:cling/features/ui/language_currency/lang_export.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
@@ -102,7 +103,7 @@ Future<void> dialogCloseVerifOnboard(BuildContext context) async {
                       child: Align(
                         alignment: Alignment.center,
                         child: Text(
-                          "Back",
+                          AppLocalizations.of(context)!.back,
                           style: TextStyle(
                             fontFamily: FontFamily.cabinetGrotesk,
                             fontSize: 10.sp,
