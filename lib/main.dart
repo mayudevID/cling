@@ -1,5 +1,4 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
-import 'package:cling/features/repository/database_repository.dart';
 
 import 'package:device_preview/device_preview.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -15,6 +14,7 @@ import 'core/notification.dart';
 import 'core/route.dart';
 import 'features/repository/auth_repository.dart';
 
+import 'features/repository/database_repository.dart';
 import 'features/repository/settings_repository.dart';
 import 'features/ui/app_bloc/app_bloc.dart';
 import 'features/ui/language_currency/lang_export.dart';

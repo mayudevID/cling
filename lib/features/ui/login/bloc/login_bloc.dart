@@ -1,14 +1,5 @@
 // ignore_for_file: use_buildmainContext_synchronously, use_build_context_synchronously
 import 'dart:io';
-import 'package:cling/core/exception.dart';
-import 'package:cling/core/logger.dart';
-import 'package:cling/features/repository/auth_repository.dart';
-import 'package:cling/features/repository/database_repository.dart';
-import 'package:cling/features/repository/settings_repository.dart';
-import 'package:cling/features/ui/language_currency/lang_export.dart';
-import 'package:cling/features/ui/login/widgets/dialog_email_not_verified.dart';
-import 'package:cling/features/ui/login/widgets/dialog_get_backup.dart';
-import 'package:cling/features/ui/login/widgets/dialog_no_internet_get_backup.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:equatable/equatable.dart';
@@ -16,10 +7,19 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../core/common_widget.dart';
+import '../../../../core/exception.dart';
+import '../../../../core/logger.dart';
 import '../../../../core/route.dart';
 import '../../../../main.dart';
+import '../../../repository/auth_repository.dart';
+import '../../../repository/database_repository.dart';
+import '../../../repository/settings_repository.dart';
 import '../../app_bloc/app_bloc.dart';
 import '../../language_currency/lang_currency_bloc.dart';
+import '../../language_currency/lang_export.dart';
+import '../widgets/dialog_email_not_verified.dart';
+import '../widgets/dialog_get_backup.dart';
+import '../widgets/dialog_no_internet_get_backup.dart';
 
 part 'login_event.dart';
 part 'login_state.dart';

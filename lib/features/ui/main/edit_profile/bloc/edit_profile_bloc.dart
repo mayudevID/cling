@@ -1,10 +1,5 @@
 // ignore_for_file: use_buildmainContext_synchronously, use_build_context_synchronously
-import 'package:cling/core/exception.dart';
-import 'package:cling/core/logger.dart';
-import 'package:cling/features/repository/auth_repository.dart';
-import 'package:cling/features/repository/settings_repository.dart';
-import 'package:cling/features/ui/main/edit_profile/widget/text_field_email_edit_profile.dart';
-import 'package:cling/features/ui/main/profile/bloc/profile_bloc.dart';
+
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:equatable/equatable.dart';
@@ -13,9 +8,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../core/common_widget.dart';
+import '../../../../../core/exception.dart';
+import '../../../../../core/logger.dart';
 import '../../../../../main.dart';
+import '../../../../repository/auth_repository.dart';
+import '../../../../repository/settings_repository.dart';
 import '../../../language_currency/lang_export.dart';
+import '../../profile/bloc/profile_bloc.dart';
 import '../widget/dialog_change_email_or_pass.dart';
+import '../widget/text_field_email_edit_profile.dart';
 import '../widget/text_field_name_edit_profile.dart';
 
 part 'edit_profile_event.dart';

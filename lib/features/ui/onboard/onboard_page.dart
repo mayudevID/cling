@@ -1,10 +1,10 @@
-import 'package:cling/core/common_widget.dart';
-import 'package:cling/core/route.dart';
 import 'package:cling/core/utils.dart';
-import 'package:cling/resources/gen/fonts.gen.dart';
 import 'package:flutter/material.dart' hide ModalBottomSheetRoute;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
+import '../../../core/common_widget.dart';
+import '../../../core/route.dart';
+import '../../../resources/gen/fonts.gen.dart';
 import '../language_currency/lang_export.dart';
 import '../language_currency/lang_currency_bloc.dart';
 import 'widgets/emoticon_widget.dart';
@@ -67,9 +67,7 @@ class OnboardPage extends StatelessWidget {
                 Navigator.pushNamed(context, RouteName.register);
               },
             ),
-            SizedBox(
-              height: 8.hmea,
-            ),
+            SizedBox(height: 8.hmea),
             SizedBox(
               width: 370.wmea,
               child: Row(

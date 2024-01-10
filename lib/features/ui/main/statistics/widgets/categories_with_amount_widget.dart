@@ -1,13 +1,13 @@
-import 'package:cling/core/common_widget.dart';
-import 'package:cling/core/route.dart';
 import 'package:cling/core/utils.dart';
-import 'package:cling/features/model/detail_category_model.dart';
-import 'package:cling/features/ui/main/statistics/bloc/statistics_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../../../../core/common_widget.dart';
+import '../../../../../core/route.dart';
 import '../../../../../resources/gen/fonts.gen.dart';
+import '../../../../model/detail_category_model.dart';
+import '../bloc/statistics_bloc.dart';
 
 Widget categoriesWithAmount({
   required BuildContext context,

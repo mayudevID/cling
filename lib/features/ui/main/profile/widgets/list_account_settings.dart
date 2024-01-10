@@ -1,14 +1,14 @@
-import 'package:cling/core/common_widget.dart';
-import 'package:cling/core/route.dart';
 import 'package:cling/core/utils.dart';
-import 'package:cling/features/ui/language_currency/lang_export.dart';
-import 'package:cling/features/ui/main/edit_monthly/page/edit_budget_or_income.dart';
-import 'package:cling/resources/gen/assets.gen.dart';
-import 'package:cling/resources/gen/fonts.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../../../../core/common_widget.dart';
+import '../../../../../core/route.dart';
+import '../../../../../resources/gen/assets.gen.dart';
+import '../../../../../resources/gen/fonts.gen.dart';
+import '../../../language_currency/lang_export.dart';
+import '../../edit_monthly/page/edit_budget_or_income.dart';
 import '../bloc/profile_bloc.dart';
 
 List<Widget> listAccountSettings(BuildContext context) {

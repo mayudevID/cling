@@ -1,16 +1,16 @@
-// ignore_for_file: use_buildmainContext_synchronously
+// ignore_for_file: use_buildmainContext_synchronously, use_build_context_synchronously
 
 import 'package:bloc/bloc.dart';
-import 'package:cling/core/common_widget.dart';
-import 'package:cling/core/logger.dart';
-import 'package:cling/core/route.dart';
-import 'package:cling/features/repository/auth_repository.dart';
-import 'package:cling/features/ui/language_currency/lang_export.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 
+import '../../../../core/common_widget.dart';
+import '../../../../core/logger.dart';
+import '../../../../core/route.dart';
 import '../../../../main.dart';
+import '../../../repository/auth_repository.dart';
+import '../../language_currency/lang_export.dart';
 
 part 'forgot_password_state.dart';
 

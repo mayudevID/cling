@@ -1,15 +1,15 @@
 import 'package:cling/core/utils.dart';
-import 'package:cling/features/repository/auth_repository.dart';
-import 'package:cling/features/repository/settings_repository.dart';
-import 'package:cling/features/ui/main/edit_profile/bloc/edit_profile_bloc.dart';
-import 'package:cling/injection.dart';
-import 'package:cling/resources/gen/fonts.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../../core/common_widget.dart';
+import '../../../../../injection.dart';
+import '../../../../../resources/gen/fonts.gen.dart';
+import '../../../../repository/auth_repository.dart';
+import '../../../../repository/settings_repository.dart';
 import '../../../language_currency/lang_export.dart';
+import '../bloc/edit_profile_bloc.dart';
 import '../widget/text_field_email_edit_profile.dart';
 import '../widget/text_field_name_edit_profile.dart';
 
@@ -61,13 +61,9 @@ class EditProfilePageContent extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(
-                height: 8.hmea,
-              ),
+              SizedBox(height: 8.hmea),
               const TextFieldNameEditProfile(),
-              SizedBox(
-                height: 24.hmea,
-              ),
+              SizedBox(height: 24.hmea),
               BlocBuilder<EditProfileBloc, EditProfileState>(
                 buildWhen: (p, c) {
                   return p.isNameSame != c.isNameSame;

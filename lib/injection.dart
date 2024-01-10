@@ -1,5 +1,3 @@
-import 'package:cling/features/repository/database_repository.dart';
-import 'package:cling/features/repository/settings_repository.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -11,6 +9,8 @@ import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'features/repository/auth_repository.dart';
+import 'features/repository/database_repository.dart';
+import 'features/repository/settings_repository.dart';
 import 'firebase_options.dart';
 
 final getIt = GetIt.instance;

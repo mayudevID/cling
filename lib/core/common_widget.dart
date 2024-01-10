@@ -1,7 +1,5 @@
 // ignore_for_file: must_be_immutable
-
 import 'package:cling/core/utils.dart';
-import 'package:cling/resources/gen/assets.gen.dart';
 import 'package:flutter/material.dart' hide ModalBottomSheetRoute;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -13,6 +11,7 @@ import '../features/model/language.dart';
 import '../features/ui/language_currency/lang_currency_bloc.dart';
 import '../features/ui/language_currency/lang_export.dart';
 import '../injection.dart';
+import '../resources/gen/assets.gen.dart';
 import '../resources/gen/fonts.gen.dart';
 import 'dart:math' as math;
 
@@ -188,9 +187,7 @@ void errorToast(String msg) {
           mainAxisSize: MainAxisSize.min,
           children: [
             Assets.lib.resources.images.dismiss.svg(),
-            SizedBox(
-              width: 8.wmea,
-            ),
+            SizedBox(width: 8.wmea),
             Text(
               msg,
               style: TextStyle(

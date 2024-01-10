@@ -1,16 +1,16 @@
-import 'package:cling/core/common_widget.dart';
 import 'package:cling/core/utils.dart';
-import 'package:cling/features/repository/auth_repository.dart';
-import 'package:cling/features/ui/forgot_password/cubit/forgot_password_cubit.dart';
-import 'package:cling/injection.dart';
-import 'package:cling/resources/gen/assets.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
+import '../../../../core/common_widget.dart';
+import '../../../../injection.dart';
+import '../../../../resources/gen/assets.gen.dart';
 import '../../../../resources/gen/fonts.gen.dart';
+import '../../../repository/auth_repository.dart';
 import '../../language_currency/lang_export.dart';
 import '../../login/widgets/tag_name_login.dart';
 
+import '../cubit/forgot_password_cubit.dart';
 import '../widgets/text_field_email_forgot.dart';
 
 class ForgotPasswordPage extends StatelessWidget {
@@ -79,17 +79,11 @@ class ForgotPasswordPageContent extends StatelessWidget {
                   fontWeight: FontWeight.w500,
                 ),
               ),
-              SizedBox(
-                height: 32.hmea,
-              ),
+              SizedBox(height: 32.hmea),
               TagNameLogin(name: AppLocalizations.of(context)!.email),
-              SizedBox(
-                height: 8.hmea,
-              ),
+              SizedBox(height: 8.hmea),
               const TextFieldEmailForgot(),
-              SizedBox(
-                height: 40.hmea,
-              ),
+              SizedBox(height: 40.hmea),
               PinkButton(
                 onTap: () {
                   context.read<ForgotPasswordCubit>().sendResetPassword();
