@@ -1,7 +1,7 @@
 name: cling
 description: A Money Management App.
 publish_to: 'none'
-version: 0.1.0
+version: 0.1.1
 
 environment:
   sdk: '>=3.0.6 <4.0.0'

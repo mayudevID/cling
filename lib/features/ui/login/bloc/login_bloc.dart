@@ -116,25 +116,29 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         if (result) await _getBackup();
       }
 
+      //* ~~~~ SAVE RECURRING M INCOME ~~~~
+      if (_authRepo.currentUserModel!.recurringDay != 0 &&
+          _authRepo.currentUserModel!.monthlyIncome != 0) {
+        await _dbRepo.saveRecurringMonthly(
+          recDay: _authRepo.currentUserModel!.recurringDay,
+          type: 0,
+          amount: _authRepo.currentUserModel!.monthlyIncome,
+          isFromLogin: true,
+        );
+      }
+
       await Future.delayed(const Duration(milliseconds: 100));
 
       mainContext.read<AppBloc>().add(const Redirect());
 
       if (isVerifiedNotPassed) {
         Future.delayed(
-          const Duration(milliseconds: 1250),
+          const Duration(milliseconds: 1000),
           () {
             Navigator.pushNamed(
               MainApp.navKeyGlobal.currentContext!,
               RouteName.verifOnboard,
             );
-            // Navigator.pushNamedAndRemoveUntil(
-            //   MainApp.navKeyGlobal.currentContext!,
-            //   RouteName.verifOnboard,
-            //   (route) =>
-            //       (route.settings.name != RouteName.verifOnboard) ||
-            //       route.isFirst,
-            // );
           },
         );
       }

@@ -164,44 +164,28 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
           PieDataExpense(nameCategories: cat, amount: total.toDouble()),
         );
       }
-
-      emit(
-        state.copyWith(
-          expenseBreakdownList: result,
-          pieDataExpenseList: pieDataExpenseList,
-        ),
-      );
-    } else {
-      emit(
-        state.copyWith(
-          expenseBreakdownList: List.empty(),
-          pieDataExpenseList: List.empty(),
-        ),
-      );
     }
+
+    emit(
+      state.copyWith(
+        expenseBreakdownList: result.isNotEmpty ? result : List.empty(),
+        pieDataExpenseList: pieDataExpenseList,
+      ),
+    );
 
     Logger.Yellow.log("GetExpenseBreakdown Called");
   }
 
   void _getMost(event, emit) async {
     final result = await _dbRepo.getMost(state.allStatsChoose);
+    final isIncome = state.allStatsChoose == AllStatsChoose.income;
 
-    if (result.isNotEmpty) {
-      final isIncome = state.allStatsChoose == AllStatsChoose.income;
-      emit(
-        state.copyWith(
-          mostIncomeList: isIncome ? result : List.empty(),
-          mostExpenseList: isIncome ? List.empty() : result,
-        ),
-      );
-    } else {
-      emit(
-        state.copyWith(
-          mostIncomeList: List.empty(),
-          mostExpenseList: List.empty(),
-        ),
-      );
-    }
+    emit(
+      state.copyWith(
+        mostIncomeList: isIncome && result.isNotEmpty ? result : List.empty(),
+        mostExpenseList: isIncome && result.isNotEmpty ? List.empty() : result,
+      ),
+    );
   }
 
   void _getYearlyIncome(event, emit) async {
@@ -223,12 +207,12 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
       });
 
       Logger.Red.log(yearlyIncomeList.first.y);
-
-      emit(state.copyWith(
-        yearlyIncomeList: yearlyIncomeList,
-        maxValIncome: max.toDouble(),
-      ));
     }
+
+    emit(state.copyWith(
+      yearlyIncomeList: yearlyIncomeList,
+      maxValIncome: max.toDouble(),
+    ));
   }
 
   void _changeDateForPeriod(ChangeDateForPeriod event, emit) {

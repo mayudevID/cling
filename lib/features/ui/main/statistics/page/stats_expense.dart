@@ -18,6 +18,7 @@ class StatsExpense extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         ...chooseDateRange(context),
+        SizedBox(height: 4.hmea),
         pieChartStatsExpense(),
         Text(
           AppLocalizations.of(context)!.expenseBreakdown,

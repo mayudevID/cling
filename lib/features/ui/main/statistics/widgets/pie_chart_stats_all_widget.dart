@@ -35,20 +35,10 @@ Widget pieChartStatsAllWidget() {
         );
       }
 
-      // if (pieData[0].amount == 0 && pieData[1].amount == 0) {
-      //   return Padding(
-      //     padding: EdgeInsets.only(top: 24.hmea),
-      //     child: const Center(
-      //       child: Text(
-      //         "No data :(",
-      //         style: TextStyle(
-      //           fontFamily: FontFamily.cabinetGrotesk,
-      //           color: Colors.white,
-      //         ),
-      //       ),
-      //     ),
-      //   );
-      // }
+      double dataTot = 0.0;
+      for (PieDataExSav element in pieData) {
+        dataTot += element.amount;
+      }
 
       return SizedBox(
         height: 248.5.hmea,
@@ -109,7 +99,7 @@ Widget pieChartStatsAllWidget() {
               xValueMapper: (PieDataExSav data, _) => data.nameData,
               yValueMapper: (PieDataExSav data, _) => data.amount,
               dataLabelMapper: (PieDataExSav data, _) {
-                return "${_countPercentage(data.amount, pieData).round()}%";
+                return "${((data.amount / dataTot) * 100).round()}%";
               },
               dataLabelSettings: DataLabelSettings(
                 isVisible: true,
@@ -126,12 +116,4 @@ Widget pieChartStatsAllWidget() {
       );
     },
   );
-}
-
-double _countPercentage(double count, List<PieDataExSav> dataList) {
-  var data = 0.0;
-  for (var element in dataList) {
-    data += element.amount;
-  }
-  return (count / data) * 100;
 }

@@ -55,6 +55,10 @@ class NotificationMeta {
   static const isRead = 'is_read';
 }
 
+//* TYPE 0: monthly income, must only one
+//* TYPE 1: ?
+//* TYPE 2: ?
+
 class RecurringMeta {
   static const nameTable = 'recurring_table';
   static const id = 'recurring_id';
@@ -62,4 +66,5 @@ class RecurringMeta {
   static const recurringDay = 'recurring_day';
   static const recurringLast = 'last_time';
   static const type = 'recurring_type';
+  static const amount = 'rec_amount';
 }

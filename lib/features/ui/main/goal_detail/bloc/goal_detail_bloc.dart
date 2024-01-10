@@ -1,5 +1,4 @@
 // ignore_for_file: use_build_context_synchronously
-
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -23,8 +22,7 @@ class GoalDetailBloc extends Bloc<GoalDetailEvent, GoalDetailState> {
       : _dbRepo = dbRepo,
         super(GoalDetailState()) {
     on<InitGoal>(_initGoal);
-    on<InitTempNameEdit>(_initTempNameEdit);
-    on<InitTempAmountEdit>(_initTempAmountEdit);
+    on<InitTempEdit>(_initTempEdit);
     on<ChangeIcon>(_changeIcon);
     on<SetDateGoalInput>(_setDateInput);
     on<SetTempAmountInput>(_setTempAmountInput);
@@ -50,18 +48,14 @@ class GoalDetailBloc extends Bloc<GoalDetailEvent, GoalDetailState> {
       state.copyWith(
         goalModel: result[1] as GoalModel,
         tempLogoGoal: (result[1] as GoalModel).image,
+        tempAmount: (result[1] as GoalModel).target,
         dataSavingsList: result[0] as List<GoalSavingModel>,
       ),
     );
   }
 
-  void _initTempNameEdit(event, emit) {
+  void _initTempEdit(event, emit) {
     TextFieldNameEditGoal.textEditingController.text = state.goalModel.name;
-    emit(state.copyWith(tempLogoGoal: state.goalModel.image));
-  }
-
-  void _initTempAmountEdit(event, emit) {
-    emit(state.copyWith(tempAmount: state.goalModel.target));
   }
 
   void _changeIcon(ChangeIcon event, emit) async {
@@ -119,6 +113,8 @@ class GoalDetailBloc extends Bloc<GoalDetailEvent, GoalDetailState> {
         state.copyWith(
           dataSavingsList: result,
           goalModel: newGoalModel,
+          amount: 0.0,
+          selectedDate: DateTime.now(),
         ),
       );
     } on FormatException {

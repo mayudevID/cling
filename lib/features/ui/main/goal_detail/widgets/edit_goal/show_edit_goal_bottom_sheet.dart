@@ -6,6 +6,7 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:sizer/sizer.dart';
 import 'dart:math' as math;
 
+import '../../../../../../core/route.dart';
 import '../../../../../../resources/gen/assets.gen.dart';
 import '../../../../../../resources/gen/fonts.gen.dart';
 import '../../../../language_currency/lang_currency_bloc.dart';
@@ -27,7 +28,7 @@ void showEditGoalBottomSheet(BuildContext context) {
         topRight: Radius.circular(10),
       ),
     ),
-    builder: (context) {
+    builder: (bottomSheetContext) {
       return BlocProvider.value(
         value: BlocProvider.of<GoalDetailBloc>(
           GoalDetailPage.navKeyMain.currentContext!,
@@ -117,57 +118,74 @@ void showEditGoalBottomSheet(BuildContext context) {
                   ),
                 ),
                 SizedBox(height: 8.hmea),
-                Container(
-                  decoration: ShapeDecoration(
-                    color: const Color.fromARGB(255, 224, 224, 224),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                  padding: EdgeInsets.symmetric(
-                    vertical: 16.hmea,
-                    horizontal: 16.wmea,
-                  ),
-                  child: Row(
-                    children: [
-                      BlocBuilder<LangCurrencyBloc, LangCurrencyState>(
-                        buildWhen: (p, c) {
-                          return p.selectedCurrency.name !=
-                              c.selectedCurrency.name;
-                        },
-                        builder: (context, state) {
-                          return Text(
-                            state.selectedCurrency.name,
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 10.sp,
-                              fontFamily: FontFamily.cabinetGrotesk,
-                              fontWeight: FontWeight.w800,
-                            ),
-                          );
-                        },
+                GestureDetector(
+                  onTap: () async {
+                    var ctxt = GoalDetailPage.navKeyMain.currentContext!;
+                    final amountRes = await Navigator.pushNamed(
+                      bottomSheetContext,
+                      RouteName.calc,
+                      arguments: ctxt.read<GoalDetailBloc>().state.tempAmount,
+                    );
+
+                    if ((amountRes! as List)[0] == true) {
+                      // ignore: use_build_context_synchronously
+                      ctxt
+                          .read<GoalDetailBloc>()
+                          .add(SetTempAmountInput((amountRes as List)[1]));
+                    }
+                  },
+                  child: Container(
+                    decoration: ShapeDecoration(
+                      color: const Color.fromARGB(255, 224, 224, 224),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
                       ),
-                      SizedBox(width: 10.wmea),
-                      Expanded(
-                        child: BlocBuilder<GoalDetailBloc, GoalDetailState>(
+                    ),
+                    padding: EdgeInsets.symmetric(
+                      vertical: 16.hmea,
+                      horizontal: 16.wmea,
+                    ),
+                    child: Row(
+                      children: [
+                        BlocBuilder<LangCurrencyBloc, LangCurrencyState>(
                           buildWhen: (p, c) {
-                            return p.tempAmount != c.tempAmount;
+                            return p.selectedCurrency.name !=
+                                c.selectedCurrency.name;
                           },
                           builder: (context, state) {
-                            return NominalMoneyFormatter(
-                              textStyle: TextStyle(
+                            return Text(
+                              state.selectedCurrency.name,
+                              style: TextStyle(
                                 color: Colors.black,
                                 fontSize: 10.sp,
                                 fontFamily: FontFamily.cabinetGrotesk,
-                                fontWeight: FontWeight.w500,
+                                fontWeight: FontWeight.w800,
                               ),
-                              amount: state.tempAmount,
-                              isWithName: false,
                             );
                           },
                         ),
-                      ),
-                    ],
+                        SizedBox(width: 10.wmea),
+                        Expanded(
+                          child: BlocBuilder<GoalDetailBloc, GoalDetailState>(
+                            buildWhen: (p, c) {
+                              return p.tempAmount != c.tempAmount;
+                            },
+                            builder: (context, state) {
+                              return NominalMoneyFormatter(
+                                textStyle: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 10.sp,
+                                  fontFamily: FontFamily.cabinetGrotesk,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                                amount: state.tempAmount,
+                                isWithName: false,
+                              );
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 SizedBox(height: 24.hmea),

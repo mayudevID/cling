@@ -65,7 +65,6 @@ Widget lineColumnStatsAllWidget(BuildContext mainContext) {
             ),
           ),
           primaryYAxis: NumericAxis(
-            //enableAutoIntervalOnZooming: true,
             interval: setInterval(state.maxValAll),
             labelStyle: TextStyle(
               color: Colors.white,

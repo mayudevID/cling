@@ -43,6 +43,7 @@ class GoalDetailState extends Equatable {
       dataSavingsList: dataSavingsList ?? this.dataSavingsList,
       selectedDate: selectedDate ?? this.selectedDate,
       amount: amount ?? this.amount,
+      tempAmount: tempAmount ?? this.tempAmount,
       tempLogoGoal: tempLogoGoal ?? this.tempLogoGoal,
     );
   }

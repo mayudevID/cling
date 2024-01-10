@@ -17,7 +17,7 @@ class _TextFieldNameEditGoalState extends State<TextFieldNameEditGoal> {
   @override
   void initState() {
     TextFieldNameEditGoal.textEditingController = TextEditingController();
-    context.read<GoalDetailBloc>().add(InitTempNameEdit());
+    context.read<GoalDetailBloc>().add(InitTempEdit());
     super.initState();
   }
 

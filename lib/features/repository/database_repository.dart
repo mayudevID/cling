@@ -32,6 +32,8 @@ class DatabaseRepository {
       version: 1,
     );
     Logger.Green.log("Database Created");
+
+    await checkAndInputRecurring();
   }
 
   Future<void> close() async => await db.close();
@@ -898,6 +900,99 @@ class DatabaseRepository {
     );
   }
 
+  //* ================ RECURRING CRUD ======================
+
+  Future<void> checkAndInputRecurring() async {
+    //* Monthly (Monthly Income)
+    final now = DateTime.now();
+    final applicationOpenDate = DateTime(now.year, now.month, now.day);
+
+    final res = await db.query(RecurringMeta.nameTable);
+    for (var i = 0; i < res.length; i++) {
+      final dataRec = res[0];
+      final latestDate = DateTime.parse(
+        dataRec[RecurringMeta.recurringLast].toString(),
+      );
+
+      int monthsDifference =
+          applicationOpenDate.difference(latestDate).inDays ~/ 30;
+
+      for (int i = 1; i <= monthsDifference; i++) {
+        DateTime updateDate = DateTime(
+          latestDate.year,
+          latestDate.month + i,
+          int.parse(dataRec[RecurringMeta.recurringDay].toString()),
+        );
+
+        if (updateDate.isBefore(applicationOpenDate) ||
+            updateDate.isAtSameMomentAs(applicationOpenDate)) {
+          await insertIncome(
+            IncomeModel(
+              date: updateDate,
+              desc: "Monthly Income (Recurring)",
+              amount: double.parse(dataRec[RecurringMeta.amount].toString()),
+              incomeSource: "0 xxx",
+            ),
+          );
+          Logger.Red.log("Insert Data for $updateDate...");
+
+          if (i == monthsDifference) {
+            await db.rawUpdate(
+              '''
+                UPDATE ${RecurringMeta.nameTable}
+                SET ${RecurringMeta.recurringLast} = ?
+                WHERE ${RecurringMeta.id} = ?
+              ''',
+              [
+                updateDate.toIso8601String(),
+                dataRec[RecurringMeta.id].toString(),
+              ],
+            );
+            Logger.Yellow.log("Update Data Reccuring Again...");
+          }
+        }
+      }
+    }
+  }
+
+  Future<void> saveRecurringMonthly({
+    required int recDay,
+    required int type,
+    required double amount,
+    required bool isFromLogin,
+  }) async {
+    Logger.Yellow.log("Save Recurring Monthly...");
+    late DateTime lastInput;
+    final now = DateTime.now();
+    final dtNow = DateTime(now.year, now.month, now.day);
+    final dt = DateTime(now.year, now.month, recDay);
+
+    if (dt.isBefore(dtNow)) {
+      lastInput = dt;
+      Logger.Yellow.log("dt Is Before Now...");
+    } else {
+      lastInput = DateTime(now.year, now.month - 1, recDay);
+      Logger.Yellow.log("dt Is Same/After Now...");
+    }
+
+    Logger.Yellow.log("Insert Recurring...");
+    await db.insert(
+      RecurringMeta.nameTable,
+      {
+        RecurringMeta.idModel: 0,
+        RecurringMeta.type: type,
+        RecurringMeta.recurringDay: recDay,
+        RecurringMeta.recurringLast: lastInput.toIso8601String(),
+        RecurringMeta.amount: amount,
+      },
+    );
+
+    if (dt.isAtSameMomentAs(dtNow) && isFromLogin) {
+      Logger.Yellow.log("Same Moment, Check And Input Rec...");
+      await checkAndInputRecurring();
+    }
+  }
+
   //! ================ DELETE ALL ================
 
   Future<void> deleteAllTable() async {
@@ -907,6 +1002,7 @@ class DatabaseRepository {
       GoalMeta.nameTable,
       GoalSavingMeta.nameTable,
       NotificationMeta.nameTable,
+      RecurringMeta.nameTable,
     ];
 
     await Future.wait(table.map((e) => db.delete(e)).toList());

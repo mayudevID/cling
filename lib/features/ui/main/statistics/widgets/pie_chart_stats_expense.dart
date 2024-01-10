@@ -16,8 +16,7 @@ Widget pieChartStatsExpense() {
       return p.pieDataExpenseList != c.pieDataExpenseList;
     },
     builder: (context, state) {
-      final pieData = state.pieDataExpenseList;
-      if (pieData.isEmpty) {
+      if (state.pieDataExpenseList.isEmpty) {
         return SizedBox(
           height: 248.5.wmea,
           child: const Center(
@@ -30,6 +29,11 @@ Widget pieChartStatsExpense() {
             ),
           ),
         );
+      }
+
+      double dataTot = 0.0;
+      for (PieDataExpense element in state.pieDataExpenseList) {
+        dataTot += element.amount;
       }
 
       return SizedBox(
@@ -82,22 +86,22 @@ Widget pieChartStatsExpense() {
             isResponsive: true,
             isVisible: true,
             position: LegendPosition.right,
-            overflowMode: LegendItemOverflowMode.wrap,
+            overflowMode: LegendItemOverflowMode.scroll,
             textStyle: TextStyle(
               color: Colors.white,
-              fontSize: 9.5.sp,
+              fontSize: 8.061.sp,
               fontFamily: FontFamily.cabinetGrotesk,
               fontWeight: FontWeight.w700,
             ),
           ),
           series: <DoughnutSeries<PieDataExpense, String>>[
             DoughnutSeries<PieDataExpense, String>(
-              dataSource: pieData,
+              dataSource: state.pieDataExpenseList,
               legendIconType: LegendIconType.circle,
               xValueMapper: (PieDataExpense data, _) => data.nameCategories,
               yValueMapper: (PieDataExpense data, _) => data.amount,
               dataLabelMapper: (PieDataExpense data, _) {
-                return "${_countPercentage(data.amount, pieData).round()}%";
+                return "${((data.amount / dataTot) * 100).round()}%";
               },
               dataLabelSettings: DataLabelSettings(
                 isVisible: true,
@@ -114,12 +118,4 @@ Widget pieChartStatsExpense() {
       );
     },
   );
-}
-
-double _countPercentage(double count, List<PieDataExpense> dataPieChart) {
-  var data = 0.0;
-  for (var element in dataPieChart) {
-    data += element.amount;
-  }
-  return (count / data) * 100;
 }

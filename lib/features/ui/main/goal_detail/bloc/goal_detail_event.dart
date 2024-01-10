@@ -19,9 +19,7 @@ class ChangeIcon extends GoalDetailEvent {
   const ChangeIcon(this.icon);
 }
 
-class InitTempNameEdit extends GoalDetailEvent {}
-
-class InitTempAmountEdit extends GoalDetailEvent {}
+class InitTempEdit extends GoalDetailEvent {}
 
 class SaveEdit extends GoalDetailEvent {}
 

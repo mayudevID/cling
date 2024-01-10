@@ -109,6 +109,16 @@ FutureOr<void> initDatabaseTable(Database db, int version) async {
             ${NotificationMeta.isRead} INTEGER
          ) 
       '''),
+    db.execute('''
+         CREATE TABLE ${RecurringMeta.nameTable}(
+            ${RecurringMeta.id} INTEGER PRIMARY KEY AUTOINCREMENT,
+            ${RecurringMeta.idModel} INTEGER,
+            ${RecurringMeta.recurringDay} INTEGER,
+            ${RecurringMeta.recurringLast} TEXT,
+            ${RecurringMeta.amount} INTEGER,
+            ${RecurringMeta.type} INTEGER
+         ) 
+      '''),
   ]);
 
   for (var i = 0; i < inSourceData.length; i++) {
