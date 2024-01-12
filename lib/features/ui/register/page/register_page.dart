@@ -1,14 +1,13 @@
-import 'package:cling/core/common_widget.dart';
 import 'package:cling/core/utils.dart';
-
-import 'package:cling/features/repository/auth_repository.dart';
-import 'package:cling/resources/gen/fonts.gen.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
 import '../../../../../core/route.dart';
 import '../../../../../injection.dart';
+import '../../../../core/common_widget.dart';
+import '../../../../resources/gen/fonts.gen.dart';
+import '../../../repository/auth_repository.dart';
 import '../../language_currency/lang_export.dart';
 import '../bloc/register_bloc.dart';
 import '../widgets/form_register.dart';
@@ -38,9 +37,7 @@ class RegisterPageContent extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: 24.wmea),
           child: Column(
             children: [
-              SizedBox(
-                height: 40.hmea,
-              ),
+              SizedBox(height: 40.hmea),
               Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
@@ -53,9 +50,7 @@ class RegisterPageContent extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(
-                height: 8.hmea,
-              ),
+              SizedBox(height: 8.hmea),
               Text(
                 AppLocalizations.of(context)!.descHelloThere,
                 style: TextStyle(
@@ -65,13 +60,9 @@ class RegisterPageContent extends StatelessWidget {
                   fontWeight: FontWeight.w500,
                 ),
               ),
-              SizedBox(
-                height: 32.hmea,
-              ),
+              SizedBox(height: 32.hmea),
               ...formRegister(context),
-              SizedBox(
-                height: 40.hmea,
-              ),
+              SizedBox(height: 40.hmea),
               PinkButton(
                 onTap: () async {
                   FocusManager.instance.primaryFocus?.unfocus();
@@ -112,9 +103,7 @@ class RegisterPageContent extends StatelessWidget {
                 ),
                 textAlign: TextAlign.center,
               ),
-              SizedBox(
-                height: 24.hmea,
-              ),
+              SizedBox(height: 24.hmea),
             ],
           ),
         ),

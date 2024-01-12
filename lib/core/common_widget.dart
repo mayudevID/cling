@@ -295,9 +295,7 @@ Future<void> showBottomSheetChooseLang(BuildContext context) async {
               : null,
         );
       },
-      separatorBuilder: (BuildContext context, int index) {
-        return SizedBox(height: 18.hmea);
-      },
+      separatorBuilder: (_, idx) => SizedBox(height: 18.hmea),
     );
   }
 
@@ -306,54 +304,45 @@ Future<void> showBottomSheetChooseLang(BuildContext context) async {
     context: context,
     enableDrag: false,
     isDismissible: false,
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
     builder: (context) {
-      return BlocBuilder<LangCurrencyBloc, LangCurrencyState>(
-        builder: (context, state) {
-          return Container(
-            padding: EdgeInsets.all(24.wmea),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
+      return Container(
+        padding: EdgeInsets.all(24.wmea),
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
               children: [
-                Row(
-                  children: [
-                    Text(
-                      AppLocalizations.of(context)!.chooseLang,
-                      style: TextStyle(
-                        fontFamily: FontFamily.cabinetGrotesk,
-                        fontSize: 10.sp,
-                      ),
-                    ),
-                    const Spacer(),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
-                      child: Transform.rotate(
-                        angle: math.pi / 4,
-                        child: Assets.lib.resources.images.plus.svg(),
-                      ),
-                    ),
-                  ],
+                Text(
+                  AppLocalizations.of(context)!.chooseLang,
+                  style: TextStyle(
+                    fontFamily: FontFamily.cabinetGrotesk,
+                    fontSize: 10.sp,
+                  ),
                 ),
-                SizedBox(
-                  height: 16.hmea,
-                ),
-                MediaQuery.removePadding(
-                  removeTop: true,
-                  context: context,
-                  child: BlocBuilder<LangCurrencyBloc, LangCurrencyState>(
-                    builder: (context, state) {
-                      return listLanguage(state);
-                    },
+                const Spacer(),
+                GestureDetector(
+                  onTap: () => Navigator.pop(context),
+                  child: Transform.rotate(
+                    angle: math.pi / 4,
+                    child: Assets.lib.resources.images.plus.svg(),
                   ),
                 ),
               ],
             ),
-          );
-        },
+            SizedBox(height: 16.hmea),
+            MediaQuery.removePadding(
+              removeTop: true,
+              context: context,
+              child: BlocBuilder<LangCurrencyBloc, LangCurrencyState>(
+                builder: (context, state) {
+                  return listLanguage(state);
+                },
+              ),
+            ),
+          ],
+        ),
       );
     },
   );

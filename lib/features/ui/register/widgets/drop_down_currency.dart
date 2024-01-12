@@ -28,7 +28,7 @@ Widget dropDownCurrency(BuildContext context) {
             child: Row(
               children: [
                 Text(
-                  state.selectedCurrency.name,
+                  state.selectedCurrency.longName,
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: Colors.white,
@@ -47,7 +47,7 @@ Widget dropDownCurrency(BuildContext context) {
                 (item) => DropdownMenuItem<Currency>(
                   value: item,
                   child: Text(
-                    item.name,
+                    item.longName,
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 10.5.sp,
