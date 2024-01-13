@@ -45,6 +45,7 @@ dependencies:
   open_mail_app: ^0.4.5
   package_info_plus: ^5.0.1
   pull_to_refresh_flutter3: ^2.0.2
+  recaptcha_enterprise_flutter: ^18.4.0
   rename: ^3.0.0
   shared_preferences: ^2.2.0
   sizer: ^2.0.15
