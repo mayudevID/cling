@@ -1,10 +1,11 @@
 import 'package:cling/core/utils.dart';
 import 'package:cling/features/ui/language_currency/lang_export.dart';
 import 'package:flutter/material.dart';
-import 'package:open_mail_app/open_mail_app.dart';
+
 import 'package:sizer/sizer.dart';
 
 import '../../../../../resources/gen/fonts.gen.dart';
+import '../../../../core/open_mail_app.dart';
 
 Future<void> dialogEmailNotVerified(BuildContext context) async {
   await showDialog(

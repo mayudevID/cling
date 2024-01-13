@@ -56,8 +56,6 @@ void currencyBottomSheet(BuildContext context) {
     );
   }
 
-  ;
-
   showMaterialModalBottomSheet(
     context: context,
     enableDrag: false,
