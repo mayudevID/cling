@@ -17,7 +17,10 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      return web;
+      throw UnsupportedError(
+        'DefaultFirebaseOptions have not been configured for web - '
+        'you can reconfigure this by running the FlutterFire CLI again.',
+      );
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -46,19 +49,9 @@ class DefaultFirebaseOptions {
     }
   }
 
-  static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyCmX_mcUR0h1fNv6Kk0iy9UhS5G2EKuOb8',
-    appId: '1:726454501636:web:6e123c0a8b2355ec6d1051',
-    messagingSenderId: '726454501636',
-    projectId: 'cling-c49aa',
-    authDomain: 'cling-c49aa.firebaseapp.com',
-    storageBucket: 'cling-c49aa.appspot.com',
-    measurementId: 'G-B8JRCMWNR8',
-  );
-
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyCl7wqJThd-_E68DSKI53ECk7x3YGCgWI0',
-    appId: '1:726454501636:android:ab702bbb891ffed96d1051',
+    appId: '1:726454501636:android:00991a888941c4426d1051',
     messagingSenderId: '726454501636',
     projectId: 'cling-c49aa',
     storageBucket: 'cling-c49aa.appspot.com',
@@ -66,11 +59,10 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyDS3yxM9-35Krz_e8yyY325UqX7fmzIaRU',
-    appId: '1:726454501636:ios:c3634a1b70470c606d1051',
+    appId: '1:726454501636:ios:d5fc811c4276a4bf6d1051',
     messagingSenderId: '726454501636',
     projectId: 'cling-c49aa',
     storageBucket: 'cling-c49aa.appspot.com',
-    iosClientId: '726454501636-6gfr5fknobmh0do3tga12aps810cb947.apps.googleusercontent.com',
-    iosBundleId: 'com.maul.cling',
+    iosBundleId: 'com.mayudev.cling',
   );
 }

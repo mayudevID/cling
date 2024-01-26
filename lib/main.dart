@@ -26,8 +26,8 @@ import 'features/ui/main/statistics/bloc/statistics_bloc.dart';
 import 'features/ui/main/transaction/bloc/transaction_bloc.dart';
 import 'injection.dart';
 
-// adb shell "pm uninstall com.maul.cling"
-// adb shell "rm -rf /data/app/com.maul.cling-*"
+// adb shell "pm uninstall com.mayudev.cling"
+// adb shell "rm -rf /data/app/com.mayudev.cling-*"
 
 void main() async {
   Bloc.observer = MyGlobalObserver();

@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:726454501636:android:ab702bbb891ffed96d1051",
+        "mobilesdk_app_id": "1:726454501636:android:00991a888941c4426d1051",
         "android_client_info": {
-          "package_name": "com.maul.cling"
+          "package_name": "com.mayudev.cling"
         }
       },
       "oauth_client": [
