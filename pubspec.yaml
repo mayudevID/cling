@@ -11,7 +11,7 @@ dependencies:
   awesome_notifications: ^0.8.2
   bloc: ^8.1.2
   cloud_firestore: ^4.9.2
-  connectivity_plus: ^5.0.0
+  connectivity_plus: ^6.0.1
   currency_text_input_formatter: ^2.1.10
   device_preview: ^1.1.0
   dropdown_button2: ^2.3.6
@@ -34,7 +34,7 @@ dependencies:
   fluttertoast: ^8.2.2
   get_it: ^7.6.0
   intl: ^0.18.0
-  lottie: ^2.5.0
+  lottie: ^3.1.0
   math_expressions: ^2.4.0
   modal_bottom_sheet: ^3.0.0-pre
   money_formatter: ^0.0.4
@@ -42,7 +42,7 @@ dependencies:
   nil: ^1.1.1
   numberpicker: ^2.1.2
   onesignal_flutter: ^5.0.4
-  package_info_plus: ^5.0.1
+  package_info_plus: ^6.0.0
   pull_to_refresh_flutter3: ^2.0.2
   recaptcha_enterprise_flutter: ^18.4.0
   rename: ^3.0.0
@@ -51,8 +51,8 @@ dependencies:
   smooth_page_indicator: ^1.1.0
   sqflite: ^2.3.0
   super_tooltip: ^2.0.7
-  syncfusion_flutter_charts: ^24.1.44+1
-  syncfusion_flutter_datepicker: ^24.1.41
+  syncfusion_flutter_charts: ^25.1.37
+  syncfusion_flutter_datepicker: ^25.1.37
   timeago: ^3.6.0
   transitioned_indexed_stack: ^1.0.2
   url_launcher: ^6.2.3

@@ -77,8 +77,8 @@ class EditProfileBloc extends Bloc<EditProfileEvent, EditProfileState> {
 
   void _saveNewName(event, emit) async {
     final connectivityResult = await (Connectivity().checkConnectivity());
-    if (!(connectivityResult == ConnectivityResult.mobile ||
-        connectivityResult == ConnectivityResult.wifi)) {
+    if (!(connectivityResult[0] == ConnectivityResult.mobile ||
+        connectivityResult[0] == ConnectivityResult.wifi)) {
       errorSnackbar(
         mainContext,
         AppLocalizations.of(mainContext)!.noConnection,
@@ -111,8 +111,8 @@ class EditProfileBloc extends Bloc<EditProfileEvent, EditProfileState> {
 
   void _saveNewEmail(event, emit) async {
     final connectivityResult = await (Connectivity().checkConnectivity());
-    if (!(connectivityResult == ConnectivityResult.mobile ||
-        connectivityResult == ConnectivityResult.wifi)) {
+    if (!(connectivityResult[0] == ConnectivityResult.mobile ||
+        connectivityResult[0] == ConnectivityResult.wifi)) {
       errorSnackbar(
         mainContext,
         AppLocalizations.of(mainContext)!.noConnection,

@@ -95,8 +95,8 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       return;
     }
     final connectivityResult = await (Connectivity().checkConnectivity());
-    if (!(connectivityResult == ConnectivityResult.mobile ||
-        connectivityResult == ConnectivityResult.wifi)) {
+    if (!(connectivityResult[0] == ConnectivityResult.mobile ||
+        connectivityResult[0] == ConnectivityResult.wifi)) {
       errorSnackbar(
         mainContext,
         AppLocalizations.of(mainContext)!.noConnection,

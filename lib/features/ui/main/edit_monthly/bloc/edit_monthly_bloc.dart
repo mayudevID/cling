@@ -63,8 +63,8 @@ class EditMonthlyBloc extends Bloc<EditMonthlyEvent, EditMonthlyState> {
 
   void _saveNewMonthly(SaveNewMonthly event, _) async {
     final connectivityResult = await (Connectivity().checkConnectivity());
-    if (!(connectivityResult == ConnectivityResult.mobile ||
-        connectivityResult == ConnectivityResult.wifi)) {
+    if (!(connectivityResult[0] == ConnectivityResult.mobile ||
+        connectivityResult[0] == ConnectivityResult.wifi)) {
       errorSnackbar(
           mainContext, AppLocalizations.of(mainContext)!.noConnection);
       return;

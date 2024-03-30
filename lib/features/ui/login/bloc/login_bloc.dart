@@ -59,8 +59,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
   void _sendLogin(SendLogin event, _) async {
     final connectivityResult = await (Connectivity().checkConnectivity());
-    if (!(connectivityResult == ConnectivityResult.mobile ||
-        connectivityResult == ConnectivityResult.wifi)) {
+    if (!(connectivityResult[0] == ConnectivityResult.mobile ||
+        connectivityResult[0] == ConnectivityResult.wifi)) {
       errorSnackbar(
           mainContext, AppLocalizations.of(mainContext)!.noConnection);
       return;
@@ -176,8 +176,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     late bool result;
     do {
       final connectivityResult = await (Connectivity().checkConnectivity());
-      if (!(connectivityResult == ConnectivityResult.mobile ||
-          connectivityResult == ConnectivityResult.wifi)) {
+      if (!(connectivityResult[0] == ConnectivityResult.mobile ||
+          connectivityResult[0] == ConnectivityResult.wifi)) {
         //* No Connection
         result = await dialogNoInternetGetBackup(mainContext);
       } else {

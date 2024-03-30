@@ -119,7 +119,7 @@ class SettingsRepository {
   }
 
   Future<void> editProfileEmail({required String newEmail}) async {
-    await _firebaseAuth.currentUser!.updateEmail(newEmail);
+    await _firebaseAuth.currentUser!.verifyBeforeUpdateEmail(newEmail);
     await _firebaseAuth.currentUser!.reload();
     await Future.delayed(const Duration(milliseconds: 150));
     await _firebaseAuth.currentUser!.sendEmailVerification();
