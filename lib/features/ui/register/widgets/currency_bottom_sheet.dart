@@ -18,6 +18,7 @@ void currencyBottomSheet(BuildContext context) {
       itemCount: Currency.values.length,
       itemBuilder: (context, index) {
         return GestureDetector(
+          behavior: HitTestBehavior.opaque,
           onTap: () async {
             context.read<LangCurrencyBloc>().add(
                   ChangeCurrency(
@@ -32,6 +33,8 @@ void currencyBottomSheet(BuildContext context) {
           },
           child: Container(
             padding: EdgeInsets.all(16.hmea),
+            margin: EdgeInsets.only(
+                bottom: (index == Currency.values.length - 1) ? 8.hmea : 0),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
               border: Border.all(
