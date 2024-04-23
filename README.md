@@ -11,3 +11,6 @@ Cling! is money tracking app that helps users manage their finances and keep tra
 Creating and sticking to a budget can be a daunting task. Many individuals struggle to establish realistic budgets and find it challenging to track their expenses and adjust their spending habits accordingly.
 
 Made by [Flutter](https://flutter.dev/)
+Made by [Raissa Gabriella Putri](https://www.linkedin.com/in/raissagabriella/)
+
+<a href='https://play.google.com/store/apps/details?id=com.mayudev.cling&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png'/></a>
