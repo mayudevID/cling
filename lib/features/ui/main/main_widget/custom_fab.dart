@@ -78,7 +78,7 @@ Widget customFloatingActionButton(BuildContext context) {
         },
       ),
       distance: 50.hmea,
-      overlayStyle: ExpandableFabOverlayStyle(blur: 3),
+      overlayStyle: const ExpandableFabOverlayStyle(blur: 3),
       children: [
         const Nil(),
         for (Map data in buttonData)
