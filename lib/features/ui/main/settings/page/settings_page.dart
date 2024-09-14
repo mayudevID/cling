@@ -152,11 +152,11 @@ class SettingsPageContent extends StatelessWidget {
                     onPressed: () =>
                         context.read<ProfileBloc>().add(GoBackup()),
                     style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(
+                      backgroundColor: WidgetStateProperty.all(
                         const Color(0x3D787880),
                       ),
-                      overlayColor: MaterialStateProperty.all(Colors.white60),
-                      shape: MaterialStateProperty.all(
+                      overlayColor: WidgetStateProperty.all(Colors.white60),
+                      shape: WidgetStateProperty.all(
                         RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
@@ -191,11 +191,11 @@ class SettingsPageContent extends StatelessWidget {
                   child: ElevatedButton(
                     onPressed: () => dialogLogout(context),
                     style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(
+                      backgroundColor: WidgetStateProperty.all(
                         const Color(0xFFF8312F),
                       ),
-                      overlayColor: MaterialStateProperty.all(Colors.redAccent),
-                      shape: MaterialStateProperty.all(
+                      overlayColor: WidgetStateProperty.all(Colors.redAccent),
+                      shape: WidgetStateProperty.all(
                         RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
