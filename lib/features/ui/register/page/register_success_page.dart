@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:cling/core/common_widget.dart';
 import 'package:cling/core/utils.dart';
 

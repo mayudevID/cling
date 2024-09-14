@@ -35,7 +35,7 @@ class _TextFieldMonthlyDataState extends State<TextFieldMonthlyData> {
     return AutoSizeTextField(
       controller: TextFieldMonthlyData.textEditingController,
       inputFormatters: [
-        CurrencyTextInputFormatter(
+        CurrencyTextInputFormatter.currency(
           locale: context.select(
             (LangCurrencyBloc bloc) =>
                 bloc.state.selectedCurrency.value.toLanguageTag(),

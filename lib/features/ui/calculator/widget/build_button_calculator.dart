@@ -19,9 +19,9 @@ Widget buildButtonCalculator(
     child: ElevatedButton(
       onPressed: () => context.read<CalcBloc>().add(AddExpression(value)),
       style: ButtonStyle(
-        backgroundColor: MaterialStateProperty.all(color),
-        overlayColor: MaterialStateProperty.all(overlayColor),
-        shape: MaterialStateProperty.all(
+        backgroundColor: WidgetStateProperty.all(color),
+        overlayColor: WidgetStateProperty.all(overlayColor),
+        shape: WidgetStateProperty.all(
           RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(0),
           ),
