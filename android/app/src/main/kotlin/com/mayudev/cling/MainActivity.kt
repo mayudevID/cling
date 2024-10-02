@@ -1,4 +1,4 @@
-package com.mayudevid.cling
+package com.mayudev.cling
 
 import io.flutter.embedding.android.FlutterActivity
 
