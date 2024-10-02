@@ -1,7 +1,6 @@
-import 'package:cling/core/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sizer/sizer.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../resources/gen/fonts.gen.dart';
 import '../../../language_currency/lang_export.dart';
 import '../bloc/transaction_bloc.dart';
@@ -19,10 +18,10 @@ class TransactionPage extends StatelessWidget {
       child: Scaffold(
         backgroundColor: Colors.black,
         body: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24.wmea),
+          padding: EdgeInsets.symmetric(horizontal: 24.w),
           child: Column(
             children: [
-              SizedBox(height: 16.hmea),
+              SizedBox(height: 16.h),
               Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
@@ -36,9 +35,9 @@ class TransactionPage extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(height: 16.hmea),
+              SizedBox(height: 16.h),
               switchDateTransaction(context),
-              SizedBox(height: 16.hmea),
+              SizedBox(height: 16.h),
               Expanded(
                 child: GestureDetector(
                   behavior: HitTestBehavior.opaque,
@@ -104,7 +103,7 @@ class TransactionPage extends StatelessWidget {
                     )
                   : listTransaction(context, state.listTransaction[idx]);
             },
-            separatorBuilder: (_, idx) => SizedBox(height: 8.hmea),
+            separatorBuilder: (_, idx) => SizedBox(height: 8.h),
           ),
         );
       },

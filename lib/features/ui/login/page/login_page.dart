@@ -1,11 +1,10 @@
 import 'package:cling/core/common_widget.dart';
 import 'package:cling/core/route.dart';
-import 'package:cling/core/utils.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:sizer/sizer.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../injection.dart';
 import '../../../../../resources/gen/fonts.gen.dart';
@@ -43,11 +42,11 @@ class LoginPageContent extends StatelessWidget {
         resizeToAvoidBottomInset: false,
         backgroundColor: Colors.black,
         body: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24.wmea),
+          padding: EdgeInsets.symmetric(horizontal: 24.w),
           child: Column(
             children: [
               SizedBox(
-                height: 40.hmea,
+                height: 40.h,
               ),
               Align(
                 alignment: Alignment.centerLeft,
@@ -62,7 +61,7 @@ class LoginPageContent extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                height: 8.hmea,
+                height: 8.h,
               ),
               Text(
                 AppLocalizations.of(context)!.descWelcomeBack,
@@ -74,11 +73,11 @@ class LoginPageContent extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                height: 32.hmea,
+                height: 32.h,
               ),
               ...formLogin(context),
               SizedBox(
-                height: 40.hmea,
+                height: 40.h,
               ),
               PinkButton(
                 onTap: () async {
@@ -88,18 +87,18 @@ class LoginPageContent extends StatelessWidget {
                 name: AppLocalizations.of(context)!.login,
               ),
               // SizedBox(
-              //   height: 24.hmea,
+              //   height: 24.h,
               // ),
               // Row(
               //   children: [
               //     Expanded(
               //       child: Container(
-              //         height: 1.hmea,
+              //         height: 1.h,
               //         color: Colors.grey,
               //       ),
               //     ),
               //     Padding(
-              //       padding: EdgeInsets.symmetric(horizontal: 24.wmea),
+              //       padding: EdgeInsets.symmetric(horizontal: 24.w),
               //       child: Text(
               //         AppLocalizations.of(context)!.or,
               //         style: TextStyle(
@@ -111,18 +110,18 @@ class LoginPageContent extends StatelessWidget {
               //     ),
               //     Expanded(
               //       child: Container(
-              //         height: 1.hmea,
+              //         height: 1.h,
               //         color: Colors.grey,
               //       ),
               //     ),
               //   ],
               // ),
               // SizedBox(
-              //   height: 24.hmea,
+              //   height: 24.h,
               // ),
               // SizedBox(
-              //   width: 390.wmea,
-              //   height: 57.wmea,
+              //   width: 390.w,
+              //   height: 57.w,
               //   child: ElevatedButton(
               //     onPressed: () {},
               //     style: ButtonStyle(
@@ -144,7 +143,7 @@ class LoginPageContent extends StatelessWidget {
               //           color: Colors.white,
               //         ),
               //         SizedBox(
-              //           width: 10.wmea,
+              //           width: 10.w,
               //         ),
               //         Text(
               //           AppLocalizations.of(context)!.loginWithAnon,
@@ -195,7 +194,7 @@ class LoginPageContent extends StatelessWidget {
                 textAlign: TextAlign.center,
               ),
               SizedBox(
-                height: 55.hmea,
+                height: 55.h,
               ),
             ],
           ),

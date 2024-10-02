@@ -1,10 +1,9 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:cling/core/utils.dart';
 import 'package:cling/features/ui/language_currency/lang_export.dart';
 import 'package:flutter/material.dart';
 
-import 'package:sizer/sizer.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../core/open_mail_app.dart';
 import '../../../../../resources/gen/fonts.gen.dart';
@@ -32,10 +31,10 @@ Future<bool> dialogChangeEmailOrPassword(
             color: Colors.white,
           ),
           padding: EdgeInsets.only(
-            top: 18.hmea,
-            left: 18.wmea,
-            right: 18.wmea,
-            bottom: 18.hmea,
+            top: 18.h,
+            left: 18.w,
+            right: 18.w,
+            bottom: 18.h,
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -52,7 +51,7 @@ Future<bool> dialogChangeEmailOrPassword(
                 ),
               ),
               SizedBox(
-                height: 8.hmea,
+                height: 8.h,
               ),
               Text(
                 (type == "email")
@@ -66,14 +65,14 @@ Future<bool> dialogChangeEmailOrPassword(
                 textAlign: TextAlign.center,
               ),
               SizedBox(
-                height: 12.hmea,
+                height: 12.h,
               ),
               GestureDetector(
                 onTap: () {
                   Navigator.pop(context, true);
                 },
                 child: Container(
-                  padding: EdgeInsets.all(12.hmea),
+                  padding: EdgeInsets.all(12.h),
                   decoration: BoxDecoration(
                     color: const Color(0xFFF06AC9),
                     borderRadius: BorderRadius.circular(24),
@@ -93,14 +92,14 @@ Future<bool> dialogChangeEmailOrPassword(
                 ),
               ),
               SizedBox(
-                height: 8.hmea,
+                height: 8.h,
               ),
               GestureDetector(
                 onTap: () {
                   Navigator.pop(context, false);
                 },
                 child: Container(
-                  padding: EdgeInsets.all(12.hmea),
+                  padding: EdgeInsets.all(12.h),
                   decoration: BoxDecoration(
                     color: Colors.black,
                     borderRadius: BorderRadius.circular(24),

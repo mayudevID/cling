@@ -1,10 +1,9 @@
 import 'dart:async';
 
 import 'package:cling/core/logger.dart';
-import 'package:cling/core/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sizer/sizer.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../core/common_widget.dart';
 import '../../../../../resources/gen/assets.gen.dart';
@@ -37,10 +36,10 @@ class SettingsPageContent extends StatelessWidget {
       child: Scaffold(
         backgroundColor: Colors.black,
         body: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24.wmea),
+          padding: EdgeInsets.symmetric(horizontal: 24.w),
           child: Column(
             children: [
-              SizedBox(height: 16.hmea),
+              SizedBox(height: 16.h),
               Row(
                 children: [
                   GestureDetector(
@@ -48,7 +47,7 @@ class SettingsPageContent extends StatelessWidget {
                     child: Assets.lib.resources.images.fluentChevronLeft24Filled
                         .svg(),
                   ),
-                  SizedBox(width: 16.wmea),
+                  SizedBox(width: 16.w),
                   Text(
                     AppLocalizations.of(context)!.settings,
                     textAlign: TextAlign.center,
@@ -62,16 +61,16 @@ class SettingsPageContent extends StatelessWidget {
                   const Spacer(),
                 ],
               ),
-              SizedBox(height: 24.hmea),
+              SizedBox(height: 24.h),
               GestureDetector(
                 onTap: () => showBottomSheetChooseLang(context),
                 behavior: HitTestBehavior.opaque,
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    SizedBox(width: 8.wmea),
+                    SizedBox(width: 8.w),
                     Assets.lib.resources.images.globe.svg(),
-                    SizedBox(width: 10.wmea),
+                    SizedBox(width: 10.w),
                     Text(
                       AppLocalizations.of(context)!.changeLanguage,
                       textAlign: TextAlign.center,
@@ -84,11 +83,11 @@ class SettingsPageContent extends StatelessWidget {
                     ),
                     const Spacer(),
                     Assets.lib.resources.images.chevronRight16.svg(),
-                    SizedBox(width: 8.wmea),
+                    SizedBox(width: 8.w),
                   ],
                 ),
               ),
-              SizedBox(height: 48.hmea),
+              SizedBox(height: 48.h),
               Text(
                 context.read<ProfileBloc>().state.version,
                 style: TextStyle(
@@ -98,9 +97,9 @@ class SettingsPageContent extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              SizedBox(height: 12.hmea),
+              SizedBox(height: 12.h),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 8.wmea),
+                padding: EdgeInsets.symmetric(horizontal: 8.w),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -142,12 +141,12 @@ class SettingsPageContent extends StatelessWidget {
                   ],
                 ),
               ),
-              SizedBox(height: 16.hmea),
+              SizedBox(height: 16.h),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 8.wmea),
+                padding: EdgeInsets.symmetric(horizontal: 8.w),
                 child: SizedBox(
-                  width: 390.wmea,
-                  height: 45.hmea,
+                  width: 390.w,
+                  height: 45.h,
                   child: ElevatedButton(
                     onPressed: () =>
                         context.read<ProfileBloc>().add(GoBackup()),
@@ -166,7 +165,7 @@ class SettingsPageContent extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Assets.lib.resources.images.databaseBackup.svg(),
-                        SizedBox(width: 8.wmea),
+                        SizedBox(width: 8.w),
                         Text(
                           AppLocalizations.of(context)!.backup,
                           textAlign: TextAlign.center,
@@ -182,12 +181,12 @@ class SettingsPageContent extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(height: 16.hmea),
+              SizedBox(height: 16.h),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 8.wmea),
+                padding: EdgeInsets.symmetric(horizontal: 8.w),
                 child: SizedBox(
-                  width: 390.wmea,
-                  height: 57.hmea,
+                  width: 390.w,
+                  height: 57.h,
                   child: ElevatedButton(
                     onPressed: () => dialogLogout(context),
                     style: ButtonStyle(

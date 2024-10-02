@@ -1,12 +1,11 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:cling/core/common_widget.dart';
-import 'package:cling/core/utils.dart';
 
 import 'package:cling/resources/gen/fonts.gen.dart';
 import 'package:flutter/material.dart';
 
-import 'package:sizer/sizer.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../core/open_mail_app.dart';
 import '../../language_currency/lang_export.dart';
@@ -44,7 +43,7 @@ class RegisterSuccessPage extends StatelessWidget {
               ),
             ),
             SizedBox(
-              height: 97.hmea,
+              height: 97.h,
             ),
             Text(
               AppLocalizations.of(context)!.almostThere,
@@ -57,7 +56,7 @@ class RegisterSuccessPage extends StatelessWidget {
               ),
             ),
             SizedBox(
-              height: 16.hmea,
+              height: 16.h,
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 45),
@@ -73,7 +72,7 @@ class RegisterSuccessPage extends StatelessWidget {
               ),
             ),
             SizedBox(
-              height: 63.hmea,
+              height: 63.h,
             ),
             PinkButton(
               onTap: () async {

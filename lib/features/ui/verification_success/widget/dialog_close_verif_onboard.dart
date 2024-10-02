@@ -1,7 +1,6 @@
-import 'package:cling/core/utils.dart';
 import 'package:cling/features/ui/language_currency/lang_export.dart';
 import 'package:flutter/material.dart';
-import 'package:sizer/sizer.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../resources/gen/fonts.gen.dart';
 
@@ -23,10 +22,10 @@ Future<void> dialogCloseVerifOnboard(BuildContext context) async {
             color: Colors.white,
           ),
           padding: EdgeInsets.only(
-            top: 18.hmea,
-            left: 18.wmea,
-            right: 18.wmea,
-            bottom: 18.hmea,
+            top: 18.h,
+            left: 18.w,
+            right: 18.w,
+            bottom: 18.h,
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -41,7 +40,7 @@ Future<void> dialogCloseVerifOnboard(BuildContext context) async {
                 ),
               ),
               SizedBox(
-                height: 8.hmea,
+                height: 8.h,
               ),
               Text(
                 "Are you sure want to close? Monthly budget and Monthly Income will be empty.",
@@ -53,7 +52,7 @@ Future<void> dialogCloseVerifOnboard(BuildContext context) async {
                 textAlign: TextAlign.center,
               ),
               SizedBox(
-                height: 12.hmea,
+                height: 12.h,
               ),
               Row(
                 children: [
@@ -65,7 +64,7 @@ Future<void> dialogCloseVerifOnboard(BuildContext context) async {
                         ..pop();
                     },
                     child: Container(
-                      padding: EdgeInsets.all(12.hmea),
+                      padding: EdgeInsets.all(12.h),
                       decoration: BoxDecoration(
                         color: Colors.red,
                         borderRadius: BorderRadius.circular(8),
@@ -85,14 +84,14 @@ Future<void> dialogCloseVerifOnboard(BuildContext context) async {
                     ),
                   ),
                   SizedBox(
-                    width: 10.wmea,
+                    width: 10.w,
                   ),
                   GestureDetector(
                     onTap: () async {
                       Navigator.pop(context);
                     },
                     child: Container(
-                      padding: EdgeInsets.all(12.hmea),
+                      padding: EdgeInsets.all(12.h),
                       decoration: BoxDecoration(
                         color: Colors.black,
                         borderRadius: BorderRadius.circular(8),

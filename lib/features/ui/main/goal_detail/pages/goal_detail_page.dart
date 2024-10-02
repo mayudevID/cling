@@ -1,9 +1,8 @@
 import 'package:cling/core/common_widget.dart';
-import 'package:cling/core/utils.dart';
 import 'package:cling/injection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sizer/sizer.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../resources/gen/assets.gen.dart';
 import '../../../../../resources/gen/fonts.gen.dart';
@@ -43,11 +42,11 @@ class GoalDetailPageContent extends StatelessWidget {
       child: Scaffold(
         backgroundColor: Colors.black,
         body: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24.wmea),
+          padding: EdgeInsets.symmetric(horizontal: 24.w),
           child: Column(
             children: [
               Container(
-                margin: EdgeInsets.only(top: 16.hmea),
+                margin: EdgeInsets.only(top: 16.h),
                 child: Row(
                   children: [
                     GestureDetector(
@@ -56,7 +55,7 @@ class GoalDetailPageContent extends StatelessWidget {
                           .lib.resources.images.fluentChevronLeft24Filled
                           .svg(),
                     ),
-                    SizedBox(width: 8.wmea),
+                    SizedBox(width: 8.w),
                     BlocBuilder<GoalDetailBloc, GoalDetailState>(
                       builder: (context, state) {
                         return Text(
@@ -86,15 +85,15 @@ class GoalDetailPageContent extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                height: 32.hmea,
+                height: 32.h,
               ),
               logoGoalWidget(context),
               SizedBox(
-                height: 24.hmea,
+                height: 24.h,
               ),
               targetGoalWidget(context),
               SizedBox(
-                height: 32.hmea,
+                height: 32.h,
               ),
               Align(
                 alignment: Alignment.centerLeft,
@@ -108,7 +107,7 @@ class GoalDetailPageContent extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(height: 16.hmea),
+              SizedBox(height: 16.h),
               Expanded(
                 child: BlocBuilder<GoalDetailBloc, GoalDetailState>(
                   buildWhen: (previous, current) {
@@ -169,17 +168,17 @@ class GoalDetailPageContent extends StatelessWidget {
                               )
                             : container;
                       },
-                      separatorBuilder: (cntxt, _) => SizedBox(height: 6.hmea),
+                      separatorBuilder: (cntxt, _) => SizedBox(height: 6.h),
                     );
                   },
                 ),
               ),
-              SizedBox(height: 16.hmea),
+              SizedBox(height: 16.h),
               PinkButton(
                 onTap: () => addGoalSavingBottomSheet(context),
                 name: AppLocalizations.of(context)!.addSaving,
               ),
-              SizedBox(height: 16.hmea),
+              SizedBox(height: 16.h),
             ],
           ),
         ),

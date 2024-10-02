@@ -1,8 +1,7 @@
 import 'package:cling/core/route.dart';
-import 'package:cling/core/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sizer/sizer.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../resources/gen/assets.gen.dart';
 import '../../../../../resources/gen/fonts.gen.dart';
@@ -17,12 +16,12 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 24.wmea),
+      padding: EdgeInsets.symmetric(horizontal: 24.w),
       child: Column(
         children: [
-          SizedBox(height: 31.hmea),
+          SizedBox(height: 31.h),
           nameAndEmail(context),
-          SizedBox(height: 31.hmea),
+          SizedBox(height: 31.h),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -52,7 +51,7 @@ class ProfilePage extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: 31.hmea),
+          SizedBox(height: 31.h),
           Align(
             alignment: Alignment.centerLeft,
             child: Text(
@@ -66,9 +65,9 @@ class ProfilePage extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(height: 24.hmea),
+          SizedBox(height: 24.h),
           ...listAccountSettings(context),
-          SizedBox(height: 31.hmea),
+          SizedBox(height: 31.h),
           Align(
             alignment: Alignment.centerLeft,
             child: Text(
@@ -82,16 +81,16 @@ class ProfilePage extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(height: 24.hmea),
+          SizedBox(height: 24.h),
           GestureDetector(
             onTap: () {},
             behavior: HitTestBehavior.opaque,
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                SizedBox(width: 8.wmea),
+                SizedBox(width: 8.w),
                 Assets.lib.resources.images.fluentStar24Filled.svg(),
-                SizedBox(width: 10.wmea),
+                SizedBox(width: 10.w),
                 Text(
                   AppLocalizations.of(context)!.rateCling,
                   textAlign: TextAlign.center,
@@ -104,11 +103,11 @@ class ProfilePage extends StatelessWidget {
                 ),
                 const Spacer(),
                 Assets.lib.resources.images.chevronRight16.svg(),
-                SizedBox(width: 8.wmea),
+                SizedBox(width: 8.w),
               ],
             ),
           ),
-          SizedBox(height: 31.hmea),
+          SizedBox(height: 31.h),
           GestureDetector(
             onTap: () {
               Navigator.pushNamed(
@@ -133,7 +132,7 @@ class ProfilePage extends StatelessWidget {
                 ),
                 const Spacer(),
                 Assets.lib.resources.images.chevronRight16.svg(),
-                SizedBox(width: 8.wmea),
+                SizedBox(width: 8.w),
               ],
             ),
           ),

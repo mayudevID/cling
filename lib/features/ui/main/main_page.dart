@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
 import 'package:nil/nil.dart';
-import 'package:sizer/sizer.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:transitioned_indexed_stack/transitioned_indexed_stack.dart';
 import 'home/page/home_page.dart';
 import 'main_bloc/main_bloc.dart';

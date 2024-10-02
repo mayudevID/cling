@@ -1,5 +1,5 @@
-import 'package:cling/core/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class StackStarReg extends StatelessWidget {
   const StackStarReg({super.key});
@@ -9,11 +9,11 @@ class StackStarReg extends StatelessWidget {
     return Stack(
       children: [
         Positioned(
-          left: 308.90.wmea,
-          top: 95.hmea,
+          left: 308.90.w,
+          top: 95.h,
           child: Container(
-            width: 61.02.wmea,
-            height: 61.02.wmea,
+            width: 61.02.w,
+            height: 61.02.w,
             decoration: const ShapeDecoration(
               color: Color(0xFFF2D82D),
               shape: StarBorder(
@@ -28,11 +28,11 @@ class StackStarReg extends StatelessWidget {
           ),
         ),
         Positioned(
-          left: 350.wmea,
-          top: 80.45.hmea,
+          left: 350.w,
+          top: 80.45.h,
           child: Container(
-            width: 34.49.wmea,
-            height: 34.49.wmea,
+            width: 34.49.w,
+            height: 34.49.w,
             decoration: const ShapeDecoration(
               color: Color(0xFF006DE9),
               shape: StarBorder(
@@ -47,11 +47,11 @@ class StackStarReg extends StatelessWidget {
           ),
         ),
         Positioned(
-          left: 45.wmea,
-          top: 108.hmea,
+          left: 45.w,
+          top: 108.h,
           child: Container(
-            width: 21.wmea,
-            height: 21.wmea,
+            width: 21.w,
+            height: 21.w,
             decoration: const ShapeDecoration(
               color: Color(0xFFE54C19),
               shape: StarBorder(
@@ -66,8 +66,8 @@ class StackStarReg extends StatelessWidget {
           ),
         ),
         Positioned(
-          left: 30.hmea,
-          top: 123.hmea,
+          left: 30.h,
+          top: 123.h,
           child: Container(
             width: 34.49,
             height: 34.49,
@@ -85,11 +85,11 @@ class StackStarReg extends StatelessWidget {
           ),
         ),
         Positioned(
-          left: 309.wmea,
-          top: 305.wmea,
+          left: 309.w,
+          top: 305.w,
           child: Container(
-            width: 34.49.wmea,
-            height: 34.49.wmea,
+            width: 34.49.w,
+            height: 34.49.w,
             decoration: const ShapeDecoration(
               color: Color(0xFFF599DA),
               shape: StarBorder(

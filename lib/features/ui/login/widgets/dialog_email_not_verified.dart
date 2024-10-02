@@ -1,10 +1,9 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:cling/core/utils.dart';
 import 'package:cling/features/ui/language_currency/lang_export.dart';
 import 'package:flutter/material.dart';
 
-import 'package:sizer/sizer.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../resources/gen/fonts.gen.dart';
 import '../../../../core/open_mail_app.dart';
@@ -27,10 +26,10 @@ Future<void> dialogEmailNotVerified(BuildContext context) async {
           color: Colors.white,
         ),
         padding: EdgeInsets.only(
-          top: 18.hmea,
-          left: 18.wmea,
-          right: 18.wmea,
-          bottom: 18.hmea,
+          top: 18.h,
+          left: 18.w,
+          right: 18.w,
+          bottom: 18.h,
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -44,7 +43,7 @@ Future<void> dialogEmailNotVerified(BuildContext context) async {
                 color: Colors.black,
               ),
             ),
-            SizedBox(height: 8.hmea),
+            SizedBox(height: 8.h),
             Text(
               AppLocalizations.of(context)!.goVerify,
               style: TextStyle(
@@ -54,7 +53,7 @@ Future<void> dialogEmailNotVerified(BuildContext context) async {
               ),
               textAlign: TextAlign.center,
             ),
-            SizedBox(height: 12.hmea),
+            SizedBox(height: 12.h),
             GestureDetector(
               onTap: () async {
                 await Future.microtask(() async {
@@ -62,7 +61,7 @@ Future<void> dialogEmailNotVerified(BuildContext context) async {
                 });
               },
               child: Container(
-                padding: EdgeInsets.all(12.hmea),
+                padding: EdgeInsets.all(12.h),
                 decoration: BoxDecoration(
                   color: const Color(0xFFF06AC9),
                   borderRadius: BorderRadius.circular(24),

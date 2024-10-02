@@ -1,6 +1,6 @@
-import 'package:cling/core/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import "dart:math" as math;
 import '../../../../../../resources/gen/assets.gen.dart';
@@ -31,7 +31,7 @@ Widget rangeDateMonthlyByCategory(BuildContext context) {
             context.read<StatsDetailBloc>().add(const ChangeMonthly(null));
           },
           child: Container(
-            padding: EdgeInsets.all(14.wmea),
+            padding: EdgeInsets.all(14.w),
             decoration: BoxDecoration(
               color: const Color(0x3D787880),
               borderRadius: BorderRadius.circular(5),

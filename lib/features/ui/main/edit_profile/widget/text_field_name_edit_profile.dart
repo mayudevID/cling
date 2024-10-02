@@ -1,10 +1,9 @@
 // ignore_for_file: must_be_immutable
 
-import 'package:cling/core/utils.dart';
 import 'package:cling/features/ui/main/edit_profile/bloc/edit_profile_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sizer/sizer.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../resources/gen/fonts.gen.dart';
 import '../../../language_currency/lang_export.dart';
 
@@ -54,8 +53,8 @@ class _TextFieldNameRegState extends State<TextFieldNameEditProfile> {
             : null,
       ),
       padding: EdgeInsets.symmetric(
-        vertical: 16.hmea,
-        horizontal: 16.wmea,
+        vertical: 16.h,
+        horizontal: 16.w,
       ),
       child: TextFormField(
         focusNode: _focus,

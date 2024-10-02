@@ -1,8 +1,7 @@
-import 'package:cling/core/utils.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sizer/sizer.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../resources/gen/assets.gen.dart';
 import '../../../../../resources/gen/fonts.gen.dart';
@@ -37,8 +36,8 @@ Widget dropDownEditCategories({required FlowType flowType}) {
               ),
             ),
             padding: EdgeInsets.symmetric(
-              vertical: 16.hmea,
-              horizontal: 16.wmea,
+              vertical: 16.h,
+              horizontal: 16.w,
             ),
             child: Row(
               children: [
@@ -83,7 +82,7 @@ Widget dropDownEditCategories({required FlowType flowType}) {
             }
           },
           dropdownStyleData: DropdownStyleData(
-            width: 390.wmea,
+            width: 390.w,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
               color: const Color(0xFF313131),

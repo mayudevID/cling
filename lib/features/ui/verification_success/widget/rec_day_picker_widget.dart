@@ -2,7 +2,7 @@ import 'package:cling/core/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:numberpicker/numberpicker.dart';
-import 'package:sizer/sizer.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../resources/gen/assets.gen.dart';
 import '../../../../resources/gen/fonts.gen.dart';
@@ -12,7 +12,7 @@ import 'dart:math' as math;
 
 Widget recDayPickerWidget(BuildContext context) {
   return SizedBox(
-    height: 200.hmea,
+    height: 200.h,
     child: Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -24,7 +24,7 @@ Widget recDayPickerWidget(BuildContext context) {
             fontWeight: FontWeight.w500,
           ),
         ),
-        SizedBox(height: 16.hmea),
+        SizedBox(height: 16.h),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -36,7 +36,7 @@ Widget recDayPickerWidget(BuildContext context) {
               child:
                   Assets.lib.resources.images.fluentChevronLeft24Filled.svg(),
             ),
-            SizedBox(width: 16.wmea),
+            SizedBox(width: 16.w),
             BlocBuilder<MonthlyDataBloc, MonthlyDataState>(
               buildWhen: (p, c) => p.dateRec != c.dateRec,
               builder: (context, state) {
@@ -68,7 +68,7 @@ Widget recDayPickerWidget(BuildContext context) {
                 );
               },
             ),
-            SizedBox(width: 16.wmea),
+            SizedBox(width: 16.w),
             GestureDetector(
               onTap: () {
                 int day = context.read<MonthlyDataBloc>().state.dateRec + 1;

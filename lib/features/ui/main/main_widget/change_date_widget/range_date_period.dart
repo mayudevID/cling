@@ -1,4 +1,3 @@
-import 'package:cling/core/utils.dart';
 import 'package:cling/features/ui/language_currency/lang_export.dart';
 
 import 'package:cling/features/ui/main/statistics/bloc/statistics_bloc.dart';
@@ -7,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:sizer/sizer.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 import '../../../../../resources/gen/assets.gen.dart';
@@ -53,7 +52,7 @@ Widget rangeDatePeriod(BuildContext mainContext) {
     },
     child: Container(
       width: double.infinity,
-      padding: EdgeInsets.all(14.wmea),
+      padding: EdgeInsets.all(14.w),
       decoration: BoxDecoration(
         color: const Color(0x3D787880),
         borderRadius: BorderRadius.circular(5),
@@ -115,7 +114,7 @@ void pickDateRangeBottomSheet(BuildContext mainContext) {
                 ),
                 color: Colors.white,
               ),
-              height: 550.hmea,
+              height: 550.h,
               child: Column(
                 children: [
                   Padding(
@@ -137,8 +136,8 @@ void pickDateRangeBottomSheet(BuildContext mainContext) {
                           color: Color(0xFF313131),
                         ),
                         padding: EdgeInsets.symmetric(
-                          vertical: 16.hmea,
-                          horizontal: 16.wmea,
+                          vertical: 16.h,
+                          horizontal: 16.w,
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,

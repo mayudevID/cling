@@ -1,10 +1,9 @@
-import 'package:cling/core/utils.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:sizer/sizer.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'dart:math' as math;
 import '../../../../../core/common_widget.dart';
 import '../../../../../core/route.dart';
@@ -28,7 +27,7 @@ void addGoalSavingBottomSheet(BuildContext mainContext) {
       return BlocProvider.value(
         value: BlocProvider.of<GoalDetailBloc>(mainContext),
         child: Container(
-          padding: EdgeInsets.all(24.wmea),
+          padding: EdgeInsets.all(24.w),
           decoration: const BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.only(
@@ -67,7 +66,7 @@ void addGoalSavingBottomSheet(BuildContext mainContext) {
                     ),
                   ),
                 ),
-                SizedBox(height: 8.hmea),
+                SizedBox(height: 8.h),
                 Container(
                   decoration: ShapeDecoration(
                     color: const Color.fromARGB(255, 224, 224, 224),
@@ -76,8 +75,8 @@ void addGoalSavingBottomSheet(BuildContext mainContext) {
                     ),
                   ),
                   padding: EdgeInsets.symmetric(
-                    vertical: 16.hmea,
-                    horizontal: 16.wmea,
+                    vertical: 16.h,
+                    horizontal: 16.w,
                   ),
                   child: Row(
                     children: [
@@ -131,7 +130,7 @@ void addGoalSavingBottomSheet(BuildContext mainContext) {
                     ],
                   ),
                 ),
-                SizedBox(height: 16.hmea),
+                SizedBox(height: 16.h),
                 Align(
                   alignment: Alignment.centerLeft,
                   child: BlocBuilder<LangCurrencyBloc, LangCurrencyState>(
@@ -151,7 +150,7 @@ void addGoalSavingBottomSheet(BuildContext mainContext) {
                     },
                   ),
                 ),
-                SizedBox(height: 8.hmea),
+                SizedBox(height: 8.h),
                 GestureDetector(
                   onTap: () async {
                     final amountRes = await Navigator.pushNamed(
@@ -176,8 +175,8 @@ void addGoalSavingBottomSheet(BuildContext mainContext) {
                       ),
                     ),
                     padding: EdgeInsets.symmetric(
-                      vertical: 16.hmea,
-                      horizontal: 16.wmea,
+                      vertical: 16.h,
+                      horizontal: 16.w,
                     ),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -199,7 +198,7 @@ void addGoalSavingBottomSheet(BuildContext mainContext) {
                             );
                           },
                         ),
-                        SizedBox(width: 10.wmea),
+                        SizedBox(width: 10.w),
                         Expanded(
                           child: BlocBuilder<GoalDetailBloc, GoalDetailState>(
                             buildWhen: (p, c) => p.amount != c.amount,
@@ -221,7 +220,7 @@ void addGoalSavingBottomSheet(BuildContext mainContext) {
                     ),
                   ),
                 ),
-                SizedBox(height: 24.hmea),
+                SizedBox(height: 24.h),
                 PinkButton(
                   onTap: () {
                     mainContext.read<GoalDetailBloc>().add(
@@ -231,7 +230,7 @@ void addGoalSavingBottomSheet(BuildContext mainContext) {
                   },
                   name: "Add Saving",
                 ),
-                SizedBox(height: 24.hmea),
+                SizedBox(height: 24.h),
               ],
             ),
           ),

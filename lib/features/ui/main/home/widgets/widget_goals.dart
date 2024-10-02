@@ -1,6 +1,5 @@
-import 'package:cling/core/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:sizer/sizer.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../core/common_widget.dart';
 import '../../../../../core/route.dart';
@@ -25,10 +24,10 @@ Widget widgetGoals(
     },
     child: Container(
       margin: EdgeInsets.only(
-        left: (index == 0) ? 24.wmea : 12.wmea,
-        right: (index == length - 1) ? 24.wmea : 0,
+        left: (index == 0) ? 24.w : 12.w,
+        right: (index == length - 1) ? 24.w : 0,
       ),
-      padding: EdgeInsets.symmetric(vertical: 16.wmea, horizontal: 16.wmea),
+      padding: EdgeInsets.symmetric(vertical: 16.w, horizontal: 16.w),
       decoration: BoxDecoration(
         color: const Color(0x3D787880),
         borderRadius: BorderRadius.circular(10),
@@ -36,14 +35,14 @@ Widget widgetGoals(
       child: Column(
         children: [
           Container(
-            padding: EdgeInsets.all(8.wmea),
+            padding: EdgeInsets.all(8.w),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(5),
             ),
             child: Text(goalModel.image, style: TextStyle(fontSize: 18.sp)),
           ),
-          SizedBox(height: 12.hmea),
+          SizedBox(height: 12.h),
           Text(
             goalModel.name,
             textAlign: TextAlign.center,
@@ -55,20 +54,20 @@ Widget widgetGoals(
               fontWeight: FontWeight.w500,
             ),
           ),
-          SizedBox(height: 4.hmea),
+          SizedBox(height: 4.h),
           Stack(
             children: [
               Container(
-                width: 133.wmea,
-                height: 8.hmea,
+                width: 133.w,
+                height: 8.h,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(100),
                   color: Colors.white.withOpacity(0.76),
                 ),
               ),
               Container(
-                width: ((133.wmea * percent) / 100.0),
-                height: 8.hmea,
+                width: ((133.w * percent) / 100.0),
+                height: 8.h,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(100),
                   color: const Color(0xFF006DE9),
@@ -76,7 +75,7 @@ Widget widgetGoals(
               ),
             ],
           ),
-          SizedBox(height: 4.hmea),
+          SizedBox(height: 4.h),
           Row(
             children: [
               NominalMoneyFormatter(

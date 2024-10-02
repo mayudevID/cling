@@ -1,11 +1,10 @@
 import 'dart:async';
 
-import 'package:cling/core/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:sizer/sizer.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../injection.dart';
 import '../../../main.dart';
@@ -24,14 +23,14 @@ class _SplashContentState extends State<SplashContent>
     with TickerProviderStateMixin {
   final String nameApp = 'Cling!';
 
-  late final _styleText = TextStyle(
+  late final _styleText = const TextStyle(
     color: Colors.white,
-    fontSize: 17.sp,
+    fontSize: 17,
     fontFamily: FontFamily.bungee,
     fontWeight: FontWeight.w400,
   );
 
-  late final _leftText = 50.w - (_textSize(nameApp, _styleText).width / 2).wmea;
+  late final _leftText = 50 - (_textSize(nameApp, _styleText).width / 2);
 
   late final AnimationController _controller = AnimationController(
     duration: const Duration(seconds: 3),
@@ -51,8 +50,8 @@ class _SplashContentState extends State<SplashContent>
   //* Animation Pict
 
   late final Animation<RelativeRect> _tween = RelativeRectTween(
-    begin: RelativeRect.fromLTRB(0, 0, 0, -5.hmea),
-    end: RelativeRect.fromLTRB(0, 0, 0, 12.hmea),
+    begin: RelativeRect.fromLTRB(0, 0, 0, -5.h),
+    end: RelativeRect.fromLTRB(0, 0, 0, 12.h),
   ).animate(
     CurvedAnimation(
       parent: _controller,
@@ -63,8 +62,8 @@ class _SplashContentState extends State<SplashContent>
   //* Animation Text
 
   late final Animation<RelativeRect> _tweenText = RelativeRectTween(
-    begin: RelativeRect.fromLTRB(_leftText, 505.hmea, 0, 0),
-    end: RelativeRect.fromLTRB(_leftText, 534.hmea, 0, 0),
+    begin: RelativeRect.fromLTRB(_leftText, 505.h, 0, 0),
+    end: RelativeRect.fromLTRB(_leftText, 534.h, 0, 0),
   ).animate(
     CurvedAnimation(
       parent: _controller,
@@ -142,20 +141,20 @@ class _SplashContentState extends State<SplashContent>
           rect: _tween,
           child: Center(
             child: Assets.lib.resources.images.logo.svg(
-              width: 123.wmea,
+              width: 123.w,
             ),
           ),
         ),
         Positioned(
-          left: 50.w + (_textSize(nameApp, _styleText).width / 2).wmea,
-          top: 50.h + 20.wmea,
+          left: 50.w + (_textSize(nameApp, _styleText).width / 2).w,
+          top: 50.h + 20.w,
           child: ScaleTransition(
             scale: _animateScale,
             child: RotationTransition(
               turns: _animateRotate,
               child: Container(
-                width: 40.wmea,
-                height: 40.wmea,
+                width: 40.w,
+                height: 40.w,
                 decoration: const ShapeDecoration(
                   color: Color(0xFFF2D82D),
                   shape: StarBorder(

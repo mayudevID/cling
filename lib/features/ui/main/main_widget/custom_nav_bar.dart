@@ -1,7 +1,6 @@
-import 'package:cling/core/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sizer/sizer.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../resources/gen/assets.gen.dart';
 import '../main_bloc/main_bloc.dart';
@@ -19,8 +18,8 @@ class CustomNavBar extends StatelessWidget {
         right: 20,
       ),
       padding: EdgeInsets.symmetric(
-        vertical: 25.5.hmea,
-        horizontal: 45.5.wmea,
+        vertical: 25.5.h,
+        horizontal: 45.5.w,
       ),
       decoration: BoxDecoration(
         color: const Color(0xFF343437),

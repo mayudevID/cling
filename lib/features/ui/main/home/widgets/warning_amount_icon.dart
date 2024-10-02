@@ -1,12 +1,12 @@
-import 'package:cling/core/utils.dart';
 import 'package:cling/resources/gen/assets.gen.dart';
 import 'package:cling/resources/gen/fonts.gen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:super_tooltip/super_tooltip.dart';
 
 Widget warningAmountIcon({required String content}) {
   return SuperTooltip(
-    minimumOutsideMargin: 24.wmea,
+    minimumOutsideMargin: 24.w,
     hasShadow: true,
     shadowColor: Colors.red,
     fadeOutDuration: const Duration(milliseconds: 150),
@@ -18,7 +18,7 @@ Widget warningAmountIcon({required String content}) {
       ),
     ),
     child: Container(
-      margin: EdgeInsets.only(bottom: 1.8.hmea),
+      margin: EdgeInsets.only(bottom: 1.8.h),
       child: Assets.lib.resources.images.warningTriangleSolid.svg(),
     ),
   );

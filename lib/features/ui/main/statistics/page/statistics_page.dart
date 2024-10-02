@@ -1,8 +1,7 @@
-import 'package:cling/core/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:sizer/sizer.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../resources/gen/fonts.gen.dart';
 import '../../../language_currency/lang_export.dart';
@@ -23,11 +22,11 @@ class StatisticsPage extends StatelessWidget {
     return SingleChildScrollView(
       controller: _scrollController,
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 24.wmea),
+        padding: EdgeInsets.symmetric(horizontal: 24.w),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: 16.hmea),
+            SizedBox(height: 16.h),
             Text(
               AppLocalizations.of(context)!.statistics,
               textAlign: TextAlign.center,
@@ -38,9 +37,9 @@ class StatisticsPage extends StatelessWidget {
                 fontWeight: FontWeight.w700,
               ),
             ),
-            SizedBox(height: 24.hmea),
+            SizedBox(height: 24.h),
             const TagChooser(),
-            SizedBox(height: 24.hmea),
+            SizedBox(height: 24.h),
             BlocBuilder<StatisticsBloc, StatisticsState>(
               buildWhen: (previous, current) {
                 return previous.typeCategories != current.typeCategories;

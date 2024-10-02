@@ -1,8 +1,7 @@
-import 'package:cling/core/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lottie/lottie.dart';
-import 'package:sizer/sizer.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../core/common_widget.dart';
 import '../../../../../core/route.dart';
@@ -24,16 +23,16 @@ class VerificationSuccessPage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               SizedBox(
-                height: 110.hmea,
+                height: 110.h,
               ),
               SizedBox(
                 width: 100.w,
-                height: 197.hmea,
+                height: 197.h,
                 child: Stack(
                   children: [
                     Center(
                       child: Container(
-                        width: 197.wmea,
+                        width: 197.w,
                         height: double.infinity,
                         decoration: const ShapeDecoration(
                           color: Color(0xFF313131),
@@ -52,11 +51,11 @@ class VerificationSuccessPage extends StatelessWidget {
                       ),
                     ),
                     Positioned(
-                      right: 90.wmea,
-                      bottom: 50.hmea,
+                      right: 90.w,
+                      bottom: 50.h,
                       child: Container(
-                        width: 61.02.wmea,
-                        height: 61.02.wmea,
+                        width: 61.02.w,
+                        height: 61.02.w,
                         decoration: const ShapeDecoration(
                           color: Color(0xFFF2D82D),
                           shape: StarBorder(
@@ -71,11 +70,11 @@ class VerificationSuccessPage extends StatelessWidget {
                       ),
                     ),
                     Positioned(
-                      top: 10.hmea,
-                      left: 118.wmea,
+                      top: 10.h,
+                      left: 118.w,
                       child: Container(
-                        width: 48.wmea,
-                        height: 48.wmea,
+                        width: 48.w,
+                        height: 48.w,
                         decoration: const ShapeDecoration(
                           color: Color(0xFFF2D82D),
                           shape: StarBorder(
@@ -91,10 +90,10 @@ class VerificationSuccessPage extends StatelessWidget {
                     ),
                     Positioned(
                       bottom: 0,
-                      left: 140.wmea,
+                      left: 140.w,
                       child: Container(
-                        width: 29.wmea,
-                        height: 29.wmea,
+                        width: 29.w,
+                        height: 29.w,
                         decoration: const ShapeDecoration(
                           color: Color(0xFFF2D82D),
                           shape: StarBorder(
@@ -112,7 +111,7 @@ class VerificationSuccessPage extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                height: 81.hmea,
+                height: 81.h,
               ),
               Text(
                 "Verified",
@@ -125,10 +124,10 @@ class VerificationSuccessPage extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                height: 16.hmea,
+                height: 16.h,
               ),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 47.wmea),
+                padding: EdgeInsets.symmetric(horizontal: 47.w),
                 child: Text(
                   AppLocalizations.of(context)!.verifSuccess,
                   textAlign: TextAlign.center,
@@ -141,7 +140,7 @@ class VerificationSuccessPage extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                height: 59.hmea,
+                height: 59.h,
               ),
               PinkButton(
                 onTap: () {
@@ -150,7 +149,7 @@ class VerificationSuccessPage extends StatelessWidget {
                 name: AppLocalizations.of(context)!.setMonthlyBudget,
               ),
               SizedBox(
-                height: 8.hmea,
+                height: 8.h,
               ),
               BlackButton(
                 name: AppLocalizations.of(context)!.skip,

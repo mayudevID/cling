@@ -1,8 +1,7 @@
-import 'package:cling/core/utils.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sizer/sizer.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../core/common_widget.dart';
 import '../../../../../resources/gen/fonts.gen.dart';
@@ -12,11 +11,11 @@ import '../bloc/goal_detail_bloc.dart';
 Widget targetGoalWidget(BuildContext context) {
   return Container(
     padding: EdgeInsets.symmetric(
-      horizontal: 16.wmea,
-      vertical: 16.hmea,
+      horizontal: 16.w,
+      vertical: 16.h,
     ),
     width: double.infinity,
-    //height: 117.hmea,
+    //height: 117.h,
     decoration: ShapeDecoration(
       color: const Color(0x3D787880),
       shape: RoundedRectangleBorder(
@@ -57,12 +56,12 @@ Widget targetGoalWidget(BuildContext context) {
             ),
           ],
         ),
-        SizedBox(height: 16.hmea),
+        SizedBox(height: 16.h),
         Stack(
           children: [
             Container(
-              width: 358.wmea,
-              height: 16.hmea,
+              width: 358.w,
+              height: 16.h,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(100),
                 color: Colors.white.withOpacity(0.76),
@@ -78,11 +77,11 @@ Widget targetGoalWidget(BuildContext context) {
                   return const SizedBox();
                 }
 
-                final length = (state.goalModel.collected * 358.wmea) /
+                final length = (state.goalModel.collected * 358.w) /
                     state.goalModel.target;
                 return Container(
                   width: length,
-                  height: 16.hmea,
+                  height: 16.h,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(100),
                     color: const Color(0xFF006DE9),

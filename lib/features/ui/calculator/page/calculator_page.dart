@@ -1,7 +1,6 @@
-import 'package:cling/core/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sizer/sizer.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../resources/gen/assets.gen.dart';
 import '../../../../resources/gen/fonts.gen.dart';
 import '../../language_currency/lang_export.dart';
@@ -31,9 +30,9 @@ class CalculatorPageContent extends StatelessWidget {
         backgroundColor: Colors.black,
         body: Column(
           children: [
-            SizedBox(height: 16.hmea),
+            SizedBox(height: 16.h),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 24.wmea),
+              padding: EdgeInsets.symmetric(horizontal: 24.w),
               child: Row(
                 children: [
                   GestureDetector(
@@ -41,7 +40,7 @@ class CalculatorPageContent extends StatelessWidget {
                     child: Assets.lib.resources.images.fluentChevronLeft24Filled
                         .svg(),
                   ),
-                  SizedBox(width: 16.wmea),
+                  SizedBox(width: 16.w),
                   Text(
                     "Calculator",
                     textAlign: TextAlign.center,
@@ -81,7 +80,7 @@ class CalculatorPageContent extends StatelessWidget {
                         },
                       ),
                     ),
-                    SizedBox(height: 24.hmea),
+                    SizedBox(height: 24.h),
                     Align(
                       alignment: Alignment.centerRight,
                       child: BlocBuilder<CalcBloc, CalcState>(
@@ -175,7 +174,7 @@ class CalculatorPageContent extends StatelessWidget {
                             );
                       },
                       child: Container(
-                        height: 72.hmea,
+                        height: 72.h,
                         width: MediaQuery.of(context).size.width / 2,
                         decoration: const BoxDecoration(color: Colors.green),
                         child: Center(

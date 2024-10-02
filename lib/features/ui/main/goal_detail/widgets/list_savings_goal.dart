@@ -1,8 +1,7 @@
-import 'package:cling/core/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:sizer/sizer.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:super_tooltip/super_tooltip.dart';
 
 import '../../../../../core/common_widget.dart';
@@ -43,7 +42,7 @@ Widget savingItem({
       ),
     ),
     child: Container(
-      padding: EdgeInsets.symmetric(horizontal: 10.wmea, vertical: 8.wmea),
+      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 8.w),
       decoration: ShapeDecoration(
         color: const Color(0x3D787880),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),

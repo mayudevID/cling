@@ -1,7 +1,6 @@
-import 'package:cling/core/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sizer/sizer.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../core/route.dart';
 import '../../../../../resources/gen/assets.gen.dart';
@@ -10,7 +9,7 @@ import '../../../app_bloc/app_bloc.dart';
 
 Widget nameAndEmail(BuildContext context) {
   return Container(
-    padding: EdgeInsets.all(16.wmea),
+    padding: EdgeInsets.all(16.w),
     decoration: ShapeDecoration(
       color: const Color(0x3D787880),
       shape: RoundedRectangleBorder(
@@ -43,7 +42,7 @@ Widget nameAndEmail(BuildContext context) {
                 },
               ),
               SizedBox(
-                height: 8.hmea,
+                height: 8.h,
               ),
               Row(
                 children: [
@@ -67,12 +66,12 @@ Widget nameAndEmail(BuildContext context) {
                     },
                   ),
                   SizedBox(
-                    width: 8.wmea,
+                    width: 8.w,
                   ),
                   Container(
                     padding: EdgeInsets.symmetric(
-                      vertical: 3.hmea,
-                      horizontal: 6.wmea,
+                      vertical: 3.h,
+                      horizontal: 6.w,
                     ),
                     decoration: BoxDecoration(
                       color: Colors.white,

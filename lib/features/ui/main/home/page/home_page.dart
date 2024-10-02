@@ -1,9 +1,8 @@
 import 'package:cling/core/common_widget.dart';
-import 'package:cling/core/utils.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sizer/sizer.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../resources/gen/fonts.gen.dart';
 import '../../../language_currency/lang_export.dart';
 import '../bloc/home_bloc.dart';
@@ -26,13 +25,12 @@ class HomePage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(height: 16.hmea),
+          SizedBox(height: 16.h),
           nameAndNotification(context),
-          SizedBox(height: 24.hmea),
+          SizedBox(height: 24.h),
           Container(
-            margin: EdgeInsets.symmetric(horizontal: 24.wmea),
-            padding:
-                EdgeInsets.symmetric(horizontal: 16.wmea, vertical: 16.hmea),
+            margin: EdgeInsets.symmetric(horizontal: 24.w),
+            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
             decoration: BoxDecoration(
               color: const Color(0x3D787880),
               borderRadius: BorderRadius.circular(10),
@@ -63,7 +61,7 @@ class HomePage extends StatelessWidget {
                     );
                   },
                 ),
-                SizedBox(width: 8.wmea),
+                SizedBox(width: 8.w),
                 BlocBuilder<HomeBloc, HomeState>(
                   buildWhen: (p, c) {
                     return p.totalBalance != c.totalBalance;
@@ -90,7 +88,7 @@ class HomePage extends StatelessWidget {
             withDate: true,
           ),
           monthlyBudget(context),
-          SizedBox(height: 16.hmea),
+          SizedBox(height: 16.h),
           incomeAndExpense(context),
           ...tagNameHome(context, AppLocalizations.of(context)!.goals),
           BlocBuilder<HomeBloc, HomeState>(
@@ -101,7 +99,7 @@ class HomePage extends StatelessWidget {
               final lengthD = state.totalGoals > 5 ? 6 : state.listGoals.length;
 
               return SizedBox(
-                height: 156.855.hmea,
+                height: 156.855.h,
                 child: ListView.builder(
                   shrinkWrap: true,
                   scrollDirection: Axis.horizontal,
@@ -128,7 +126,7 @@ class HomePage extends StatelessWidget {
             builder: (context, state) {
               if (state.listTodayExpenses.isEmpty) {
                 return Container(
-                  padding: EdgeInsets.symmetric(horizontal: 24.wmea),
+                  padding: EdgeInsets.symmetric(horizontal: 24.w),
                   child: Text(
                     AppLocalizations.of(context)!.noExpenseToday,
                     style: const TextStyle(
@@ -152,12 +150,12 @@ class HomePage extends StatelessWidget {
                       state.listTodayExpenses[index],
                     );
                   },
-                  separatorBuilder: (_, idx) => SizedBox(height: 6.hmea),
+                  separatorBuilder: (_, idx) => SizedBox(height: 6.h),
                 ),
               );
             },
           ),
-          SizedBox(height: 185.hmea),
+          SizedBox(height: 185.h),
         ],
       ),
     );

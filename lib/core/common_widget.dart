@@ -1,12 +1,11 @@
 // ignore_for_file: must_be_immutable, use_build_context_synchronously
-import 'package:cling/core/utils.dart';
 import 'package:flutter/material.dart' hide ModalBottomSheetRoute;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:sizer/sizer.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../features/model/language.dart';
 import '../features/ui/language_currency/lang_currency_bloc.dart';
 import '../features/ui/language_currency/lang_export.dart';
@@ -28,8 +27,8 @@ class PinkButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 380.wmea,
-      height: 57.hmea,
+      width: 380.w,
+      height: 57.h,
       child: ElevatedButton(
         onPressed: onTap,
         style: ButtonStyle(
@@ -50,7 +49,7 @@ class PinkButton extends StatelessWidget {
           textAlign: TextAlign.center,
           style: TextStyle(
             color: const Color(0xFF101010),
-            fontSize: 11.5.sp,
+            fontSize: 16.sp,
             fontFamily: FontFamily.cabinetGrotesk,
             fontWeight: FontWeight.w700,
           ),
@@ -73,8 +72,8 @@ class BlackButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 390.wmea,
-      height: 57.wmea,
+      width: 390.w,
+      height: 57.w,
       child: ElevatedButton(
         onPressed: onTap,
         style: ButtonStyle(
@@ -121,8 +120,8 @@ void loadingAuth(BuildContext context) {
             "lib/resources/anim/loading_carga.json",
             animate: true,
             repeat: true,
-            width: 48.wmea,
-            height: 48.wmea,
+            width: 48.w,
+            height: 48.w,
             frameRate: FrameRate.max,
           ),
         ),
@@ -177,8 +176,8 @@ void errorToast(String msg) {
       gravity: ToastGravity.BOTTOM,
       toastDuration: const Duration(milliseconds: 3500),
       child: Container(
-        margin: EdgeInsets.only(bottom: 111.hmea),
-        padding: EdgeInsets.all(10.wmea),
+        margin: EdgeInsets.only(bottom: 111.h),
+        padding: EdgeInsets.all(10.w),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(6),
           color: const Color(0xff313131),
@@ -187,7 +186,7 @@ void errorToast(String msg) {
           mainAxisSize: MainAxisSize.min,
           children: [
             Assets.lib.resources.images.dismiss.svg(),
-            SizedBox(width: 8.wmea),
+            SizedBox(width: 8.w),
             Text(
               msg,
               style: TextStyle(
@@ -295,7 +294,7 @@ Future<void> showBottomSheetChooseLang(BuildContext context) async {
               : null,
         );
       },
-      separatorBuilder: (_, idx) => SizedBox(height: 18.hmea),
+      separatorBuilder: (_, idx) => SizedBox(height: 18.h),
     );
   }
 
@@ -307,7 +306,7 @@ Future<void> showBottomSheetChooseLang(BuildContext context) async {
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
     builder: (context) {
       return Container(
-        padding: EdgeInsets.all(24.wmea),
+        padding: EdgeInsets.all(24.w),
         decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -331,7 +330,7 @@ Future<void> showBottomSheetChooseLang(BuildContext context) async {
                 ),
               ],
             ),
-            SizedBox(height: 16.hmea),
+            SizedBox(height: 16.h),
             MediaQuery.removePadding(
               removeTop: true,
               context: context,
@@ -356,14 +355,14 @@ Widget appBarProfile({
   required Function() onTapButton,
 }) {
   return Container(
-    margin: EdgeInsets.only(top: 16.hmea),
+    margin: EdgeInsets.only(top: 16.h),
     child: Row(
       children: [
         GestureDetector(
           onTap: () => Navigator.pop(context),
           child: Assets.lib.resources.images.fluentChevronLeft24Filled.svg(),
         ),
-        SizedBox(width: 8.wmea),
+        SizedBox(width: 8.w),
         Text(
           title,
           textAlign: TextAlign.center,
@@ -379,8 +378,8 @@ Widget appBarProfile({
           GestureDetector(
             onTap: onTapButton,
             child: Container(
-              width: 74.wmea,
-              height: 36.hmea,
+              width: 74.w,
+              height: 36.h,
               padding: const EdgeInsets.symmetric(vertical: 8),
               decoration: ShapeDecoration(
                 color: const Color(0xFFF599DA),
@@ -425,10 +424,10 @@ Future<bool> dialogDelete(BuildContext context) async {
             color: Colors.white,
           ),
           padding: EdgeInsets.only(
-            top: 18.hmea,
-            left: 18.wmea,
-            right: 18.wmea,
-            bottom: 18.hmea,
+            top: 18.h,
+            left: 18.w,
+            right: 18.w,
+            bottom: 18.h,
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -443,7 +442,7 @@ Future<bool> dialogDelete(BuildContext context) async {
                 textAlign: TextAlign.center,
               ),
               SizedBox(
-                height: 12.hmea,
+                height: 12.h,
               ),
               Row(
                 children: [
@@ -453,7 +452,7 @@ Future<bool> dialogDelete(BuildContext context) async {
                       Navigator.pop(context, true);
                     },
                     child: Container(
-                      padding: EdgeInsets.all(12.hmea),
+                      padding: EdgeInsets.all(12.h),
                       decoration: BoxDecoration(
                         color: Colors.red,
                         borderRadius: BorderRadius.circular(8),
@@ -473,13 +472,13 @@ Future<bool> dialogDelete(BuildContext context) async {
                       ),
                     ),
                   ),
-                  SizedBox(width: 10.wmea),
+                  SizedBox(width: 10.w),
                   GestureDetector(
                     onTap: () async {
                       Navigator.pop(context, false);
                     },
                     child: Container(
-                      padding: EdgeInsets.all(12.hmea),
+                      padding: EdgeInsets.all(12.h),
                       decoration: BoxDecoration(
                         color: Colors.black,
                         borderRadius: BorderRadius.circular(8),

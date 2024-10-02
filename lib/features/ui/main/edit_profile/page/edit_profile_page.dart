@@ -1,7 +1,6 @@
-import 'package:cling/core/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sizer/sizer.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../core/common_widget.dart';
 import '../../../../../injection.dart';
@@ -37,7 +36,7 @@ class EditProfilePageContent extends StatelessWidget {
       child: Scaffold(
         backgroundColor: const Color(0xFF101010),
         body: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24.wmea),
+          padding: EdgeInsets.symmetric(horizontal: 24.w),
           child: Column(
             children: [
               appBarProfile(
@@ -47,7 +46,7 @@ class EditProfilePageContent extends StatelessWidget {
                 onTapButton: () {},
               ),
               SizedBox(
-                height: 32.hmea,
+                height: 32.h,
               ),
               Align(
                 alignment: Alignment.centerLeft,
@@ -61,9 +60,9 @@ class EditProfilePageContent extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(height: 8.hmea),
+              SizedBox(height: 8.h),
               const TextFieldNameEditProfile(),
-              SizedBox(height: 24.hmea),
+              SizedBox(height: 24.h),
               BlocBuilder<EditProfileBloc, EditProfileState>(
                 buildWhen: (p, c) {
                   return p.isNameSame != c.isNameSame;
@@ -71,7 +70,7 @@ class EditProfilePageContent extends StatelessWidget {
                 builder: (context, state) {
                   if (!state.isNameSame) {
                     return Container(
-                      margin: EdgeInsets.only(bottom: 24.hmea),
+                      margin: EdgeInsets.only(bottom: 24.h),
                       child: PinkButton(
                         onTap: () {
                           context.read<EditProfileBloc>().add(SaveNewName());
@@ -96,11 +95,11 @@ class EditProfilePageContent extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                height: 8.hmea,
+                height: 8.h,
               ),
               const TextFieldEmailEditProfile(),
               SizedBox(
-                height: 24.hmea,
+                height: 24.h,
               ),
               BlocBuilder<EditProfileBloc, EditProfileState>(
                 buildWhen: (p, c) {
@@ -109,7 +108,7 @@ class EditProfilePageContent extends StatelessWidget {
                 builder: (context, state) {
                   if (!state.isEmailSame) {
                     return Container(
-                      margin: EdgeInsets.only(bottom: 24.hmea),
+                      margin: EdgeInsets.only(bottom: 24.h),
                       child: PinkButton(
                         onTap: () {
                           context.read<EditProfileBloc>().add(SaveNewEmail());
@@ -134,7 +133,7 @@ class EditProfilePageContent extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                height: 8.hmea,
+                height: 8.h,
               ),
               PinkButton(
                 onTap: () async {

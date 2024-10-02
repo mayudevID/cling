@@ -1,6 +1,6 @@
-import 'package:cling/core/utils.dart';
 import 'package:cling/features/ui/onboard/widgets/star_anim_one.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'star_anim_three.dart';
 import 'star_anim_two.dart';
@@ -13,16 +13,16 @@ class StackStar extends StatelessWidget {
     return Stack(
       children: [
         Positioned(
-          left: 308.90.wmea,
-          top: 50.hmea,
+          left: 308.90.w,
+          top: 50.h,
           child: const StarAnimOne(),
         ),
         Positioned(
-          left: 369.92.wmea,
-          top: 92.45.hmea,
+          left: 369.92.w,
+          top: 92.45.h,
           child: Container(
-            width: 34.49.wmea,
-            height: 34.49.wmea,
+            width: 34.49.w,
+            height: 34.49.w,
             decoration: const ShapeDecoration(
               color: Color(0xFF006DE9),
               shape: StarBorder(
@@ -37,11 +37,11 @@ class StackStar extends StatelessWidget {
           ),
         ),
         Positioned(
-          left: 59.wmea,
-          top: 108.hmea,
+          left: 59.w,
+          top: 108.h,
           child: Container(
-            width: 21.wmea,
-            height: 21.wmea,
+            width: 21.w,
+            height: 21.w,
             decoration: const ShapeDecoration(
               color: Color(0xFF006DE9),
               shape: StarBorder(
@@ -56,13 +56,13 @@ class StackStar extends StatelessWidget {
           ),
         ),
         Positioned(
-          left: 25.wmea,
-          top: 118.98.hmea,
+          left: 25.w,
+          top: 118.98.h,
           child: const StarAnimTwo(),
         ),
         Positioned(
-          left: 309.wmea,
-          top: 362.hmea,
+          left: 309.w,
+          top: 362.h,
           child: const StarAnimThree(),
         ),
       ],

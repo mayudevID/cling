@@ -1,7 +1,6 @@
-import 'package:cling/core/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sizer/sizer.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../core/common_widget.dart';
 import '../../../../../core/route.dart';
@@ -39,7 +38,7 @@ Widget categoriesWithAmount({
       );
     },
     child: Container(
-      padding: EdgeInsets.all(16.wmea),
+      padding: EdgeInsets.all(16.w),
       width: double.infinity,
       decoration: BoxDecoration(
         color: const Color(0x3D787880),
@@ -48,7 +47,7 @@ Widget categoriesWithAmount({
       child: Row(
         children: [
           Container(
-            padding: EdgeInsets.all(8.wmea),
+            padding: EdgeInsets.all(8.w),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(5),
@@ -60,7 +59,7 @@ Widget categoriesWithAmount({
               ),
             ),
           ),
-          SizedBox(width: 12.wmea),
+          SizedBox(width: 12.w),
           Text(
             categoryClass,
             textAlign: TextAlign.center,

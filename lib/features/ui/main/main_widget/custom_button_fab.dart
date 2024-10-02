@@ -1,14 +1,13 @@
-import 'package:cling/core/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:sizer/sizer.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../resources/gen/fonts.gen.dart';
 
 Widget customButtonFab(String text) {
   return Container(
     padding: EdgeInsets.symmetric(
-      vertical: 9.wmea,
-      horizontal: 19.5.hmea,
+      vertical: 9.w,
+      horizontal: 19.5.h,
     ),
     decoration: BoxDecoration(
       color: const Color(0xFFF599DA),

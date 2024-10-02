@@ -1,8 +1,7 @@
-import 'package:cling/core/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:sizer/sizer.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../core/common_widget.dart';
 import '../../../../../core/route.dart';
@@ -28,8 +27,8 @@ Widget todayExpensesWidget(BuildContext context, ExpenseModel expenseModel) {
     },
     behavior: HitTestBehavior.opaque,
     child: Container(
-      margin: EdgeInsets.only(left: 24.wmea, right: 24.wmea),
-      padding: EdgeInsets.symmetric(vertical: 8.hmea, horizontal: 16.wmea),
+      margin: EdgeInsets.only(left: 24.w, right: 24.w),
+      padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 16.w),
       width: double.infinity,
       decoration: BoxDecoration(
         color: const Color(0x3D787880),
@@ -38,7 +37,7 @@ Widget todayExpensesWidget(BuildContext context, ExpenseModel expenseModel) {
       child: Row(
         children: [
           Container(
-            padding: EdgeInsets.all(5.wmea),
+            padding: EdgeInsets.all(5.w),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(5),
@@ -53,7 +52,7 @@ Widget todayExpensesWidget(BuildContext context, ExpenseModel expenseModel) {
               ),
             ),
           ),
-          SizedBox(width: 12.wmea),
+          SizedBox(width: 12.w),
           Text(
             expenseModel.item,
             textAlign: TextAlign.center,

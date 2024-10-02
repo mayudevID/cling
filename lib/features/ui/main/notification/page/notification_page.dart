@@ -1,12 +1,11 @@
 // ignore_for_file: must_be_immutable, use_build_context_synchronously
 
-import 'package:cling/core/utils.dart';
 import 'package:cling/injection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
-import 'package:sizer/sizer.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../resources/gen/assets.gen.dart';
 import '../../../../../resources/gen/fonts.gen.dart';
@@ -39,10 +38,10 @@ class NotificationPageContent extends StatelessWidget {
       child: Scaffold(
         backgroundColor: Colors.black,
         body: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24.wmea),
+          padding: EdgeInsets.symmetric(horizontal: 24.w),
           child: Column(
             children: [
-              SizedBox(height: 16.hmea),
+              SizedBox(height: 16.h),
               Row(
                 children: [
                   GestureDetector(
@@ -50,7 +49,7 @@ class NotificationPageContent extends StatelessWidget {
                     child: Assets.lib.resources.images.fluentChevronLeft24Filled
                         .svg(),
                   ),
-                  SizedBox(width: 16.wmea),
+                  SizedBox(width: 16.w),
                   Text(
                     AppLocalizations.of(context)!.notification,
                     textAlign: TextAlign.center,
@@ -80,7 +79,7 @@ class NotificationPageContent extends StatelessWidget {
                   ),
                 ],
               ),
-              SizedBox(height: 24.hmea),
+              SizedBox(height: 24.h),
               Expanded(
                 child: MediaQuery.removePadding(
                   context: context,
@@ -152,7 +151,7 @@ class NotificationPageContent extends StatelessWidget {
                   break;
               }
 
-              return SizedBox(height: 55.hmea, child: Center(child: body));
+              return SizedBox(height: 55.h, child: Center(child: body));
             },
           ),
           child: ListView.separated(
@@ -183,7 +182,7 @@ class NotificationPageContent extends StatelessWidget {
                           children: [
                             Expanded(
                               child: Container(
-                                height: 1.hmea,
+                                height: 1.h,
                                 color: Colors.grey,
                               ),
                             ),
@@ -204,19 +203,19 @@ class NotificationPageContent extends StatelessWidget {
                             ),
                             Expanded(
                               child: Container(
-                                height: 1.hmea,
+                                height: 1.h,
                                 color: Colors.grey,
                               ),
                             ),
                           ],
                         ),
-                        SizedBox(height: 8.hmea),
+                        SizedBox(height: 8.h),
                         notificationWidget(idx),
                       ],
                     )
                   : notificationWidget(idx);
             },
-            separatorBuilder: (_, idx) => SizedBox(height: 8.hmea),
+            separatorBuilder: (_, idx) => SizedBox(height: 8.h),
           ),
         );
       },

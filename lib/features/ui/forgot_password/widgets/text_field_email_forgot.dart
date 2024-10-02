@@ -1,6 +1,5 @@
-import 'package:cling/core/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:sizer/sizer.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../resources/gen/fonts.gen.dart';
 import '../../language_currency/lang_export.dart';
@@ -11,8 +10,8 @@ class TextFieldEmailForgot extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 390.wmea,
-      height: 54.hmea,
+      width: 390.w,
+      height: 54.h,
       decoration: ShapeDecoration(
         color: const Color(0xFF313131),
         shape: RoundedRectangleBorder(

@@ -1,8 +1,7 @@
-import 'package:cling/core/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:sizer/sizer.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../resources/gen/assets.gen.dart';
 import '../../../../../resources/gen/fonts.gen.dart';
@@ -69,8 +68,8 @@ Widget notificationWidget(int idx) {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Assets.lib.resources.images.warningTriangleSolid
-                    .svg(width: 40.wmea),
-                SizedBox(width: 16.wmea),
+                    .svg(width: 40.w),
+                SizedBox(width: 16.w),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

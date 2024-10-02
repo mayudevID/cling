@@ -1,8 +1,7 @@
-import 'package:cling/core/utils.dart';
 import 'package:cling/features/model/income_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sizer/sizer.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../core/common_widget.dart';
 import '../../../../../core/route.dart';
@@ -89,11 +88,11 @@ class EditIncomeExpensePageContent extends StatelessWidget {
         resizeToAvoidBottomInset: false,
         backgroundColor: Colors.black,
         body: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24.wmea),
+          padding: EdgeInsets.symmetric(horizontal: 24.w),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: 16.hmea),
+              SizedBox(height: 16.h),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -117,7 +116,7 @@ class EditIncomeExpensePageContent extends StatelessWidget {
                   ),
                 ],
               ),
-              SizedBox(height: 24.hmea),
+              SizedBox(height: 24.h),
               Text(
                 (flowType == FlowType.income)
                     ? AppLocalizations.of(context)!.date
@@ -129,9 +128,9 @@ class EditIncomeExpensePageContent extends StatelessWidget {
                   fontWeight: FontWeight.w800,
                 ),
               ),
-              SizedBox(height: 8.hmea),
+              SizedBox(height: 8.h),
               datetimeEditWidget(context),
-              SizedBox(height: 8.hmea),
+              SizedBox(height: 8.h),
               Text(
                 (flowType == FlowType.income)
                     ? AppLocalizations.of(context)!.incomeSource
@@ -143,9 +142,9 @@ class EditIncomeExpensePageContent extends StatelessWidget {
                   fontWeight: FontWeight.w800,
                 ),
               ),
-              SizedBox(height: 8.hmea),
+              SizedBox(height: 8.h),
               dropDownEditCategories(flowType: flowType),
-              SizedBox(height: 8.hmea),
+              SizedBox(height: 8.h),
               Text(
                 (flowType == FlowType.income)
                     ? AppLocalizations.of(context)!.descriptionOptional
@@ -157,7 +156,7 @@ class EditIncomeExpensePageContent extends StatelessWidget {
                   fontWeight: FontWeight.w800,
                 ),
               ),
-              SizedBox(height: 8.hmea),
+              SizedBox(height: 8.h),
               Container(
                 decoration: ShapeDecoration(
                   color: const Color(0xFF313131),
@@ -166,8 +165,8 @@ class EditIncomeExpensePageContent extends StatelessWidget {
                   ),
                 ),
                 padding: EdgeInsets.symmetric(
-                  vertical: 16.hmea,
-                  horizontal: 16.wmea,
+                  vertical: 16.h,
+                  horizontal: 16.w,
                 ),
                 child: TextFormField(
                   initialValue:
@@ -197,7 +196,7 @@ class EditIncomeExpensePageContent extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(height: 8.hmea),
+              SizedBox(height: 8.h),
               BlocBuilder<LangCurrencyBloc, LangCurrencyState>(
                 buildWhen: (p, c) {
                   return p.selectedCurrency.name != c.selectedCurrency.name;
@@ -214,7 +213,7 @@ class EditIncomeExpensePageContent extends StatelessWidget {
                   );
                 },
               ),
-              SizedBox(height: 8.hmea),
+              SizedBox(height: 8.h),
               GestureDetector(
                 onTap: () async {
                   final amountRes = await Navigator.pushNamed(
@@ -239,8 +238,8 @@ class EditIncomeExpensePageContent extends StatelessWidget {
                     ),
                   ),
                   padding: EdgeInsets.symmetric(
-                    vertical: 16.hmea,
-                    horizontal: 16.wmea,
+                    vertical: 16.h,
+                    horizontal: 16.w,
                   ),
                   child: Row(
                     children: [
@@ -261,7 +260,7 @@ class EditIncomeExpensePageContent extends StatelessWidget {
                           );
                         },
                       ),
-                      SizedBox(width: 10.wmea),
+                      SizedBox(width: 10.w),
                       Expanded(
                         child: BlocBuilder<EditIncomeExpenseBloc,
                             EditIncomeExpenseState>(
@@ -287,7 +286,7 @@ class EditIncomeExpensePageContent extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                height: 40.hmea,
+                height: 40.h,
               ),
               PinkButton(
                 onTap: () {
@@ -297,7 +296,7 @@ class EditIncomeExpensePageContent extends StatelessWidget {
                 name: AppLocalizations.of(context)!.submit,
               ),
               SizedBox(
-                height: 16.hmea,
+                height: 16.h,
               ),
               BlackButton(
                 name: AppLocalizations.of(context)!.cancel,

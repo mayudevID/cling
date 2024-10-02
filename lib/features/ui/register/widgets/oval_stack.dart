@@ -1,6 +1,5 @@
-import 'package:cling/core/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:sizer/sizer.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class OvalStack extends StatelessWidget {
   const OvalStack({super.key});
@@ -17,8 +16,8 @@ class OvalStack extends StatelessWidget {
             decoration: BoxDecoration(
               color: const Color(0xFF313131),
               borderRadius: BorderRadius.only(
-                bottomRight: Radius.circular(139.50.wmea),
-                topRight: Radius.circular(139.50.wmea),
+                bottomRight: Radius.circular(139.50.w),
+                topRight: Radius.circular(139.50.w),
               ),
             ),
           ),
@@ -47,8 +46,8 @@ class OvalStack extends StatelessWidget {
             decoration: BoxDecoration(
               color: const Color(0xFF313131),
               borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(139.50.wmea),
-                topLeft: Radius.circular(139.50.wmea),
+                bottomLeft: Radius.circular(139.50.w),
+                topLeft: Radius.circular(139.50.w),
               ),
             ),
           ),

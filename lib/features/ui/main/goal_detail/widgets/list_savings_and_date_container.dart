@@ -1,9 +1,8 @@
-import 'package:cling/core/utils.dart';
 import 'package:cling/features/ui/language_currency/lang_currency_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:sizer/sizer.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../resources/gen/fonts.gen.dart';
 import '../../../language_currency/lang_export.dart';
@@ -24,7 +23,7 @@ Widget listSavingsWithDateContainer(
     children: [
       Row(
         children: [
-          //Container(width: 24.wmea, height: 1.hmea, color: Colors.grey),
+          //Container(width: 24.w, height: 1.h, color: Colors.grey),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8),
             child: Text(
@@ -45,10 +44,10 @@ Widget listSavingsWithDateContainer(
               ),
             ),
           ),
-          Expanded(child: Container(height: 1.hmea, color: Colors.grey)),
+          Expanded(child: Container(height: 1.h, color: Colors.grey)),
         ],
       ),
-      SizedBox(height: 8.hmea),
+      SizedBox(height: 8.h),
       container,
     ],
   );

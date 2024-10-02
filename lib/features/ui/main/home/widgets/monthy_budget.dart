@@ -1,8 +1,7 @@
 import 'package:cling/core/common_widget.dart';
-import 'package:cling/core/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sizer/sizer.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../resources/gen/fonts.gen.dart';
 import '../../../language_currency/lang_export.dart';
 import '../../profile/bloc/profile_bloc.dart';
@@ -11,13 +10,13 @@ import 'warning_amount_icon.dart';
 
 Widget monthlyBudget(BuildContext context) {
   return Container(
-    margin: EdgeInsets.symmetric(horizontal: 24.wmea),
+    margin: EdgeInsets.symmetric(horizontal: 24.w),
     padding: EdgeInsets.symmetric(
-      horizontal: 16.wmea,
-      vertical: 16.hmea,
+      horizontal: 16.w,
+      vertical: 16.h,
     ),
     width: double.infinity,
-    //height: 117.hmea,
+    //height: 117.h,
     decoration: ShapeDecoration(
       color: const Color(0x3D787880),
       shape: RoundedRectangleBorder(
@@ -69,12 +68,12 @@ Widget monthlyBudget(BuildContext context) {
             ),
           ],
         ),
-        SizedBox(height: 16.hmea),
+        SizedBox(height: 16.h),
         Stack(
           children: [
             Container(
-              width: 358.wmea,
-              height: 16.hmea,
+              width: 358.w,
+              height: 16.h,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(100),
                 color: Colors.white.withOpacity(0.76),
@@ -94,12 +93,11 @@ Widget monthlyBudget(BuildContext context) {
                       return const SizedBox();
                     }
 
-                    final length =
-                        (homeState.amountExpenseThisMonth * 358.wmea) /
-                            profileState.userModel.monthlyBudget;
+                    final length = (homeState.amountExpenseThisMonth * 358.w) /
+                        profileState.userModel.monthlyBudget;
                     return Container(
                       width: length,
-                      height: 16.hmea,
+                      height: 16.h,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(100),
                         color: const Color(0xFF006DE9),
@@ -179,7 +177,7 @@ Widget monthlyBudget(BuildContext context) {
                 );
               },
             ),
-            SizedBox(width: 10.wmea),
+            SizedBox(width: 10.w),
             BlocBuilder<ProfileBloc, ProfileState>(
               buildWhen: (p, c) {
                 return p.userModel.monthlyBudget != c.userModel.monthlyBudget;

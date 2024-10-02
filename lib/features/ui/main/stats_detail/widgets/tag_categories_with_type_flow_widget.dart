@@ -1,7 +1,6 @@
 import 'package:cling/core/logger.dart';
-import 'package:cling/core/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:sizer/sizer.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../resources/gen/fonts.gen.dart';
 import '../../../language_currency/lang_export.dart';
@@ -14,7 +13,7 @@ Widget tagCategoriesWithTypeFlowWidget(
 ) {
   Logger.Red.log(type);
   return Container(
-    padding: EdgeInsets.all(16.hmea),
+    padding: EdgeInsets.all(16.h),
     decoration: BoxDecoration(
       color: const Color(0x3D787880),
       borderRadius: BorderRadius.circular(10),
@@ -34,7 +33,7 @@ Widget tagCategoriesWithTypeFlowWidget(
             ),
           ),
         ),
-        SizedBox(width: 16.wmea),
+        SizedBox(width: 16.w),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

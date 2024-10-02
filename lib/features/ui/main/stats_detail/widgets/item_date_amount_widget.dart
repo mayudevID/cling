@@ -1,10 +1,9 @@
-import 'package:cling/core/utils.dart';
 import 'package:cling/features/model/expense_model.dart';
 import 'package:cling/features/model/income_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:sizer/sizer.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../core/common_widget.dart';
 import '../../../../../core/route.dart';
@@ -34,7 +33,7 @@ Widget itemDateAmountWidget(
       );
     },
     child: Container(
-      padding: EdgeInsets.all(16.hmea),
+      padding: EdgeInsets.all(16.h),
       decoration: BoxDecoration(
         color: const Color(0x3D787880),
         borderRadius: BorderRadius.circular(10),

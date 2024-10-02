@@ -1,8 +1,7 @@
 // ignore_for_file: prefer_const_constructors
-import 'package:cling/core/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sizer/sizer.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../core/common_widget.dart';
 import '../../../../../core/route.dart';
@@ -36,11 +35,11 @@ class AddGoalPageContent extends StatelessWidget {
         resizeToAvoidBottomInset: false,
         backgroundColor: Colors.black,
         body: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24.wmea),
+          padding: EdgeInsets.symmetric(horizontal: 24.w),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: 16.hmea),
+              SizedBox(height: 16.h),
               Text(
                 AppLocalizations.of(context)!.addGoals,
                 textAlign: TextAlign.center,
@@ -51,9 +50,9 @@ class AddGoalPageContent extends StatelessWidget {
                   fontWeight: FontWeight.w700,
                 ),
               ),
-              SizedBox(height: 32.hmea),
+              SizedBox(height: 32.h),
               Center(child: addGoalLogoPicker(context)),
-              SizedBox(height: 24.hmea),
+              SizedBox(height: 24.h),
               Text(
                 AppLocalizations.of(context)!.goalName,
                 style: TextStyle(
@@ -63,7 +62,7 @@ class AddGoalPageContent extends StatelessWidget {
                   fontWeight: FontWeight.w800,
                 ),
               ),
-              SizedBox(height: 8.hmea),
+              SizedBox(height: 8.h),
               Container(
                 decoration: ShapeDecoration(
                   color: const Color(0xFF313131),
@@ -72,8 +71,8 @@ class AddGoalPageContent extends StatelessWidget {
                   ),
                 ),
                 padding: EdgeInsets.symmetric(
-                  vertical: 16.hmea,
-                  horizontal: 16.wmea,
+                  vertical: 16.h,
+                  horizontal: 16.w,
                 ),
                 child: TextFormField(
                   onChanged: (value) {
@@ -98,7 +97,7 @@ class AddGoalPageContent extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                height: 16.hmea,
+                height: 16.h,
               ),
               BlocBuilder<LangCurrencyBloc, LangCurrencyState>(
                 buildWhen: (p, c) {
@@ -116,7 +115,7 @@ class AddGoalPageContent extends StatelessWidget {
                   );
                 },
               ),
-              SizedBox(height: 8.hmea),
+              SizedBox(height: 8.h),
               GestureDetector(
                 onTap: () async {
                   final amountRes = await Navigator.pushNamed(
@@ -140,8 +139,8 @@ class AddGoalPageContent extends StatelessWidget {
                     ),
                   ),
                   padding: EdgeInsets.symmetric(
-                    vertical: 16.hmea,
-                    horizontal: 16.wmea,
+                    vertical: 16.h,
+                    horizontal: 16.w,
                   ),
                   child: Row(
                     children: [
@@ -162,7 +161,7 @@ class AddGoalPageContent extends StatelessWidget {
                           );
                         },
                       ),
-                      SizedBox(width: 10.wmea),
+                      SizedBox(width: 10.w),
                       Expanded(
                         child: BlocBuilder<AddGoalBloc, AddGoalState>(
                           buildWhen: (p, c) {
@@ -186,7 +185,7 @@ class AddGoalPageContent extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(height: 32.hmea),
+              SizedBox(height: 32.h),
               PinkButton(
                 onTap: () {
                   FocusManager.instance.primaryFocus?.unfocus();
@@ -194,7 +193,7 @@ class AddGoalPageContent extends StatelessWidget {
                 },
                 name: AppLocalizations.of(context)!.submit,
               ),
-              SizedBox(height: 16.hmea),
+              SizedBox(height: 16.h),
               BlackButton(
                 onTap: () {
                   FocusManager.instance.primaryFocus?.unfocus();

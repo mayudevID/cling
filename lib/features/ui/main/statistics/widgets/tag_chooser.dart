@@ -1,7 +1,6 @@
-import 'package:cling/core/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sizer/sizer.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../resources/gen/fonts.gen.dart';
 import '../../../language_currency/lang_export.dart';
@@ -35,10 +34,10 @@ class TagChooser extends StatelessWidget {
                   },
                   child: Container(
                     padding: EdgeInsets.symmetric(
-                      horizontal: 16.wmea,
-                      vertical: 8.hmea,
+                      horizontal: 16.w,
+                      vertical: 8.h,
                     ),
-                    margin: EdgeInsets.only(right: 12.wmea),
+                    margin: EdgeInsets.only(right: 12.w),
                     decoration: ShapeDecoration(
                       color: (e.key == state.typeCategories)
                           ? const Color(0xFFF599DA)

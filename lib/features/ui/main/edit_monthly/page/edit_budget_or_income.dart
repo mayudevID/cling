@@ -2,7 +2,7 @@ import 'package:cling/core/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:numberpicker/numberpicker.dart';
-import 'package:sizer/sizer.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../core/common_widget.dart';
 import '../../../../../core/route.dart';
@@ -51,7 +51,7 @@ class EditMonBudgetOrIncomePageContent extends StatelessWidget {
         key: EditMonBudgetOrIncomePage.navEditMon,
         backgroundColor: const Color(0xFF101010),
         body: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24.wmea),
+          padding: EdgeInsets.symmetric(horizontal: 24.w),
           child: Column(
             children: [
               appBarProfile(
@@ -64,7 +64,7 @@ class EditMonBudgetOrIncomePageContent extends StatelessWidget {
                   context.read<EditMonthlyBloc>().add(SaveNewMonthly());
                 },
               ),
-              SizedBox(height: 32.hmea),
+              SizedBox(height: 32.h),
               Align(
                 alignment: Alignment.centerLeft,
                 child: BlocBuilder<LangCurrencyBloc, LangCurrencyState>(
@@ -81,7 +81,7 @@ class EditMonBudgetOrIncomePageContent extends StatelessWidget {
                   },
                 ),
               ),
-              SizedBox(height: 8.hmea),
+              SizedBox(height: 8.h),
               GestureDetector(
                 onTap: () async {
                   final amountRes = await Navigator.pushNamed(
@@ -105,8 +105,8 @@ class EditMonBudgetOrIncomePageContent extends StatelessWidget {
                     ),
                   ),
                   padding: EdgeInsets.symmetric(
-                    vertical: 16.hmea,
-                    horizontal: 16.wmea,
+                    vertical: 16.h,
+                    horizontal: 16.w,
                   ),
                   child: Row(
                     children: [
@@ -127,7 +127,7 @@ class EditMonBudgetOrIncomePageContent extends StatelessWidget {
                           );
                         },
                       ),
-                      SizedBox(width: 10.wmea),
+                      SizedBox(width: 10.w),
                       Expanded(
                         child: BlocBuilder<EditMonthlyBloc, EditMonthlyState>(
                           buildWhen: (p, c) {
@@ -152,7 +152,7 @@ class EditMonBudgetOrIncomePageContent extends StatelessWidget {
                 ),
               ),
               if (monthlyMode == EditMonthlyMode.income) ...[
-                SizedBox(height: 32.hmea),
+                SizedBox(height: 32.h),
                 Text(
                   AppLocalizations.of(context)!.recurringEveryDate,
                   style: const TextStyle(
@@ -161,7 +161,7 @@ class EditMonBudgetOrIncomePageContent extends StatelessWidget {
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-                SizedBox(height: 16.hmea),
+                SizedBox(height: 16.h),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -177,7 +177,7 @@ class EditMonBudgetOrIncomePageContent extends StatelessWidget {
                           .lib.resources.images.fluentChevronLeft24Filled
                           .svg(),
                     ),
-                    SizedBox(width: 16.wmea),
+                    SizedBox(width: 16.w),
                     BlocBuilder<EditMonthlyBloc, EditMonthlyState>(
                       buildWhen: (p, c) => p.dateRec != c.dateRec,
                       builder: (context, state) {
@@ -209,7 +209,7 @@ class EditMonBudgetOrIncomePageContent extends StatelessWidget {
                         );
                       },
                     ),
-                    SizedBox(width: 16.wmea),
+                    SizedBox(width: 16.w),
                     GestureDetector(
                       onTap: () {
                         int day =

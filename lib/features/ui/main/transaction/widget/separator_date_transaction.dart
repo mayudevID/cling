@@ -1,10 +1,9 @@
-import 'package:cling/core/utils.dart';
 import 'package:cling/features/ui/language_currency/lang_currency_bloc.dart';
 import 'package:cling/resources/gen/fonts.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:sizer/sizer.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../model/transaction_model.dart';
 
@@ -17,7 +16,7 @@ Widget separatorDateTransaction(BuildContext context, TransactionModel model) {
       .toLanguageTag();
 
   return Padding(
-    padding: EdgeInsets.symmetric(horizontal: 10.wmea),
+    padding: EdgeInsets.symmetric(horizontal: 10.w),
     child: Row(
       children: [
         Text(
@@ -28,7 +27,7 @@ Widget separatorDateTransaction(BuildContext context, TransactionModel model) {
             fontSize: 30.sp,
           ),
         ),
-        SizedBox(width: 8.wmea),
+        SizedBox(width: 8.w),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -50,7 +49,7 @@ Widget separatorDateTransaction(BuildContext context, TransactionModel model) {
                   fontSize: 8.5.sp,
                 ),
               ),
-              SizedBox(height: 2.8.hmea)
+              SizedBox(height: 2.8.h)
             ],
           ),
         ),

@@ -1,7 +1,6 @@
-import 'package:cling/core/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sizer/sizer.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../core/common_widget.dart';
 import '../../../../../resources/gen/fonts.gen.dart';
@@ -13,12 +12,12 @@ import 'warning_amount_icon.dart';
 Widget incomeAndExpense(BuildContext context) {
   return Container(
     margin: EdgeInsets.symmetric(
-      horizontal: 24.wmea,
+      horizontal: 24.w,
     ),
     width: double.infinity,
     padding: EdgeInsets.symmetric(
-      horizontal: 16.wmea,
-      vertical: 16.hmea,
+      horizontal: 16.w,
+      vertical: 16.h,
     ),
     decoration: BoxDecoration(
       color: const Color(0x3D787880),
@@ -51,7 +50,7 @@ Widget incomeAndExpense(BuildContext context) {
                 content: AppLocalizations.of(context)!.warningMonthlyBudget,
               );
             }),
-            SizedBox(width: 8.wmea),
+            SizedBox(width: 8.w),
             BlocBuilder<HomeBloc, HomeState>(
               buildWhen: (p, c) {
                 return p.amountIncomeThisMonth != c.amountIncomeThisMonth ||
@@ -75,7 +74,7 @@ Widget incomeAndExpense(BuildContext context) {
           ],
         ),
         SizedBox(
-          height: 16.hmea,
+          height: 16.h,
         ),
         Row(
           children: [
@@ -87,8 +86,8 @@ Widget incomeAndExpense(BuildContext context) {
                 ),
                 child: Padding(
                   padding: EdgeInsets.symmetric(
-                    horizontal: 8.wmea,
-                    vertical: 10.hmea,
+                    horizontal: 8.w,
+                    vertical: 10.h,
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -104,7 +103,7 @@ Widget incomeAndExpense(BuildContext context) {
                         ),
                       ),
                       SizedBox(
-                        height: 6.hmea,
+                        height: 6.h,
                       ),
                       tagCurrency(context),
                       BlocBuilder<HomeBloc, HomeState>(
@@ -132,7 +131,7 @@ Widget incomeAndExpense(BuildContext context) {
               ),
             ),
             SizedBox(
-              width: 16.wmea,
+              width: 16.w,
             ),
             Expanded(
               child: Container(
@@ -142,8 +141,8 @@ Widget incomeAndExpense(BuildContext context) {
                 ),
                 child: Padding(
                   padding: EdgeInsets.symmetric(
-                    horizontal: 8.wmea,
-                    vertical: 10.hmea,
+                    horizontal: 8.w,
+                    vertical: 10.h,
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -158,7 +157,7 @@ Widget incomeAndExpense(BuildContext context) {
                         ),
                       ),
                       SizedBox(
-                        height: 6.hmea,
+                        height: 6.h,
                       ),
                       tagCurrency(context),
                       BlocBuilder<HomeBloc, HomeState>(

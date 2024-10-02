@@ -1,9 +1,8 @@
 import 'package:cling/core/common_widget.dart';
-import 'package:cling/core/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:sizer/sizer.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'dart:math' as math;
 
 import '../../../../../../core/route.dart';
@@ -34,7 +33,7 @@ void showEditGoalBottomSheet(BuildContext context) {
           GoalDetailPage.navKeyMain.currentContext!,
         ),
         child: Container(
-          padding: EdgeInsets.all(24.wmea),
+          padding: EdgeInsets.all(24.w),
           decoration: const BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.only(
@@ -68,9 +67,9 @@ void showEditGoalBottomSheet(BuildContext context) {
                     ),
                   ],
                 ),
-                SizedBox(height: 8.hmea),
+                SizedBox(height: 8.h),
                 logoGoalWidgetOnEditGoal(context),
-                SizedBox(height: 8.hmea),
+                SizedBox(height: 8.h),
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
@@ -83,7 +82,7 @@ void showEditGoalBottomSheet(BuildContext context) {
                     ),
                   ),
                 ),
-                SizedBox(height: 8.hmea),
+                SizedBox(height: 8.h),
                 Container(
                   decoration: ShapeDecoration(
                     color: const Color.fromARGB(255, 224, 224, 224),
@@ -92,12 +91,12 @@ void showEditGoalBottomSheet(BuildContext context) {
                     ),
                   ),
                   padding: EdgeInsets.symmetric(
-                    vertical: 16.hmea,
-                    horizontal: 16.wmea,
+                    vertical: 16.h,
+                    horizontal: 16.w,
                   ),
                   child: const TextFieldNameEditGoal(),
                 ),
-                SizedBox(height: 16.hmea),
+                SizedBox(height: 16.h),
                 Align(
                   alignment: Alignment.centerLeft,
                   child: BlocBuilder<LangCurrencyBloc, LangCurrencyState>(
@@ -117,7 +116,7 @@ void showEditGoalBottomSheet(BuildContext context) {
                     },
                   ),
                 ),
-                SizedBox(height: 8.hmea),
+                SizedBox(height: 8.h),
                 GestureDetector(
                   onTap: () async {
                     var ctxt = GoalDetailPage.navKeyMain.currentContext!;
@@ -142,8 +141,8 @@ void showEditGoalBottomSheet(BuildContext context) {
                       ),
                     ),
                     padding: EdgeInsets.symmetric(
-                      vertical: 16.hmea,
-                      horizontal: 16.wmea,
+                      vertical: 16.h,
+                      horizontal: 16.w,
                     ),
                     child: Row(
                       children: [
@@ -164,7 +163,7 @@ void showEditGoalBottomSheet(BuildContext context) {
                             );
                           },
                         ),
-                        SizedBox(width: 10.wmea),
+                        SizedBox(width: 10.w),
                         Expanded(
                           child: BlocBuilder<GoalDetailBloc, GoalDetailState>(
                             buildWhen: (p, c) {
@@ -188,7 +187,7 @@ void showEditGoalBottomSheet(BuildContext context) {
                     ),
                   ),
                 ),
-                SizedBox(height: 24.hmea),
+                SizedBox(height: 24.h),
                 PinkButton(
                   onTap: () {
                     GoalDetailPage.navKeyMain.currentContext!
@@ -198,7 +197,7 @@ void showEditGoalBottomSheet(BuildContext context) {
                   },
                   name: "Edit",
                 ),
-                SizedBox(height: 24.hmea),
+                SizedBox(height: 24.h),
               ],
             ),
           ),

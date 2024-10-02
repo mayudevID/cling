@@ -1,9 +1,8 @@
-import 'package:cling/core/utils.dart';
 import 'package:cling/features/ui/main/goal_list/widget/goal_list_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
-import 'package:sizer/sizer.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../injection.dart';
 import '../../../../../resources/gen/assets.gen.dart';
@@ -37,10 +36,10 @@ class GoalListPageContent extends StatelessWidget {
       child: Scaffold(
         backgroundColor: Colors.black,
         body: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24.wmea),
+          padding: EdgeInsets.symmetric(horizontal: 24.w),
           child: Column(
             children: [
-              SizedBox(height: 16.hmea),
+              SizedBox(height: 16.h),
               Row(
                 children: [
                   GestureDetector(
@@ -48,7 +47,7 @@ class GoalListPageContent extends StatelessWidget {
                     child: Assets.lib.resources.images.fluentChevronLeft24Filled
                         .svg(),
                   ),
-                  SizedBox(width: 16.wmea),
+                  SizedBox(width: 16.w),
                   Text(
                     AppLocalizations.of(context)!.goals,
                     textAlign: TextAlign.center,
@@ -62,7 +61,7 @@ class GoalListPageContent extends StatelessWidget {
                   const Spacer(),
                 ],
               ),
-              SizedBox(height: 16.hmea),
+              SizedBox(height: 16.h),
               Expanded(
                 child: MediaQuery.removePadding(
                   context: context,
@@ -121,7 +120,7 @@ class GoalListPageContent extends StatelessWidget {
               }
 
               return SizedBox(
-                height: 55.hmea,
+                height: 55.h,
                 child: Center(child: body),
               );
             },
@@ -131,7 +130,7 @@ class GoalListPageContent extends StatelessWidget {
             itemBuilder: (context, index) {
               return goalListWidget(context, state.listGoalModel[index]);
             },
-            separatorBuilder: (_, x) => SizedBox(height: 8.hmea),
+            separatorBuilder: (_, x) => SizedBox(height: 8.h),
           ),
         );
       },

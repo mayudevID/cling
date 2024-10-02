@@ -1,7 +1,6 @@
-import 'package:cling/core/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sizer/sizer.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../../../../../core/common_widget.dart';
@@ -18,7 +17,7 @@ Widget pieChartStatsExpense() {
     builder: (context, state) {
       if (state.pieDataExpenseList.isEmpty) {
         return SizedBox(
-          height: 248.5.wmea,
+          height: 248.5.w,
           child: const Center(
             child: Text(
               "No data :(",
@@ -38,7 +37,7 @@ Widget pieChartStatsExpense() {
 
       return SizedBox(
         width: double.infinity,
-        height: 248.5.wmea,
+        height: 248.5.w,
         child: SfCircularChart(
           tooltipBehavior: TooltipBehavior(
             enable: true,

@@ -3,7 +3,7 @@ import 'package:cling/features/model/chart_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:sizer/sizer.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../../../../../resources/gen/fonts.gen.dart';
@@ -18,7 +18,7 @@ Widget lineColumnStatsIncomeWidget(BuildContext mainContext) {
     builder: (context, state) {
       if (state.yearlyIncomeList.isEmpty) {
         return SizedBox(
-          height: 193.hmea,
+          height: 193.h,
           child: const Center(
             child: Text(
               "No data :(",
@@ -33,7 +33,7 @@ Widget lineColumnStatsIncomeWidget(BuildContext mainContext) {
 
       return SizedBox(
         width: double.infinity,
-        height: 193.hmea,
+        height: 193.h,
         child: SfCartesianChart(
           tooltipBehavior: TooltipBehavior(
             enable: true,

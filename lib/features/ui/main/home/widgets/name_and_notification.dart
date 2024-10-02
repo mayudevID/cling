@@ -1,8 +1,7 @@
-import 'package:cling/core/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:sizer/sizer.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../core/route.dart';
 import '../../../../../resources/gen/assets.gen.dart';
@@ -21,7 +20,7 @@ Widget nameAndNotification(BuildContext context) {
       .toLanguageTag();
 
   return Padding(
-    padding: EdgeInsets.only(left: 24.wmea, right: 17.wmea),
+    padding: EdgeInsets.only(left: 24.w, right: 17.w),
     child: Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -63,16 +62,16 @@ Widget nameAndNotification(BuildContext context) {
             Navigator.pushNamed(context, RouteName.notification);
           },
           child: SizedBox(
-            height: 30.hmea,
-            width: 28.wmea,
+            height: 30.h,
+            width: 28.w,
             child: Stack(
               children: [
                 Positioned(
                   left: 0,
                   bottom: 0,
                   child: Assets.lib.resources.images.bell.svg(
-                    width: 21.91.wmea,
-                    height: 24.hmea,
+                    width: 21.91.w,
+                    height: 24.h,
                   ),
                 ),
                 BlocBuilder<HomeBloc, HomeState>(

@@ -1,9 +1,8 @@
-import 'package:cling/core/utils.dart';
 import 'package:cling/features/ui/language_currency/lang_currency_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:sizer/sizer.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../resources/gen/fonts.gen.dart';
 
@@ -13,9 +12,9 @@ List<Widget> tagNameHome(
   bool withDate = false,
 }) {
   return [
-    SizedBox(height: 24.hmea),
+    SizedBox(height: 24.h),
     Padding(
-      padding: EdgeInsets.symmetric(horizontal: 24.wmea),
+      padding: EdgeInsets.symmetric(horizontal: 24.w),
       child: RichText(
         text: TextSpan(
           text: name,
@@ -60,7 +59,7 @@ List<Widget> tagNameHome(
       ),
     ),
     SizedBox(
-      height: 16.hmea,
+      height: 16.h,
     ),
   ];
 }

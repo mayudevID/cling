@@ -1,6 +1,5 @@
-import 'package:cling/core/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:sizer/sizer.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../resources/gen/fonts.gen.dart';
 import '../../../language_currency/lang_export.dart';
@@ -14,15 +13,15 @@ class TagInfo extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Container(
-          width: 15.wmea,
-          height: 15.wmea,
+          width: 15.w,
+          height: 15.w,
           decoration: const ShapeDecoration(
             color: Color(0xFFE54C19),
             shape: OvalBorder(),
           ),
         ),
         SizedBox(
-          width: 6.wmea,
+          width: 6.w,
         ),
         Text(
           AppLocalizations.of(context)!.expense,
@@ -35,18 +34,18 @@ class TagInfo extends StatelessWidget {
           ),
         ),
         SizedBox(
-          width: 11.wmea,
+          width: 11.w,
         ),
         Container(
-          width: 15.wmea,
-          height: 15.wmea,
+          width: 15.w,
+          height: 15.w,
           decoration: const ShapeDecoration(
             color: Color(0xFF07AC65),
             shape: OvalBorder(),
           ),
         ),
         SizedBox(
-          width: 6.wmea,
+          width: 6.w,
         ),
         Text(
           AppLocalizations.of(context)!.income,
@@ -59,18 +58,18 @@ class TagInfo extends StatelessWidget {
           ),
         ),
         SizedBox(
-          width: 11.wmea,
+          width: 11.w,
         ),
         Container(
-          width: 15.wmea,
-          height: 15.wmea,
+          width: 15.w,
+          height: 15.w,
           decoration: const ShapeDecoration(
             color: Color(0xFF006DE9),
             shape: OvalBorder(),
           ),
         ),
         SizedBox(
-          width: 6.wmea,
+          width: 6.w,
         ),
         Text(
           AppLocalizations.of(context)!.savings,

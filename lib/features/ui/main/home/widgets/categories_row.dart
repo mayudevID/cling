@@ -1,6 +1,5 @@
-import 'package:cling/core/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:sizer/sizer.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../resources/gen/fonts.gen.dart';
 
@@ -14,7 +13,7 @@ List<Widget> rowCategories(String data) {
       ),
     ),
     SizedBox(
-      width: 10.wmea,
+      width: 10.w,
     ),
     Text(
       data.substring(data.indexOf(" ") + 1),

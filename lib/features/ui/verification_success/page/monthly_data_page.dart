@@ -1,9 +1,8 @@
 // ignore_for_file: must_be_immutable
 
-import 'package:cling/core/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sizer/sizer.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import '../../../../core/common_widget.dart';
 import '../../../../injection.dart';
@@ -46,7 +45,7 @@ class MonthlyDataPageContent extends StatelessWidget {
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            SizedBox(width: 100.w, height: 58.hmea),
+            SizedBox(width: 100.w, height: 58.h),
             BlocBuilder<MonthlyDataBloc, MonthlyDataState>(
               builder: (context, state) {
                 return Text(
@@ -63,7 +62,7 @@ class MonthlyDataPageContent extends StatelessWidget {
                 );
               },
             ),
-            SizedBox(height: 100.hmea),
+            SizedBox(height: 100.h),
             BlocBuilder<MonthlyDataBloc, MonthlyDataState>(
               builder: (context, state) {
                 switch (state.state) {
@@ -81,7 +80,7 @@ class MonthlyDataPageContent extends StatelessWidget {
                 }
               },
             ),
-            SizedBox(height: 92.hmea),
+            SizedBox(height: 92.h),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -100,7 +99,7 @@ class MonthlyDataPageContent extends StatelessWidget {
                     );
                   },
                 ),
-                SizedBox(width: 6.wmea),
+                SizedBox(width: 6.w),
                 const TextFieldMonthlyData(),
               ],
             ),
@@ -113,7 +112,7 @@ class MonthlyDataPageContent extends StatelessWidget {
                   return recDayPickerWidget(context);
                 }
 
-                return SizedBox(height: 200.hmea);
+                return SizedBox(height: 200.h);
               },
             ),
             BlocBuilder<MonthlyDataBloc, MonthlyDataState>(
@@ -122,7 +121,7 @@ class MonthlyDataPageContent extends StatelessWidget {
                   activeIndex: (state.state == VerifOnboardPos.income) ? 0 : 1,
                   count: 2,
                   effect: ExpandingDotsEffect(
-                    spacing: 8.wmea,
+                    spacing: 8.w,
                     dotColor: Colors.white,
                     activeDotColor: const Color(0xFFF06AC9),
                   ),
@@ -130,7 +129,7 @@ class MonthlyDataPageContent extends StatelessWidget {
                 );
               },
             ),
-            SizedBox(height: 48.hmea),
+            SizedBox(height: 48.h),
             BlocBuilder<MonthlyDataBloc, MonthlyDataState>(
               builder: (context, state) {
                 return PinkButton(
@@ -155,7 +154,7 @@ class MonthlyDataPageContent extends StatelessWidget {
                 }
 
                 return Padding(
-                  padding: EdgeInsets.only(top: 8.hmea),
+                  padding: EdgeInsets.only(top: 8.h),
                   child: BlackButton(
                     name: AppLocalizations.of(context)!.back,
                     onTap: () {

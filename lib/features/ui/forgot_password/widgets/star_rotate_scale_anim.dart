@@ -1,5 +1,5 @@
-import 'package:cling/core/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class StarRotateScaleAnim extends StatefulWidget {
   const StarRotateScaleAnim({super.key});
@@ -55,14 +55,14 @@ class _StarRotateScaleAnimState extends State<StarRotateScaleAnim>
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      right: 120.wmea,
+      right: 120.w,
       child: ScaleTransition(
         scale: _curveAnimC2,
         child: RotationTransition(
           turns: _animC,
           child: Container(
-            width: 61.02.wmea,
-            height: 61.02.wmea,
+            width: 61.02.w,
+            height: 61.02.w,
             decoration: const ShapeDecoration(
               color: Color(0xFFF2D82D),
               shape: StarBorder(

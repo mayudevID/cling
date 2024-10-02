@@ -1,11 +1,10 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:cling/core/common_widget.dart';
-import 'package:cling/core/utils.dart';
 import 'package:cling/resources/gen/fonts.gen.dart';
 import 'package:flutter/material.dart';
 
-import 'package:sizer/sizer.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/open_mail_app.dart';
 import '../../language_currency/lang_export.dart';
 import '../widgets/email_with_star.dart';
@@ -21,11 +20,11 @@ class CheckEmailPage extends StatelessWidget {
         body: Column(
           children: [
             SizedBox(
-              height: 110.hmea,
+              height: 110.h,
             ),
             const EmailWithStar(),
             SizedBox(
-              height: 81.hmea,
+              height: 81.h,
             ),
             Text(
               AppLocalizations.of(context)!.checkYourEmail,
@@ -38,10 +37,10 @@ class CheckEmailPage extends StatelessWidget {
               ),
             ),
             SizedBox(
-              height: 16.hmea,
+              height: 16.h,
             ),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 47.wmea),
+              padding: EdgeInsets.symmetric(horizontal: 47.w),
               child: Text(
                 AppLocalizations.of(context)!.descCheckYourEmail,
                 textAlign: TextAlign.center,
@@ -54,7 +53,7 @@ class CheckEmailPage extends StatelessWidget {
               ),
             ),
             SizedBox(
-              height: 81.hmea,
+              height: 81.h,
             ),
             PinkButton(
               onTap: () async {

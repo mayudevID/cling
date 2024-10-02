@@ -1,8 +1,7 @@
-import 'package:cling/core/utils.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sizer/sizer.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../resources/gen/assets.gen.dart';
 import '../../../../../resources/gen/fonts.gen.dart';
 import '../../../language_currency/lang_export.dart';
@@ -25,7 +24,7 @@ class StatsAll extends StatelessWidget {
         const TagInfo(),
         pieChartStatsAllWidget(),
         SizedBox(
-          height: 8.hmea,
+          height: 8.h,
         ),
         Text(
           '${AppLocalizations.of(context)!.yearlyBreakdown} / ${DateTime.now().year}',
@@ -37,14 +36,14 @@ class StatsAll extends StatelessWidget {
             fontWeight: FontWeight.w500,
           ),
         ),
-        SizedBox(height: 8.hmea),
+        SizedBox(height: 8.h),
         lineColumnStatsAllWidget(context),
-        SizedBox(height: 8.hmea),
+        SizedBox(height: 8.h),
         DropdownButtonHideUnderline(
           child: DropdownButton2(
             customButton: Container(
               width: MediaQuery.of(context).size.width,
-              padding: EdgeInsets.all(14.wmea),
+              padding: EdgeInsets.all(14.w),
               decoration: BoxDecoration(
                 color: const Color(0x3D787880),
                 borderRadius: BorderRadius.circular(5),
@@ -103,7 +102,7 @@ class StatsAll extends StatelessWidget {
                 )
                 .toList(),
             dropdownStyleData: DropdownStyleData(
-              width: 387.wmea,
+              width: 387.w,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
                 color: const Color(0xFF313131),
@@ -112,11 +111,11 @@ class StatsAll extends StatelessWidget {
           ),
         ),
         // SizedBox(
-        //   height: 8.hmea,
+        //   height: 8.h,
         // ),
         // ...chooseDateRange(context),
         SizedBox(
-          height: 16.hmea,
+          height: 16.h,
         ),
         BlocBuilder<StatisticsBloc, StatisticsState>(
           buildWhen: (p, c) {
@@ -166,7 +165,7 @@ class StatsAll extends StatelessWidget {
                 physics: const NeverScrollableScrollPhysics(),
                 itemBuilder: itemBuilder,
                 separatorBuilder: (context, index) {
-                  return SizedBox(height: 4.hmea);
+                  return SizedBox(height: 4.h);
                 },
               ),
             );
@@ -180,7 +179,7 @@ class StatsAll extends StatelessWidget {
                     : listWidget;
           },
         ),
-        SizedBox(height: 128.hmea),
+        SizedBox(height: 128.h),
       ],
     );
   }

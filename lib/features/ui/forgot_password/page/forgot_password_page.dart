@@ -1,7 +1,6 @@
-import 'package:cling/core/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sizer/sizer.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/common_widget.dart';
 import '../../../../injection.dart';
 import '../../../../resources/gen/assets.gen.dart';
@@ -37,11 +36,11 @@ class ForgotPasswordPageContent extends StatelessWidget {
         backgroundColor: Colors.black,
         body: Container(
           width: 100.w,
-          padding: EdgeInsets.symmetric(horizontal: 24.wmea),
+          padding: EdgeInsets.symmetric(horizontal: 24.w),
           child: Column(
             children: [
               SizedBox(
-                height: 40.hmea,
+                height: 40.h,
               ),
               GestureDetector(
                 onTap: () {
@@ -53,7 +52,7 @@ class ForgotPasswordPageContent extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                height: 36.hmea,
+                height: 36.h,
               ),
               Align(
                 alignment: Alignment.centerLeft,
@@ -68,7 +67,7 @@ class ForgotPasswordPageContent extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                height: 8.hmea,
+                height: 8.h,
               ),
               Text(
                 AppLocalizations.of(context)!.descForgotPassword,
@@ -79,11 +78,11 @@ class ForgotPasswordPageContent extends StatelessWidget {
                   fontWeight: FontWeight.w500,
                 ),
               ),
-              SizedBox(height: 32.hmea),
+              SizedBox(height: 32.h),
               TagNameLogin(name: AppLocalizations.of(context)!.email),
-              SizedBox(height: 8.hmea),
+              SizedBox(height: 8.h),
               const TextFieldEmailForgot(),
-              SizedBox(height: 40.hmea),
+              SizedBox(height: 40.h),
               PinkButton(
                 onTap: () {
                   context.read<ForgotPasswordCubit>().sendResetPassword();

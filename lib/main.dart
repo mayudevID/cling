@@ -130,6 +130,8 @@ class _MainAppState extends State<MainApp> {
 
   Widget initApp() {
     return ScreenUtilInit(
+      designSize: const Size(430, 932),
+      ensureScreenSize: true,
       builder: (context, child) {
         return GestureDetector(
           onTap: () {
@@ -144,28 +146,24 @@ class _MainAppState extends State<MainApp> {
               return prev.selectedLanguage != curr.selectedLanguage;
             },
             builder: (context, state) {
-              return materialApp(state);
+              return MaterialApp(
+                builder: FToastBuilder(),
+                navigatorKey: MainApp.navKeyGlobal,
+                theme: ThemeData(primaryColor: Colors.white),
+                locale: state.selectedLanguage.value,
+                supportedLocales: AppLocalizations.supportedLocales,
+                localizationsDelegates: const [
+                  ...AppLocalizations.localizationsDelegates,
+                  GlobalMaterialLocalizations.delegate,
+                  MonthYearPickerLocalizations.delegate,
+                ],
+                onGenerateRoute: RouteGen.generateRoute,
+                debugShowCheckedModeBanner: false,
+              );
             },
           ),
         );
       },
-    );
-  }
-
-  MaterialApp materialApp(LangCurrencyState state) {
-    return MaterialApp(
-      builder: FToastBuilder(),
-      navigatorKey: MainApp.navKeyGlobal,
-      theme: ThemeData(primaryColor: Colors.white),
-      locale: state.selectedLanguage.value,
-      supportedLocales: AppLocalizations.supportedLocales,
-      localizationsDelegates: const [
-        ...AppLocalizations.localizationsDelegates,
-        GlobalMaterialLocalizations.delegate,
-        MonthYearPickerLocalizations.delegate,
-      ],
-      onGenerateRoute: RouteGen.generateRoute,
-      debugShowCheckedModeBanner: false,
     );
   }
 }

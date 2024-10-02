@@ -1,6 +1,5 @@
-import 'package:cling/core/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:sizer/sizer.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../resources/gen/assets.gen.dart';
 import 'star_rotate_scale_anim.dart';
@@ -12,12 +11,12 @@ class EmailWithStar extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: 100.w,
-      height: 197.hmea,
+      height: 197.h,
       child: Stack(
         children: [
           Center(
             child: Container(
-              width: 197.wmea,
+              width: 197.w,
               height: double.infinity,
               decoration: const ShapeDecoration(
                 color: Color(0xFF313131),
@@ -30,11 +29,11 @@ class EmailWithStar extends StatelessWidget {
           ),
           const StarRotateScaleAnim(),
           Positioned(
-            bottom: 10.hmea,
-            left: 118.wmea,
+            bottom: 10.h,
+            left: 118.w,
             child: Container(
-              width: 48.wmea,
-              height: 48.wmea,
+              width: 48.w,
+              height: 48.w,
               decoration: const ShapeDecoration(
                 color: Color(0xFFF2D82D),
                 shape: StarBorder(
@@ -50,10 +49,10 @@ class EmailWithStar extends StatelessWidget {
           ),
           Positioned(
             bottom: 0,
-            left: 155.wmea,
+            left: 155.w,
             child: Container(
-              width: 29.wmea,
-              height: 29.wmea,
+              width: 29.w,
+              height: 29.w,
               decoration: const ShapeDecoration(
                 color: Color(0xFFF2D82D),
                 shape: StarBorder(

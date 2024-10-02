@@ -1,7 +1,6 @@
-import 'package:cling/core/utils.dart';
 import 'package:flutter/material.dart' hide ModalBottomSheetRoute;
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sizer/sizer.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../core/common_widget.dart';
 import '../../../core/route.dart';
 import '../../../resources/gen/fonts.gen.dart';
@@ -25,15 +24,15 @@ class OnboardPage extends StatelessWidget {
               children: [
                 const StackEmoticon(),
                 SizedBox(
-                  width: 100.w,
-                  height: (215.hmea) * 2,
+                  width: 1.sw,
+                  height: (215.h) * 2,
                   child: const StackStar(),
                 ),
                 const EmoticonWidget(),
               ],
             ),
             SizedBox(
-              height: 40.hmea,
+              height: 40.h,
             ),
             Text(
               "Cling!",
@@ -45,7 +44,7 @@ class OnboardPage extends StatelessWidget {
               ),
             ),
             SizedBox(
-              height: 24.hmea,
+              height: 24.h,
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -54,7 +53,7 @@ class OnboardPage extends StatelessWidget {
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: 14.5.sp,
+                  fontSize: 16.sp,
                   fontFamily: FontFamily.cabinetGrotesk,
                   fontWeight: FontWeight.w700,
                 ),
@@ -67,9 +66,9 @@ class OnboardPage extends StatelessWidget {
                 Navigator.pushNamed(context, RouteName.register);
               },
             ),
-            SizedBox(height: 8.hmea),
+            SizedBox(height: 8.h),
             SizedBox(
-              width: 370.wmea,
+              width: 370.w,
               child: Row(
                 children: [
                   GestureDetector(
@@ -77,8 +76,8 @@ class OnboardPage extends StatelessWidget {
                       await showBottomSheetChooseLang(context);
                     },
                     child: Container(
-                      width: 57.hmea,
-                      height: 57.hmea,
+                      width: 57.h,
+                      height: 57.h,
                       decoration: BoxDecoration(
                         border: Border.all(
                           color: Colors.white,
@@ -110,7 +109,7 @@ class OnboardPage extends StatelessWidget {
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: const Color(0xFFF599DA),
-                        fontSize: 11.5.sp,
+                        fontSize: 16.sp,
                         fontFamily: FontFamily.cabinetGrotesk,
                         fontWeight: FontWeight.w700,
                       ),
@@ -120,7 +119,7 @@ class OnboardPage extends StatelessWidget {
               ),
             ),
             SizedBox(
-              height: 24.hmea,
+              height: 24.h,
             ),
           ],
         ),

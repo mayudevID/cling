@@ -1,10 +1,9 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:cling/core/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:sizer/sizer.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../resources/gen/assets.gen.dart';
 import '../../../../resources/gen/fonts.gen.dart';
@@ -34,9 +33,9 @@ void currencyBottomSheet(BuildContext context) {
             });
           },
           child: Container(
-            padding: EdgeInsets.all(16.hmea),
+            padding: EdgeInsets.all(16.h),
             margin: EdgeInsets.only(
-                bottom: (index == Currency.values.length - 1) ? 8.hmea : 0),
+                bottom: (index == Currency.values.length - 1) ? 8.h : 0),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
               border: Border.all(
@@ -57,7 +56,7 @@ void currencyBottomSheet(BuildContext context) {
           ),
         );
       },
-      separatorBuilder: (_, idx) => SizedBox(height: 8.hmea),
+      separatorBuilder: (_, idx) => SizedBox(height: 8.h),
     );
   }
 
@@ -69,8 +68,8 @@ void currencyBottomSheet(BuildContext context) {
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
     builder: (_) {
       return Container(
-        height: 650.hmea,
-        padding: EdgeInsets.only(top: 24.hmea, left: 24.wmea, right: 24.wmea),
+        height: 650.h,
+        padding: EdgeInsets.only(top: 24.h, left: 24.w, right: 24.w),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
         ),
@@ -96,7 +95,7 @@ void currencyBottomSheet(BuildContext context) {
                 ),
               ],
             ),
-            SizedBox(height: 16.hmea),
+            SizedBox(height: 16.h),
             Expanded(
               child: MediaQuery.removePadding(
                 removeTop: true,

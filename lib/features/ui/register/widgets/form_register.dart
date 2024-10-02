@@ -1,7 +1,6 @@
-import 'package:cling/core/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sizer/sizer.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../resources/gen/assets.gen.dart';
 import '../../../../resources/gen/fonts.gen.dart';
 import '../../language_currency/lang_currency_bloc.dart';
@@ -16,23 +15,23 @@ import 'text_field_pass_reg.dart';
 List<Widget> formRegister(BuildContext context) {
   return [
     TagNameReg(name: AppLocalizations.of(context)!.name),
-    SizedBox(height: 8.hmea),
+    SizedBox(height: 8.h),
     const TextFieldNameReg(),
-    SizedBox(height: 16.hmea),
+    SizedBox(height: 16.h),
     TagNameReg(name: AppLocalizations.of(context)!.email),
-    SizedBox(height: 8.hmea),
+    SizedBox(height: 8.h),
     const TextFieldEmailReg(),
-    SizedBox(height: 16.hmea),
+    SizedBox(height: 16.h),
     TagNameReg(name: AppLocalizations.of(context)!.password),
-    SizedBox(height: 8.hmea),
+    SizedBox(height: 8.h),
     const TextFieldPassReg(),
-    SizedBox(height: 16.hmea),
+    SizedBox(height: 16.h),
     TagNameReg(name: AppLocalizations.of(context)!.confirmPassword),
-    SizedBox(height: 8.hmea),
+    SizedBox(height: 8.h),
     const TextFieldConPassReg(),
-    SizedBox(height: 16.hmea),
+    SizedBox(height: 16.h),
     TagNameReg(name: AppLocalizations.of(context)!.currency),
-    SizedBox(height: 8.hmea),
+    SizedBox(height: 8.h),
     GestureDetector(
       onTap: () => currencyBottomSheet(context),
       child: Container(
@@ -42,7 +41,7 @@ List<Widget> formRegister(BuildContext context) {
             borderRadius: BorderRadius.circular(10),
           ),
         ),
-        padding: EdgeInsets.symmetric(vertical: 16.hmea, horizontal: 16.wmea),
+        padding: EdgeInsets.symmetric(vertical: 16.h, horizontal: 16.w),
         child: Row(
           children: [
             BlocBuilder<LangCurrencyBloc, LangCurrencyState>(

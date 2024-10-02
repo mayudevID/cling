@@ -1,5 +1,5 @@
-import 'package:cling/core/utils.dart';
 import 'package:cling/features/ui/language_currency/lang_export.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../resources/gen/fonts.gen.dart';
 import 'package:flutter/material.dart';
 
@@ -12,14 +12,14 @@ Widget emptyTransactionWidget(BuildContext context) {
     children: [
       SizedBox(
         width: MediaQuery.of(context).size.width,
-        height: 100.hmea,
+        height: 100.h,
         child: Stack(
           fit: StackFit.expand,
           children: [
             Positioned(
-              left: 135.wmea,
+              left: 135.w,
               child: Assets.lib.resources.images.warningTriangleSolid.svg(
-                height: 75.hmea,
+                height: 75.h,
                 colorFilter: const ColorFilter.mode(
                   Colors.white,
                   BlendMode.srcIn,
@@ -27,15 +27,15 @@ Widget emptyTransactionWidget(BuildContext context) {
               ),
             ),
             Positioned(
-              left: 180.wmea,
+              left: 180.w,
               child: Assets.lib.resources.images.transaction.svg(
-                height: 75.hmea,
+                height: 75.h,
               ),
             ),
           ],
         ),
       ),
-      SizedBox(height: 8.hmea),
+      SizedBox(height: 8.h),
       Text(
         AppLocalizations.of(context)!.emptyTransaction,
         style: const TextStyle(
@@ -44,7 +44,7 @@ Widget emptyTransactionWidget(BuildContext context) {
           fontWeight: FontWeight.bold,
         ),
       ),
-      SizedBox(height: 180.hmea),
+      SizedBox(height: 180.h),
     ],
   );
 }

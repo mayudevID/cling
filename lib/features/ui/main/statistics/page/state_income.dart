@@ -1,9 +1,8 @@
-import 'package:cling/core/utils.dart';
 import 'package:cling/features/ui/main/statistics/widgets/categories_with_amount_widget.dart';
 import 'package:cling/features/ui/main/statistics/widgets/line_column_stats_income.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sizer/sizer.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../resources/gen/fonts.gen.dart';
 import '../../../language_currency/lang_export.dart';
@@ -28,9 +27,9 @@ class StatsIncome extends StatelessWidget {
             fontWeight: FontWeight.w500,
           ),
         ),
-        SizedBox(height: 24.hmea),
+        SizedBox(height: 24.h),
         lineColumnStatsIncomeWidget(context),
-        SizedBox(height: 24.hmea),
+        SizedBox(height: 24.h),
         Text(
           AppLocalizations.of(context)!.incomeBreakdown,
           style: TextStyle(
@@ -41,11 +40,11 @@ class StatsIncome extends StatelessWidget {
           ),
         ),
         SizedBox(
-          height: 16.hmea,
+          height: 16.h,
         ),
         ...chooseDateRange(context),
         SizedBox(
-          height: 16.hmea,
+          height: 16.h,
         ),
         BlocBuilder<StatisticsBloc, StatisticsState>(
           buildWhen: (p, c) {
@@ -79,12 +78,12 @@ class StatsIncome extends StatelessWidget {
                     title: AppLocalizations.of(context)!.incomeBreakdown,
                   );
                 },
-                separatorBuilder: (context, index) => SizedBox(height: 4.hmea),
+                separatorBuilder: (context, index) => SizedBox(height: 4.h),
               ),
             );
           },
         ),
-        SizedBox(height: 90.hmea),
+        SizedBox(height: 90.h),
       ],
     );
   }

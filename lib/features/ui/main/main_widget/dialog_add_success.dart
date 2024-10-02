@@ -2,10 +2,9 @@
 
 import 'dart:async';
 
-import 'package:cling/core/utils.dart';
 import 'package:flutter/material.dart';
 
-import 'package:sizer/sizer.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../core/open_mail_app.dart';
 import '../../../../resources/gen/fonts.gen.dart';
@@ -43,10 +42,10 @@ Future<void> dialogAddSuccess(
             color: const Color(0xFF313131),
           ),
           padding: EdgeInsets.only(
-            top: 44.54.hmea,
-            left: 112.5.wmea,
-            right: 112.5.wmea,
-            bottom: 44.54.hmea,
+            top: 44.54.h,
+            left: 112.5.w,
+            right: 112.5.w,
+            bottom: 44.54.h,
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -59,7 +58,7 @@ Future<void> dialogAddSuccess(
                 ),
               ),
               SizedBox(
-                height: 29.69.hmea,
+                height: 29.69.h,
               ),
               Text(
                 (msg == FlowType.income)

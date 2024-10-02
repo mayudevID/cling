@@ -1,8 +1,7 @@
-import 'package:cling/core/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:sizer/sizer.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../core/common_widget.dart';
 import '../../../../../core/route.dart';
@@ -50,7 +49,7 @@ Widget listTransaction(
       child: Row(
         children: [
           Container(
-            height: 45.hmea,
+            height: 45.h,
             padding: const EdgeInsets.all(9),
             decoration: BoxDecoration(
               color: Colors.white,
@@ -60,17 +59,17 @@ Widget listTransaction(
               child: Text(icon, style: const TextStyle(fontSize: 18)),
             ),
           ),
-          SizedBox(width: 8.wmea),
+          SizedBox(width: 8.w),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SizedBox(height: 5.hmea),
+                SizedBox(height: 5.h),
                 Container(
                   padding: EdgeInsets.symmetric(
-                    vertical: 2.hmea,
-                    horizontal: 6.wmea,
+                    vertical: 2.h,
+                    horizontal: 6.w,
                   ),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(6),

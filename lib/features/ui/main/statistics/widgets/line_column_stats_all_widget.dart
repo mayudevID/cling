@@ -3,7 +3,7 @@ import 'package:cling/features/ui/language_currency/lang_export.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:sizer/sizer.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../../../../../resources/gen/fonts.gen.dart';
@@ -23,7 +23,7 @@ Widget lineColumnStatsAllWidget(BuildContext mainContext) {
           state.chartDataIncomeList.isEmpty &&
           state.chartDataSavingsList.isEmpty) {
         return SizedBox(
-          height: 200.hmea,
+          height: 200.h,
           child: const Center(
             child: Text(
               "No data :(",
@@ -39,7 +39,7 @@ Widget lineColumnStatsAllWidget(BuildContext mainContext) {
       double monthNow = DateTime.now().month.toDouble();
 
       return SizedBox(
-        height: 193.hmea,
+        height: 193.h,
         child: SfCartesianChart(
           tooltipBehavior: TooltipBehavior(
             enable: true,

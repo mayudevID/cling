@@ -1,9 +1,8 @@
-import 'package:cling/core/utils.dart';
 import 'package:cling/features/ui/main/goal_detail/bloc/goal_detail_bloc.dart';
 import 'package:cling/features/ui/main/goal_detail/pages/goal_detail_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sizer/sizer.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../../core/init_database.dart';
 import '../../../../../../resources/gen/fonts.gen.dart';
@@ -26,10 +25,10 @@ Future<void> dialogPickEditGoalLogo(BuildContext mainContext) async {
             color: Colors.white,
           ),
           padding: EdgeInsets.only(
-            top: 18.hmea,
-            left: 18.wmea,
-            right: 18.wmea,
-            bottom: 18.hmea,
+            top: 18.h,
+            left: 18.w,
+            right: 18.w,
+            bottom: 18.h,
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -44,10 +43,10 @@ Future<void> dialogPickEditGoalLogo(BuildContext mainContext) async {
                 ),
               ),
               SizedBox(
-                height: 8.hmea,
+                height: 8.h,
               ),
               SizedBox(
-                height: 400.hmea,
+                height: 400.h,
                 child: GridView.builder(
                   shrinkWrap: true,
                   itemCount: emotLogo.length,

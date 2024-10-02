@@ -1,7 +1,6 @@
-import 'package:cling/core/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sizer/sizer.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../injection.dart';
 import '../../../../../resources/gen/assets.gen.dart';
@@ -85,10 +84,10 @@ class StatsDetailPerCategoriesPageContent extends StatelessWidget {
       child: Scaffold(
         backgroundColor: Colors.black,
         body: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24.wmea),
+          padding: EdgeInsets.symmetric(horizontal: 24.w),
           child: Column(
             children: [
-              SizedBox(height: 16.hmea),
+              SizedBox(height: 16.h),
               Row(
                 children: [
                   GestureDetector(
@@ -96,7 +95,7 @@ class StatsDetailPerCategoriesPageContent extends StatelessWidget {
                     child: Assets.lib.resources.images.fluentChevronLeft24Filled
                         .svg(),
                   ),
-                  SizedBox(width: 16.wmea),
+                  SizedBox(width: 16.w),
                   Text(
                     '${appLocalizations.detail} - $_title',
                     textAlign: TextAlign.center,
@@ -109,18 +108,18 @@ class StatsDetailPerCategoriesPageContent extends StatelessWidget {
                   ),
                 ],
               ),
-              SizedBox(height: 16.hmea),
+              SizedBox(height: 16.h),
               tagCategoriesWithTypeFlowWidget(
                 context,
                 _type,
                 _categoryOrSourceIcon,
                 _categoryOrSourceClass,
               ),
-              SizedBox(height: 16.hmea),
+              SizedBox(height: 16.h),
               if (_title == appLocalizations.incomeBreakdown ||
                   _title == appLocalizations.expenseBreakdown) ...[
                 ...chooseDateRangeByCategory(context),
-                SizedBox(height: 16.hmea),
+                SizedBox(height: 16.h),
               ],
               BlocBuilder<StatsDetailBloc, StatsDetailState>(
                 buildWhen: (p, c) {
@@ -140,7 +139,7 @@ class StatsDetailPerCategoriesPageContent extends StatelessWidget {
                             isIncome,
                           );
                         },
-                        separatorBuilder: (_, idx) => SizedBox(height: 4.hmea),
+                        separatorBuilder: (_, idx) => SizedBox(height: 4.h),
                         itemCount: state.listTransactionModel.length,
                       ),
                     ),

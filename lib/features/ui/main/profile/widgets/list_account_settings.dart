@@ -1,7 +1,6 @@
-import 'package:cling/core/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sizer/sizer.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../core/common_widget.dart';
 import '../../../../../core/route.dart';
@@ -26,9 +25,9 @@ List<Widget> listAccountSettings(BuildContext context) {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          SizedBox(width: 8.wmea),
+          SizedBox(width: 8.w),
           Assets.lib.resources.images.money.svg(),
-          SizedBox(width: 10.wmea),
+          SizedBox(width: 10.w),
           Text(
             AppLocalizations.of(context)!.monthlyBudget,
             textAlign: TextAlign.center,
@@ -57,13 +56,13 @@ List<Widget> listAccountSettings(BuildContext context) {
               );
             },
           ),
-          SizedBox(width: 10.wmea),
+          SizedBox(width: 10.w),
           Assets.lib.resources.images.chevronRight16.svg(),
-          SizedBox(width: 8.wmea),
+          SizedBox(width: 8.w),
         ],
       ),
     ),
-    SizedBox(height: 32.hmea),
+    SizedBox(height: 32.h),
 
     ///* Monthly Income
     GestureDetector(
@@ -78,9 +77,9 @@ List<Widget> listAccountSettings(BuildContext context) {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          SizedBox(width: 8.wmea),
+          SizedBox(width: 8.w),
           Assets.lib.resources.images.moneyHand.svg(),
-          SizedBox(width: 10.wmea),
+          SizedBox(width: 10.w),
           Text(
             AppLocalizations.of(context)!.monthlyIncome,
             textAlign: TextAlign.center,
@@ -109,9 +108,9 @@ List<Widget> listAccountSettings(BuildContext context) {
               );
             },
           ),
-          SizedBox(width: 10.wmea),
+          SizedBox(width: 10.w),
           Assets.lib.resources.images.chevronRight16.svg(),
-          SizedBox(width: 8.wmea),
+          SizedBox(width: 8.w),
         ],
       ),
     ),

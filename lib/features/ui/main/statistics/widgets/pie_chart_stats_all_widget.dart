@@ -1,7 +1,6 @@
-import 'package:cling/core/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sizer/sizer.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../../../../../core/common_widget.dart';
@@ -19,9 +18,9 @@ Widget pieChartStatsAllWidget() {
       if (pieData.isEmpty ||
           (pieData[0].amount == 0 && pieData[1].amount == 0)) {
         return Padding(
-          padding: EdgeInsets.only(top: 24.hmea),
+          padding: EdgeInsets.only(top: 24.h),
           child: SizedBox(
-            height: 200.hmea,
+            height: 200.h,
             child: const Center(
               child: Text(
                 "No data :(",
@@ -41,7 +40,7 @@ Widget pieChartStatsAllWidget() {
       }
 
       return SizedBox(
-        height: 248.5.hmea,
+        height: 248.5.h,
         child: SfCircularChart(
           tooltipBehavior: TooltipBehavior(
             enable: true,

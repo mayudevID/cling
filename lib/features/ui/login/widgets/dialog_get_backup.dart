@@ -1,9 +1,8 @@
-import 'package:cling/core/utils.dart';
 import 'package:cling/features/ui/language_currency/lang_currency_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:sizer/sizer.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../resources/gen/fonts.gen.dart';
 import '../../language_currency/lang_export.dart';
@@ -37,10 +36,10 @@ Future<bool> dialogGetBackup(
             color: Colors.white,
           ),
           padding: EdgeInsets.only(
-            top: 18.hmea,
-            left: 18.wmea,
-            right: 18.wmea,
-            bottom: 18.hmea,
+            top: 18.h,
+            left: 18.w,
+            right: 18.w,
+            bottom: 18.h,
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -55,7 +54,7 @@ Future<bool> dialogGetBackup(
                 ),
               ),
               SizedBox(
-                height: 8.hmea,
+                height: 8.h,
               ),
               Align(
                 alignment: Alignment.centerLeft,
@@ -85,7 +84,7 @@ Future<bool> dialogGetBackup(
                 ),
               ),
               SizedBox(
-                height: 8.hmea,
+                height: 8.h,
               ),
               Align(
                 alignment: Alignment.centerLeft,
@@ -100,7 +99,7 @@ Future<bool> dialogGetBackup(
                 ),
               ),
               SizedBox(
-                height: 12.hmea,
+                height: 12.h,
               ),
               Row(
                 children: [
@@ -110,7 +109,7 @@ Future<bool> dialogGetBackup(
                       Navigator.pop(context, true);
                     },
                     child: Container(
-                      padding: EdgeInsets.all(12.hmea),
+                      padding: EdgeInsets.all(12.h),
                       decoration: BoxDecoration(
                         color: Colors.red,
                         borderRadius: BorderRadius.circular(8),
@@ -130,14 +129,14 @@ Future<bool> dialogGetBackup(
                     ),
                   ),
                   SizedBox(
-                    width: 10.wmea,
+                    width: 10.w,
                   ),
                   GestureDetector(
                     onTap: () {
                       Navigator.pop(context, false);
                     },
                     child: Container(
-                      padding: EdgeInsets.all(12.hmea),
+                      padding: EdgeInsets.all(12.h),
                       decoration: BoxDecoration(
                         color: Colors.black,
                         borderRadius: BorderRadius.circular(8),

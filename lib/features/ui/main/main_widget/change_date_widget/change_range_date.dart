@@ -1,8 +1,7 @@
-import 'package:cling/core/utils.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sizer/sizer.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../resources/gen/assets.gen.dart';
 import '../../../../../resources/gen/fonts.gen.dart';
@@ -22,7 +21,7 @@ Widget changeRangeDate(BuildContext context) {
     child: DropdownButton2(
       customButton: Container(
         width: MediaQuery.of(context).size.width,
-        padding: EdgeInsets.all(14.wmea),
+        padding: EdgeInsets.all(14.w),
         decoration: BoxDecoration(
           color: const Color(0x3D787880),
           borderRadius: BorderRadius.circular(5),
@@ -68,7 +67,7 @@ Widget changeRangeDate(BuildContext context) {
           )
           .toList(),
       dropdownStyleData: DropdownStyleData(
-        width: 387.wmea,
+        width: 387.w,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           color: const Color(0xFF313131),

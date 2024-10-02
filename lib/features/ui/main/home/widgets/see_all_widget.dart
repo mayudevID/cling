@@ -1,5 +1,5 @@
-import 'package:cling/core/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'dart:math' as math;
 import '../../../../../core/route.dart';
 import '../../../../../resources/gen/assets.gen.dart';
@@ -10,9 +10,9 @@ Widget seeAllWidget(BuildContext context) {
   return GestureDetector(
     onTap: () => Navigator.pushNamed(context, RouteName.goalList),
     child: Container(
-      margin: EdgeInsets.only(left: 12.wmea, right: 24.wmea),
-      height: 156.855.hmea,
-      padding: EdgeInsets.symmetric(vertical: 16.wmea, horizontal: 16.wmea),
+      margin: EdgeInsets.only(left: 12.w, right: 24.w),
+      height: 156.855.h,
+      padding: EdgeInsets.symmetric(vertical: 16.w, horizontal: 16.w),
       decoration: BoxDecoration(
         color: const Color(0x3D787880),
         borderRadius: BorderRadius.circular(10),

@@ -1,9 +1,8 @@
 import 'package:cling/core/common_widget.dart';
-import 'package:cling/core/utils.dart';
 import 'package:cling/resources/gen/fonts.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sizer/sizer.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../core/route.dart';
 import '../../../../model/goal_model.dart';
@@ -12,7 +11,7 @@ import '../bloc/goal_list_bloc.dart';
 
 Widget goalListWidget(BuildContext context, GoalModel goalModel) {
   final percent = 100 * goalModel.collected / goalModel.target;
-  final widthResult = goalModel.collected * 292.5.wmea / goalModel.target;
+  final widthResult = goalModel.collected * 292.5.w / goalModel.target;
   return GestureDetector(
     onTap: () {
       Navigator.pushNamed(
@@ -31,8 +30,8 @@ Widget goalListWidget(BuildContext context, GoalModel goalModel) {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Container(
-            width: 52.wmea,
-            height: 86.hmea,
+            width: 52.w,
+            height: 86.h,
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(5),
@@ -44,7 +43,7 @@ Widget goalListWidget(BuildContext context, GoalModel goalModel) {
               ),
             ),
           ),
-          SizedBox(width: 8.wmea),
+          SizedBox(width: 8.w),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -63,8 +62,8 @@ Widget goalListWidget(BuildContext context, GoalModel goalModel) {
                     const Spacer(),
                     Container(
                       padding: EdgeInsets.symmetric(
-                        horizontal: 4.wmea,
-                        vertical: 2.hmea,
+                        horizontal: 4.w,
+                        vertical: 2.h,
                       ),
                       decoration: BoxDecoration(
                         color: Colors.white,
@@ -86,12 +85,12 @@ Widget goalListWidget(BuildContext context, GoalModel goalModel) {
                     ),
                   ],
                 ),
-                SizedBox(height: 4.wmea),
+                SizedBox(height: 4.w),
                 Stack(
                   children: [
                     Container(
-                      width: 292.5.wmea,
-                      height: 8.hmea,
+                      width: 292.5.w,
+                      height: 8.h,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(100),
                         color: Colors.white.withOpacity(0.76),
@@ -101,7 +100,7 @@ Widget goalListWidget(BuildContext context, GoalModel goalModel) {
                       builder: (context, state) {
                         return Container(
                           width: widthResult,
-                          height: 8.hmea,
+                          height: 8.h,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(100),
                             color: const Color(0xFF006DE9),
@@ -111,7 +110,7 @@ Widget goalListWidget(BuildContext context, GoalModel goalModel) {
                     ),
                   ],
                 ),
-                SizedBox(height: 2.wmea),
+                SizedBox(height: 2.w),
                 Row(
                   children: [
                     Text(

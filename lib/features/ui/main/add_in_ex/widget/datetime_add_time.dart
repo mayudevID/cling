@@ -1,9 +1,8 @@
-import 'package:cling/core/utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:sizer/sizer.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../resources/gen/assets.gen.dart';
 import '../../../../../resources/gen/fonts.gen.dart';
@@ -22,8 +21,8 @@ Widget datetimeAddWidget(BuildContext context) {
             ),
           ),
           padding: EdgeInsets.symmetric(
-            vertical: 16.hmea,
-            horizontal: 16.wmea,
+            vertical: 16.h,
+            horizontal: 16.w,
           ),
           child: Row(
             children: [
@@ -77,7 +76,7 @@ Widget datetimeAddWidget(BuildContext context) {
           ),
         ),
       ),
-      SizedBox(width: 16.wmea),
+      SizedBox(width: 16.w),
       Expanded(
         child: Container(
           decoration: ShapeDecoration(
@@ -87,8 +86,8 @@ Widget datetimeAddWidget(BuildContext context) {
             ),
           ),
           padding: EdgeInsets.symmetric(
-            vertical: 16.hmea,
-            horizontal: 16.wmea,
+            vertical: 16.h,
+            horizontal: 16.w,
           ),
           child: Row(
             children: [
