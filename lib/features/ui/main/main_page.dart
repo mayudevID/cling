@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
 import 'package:nil/nil.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import 'package:transitioned_indexed_stack/transitioned_indexed_stack.dart';
 import 'home/page/home_page.dart';
 import 'main_bloc/main_bloc.dart';
@@ -34,8 +34,8 @@ class MainPageContent extends StatelessWidget {
         resizeToAvoidBottomInset: false,
         backgroundColor: const Color(0xFF101010),
         body: SizedBox(
-          width: 100.w,
-          height: 100.h,
+          width: 100,
+          height: 100,
           child: Stack(
             children: [
               BlocBuilder<MainBloc, MainState>(
@@ -47,7 +47,6 @@ class MainPageContent extends StatelessWidget {
                     index: state.tabIndex,
                     duration: const Duration(milliseconds: 60),
                     beginOpacity: 0.75,
-                    endOpacity: 1,
                     children: [
                       const HomePage(),
                       const TransactionPage(),

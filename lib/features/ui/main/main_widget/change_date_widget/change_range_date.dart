@@ -1,7 +1,6 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../resources/gen/assets.gen.dart';
 import '../../../../../resources/gen/fonts.gen.dart';
@@ -21,7 +20,7 @@ Widget changeRangeDate(BuildContext context) {
     child: DropdownButton2(
       customButton: Container(
         width: MediaQuery.of(context).size.width,
-        padding: EdgeInsets.all(14.w),
+        padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
           color: const Color(0x3D787880),
           borderRadius: BorderRadius.circular(5),
@@ -37,10 +36,10 @@ Widget changeRangeDate(BuildContext context) {
               builder: (context, state) {
                 return Text(
                   '${setName(context, state.rangeDate)} ${periodCheck(state)}',
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.white,
                     fontFamily: FontFamily.cabinetGrotesk,
-                    fontSize: 11.sp,
+                    fontSize: 11,
                   ),
                 );
               },
@@ -54,7 +53,7 @@ Widget changeRangeDate(BuildContext context) {
       },
       items: RangeDate.values
           .map(
-            (e) => DropdownMenuItem<RangeDate>(
+            (e) => DropdownItem<RangeDate>(
               value: e,
               child: Text(
                 setName(context, e),
@@ -67,7 +66,7 @@ Widget changeRangeDate(BuildContext context) {
           )
           .toList(),
       dropdownStyleData: DropdownStyleData(
-        width: 387.w,
+        width: 387,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           color: const Color(0xFF313131),

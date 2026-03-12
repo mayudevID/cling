@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import '../../../../resources/gen/assets.gen.dart';
 import '../../../../resources/gen/fonts.gen.dart';
 import '../../language_currency/lang_export.dart';
@@ -30,9 +30,9 @@ class CalculatorPageContent extends StatelessWidget {
         backgroundColor: Colors.black,
         body: Column(
           children: [
-            SizedBox(height: 16.h),
+            const SizedBox(height: 16),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 24.w),
+              padding: const EdgeInsets.symmetric(horizontal: 24),
               child: Row(
                 children: [
                   GestureDetector(
@@ -40,13 +40,13 @@ class CalculatorPageContent extends StatelessWidget {
                     child: Assets.lib.resources.images.fluentChevronLeft24Filled
                         .svg(),
                   ),
-                  SizedBox(width: 16.w),
-                  Text(
+                  const SizedBox(width: 16),
+                  const Text(
                     "Calculator",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 16.sp,
+                      fontSize: 16,
                       fontFamily: FontFamily.cabinetGrotesk,
                       fontWeight: FontWeight.w700,
                     ),
@@ -71,7 +71,7 @@ class CalculatorPageContent extends StatelessWidget {
                           return Text(
                             state.expressionFromCount,
                             style: TextStyle(
-                              fontSize: 16.sp,
+                              fontSize: 16,
                               color: Colors.grey.shade400,
                               fontFamily: FontFamily.cabinetGrotesk,
                               fontWeight: FontWeight.bold,
@@ -80,7 +80,7 @@ class CalculatorPageContent extends StatelessWidget {
                         },
                       ),
                     ),
-                    SizedBox(height: 24.h),
+                    const SizedBox(height: 24),
                     Align(
                       alignment: Alignment.centerRight,
                       child: BlocBuilder<CalcBloc, CalcState>(
@@ -88,8 +88,8 @@ class CalculatorPageContent extends StatelessWidget {
                         builder: (context, state) {
                           return Text(
                             state.listInput.join(),
-                            style: TextStyle(
-                              fontSize: 24.0.sp,
+                            style: const TextStyle(
+                              fontSize: 24.0,
                               color: Colors.white,
                               fontFamily: FontFamily.cabinetGrotesk,
                               fontWeight: FontWeight.bold,
@@ -174,14 +174,14 @@ class CalculatorPageContent extends StatelessWidget {
                             );
                       },
                       child: Container(
-                        height: 72.h,
+                        height: 72,
                         width: MediaQuery.of(context).size.width / 2,
                         decoration: const BoxDecoration(color: Colors.green),
                         child: Center(
                           child: Text(
                             AppLocalizations.of(context)!.save,
-                            style: TextStyle(
-                              fontSize: 15.sp,
+                            style: const TextStyle(
+                              fontSize: 15,
                               color: Colors.white,
                               fontWeight: FontWeight.w700,
                               fontFamily: FontFamily.cabinetGrotesk,

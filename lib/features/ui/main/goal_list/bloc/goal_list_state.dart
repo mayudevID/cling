@@ -3,8 +3,6 @@
 part of 'goal_list_bloc.dart';
 
 class GoalListState extends Equatable {
-  List<GoalModel> listGoalModel;
-  RefreshController refreshController;
 
   GoalListState({
     List<GoalModel>? listGoalModel,
@@ -12,6 +10,8 @@ class GoalListState extends Equatable {
   })  : listGoalModel = listGoalModel ?? List.empty(),
         refreshController = refreshController ??
             RefreshController(initialLoadStatus: LoadStatus.loading);
+  List<GoalModel> listGoalModel;
+  RefreshController refreshController;
 
   @override
   List<Object> get props => [listGoalModel, refreshController];

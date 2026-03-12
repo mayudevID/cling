@@ -3,12 +3,6 @@
 part of 'edit_profile_bloc.dart';
 
 class EditProfileState extends Equatable {
-  bool isObscure;
-  String initName;
-  String initEmail;
-  String initPass;
-  bool isNameSame;
-  bool isEmailSame;
 
   EditProfileState({
     this.isObscure = true,
@@ -18,6 +12,12 @@ class EditProfileState extends Equatable {
     this.isNameSame = true,
     this.isEmailSame = true,
   });
+  bool isObscure;
+  String initName;
+  String initEmail;
+  String initPass;
+  bool isNameSame;
+  bool isEmailSame;
 
   @override
   List<Object> get props => [

@@ -2,7 +2,7 @@
 
 import 'dart:convert';
 
-import 'package:cling/features/model/currency.dart';
+import 'currency.dart';
 import 'package:equatable/equatable.dart';
 
 UserModel userModelFromMap(String str) => UserModel.fromMap(json.decode(str));
@@ -10,6 +10,32 @@ UserModel userModelFromMap(String str) => UserModel.fromMap(json.decode(str));
 String userModelToMap(UserModel data) => json.encode(data.toMap());
 
 class UserModel extends Equatable {
+
+  factory UserModel.fromMap(Map<String, dynamic> json) => UserModel(
+        uid: json["uid"],
+        lastBackupTime: DateTime.tryParse(json["last_backup_time"] ?? ""),
+        recurringDay: json["recurring_day"],
+        verifiedProcess: json["verified_process"],
+        currency: Currency.values.firstWhere(
+          (e) => e.value.countryCode == json["currency"],
+          orElse: () => Currency.idr,
+        ),
+        monthlyBudget: json["monthly_budget"].toDouble(),
+        monthlyIncome: json["monthly_income"].toDouble(),
+        createdAt: DateTime.parse(json["created_at"]),
+        updatedAt: DateTime.parse(json["updated_at"]),
+      );
+
+  factory UserModel.empty() => UserModel(
+        uid: '-1',
+        verifiedProcess: false,
+        currency: Currency.idr,
+        recurringDay: 0,
+        monthlyBudget: 0.0,
+        monthlyIncome: 0.0,
+        createdAt: DateTime(0),
+        updatedAt: DateTime(0),
+      );
   UserModel({
     required this.uid,
     required this.verifiedProcess,
@@ -45,21 +71,6 @@ class UserModel extends Equatable {
         updatedAt,
       ];
 
-  factory UserModel.fromMap(Map<String, dynamic> json) => UserModel(
-        uid: json["uid"],
-        lastBackupTime: DateTime.tryParse(json["last_backup_time"] ?? ""),
-        recurringDay: json["recurring_day"],
-        verifiedProcess: json["verified_process"],
-        currency: Currency.values.firstWhere(
-          (e) => e.value.countryCode == json["currency"],
-          orElse: () => Currency.idr,
-        ),
-        monthlyBudget: json["monthly_budget"].toDouble(),
-        monthlyIncome: json["monthly_income"].toDouble(),
-        createdAt: DateTime.parse(json["created_at"]),
-        updatedAt: DateTime.parse(json["updated_at"]),
-      );
-
   Map<String, dynamic> toMap() => {
         "uid": uid,
         "last_backup_time": lastBackupTime?.toIso8601String(),
@@ -71,18 +82,6 @@ class UserModel extends Equatable {
         "created_at": createdAt.toIso8601String(),
         "updated_at": updatedAt.toIso8601String(),
       };
-
-  factory UserModel.empty() => UserModel(
-        uid: '-1',
-        verifiedProcess: false,
-        currency: Currency.idr,
-        lastBackupTime: null,
-        recurringDay: 0,
-        monthlyBudget: 0.0,
-        monthlyIncome: 0.0,
-        createdAt: DateTime(0),
-        updatedAt: DateTime(0),
-      );
 
   UserModel copyWith({
     String? uid,

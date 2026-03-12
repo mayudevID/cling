@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import '../../../../../resources/gen/fonts.gen.dart';
 import '../../../language_currency/lang_export.dart';
 import '../../main_widget/change_date_widget/choose_date_range.dart';
@@ -17,19 +17,19 @@ class StatsExpense extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         ...chooseDateRange(context),
-        SizedBox(height: 4.h),
+        const SizedBox(height: 4),
         pieChartStatsExpense(),
         Text(
           AppLocalizations.of(context)!.expenseBreakdown,
           textAlign: TextAlign.center,
-          style: TextStyle(
+          style: const TextStyle(
             color: Colors.white,
-            fontSize: 11.5.sp,
+            fontSize: 11.5,
             fontFamily: FontFamily.cabinetGrotesk,
             fontWeight: FontWeight.w700,
           ),
         ),
-        SizedBox(height: 16.h),
+        const SizedBox(height: 16),
         BlocBuilder<StatisticsBloc, StatisticsState>(
           buildWhen: (p, c) {
             return p.expenseBreakdownList != c.expenseBreakdownList;
@@ -63,13 +63,13 @@ class StatsExpense extends StatelessWidget {
                   );
                 },
                 separatorBuilder: (context, index) {
-                  return SizedBox(height: 4.h);
+                  return const SizedBox(height: 4);
                 },
               ),
             );
           },
         ),
-        SizedBox(height: 90.h),
+        const SizedBox(height: 90),
       ],
     );
   }

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../resources/gen/fonts.gen.dart';
 import '../../../language_currency/lang_export.dart';
@@ -33,11 +32,11 @@ class TagChooser extends StatelessWidget {
                         );
                   },
                   child: Container(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 16.w,
-                      vertical: 8.h,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 8,
                     ),
-                    margin: EdgeInsets.only(right: 12.w),
+                    margin: const EdgeInsets.only(right: 12),
                     decoration: ShapeDecoration(
                       color: (e.key == state.typeCategories)
                           ? const Color(0xFFF599DA)
@@ -52,7 +51,7 @@ class TagChooser extends StatelessWidget {
                         color: (e.key == state.typeCategories)
                             ? const Color(0xFF101010)
                             : Colors.white,
-                        fontSize: 11.5.sp,
+                        fontSize: 11.5,
                         fontFamily: FontFamily.cabinetGrotesk,
                         fontWeight: FontWeight.w700,
                       ),

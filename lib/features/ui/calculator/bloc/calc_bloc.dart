@@ -19,11 +19,11 @@ class CalcBloc extends Bloc<CalcEvent, CalcState> {
     on<AddExpression>(_addExpression);
   }
 
-  final operate = [" / ", " * ", " + ", " - "];
-  final operateError = ["Error", ""];
-  var mainContext = MainApp.navKeyGlobal.currentContext!;
+  final List<String> operate = [" / ", " * ", " + ", " - "];
+  final List<String> operateError = ["Error", ""];
+  final BuildContext mainContext = MainApp.navKeyGlobal.currentContext!;
 
-  void _initAmount(InitAmount event, emit) {
+  void _initAmount(InitAmount event, Emitter<CalcState> emit) {
     if (event.amount != null && event.amount != 0) {
       Logger.Red.log(event.amount);
       String initA = NumberFormat.currency(
@@ -39,7 +39,7 @@ class CalcBloc extends Bloc<CalcEvent, CalcState> {
     }
   }
 
-  void _addExpression(AddExpression event, emit) {
+  void _addExpression(AddExpression event, Emitter<CalcState> emit) {
     final VAL = event.value;
     if ((VAL == "." || VAL == "Del") &&
         (state.listInput.length == 1 && state.listInput.first == "")) {
@@ -47,25 +47,26 @@ class CalcBloc extends Bloc<CalcEvent, CalcState> {
     }
 
     if (VAL == '=') {
-      _countResult(event, emit);
+      _countResult(emit);
     } else if (VAL == 'C') {
-      _clearCalc(event, emit);
+      _clearCalc(emit);
     } else if (VAL == 'Del') {
-      _deleteCalc(event, emit);
+      _deleteCalc(emit);
     } else if (VAL == AppLocalizations.of(mainContext)!.save) {
-      _saveValue(event, emit);
+      _saveValue(emit);
     } else {
       _addValue(event, emit);
     }
   }
 
-  void _countResult(event, emit) {
+  void _countResult(Emitter<CalcState> emit) {
     try {
       final joiningStr = state.listInput.join();
-      Parser parser = Parser();
-      Expression expression = parser.parse(joiningStr.replaceAll(",", ""));
-      ContextModel contextModel = ContextModel();
-      double result = expression.evaluate(EvaluationType.REAL, contextModel);
+      final ShuntingYardParser parser = ShuntingYardParser();
+      final Expression expression = parser.parse(joiningStr.replaceAll(",", ""));
+      final ContextModel contextModel = ContextModel();
+      final double result =
+          RealEvaluator(contextModel).evaluate(expression).toDouble();
 
       String res = NumberFormat.currency(
         decimalDigits: (result % 1 == 0) ? 0 : 2,
@@ -89,13 +90,13 @@ class CalcBloc extends Bloc<CalcEvent, CalcState> {
     }
   }
 
-  void _clearCalc(event, emit) {
+  void _clearCalc(Emitter<CalcState> emit) {
     emit(state.copyWith(listInput: [""], expressionFromCount: ""));
   }
 
-  void _deleteCalc(event, emit) {
-    var listInput = state.listInput.toList(growable: true);
-    String lastIndex = listInput[listInput.length - 1];
+  void _deleteCalc(Emitter<CalcState> emit) {
+    final List<String> listInput = state.listInput.toList(growable: true);
+    final String lastIndex = listInput[listInput.length - 1];
     if (operate.contains(lastIndex)) {
       listInput.removeLast();
     } else {
@@ -117,9 +118,9 @@ class CalcBloc extends Bloc<CalcEvent, CalcState> {
     emit(state.copyWith(listInput: listInput));
   }
 
-  void _addValue(event, emit) {
+  void _addValue(AddExpression event, Emitter<CalcState> emit) {
     final VAL = event.value;
-    var listInput = state.listInput.toList(growable: true);
+    final List<String> listInput = state.listInput.toList(growable: true);
 
     if (operate.contains(VAL)) {
       listInput.addAll([VAL, ""]);
@@ -144,7 +145,7 @@ class CalcBloc extends Bloc<CalcEvent, CalcState> {
     emit(state.copyWith(listInput: listInput));
   }
 
-  void _saveValue(event, emit) async {
+  Future<void> _saveValue(Emitter<CalcState> emit) async {
     if (state.listInput.length == 1 &&
         !operateError.contains(state.listInput.first)) {
       Navigator.pop(mainContext, [
@@ -152,7 +153,7 @@ class CalcBloc extends Bloc<CalcEvent, CalcState> {
         double.parse(state.listInput.first.replaceAll(",", "")),
       ]);
     } else {
-      _countResult(event, emit);
+      _countResult(emit);
       await Future.delayed(const Duration(milliseconds: 200));
       if (!operateError.contains(state.listInput.first)) {
         Navigator.pop(mainContext, [

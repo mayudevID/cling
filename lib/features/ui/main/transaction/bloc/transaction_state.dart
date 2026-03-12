@@ -3,14 +3,14 @@
 part of 'transaction_bloc.dart';
 
 class TransactionState extends Equatable {
-  DateTime date;
-  List<TransactionModel> listTransaction;
 
   TransactionState({
     DateTime? date,
     List<TransactionModel>? listTransaction,
-  })  : date = date ?? DateTime(DateTime.now().year, DateTime.now().month, 1),
+  })  : date = date ?? DateTime(DateTime.now().year, DateTime.now().month),
         listTransaction = listTransaction ?? List.empty();
+  DateTime date;
+  List<TransactionModel> listTransaction;
 
   @override
   List<Object> get props => [date, listTransaction];

@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
@@ -27,9 +28,12 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
   int? _idOffset;
   bool _firstAttempt = true;
   bool _loadAgain = true;
-  var mainContext = MainApp.navKeyGlobal.currentContext!;
+  final BuildContext mainContext = MainApp.navKeyGlobal.currentContext!;
 
-  void _getNotificationList(event, emit) async {
+  Future<void> _getNotificationList(
+    GetNotificationList event,
+    Emitter<NotificationState> emit,
+  ) async {
     if (_loadAgain == false) {
       Logger.Yellow.log("Loader: No DATA");
       state.refreshController.loadNoData();
@@ -61,7 +65,8 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
     );
 
     if (dataList.isNotEmpty) {
-      var dataListNew = state.listNotif.toList(growable: true);
+      final List<NotificationModelClass> dataListNew =
+          state.listNotif.toList(growable: true);
       if (_firstAttempt) {
         _firstAttempt = false;
         dataListNew.add(lastRowData!);
@@ -82,22 +87,29 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
     }
   }
 
-  void _markNotificationRead(MarkNotificationRead event, emit) async {
+  Future<void> _markNotificationRead(
+    MarkNotificationRead event,
+    Emitter<NotificationState> emit,
+  ) async {
     await _dbRepo.updateNotificationIsRead(event.notifData.id!);
-    var oldDataList = state.listNotif.toList(growable: true);
-    var newModel = event.notifData.copyWith(isRead: true);
+    final List<NotificationModelClass> oldDataList =
+        state.listNotif.toList(growable: true);
+    final NotificationModelClass newModel = event.notifData.copyWith(isRead: true);
     oldDataList[event.idx] = newModel;
     emit(state.copyWith(listNotif: oldDataList));
     mainContext.read<HomeBloc>().add(GetNotificationCount());
   }
 
-  void _markNotificationReadAll(event, emit) async {
+  Future<void> _markNotificationReadAll(
+    MarkNotificationReadAll event,
+    Emitter<NotificationState> emit,
+  ) async {
     await _dbRepo.updateNotificationIsReadAll();
     mainContext.read<HomeBloc>().add(GetNotificationCount());
     //add(GetNotificationList());
   }
 
-  void _clearList(event, emit) async {
+  void _clearList(ClearList event, Emitter<NotificationState> emit) {
     emit(state.copyWith(listNotif: List.empty()));
     _timeOffset = null;
     _idOffset = null;

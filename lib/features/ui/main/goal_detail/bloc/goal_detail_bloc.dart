@@ -35,10 +35,10 @@ class GoalDetailBloc extends Bloc<GoalDetailEvent, GoalDetailState> {
 
   final DatabaseRepository _dbRepo;
 
-  var mainContext = MainApp.navKeyGlobal.currentContext!;
-  var goalListContext = GoalListPage.keyState.currentContext;
+  final BuildContext mainContext = MainApp.navKeyGlobal.currentContext!;
+  final BuildContext? goalListContext = GoalListPage.keyState.currentContext;
 
-  void _initGoal(InitGoal event, emit) async {
+  Future<void> _initGoal(InitGoal event, Emitter<GoalDetailState> emit) async {
     final result = await Future.wait([
       _dbRepo.getGoalDetailSave(event.goalModelId),
       _dbRepo.getSingleGoalModel(event.goalModelId),
@@ -54,27 +54,31 @@ class GoalDetailBloc extends Bloc<GoalDetailEvent, GoalDetailState> {
     );
   }
 
-  void _initTempEdit(event, emit) {
+  void _initTempEdit(InitTempEdit event, Emitter<GoalDetailState> emit) {
     TextFieldNameEditGoal.textEditingController.text = state.goalModel.name;
   }
 
-  void _changeIcon(ChangeIcon event, emit) async {
+  void _changeIcon(ChangeIcon event, Emitter<GoalDetailState> emit) {
     emit(state.copyWith(tempLogoGoal: event.icon));
   }
 
-  void _setDateInput(SetDateGoalInput event, emit) {
+  void _setDateInput(SetDateGoalInput event, Emitter<GoalDetailState> emit) {
     emit(state.copyWith(selectedDate: event.time));
   }
 
-  void _setTempAmountInput(SetTempAmountInput event, emit) {
+  void _setTempAmountInput(
+    SetTempAmountInput event,
+    Emitter<GoalDetailState> emit,
+  ) {
     emit(state.copyWith(tempAmount: event.tempAmount));
   }
 
-  void _setAmountInput(SetAmountInput event, emit) {
+  void _setAmountInput(SetAmountInput event, Emitter<GoalDetailState> emit) {
     emit(state.copyWith(amount: event.amount));
   }
 
-  void _addSaving(event, emit) async {
+  Future<void> _addSaving(
+      AddSaving event, Emitter<GoalDetailState> emit) async {
     if (state.amount == 0) {
       errorToast(AppLocalizations.of(mainContext)!.pleaseFillAmount);
       return;
@@ -124,7 +128,7 @@ class GoalDetailBloc extends Bloc<GoalDetailEvent, GoalDetailState> {
     }
   }
 
-  void _saveEdit(event, emit) async {
+  Future<void> _saveEdit(SaveEdit event, Emitter<GoalDetailState> emit) async {
     final newName = TextFieldNameEditGoal.textEditingController.text.trim();
     final newTarget = state.tempAmount;
     if (newName.isEmpty || newName == "") {
@@ -164,13 +168,17 @@ class GoalDetailBloc extends Bloc<GoalDetailEvent, GoalDetailState> {
     );
   }
 
-  void _deleteSaving(DeleteSaving event, emit) async {
+  Future<void> _deleteSaving(
+    DeleteSaving event,
+    Emitter<GoalDetailState> emit,
+  ) async {
     //* Update Goal Model
     final newGoalModel = state.goalModel.copyWith(
       collected: state.goalModel.collected - event.goalSaving.amount,
     );
     //* Update List Savings
-    var listSavings = state.dataSavingsList.toList(growable: true);
+    final List<GoalSavingModel> listSavings =
+        state.dataSavingsList.toList(growable: true);
     listSavings.removeWhere((e) => e.id == event.goalSaving.id);
 
     await Future.wait([
@@ -183,7 +191,8 @@ class GoalDetailBloc extends Bloc<GoalDetailEvent, GoalDetailState> {
     emit(state.copyWith(goalModel: newGoalModel, dataSavingsList: listSavings));
   }
 
-  void _deleteGoal(event, emit) async {
+  Future<void> _deleteGoal(
+      DeleteGoal event, Emitter<GoalDetailState> emit) async {
     await _dbRepo.deleteGoalWithSaving(state.goalModel.id!);
     mainContext.read<HomeBloc>().add(GetGoalsHomeWithCount());
     goalListContext

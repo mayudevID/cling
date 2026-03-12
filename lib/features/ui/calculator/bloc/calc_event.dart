@@ -8,11 +8,11 @@ sealed class CalcEvent extends Equatable {
 }
 
 class InitAmount extends CalcEvent {
-  final double? amount;
   const InitAmount(this.amount);
+  final double? amount;
 }
 
 class AddExpression extends CalcEvent {
-  final String value;
   const AddExpression(this.value);
+  final String value;
 }

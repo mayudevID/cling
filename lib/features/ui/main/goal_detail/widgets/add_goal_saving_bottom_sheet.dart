@@ -1,9 +1,8 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import 'dart:math' as math;
 import '../../../../../core/common_widget.dart';
 import '../../../../../core/route.dart';
@@ -27,7 +26,7 @@ void addGoalSavingBottomSheet(BuildContext mainContext) {
       return BlocProvider.value(
         value: BlocProvider.of<GoalDetailBloc>(mainContext),
         child: Container(
-          padding: EdgeInsets.all(24.w),
+          padding: const EdgeInsets.all(24),
           decoration: const BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.only(
@@ -54,19 +53,19 @@ void addGoalSavingBottomSheet(BuildContext mainContext) {
                     ),
                   ),
                 ),
-                Align(
+                const Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
                     'Saving Date',
                     style: TextStyle(
                       color: Colors.black,
-                      fontSize: 10.sp,
+                      fontSize: 10,
                       fontFamily: FontFamily.cabinetGrotesk,
                       fontWeight: FontWeight.w800,
                     ),
                   ),
                 ),
-                SizedBox(height: 8.h),
+                const SizedBox(height: 8),
                 Container(
                   decoration: ShapeDecoration(
                     color: const Color.fromARGB(255, 224, 224, 224),
@@ -74,9 +73,9 @@ void addGoalSavingBottomSheet(BuildContext mainContext) {
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  padding: EdgeInsets.symmetric(
-                    vertical: 16.h,
-                    horizontal: 16.w,
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 16,
+                    horizontal: 16,
                   ),
                   child: Row(
                     children: [
@@ -97,9 +96,9 @@ void addGoalSavingBottomSheet(BuildContext mainContext) {
                           return Text(
                             date,
                             textAlign: TextAlign.center,
-                            style: TextStyle(
+                            style: const TextStyle(
                               color: Colors.black,
-                              fontSize: 10.5.sp,
+                              fontSize: 10.5,
                               fontFamily: FontFamily.cabinetGrotesk,
                               fontWeight: FontWeight.w500,
                             ),
@@ -110,7 +109,7 @@ void addGoalSavingBottomSheet(BuildContext mainContext) {
                       GestureDetector(
                         onTap: () async {
                           final now = DateTime.now();
-                          DateTime? pickedDate = await showDatePicker(
+                          final DateTime? pickedDate = await showDatePicker(
                             context: context,
                             initialDate: now,
                             firstDate: now.subtract(const Duration(days: 186)),
@@ -130,7 +129,7 @@ void addGoalSavingBottomSheet(BuildContext mainContext) {
                     ],
                   ),
                 ),
-                SizedBox(height: 16.h),
+                const SizedBox(height: 16),
                 Align(
                   alignment: Alignment.centerLeft,
                   child: BlocBuilder<LangCurrencyBloc, LangCurrencyState>(
@@ -140,9 +139,9 @@ void addGoalSavingBottomSheet(BuildContext mainContext) {
                     builder: (context, state) {
                       return Text(
                         '${AppLocalizations.of(context)!.amount} (${state.selectedCurrency.name})',
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Colors.black,
-                          fontSize: 10.sp,
+                          fontSize: 10,
                           fontFamily: FontFamily.cabinetGrotesk,
                           fontWeight: FontWeight.w800,
                         ),
@@ -150,7 +149,7 @@ void addGoalSavingBottomSheet(BuildContext mainContext) {
                     },
                   ),
                 ),
-                SizedBox(height: 8.h),
+                const SizedBox(height: 8),
                 GestureDetector(
                   onTap: () async {
                     final amountRes = await Navigator.pushNamed(
@@ -174,12 +173,11 @@ void addGoalSavingBottomSheet(BuildContext mainContext) {
                         borderRadius: BorderRadius.circular(10),
                       ),
                     ),
-                    padding: EdgeInsets.symmetric(
-                      vertical: 16.h,
-                      horizontal: 16.w,
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 16,
+                      horizontal: 16,
                     ),
                     child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         BlocBuilder<LangCurrencyBloc, LangCurrencyState>(
                           buildWhen: (p, c) {
@@ -189,24 +187,24 @@ void addGoalSavingBottomSheet(BuildContext mainContext) {
                           builder: (context, state) {
                             return Text(
                               state.selectedCurrency.name,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 color: Colors.black,
-                                fontSize: 10.sp,
+                                fontSize: 10,
                                 fontFamily: FontFamily.cabinetGrotesk,
                                 fontWeight: FontWeight.w800,
                               ),
                             );
                           },
                         ),
-                        SizedBox(width: 10.w),
+                        const SizedBox(width: 10),
                         Expanded(
                           child: BlocBuilder<GoalDetailBloc, GoalDetailState>(
                             buildWhen: (p, c) => p.amount != c.amount,
                             builder: (context, state) {
                               return NominalMoneyFormatter(
-                                textStyle: TextStyle(
+                                textStyle: const TextStyle(
                                   color: Colors.black,
-                                  fontSize: 10.sp,
+                                  fontSize: 10,
                                   fontFamily: FontFamily.cabinetGrotesk,
                                   fontWeight: FontWeight.w500,
                                 ),
@@ -220,7 +218,7 @@ void addGoalSavingBottomSheet(BuildContext mainContext) {
                     ),
                   ),
                 ),
-                SizedBox(height: 24.h),
+                const SizedBox(height: 24),
                 PinkButton(
                   onTap: () {
                     mainContext.read<GoalDetailBloc>().add(
@@ -230,7 +228,7 @@ void addGoalSavingBottomSheet(BuildContext mainContext) {
                   },
                   name: "Add Saving",
                 ),
-                SizedBox(height: 24.h),
+                const SizedBox(height: 24),
               ],
             ),
           ),

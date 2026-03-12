@@ -1,8 +1,7 @@
-import 'package:cling/core/common_widget.dart';
-import 'package:cling/injection.dart';
+import '../../../../../core/common_widget.dart';
+import '../../../../../injection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../resources/gen/assets.gen.dart';
 import '../../../../../resources/gen/fonts.gen.dart';
@@ -42,11 +41,11 @@ class GoalDetailPageContent extends StatelessWidget {
       child: Scaffold(
         backgroundColor: Colors.black,
         body: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24.w),
+          padding: const EdgeInsets.symmetric(horizontal: 24),
           child: Column(
             children: [
               Container(
-                margin: EdgeInsets.only(top: 16.h),
+                margin: const EdgeInsets.only(top: 16),
                 child: Row(
                   children: [
                     GestureDetector(
@@ -55,15 +54,15 @@ class GoalDetailPageContent extends StatelessWidget {
                           .lib.resources.images.fluentChevronLeft24Filled
                           .svg(),
                     ),
-                    SizedBox(width: 8.w),
+                    const SizedBox(width: 8),
                     BlocBuilder<GoalDetailBloc, GoalDetailState>(
                       builder: (context, state) {
                         return Text(
                           state.goalModel.name,
                           textAlign: TextAlign.center,
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: Colors.white,
-                            fontSize: 14.5.sp,
+                            fontSize: 14.5,
                             fontFamily: FontFamily.cabinetGrotesk,
                             fontWeight: FontWeight.w500,
                           ),
@@ -84,30 +83,30 @@ class GoalDetailPageContent extends StatelessWidget {
                   ],
                 ),
               ),
-              SizedBox(
-                height: 32.h,
+              const SizedBox(
+                height: 32,
               ),
               logoGoalWidget(context),
-              SizedBox(
-                height: 24.h,
+              const SizedBox(
+                height: 24,
               ),
               targetGoalWidget(context),
-              SizedBox(
-                height: 32.h,
+              const SizedBox(
+                height: 32,
               ),
               Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
                   AppLocalizations.of(context)!.savingDate,
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.white,
-                    fontSize: 12.5.sp,
+                    fontSize: 12.5,
                     fontFamily: FontFamily.cabinetGrotesk,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
               ),
-              SizedBox(height: 16.h),
+              const SizedBox(height: 16),
               Expanded(
                 child: BlocBuilder<GoalDetailBloc, GoalDetailState>(
                   buildWhen: (previous, current) {
@@ -116,7 +115,6 @@ class GoalDetailPageContent extends StatelessWidget {
                   builder: (context, state) {
                     if (state.dataSavingsList.isEmpty) {
                       return const Align(
-                        alignment: Alignment.center,
                         child: Text(
                           "No Saving :(",
                           style: TextStyle(
@@ -168,17 +166,17 @@ class GoalDetailPageContent extends StatelessWidget {
                               )
                             : container;
                       },
-                      separatorBuilder: (cntxt, _) => SizedBox(height: 6.h),
+                      separatorBuilder: (cntxt, _) => const SizedBox(height: 6),
                     );
                   },
                 ),
               ),
-              SizedBox(height: 16.h),
+              const SizedBox(height: 16),
               PinkButton(
                 onTap: () => addGoalSavingBottomSheet(context),
                 name: AppLocalizations.of(context)!.addSaving,
               ),
-              SizedBox(height: 16.h),
+              const SizedBox(height: 16),
             ],
           ),
         ),

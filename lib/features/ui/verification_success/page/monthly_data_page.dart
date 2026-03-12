@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import '../../../../core/common_widget.dart';
 import '../../../../injection.dart';
@@ -43,9 +43,8 @@ class MonthlyDataPageContent extends StatelessWidget {
         resizeToAvoidBottomInset: false,
         backgroundColor: Colors.black,
         body: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            SizedBox(width: 100.w, height: 58.h),
+            const SizedBox(width: 100, height: 58),
             BlocBuilder<MonthlyDataBloc, MonthlyDataState>(
               builder: (context, state) {
                 return Text(
@@ -53,16 +52,16 @@ class MonthlyDataPageContent extends StatelessWidget {
                       ? AppLocalizations.of(context)!.monthlyIncome
                       : AppLocalizations.of(context)!.monthlyBudget,
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.white,
-                    fontSize: 14.5.sp,
+                    fontSize: 14.5,
                     fontFamily: FontFamily.bungee,
                     fontWeight: FontWeight.w400,
                   ),
                 );
               },
             ),
-            SizedBox(height: 100.h),
+            const SizedBox(height: 100),
             BlocBuilder<MonthlyDataBloc, MonthlyDataState>(
               builder: (context, state) {
                 switch (state.state) {
@@ -80,26 +79,25 @@ class MonthlyDataPageContent extends StatelessWidget {
                 }
               },
             ),
-            SizedBox(height: 92.h),
+            const SizedBox(height: 92),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 BlocBuilder<LangCurrencyBloc, LangCurrencyState>(
                   builder: (context, state) {
                     return Text(
                       state.selectedCurrency.name,
                       textAlign: TextAlign.center,
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.white,
-                        fontSize: 15.sp,
+                        fontSize: 15,
                         fontFamily: FontFamily.cabinetGrotesk,
                         fontWeight: FontWeight.w700,
                       ),
                     );
                   },
                 ),
-                SizedBox(width: 6.w),
+                const SizedBox(width: 6),
                 const TextFieldMonthlyData(),
               ],
             ),
@@ -112,7 +110,7 @@ class MonthlyDataPageContent extends StatelessWidget {
                   return recDayPickerWidget(context);
                 }
 
-                return SizedBox(height: 200.h);
+                return const SizedBox(height: 200);
               },
             ),
             BlocBuilder<MonthlyDataBloc, MonthlyDataState>(
@@ -121,15 +119,14 @@ class MonthlyDataPageContent extends StatelessWidget {
                   activeIndex: (state.state == VerifOnboardPos.income) ? 0 : 1,
                   count: 2,
                   effect: ExpandingDotsEffect(
-                    spacing: 8.w,
+                    spacing: 8,
                     dotColor: Colors.white,
                     activeDotColor: const Color(0xFFF06AC9),
                   ),
-                  curve: Curves.easeInOut,
                 );
               },
             ),
-            SizedBox(height: 48.h),
+            const SizedBox(height: 48),
             BlocBuilder<MonthlyDataBloc, MonthlyDataState>(
               builder: (context, state) {
                 return PinkButton(
@@ -154,7 +151,7 @@ class MonthlyDataPageContent extends StatelessWidget {
                 }
 
                 return Padding(
-                  padding: EdgeInsets.only(top: 8.h),
+                  padding: const EdgeInsets.only(top: 8),
                   child: BlackButton(
                     name: AppLocalizations.of(context)!.back,
                     onTap: () {

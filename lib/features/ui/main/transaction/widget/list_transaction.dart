@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../core/common_widget.dart';
 import '../../../../../core/route.dart';
@@ -49,7 +48,7 @@ Widget listTransaction(
       child: Row(
         children: [
           Container(
-            height: 45.h,
+            height: 45,
             padding: const EdgeInsets.all(9),
             decoration: BoxDecoration(
               color: Colors.white,
@@ -59,17 +58,17 @@ Widget listTransaction(
               child: Text(icon, style: const TextStyle(fontSize: 18)),
             ),
           ),
-          SizedBox(width: 8.w),
+          const SizedBox(width: 8),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SizedBox(height: 5.h),
+                const SizedBox(height: 5),
                 Container(
-                  padding: EdgeInsets.symmetric(
-                    vertical: 2.h,
-                    horizontal: 6.w,
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 2,
+                    horizontal: 6,
                   ),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(6),
@@ -79,11 +78,11 @@ Widget listTransaction(
                   ),
                   child: Text(
                     data[2],
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.white,
                       fontFamily: FontFamily.cabinetGrotesk,
                       fontWeight: FontWeight.bold,
-                      fontSize: 8.sp,
+                      fontSize: 8,
                     ),
                   ),
                 ),
@@ -114,7 +113,7 @@ Widget listTransaction(
                 style: TextStyle(
                   color: Colors.grey.shade300,
                   fontFamily: FontFamily.cabinetGrotesk,
-                  fontSize: 8.5.sp,
+                  fontSize: 8.5,
                   fontWeight: FontWeight.bold,
                 ),
               ),

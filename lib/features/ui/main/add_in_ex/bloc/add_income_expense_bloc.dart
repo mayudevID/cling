@@ -45,8 +45,8 @@ class AddIncomeExpenseBloc
   var mainContext = MainApp.navKeyGlobal.currentContext!;
 
   void _setDate(SetDate event, emit) {
-    DateTime oldDateTime = state.selectedDate;
-    DateTime newDateTime = DateTime(
+    final DateTime oldDateTime = state.selectedDate;
+    final DateTime newDateTime = DateTime(
       event.date.year,
       event.date.month,
       event.date.day,
@@ -57,8 +57,8 @@ class AddIncomeExpenseBloc
   }
 
   void _setTime(SetTime event, emit) {
-    DateTime oldDateTime = state.selectedDate;
-    DateTime newDateTime = DateTime(
+    final DateTime oldDateTime = state.selectedDate;
+    final DateTime newDateTime = DateTime(
       oldDateTime.year,
       oldDateTime.month,
       oldDateTime.day,
@@ -161,7 +161,7 @@ class AddIncomeExpenseBloc
         ..add(GetMost());
 
       if (mainContext.read<TransactionBloc>().state.date ==
-          DateTime(DateTime.now().year, DateTime.now().month, 1)) {
+          DateTime(DateTime.now().year, DateTime.now().month)) {
         mainContext.read<TransactionBloc>().add(GetData());
       }
 

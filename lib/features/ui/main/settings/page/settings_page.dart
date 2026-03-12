@@ -1,9 +1,8 @@
 import 'dart:async';
 
-import 'package:cling/core/logger.dart';
+import '../../../../../core/logger.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../core/common_widget.dart';
 import '../../../../../resources/gen/assets.gen.dart';
@@ -36,10 +35,10 @@ class SettingsPageContent extends StatelessWidget {
       child: Scaffold(
         backgroundColor: Colors.black,
         body: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24.w),
+          padding: const EdgeInsets.symmetric(horizontal: 24),
           child: Column(
             children: [
-              SizedBox(height: 16.h),
+              const SizedBox(height: 16),
               Row(
                 children: [
                   GestureDetector(
@@ -47,13 +46,13 @@ class SettingsPageContent extends StatelessWidget {
                     child: Assets.lib.resources.images.fluentChevronLeft24Filled
                         .svg(),
                   ),
-                  SizedBox(width: 16.w),
+                  const SizedBox(width: 16),
                   Text(
                     AppLocalizations.of(context)!.settings,
                     textAlign: TextAlign.center,
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.white,
-                      fontSize: 16.sp,
+                      fontSize: 16,
                       fontFamily: FontFamily.cabinetGrotesk,
                       fontWeight: FontWeight.w700,
                     ),
@@ -61,54 +60,53 @@ class SettingsPageContent extends StatelessWidget {
                   const Spacer(),
                 ],
               ),
-              SizedBox(height: 24.h),
+              const SizedBox(height: 24),
               GestureDetector(
                 onTap: () => showBottomSheetChooseLang(context),
                 behavior: HitTestBehavior.opaque,
                 child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    SizedBox(width: 8.w),
+                    const SizedBox(width: 8),
                     Assets.lib.resources.images.globe.svg(),
-                    SizedBox(width: 10.w),
+                    const SizedBox(width: 10),
                     Text(
                       AppLocalizations.of(context)!.changeLanguage,
                       textAlign: TextAlign.center,
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.white,
-                        fontSize: 10.sp,
+                        fontSize: 10,
                         fontFamily: FontFamily.cabinetGrotesk,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
                     const Spacer(),
                     Assets.lib.resources.images.chevronRight16.svg(),
-                    SizedBox(width: 8.w),
+                    const SizedBox(width: 8),
                   ],
                 ),
               ),
-              SizedBox(height: 48.h),
+              const SizedBox(height: 48),
               Text(
                 context.read<ProfileBloc>().state.version,
-                style: TextStyle(
+                style: const TextStyle(
                   fontFamily: FontFamily.cabinetGrotesk,
-                  color: const Color.fromARGB(255, 189, 189, 189),
-                  fontSize: 9.sp,
+                  color: Color.fromARGB(255, 189, 189, 189),
+                  fontSize: 9,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              SizedBox(height: 12.h),
+              const SizedBox(height: 12),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 8.w),
+                padding: const EdgeInsets.symmetric(horizontal: 8),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
                       AppLocalizations.of(context)!.lastBackup,
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.white,
                         fontFamily: FontFamily.cabinetGrotesk,
-                        fontSize: 9.5.sp,
+                        fontSize: 9.5,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -118,15 +116,15 @@ class SettingsPageContent extends StatelessWidget {
                             c.userModel.lastBackupTime;
                       },
                       builder: (context, state) {
-                        final textStyle = TextStyle(
+                        const textStyle = TextStyle(
                           color: Colors.white,
                           fontFamily: FontFamily.cabinetGrotesk,
-                          fontSize: 9.5.sp,
+                          fontSize: 9.5,
                           fontWeight: FontWeight.w500,
                         );
 
                         if (state.userModel.lastBackupTime == null) {
-                          return Text(
+                          return const Text(
                             "---",
                             style: textStyle,
                           );
@@ -141,12 +139,12 @@ class SettingsPageContent extends StatelessWidget {
                   ],
                 ),
               ),
-              SizedBox(height: 16.h),
+              const SizedBox(height: 16),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 8.w),
+                padding: const EdgeInsets.symmetric(horizontal: 8),
                 child: SizedBox(
-                  width: 390.w,
-                  height: 45.h,
+                  width: 390,
+                  height: 45,
                   child: ElevatedButton(
                     onPressed: () =>
                         context.read<ProfileBloc>().add(GoBackup()),
@@ -165,13 +163,13 @@ class SettingsPageContent extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Assets.lib.resources.images.databaseBackup.svg(),
-                        SizedBox(width: 8.w),
+                        const SizedBox(width: 8),
                         Text(
                           AppLocalizations.of(context)!.backup,
                           textAlign: TextAlign.center,
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: Colors.white,
-                            fontSize: 11.5.sp,
+                            fontSize: 11.5,
                             fontFamily: FontFamily.cabinetGrotesk,
                             fontWeight: FontWeight.w700,
                           ),
@@ -181,12 +179,12 @@ class SettingsPageContent extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(height: 16.h),
+              const SizedBox(height: 16),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 8.w),
+                padding: const EdgeInsets.symmetric(horizontal: 8),
                 child: SizedBox(
-                  width: 390.w,
-                  height: 57.h,
+                  width: 390,
+                  height: 57,
                   child: ElevatedButton(
                     onPressed: () => dialogLogout(context),
                     style: ButtonStyle(
@@ -200,12 +198,12 @@ class SettingsPageContent extends StatelessWidget {
                         ),
                       ),
                     ),
-                    child: Text(
+                    child: const Text(
                       "Logout",
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 11.5.sp,
+                        fontSize: 11.5,
                         fontFamily: FontFamily.cabinetGrotesk,
                         fontWeight: FontWeight.w700,
                       ),

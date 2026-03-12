@@ -1,7 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import '../../../../../core/route.dart';
 import '../../../../../injection.dart';
 import '../../../../core/common_widget.dart';
@@ -33,35 +33,35 @@ class RegisterPageContent extends StatelessWidget {
         resizeToAvoidBottomInset: false,
         backgroundColor: Colors.black,
         body: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24.w),
+          padding: const EdgeInsets.symmetric(horizontal: 24),
           child: Column(
             children: [
-              SizedBox(height: 40.h),
+              const SizedBox(height: 40),
               Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
                   AppLocalizations.of(context)!.helloThere,
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.white,
-                    fontSize: 20.sp,
+                    fontSize: 20,
                     fontFamily: FontFamily.bungee,
                     fontWeight: FontWeight.w400,
                   ),
                 ),
               ),
-              SizedBox(height: 8.h),
+              const SizedBox(height: 8),
               Text(
                 AppLocalizations.of(context)!.descHelloThere,
-                style: TextStyle(
+                style: const TextStyle(
                   color: Colors.white,
-                  fontSize: 11.sp,
+                  fontSize: 11,
                   fontFamily: FontFamily.cabinetGrotesk,
                   fontWeight: FontWeight.w500,
                 ),
               ),
-              SizedBox(height: 32.h),
+              const SizedBox(height: 32),
               ...formRegister(context),
-              SizedBox(height: 40.h),
+              const SizedBox(height: 40),
               PinkButton(
                 onTap: () async {
                   FocusManager.instance.primaryFocus?.unfocus();
@@ -69,24 +69,24 @@ class RegisterPageContent extends StatelessWidget {
                 },
                 name: AppLocalizations.of(context)!.createNewAccount,
               ),
-              const Expanded(flex: 1, child: SizedBox()),
+              const Expanded(child: SizedBox()),
               Text.rich(
                 TextSpan(
                   children: [
                     TextSpan(
                       text: AppLocalizations.of(context)!.haveAccountTwo,
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.white,
-                        fontSize: 10.sp,
+                        fontSize: 10,
                         fontFamily: FontFamily.cabinetGrotesk,
                         fontWeight: FontWeight.w400,
                       ),
                     ),
                     TextSpan(
                       text: ' ${AppLocalizations.of(context)!.login}',
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.white,
-                        fontSize: 10.sp,
+                        fontSize: 10,
                         fontFamily: FontFamily.cabinetGrotesk,
                         fontWeight: FontWeight.w700,
                       ),
@@ -102,7 +102,7 @@ class RegisterPageContent extends StatelessWidget {
                 ),
                 textAlign: TextAlign.center,
               ),
-              SizedBox(height: 24.h),
+              const SizedBox(height: 24),
             ],
           ),
         ),

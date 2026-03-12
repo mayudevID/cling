@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 import '../../../../resources/gen/assets.gen.dart';
 
 class QuarterWidgetRotate extends StatelessWidget {
@@ -14,8 +12,8 @@ class QuarterWidgetRotate extends StatelessWidget {
       quarterTurns: bigRound,
       child: Assets.lib.resources.imagesPng.ellipseOnboard.image(
         fit: BoxFit.fill,
-        width: (bigRound == 1 || bigRound == -1) ? 215.h : 215.w,
-        height: (bigRound == 1 || bigRound == -1) ? 215.w : 215.h,
+        width: (bigRound == 1 || bigRound == -1) ? 215 : 215,
+        height: (bigRound == 1 || bigRound == -1) ? 215 : 215,
       ),
     );
   }

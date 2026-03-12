@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:cling/core/logger.dart';
+import '../../core/logger.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -12,10 +12,6 @@ import 'package:path/path.dart';
 import 'database_repository.dart';
 
 class SettingsRepository {
-  final FirebaseAuth _firebaseAuth;
-  final FirebaseFirestore _firestore;
-  final FirebaseStorage _firebaseStorage;
-  final SharedPreferences _cache;
 
   SettingsRepository({
     required FirebaseAuth firebaseAuth,
@@ -26,6 +22,10 @@ class SettingsRepository {
         _firestore = firestore,
         _firebaseStorage = firebaseStorage,
         _firebaseAuth = firebaseAuth;
+  final FirebaseAuth _firebaseAuth;
+  final FirebaseFirestore _firestore;
+  final FirebaseStorage _firebaseStorage;
+  final SharedPreferences _cache;
 
   static const userCacheKey = '__user_cache_key__';
   static const languagePrefsKey = '__language_prefs__';
@@ -63,9 +63,9 @@ class SettingsRepository {
   }) async {
     final userData = userModel;
 
-    double monIncomeNew = monthlyIncome ?? userData.monthlyIncome;
-    double monBudgetNew = monthlyBudget ?? userData.monthlyBudget;
-    int recurringNew = recurringDay ?? userData.recurringDay;
+    final double monIncomeNew = monthlyIncome ?? userData.monthlyIncome;
+    final double monBudgetNew = monthlyBudget ?? userData.monthlyBudget;
+    final int recurringNew = recurringDay ?? userData.recurringDay;
 
     final now = DateTime.now();
 
@@ -130,10 +130,10 @@ class SettingsRepository {
     try {
       final pathDb = await getDatabasesPath();
 
-      File fileData = File(join(pathDb, DatabaseRepository.databaseName));
-      var pathOld = fileData.path;
-      var lastSeparator = pathOld.lastIndexOf(Platform.pathSeparator);
-      var newPath = pathOld.substring(0, lastSeparator + 1) +
+      final File fileData = File(join(pathDb, DatabaseRepository.databaseName));
+      final pathOld = fileData.path;
+      final lastSeparator = pathOld.lastIndexOf(Platform.pathSeparator);
+      final newPath = pathOld.substring(0, lastSeparator + 1) +
           _firebaseAuth.currentUser!.uid;
       final newFileData = await fileData.copy('$newPath.db');
       Logger.White.log("Location DB: ${newFileData.path}");
@@ -141,7 +141,7 @@ class SettingsRepository {
       final path = basename(newFileData.path);
       final ref = _firebaseStorage.ref('backupDb/$path');
 
-      var uploadTask = ref.putFile(newFileData);
+      final uploadTask = ref.putFile(newFileData);
       await uploadTask.whenComplete(() {});
       await newFileData.delete(recursive: true);
     } on FirebaseException catch (e) {
@@ -157,10 +157,10 @@ class SettingsRepository {
       final dbRef =
           _firebaseStorage.ref('backupDb/${_firebaseAuth.currentUser!.uid}.db');
 
-      File fileNew = File(join(pathDb, DatabaseRepository.databaseName));
+      final File fileNew = File(join(pathDb, DatabaseRepository.databaseName));
       await fileNew.delete();
 
-      var downloadTask = dbRef.writeToFile(fileNew);
+      final downloadTask = dbRef.writeToFile(fileNew);
       await downloadTask.whenComplete(() {});
     } on FirebaseException catch (e) {
       Logger.Red.log(e);

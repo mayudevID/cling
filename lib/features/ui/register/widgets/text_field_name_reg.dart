@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../resources/gen/fonts.gen.dart';
 import '../../language_currency/lang_export.dart';
@@ -39,14 +38,13 @@ class _TextFieldNameRegState extends State<TextFieldNameReg> {
         borderRadius: BorderRadius.circular(10),
         border: _focus.hasFocus
             ? Border.all(
-                width: 1,
                 color: Colors.white,
               )
             : null,
       ),
-      padding: EdgeInsets.symmetric(
-        vertical: 16.h,
-        horizontal: 16.w,
+      padding: const EdgeInsets.symmetric(
+        vertical: 16,
+        horizontal: 16,
       ),
       child: TextFormField(
         focusNode: _focus,
@@ -54,17 +52,17 @@ class _TextFieldNameRegState extends State<TextFieldNameReg> {
           context.read<RegisterBloc>().add(ChangeName(value));
         },
         cursorColor: Colors.white,
-        style: TextStyle(
+        style: const TextStyle(
           color: Colors.white,
-          fontSize: 10.5.sp,
+          fontSize: 10.5,
           fontFamily: FontFamily.cabinetGrotesk,
           fontWeight: FontWeight.w500,
         ),
         decoration: InputDecoration.collapsed(
           hintText: AppLocalizations.of(context)!.name,
-          hintStyle: TextStyle(
+          hintStyle: const TextStyle(
             color: Colors.grey,
-            fontSize: 10.5.sp,
+            fontSize: 10.5,
             fontFamily: FontFamily.cabinetGrotesk,
             fontWeight: FontWeight.w500,
           ),

@@ -3,12 +3,6 @@
 import 'package:equatable/equatable.dart';
 
 class NotificationModelClass extends Equatable {
-  int? id;
-  final String title;
-  final String desc;
-  final DateTime date;
-  final bool isRead;
-  final int type;
 
   NotificationModelClass({
     this.id,
@@ -18,6 +12,12 @@ class NotificationModelClass extends Equatable {
     required this.isRead,
     required this.type,
   });
+  int? id;
+  final String title;
+  final String desc;
+  final DateTime date;
+  final bool isRead;
+  final int type;
 
   @override
   List<Object?> get props => [

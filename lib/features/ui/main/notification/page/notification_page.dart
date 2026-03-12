@@ -1,11 +1,10 @@
 // ignore_for_file: must_be_immutable, use_build_context_synchronously
 
-import 'package:cling/injection.dart';
+import '../../../../../injection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../resources/gen/assets.gen.dart';
 import '../../../../../resources/gen/fonts.gen.dart';
@@ -38,10 +37,10 @@ class NotificationPageContent extends StatelessWidget {
       child: Scaffold(
         backgroundColor: Colors.black,
         body: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24.w),
+          padding: const EdgeInsets.symmetric(horizontal: 24),
           child: Column(
             children: [
-              SizedBox(height: 16.h),
+              const SizedBox(height: 16),
               Row(
                 children: [
                   GestureDetector(
@@ -49,13 +48,13 @@ class NotificationPageContent extends StatelessWidget {
                     child: Assets.lib.resources.images.fluentChevronLeft24Filled
                         .svg(),
                   ),
-                  SizedBox(width: 16.w),
+                  const SizedBox(width: 16),
                   Text(
                     AppLocalizations.of(context)!.notification,
                     textAlign: TextAlign.center,
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.white,
-                      fontSize: 16.sp,
+                      fontSize: 16,
                       fontFamily: FontFamily.cabinetGrotesk,
                       fontWeight: FontWeight.w700,
                     ),
@@ -79,7 +78,7 @@ class NotificationPageContent extends StatelessWidget {
                   ),
                 ],
               ),
-              SizedBox(height: 24.h),
+              const SizedBox(height: 24),
               Expanded(
                 child: MediaQuery.removePadding(
                   context: context,
@@ -151,7 +150,7 @@ class NotificationPageContent extends StatelessWidget {
                   break;
               }
 
-              return SizedBox(height: 55.h, child: Center(child: body));
+              return SizedBox(height: 55, child: Center(child: body));
             },
           ),
           child: ListView.separated(
@@ -176,13 +175,12 @@ class NotificationPageContent extends StatelessWidget {
 
               return isDateDifferent
                   ? Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Row(
                           children: [
                             Expanded(
                               child: Container(
-                                height: 1.h,
+                                height: 1,
                                 color: Colors.grey,
                               ),
                             ),
@@ -193,29 +191,29 @@ class NotificationPageContent extends StatelessWidget {
                                 (itemDate.isAtSameMomentAs(today))
                                     ? AppLocalizations.of(context)!.today
                                     : dateFormat.format(itemDate),
-                                style: TextStyle(
+                                style: const TextStyle(
                                   color: Colors.white,
                                   fontFamily: FontFamily.cabinetGrotesk,
                                   fontWeight: FontWeight.w700,
-                                  fontSize: 9.2.sp,
+                                  fontSize: 9.2,
                                 ),
                               ),
                             ),
                             Expanded(
                               child: Container(
-                                height: 1.h,
+                                height: 1,
                                 color: Colors.grey,
                               ),
                             ),
                           ],
                         ),
-                        SizedBox(height: 8.h),
+                        const SizedBox(height: 8),
                         notificationWidget(idx),
                       ],
                     )
                   : notificationWidget(idx);
             },
-            separatorBuilder: (_, idx) => SizedBox(height: 8.h),
+            separatorBuilder: (_, idx) => const SizedBox(height: 8),
           ),
         );
       },

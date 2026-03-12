@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../resources/gen/assets.gen.dart';
 import '../main_bloc/main_bloc.dart';
@@ -11,15 +10,15 @@ class CustomNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 100.w - 40,
+      width: 100 - 40,
       margin: const EdgeInsets.only(
         bottom: 11,
         left: 20,
         right: 20,
       ),
-      padding: EdgeInsets.symmetric(
-        vertical: 25.5.h,
-        horizontal: 45.5.w,
+      padding: const EdgeInsets.symmetric(
+        vertical: 25.5,
+        horizontal: 45.5,
       ),
       decoration: BoxDecoration(
         color: const Color(0xFF343437),

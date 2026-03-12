@@ -1,7 +1,6 @@
-import 'package:cling/core/route.dart';
+import '../../../../../core/route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../resources/gen/assets.gen.dart';
 import '../../../../../resources/gen/fonts.gen.dart';
@@ -16,21 +15,21 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 24.w),
+      padding: const EdgeInsets.symmetric(horizontal: 24),
       child: Column(
         children: [
-          SizedBox(height: 31.h),
+          const SizedBox(height: 31),
           nameAndEmail(context),
-          SizedBox(height: 31.h),
+          const SizedBox(height: 31),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
                 AppLocalizations.of(context)!.currency,
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: const TextStyle(
                   color: Colors.white,
-                  fontSize: 10.sp,
+                  fontSize: 10,
                   fontFamily: FontFamily.cabinetGrotesk,
                   fontWeight: FontWeight.w500,
                 ),
@@ -40,9 +39,9 @@ class ProfilePage extends StatelessWidget {
                   return Text(
                     state.userModel.currency.name,
                     textAlign: TextAlign.center,
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.white,
-                      fontSize: 10.sp,
+                      fontSize: 10,
                       fontFamily: FontFamily.cabinetGrotesk,
                       fontWeight: FontWeight.w800,
                     ),
@@ -51,63 +50,62 @@ class ProfilePage extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: 31.h),
+          const SizedBox(height: 31),
           Align(
             alignment: Alignment.centerLeft,
             child: Text(
               AppLocalizations.of(context)!.account,
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: const TextStyle(
                 color: Colors.white,
-                fontSize: 12.5.sp,
+                fontSize: 12.5,
                 fontFamily: FontFamily.cabinetGrotesk,
                 fontWeight: FontWeight.w700,
               ),
             ),
           ),
-          SizedBox(height: 24.h),
+          const SizedBox(height: 24),
           ...listAccountSettings(context),
-          SizedBox(height: 31.h),
+          const SizedBox(height: 31),
           Align(
             alignment: Alignment.centerLeft,
             child: Text(
               AppLocalizations.of(context)!.general,
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: const TextStyle(
                 color: Colors.white,
-                fontSize: 12.5.sp,
+                fontSize: 12.5,
                 fontFamily: FontFamily.cabinetGrotesk,
                 fontWeight: FontWeight.w700,
               ),
             ),
           ),
-          SizedBox(height: 24.h),
+          const SizedBox(height: 24),
           GestureDetector(
             onTap: () {},
             behavior: HitTestBehavior.opaque,
             child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                SizedBox(width: 8.w),
+                const SizedBox(width: 8),
                 Assets.lib.resources.images.fluentStar24Filled.svg(),
-                SizedBox(width: 10.w),
+                const SizedBox(width: 10),
                 Text(
                   AppLocalizations.of(context)!.rateCling,
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.white,
-                    fontSize: 10.sp,
+                    fontSize: 10,
                     fontFamily: FontFamily.cabinetGrotesk,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
                 const Spacer(),
                 Assets.lib.resources.images.chevronRight16.svg(),
-                SizedBox(width: 8.w),
+                const SizedBox(width: 8),
               ],
             ),
           ),
-          SizedBox(height: 31.h),
+          const SizedBox(height: 31),
           GestureDetector(
             onTap: () {
               Navigator.pushNamed(
@@ -123,16 +121,16 @@ class ProfilePage extends StatelessWidget {
                 Text(
                   AppLocalizations.of(context)!.settings,
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.white,
-                    fontSize: 12.5.sp,
+                    fontSize: 12.5,
                     fontFamily: FontFamily.cabinetGrotesk,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
                 const Spacer(),
                 Assets.lib.resources.images.chevronRight16.svg(),
-                SizedBox(width: 8.w),
+                const SizedBox(width: 8),
               ],
             ),
           ),

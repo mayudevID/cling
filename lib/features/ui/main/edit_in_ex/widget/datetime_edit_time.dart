@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../resources/gen/assets.gen.dart';
 import '../../../../../resources/gen/fonts.gen.dart';
@@ -19,9 +18,9 @@ Widget datetimeEditWidget(BuildContext context) {
               borderRadius: BorderRadius.circular(10),
             ),
           ),
-          padding: EdgeInsets.symmetric(
-            vertical: 16.h,
-            horizontal: 16.w,
+          padding: const EdgeInsets.symmetric(
+            vertical: 16,
+            horizontal: 16,
           ),
           child: Row(
             children: [
@@ -42,9 +41,9 @@ Widget datetimeEditWidget(BuildContext context) {
                   return Text(
                     date,
                     textAlign: TextAlign.center,
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.white,
-                      fontSize: 10.5.sp,
+                      fontSize: 10.5,
                       fontFamily: FontFamily.cabinetGrotesk,
                       fontWeight: FontWeight.w500,
                     ),
@@ -56,7 +55,7 @@ Widget datetimeEditWidget(BuildContext context) {
                 onTap: () async {
                   final now =
                       context.read<EditIncomeExpenseBloc>().state.selectedDate;
-                  DateTime? pickDate = await showDatePicker(
+                  final DateTime? pickDate = await showDatePicker(
                     context: context,
                     initialDate: now,
                     firstDate: now.subtract(const Duration(days: 186)),
@@ -75,7 +74,7 @@ Widget datetimeEditWidget(BuildContext context) {
           ),
         ),
       ),
-      SizedBox(width: 16.w),
+      const SizedBox(width: 16),
       Expanded(
         child: Container(
           decoration: ShapeDecoration(
@@ -84,9 +83,9 @@ Widget datetimeEditWidget(BuildContext context) {
               borderRadius: BorderRadius.circular(10),
             ),
           ),
-          padding: EdgeInsets.symmetric(
-            vertical: 16.h,
-            horizontal: 16.w,
+          padding: const EdgeInsets.symmetric(
+            vertical: 16,
+            horizontal: 16,
           ),
           child: Row(
             children: [
@@ -107,9 +106,9 @@ Widget datetimeEditWidget(BuildContext context) {
                   return Text(
                     date,
                     textAlign: TextAlign.center,
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.white,
-                      fontSize: 10.5.sp,
+                      fontSize: 10.5,
                       fontFamily: FontFamily.cabinetGrotesk,
                       fontWeight: FontWeight.w500,
                     ),

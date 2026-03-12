@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../core/route.dart';
 import '../../../../../resources/gen/assets.gen.dart';
@@ -20,10 +19,9 @@ Widget nameAndNotification(BuildContext context) {
       .toLanguageTag();
 
   return Padding(
-    padding: EdgeInsets.only(left: 24.w, right: 17.w),
+    padding: const EdgeInsets.only(left: 24, right: 17),
     child: Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Expanded(
           child: Column(
@@ -37,9 +35,9 @@ Widget nameAndNotification(BuildContext context) {
                   return Text(
                     '${AppLocalizations.of(context)!.goodDay}, ${state.user?.displayName?.split(" ")[0]}!',
                     textAlign: TextAlign.left,
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.white,
-                      fontSize: 18.sp,
+                      fontSize: 18,
                       fontFamily: FontFamily.cabinetGrotesk,
                       fontWeight: FontWeight.w700,
                     ),
@@ -62,16 +60,16 @@ Widget nameAndNotification(BuildContext context) {
             Navigator.pushNamed(context, RouteName.notification);
           },
           child: SizedBox(
-            height: 30.h,
-            width: 28.w,
+            height: 30,
+            width: 28,
             child: Stack(
               children: [
                 Positioned(
                   left: 0,
                   bottom: 0,
                   child: Assets.lib.resources.images.bell.svg(
-                    width: 21.91.w,
-                    height: 24.h,
+                    width: 21.91,
+                    height: 24,
                   ),
                 ),
                 BlocBuilder<HomeBloc, HomeState>(
@@ -93,11 +91,11 @@ Widget nameAndNotification(BuildContext context) {
                         child: Center(
                           child: Text(
                             state.totalNotif.toString(),
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontFamily: FontFamily.cabinetGrotesk,
                               color: Colors.white,
                               fontWeight: FontWeight.w800,
-                              fontSize: 8.sp,
+                              fontSize: 8,
                             ),
                           ),
                         ),

@@ -1,11 +1,10 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:auto_size_text_field/auto_size_text_field.dart';
-import 'package:cling/features/ui/language_currency/lang_currency_bloc.dart';
+import '../../language_currency/lang_currency_bloc.dart';
 import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../resources/gen/fonts.gen.dart';
 
@@ -48,18 +47,17 @@ class _TextFieldMonthlyDataState extends State<TextFieldMonthlyData> {
       enableInteractiveSelection: false,
       keyboardType: TextInputType.number,
       fullwidth: false,
-      maxLines: 1,
-      style: TextStyle(
+      style: const TextStyle(
         color: Colors.white,
-        fontSize: 20.sp,
+        fontSize: 20,
         fontFamily: FontFamily.cabinetGrotesk,
         fontWeight: FontWeight.w700,
       ),
-      decoration: InputDecoration.collapsed(
+      decoration: const InputDecoration.collapsed(
         hintText: "0",
         hintStyle: TextStyle(
           color: Colors.grey,
-          fontSize: 20.sp,
+          fontSize: 20,
           fontFamily: FontFamily.cabinetGrotesk,
           fontWeight: FontWeight.w700,
         ),

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class StarAnimOne extends StatefulWidget {
   const StarAnimOne({super.key});
@@ -45,17 +44,13 @@ class _StarAnimOneState extends State<StarAnimOne>
     return RotationTransition(
       turns: animate,
       child: Container(
-        width: 61.02.w,
-        height: 61.02.w,
+        width: 61.02,
+        height: 61.02,
         decoration: const ShapeDecoration(
           color: Color(0xFF07AC65),
           shape: StarBorder(
             points: 4,
             innerRadiusRatio: 0.39,
-            pointRounding: 0,
-            valleyRounding: 0,
-            rotation: 0,
-            squash: 0,
           ),
         ),
       ),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../../../../../core/common_widget.dart';
@@ -17,11 +17,11 @@ Widget pieChartStatsAllWidget() {
       final pieData = state.pieDataExSavList;
       if (pieData.isEmpty ||
           (pieData[0].amount == 0 && pieData[1].amount == 0)) {
-        return Padding(
-          padding: EdgeInsets.only(top: 24.h),
+        return const Padding(
+          padding: EdgeInsets.only(top: 24),
           child: SizedBox(
-            height: 200.h,
-            child: const Center(
+            height: 200,
+            child: Center(
               child: Text(
                 "No data :(",
                 style: TextStyle(
@@ -35,12 +35,12 @@ Widget pieChartStatsAllWidget() {
       }
 
       double dataTot = 0.0;
-      for (PieDataExSav element in pieData) {
+      for (final PieDataExSav element in pieData) {
         dataTot += element.amount;
       }
 
       return SizedBox(
-        height: 248.5.h,
+        height: 248.5,
         child: SfCircularChart(
           tooltipBehavior: TooltipBehavior(
             enable: true,
@@ -100,11 +100,11 @@ Widget pieChartStatsAllWidget() {
               dataLabelMapper: (PieDataExSav data, _) {
                 return "${((data.amount / dataTot) * 100).round()}%";
               },
-              dataLabelSettings: DataLabelSettings(
+              dataLabelSettings: const DataLabelSettings(
                 isVisible: true,
                 textStyle: TextStyle(
                   color: Colors.white,
-                  fontSize: 9.5.sp,
+                  fontSize: 9.5,
                   fontFamily: FontFamily.cabinetGrotesk,
                   fontWeight: FontWeight.w800,
                 ),

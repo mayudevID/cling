@@ -1,8 +1,7 @@
-import 'package:cling/features/ui/language_currency/lang_currency_bloc.dart';
+import '../../../language_currency/lang_currency_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../resources/gen/fonts.gen.dart';
 
@@ -12,25 +11,25 @@ List<Widget> tagNameHome(
   bool withDate = false,
 }) {
   return [
-    SizedBox(height: 24.h),
+    const SizedBox(height: 24),
     Padding(
-      padding: EdgeInsets.symmetric(horizontal: 24.w),
+      padding: const EdgeInsets.symmetric(horizontal: 24),
       child: RichText(
         text: TextSpan(
           text: name,
-          style: TextStyle(
+          style: const TextStyle(
             color: Colors.white,
-            fontSize: 12.5.sp,
+            fontSize: 12.5,
             fontFamily: FontFamily.cabinetGrotesk,
             fontWeight: FontWeight.w700,
           ),
           children: (withDate)
               ? [
-                  TextSpan(
+                  const TextSpan(
                     text: " / ",
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 12.5.sp,
+                      fontSize: 12.5,
                       fontFamily: FontFamily.cabinetGrotesk,
                       fontWeight: FontWeight.w700,
                     ),
@@ -46,9 +45,9 @@ List<Widget> tagNameHome(
                     ).format(
                       DateTime.now(),
                     ),
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.white,
-                      fontSize: 10.sp,
+                      fontSize: 10,
                       fontFamily: FontFamily.cabinetGrotesk,
                       fontWeight: FontWeight.w700,
                     ),
@@ -58,8 +57,8 @@ List<Widget> tagNameHome(
         ),
       ),
     ),
-    SizedBox(
-      height: 16.h,
+    const SizedBox(
+      height: 16,
     ),
   ];
 }

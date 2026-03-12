@@ -1,7 +1,6 @@
-import 'package:cling/features/ui/main/goal_detail/bloc/goal_detail_bloc.dart';
+import '../../bloc/goal_detail_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../../resources/gen/fonts.gen.dart';
 import '../../../../language_currency/lang_export.dart';
@@ -32,17 +31,17 @@ class _TextFieldNameEditGoalState extends State<TextFieldNameEditGoal> {
     return TextFormField(
       controller: TextFieldNameEditGoal.textEditingController,
       cursorColor: Colors.black,
-      style: TextStyle(
+      style: const TextStyle(
         color: Colors.black,
-        fontSize: 10.5.sp,
+        fontSize: 10.5,
         fontFamily: FontFamily.cabinetGrotesk,
         fontWeight: FontWeight.w500,
       ),
       decoration: InputDecoration.collapsed(
         hintText: AppLocalizations.of(context)!.name,
-        hintStyle: TextStyle(
+        hintStyle: const TextStyle(
           color: Colors.grey,
-          fontSize: 10.5.sp,
+          fontSize: 10.5,
           fontFamily: FontFamily.cabinetGrotesk,
           fontWeight: FontWeight.w500,
         ),

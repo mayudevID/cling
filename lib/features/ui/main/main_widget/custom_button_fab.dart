@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../resources/gen/fonts.gen.dart';
 
 Widget customButtonFab(String text) {
   return Container(
-    padding: EdgeInsets.symmetric(
-      vertical: 9.w,
-      horizontal: 19.5.h,
+    padding: const EdgeInsets.symmetric(
+      vertical: 9,
+      horizontal: 19.5,
     ),
     decoration: BoxDecoration(
       color: const Color(0xFFF599DA),
@@ -15,9 +14,9 @@ Widget customButtonFab(String text) {
     ),
     child: Text(
       text,
-      style: TextStyle(
+      style: const TextStyle(
         color: Colors.black,
-        fontSize: 11.5.sp,
+        fontSize: 11.5,
         fontFamily: FontFamily.cabinetGrotesk,
         fontWeight: FontWeight.w400,
       ),

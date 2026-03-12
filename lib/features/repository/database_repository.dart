@@ -18,12 +18,12 @@ import '../model/transaction_model.dart';
 import '../ui/main/statistics/bloc/statistics_bloc.dart';
 
 class DatabaseRepository {
-  late Database db;
-  static const databaseName = 'cling_database.db';
 
   DatabaseRepository() {
     open();
   }
+  late Database db;
+  static const databaseName = 'cling_database.db';
 
   Future<void> open() async {
     db = await openDatabase(
@@ -43,7 +43,6 @@ class DatabaseRepository {
     final monthNowFirstDay = DateTime(
       monthNow.year,
       monthNow.month,
-      1,
     ).toIso8601String();
 
     final monthNowLastDay = monthNow.toIso8601String();
@@ -108,8 +107,8 @@ class DatabaseRepository {
       ),
     ]);
 
-    Object? totInc = result[0][0]['TotalIncome'];
-    Object? totEx = result[1][0]['TotalExpense'];
+    final Object? totInc = result[0][0]['TotalIncome'];
+    final Object? totEx = result[1][0]['TotalExpense'];
 
     final income = totInc != null
         ? (totInc is int ? totInc.toDouble() : totInc as double)
@@ -127,7 +126,7 @@ class DatabaseRepository {
     final now = DateTime.now();
 
     final monthNowFormatted = DateTime(now.year, 12, 31).toIso8601String();
-    final fourMonthsAgoFormatted = DateTime(now.year, 1, 1).toIso8601String();
+    final fourMonthsAgoFormatted = DateTime(now.year).toIso8601String();
 
     final result = await Future.wait([
       db.rawQuery(
@@ -156,19 +155,19 @@ class DatabaseRepository {
       ),
     ]);
 
-    Map<String, Map<String, dynamic>> combinedData = {};
+    final Map<String, Map<String, dynamic>> combinedData = {};
 
     if (result[0].isNotEmpty) {
-      for (var income in result[0]) {
-        var month = income["Month"] as String;
+      for (final income in result[0]) {
+        final month = income["Month"] as String;
         combinedData[month] ??= {"TotalIncome": 0.0, "TotalExpense": 0.0};
         combinedData[month]!["TotalIncome"] = income["TotalIncome"];
       }
     }
 
     if (result[1].isNotEmpty) {
-      for (var expense in result[1]) {
-        var month = expense["Month"] as String;
+      for (final expense in result[1]) {
+        final month = expense["Month"] as String;
         combinedData[month] ??= {"TotalIncome": 0.0, "TotalExpense": 0.0};
         combinedData[month]!["TotalExpense"] = expense["TotalExpense"];
       }
@@ -180,7 +179,7 @@ class DatabaseRepository {
   Future<List<Map<String, Object?>>> getMost(
     AllStatsChoose allStatsChoose,
   ) async {
-    final first = DateTime(DateTime.now().year, 1, 1).toIso8601String();
+    final first = DateTime(DateTime.now().year).toIso8601String();
     final last = DateTime(DateTime.now().year, 12, 31).toIso8601String();
     List<Map<String, Object?>> result;
     switch (allStatsChoose) {
@@ -226,10 +225,10 @@ class DatabaseRepository {
   }
 
   Future<List<TransactionModel>> getTransaction(DateTime date) async {
-    List<IncomeModel> incomeData = [];
-    List<ExpenseModel> expenseData = [];
+    final List<IncomeModel> incomeData = [];
+    final List<ExpenseModel> expenseData = [];
 
-    final start = DateTime(date.year, date.month, 1).toIso8601String();
+    final start = DateTime(date.year, date.month).toIso8601String();
     final end = DateTime(
       date.year,
       date.month,
@@ -255,10 +254,10 @@ class DatabaseRepository {
       ),
     ]);
 
-    for (var data in res[0]) {
+    for (final data in res[0]) {
       incomeData.add(IncomeModel.fromDatabase(data));
     }
-    for (var data in res[1]) {
+    for (final data in res[1]) {
       expenseData.add(ExpenseModel.fromDatabase(data));
     }
 
@@ -312,7 +311,7 @@ class DatabaseRepository {
   }
 
   Future<List<GoalSavingModel>> getGoalDetailSave(int goalId) async {
-    List<GoalSavingModel> dataList = [];
+    final List<GoalSavingModel> dataList = [];
     final result = await db.rawQuery(
       '''
         SELECT * FROM ${GoalSavingMeta.nameTable} 
@@ -322,7 +321,7 @@ class DatabaseRepository {
       [goalId],
     );
 
-    for (var data in result) {
+    for (final data in result) {
       dataList.add(GoalSavingModel.fromDatabase(data));
     }
 
@@ -358,19 +357,19 @@ class DatabaseRepository {
   }
 
   Future<List<GoalModel>> getGoalsHome() async {
-    List<GoalModel> dataList = [];
-    List<Map<String, dynamic>> maps = await db.query(
+    final List<GoalModel> dataList = [];
+    final List<Map<String, dynamic>> maps = await db.query(
       GoalMeta.nameTable,
       limit: 5,
     );
-    for (var element in maps) {
+    for (final element in maps) {
       dataList.add(GoalModel.fromDatabase(element));
     }
     return dataList;
   }
 
   Future<List<GoalModel>> getGoalsList(int id) async {
-    List<GoalModel> dataList = [];
+    final List<GoalModel> dataList = [];
     final maps = await db.rawQuery(
       '''
         SELECT * FROM ${GoalMeta.nameTable}
@@ -379,7 +378,7 @@ class DatabaseRepository {
       ''',
       [id],
     );
-    for (var data in maps) {
+    for (final data in maps) {
       dataList.add(GoalModel.fromDatabase(data));
     }
 
@@ -482,18 +481,18 @@ class DatabaseRepository {
   }
 
   Future<List<IncomeSourceModel>> getIncomeSource() async {
-    List<IncomeSourceModel> listData = [];
-    List<Map<String, dynamic>> maps = await db.query(
+    final List<IncomeSourceModel> listData = [];
+    final List<Map<String, dynamic>> maps = await db.query(
       IncomeSourceMeta.nameTable,
     );
-    for (var element in maps) {
+    for (final element in maps) {
       listData.add(IncomeSourceModel.fromMap(element));
     }
     return listData;
   }
 
   Future<num> getTotalIncome() async {
-    List<Map<String, dynamic>> maps = await db.rawQuery('''
+    final List<Map<String, dynamic>> maps = await db.rawQuery('''
         SELECT SUM(${IncomeMeta.amount}) 
         FROM ${IncomeMeta.nameTable}
       ''');
@@ -503,7 +502,7 @@ class DatabaseRepository {
   Future<Map<String, double>> getYearlyIncome() async {
     final nowYear = DateTime.now().year;
 
-    Map<String, double> uniqueData = {
+    final Map<String, double> uniqueData = {
       "$nowYear-01": 0.0,
       "$nowYear-02": 0.0,
       "$nowYear-03": 0.0,
@@ -519,7 +518,7 @@ class DatabaseRepository {
     };
 
     final now = DateTime.now();
-    final firstDate = DateTime(now.year, 1, 1).toIso8601String();
+    final firstDate = DateTime(now.year).toIso8601String();
     final lastDate = DateTime(now.year, 12, 31).toIso8601String();
 
     final result = await db.rawQuery(
@@ -534,8 +533,8 @@ class DatabaseRepository {
       [firstDate, lastDate],
     );
 
-    for (Map<String, Object?> item in result) {
-      Object? totInc = item["TotalIncome"];
+    for (final Map<String, Object?> item in result) {
+      final Object? totInc = item["TotalIncome"];
 
       final result = totInc != null
           ? (totInc is int ? totInc.toDouble() : totInc as double)
@@ -576,10 +575,10 @@ class DatabaseRepository {
     String? startDate,
     String? endDate,
   }) async {
-    List<IncomeModel> listData = [];
+    final List<IncomeModel> listData = [];
 
     final now = DateTime.now();
-    startDate ??= DateTime(now.year, 1, 1).toIso8601String();
+    startDate ??= DateTime(now.year).toIso8601String();
     endDate ??= DateTime(now.year, 12, 31).toIso8601String();
 
     final read = await db.rawQuery(
@@ -591,7 +590,7 @@ class DatabaseRepository {
       [source],
     );
 
-    List<Map<String, dynamic>> maps = await db.rawQuery(
+    final List<Map<String, dynamic>> maps = await db.rawQuery(
       '''
         SELECT *
         FROM ${IncomeMeta.nameTable}
@@ -607,7 +606,7 @@ class DatabaseRepository {
       [startDate, endDate, read[0].values.first],
     );
 
-    for (var element in maps) {
+    for (final element in maps) {
       listData.add(IncomeModel.fromDatabase(element));
     }
 
@@ -662,27 +661,27 @@ class DatabaseRepository {
   }
 
   Future<List<ExpenseCategoriesModel>> getExpenseCategories() async {
-    List<ExpenseCategoriesModel> listData = [];
-    List<Map<String, dynamic>> maps = await db.query(
+    final List<ExpenseCategoriesModel> listData = [];
+    final List<Map<String, dynamic>> maps = await db.query(
       ExpenseCategoriesMeta.nameTable,
     );
-    for (var element in maps) {
+    for (final element in maps) {
       listData.add(ExpenseCategoriesModel.fromMap(element));
     }
     return listData;
   }
 
   Future<List<ExpenseModel>> getTodayExpenses() async {
-    List<ExpenseModel> listData = [];
+    final List<ExpenseModel> listData = [];
     final now = DateTime.now();
-    List<Map<String, dynamic>> maps = await db.query(
+    final List<Map<String, dynamic>> maps = await db.query(
       ExpenseMeta.nameTable,
       where: "date(${ExpenseMeta.date}) = date(?)",
       whereArgs: [DateTime(now.year, now.month, now.day).toIso8601String()],
       orderBy: "${ExpenseMeta.date} DESC",
     );
 
-    for (var element in maps) {
+    for (final element in maps) {
       listData.add(ExpenseModel.fromDatabase(element));
     }
     return listData;
@@ -716,10 +715,10 @@ class DatabaseRepository {
     String? startDate,
     String? endDate,
   }) async {
-    List<ExpenseModel> listData = [];
+    final List<ExpenseModel> listData = [];
 
     final now = DateTime.now();
-    startDate ??= DateTime(now.year, 1, 1).toIso8601String();
+    startDate ??= DateTime(now.year).toIso8601String();
     endDate ??= DateTime(now.year, 12, 31).toIso8601String();
 
     final read = await db.rawQuery(
@@ -731,7 +730,7 @@ class DatabaseRepository {
       [source],
     );
 
-    List<Map<String, dynamic>> maps = await db.rawQuery(
+    final List<Map<String, dynamic>> maps = await db.rawQuery(
       '''
         SELECT *
         FROM ${ExpenseMeta.nameTable}
@@ -747,7 +746,7 @@ class DatabaseRepository {
       [startDate, endDate, read[0].values.first],
     );
 
-    for (var element in maps) {
+    for (final element in maps) {
       listData.add(ExpenseModel.fromDatabase(element));
     }
 
@@ -817,8 +816,8 @@ class DatabaseRepository {
     int idOffset,
   ) async {
     Logger.Green.log('time: $timeOffset id: $idOffset');
-    List<NotificationModelClass> dataList = [];
-    List<Map<String, dynamic>> maps = await db.rawQuery(
+    final List<NotificationModelClass> dataList = [];
+    final List<Map<String, dynamic>> maps = await db.rawQuery(
       '''
         SELECT * FROM ${NotificationMeta.nameTable}
         WHERE (date(${NotificationMeta.date}) = date(?) AND ${NotificationMeta.id} < ?) 
@@ -829,7 +828,7 @@ class DatabaseRepository {
       [timeOffset, idOffset, timeOffset],
     );
 
-    for (var data in maps) {
+    for (final data in maps) {
       dataList.add(
         NotificationModelClass(
           id: data[NotificationMeta.id],
@@ -914,11 +913,11 @@ class DatabaseRepository {
         dataRec[RecurringMeta.recurringLast].toString(),
       );
 
-      int monthsDifference =
+      final int monthsDifference =
           applicationOpenDate.difference(latestDate).inDays ~/ 30;
 
       for (int i = 1; i <= monthsDifference; i++) {
-        DateTime updateDate = DateTime(
+        final DateTime updateDate = DateTime(
           latestDate.year,
           latestDate.month + i,
           int.parse(dataRec[RecurringMeta.recurringDay].toString()),

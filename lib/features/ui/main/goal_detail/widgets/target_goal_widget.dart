@@ -1,7 +1,5 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../core/common_widget.dart';
 import '../../../../../resources/gen/fonts.gen.dart';
@@ -10,12 +8,12 @@ import '../bloc/goal_detail_bloc.dart';
 
 Widget targetGoalWidget(BuildContext context) {
   return Container(
-    padding: EdgeInsets.symmetric(
-      horizontal: 16.w,
-      vertical: 16.h,
+    padding: const EdgeInsets.symmetric(
+      horizontal: 16,
+      vertical: 16,
     ),
     width: double.infinity,
-    //height: 117.h,
+    //height: 117,
     decoration: ShapeDecoration(
       color: const Color(0x3D787880),
       shape: RoundedRectangleBorder(
@@ -30,9 +28,9 @@ Widget targetGoalWidget(BuildContext context) {
             Text(
               AppLocalizations.of(context)!.target,
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: const TextStyle(
                 color: Colors.white,
-                fontSize: 10.sp,
+                fontSize: 10,
                 fontFamily: FontFamily.cabinetGrotesk,
                 fontWeight: FontWeight.w700,
               ),
@@ -43,9 +41,9 @@ Widget targetGoalWidget(BuildContext context) {
               },
               builder: (context, state) {
                 return NominalMoneyFormatter(
-                  textStyle: TextStyle(
+                  textStyle: const TextStyle(
                     color: Colors.white,
-                    fontSize: 10.sp,
+                    fontSize: 10,
                     fontFamily: FontFamily.cabinetGrotesk,
                     fontWeight: FontWeight.w700,
                   ),
@@ -56,15 +54,15 @@ Widget targetGoalWidget(BuildContext context) {
             ),
           ],
         ),
-        SizedBox(height: 16.h),
+        const SizedBox(height: 16),
         Stack(
           children: [
             Container(
-              width: 358.w,
-              height: 16.h,
+              width: 358,
+              height: 16,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(100),
-                color: Colors.white.withOpacity(0.76),
+                color: Colors.white.withValues(alpha: 0.76),
               ),
             ),
             BlocBuilder<GoalDetailBloc, GoalDetailState>(
@@ -77,11 +75,11 @@ Widget targetGoalWidget(BuildContext context) {
                   return const SizedBox();
                 }
 
-                final length = (state.goalModel.collected * 358.w) /
-                    state.goalModel.target;
+                final length =
+                    (state.goalModel.collected * 358) / state.goalModel.target;
                 return Container(
                   width: length,
-                  height: 16.h,
+                  height: 16,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(100),
                     color: const Color(0xFF006DE9),
@@ -97,9 +95,9 @@ Widget targetGoalWidget(BuildContext context) {
             BlocBuilder<GoalDetailBloc, GoalDetailState>(
               builder: (context, state) {
                 return NominalMoneyFormatter(
-                  textStyle: TextStyle(
+                  textStyle: const TextStyle(
                     color: Colors.white,
-                    fontSize: 9.5.sp,
+                    fontSize: 9.5,
                     fontFamily: FontFamily.cabinetGrotesk,
                     fontWeight: FontWeight.w700,
                   ),
@@ -115,12 +113,12 @@ Widget targetGoalWidget(BuildContext context) {
               },
               builder: (context, state) {
                 if (state.goalModel.collected < 1) {
-                  return Text(
+                  return const Text(
                     ' / 0%',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 9.5.sp,
+                      fontSize: 9.5,
                       fontFamily: FontFamily.cabinetGrotesk,
                       fontWeight: FontWeight.w700,
                     ),
@@ -133,9 +131,9 @@ Widget targetGoalWidget(BuildContext context) {
                 return Text(
                   ' / ${amount.round()}%',
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.white,
-                    fontSize: 9.5.sp,
+                    fontSize: 9.5,
                     fontFamily: FontFamily.cabinetGrotesk,
                     fontWeight: FontWeight.w700,
                   ),

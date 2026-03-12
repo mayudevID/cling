@@ -56,8 +56,8 @@ class EditIncomeExpenseBloc
   var detailStatsContext = StatsDetailPerCategoriesPage.navKey.currentContext;
 
   void _setDate(SetDate event, emit) {
-    DateTime oldDateTime = state.selectedDate;
-    DateTime newDateTime = DateTime(
+    final DateTime oldDateTime = state.selectedDate;
+    final DateTime newDateTime = DateTime(
       event.date.year,
       event.date.month,
       event.date.day,
@@ -68,8 +68,8 @@ class EditIncomeExpenseBloc
   }
 
   void _setTime(SetTime event, emit) {
-    DateTime oldDateTime = state.selectedDate;
-    DateTime newDateTime = DateTime(
+    final DateTime oldDateTime = state.selectedDate;
+    final DateTime newDateTime = DateTime(
       oldDateTime.year,
       oldDateTime.month,
       oldDateTime.day,
@@ -196,7 +196,7 @@ class EditIncomeExpenseBloc
       detailStatsContext?.read<StatsDetailBloc>().add(UpdateFromEdit(data));
 
       if (mainContext.read<TransactionBloc>().state.date ==
-          DateTime(DateTime.now().year, DateTime.now().month, 1)) {
+          DateTime(DateTime.now().year, DateTime.now().month)) {
         mainContext.read<TransactionBloc>().add(GetData());
       }
 
@@ -243,7 +243,7 @@ class EditIncomeExpenseBloc
     detailStatsContext?.read<StatsDetailBloc>().add(DeleteFromEdit(state.id));
 
     if (mainContext.read<TransactionBloc>().state.date ==
-        DateTime(DateTime.now().year, DateTime.now().month, 1)) {
+        DateTime(DateTime.now().year, DateTime.now().month)) {
       mainContext.read<TransactionBloc>().add(GetData());
     }
 

@@ -16,53 +16,53 @@ class GetIncomeBreakdownByCategory extends StatsDetailEvent {}
 class GetExpenseBreakdownByCategory extends StatsDetailEvent {}
 
 class ChangeRangeDate extends StatsDetailEvent {
-  final RangeDate rangeDate;
 
   const ChangeRangeDate(this.rangeDate);
+  final RangeDate rangeDate;
 }
 
 class ChangeDaily extends StatsDetailEvent {
-  final int? leftOrRightOrPick;
 
   const ChangeDaily(this.leftOrRightOrPick);
+  final int? leftOrRightOrPick;
 }
 
 class ChangeMonthly extends StatsDetailEvent {
-  final int? leftOrRightOrPick;
 
   const ChangeMonthly(this.leftOrRightOrPick);
+  final int? leftOrRightOrPick;
 }
 
 class ChangeYearly extends StatsDetailEvent {
-  final int? leftOrRightOrPick;
 
   const ChangeYearly(this.leftOrRightOrPick);
+  final int? leftOrRightOrPick;
 }
 
 class ChangeDateRangePickerView extends StatsDetailEvent {
-  final DateRangePickerView dateRangePickerView;
 
   const ChangeDateRangePickerView(this.dateRangePickerView);
+  final DateRangePickerView dateRangePickerView;
 }
 
 class ChangeDateForPeriod extends StatsDetailEvent {
-  final DateTime? startDate;
-  final DateTime? endDate;
 
   const ChangeDateForPeriod(
     this.startDate,
     this.endDate,
   );
+  final DateTime? startDate;
+  final DateTime? endDate;
 }
 
 class UpdateFromEdit extends StatsDetailEvent {
-  final TransactionModel transactionModel;
 
   const UpdateFromEdit(this.transactionModel);
+  final TransactionModel transactionModel;
 }
 
 class DeleteFromEdit extends StatsDetailEvent {
-  final int id;
 
   const DeleteFromEdit(this.id);
+  final int id;
 }

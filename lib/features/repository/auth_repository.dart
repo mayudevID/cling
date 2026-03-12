@@ -1,14 +1,11 @@
-import 'package:cling/core/logger.dart';
-import 'package:cling/features/model/user_model.dart';
+import '../../core/logger.dart';
+import '../model/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../core/exception.dart';
 
 class AuthRepository {
-  final FirebaseAuth _firebaseAuth;
-  final FirebaseFirestore _firestore;
-  final SharedPreferences _cache;
 
   AuthRepository({
     required FirebaseAuth firebaseAuth,
@@ -17,6 +14,9 @@ class AuthRepository {
   })  : _firebaseAuth = firebaseAuth,
         _firestore = firestore,
         _cache = cache;
+  final FirebaseAuth _firebaseAuth;
+  final FirebaseFirestore _firestore;
+  final SharedPreferences _cache;
 
   static const userCacheKey = '__user_cache_key__';
   static const loginStatusKey = '__login_stat_key__';

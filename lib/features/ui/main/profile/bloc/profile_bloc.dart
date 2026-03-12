@@ -1,7 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:cling/core/common_widget.dart';
-import 'package:cling/core/exception.dart';
+import '../../../../../core/common_widget.dart';
+import '../../../../../core/exception.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
@@ -42,9 +42,12 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   final AuthRepository _authRepo;
   final DatabaseRepository _dbRepo;
   final SettingsRepository _settingsRepo;
-  var mainContext = MainApp.navKeyGlobal.currentContext!;
+  final BuildContext mainContext = MainApp.navKeyGlobal.currentContext!;
 
-  void _sendLogout(event, emit) async {
+  Future<void> _sendLogout(
+    SendLogout event,
+    Emitter<ProfileState> emit,
+  ) async {
     try {
       Navigator.pop(mainContext);
       loadingAuth(mainContext);
@@ -83,13 +86,16 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     );
   }
 
-  void _getVerifiedStatus(event, emit) {
+  void _getVerifiedStatus(
+    GetVerifiedStatus event,
+    Emitter<ProfileState> emit,
+  ) {
     final isVerified =
         (_authRepo.currentUserFirebase!.emailVerified == false) ? false : true;
     emit(state.copyWith(isVerified: isVerified));
   }
 
-  void _goBackup(event, emit) async {
+  Future<void> _goBackup(GoBackup event, Emitter<ProfileState> emit) async {
     final resultDialog = await dialogGoBackup(mainContext);
     if (!resultDialog) {
       return;
@@ -110,7 +116,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     Navigator.pop(mainContext);
   }
 
-  void _freeResources() async {
+  void _freeResources() {
     mainContext.read<HomeBloc>().add(FreeResourcesHome());
     mainContext.read<StatisticsBloc>().add(FreeResourcesStats());
   }

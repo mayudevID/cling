@@ -8,14 +8,14 @@ sealed class EditMonthlyEvent extends Equatable {
 }
 
 class SetAmountInput extends EditMonthlyEvent {
-  final double newValue;
   const SetAmountInput(this.newValue);
+  final double newValue;
 }
 
 class ChangeTempRecDay extends EditMonthlyEvent {
-  final int value;
 
   const ChangeTempRecDay(this.value);
+  final int value;
 }
 
 class SaveNewMonthly extends EditMonthlyEvent {}

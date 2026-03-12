@@ -1,10 +1,8 @@
-import 'package:cling/core/common_widget.dart';
-import 'package:cling/core/route.dart';
+import '../../../../core/common_widget.dart';
+import '../../../../core/route.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../injection.dart';
 import '../../../../../resources/gen/fonts.gen.dart';
@@ -42,42 +40,42 @@ class LoginPageContent extends StatelessWidget {
         resizeToAvoidBottomInset: false,
         backgroundColor: Colors.black,
         body: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24.w),
+          padding: const EdgeInsets.symmetric(horizontal: 24),
           child: Column(
             children: [
-              SizedBox(
-                height: 40.h,
+              const SizedBox(
+                height: 40,
               ),
               Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
                   AppLocalizations.of(context)!.welcomeBack,
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.white,
-                    fontSize: 20.sp,
+                    fontSize: 20,
                     fontFamily: FontFamily.bungee,
                     fontWeight: FontWeight.w400,
                   ),
                 ),
               ),
-              SizedBox(
-                height: 8.h,
+              const SizedBox(
+                height: 8,
               ),
               Text(
                 AppLocalizations.of(context)!.descWelcomeBack,
-                style: TextStyle(
+                style: const TextStyle(
                   color: Colors.white,
-                  fontSize: 11.sp,
+                  fontSize: 11,
                   fontFamily: FontFamily.cabinetGrotesk,
                   fontWeight: FontWeight.w500,
                 ),
               ),
-              SizedBox(
-                height: 32.h,
+              const SizedBox(
+                height: 32,
               ),
               ...formLogin(context),
-              SizedBox(
-                height: 40.h,
+              const SizedBox(
+                height: 40,
               ),
               PinkButton(
                 onTap: () async {
@@ -87,22 +85,22 @@ class LoginPageContent extends StatelessWidget {
                 name: AppLocalizations.of(context)!.login,
               ),
               // SizedBox(
-              //   height: 24.h,
+              //   height: 24,
               // ),
               // Row(
               //   children: [
               //     Expanded(
               //       child: Container(
-              //         height: 1.h,
+              //         height: 1,
               //         color: Colors.grey,
               //       ),
               //     ),
               //     Padding(
-              //       padding: EdgeInsets.symmetric(horizontal: 24.w),
+              //       padding: EdgeInsets.symmetric(horizontal: 24),
               //       child: Text(
               //         AppLocalizations.of(context)!.or,
               //         style: TextStyle(
-              //           fontSize: 10.sp,
+              //           fontSize: 10,
               //           color: Colors.white,
               //           fontFamily: FontFamily.cabinetGrotesk,
               //         ),
@@ -110,18 +108,18 @@ class LoginPageContent extends StatelessWidget {
               //     ),
               //     Expanded(
               //       child: Container(
-              //         height: 1.h,
+              //         height: 1,
               //         color: Colors.grey,
               //       ),
               //     ),
               //   ],
               // ),
               // SizedBox(
-              //   height: 24.h,
+              //   height: 24,
               // ),
               // SizedBox(
-              //   width: 390.w,
-              //   height: 57.w,
+              //   width: 390,
+              //   height: 57,
               //   child: ElevatedButton(
               //     onPressed: () {},
               //     style: ButtonStyle(
@@ -143,14 +141,14 @@ class LoginPageContent extends StatelessWidget {
               //           color: Colors.white,
               //         ),
               //         SizedBox(
-              //           width: 10.w,
+              //           width: 10,
               //         ),
               //         Text(
               //           AppLocalizations.of(context)!.loginWithAnon,
               //           textAlign: TextAlign.center,
               //           style: TextStyle(
               //             color: Colors.white,
-              //             fontSize: 11.5.sp,
+              //             fontSize: 11.5,
               //             fontFamily: FontFamily.cabinetGrotesk,
               //             fontWeight: FontWeight.w700,
               //           ),
@@ -165,9 +163,9 @@ class LoginPageContent extends StatelessWidget {
                   children: [
                     TextSpan(
                       text: AppLocalizations.of(context)!.dontHaveAnAccount,
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.white,
-                        fontSize: 10.sp,
+                        fontSize: 10,
                         fontFamily: FontFamily.cabinetGrotesk,
                         fontWeight: FontWeight.w400,
                       ),
@@ -175,9 +173,9 @@ class LoginPageContent extends StatelessWidget {
                     TextSpan(
                       text:
                           ' ${AppLocalizations.of(context)!.createNewAccount}',
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.white,
-                        fontSize: 10.sp,
+                        fontSize: 10,
                         fontFamily: FontFamily.cabinetGrotesk,
                         fontWeight: FontWeight.w700,
                       ),
@@ -193,8 +191,8 @@ class LoginPageContent extends StatelessWidget {
                 ),
                 textAlign: TextAlign.center,
               ),
-              SizedBox(
-                height: 55.h,
+              const SizedBox(
+                height: 55,
               ),
             ],
           ),

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../injection.dart';
 import '../../../../../resources/gen/assets.gen.dart';
@@ -84,10 +83,10 @@ class StatsDetailPerCategoriesPageContent extends StatelessWidget {
       child: Scaffold(
         backgroundColor: Colors.black,
         body: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24.w),
+          padding: const EdgeInsets.symmetric(horizontal: 24),
           child: Column(
             children: [
-              SizedBox(height: 16.h),
+              const SizedBox(height: 16),
               Row(
                 children: [
                   GestureDetector(
@@ -95,31 +94,31 @@ class StatsDetailPerCategoriesPageContent extends StatelessWidget {
                     child: Assets.lib.resources.images.fluentChevronLeft24Filled
                         .svg(),
                   ),
-                  SizedBox(width: 16.w),
+                  const SizedBox(width: 16),
                   Text(
                     '${appLocalizations.detail} - $_title',
                     textAlign: TextAlign.center,
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.white,
-                      fontSize: 16.sp,
+                      fontSize: 16,
                       fontFamily: FontFamily.cabinetGrotesk,
                       fontWeight: FontWeight.w700,
                     ),
                   ),
                 ],
               ),
-              SizedBox(height: 16.h),
+              const SizedBox(height: 16),
               tagCategoriesWithTypeFlowWidget(
                 context,
                 _type,
                 _categoryOrSourceIcon,
                 _categoryOrSourceClass,
               ),
-              SizedBox(height: 16.h),
+              const SizedBox(height: 16),
               if (_title == appLocalizations.incomeBreakdown ||
                   _title == appLocalizations.expenseBreakdown) ...[
                 ...chooseDateRangeByCategory(context),
-                SizedBox(height: 16.h),
+                const SizedBox(height: 16),
               ],
               BlocBuilder<StatsDetailBloc, StatsDetailState>(
                 buildWhen: (p, c) {
@@ -139,7 +138,7 @@ class StatsDetailPerCategoriesPageContent extends StatelessWidget {
                             isIncome,
                           );
                         },
-                        separatorBuilder: (_, idx) => SizedBox(height: 4.h),
+                        separatorBuilder: (_, idx) => const SizedBox(height: 4),
                         itemCount: state.listTransactionModel.length,
                       ),
                     ),

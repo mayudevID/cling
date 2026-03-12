@@ -4,8 +4,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 import '../../../../core/open_mail_app.dart';
 import '../../../../resources/gen/fonts.gen.dart';
 import '../../language_currency/lang_export.dart';
@@ -41,24 +39,24 @@ Future<void> dialogAddSuccess(
             ),
             color: const Color(0xFF313131),
           ),
-          padding: EdgeInsets.only(
-            top: 44.54.h,
-            left: 112.5.w,
-            right: 112.5.w,
-            bottom: 44.54.h,
+          padding: const EdgeInsets.only(
+            top: 44.54,
+            left: 112.5,
+            right: 112.5,
+            bottom: 44.54,
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(
+              const Text(
                 "✅",
                 style: TextStyle(
-                  fontSize: 43.sp,
+                  fontSize: 43,
                   fontWeight: FontWeight.w500,
                 ),
               ),
-              SizedBox(
-                height: 29.69.h,
+              const SizedBox(
+                height: 29.69,
               ),
               Text(
                 (msg == FlowType.income)
@@ -66,10 +64,10 @@ Future<void> dialogAddSuccess(
                     : (msg == FlowType.expense)
                         ? AppLocalizations.of(context)!.expenseAdded
                         : "Goal Added",
-                style: TextStyle(
+                style: const TextStyle(
                   fontFamily: FontFamily.cabinetGrotesk,
                   fontWeight: FontWeight.w500,
-                  fontSize: 14.5.sp,
+                  fontSize: 14.5,
                   color: Colors.white,
                 ),
                 textAlign: TextAlign.center,
@@ -83,7 +81,7 @@ Future<void> dialogAddSuccess(
 }
 
 Future<void> openMail(BuildContext context) async {
-  var result = await OpenMailApp.openMailApp();
+  final result = await OpenMailApp.openMailApp();
   if (!result.didOpen && !result.canOpen) {
     await Future.microtask(() async {
       await showDialog(

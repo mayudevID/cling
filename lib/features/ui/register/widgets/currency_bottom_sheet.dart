@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../resources/gen/assets.gen.dart';
 import '../../../../resources/gen/fonts.gen.dart';
@@ -33,9 +32,9 @@ void currencyBottomSheet(BuildContext context) {
             });
           },
           child: Container(
-            padding: EdgeInsets.all(16.h),
+            padding: const EdgeInsets.all(16),
             margin: EdgeInsets.only(
-                bottom: (index == Currency.values.length - 1) ? 8.h : 0),
+                bottom: (index == Currency.values.length - 1) ? 8 : 0),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
               border: Border.all(
@@ -56,7 +55,7 @@ void currencyBottomSheet(BuildContext context) {
           ),
         );
       },
-      separatorBuilder: (_, idx) => SizedBox(height: 8.h),
+      separatorBuilder: (_, idx) => const SizedBox(height: 8),
     );
   }
 
@@ -68,8 +67,8 @@ void currencyBottomSheet(BuildContext context) {
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
     builder: (_) {
       return Container(
-        height: 650.h,
-        padding: EdgeInsets.only(top: 24.h, left: 24.w, right: 24.w),
+        height: 650,
+        padding: const EdgeInsets.only(top: 24, left: 24, right: 24),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
         ),
@@ -80,9 +79,9 @@ void currencyBottomSheet(BuildContext context) {
               children: [
                 Text(
                   AppLocalizations.of(context)!.currency,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontFamily: FontFamily.cabinetGrotesk,
-                    fontSize: 10.sp,
+                    fontSize: 10,
                   ),
                 ),
                 const Spacer(),
@@ -95,7 +94,7 @@ void currencyBottomSheet(BuildContext context) {
                 ),
               ],
             ),
-            SizedBox(height: 16.h),
+            const SizedBox(height: 16),
             Expanded(
               child: MediaQuery.removePadding(
                 removeTop: true,

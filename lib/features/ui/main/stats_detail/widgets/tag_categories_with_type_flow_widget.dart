@@ -1,6 +1,5 @@
-import 'package:cling/core/logger.dart';
+import '../../../../../core/logger.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../resources/gen/fonts.gen.dart';
 import '../../../language_currency/lang_export.dart';
@@ -13,7 +12,7 @@ Widget tagCategoriesWithTypeFlowWidget(
 ) {
   Logger.Red.log(type);
   return Container(
-    padding: EdgeInsets.all(16.h),
+    padding: const EdgeInsets.all(16),
     decoration: BoxDecoration(
       color: const Color(0x3D787880),
       borderRadius: BorderRadius.circular(10),
@@ -29,21 +28,21 @@ Widget tagCategoriesWithTypeFlowWidget(
           child: Center(
             child: Text(
               categoryOrSourceIcon,
-              style: TextStyle(fontSize: 18.sp),
+              style: const TextStyle(fontSize: 18),
             ),
           ),
         ),
-        SizedBox(width: 16.w),
+        const SizedBox(width: 16),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               categoryOrSourceClass,
-              style: TextStyle(
+              style: const TextStyle(
                 color: Colors.white,
                 fontFamily: FontFamily.cabinetGrotesk,
                 fontWeight: FontWeight.bold,
-                fontSize: 13.sp,
+                fontSize: 13,
               ),
             ),
             Container(

@@ -5,24 +5,6 @@ part of 'statistics_bloc.dart';
 enum AllStatsChoose { income, expense }
 
 class StatisticsState extends Equatable {
-  int typeCategories;
-  List<PieDataExSav> pieDataExSavList;
-  List<ChartData> yearlyIncomeList;
-  List<Map<String, Object?>> mostExpenseList;
-  List<Map<String, Object?>> mostIncomeList;
-  List<Map<String, Object?>> incomeBreakdownList;
-  List<Map<String, Object?>> expenseBreakdownList;
-  List<PieDataExpense> pieDataExpenseList;
-  List<ChartData> chartDataIncomeList;
-  List<ChartData> chartDataExpenseList;
-  List<ChartData> chartDataSavingsList;
-  double maxValAll;
-  double maxValIncome;
-  RangeDate rangeDate;
-  DateRangePickerView dateRangePickerView;
-  DateTime startDate;
-  DateTime endDate;
-  AllStatsChoose allStatsChoose;
 
   StatisticsState({
     this.typeCategories = 0,
@@ -65,6 +47,24 @@ class StatisticsState extends Equatable {
               DateTime.now().month,
               DateTime.now().day,
             );
+  int typeCategories;
+  List<PieDataExSav> pieDataExSavList;
+  List<ChartData> yearlyIncomeList;
+  List<Map<String, Object?>> mostExpenseList;
+  List<Map<String, Object?>> mostIncomeList;
+  List<Map<String, Object?>> incomeBreakdownList;
+  List<Map<String, Object?>> expenseBreakdownList;
+  List<PieDataExpense> pieDataExpenseList;
+  List<ChartData> chartDataIncomeList;
+  List<ChartData> chartDataExpenseList;
+  List<ChartData> chartDataSavingsList;
+  double maxValAll;
+  double maxValIncome;
+  RangeDate rangeDate;
+  DateRangePickerView dateRangePickerView;
+  DateTime startDate;
+  DateTime endDate;
+  AllStatsChoose allStatsChoose;
 
   @override
   List<Object> get props => [

@@ -1,6 +1,4 @@
-
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../core/route.dart';
 import '../../../../../resources/gen/fonts.gen.dart';
@@ -12,20 +10,20 @@ import 'text_field_pass_login.dart';
 List<Widget> formLogin(BuildContext context) {
   return [
     TagNameLogin(name: AppLocalizations.of(context)!.email),
-    SizedBox(
-      height: 8.h,
+    const SizedBox(
+      height: 8,
     ),
     const TextFieldEmailLogin(),
-    SizedBox(
-      height: 16.h,
+    const SizedBox(
+      height: 16,
     ),
     TagNameLogin(name: AppLocalizations.of(context)!.password),
-    SizedBox(
-      height: 8.h,
+    const SizedBox(
+      height: 8,
     ),
     const TextFieldPassLogin(),
-    SizedBox(
-      height: 16.h,
+    const SizedBox(
+      height: 16,
     ),
     Align(
       alignment: Alignment.centerRight,
@@ -39,9 +37,9 @@ List<Widget> formLogin(BuildContext context) {
         child: Text(
           AppLocalizations.of(context)!.forgotPassword,
           textAlign: TextAlign.right,
-          style: TextStyle(
+          style: const TextStyle(
             color: Colors.white,
-            fontSize: 10.sp,
+            fontSize: 10,
             fontFamily: FontFamily.cabinetGrotesk,
             fontWeight: FontWeight.w800,
           ),

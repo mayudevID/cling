@@ -3,11 +3,6 @@
 part of 'stats_detail_bloc.dart';
 
 class StatsDetailState extends Equatable {
-  List<TransactionModel> listTransactionModel;
-  DateTime startDate;
-  DateTime endDate;
-  RangeDate rangeDate;
-  DateRangePickerView dateRangePickerView;
 
   StatsDetailState({
     List<TransactionModel>? listTransactionModel,
@@ -28,6 +23,11 @@ class StatsDetailState extends Equatable {
               DateTime.now().month,
               DateTime.now().day,
             );
+  List<TransactionModel> listTransactionModel;
+  DateTime startDate;
+  DateTime endDate;
+  RangeDate rangeDate;
+  DateRangePickerView dateRangePickerView;
 
   @override
   List<Object> get props => [

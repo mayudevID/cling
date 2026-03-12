@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../resources/gen/assets.gen.dart';
 import '../../../../../resources/gen/fonts.gen.dart';
@@ -65,11 +64,9 @@ Widget notificationWidget(int idx) {
         child: Column(
           children: [
             Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Assets.lib.resources.images.warningTriangleSolid
-                    .svg(width: 40.w),
-                SizedBox(width: 16.w),
+                Assets.lib.resources.images.warningTriangleSolid.svg(width: 40),
+                const SizedBox(width: 16),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -95,7 +92,7 @@ Widget notificationWidget(int idx) {
                               color: Colors.grey[300],
                               fontFamily: FontFamily.cabinetGrotesk,
                               fontWeight: FontWeight.w200,
-                              fontSize: 8.5.sp,
+                              fontSize: 8.5,
                             ),
                           ),
                         ],

@@ -1,8 +1,7 @@
-import 'package:cling/features/ui/main/statistics/widgets/categories_with_amount_widget.dart';
-import 'package:cling/features/ui/main/statistics/widgets/line_column_stats_income.dart';
+import '../widgets/categories_with_amount_widget.dart';
+import '../widgets/line_column_stats_income.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../resources/gen/fonts.gen.dart';
 import '../../../language_currency/lang_export.dart';
@@ -20,31 +19,31 @@ class StatsIncome extends StatelessWidget {
         Text(
           '${AppLocalizations.of(context)!.yearlyBreakdown} / ${DateTime.now().year}',
           textAlign: TextAlign.center,
-          style: TextStyle(
+          style: const TextStyle(
             color: Colors.white,
-            fontSize: 10.sp,
+            fontSize: 10,
             fontFamily: FontFamily.cabinetGrotesk,
             fontWeight: FontWeight.w500,
           ),
         ),
-        SizedBox(height: 24.h),
+        const SizedBox(height: 24),
         lineColumnStatsIncomeWidget(context),
-        SizedBox(height: 24.h),
+        const SizedBox(height: 24),
         Text(
           AppLocalizations.of(context)!.incomeBreakdown,
-          style: TextStyle(
+          style: const TextStyle(
             color: Colors.white,
-            fontSize: 11.5.sp,
+            fontSize: 11.5,
             fontFamily: FontFamily.cabinetGrotesk,
             fontWeight: FontWeight.w700,
           ),
         ),
-        SizedBox(
-          height: 16.h,
+        const SizedBox(
+          height: 16,
         ),
         ...chooseDateRange(context),
-        SizedBox(
-          height: 16.h,
+        const SizedBox(
+          height: 16,
         ),
         BlocBuilder<StatisticsBloc, StatisticsState>(
           buildWhen: (p, c) {
@@ -78,12 +77,12 @@ class StatsIncome extends StatelessWidget {
                     title: AppLocalizations.of(context)!.incomeBreakdown,
                   );
                 },
-                separatorBuilder: (context, index) => SizedBox(height: 4.h),
+                separatorBuilder: (context, index) => const SizedBox(height: 4),
               ),
             );
           },
         ),
-        SizedBox(height: 90.h),
+        const SizedBox(height: 90),
       ],
     );
   }

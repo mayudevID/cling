@@ -8,15 +8,15 @@ sealed class GoalDetailEvent extends Equatable {
 }
 
 class InitGoal extends GoalDetailEvent {
-  final int goalModelId;
 
   const InitGoal(this.goalModelId);
+  final int goalModelId;
 }
 
 class ChangeIcon extends GoalDetailEvent {
-  final String icon;
 
   const ChangeIcon(this.icon);
+  final String icon;
 }
 
 class InitTempEdit extends GoalDetailEvent {}
@@ -24,29 +24,29 @@ class InitTempEdit extends GoalDetailEvent {}
 class SaveEdit extends GoalDetailEvent {}
 
 class SetDateGoalInput extends GoalDetailEvent {
-  final DateTime time;
 
   const SetDateGoalInput(this.time);
+  final DateTime time;
 }
 
 class SetTempAmountInput extends GoalDetailEvent {
-  final double tempAmount;
 
   const SetTempAmountInput(this.tempAmount);
+  final double tempAmount;
 }
 
 class SetAmountInput extends GoalDetailEvent {
-  final double amount;
 
   const SetAmountInput(this.amount);
+  final double amount;
 }
 
 class AddSaving extends GoalDetailEvent {}
 
 class DeleteSaving extends GoalDetailEvent {
-  final GoalSavingModel goalSaving;
 
   const DeleteSaving(this.goalSaving);
+  final GoalSavingModel goalSaving;
 }
 
 class DeleteGoal extends GoalDetailEvent {}

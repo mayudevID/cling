@@ -36,11 +36,11 @@ class EditMonthlyBloc extends Bloc<EditMonthlyEvent, EditMonthlyState> {
   final EditMonthlyMode _monthlyMode;
   final SettingsRepository _settingsRepo;
   final AuthRepository _authRepo;
-  var mainContext = MainApp.navKeyGlobal.currentContext!;
+  final BuildContext mainContext = MainApp.navKeyGlobal.currentContext!;
   late double initMonthly;
   late int initDateRec;
 
-  void _initVal(event, emit) {
+  void _initVal(InitialValue event, Emitter<EditMonthlyState> emit) {
     initMonthly = (_monthlyMode == EditMonthlyMode.income)
         ? _authRepo.currentUserModel!.monthlyIncome
         : _authRepo.currentUserModel!.monthlyBudget;
@@ -53,15 +53,21 @@ class EditMonthlyBloc extends Bloc<EditMonthlyEvent, EditMonthlyState> {
     );
   }
 
-  void _setAmountInput(SetAmountInput event, emit) {
+  void _setAmountInput(SetAmountInput event, Emitter<EditMonthlyState> emit) {
     emit(state.copyWith(amount: event.newValue));
   }
 
-  void _chnageTempRecDay(ChangeTempRecDay event, emit) {
+  void _chnageTempRecDay(
+    ChangeTempRecDay event,
+    Emitter<EditMonthlyState> emit,
+  ) {
     emit(state.copyWith(dateRec: event.value));
   }
 
-  void _saveNewMonthly(SaveNewMonthly event, _) async {
+  Future<void> _saveNewMonthly(
+    SaveNewMonthly event,
+    Emitter<EditMonthlyState> emit,
+  ) async {
     final connectivityResult = await (Connectivity().checkConnectivity());
     if (!(connectivityResult[0] == ConnectivityResult.mobile ||
         connectivityResult[0] == ConnectivityResult.wifi)) {

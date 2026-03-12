@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../core/common_widget.dart';
 import '../../../../../core/route.dart';
@@ -27,8 +26,8 @@ Widget todayExpensesWidget(BuildContext context, ExpenseModel expenseModel) {
     },
     behavior: HitTestBehavior.opaque,
     child: Container(
-      margin: EdgeInsets.only(left: 24.w, right: 24.w),
-      padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 16.w),
+      margin: const EdgeInsets.only(left: 24, right: 24),
+      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
       width: double.infinity,
       decoration: BoxDecoration(
         color: const Color(0x3D787880),
@@ -37,7 +36,7 @@ Widget todayExpensesWidget(BuildContext context, ExpenseModel expenseModel) {
       child: Row(
         children: [
           Container(
-            padding: EdgeInsets.all(5.w),
+            padding: const EdgeInsets.all(5),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(5),
@@ -48,17 +47,17 @@ Widget todayExpensesWidget(BuildContext context, ExpenseModel expenseModel) {
                   0,
                   expenseModel.categories.indexOf(" "),
                 )}",
-                style: TextStyle(fontSize: 9.sp),
+                style: const TextStyle(fontSize: 9),
               ),
             ),
           ),
-          SizedBox(width: 12.w),
+          const SizedBox(width: 12),
           Text(
             expenseModel.item,
             textAlign: TextAlign.center,
-            style: TextStyle(
+            style: const TextStyle(
               color: Colors.white,
-              fontSize: 10.sp,
+              fontSize: 10,
               fontFamily: FontFamily.cabinetGrotesk,
               fontWeight: FontWeight.w500,
             ),
@@ -68,9 +67,9 @@ Widget todayExpensesWidget(BuildContext context, ExpenseModel expenseModel) {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               NominalMoneyFormatter(
-                textStyle: TextStyle(
+                textStyle: const TextStyle(
                   color: Colors.white,
-                  fontSize: 10.sp,
+                  fontSize: 10,
                   fontFamily: FontFamily.cabinetGrotesk,
                   fontWeight: FontWeight.w500,
                 ),
@@ -82,7 +81,7 @@ Widget todayExpensesWidget(BuildContext context, ExpenseModel expenseModel) {
                 style: TextStyle(
                   color: Colors.grey.shade300,
                   fontFamily: FontFamily.cabinetGrotesk,
-                  fontSize: 8.5.sp,
+                  fontSize: 8.5,
                   fontWeight: FontWeight.bold,
                 ),
               ),

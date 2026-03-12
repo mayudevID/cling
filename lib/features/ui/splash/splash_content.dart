@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../injection.dart';
 import '../../../main.dart';
@@ -50,8 +49,8 @@ class _SplashContentState extends State<SplashContent>
   //* Animation Pict
 
   late final Animation<RelativeRect> _tween = RelativeRectTween(
-    begin: RelativeRect.fromLTRB(0, 0, 0, -5.h),
-    end: RelativeRect.fromLTRB(0, 0, 0, 12.h),
+    begin: RelativeRect.fromLTRB(0, 0, 0, -5),
+    end: RelativeRect.fromLTRB(0, 0, 0, 12),
   ).animate(
     CurvedAnimation(
       parent: _controller,
@@ -62,8 +61,8 @@ class _SplashContentState extends State<SplashContent>
   //* Animation Text
 
   late final Animation<RelativeRect> _tweenText = RelativeRectTween(
-    begin: RelativeRect.fromLTRB(_leftText, 505.h, 0, 0),
-    end: RelativeRect.fromLTRB(_leftText, 534.h, 0, 0),
+    begin: RelativeRect.fromLTRB(_leftText, 505, 0, 0),
+    end: RelativeRect.fromLTRB(_leftText, 534, 0, 0),
   ).animate(
     CurvedAnimation(
       parent: _controller,
@@ -117,7 +116,7 @@ class _SplashContentState extends State<SplashContent>
   }
 
   void preloadSvg() async {
-    for (SvgGenImage image in Assets.lib.resources.images.values) {
+    for (final SvgGenImage image in Assets.lib.resources.images.values) {
       final SvgAssetLoader loader = SvgAssetLoader(image.path);
       await svg.cache.putIfAbsent(
         loader.cacheKey(null),
@@ -141,29 +140,25 @@ class _SplashContentState extends State<SplashContent>
           rect: _tween,
           child: Center(
             child: Assets.lib.resources.images.logo.svg(
-              width: 123.w,
+              width: 123,
             ),
           ),
         ),
         Positioned(
-          left: 50.w + (_textSize(nameApp, _styleText).width / 2).w,
-          top: 50.h + 20.w,
+          left: 50 + (_textSize(nameApp, _styleText).width / 2),
+          top: 50 + 20,
           child: ScaleTransition(
             scale: _animateScale,
             child: RotationTransition(
               turns: _animateRotate,
               child: Container(
-                width: 40.w,
-                height: 40.w,
+                width: 40,
+                height: 40,
                 decoration: const ShapeDecoration(
                   color: Color(0xFFF2D82D),
                   shape: StarBorder(
                     points: 4,
                     innerRadiusRatio: 0.39,
-                    pointRounding: 0,
-                    valleyRounding: 0,
-                    rotation: 0,
-                    squash: 0,
                   ),
                 ),
               ),
@@ -187,7 +182,7 @@ class _SplashContentState extends State<SplashContent>
         text: TextSpan(text: text, style: style),
         maxLines: 1,
         textDirection: TextDirection.ltr)
-      ..layout(minWidth: 0, maxWidth: double.infinity);
+      ..layout();
     return textPainter.size;
   }
 }

@@ -1,5 +1,5 @@
 import 'package:bloc/bloc.dart';
-import 'package:cling/features/model/goal_model.dart';
+import '../../../../model/goal_model.dart';
 import 'package:equatable/equatable.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
@@ -23,7 +23,10 @@ class GoalListBloc extends Bloc<GoalListEvent, GoalListState> {
   bool _firstAttempt = true;
   bool _loadAgain = true;
 
-  void _getGoalsList(event, emit) async {
+  Future<void> _getGoalsList(
+    GetGoalsList event,
+    Emitter<GoalListState> emit,
+  ) async {
     if (_loadAgain == false) {
       Logger.Yellow.log("Loader: No DATA");
       state.refreshController.loadNoData();
@@ -51,7 +54,7 @@ class GoalListBloc extends Bloc<GoalListEvent, GoalListState> {
     final dataList = await _dbRepo.getGoalsList(_idOffset!);
 
     if (dataList.isNotEmpty) {
-      var dataListNew = state.listGoalModel.toList(growable: true);
+      final List<GoalModel> dataListNew = state.listGoalModel.toList(growable: true);
       if (_firstAttempt) {
         _firstAttempt = false;
         dataListNew.add(lastRowData!);
@@ -71,16 +74,22 @@ class GoalListBloc extends Bloc<GoalListEvent, GoalListState> {
     }
   }
 
-  void _updateGoalFromGL(UpdateGoalFromGL event, emit) {
-    var dataList = state.listGoalModel.toList(growable: true);
+  void _updateGoalFromGL(
+    UpdateGoalFromGL event,
+    Emitter<GoalListState> emit,
+  ) {
+    final List<GoalModel> dataList = state.listGoalModel.toList(growable: true);
     final idxLoc = dataList.indexWhere((e) => e.id == event.newGoalModel.id);
     if (idxLoc == -1) return;
     dataList[idxLoc] = event.newGoalModel;
     emit(state.copyWith(listGoalModel: dataList));
   }
 
-  void _deleteGoalFromGL(DeleteGoalFromGL event, emit) {
-    var dataList = state.listGoalModel.toList(growable: true);
+  void _deleteGoalFromGL(
+    DeleteGoalFromGL event,
+    Emitter<GoalListState> emit,
+  ) {
+    final List<GoalModel> dataList = state.listGoalModel.toList(growable: true);
     dataList.removeWhere((e) => e.id == event.id);
     emit(state.copyWith(listGoalModel: dataList));
   }

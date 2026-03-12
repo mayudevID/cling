@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../core/common_widget.dart';
 import '../../../../../core/route.dart';
@@ -24,10 +23,10 @@ Widget widgetGoals(
     },
     child: Container(
       margin: EdgeInsets.only(
-        left: (index == 0) ? 24.w : 12.w,
-        right: (index == length - 1) ? 24.w : 0,
+        left: (index == 0) ? 24 : 12,
+        right: (index == length - 1) ? 24 : 0,
       ),
-      padding: EdgeInsets.symmetric(vertical: 16.w, horizontal: 16.w),
+      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
       decoration: BoxDecoration(
         color: const Color(0x3D787880),
         borderRadius: BorderRadius.circular(10),
@@ -35,39 +34,39 @@ Widget widgetGoals(
       child: Column(
         children: [
           Container(
-            padding: EdgeInsets.all(8.w),
+            padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(5),
             ),
-            child: Text(goalModel.image, style: TextStyle(fontSize: 18.sp)),
+            child: Text(goalModel.image, style: const TextStyle(fontSize: 18)),
           ),
-          SizedBox(height: 12.h),
+          const SizedBox(height: 12),
           Text(
             goalModel.name,
             textAlign: TextAlign.center,
             maxLines: 1,
-            style: TextStyle(
+            style: const TextStyle(
               color: Colors.white,
-              fontSize: 10.sp,
+              fontSize: 10,
               fontFamily: FontFamily.cabinetGrotesk,
               fontWeight: FontWeight.w500,
             ),
           ),
-          SizedBox(height: 4.h),
+          const SizedBox(height: 4),
           Stack(
             children: [
               Container(
-                width: 133.w,
-                height: 8.h,
+                width: 133,
+                height: 8,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(100),
-                  color: Colors.white.withOpacity(0.76),
+                  color: Colors.white.withValues(alpha: 0.76),
                 ),
               ),
               Container(
-                width: ((133.w * percent) / 100.0),
-                height: 8.h,
+                width: ((133 * percent) / 100.0),
+                height: 8,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(100),
                   color: const Color(0xFF006DE9),
@@ -75,13 +74,13 @@ Widget widgetGoals(
               ),
             ],
           ),
-          SizedBox(height: 4.h),
+          const SizedBox(height: 4),
           Row(
             children: [
               NominalMoneyFormatter(
-                textStyle: TextStyle(
+                textStyle: const TextStyle(
                   color: Colors.white,
-                  fontSize: 9.5.sp,
+                  fontSize: 9.5,
                   fontFamily: FontFamily.cabinetGrotesk,
                   fontWeight: FontWeight.w500,
                 ),
@@ -90,9 +89,9 @@ Widget widgetGoals(
               ),
               Text(
                 " / $percent%",
-                style: TextStyle(
+                style: const TextStyle(
                   color: Colors.white,
-                  fontSize: 9.5.sp,
+                  fontSize: 9.5,
                   fontFamily: FontFamily.cabinetGrotesk,
                   fontWeight: FontWeight.w500,
                 ),

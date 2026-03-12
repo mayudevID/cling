@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart' hide ModalBottomSheetRoute;
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import '../../../core/common_widget.dart';
 import '../../../core/route.dart';
 import '../../../resources/gen/fonts.gen.dart';
@@ -24,36 +24,36 @@ class OnboardPage extends StatelessWidget {
               children: [
                 const StackEmoticon(),
                 SizedBox(
-                  width: 1.sw,
-                  height: (215.h) * 2,
+                  width: MediaQuery.of(context).size.width,
+                  height: (215) * 2,
                   child: const StackStar(),
                 ),
                 const EmoticonWidget(),
               ],
             ),
-            SizedBox(
-              height: 40.h,
+            const SizedBox(
+              height: 40,
             ),
-            Text(
+            const Text(
               "Cling!",
               style: TextStyle(
-                fontSize: 60.sp,
+                fontSize: 60,
                 fontWeight: FontWeight.w400,
                 color: Colors.white,
                 fontFamily: FontFamily.bungee,
               ),
             ),
-            SizedBox(
-              height: 24.h,
+            const SizedBox(
+              height: 24,
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: Text(
                 AppLocalizations.of(context)!.onboarding,
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: const TextStyle(
                   color: Colors.white,
-                  fontSize: 16.sp,
+                  fontSize: 16,
                   fontFamily: FontFamily.cabinetGrotesk,
                   fontWeight: FontWeight.w700,
                 ),
@@ -66,9 +66,9 @@ class OnboardPage extends StatelessWidget {
                 Navigator.pushNamed(context, RouteName.register);
               },
             ),
-            SizedBox(height: 8.h),
+            const SizedBox(height: 8),
             SizedBox(
-              width: 370.w,
+              width: 370,
               child: Row(
                 children: [
                   GestureDetector(
@@ -76,8 +76,8 @@ class OnboardPage extends StatelessWidget {
                       await showBottomSheetChooseLang(context);
                     },
                     child: Container(
-                      width: 57.h,
-                      height: 57.h,
+                      width: 57,
+                      height: 57,
                       decoration: BoxDecoration(
                         border: Border.all(
                           color: Colors.white,
@@ -92,7 +92,7 @@ class OnboardPage extends StatelessWidget {
                                 0,
                                 state.selectedLanguage.text.indexOf(" "),
                               ),
-                              style: TextStyle(fontSize: 22.sp),
+                              style: const TextStyle(fontSize: 22),
                             );
                           },
                         ),
@@ -107,9 +107,9 @@ class OnboardPage extends StatelessWidget {
                     child: Text(
                       AppLocalizations.of(context)!.haveAccount,
                       textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: const Color(0xFFF599DA),
-                        fontSize: 16.sp,
+                      style: const TextStyle(
+                        color: Color(0xFFF599DA),
+                        fontSize: 16,
                         fontFamily: FontFamily.cabinetGrotesk,
                         fontWeight: FontWeight.w700,
                       ),
@@ -118,8 +118,8 @@ class OnboardPage extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(
-              height: 24.h,
+            const SizedBox(
+              height: 24,
             ),
           ],
         ),

@@ -1,7 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../core/common_widget.dart';
 import '../../../../../core/route.dart';
@@ -35,34 +34,34 @@ class AddGoalPageContent extends StatelessWidget {
         resizeToAvoidBottomInset: false,
         backgroundColor: Colors.black,
         body: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24.w),
+          padding: EdgeInsets.symmetric(horizontal: 24),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: 16.h),
+              SizedBox(height: 16),
               Text(
                 AppLocalizations.of(context)!.addGoals,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: 20.sp,
+                  fontSize: 20,
                   fontFamily: FontFamily.cabinetGrotesk,
                   fontWeight: FontWeight.w700,
                 ),
               ),
-              SizedBox(height: 32.h),
+              SizedBox(height: 32),
               Center(child: addGoalLogoPicker(context)),
-              SizedBox(height: 24.h),
+              SizedBox(height: 24),
               Text(
                 AppLocalizations.of(context)!.goalName,
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: 10.sp,
+                  fontSize: 10,
                   fontFamily: FontFamily.cabinetGrotesk,
                   fontWeight: FontWeight.w800,
                 ),
               ),
-              SizedBox(height: 8.h),
+              SizedBox(height: 8),
               Container(
                 decoration: ShapeDecoration(
                   color: const Color(0xFF313131),
@@ -71,8 +70,8 @@ class AddGoalPageContent extends StatelessWidget {
                   ),
                 ),
                 padding: EdgeInsets.symmetric(
-                  vertical: 16.h,
-                  horizontal: 16.w,
+                  vertical: 16,
+                  horizontal: 16,
                 ),
                 child: TextFormField(
                   onChanged: (value) {
@@ -81,7 +80,7 @@ class AddGoalPageContent extends StatelessWidget {
                   cursorColor: Colors.white,
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 10.5.sp,
+                    fontSize: 10.5,
                     fontFamily: FontFamily.cabinetGrotesk,
                     fontWeight: FontWeight.w500,
                   ),
@@ -89,7 +88,7 @@ class AddGoalPageContent extends StatelessWidget {
                     hintText: "Enter Goal",
                     hintStyle: TextStyle(
                       color: Colors.grey,
-                      fontSize: 10.5.sp,
+                      fontSize: 10.5,
                       fontFamily: FontFamily.cabinetGrotesk,
                       fontWeight: FontWeight.w500,
                     ),
@@ -97,7 +96,7 @@ class AddGoalPageContent extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                height: 16.h,
+                height: 16,
               ),
               BlocBuilder<LangCurrencyBloc, LangCurrencyState>(
                 buildWhen: (p, c) {
@@ -108,14 +107,14 @@ class AddGoalPageContent extends StatelessWidget {
                     "Target (${state.selectedCurrency.name})",
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 10.sp,
+                      fontSize: 10,
                       fontFamily: FontFamily.cabinetGrotesk,
                       fontWeight: FontWeight.w800,
                     ),
                   );
                 },
               ),
-              SizedBox(height: 8.h),
+              SizedBox(height: 8),
               GestureDetector(
                 onTap: () async {
                   final amountRes = await Navigator.pushNamed(
@@ -139,8 +138,8 @@ class AddGoalPageContent extends StatelessWidget {
                     ),
                   ),
                   padding: EdgeInsets.symmetric(
-                    vertical: 16.h,
-                    horizontal: 16.w,
+                    vertical: 16,
+                    horizontal: 16,
                   ),
                   child: Row(
                     children: [
@@ -154,14 +153,14 @@ class AddGoalPageContent extends StatelessWidget {
                             state.selectedCurrency.name,
                             style: TextStyle(
                               color: Colors.white,
-                              fontSize: 10.sp,
+                              fontSize: 10,
                               fontFamily: FontFamily.cabinetGrotesk,
                               fontWeight: FontWeight.w800,
                             ),
                           );
                         },
                       ),
-                      SizedBox(width: 10.w),
+                      SizedBox(width: 10),
                       Expanded(
                         child: BlocBuilder<AddGoalBloc, AddGoalState>(
                           buildWhen: (p, c) {
@@ -171,7 +170,7 @@ class AddGoalPageContent extends StatelessWidget {
                             return NominalMoneyFormatter(
                               textStyle: TextStyle(
                                 color: Colors.white,
-                                fontSize: 10.sp,
+                                fontSize: 10,
                                 fontFamily: FontFamily.cabinetGrotesk,
                                 fontWeight: FontWeight.w500,
                               ),
@@ -185,7 +184,7 @@ class AddGoalPageContent extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(height: 32.h),
+              SizedBox(height: 32),
               PinkButton(
                 onTap: () {
                   FocusManager.instance.primaryFocus?.unfocus();
@@ -193,7 +192,7 @@ class AddGoalPageContent extends StatelessWidget {
                 },
                 name: AppLocalizations.of(context)!.submit,
               ),
-              SizedBox(height: 16.h),
+              SizedBox(height: 16),
               BlackButton(
                 onTap: () {
                   FocusManager.instance.primaryFocus?.unfocus();

@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:cling/core/logger.dart';
-import 'package:cling/main.dart';
+import '../../../core/logger.dart';
+import '../../../main.dart';
 
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';

@@ -1,8 +1,7 @@
-import 'package:cling/features/model/currency.dart';
+import '../../../model/currency.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../resources/gen/assets.gen.dart';
 import '../../../../../resources/gen/fonts.gen.dart';
@@ -20,18 +19,18 @@ Widget dropDownCurrency(BuildContext context) {
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
-            padding: EdgeInsets.symmetric(
-              vertical: 16.h,
-              horizontal: 16.w,
+            padding: const EdgeInsets.symmetric(
+              vertical: 16,
+              horizontal: 16,
             ),
             child: Row(
               children: [
                 Text(
                   state.selectedCurrency.longName,
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.white,
-                    fontSize: 10.5.sp,
+                    fontSize: 10.5,
                     fontFamily: FontFamily.cabinetGrotesk,
                     fontWeight: FontWeight.w500,
                   ),
@@ -43,13 +42,13 @@ Widget dropDownCurrency(BuildContext context) {
           ),
           items: Currency.values
               .map(
-                (item) => DropdownMenuItem<Currency>(
+                (item) => DropdownItem<Currency>(
                   value: item,
                   child: Text(
                     item.longName,
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.white,
-                      fontSize: 10.5.sp,
+                      fontSize: 10.5,
                       fontFamily: FontFamily.cabinetGrotesk,
                       fontWeight: FontWeight.w500,
                     ),
@@ -61,7 +60,7 @@ Widget dropDownCurrency(BuildContext context) {
             context.read<RegisterBloc>().add(ChangeCurrency(value!));
           },
           dropdownStyleData: DropdownStyleData(
-            width: 390.w,
+            width: 390,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
               color: const Color(0xFF313131),

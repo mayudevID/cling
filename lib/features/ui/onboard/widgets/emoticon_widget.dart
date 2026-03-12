@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../resources/gen/assets.gen.dart';
 
@@ -19,8 +18,8 @@ class _EmoticonWidgetState extends State<EmoticonWidget>
   @override
   void initState() {
     imageEmot = Assets.lib.resources.imagesPng.emoticon.image(
-      width: 230.w,
-      height: 230.w,
+      width: 230,
+      height: 230,
     );
 
     animation = AnimationController(
@@ -29,8 +28,8 @@ class _EmoticonWidgetState extends State<EmoticonWidget>
     );
 
     animationTween = RelativeRectTween(
-      begin: RelativeRect.fromLTRB(0, 0, 0, -1 * 55.h),
-      end: RelativeRect.fromLTRB(0, 0, 0, 55.h),
+      begin: RelativeRect.fromLTRB(0, 0, 0, -1 * 55),
+      end: RelativeRect.fromLTRB(0, 0, 0, 55),
     ).animate(
       CurvedAnimation(
         parent: animation,

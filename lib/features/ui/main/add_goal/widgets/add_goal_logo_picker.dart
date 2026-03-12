@@ -1,23 +1,22 @@
-import 'package:cling/features/ui/main/add_goal/widgets/dialog_pick_goal_logo.dart';
+import 'dialog_pick_goal_logo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../resources/gen/assets.gen.dart';
 import '../bloc/add_goal_bloc.dart';
 
 Widget addGoalLogoPicker(BuildContext context) {
   return SizedBox(
-    width: 140.w,
-    height: 140.w,
+    width: 140,
+    height: 140,
     child: Stack(
       children: [
         Container(
-          width: 128.w,
-          height: 128.w,
-          padding: EdgeInsets.symmetric(
-            horizontal: 16.w,
-            vertical: 16.h,
+          width: 128,
+          height: 128,
+          padding: const EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 16,
           ),
           decoration: ShapeDecoration(
             color: const Color(0xFF313131),
@@ -31,8 +30,8 @@ Widget addGoalLogoPicker(BuildContext context) {
                 if (state.logoGoal.trim().isNotEmpty) {
                   return Text(
                     state.logoGoal,
-                    style: TextStyle(
-                      fontSize: 43.sp,
+                    style: const TextStyle(
+                      fontSize: 43,
                     ),
                   );
                 }
@@ -50,8 +49,8 @@ Widget addGoalLogoPicker(BuildContext context) {
               dialogPickGoalLogo(context);
             },
             child: Container(
-              width: 36.w,
-              height: 36.w,
+              width: 36,
+              height: 36,
               padding: const EdgeInsets.all(8),
               clipBehavior: Clip.antiAlias,
               decoration: ShapeDecoration(

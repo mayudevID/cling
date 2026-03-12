@@ -1,8 +1,7 @@
-import 'package:cling/core/utils.dart';
+import '../../../../../core/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:numberpicker/numberpicker.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../core/common_widget.dart';
 import '../../../../../core/route.dart';
@@ -51,7 +50,7 @@ class EditMonBudgetOrIncomePageContent extends StatelessWidget {
         key: EditMonBudgetOrIncomePage.navEditMon,
         backgroundColor: const Color(0xFF101010),
         body: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24.w),
+          padding: const EdgeInsets.symmetric(horizontal: 24),
           child: Column(
             children: [
               appBarProfile(
@@ -64,16 +63,16 @@ class EditMonBudgetOrIncomePageContent extends StatelessWidget {
                   context.read<EditMonthlyBloc>().add(SaveNewMonthly());
                 },
               ),
-              SizedBox(height: 32.h),
+              const SizedBox(height: 32),
               Align(
                 alignment: Alignment.centerLeft,
                 child: BlocBuilder<LangCurrencyBloc, LangCurrencyState>(
                   builder: (context, state) {
                     return Text(
                       "Target (${state.selectedCurrency.name})",
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.white,
-                        fontSize: 10.sp,
+                        fontSize: 10,
                         fontFamily: FontFamily.cabinetGrotesk,
                         fontWeight: FontWeight.w800,
                       ),
@@ -81,7 +80,7 @@ class EditMonBudgetOrIncomePageContent extends StatelessWidget {
                   },
                 ),
               ),
-              SizedBox(height: 8.h),
+              const SizedBox(height: 8),
               GestureDetector(
                 onTap: () async {
                   final amountRes = await Navigator.pushNamed(
@@ -104,9 +103,9 @@ class EditMonBudgetOrIncomePageContent extends StatelessWidget {
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  padding: EdgeInsets.symmetric(
-                    vertical: 16.h,
-                    horizontal: 16.w,
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 16,
+                    horizontal: 16,
                   ),
                   child: Row(
                     children: [
@@ -118,16 +117,16 @@ class EditMonBudgetOrIncomePageContent extends StatelessWidget {
                         builder: (context, state) {
                           return Text(
                             state.selectedCurrency.name,
-                            style: TextStyle(
+                            style: const TextStyle(
                               color: Colors.white,
-                              fontSize: 10.sp,
+                              fontSize: 10,
                               fontFamily: FontFamily.cabinetGrotesk,
                               fontWeight: FontWeight.w800,
                             ),
                           );
                         },
                       ),
-                      SizedBox(width: 10.w),
+                      const SizedBox(width: 10),
                       Expanded(
                         child: BlocBuilder<EditMonthlyBloc, EditMonthlyState>(
                           buildWhen: (p, c) {
@@ -135,9 +134,9 @@ class EditMonBudgetOrIncomePageContent extends StatelessWidget {
                           },
                           builder: (context, state) {
                             return NominalMoneyFormatter(
-                              textStyle: TextStyle(
+                              textStyle: const TextStyle(
                                 color: Colors.white,
-                                fontSize: 10.sp,
+                                fontSize: 10,
                                 fontFamily: FontFamily.cabinetGrotesk,
                                 fontWeight: FontWeight.w500,
                               ),
@@ -152,7 +151,7 @@ class EditMonBudgetOrIncomePageContent extends StatelessWidget {
                 ),
               ),
               if (monthlyMode == EditMonthlyMode.income) ...[
-                SizedBox(height: 32.h),
+                const SizedBox(height: 32),
                 Text(
                   AppLocalizations.of(context)!.recurringEveryDate,
                   style: const TextStyle(
@@ -161,13 +160,13 @@ class EditMonBudgetOrIncomePageContent extends StatelessWidget {
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-                SizedBox(height: 16.h),
+                const SizedBox(height: 16),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     GestureDetector(
                       onTap: () {
-                        int day =
+                        final int day =
                             context.read<EditMonthlyBloc>().state.dateRec - 1;
                         context
                             .read<EditMonthlyBloc>()
@@ -177,7 +176,7 @@ class EditMonBudgetOrIncomePageContent extends StatelessWidget {
                           .lib.resources.images.fluentChevronLeft24Filled
                           .svg(),
                     ),
-                    SizedBox(width: 16.w),
+                    const SizedBox(width: 16),
                     BlocBuilder<EditMonthlyBloc, EditMonthlyState>(
                       buildWhen: (p, c) => p.dateRec != c.dateRec,
                       builder: (context, state) {
@@ -196,11 +195,11 @@ class EditMonBudgetOrIncomePageContent extends StatelessWidget {
                             fontFamily: FontFamily.cabinetGrotesk,
                             fontWeight: FontWeight.w600,
                           ),
-                          selectedTextStyle: TextStyle(
+                          selectedTextStyle: const TextStyle(
                             color: Colors.white,
                             fontFamily: FontFamily.cabinetGrotesk,
                             fontWeight: FontWeight.w600,
-                            fontSize: 14.sp,
+                            fontSize: 14,
                           ),
                           value: state.dateRec,
                           minValue: 0,
@@ -209,10 +208,10 @@ class EditMonBudgetOrIncomePageContent extends StatelessWidget {
                         );
                       },
                     ),
-                    SizedBox(width: 16.w),
+                    const SizedBox(width: 16),
                     GestureDetector(
                       onTap: () {
-                        int day =
+                        final int day =
                             context.read<EditMonthlyBloc>().state.dateRec + 1;
                         context
                             .read<EditMonthlyBloc>()
