@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
 import 'package:nil/nil.dart';
@@ -29,14 +30,13 @@ class MainPageContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        resizeToAvoidBottomInset: false,
-        backgroundColor: const Color(0xFF101010),
-        body: SizedBox(
-          width: 100,
-          height: 100,
-          child: Stack(
+    return AnnotatedRegion(
+      value: SystemUiOverlayStyle.light,
+      child: SafeArea(
+        child: Scaffold(
+          resizeToAvoidBottomInset: false,
+          backgroundColor: const Color(0xFF101010),
+          body: Stack(
             children: [
               BlocBuilder<MainBloc, MainState>(
                 buildWhen: (previous, current) {
@@ -56,17 +56,24 @@ class MainPageContent extends StatelessWidget {
                   );
                 },
               ),
-              const Positioned(bottom: 0, child: CustomNavBar()),
+              const Positioned(
+                bottom: 0,
+                left: 0,
+                right: 0,
+                child: CustomNavBar(),
+              ),
             ],
           ),
-        ),
-        floatingActionButtonLocation: ExpandableFab.location,
-        floatingActionButton: BlocBuilder<MainBloc, MainState>(
-          builder: (context, state) {
-            if (state.tabIndex == 0) return customFloatingActionButton(context);
+          floatingActionButtonLocation: ExpandableFab.location,
+          floatingActionButton: BlocBuilder<MainBloc, MainState>(
+            builder: (context, state) {
+              if (state.tabIndex == 0) {
+                return customFloatingActionButton(context);
+              }
 
-            return nil;
-          },
+              return nil;
+            },
+          ),
         ),
       ),
     );

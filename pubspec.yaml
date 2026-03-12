@@ -80,11 +80,25 @@ flutter:
   fonts:
     - family: Bungee
       fonts:
-        - asset: lib/resources/fonts/Bungee-Regular.ttf
+        - asset: lib/resources/fonts/bungee/Bungee-Regular.ttf
     - family: Cabinet Grotesk
       fonts:
-        - asset: lib/resources/fonts/CabinetGrotesk-Bold.otf
-        - asset: lib/resources/fonts/CabinetGrotesk-Regular.otf
+        - asset: lib/resources/fonts/cabinet-grotesk/CabinetGrotesk-Thin.otf
+          weight: 100
+        - asset: lib/resources/fonts/cabinet-grotesk/CabinetGrotesk-Extralight.otf
+          weight: 200
+        - asset: lib/resources/fonts/cabinet-grotesk/CabinetGrotesk-Light.otf
+          weight: 300
+        - asset: lib/resources/fonts/cabinet-grotesk/CabinetGrotesk-Regular.otf
+          weight: 400
+        - asset: lib/resources/fonts/cabinet-grotesk/CabinetGrotesk-Medium.otf
+          weight: 500
+        - asset: lib/resources/fonts/cabinet-grotesk/CabinetGrotesk-Bold.otf
+          weight: 700
+        - asset: lib/resources/fonts/cabinet-grotesk/CabinetGrotesk-Extrabold.otf
+          weight: 800
+        - asset: lib/resources/fonts/cabinet-grotesk/CabinetGrotesk-Black.otf
+          weight: 900
 
 arb_generator:
   input_filepath: "lib/resources/localization/localization_cling.csv"

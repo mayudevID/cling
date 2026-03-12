@@ -10,11 +10,11 @@ class CustomNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 100 - 40,
+      width: MediaQuery.of(context).size.width,
       margin: const EdgeInsets.only(
-        bottom: 11,
         left: 20,
         right: 20,
+        bottom: 15,
       ),
       padding: const EdgeInsets.symmetric(
         vertical: 25.5,
@@ -27,57 +27,65 @@ class CustomNavBar extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          BlocBuilder<MainBloc, MainState>(
-            buildWhen: (p, c) {
-              return isStartBuild(p, c, 0);
-            },
-            builder: (context, state) {
-              return buildTabButton(
-                state: state,
-                onPressed: () => changeTab(state, context, 0),
-                icon: Assets.lib.resources.images.fluentHome48Filled.svg(),
-                isSelected: state.tabIndex == 0,
-              );
-            },
+          Flexible(
+            child: BlocBuilder<MainBloc, MainState>(
+              buildWhen: (p, c) {
+                return isStartBuild(p, c, 0);
+              },
+              builder: (context, state) {
+                return buildTabButton(
+                  state: state,
+                  onPressed: () => changeTab(state, context, 0),
+                  icon: Assets.lib.resources.images.fluentHome48Filled.svg(),
+                  isSelected: state.tabIndex == 0,
+                );
+              },
+            ),
           ),
-          BlocBuilder<MainBloc, MainState>(
-            buildWhen: (p, c) {
-              return isStartBuild(p, c, 1);
-            },
-            builder: (context, state) {
-              return buildTabButton(
-                state: state,
-                onPressed: () => changeTab(state, context, 1),
-                icon: Assets.lib.resources.images.transaction.svg(),
-                isSelected: state.tabIndex == 1,
-              );
-            },
+          Flexible(
+            child: BlocBuilder<MainBloc, MainState>(
+              buildWhen: (p, c) {
+                return isStartBuild(p, c, 1);
+              },
+              builder: (context, state) {
+                return buildTabButton(
+                  state: state,
+                  onPressed: () => changeTab(state, context, 1),
+                  icon: Assets.lib.resources.images.transaction.svg(),
+                  isSelected: state.tabIndex == 1,
+                );
+              },
+            ),
           ),
-          BlocBuilder<MainBloc, MainState>(
-            buildWhen: (p, c) {
-              return isStartBuild(p, c, 2);
-            },
-            builder: (context, state) {
-              return buildTabButton(
-                state: state,
-                onPressed: () => changeTab(state, context, 2),
-                icon: Assets.lib.resources.images.biBarChartFill.svg(),
-                isSelected: state.tabIndex == 2,
-              );
-            },
+          Flexible(
+            child: BlocBuilder<MainBloc, MainState>(
+              buildWhen: (p, c) {
+                return isStartBuild(p, c, 2);
+              },
+              builder: (context, state) {
+                return buildTabButton(
+                  state: state,
+                  onPressed: () => changeTab(state, context, 2),
+                  icon: Assets.lib.resources.images.biBarChartFill.svg(),
+                  isSelected: state.tabIndex == 2,
+                );
+              },
+            ),
           ),
-          BlocBuilder<MainBloc, MainState>(
-            buildWhen: (p, c) {
-              return isStartBuild(p, c, 3);
-            },
-            builder: (context, state) {
-              return buildTabButton(
-                state: state,
-                onPressed: () => changeTab(state, context, 3),
-                icon: Assets.lib.resources.images.iconamoonProfileFill.svg(),
-                isSelected: state.tabIndex == 3,
-              );
-            },
+          Flexible(
+            child: BlocBuilder<MainBloc, MainState>(
+              buildWhen: (p, c) {
+                return isStartBuild(p, c, 3);
+              },
+              builder: (context, state) {
+                return buildTabButton(
+                  state: state,
+                  onPressed: () => changeTab(state, context, 3),
+                  icon: Assets.lib.resources.images.iconamoonProfileFill.svg(),
+                  isSelected: state.tabIndex == 3,
+                );
+              },
+            ),
           ),
         ],
       ),

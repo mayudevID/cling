@@ -98,7 +98,7 @@ class HomePage extends StatelessWidget {
               final lengthD = state.totalGoals > 5 ? 6 : state.listGoals.length;
 
               return SizedBox(
-                height: 156.855,
+                height: 128,
                 child: ListView.builder(
                   shrinkWrap: true,
                   scrollDirection: Axis.horizontal,
@@ -136,21 +136,18 @@ class HomePage extends StatelessWidget {
                 );
               }
 
-              return MediaQuery.removePadding(
-                context: context,
-                removeTop: true,
-                child: ListView.separated(
-                  itemCount: state.listTodayExpenses.length,
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemBuilder: (context, index) {
-                    return todayExpensesWidget(
-                      context,
-                      state.listTodayExpenses[index],
-                    );
-                  },
-                  separatorBuilder: (_, idx) => const SizedBox(height: 6),
-                ),
+              return ListView.separated(
+                padding: EdgeInsets.zero,
+                itemCount: state.listTodayExpenses.length,
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemBuilder: (context, index) {
+                  return todayExpensesWidget(
+                    context,
+                    state.listTodayExpenses[index],
+                  );
+                },
+                separatorBuilder: (_, idx) => const SizedBox(height: 6),
               );
             },
           ),
