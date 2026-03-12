@@ -51,7 +51,7 @@ Widget itemDateAmountWidget(
                   color: Colors.white,
                   fontFamily: FontFamily.cabinetGrotesk,
                   fontWeight: FontWeight.bold,
-                  fontSize: 10.5,
+                  fontSize: 12.5,
                 ),
               ),
               Text(

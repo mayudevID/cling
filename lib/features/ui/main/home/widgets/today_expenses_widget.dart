@@ -57,7 +57,7 @@ Widget todayExpensesWidget(BuildContext context, ExpenseModel expenseModel) {
             textAlign: TextAlign.center,
             style: const TextStyle(
               color: Colors.white,
-              fontSize: 10,
+              fontSize: 12,
               fontFamily: FontFamily.cabinetGrotesk,
               fontWeight: FontWeight.w500,
             ),
@@ -69,7 +69,7 @@ Widget todayExpensesWidget(BuildContext context, ExpenseModel expenseModel) {
               NominalMoneyFormatter(
                 textStyle: const TextStyle(
                   color: Colors.white,
-                  fontSize: 10,
+                  fontSize: 12,
                   fontFamily: FontFamily.cabinetGrotesk,
                   fontWeight: FontWeight.w500,
                 ),

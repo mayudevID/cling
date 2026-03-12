@@ -6,7 +6,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../core/exception.dart';
 
 class AuthRepository {
-
   AuthRepository({
     required FirebaseAuth firebaseAuth,
     required FirebaseFirestore firestore,
@@ -88,9 +87,10 @@ class AuthRepository {
       email: email,
       password: password,
     );
-    if (!userCredential.user!.emailVerified) {
-      throw EmailNotVerifiedException();
-    }
+    // TODO : Handle email verification in better way. This is just temporary solution
+    // if (!userCredential.user!.emailVerified) {
+    //   throw EmailNotVerifiedException();
+    // }
 
     await saveLoginProcess(false);
     await saveRegisterProcess(false);

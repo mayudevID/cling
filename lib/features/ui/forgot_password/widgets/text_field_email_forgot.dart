@@ -25,7 +25,7 @@ class TextFieldEmailForgot extends StatelessWidget {
           cursorColor: Colors.white,
           style: const TextStyle(
             color: Colors.white,
-            fontSize: 10.5,
+            fontSize: 12.5,
             fontFamily: FontFamily.cabinetGrotesk,
             fontWeight: FontWeight.w500,
           ),
@@ -33,7 +33,7 @@ class TextFieldEmailForgot extends StatelessWidget {
             hintText: AppLocalizations.of(context)!.email,
             hintStyle: const TextStyle(
               color: Colors.grey,
-              fontSize: 10.5,
+              fontSize: 12.5,
               fontFamily: FontFamily.cabinetGrotesk,
               fontWeight: FontWeight.w500,
             ),

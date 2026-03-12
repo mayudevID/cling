@@ -36,7 +36,7 @@ Future<bool> dialogGoBackup(BuildContext context) async {
                 style: const TextStyle(
                   fontFamily: FontFamily.cabinetGrotesk,
                   fontWeight: FontWeight.bold,
-                  fontSize: 10,
+                  fontSize: 12,
                   color: Colors.black,
                 ),
               ),
@@ -47,7 +47,7 @@ Future<bool> dialogGoBackup(BuildContext context) async {
                 AppLocalizations.of(context)!.backupForDialogContent,
                 style: const TextStyle(
                   fontFamily: FontFamily.cabinetGrotesk,
-                  fontSize: 10,
+                  fontSize: 12,
                   color: Colors.black,
                 ),
                 textAlign: TextAlign.center,
@@ -74,7 +74,7 @@ Future<bool> dialogGoBackup(BuildContext context) async {
                           AppLocalizations.of(context)!.yes,
                           style: const TextStyle(
                             fontFamily: FontFamily.cabinetGrotesk,
-                            fontSize: 10,
+                            fontSize: 12,
                             color: Colors.white,
                             fontWeight: FontWeight.w700,
                           ),
@@ -101,7 +101,7 @@ Future<bool> dialogGoBackup(BuildContext context) async {
                           AppLocalizations.of(context)!.back,
                           style: const TextStyle(
                             fontFamily: FontFamily.cabinetGrotesk,
-                            fontSize: 10,
+                            fontSize: 12,
                             color: Colors.white,
                             fontWeight: FontWeight.w700,
                           ),

@@ -74,7 +74,7 @@ class SettingsPageContent extends StatelessWidget {
                       textAlign: TextAlign.center,
                       style: const TextStyle(
                         color: Colors.white,
-                        fontSize: 10,
+                        fontSize: 12,
                         fontFamily: FontFamily.cabinetGrotesk,
                         fontWeight: FontWeight.w500,
                       ),
@@ -169,7 +169,7 @@ class SettingsPageContent extends StatelessWidget {
                           textAlign: TextAlign.center,
                           style: const TextStyle(
                             color: Colors.white,
-                            fontSize: 11.5,
+                            fontSize: 13.5,
                             fontFamily: FontFamily.cabinetGrotesk,
                             fontWeight: FontWeight.w700,
                           ),
@@ -203,7 +203,7 @@ class SettingsPageContent extends StatelessWidget {
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 11.5,
+                        fontSize: 13.5,
                         fontFamily: FontFamily.cabinetGrotesk,
                         fontWeight: FontWeight.w700,
                       ),

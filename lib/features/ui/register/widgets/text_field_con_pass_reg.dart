@@ -65,7 +65,7 @@ class _TextFieldConPassRegState extends State<TextFieldConPassReg> {
                   cursorColor: Colors.white,
                   style: const TextStyle(
                     color: Colors.white,
-                    fontSize: 10.5,
+                    fontSize: 12.5,
                     fontFamily: FontFamily.cabinetGrotesk,
                     fontWeight: FontWeight.w500,
                   ),
@@ -73,7 +73,7 @@ class _TextFieldConPassRegState extends State<TextFieldConPassReg> {
                     hintText: AppLocalizations.of(context)!.confirmPassword,
                     hintStyle: const TextStyle(
                       color: Colors.grey,
-                      fontSize: 10.5,
+                      fontSize: 12.5,
                       fontFamily: FontFamily.cabinetGrotesk,
                       fontWeight: FontWeight.w500,
                     ),

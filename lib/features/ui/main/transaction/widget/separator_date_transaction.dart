@@ -37,7 +37,7 @@ Widget separatorDateTransaction(BuildContext context, TransactionModel model) {
                   color: Colors.white,
                   fontFamily: FontFamily.cabinetGrotesk,
                   fontWeight: FontWeight.bold,
-                  fontSize: 10,
+                  fontSize: 12,
                 ),
               ),
               Text(

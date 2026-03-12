@@ -30,7 +30,7 @@ Widget targetGoalWidget(BuildContext context) {
               textAlign: TextAlign.center,
               style: const TextStyle(
                 color: Colors.white,
-                fontSize: 10,
+                fontSize: 12,
                 fontFamily: FontFamily.cabinetGrotesk,
                 fontWeight: FontWeight.w700,
               ),
@@ -43,7 +43,7 @@ Widget targetGoalWidget(BuildContext context) {
                 return NominalMoneyFormatter(
                   textStyle: const TextStyle(
                     color: Colors.white,
-                    fontSize: 10,
+                    fontSize: 12,
                     fontFamily: FontFamily.cabinetGrotesk,
                     fontWeight: FontWeight.w700,
                   ),

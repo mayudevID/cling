@@ -18,7 +18,7 @@ List<Widget> rowCategories(String data) {
       data.substring(data.indexOf(" ") + 1),
       style: const TextStyle(
         color: Colors.white,
-        fontSize: 10.5,
+        fontSize: 12.5,
         fontFamily: FontFamily.cabinetGrotesk,
         fontWeight: FontWeight.w500,
       ),

@@ -52,7 +52,7 @@ Widget goalListWidget(BuildContext context, GoalModel goalModel) {
                       goalModel.name,
                       style: const TextStyle(
                         color: Colors.white,
-                        fontSize: 10.8,
+                        fontSize: 12.8,
                         fontFamily: FontFamily.cabinetGrotesk,
                         fontWeight: FontWeight.bold,
                       ),

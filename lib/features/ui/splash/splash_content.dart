@@ -49,8 +49,8 @@ class _SplashContentState extends State<SplashContent>
   //* Animation Pict
 
   late final Animation<RelativeRect> _tween = RelativeRectTween(
-    begin: RelativeRect.fromLTRB(0, 0, 0, -5),
-    end: RelativeRect.fromLTRB(0, 0, 0, 12),
+    begin: const RelativeRect.fromLTRB(0, 0, 0, -5),
+    end: const RelativeRect.fromLTRB(0, 0, 0, 12),
   ).animate(
     CurvedAnimation(
       parent: _controller,

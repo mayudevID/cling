@@ -113,41 +113,35 @@ class _MainAppState extends State<MainApp> {
   }
 
   Widget initApp() {
-    return ScreenUtilInit(
-      designSize: const Size(430, 932),
-      ensureScreenSize: true,
-      builder: (context, child) {
-        return GestureDetector(
-          onTap: () {
-            final FocusScopeNode currentFocus = FocusScope.of(context);
+    return GestureDetector(
+      onTap: () {
+        final FocusScopeNode currentFocus = FocusScope.of(context);
 
-            if (!currentFocus.hasPrimaryFocus) {
-              currentFocus.unfocus();
-            }
-          },
-          child: BlocBuilder<LangCurrencyBloc, LangCurrencyState>(
-            buildWhen: (prev, curr) {
-              return prev.selectedLanguage != curr.selectedLanguage;
-            },
-            builder: (context, state) {
-              return MaterialApp(
-                builder: FToastBuilder(),
-                navigatorKey: MainApp.navKeyGlobal,
-                theme: ThemeData(primaryColor: Colors.white),
-                locale: state.selectedLanguage.value,
-                supportedLocales: AppLocalizations.supportedLocales,
-                localizationsDelegates: const [
-                  ...AppLocalizations.localizationsDelegates,
-                  GlobalMaterialLocalizations.delegate,
-                  MonthYearPickerLocalizations.delegate,
-                ],
-                onGenerateRoute: RouteGen.generateRoute,
-                debugShowCheckedModeBanner: false,
-              );
-            },
-          ),
-        );
+        if (!currentFocus.hasPrimaryFocus) {
+          currentFocus.unfocus();
+        }
       },
+      child: BlocBuilder<LangCurrencyBloc, LangCurrencyState>(
+        buildWhen: (prev, curr) {
+          return prev.selectedLanguage != curr.selectedLanguage;
+        },
+        builder: (context, state) {
+          return MaterialApp(
+            builder: FToastBuilder(),
+            navigatorKey: MainApp.navKeyGlobal,
+            theme: ThemeData(primaryColor: Colors.white),
+            locale: state.selectedLanguage.value,
+            supportedLocales: AppLocalizations.supportedLocales,
+            localizationsDelegates: const [
+              ...AppLocalizations.localizationsDelegates,
+              GlobalMaterialLocalizations.delegate,
+              MonthYearPickerLocalizations.delegate,
+            ],
+            onGenerateRoute: RouteGen.generateRoute,
+            debugShowCheckedModeBanner: false,
+          );
+        },
+      ),
     );
   }
 }

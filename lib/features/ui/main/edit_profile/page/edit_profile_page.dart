@@ -53,7 +53,7 @@ class EditProfilePageContent extends StatelessWidget {
                   AppLocalizations.of(context)!.name,
                   style: const TextStyle(
                     color: Colors.white,
-                    fontSize: 10,
+                    fontSize: 12,
                     fontFamily: FontFamily.cabinetGrotesk,
                     fontWeight: FontWeight.w800,
                   ),
@@ -87,7 +87,7 @@ class EditProfilePageContent extends StatelessWidget {
                   AppLocalizations.of(context)!.email,
                   style: const TextStyle(
                     color: Colors.white,
-                    fontSize: 10,
+                    fontSize: 12,
                     fontFamily: FontFamily.cabinetGrotesk,
                     fontWeight: FontWeight.w800,
                   ),
@@ -125,7 +125,7 @@ class EditProfilePageContent extends StatelessWidget {
                   AppLocalizations.of(context)!.password,
                   style: const TextStyle(
                     color: Colors.white,
-                    fontSize: 10,
+                    fontSize: 12,
                     fontFamily: FontFamily.cabinetGrotesk,
                     fontWeight: FontWeight.w800,
                   ),

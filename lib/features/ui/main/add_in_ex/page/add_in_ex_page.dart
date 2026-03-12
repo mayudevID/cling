@@ -70,7 +70,7 @@ class AddIncomeExpensePageContent extends StatelessWidget {
                     : AppLocalizations.of(context)!.purchaseDate,
                 style: const TextStyle(
                   color: Colors.white,
-                  fontSize: 10,
+                  fontSize: 12,
                   fontFamily: FontFamily.cabinetGrotesk,
                   fontWeight: FontWeight.w800,
                 ),
@@ -84,7 +84,7 @@ class AddIncomeExpensePageContent extends StatelessWidget {
                     : AppLocalizations.of(context)!.categories,
                 style: const TextStyle(
                   color: Colors.white,
-                  fontSize: 10,
+                  fontSize: 12,
                   fontFamily: FontFamily.cabinetGrotesk,
                   fontWeight: FontWeight.w800,
                 ),
@@ -98,7 +98,7 @@ class AddIncomeExpensePageContent extends StatelessWidget {
                     : AppLocalizations.of(context)!.items,
                 style: const TextStyle(
                   color: Colors.white,
-                  fontSize: 10,
+                  fontSize: 12,
                   fontFamily: FontFamily.cabinetGrotesk,
                   fontWeight: FontWeight.w800,
                 ),
@@ -124,7 +124,7 @@ class AddIncomeExpensePageContent extends StatelessWidget {
                   cursorColor: Colors.white,
                   style: const TextStyle(
                     color: Colors.white,
-                    fontSize: 10.5,
+                    fontSize: 12.5,
                     fontFamily: FontFamily.cabinetGrotesk,
                     fontWeight: FontWeight.w500,
                   ),
@@ -134,7 +134,7 @@ class AddIncomeExpensePageContent extends StatelessWidget {
                         : AppLocalizations.of(context)!.items,
                     hintStyle: const TextStyle(
                       color: Colors.grey,
-                      fontSize: 10.5,
+                      fontSize: 12.5,
                       fontFamily: FontFamily.cabinetGrotesk,
                       fontWeight: FontWeight.w500,
                     ),
@@ -151,7 +151,7 @@ class AddIncomeExpensePageContent extends StatelessWidget {
                     '${AppLocalizations.of(context)!.amount} (${state.selectedCurrency.name})',
                     style: const TextStyle(
                       color: Colors.white,
-                      fontSize: 10,
+                      fontSize: 12,
                       fontFamily: FontFamily.cabinetGrotesk,
                       fontWeight: FontWeight.w800,
                     ),
@@ -198,7 +198,7 @@ class AddIncomeExpensePageContent extends StatelessWidget {
                             state.selectedCurrency.name,
                             style: const TextStyle(
                               color: Colors.white,
-                              fontSize: 10,
+                              fontSize: 12,
                               fontFamily: FontFamily.cabinetGrotesk,
                               fontWeight: FontWeight.w800,
                             ),
@@ -216,7 +216,7 @@ class AddIncomeExpensePageContent extends StatelessWidget {
                             return NominalMoneyFormatter(
                               textStyle: const TextStyle(
                                 color: Colors.white,
-                                fontSize: 10,
+                                fontSize: 12,
                                 fontFamily: FontFamily.cabinetGrotesk,
                                 fontWeight: FontWeight.w500,
                               ),

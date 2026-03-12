@@ -39,7 +39,7 @@ Widget changeRangeDateByCategory(BuildContext context) {
                   style: const TextStyle(
                     color: Colors.white,
                     fontFamily: FontFamily.cabinetGrotesk,
-                    fontSize: 11,
+                    fontSize: 13,
                   ),
                 );
               },

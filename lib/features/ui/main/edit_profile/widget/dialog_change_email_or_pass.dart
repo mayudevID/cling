@@ -44,7 +44,7 @@ Future<bool> dialogChangeEmailOrPassword(
                 style: const TextStyle(
                   fontFamily: FontFamily.cabinetGrotesk,
                   fontWeight: FontWeight.bold,
-                  fontSize: 10,
+                  fontSize: 12,
                   color: Colors.black,
                 ),
               ),
@@ -57,7 +57,7 @@ Future<bool> dialogChangeEmailOrPassword(
                     : AppLocalizations.of(context)!.changePassVerifyDialog,
                 style: const TextStyle(
                   fontFamily: FontFamily.cabinetGrotesk,
-                  fontSize: 10,
+                  fontSize: 12,
                   color: Colors.black,
                 ),
                 textAlign: TextAlign.center,
@@ -81,7 +81,7 @@ Future<bool> dialogChangeEmailOrPassword(
                       "OK",
                       style: TextStyle(
                         fontFamily: FontFamily.cabinetGrotesk,
-                        fontSize: 10,
+                        fontSize: 12,
                         color: Colors.black,
                       ),
                     ),
@@ -107,7 +107,7 @@ Future<bool> dialogChangeEmailOrPassword(
                       AppLocalizations.of(context)!.cancel,
                       style: const TextStyle(
                         fontFamily: FontFamily.cabinetGrotesk,
-                        fontSize: 10,
+                        fontSize: 12,
                         color: Colors.white,
                       ),
                     ),

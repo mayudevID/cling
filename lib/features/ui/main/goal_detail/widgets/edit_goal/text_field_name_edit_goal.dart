@@ -33,7 +33,7 @@ class _TextFieldNameEditGoalState extends State<TextFieldNameEditGoal> {
       cursorColor: Colors.black,
       style: const TextStyle(
         color: Colors.black,
-        fontSize: 10.5,
+        fontSize: 12.5,
         fontFamily: FontFamily.cabinetGrotesk,
         fontWeight: FontWeight.w500,
       ),
@@ -41,7 +41,7 @@ class _TextFieldNameEditGoalState extends State<TextFieldNameEditGoal> {
         hintText: AppLocalizations.of(context)!.name,
         hintStyle: const TextStyle(
           color: Colors.grey,
-          fontSize: 10.5,
+          fontSize: 12.5,
           fontFamily: FontFamily.cabinetGrotesk,
           fontWeight: FontWeight.w500,
         ),

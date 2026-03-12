@@ -64,7 +64,7 @@ class _TextFieldNameRegState extends State<TextFieldNameEditProfile> {
         cursorColor: Colors.white,
         style: const TextStyle(
           color: Colors.white,
-          fontSize: 10.5,
+          fontSize: 12.5,
           fontFamily: FontFamily.cabinetGrotesk,
           fontWeight: FontWeight.w500,
         ),
@@ -72,7 +72,7 @@ class _TextFieldNameRegState extends State<TextFieldNameEditProfile> {
           hintText: AppLocalizations.of(context)!.name,
           hintStyle: const TextStyle(
             color: Colors.grey,
-            fontSize: 10.5,
+            fontSize: 12.5,
             fontFamily: FontFamily.cabinetGrotesk,
             fontWeight: FontWeight.w500,
           ),

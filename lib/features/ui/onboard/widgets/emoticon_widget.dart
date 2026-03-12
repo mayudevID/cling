@@ -28,8 +28,8 @@ class _EmoticonWidgetState extends State<EmoticonWidget>
     );
 
     animationTween = RelativeRectTween(
-      begin: RelativeRect.fromLTRB(0, 0, 0, -1 * 55),
-      end: RelativeRect.fromLTRB(0, 0, 0, 55),
+      begin: const RelativeRect.fromLTRB(0, 0, 0, -1 * 55),
+      end: const RelativeRect.fromLTRB(0, 0, 0, 55),
     ).animate(
       CurvedAnimation(
         parent: animation,

@@ -59,7 +59,7 @@ void addGoalSavingBottomSheet(BuildContext mainContext) {
                     'Saving Date',
                     style: TextStyle(
                       color: Colors.black,
-                      fontSize: 10,
+                      fontSize: 12,
                       fontFamily: FontFamily.cabinetGrotesk,
                       fontWeight: FontWeight.w800,
                     ),
@@ -98,7 +98,7 @@ void addGoalSavingBottomSheet(BuildContext mainContext) {
                             textAlign: TextAlign.center,
                             style: const TextStyle(
                               color: Colors.black,
-                              fontSize: 10.5,
+                              fontSize: 12.5,
                               fontFamily: FontFamily.cabinetGrotesk,
                               fontWeight: FontWeight.w500,
                             ),
@@ -141,7 +141,7 @@ void addGoalSavingBottomSheet(BuildContext mainContext) {
                         '${AppLocalizations.of(context)!.amount} (${state.selectedCurrency.name})',
                         style: const TextStyle(
                           color: Colors.black,
-                          fontSize: 10,
+                          fontSize: 12,
                           fontFamily: FontFamily.cabinetGrotesk,
                           fontWeight: FontWeight.w800,
                         ),
@@ -189,7 +189,7 @@ void addGoalSavingBottomSheet(BuildContext mainContext) {
                               state.selectedCurrency.name,
                               style: const TextStyle(
                                 color: Colors.black,
-                                fontSize: 10,
+                                fontSize: 12,
                                 fontFamily: FontFamily.cabinetGrotesk,
                                 fontWeight: FontWeight.w800,
                               ),
@@ -204,7 +204,7 @@ void addGoalSavingBottomSheet(BuildContext mainContext) {
                               return NominalMoneyFormatter(
                                 textStyle: const TextStyle(
                                   color: Colors.black,
-                                  fontSize: 10,
+                                  fontSize: 12,
                                   fontFamily: FontFamily.cabinetGrotesk,
                                   fontWeight: FontWeight.w500,
                                 ),

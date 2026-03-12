@@ -118,10 +118,9 @@ class MonthlyDataPageContent extends StatelessWidget {
                 return AnimatedSmoothIndicator(
                   activeIndex: (state.state == VerifOnboardPos.income) ? 0 : 1,
                   count: 2,
-                  effect: ExpandingDotsEffect(
-                    spacing: 8,
+                  effect: const ExpandingDotsEffect(
                     dotColor: Colors.white,
-                    activeDotColor: const Color(0xFFF06AC9),
+                    activeDotColor: Color(0xFFF06AC9),
                   ),
                 );
               },

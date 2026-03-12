@@ -21,7 +21,7 @@ Widget emptyGoalsWidget(BuildContext context) {
           AppLocalizations.of(context)!.goalEmpty,
           style: const TextStyle(
             fontFamily: FontFamily.cabinetGrotesk,
-            fontSize: 10,
+            fontSize: 12,
             color: Colors.white,
           ),
         ),
@@ -47,7 +47,7 @@ Widget emptyGoalsWidget(BuildContext context) {
                 AppLocalizations.of(context)!.addGoals,
                 style: const TextStyle(
                   fontFamily: FontFamily.cabinetGrotesk,
-                  fontSize: 10,
+                  fontSize: 12,
                   color: Colors.white,
                 ),
               ),

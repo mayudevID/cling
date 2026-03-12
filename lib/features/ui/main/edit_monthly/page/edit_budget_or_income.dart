@@ -72,7 +72,7 @@ class EditMonBudgetOrIncomePageContent extends StatelessWidget {
                       "Target (${state.selectedCurrency.name})",
                       style: const TextStyle(
                         color: Colors.white,
-                        fontSize: 10,
+                        fontSize: 12,
                         fontFamily: FontFamily.cabinetGrotesk,
                         fontWeight: FontWeight.w800,
                       ),
@@ -119,7 +119,7 @@ class EditMonBudgetOrIncomePageContent extends StatelessWidget {
                             state.selectedCurrency.name,
                             style: const TextStyle(
                               color: Colors.white,
-                              fontSize: 10,
+                              fontSize: 12,
                               fontFamily: FontFamily.cabinetGrotesk,
                               fontWeight: FontWeight.w800,
                             ),
@@ -136,7 +136,7 @@ class EditMonBudgetOrIncomePageContent extends StatelessWidget {
                             return NominalMoneyFormatter(
                               textStyle: const TextStyle(
                                 color: Colors.white,
-                                fontSize: 10,
+                                fontSize: 12,
                                 fontFamily: FontFamily.cabinetGrotesk,
                                 fontWeight: FontWeight.w500,
                               ),

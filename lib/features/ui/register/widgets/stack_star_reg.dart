@@ -53,7 +53,7 @@ class StackStarReg extends StatelessWidget {
           ),
         ),
         Positioned(
-          left: 30.h,
+          left: 30,
           top: 123,
           child: Container(
             width: 34.49,
@@ -69,7 +69,7 @@ class StackStarReg extends StatelessWidget {
         ),
         Positioned(
           left: 309,
-          top: 305.w,
+          top: 305,
           child: Container(
             width: 34.49,
             height: 34.49,

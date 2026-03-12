@@ -81,7 +81,7 @@ void currencyBottomSheet(BuildContext context) {
                   AppLocalizations.of(context)!.currency,
                   style: const TextStyle(
                     fontFamily: FontFamily.cabinetGrotesk,
-                    fontSize: 10,
+                    fontSize: 12,
                   ),
                 ),
                 const Spacer(),

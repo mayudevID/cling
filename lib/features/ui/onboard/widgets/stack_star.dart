@@ -53,7 +53,7 @@ class StackStar extends StatelessWidget {
         ),
         const Positioned(
           left: 309,
-          top: 362,
+          top: 320,
           child: StarAnimThree(),
         ),
       ],

@@ -117,7 +117,7 @@ void pickDateRangeBottomSheet(BuildContext mainContext) {
               child: Column(
                 children: [
                   Padding(
-                    padding: EdgeInsets.all(8),
+                    padding: const EdgeInsets.all(8),
                     child: Text(
                       AppLocalizations.of(context)!.selectDateRange,
                       style: const TextStyle(

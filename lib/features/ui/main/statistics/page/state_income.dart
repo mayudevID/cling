@@ -21,7 +21,7 @@ class StatsIncome extends StatelessWidget {
           textAlign: TextAlign.center,
           style: const TextStyle(
             color: Colors.white,
-            fontSize: 10,
+            fontSize: 12,
             fontFamily: FontFamily.cabinetGrotesk,
             fontWeight: FontWeight.w500,
           ),
@@ -33,7 +33,7 @@ class StatsIncome extends StatelessWidget {
           AppLocalizations.of(context)!.incomeBreakdown,
           style: const TextStyle(
             color: Colors.white,
-            fontSize: 11.5,
+            fontSize: 13.5,
             fontFamily: FontFamily.cabinetGrotesk,
             fontWeight: FontWeight.w700,
           ),
