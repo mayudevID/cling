@@ -1,9 +1,7 @@
-import 'package:cling/core/common_widget.dart';
-import 'package:cling/core/utils.dart';
-import 'package:cling/resources/gen/fonts.gen.dart';
+import '../../../../../core/common_widget.dart';
+import '../../../../../resources/gen/fonts.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sizer/sizer.dart';
 
 import '../../../../../core/route.dart';
 import '../../../../model/goal_model.dart';
@@ -12,7 +10,7 @@ import '../bloc/goal_list_bloc.dart';
 
 Widget goalListWidget(BuildContext context, GoalModel goalModel) {
   final percent = 100 * goalModel.collected / goalModel.target;
-  final widthResult = goalModel.collected * 292.5.wmea / goalModel.target;
+  final widthResult = goalModel.collected * 292.5 / goalModel.target;
   return GestureDetector(
     onTap: () {
       Navigator.pushNamed(
@@ -28,11 +26,10 @@ Widget goalListWidget(BuildContext context, GoalModel goalModel) {
       ),
       padding: const EdgeInsets.all(16),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Container(
-            width: 52.wmea,
-            height: 86.hmea,
+            width: 52,
+            height: 86,
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(5),
@@ -40,11 +37,11 @@ Widget goalListWidget(BuildContext context, GoalModel goalModel) {
             child: Center(
               child: Text(
                 goalModel.image,
-                style: TextStyle(fontSize: 14.sp),
+                style: const TextStyle(fontSize: 14),
               ),
             ),
           ),
-          SizedBox(width: 8.wmea),
+          const SizedBox(width: 8),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -53,18 +50,18 @@ Widget goalListWidget(BuildContext context, GoalModel goalModel) {
                   children: [
                     Text(
                       goalModel.name,
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.white,
-                        fontSize: 10.8.sp,
+                        fontSize: 12.8,
                         fontFamily: FontFamily.cabinetGrotesk,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     const Spacer(),
                     Container(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 4.wmea,
-                        vertical: 2.hmea,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 4,
+                        vertical: 2,
                       ),
                       decoration: BoxDecoration(
                         color: Colors.white,
@@ -74,9 +71,9 @@ Widget goalListWidget(BuildContext context, GoalModel goalModel) {
                         builder: (context, state) {
                           return Text(
                             "${percent.toStringAsFixed(2)}%",
-                            style: TextStyle(
+                            style: const TextStyle(
                               color: Colors.black,
-                              fontSize: 9.sp,
+                              fontSize: 9,
                               fontFamily: FontFamily.cabinetGrotesk,
                               fontWeight: FontWeight.bold,
                             ),
@@ -86,22 +83,22 @@ Widget goalListWidget(BuildContext context, GoalModel goalModel) {
                     ),
                   ],
                 ),
-                SizedBox(height: 4.wmea),
+                const SizedBox(height: 4),
                 Stack(
                   children: [
                     Container(
-                      width: 292.5.wmea,
-                      height: 8.hmea,
+                      width: 292.5,
+                      height: 8,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(100),
-                        color: Colors.white.withOpacity(0.76),
+                        color: Colors.white.withValues(alpha: 0.76),
                       ),
                     ),
                     BlocBuilder<GoalListBloc, GoalListState>(
                       builder: (context, state) {
                         return Container(
                           width: widthResult,
-                          height: 8.hmea,
+                          height: 8,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(100),
                             color: const Color(0xFF006DE9),
@@ -111,21 +108,21 @@ Widget goalListWidget(BuildContext context, GoalModel goalModel) {
                     ),
                   ],
                 ),
-                SizedBox(height: 2.wmea),
+                const SizedBox(height: 2),
                 Row(
                   children: [
                     Text(
                       "${AppLocalizations.of(context)!.target}: ",
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.white,
-                        fontSize: 9.5.sp,
+                        fontSize: 9.5,
                         fontFamily: FontFamily.cabinetGrotesk,
                       ),
                     ),
                     NominalMoneyFormatter(
-                      textStyle: TextStyle(
+                      textStyle: const TextStyle(
                         color: Colors.white,
-                        fontSize: 9.5.sp,
+                        fontSize: 9.5,
                         fontWeight: FontWeight.w600,
                         fontFamily: FontFamily.cabinetGrotesk,
                       ),
@@ -138,16 +135,16 @@ Widget goalListWidget(BuildContext context, GoalModel goalModel) {
                   children: [
                     Text(
                       "${AppLocalizations.of(context)!.collected}: ",
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.white,
-                        fontSize: 9.5.sp,
+                        fontSize: 9.5,
                         fontFamily: FontFamily.cabinetGrotesk,
                       ),
                     ),
                     NominalMoneyFormatter(
-                      textStyle: TextStyle(
+                      textStyle: const TextStyle(
                         color: Colors.white,
-                        fontSize: 9.5.sp,
+                        fontSize: 9.5,
                         fontWeight: FontWeight.w600,
                         fontFamily: FontFamily.cabinetGrotesk,
                       ),

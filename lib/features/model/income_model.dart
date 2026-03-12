@@ -5,14 +5,6 @@ import '../../core/static_name_table.dart';
 import 'transaction_model.dart';
 
 class IncomeModel implements TransactionModel {
-  @override
-  int? id;
-  @override
-  DateTime date;
-  String? desc;
-  @override
-  double amount;
-  String incomeSource;
 
   IncomeModel({
     this.id,
@@ -21,6 +13,22 @@ class IncomeModel implements TransactionModel {
     required this.amount,
     required this.incomeSource,
   });
+
+  factory IncomeModel.fromDatabase(Map<String, dynamic> json) => IncomeModel(
+        id: json[IncomeMeta.id],
+        date: DateTime.parse(json[IncomeMeta.date]),
+        desc: json[IncomeMeta.desc],
+        amount: json[IncomeMeta.amount]?.toDouble(),
+        incomeSource: inSourceData[json[IncomeMeta.idIncomeSource]],
+      );
+  @override
+  int? id;
+  @override
+  DateTime date;
+  String? desc;
+  @override
+  double amount;
+  String incomeSource;
 
   IncomeModel copyWith({
     int? id,
@@ -35,14 +43,6 @@ class IncomeModel implements TransactionModel {
         desc: desc ?? this.desc,
         amount: amount ?? this.amount,
         incomeSource: incomeSource ?? this.incomeSource,
-      );
-
-  factory IncomeModel.fromDatabase(Map<String, dynamic> json) => IncomeModel(
-        id: json[IncomeMeta.id],
-        date: DateTime.parse(json[IncomeMeta.date]),
-        desc: json[IncomeMeta.desc],
-        amount: json[IncomeMeta.amount]?.toDouble(),
-        incomeSource: inSourceData[json[IncomeMeta.idIncomeSource]],
       );
 
   Map<String, dynamic> toMap() => {

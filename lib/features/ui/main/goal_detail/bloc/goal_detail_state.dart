@@ -2,12 +2,6 @@ part of 'goal_detail_bloc.dart';
 
 // ignore: must_be_immutable
 class GoalDetailState extends Equatable {
-  GoalModel goalModel;
-  List<GoalSavingModel> dataSavingsList;
-  DateTime selectedDate;
-  double amount;
-  double tempAmount;
-  String tempLogoGoal;
 
   GoalDetailState({
     GoalModel? goalModel,
@@ -19,6 +13,12 @@ class GoalDetailState extends Equatable {
   })  : goalModel = goalModel ?? GoalModel.empty(),
         dataSavingsList = dataSavingsList ?? List.empty(),
         selectedDate = selectedDate ?? DateTime.now();
+  GoalModel goalModel;
+  List<GoalSavingModel> dataSavingsList;
+  DateTime selectedDate;
+  double amount;
+  double tempAmount;
+  String tempLogoGoal;
 
   @override
   List<Object> get props => [

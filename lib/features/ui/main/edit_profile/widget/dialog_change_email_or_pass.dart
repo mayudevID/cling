@@ -1,10 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:cling/core/utils.dart';
-import 'package:cling/features/ui/language_currency/lang_export.dart';
+import '../../../language_currency/lang_export.dart';
 import 'package:flutter/material.dart';
-
-import 'package:sizer/sizer.dart';
 
 import '../../../../../core/open_mail_app.dart';
 import '../../../../../resources/gen/fonts.gen.dart';
@@ -31,11 +28,11 @@ Future<bool> dialogChangeEmailOrPassword(
             ),
             color: Colors.white,
           ),
-          padding: EdgeInsets.only(
-            top: 18.hmea,
-            left: 18.wmea,
-            right: 18.wmea,
-            bottom: 18.hmea,
+          padding: const EdgeInsets.only(
+            top: 18,
+            left: 18,
+            right: 18,
+            bottom: 18,
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -44,75 +41,73 @@ Future<bool> dialogChangeEmailOrPassword(
                 (type == "email")
                     ? AppLocalizations.of(context)!.changingEmail
                     : AppLocalizations.of(context)!.changingPass,
-                style: TextStyle(
+                style: const TextStyle(
                   fontFamily: FontFamily.cabinetGrotesk,
                   fontWeight: FontWeight.bold,
-                  fontSize: 10.sp,
+                  fontSize: 12,
                   color: Colors.black,
                 ),
               ),
-              SizedBox(
-                height: 8.hmea,
+              const SizedBox(
+                height: 8,
               ),
               Text(
                 (type == "email")
                     ? AppLocalizations.of(context)!.changeEmailVerifyDialog
                     : AppLocalizations.of(context)!.changePassVerifyDialog,
-                style: TextStyle(
+                style: const TextStyle(
                   fontFamily: FontFamily.cabinetGrotesk,
-                  fontSize: 10.sp,
+                  fontSize: 12,
                   color: Colors.black,
                 ),
                 textAlign: TextAlign.center,
               ),
-              SizedBox(
-                height: 12.hmea,
+              const SizedBox(
+                height: 12,
               ),
               GestureDetector(
                 onTap: () {
                   Navigator.pop(context, true);
                 },
                 child: Container(
-                  padding: EdgeInsets.all(12.hmea),
+                  padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
                     color: const Color(0xFFF06AC9),
                     borderRadius: BorderRadius.circular(24),
                   ),
                   alignment: Alignment.center,
-                  child: Align(
-                    alignment: Alignment.center,
+                  child: const Align(
                     child: Text(
                       "OK",
                       style: TextStyle(
                         fontFamily: FontFamily.cabinetGrotesk,
-                        fontSize: 10.sp,
+                        fontSize: 12,
                         color: Colors.black,
                       ),
                     ),
                   ),
                 ),
               ),
-              SizedBox(
-                height: 8.hmea,
+              const SizedBox(
+                height: 8,
               ),
               GestureDetector(
                 onTap: () {
                   Navigator.pop(context, false);
                 },
                 child: Container(
-                  padding: EdgeInsets.all(12.hmea),
+                  padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
                     color: Colors.black,
                     borderRadius: BorderRadius.circular(24),
                   ),
                   alignment: Alignment.center,
                   child: Align(
-                    alignment: Alignment.center,
                     child: Text(
                       AppLocalizations.of(context)!.cancel,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontFamily: FontFamily.cabinetGrotesk,
-                        fontSize: 10.sp,
+                        fontSize: 12,
                         color: Colors.white,
                       ),
                     ),
@@ -128,7 +123,7 @@ Future<bool> dialogChangeEmailOrPassword(
 }
 
 Future<void> openMail(BuildContext context) async {
-  var result = await OpenMailApp.openMailApp();
+  final result = await OpenMailApp.openMailApp();
   if (!result.didOpen && !result.canOpen) {
     await Future.microtask(() async {
       await showDialog(

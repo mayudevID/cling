@@ -1,4 +1,3 @@
-import 'package:cling/core/utils.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../resources/gen/assets.gen.dart';
@@ -19,8 +18,8 @@ class _EmoticonWidgetState extends State<EmoticonWidget>
   @override
   void initState() {
     imageEmot = Assets.lib.resources.imagesPng.emoticon.image(
-      width: 230.wmea,
-      height: 230.wmea,
+      width: 230,
+      height: 230,
     );
 
     animation = AnimationController(
@@ -29,8 +28,8 @@ class _EmoticonWidgetState extends State<EmoticonWidget>
     );
 
     animationTween = RelativeRectTween(
-      begin: RelativeRect.fromLTRB(0, 0, 0, -1 * 55.hmea),
-      end: RelativeRect.fromLTRB(0, 0, 0, 55.hmea),
+      begin: const RelativeRect.fromLTRB(0, 0, 0, -1 * 55),
+      end: const RelativeRect.fromLTRB(0, 0, 0, 55),
     ).animate(
       CurvedAnimation(
         parent: animation,

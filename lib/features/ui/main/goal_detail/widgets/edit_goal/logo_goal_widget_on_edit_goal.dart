@@ -1,7 +1,5 @@
-import 'package:cling/core/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sizer/sizer.dart';
 
 import '../../../../../../resources/gen/assets.gen.dart';
 import '../../bloc/goal_detail_bloc.dart';
@@ -9,16 +7,16 @@ import 'dialog_pick_edit_goal_logo.dart';
 
 Widget logoGoalWidgetOnEditGoal(BuildContext context) {
   return SizedBox(
-    width: 140.wmea,
-    height: 140.wmea,
+    width: 140,
+    height: 140,
     child: Stack(
       children: [
         Container(
-          width: 128.wmea,
-          height: 128.wmea,
-          padding: EdgeInsets.symmetric(
-            horizontal: 16.wmea,
-            vertical: 16.hmea,
+          width: 128,
+          height: 128,
+          padding: const EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 16,
           ),
           decoration: ShapeDecoration(
             color: Colors.grey[400],
@@ -36,8 +34,8 @@ Widget logoGoalWidgetOnEditGoal(BuildContext context) {
                     state.tempLogoGoal != "") {
                   return Text(
                     state.tempLogoGoal,
-                    style: TextStyle(
-                      fontSize: 43.sp,
+                    style: const TextStyle(
+                      fontSize: 43,
                     ),
                   );
                 }
@@ -55,8 +53,8 @@ Widget logoGoalWidgetOnEditGoal(BuildContext context) {
               dialogPickEditGoalLogo(context);
             },
             child: Container(
-              width: 36.wmea,
-              height: 36.wmea,
+              width: 36,
+              height: 36,
               padding: const EdgeInsets.all(8),
               clipBehavior: Clip.antiAlias,
               decoration: ShapeDecoration(

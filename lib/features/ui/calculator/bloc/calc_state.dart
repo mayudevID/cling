@@ -3,13 +3,13 @@
 part of 'calc_bloc.dart';
 
 class CalcState extends Equatable {
-  List<String> listInput;
-  String expressionFromCount;
 
   CalcState({
     List<String>? listInput,
     this.expressionFromCount = "",
   }) : listInput = listInput ?? [""];
+  List<String> listInput;
+  String expressionFromCount;
 
   @override
   List<Object> get props => [listInput, expressionFromCount];

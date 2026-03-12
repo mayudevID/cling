@@ -1,7 +1,6 @@
-import 'package:cling/core/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sizer/sizer.dart';
+
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../../../../../core/common_widget.dart';
@@ -17,9 +16,9 @@ Widget pieChartStatsExpense() {
     },
     builder: (context, state) {
       if (state.pieDataExpenseList.isEmpty) {
-        return SizedBox(
-          height: 248.5.wmea,
-          child: const Center(
+        return const SizedBox(
+          height: 248.5,
+          child: Center(
             child: Text(
               "No data :(",
               style: TextStyle(
@@ -32,13 +31,13 @@ Widget pieChartStatsExpense() {
       }
 
       double dataTot = 0.0;
-      for (PieDataExpense element in state.pieDataExpenseList) {
+      for (final PieDataExpense element in state.pieDataExpenseList) {
         dataTot += element.amount;
       }
 
       return SizedBox(
         width: double.infinity,
-        height: 248.5.wmea,
+        height: 248.5,
         child: SfCircularChart(
           tooltipBehavior: TooltipBehavior(
             enable: true,
@@ -82,14 +81,13 @@ Widget pieChartStatsExpense() {
               );
             },
           ),
-          legend: Legend(
+          legend: const Legend(
             isResponsive: true,
             isVisible: true,
             position: LegendPosition.right,
-            overflowMode: LegendItemOverflowMode.scroll,
             textStyle: TextStyle(
               color: Colors.white,
-              fontSize: 8.061.sp,
+              fontSize: 8.061,
               fontFamily: FontFamily.cabinetGrotesk,
               fontWeight: FontWeight.w700,
             ),
@@ -103,11 +101,11 @@ Widget pieChartStatsExpense() {
               dataLabelMapper: (PieDataExpense data, _) {
                 return "${((data.amount / dataTot) * 100).round()}%";
               },
-              dataLabelSettings: DataLabelSettings(
+              dataLabelSettings: const DataLabelSettings(
                 isVisible: true,
                 textStyle: TextStyle(
                   color: Colors.white,
-                  fontSize: 9.5.sp,
+                  fontSize: 9.5,
                   fontFamily: FontFamily.cabinetGrotesk,
                   fontWeight: FontWeight.w800,
                 ),

@@ -5,11 +5,6 @@ import 'package:equatable/equatable.dart';
 import '../../core/static_name_table.dart';
 
 class GoalModel extends Equatable {
-  int? id;
-  String name;
-  String image;
-  double target;
-  double collected;
 
   GoalModel({
     this.id,
@@ -27,6 +22,18 @@ class GoalModel extends Equatable {
         collected: json[GoalMeta.collected]?.toDouble(),
       );
 
+  factory GoalModel.empty() => GoalModel(
+        name: "",
+        image: "",
+        target: 0,
+        collected: 0,
+      );
+  int? id;
+  String name;
+  String image;
+  double target;
+  double collected;
+
   GoalModel copyWith({
     int? id,
     String? name,
@@ -42,14 +49,6 @@ class GoalModel extends Equatable {
       collected: collected ?? this.collected,
     );
   }
-
-  factory GoalModel.empty() => GoalModel(
-        id: null,
-        name: "",
-        image: "",
-        target: 0,
-        collected: 0,
-      );
 
   Map<String, dynamic> toMap() => {
         GoalMeta.id: id,

@@ -1,8 +1,7 @@
-import 'package:cling/core/utils.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sizer/sizer.dart';
+
 import '../../../../../resources/gen/assets.gen.dart';
 import '../../../../../resources/gen/fonts.gen.dart';
 import '../../../language_currency/lang_export.dart';
@@ -24,27 +23,27 @@ class StatsAll extends StatelessWidget {
       children: [
         const TagInfo(),
         pieChartStatsAllWidget(),
-        SizedBox(
-          height: 8.hmea,
+        const SizedBox(
+          height: 8,
         ),
         Text(
           '${AppLocalizations.of(context)!.yearlyBreakdown} / ${DateTime.now().year}',
           textAlign: TextAlign.center,
-          style: TextStyle(
+          style: const TextStyle(
             color: Colors.white,
-            fontSize: 10.sp,
+            fontSize: 12,
             fontFamily: FontFamily.cabinetGrotesk,
             fontWeight: FontWeight.w500,
           ),
         ),
-        SizedBox(height: 8.hmea),
+        const SizedBox(height: 8),
         lineColumnStatsAllWidget(context),
-        SizedBox(height: 8.hmea),
+        const SizedBox(height: 8),
         DropdownButtonHideUnderline(
           child: DropdownButton2(
             customButton: Container(
               width: MediaQuery.of(context).size.width,
-              padding: EdgeInsets.all(14.wmea),
+              padding: const EdgeInsets.all(14),
               decoration: BoxDecoration(
                 color: const Color(0x3D787880),
                 borderRadius: BorderRadius.circular(5),
@@ -61,9 +60,9 @@ class StatsAll extends StatelessWidget {
                         (state.allStatsChoose.name == "income")
                             ? AppLocalizations.of(context)!.mostIncome
                             : AppLocalizations.of(context)!.mostExpense,
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Colors.white,
-                          fontSize: 11.5.sp,
+                          fontSize: 13.5,
                           fontFamily: FontFamily.cabinetGrotesk,
                           fontWeight: FontWeight.w700,
                         ),
@@ -88,7 +87,7 @@ class StatsAll extends StatelessWidget {
             },
             items: AllStatsChoose.values
                 .map(
-                  (e) => DropdownMenuItem<AllStatsChoose>(
+                  (e) => DropdownItem<AllStatsChoose>(
                     value: e,
                     child: Text(
                       (e == AllStatsChoose.income)
@@ -103,7 +102,7 @@ class StatsAll extends StatelessWidget {
                 )
                 .toList(),
             dropdownStyleData: DropdownStyleData(
-              width: 387.wmea,
+              width: 387,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
                 color: const Color(0xFF313131),
@@ -112,11 +111,11 @@ class StatsAll extends StatelessWidget {
           ),
         ),
         // SizedBox(
-        //   height: 8.hmea,
+        //   height: 8,
         // ),
         // ...chooseDateRange(context),
-        SizedBox(
-          height: 16.hmea,
+        const SizedBox(
+          height: 16,
         ),
         BlocBuilder<StatisticsBloc, StatisticsState>(
           buildWhen: (p, c) {
@@ -166,7 +165,7 @@ class StatsAll extends StatelessWidget {
                 physics: const NeverScrollableScrollPhysics(),
                 itemBuilder: itemBuilder,
                 separatorBuilder: (context, index) {
-                  return SizedBox(height: 4.hmea);
+                  return const SizedBox(height: 4);
                 },
               ),
             );
@@ -180,7 +179,7 @@ class StatsAll extends StatelessWidget {
                     : listWidget;
           },
         ),
-        SizedBox(height: 128.hmea),
+        const SizedBox(height: 128),
       ],
     );
   }

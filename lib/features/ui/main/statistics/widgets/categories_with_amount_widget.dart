@@ -1,7 +1,5 @@
-import 'package:cling/core/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sizer/sizer.dart';
 
 import '../../../../../core/common_widget.dart';
 import '../../../../../core/route.dart';
@@ -39,7 +37,7 @@ Widget categoriesWithAmount({
       );
     },
     child: Container(
-      padding: EdgeInsets.all(16.wmea),
+      padding: const EdgeInsets.all(16),
       width: double.infinity,
       decoration: BoxDecoration(
         color: const Color(0x3D787880),
@@ -48,7 +46,7 @@ Widget categoriesWithAmount({
       child: Row(
         children: [
           Container(
-            padding: EdgeInsets.all(8.wmea),
+            padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(5),
@@ -56,26 +54,26 @@ Widget categoriesWithAmount({
             child: Center(
               child: Text(
                 " $categoryIcon",
-                style: TextStyle(fontSize: 9.sp),
+                style: const TextStyle(fontSize: 9),
               ),
             ),
           ),
-          SizedBox(width: 12.wmea),
+          const SizedBox(width: 12),
           Text(
             categoryClass,
             textAlign: TextAlign.center,
-            style: TextStyle(
+            style: const TextStyle(
               color: Colors.white,
-              fontSize: 10.sp,
+              fontSize: 12,
               fontFamily: FontFamily.cabinetGrotesk,
               fontWeight: FontWeight.bold,
             ),
           ),
           const Spacer(),
           NominalMoneyFormatter(
-            textStyle: TextStyle(
+            textStyle: const TextStyle(
               color: Colors.white,
-              fontSize: 9.5.sp,
+              fontSize: 9.5,
               fontFamily: FontFamily.cabinetGrotesk,
               fontWeight: FontWeight.w500,
             ),

@@ -1,4 +1,4 @@
-import 'package:cling/core/logger.dart';
+import '../../../../core/logger.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 part 'main_event.dart';

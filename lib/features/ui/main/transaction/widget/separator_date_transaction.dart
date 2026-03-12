@@ -1,10 +1,8 @@
-import 'package:cling/core/utils.dart';
-import 'package:cling/features/ui/language_currency/lang_currency_bloc.dart';
-import 'package:cling/resources/gen/fonts.gen.dart';
+import '../../../language_currency/lang_currency_bloc.dart';
+import '../../../../../resources/gen/fonts.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:sizer/sizer.dart';
 
 import '../../../../model/transaction_model.dart';
 
@@ -17,40 +15,40 @@ Widget separatorDateTransaction(BuildContext context, TransactionModel model) {
       .toLanguageTag();
 
   return Padding(
-    padding: EdgeInsets.symmetric(horizontal: 10.wmea),
+    padding: const EdgeInsets.symmetric(horizontal: 10),
     child: Row(
       children: [
         Text(
           model.date.day.toString().padLeft(2, "0"),
-          style: TextStyle(
+          style: const TextStyle(
             color: Colors.white,
             fontFamily: FontFamily.cabinetGrotesk,
-            fontSize: 30.sp,
+            fontSize: 30,
           ),
         ),
-        SizedBox(width: 8.wmea),
+        const SizedBox(width: 8),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 DateFormat("EEEE", dateLocale).format(model.date),
-                style: TextStyle(
+                style: const TextStyle(
                   color: Colors.white,
                   fontFamily: FontFamily.cabinetGrotesk,
                   fontWeight: FontWeight.bold,
-                  fontSize: 10.sp,
+                  fontSize: 12,
                 ),
               ),
               Text(
                 DateFormat("MMM y", dateLocale).format(model.date),
-                style: TextStyle(
+                style: const TextStyle(
                   color: Colors.white,
                   fontFamily: FontFamily.cabinetGrotesk,
-                  fontSize: 8.5.sp,
+                  fontSize: 8.5,
                 ),
               ),
-              SizedBox(height: 2.8.hmea)
+              const SizedBox(height: 2.8)
             ],
           ),
         ),

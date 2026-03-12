@@ -1,7 +1,5 @@
-import 'package:cling/core/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sizer/sizer.dart';
 
 import '../../../../../resources/gen/assets.gen.dart';
 import '../../../../../resources/gen/fonts.gen.dart';
@@ -41,14 +39,13 @@ class _TextFieldConPassRegState extends State<TextFieldConPassReg> {
         borderRadius: BorderRadius.circular(10),
         border: _focus.hasFocus
             ? Border.all(
-                width: 1,
                 color: Colors.white,
               )
             : null,
       ),
-      padding: EdgeInsets.symmetric(
-        vertical: 16.hmea,
-        horizontal: 16.wmea,
+      padding: const EdgeInsets.symmetric(
+        vertical: 16,
+        horizontal: 16,
       ),
       child: Row(
         children: [
@@ -66,17 +63,17 @@ class _TextFieldConPassRegState extends State<TextFieldConPassReg> {
                     context.read<RegisterBloc>().add(ChangeConfPassword(value));
                   },
                   cursorColor: Colors.white,
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.white,
-                    fontSize: 10.5.sp,
+                    fontSize: 12.5,
                     fontFamily: FontFamily.cabinetGrotesk,
                     fontWeight: FontWeight.w500,
                   ),
                   decoration: InputDecoration.collapsed(
                     hintText: AppLocalizations.of(context)!.confirmPassword,
-                    hintStyle: TextStyle(
+                    hintStyle: const TextStyle(
                       color: Colors.grey,
-                      fontSize: 10.5.sp,
+                      fontSize: 12.5,
                       fontFamily: FontFamily.cabinetGrotesk,
                       fontWeight: FontWeight.w500,
                     ),

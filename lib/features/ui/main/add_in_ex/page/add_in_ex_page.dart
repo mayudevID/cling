@@ -1,7 +1,5 @@
-import 'package:cling/core/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sizer/sizer.dart';
 
 import '../../../../../core/common_widget.dart';
 import '../../../../../core/route.dart';
@@ -44,68 +42,68 @@ class AddIncomeExpensePageContent extends StatelessWidget {
         resizeToAvoidBottomInset: false,
         backgroundColor: Colors.black,
         body: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24.wmea),
+          padding: const EdgeInsets.symmetric(horizontal: 24),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(
-                height: 16.hmea,
+              const SizedBox(
+                height: 16,
               ),
               Text(
                 (flowType == FlowType.income)
                     ? AppLocalizations.of(context)!.addIncome
                     : AppLocalizations.of(context)!.addExpenses,
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: const TextStyle(
                   color: Colors.white,
-                  fontSize: 20.sp,
+                  fontSize: 20,
                   fontFamily: FontFamily.cabinetGrotesk,
                   fontWeight: FontWeight.w700,
                 ),
               ),
-              SizedBox(
-                height: 24.hmea,
+              const SizedBox(
+                height: 24,
               ),
               Text(
                 (flowType == FlowType.income)
                     ? AppLocalizations.of(context)!.date
                     : AppLocalizations.of(context)!.purchaseDate,
-                style: TextStyle(
+                style: const TextStyle(
                   color: Colors.white,
-                  fontSize: 10.sp,
+                  fontSize: 12,
                   fontFamily: FontFamily.cabinetGrotesk,
                   fontWeight: FontWeight.w800,
                 ),
               ),
-              SizedBox(height: 8.hmea),
+              const SizedBox(height: 8),
               datetimeAddWidget(context),
-              SizedBox(height: 8.hmea),
+              const SizedBox(height: 8),
               Text(
                 (flowType == FlowType.income)
                     ? AppLocalizations.of(context)!.incomeSource
                     : AppLocalizations.of(context)!.categories,
-                style: TextStyle(
+                style: const TextStyle(
                   color: Colors.white,
-                  fontSize: 10.sp,
+                  fontSize: 12,
                   fontFamily: FontFamily.cabinetGrotesk,
                   fontWeight: FontWeight.w800,
                 ),
               ),
-              SizedBox(height: 8.hmea),
+              const SizedBox(height: 8),
               dropDownCategories(flowType: flowType),
-              SizedBox(height: 8.hmea),
+              const SizedBox(height: 8),
               Text(
                 (flowType == FlowType.income)
                     ? AppLocalizations.of(context)!.descriptionOptional
                     : AppLocalizations.of(context)!.items,
-                style: TextStyle(
+                style: const TextStyle(
                   color: Colors.white,
-                  fontSize: 10.sp,
+                  fontSize: 12,
                   fontFamily: FontFamily.cabinetGrotesk,
                   fontWeight: FontWeight.w800,
                 ),
               ),
-              SizedBox(height: 8.hmea),
+              const SizedBox(height: 8),
               Container(
                 decoration: ShapeDecoration(
                   color: const Color(0xFF313131),
@@ -113,9 +111,9 @@ class AddIncomeExpensePageContent extends StatelessWidget {
                     borderRadius: BorderRadius.circular(10),
                   ),
                 ),
-                padding: EdgeInsets.symmetric(
-                  vertical: 16.hmea,
-                  horizontal: 16.wmea,
+                padding: const EdgeInsets.symmetric(
+                  vertical: 16,
+                  horizontal: 16,
                 ),
                 child: TextFormField(
                   onChanged: (value) {
@@ -124,9 +122,9 @@ class AddIncomeExpensePageContent extends StatelessWidget {
                         .add(SetDescOrItem(value));
                   },
                   cursorColor: Colors.white,
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.white,
-                    fontSize: 10.5.sp,
+                    fontSize: 12.5,
                     fontFamily: FontFamily.cabinetGrotesk,
                     fontWeight: FontWeight.w500,
                   ),
@@ -134,16 +132,16 @@ class AddIncomeExpensePageContent extends StatelessWidget {
                     hintText: (flowType == FlowType.income)
                         ? AppLocalizations.of(context)!.descriptionOptional
                         : AppLocalizations.of(context)!.items,
-                    hintStyle: TextStyle(
+                    hintStyle: const TextStyle(
                       color: Colors.grey,
-                      fontSize: 10.5.sp,
+                      fontSize: 12.5,
                       fontFamily: FontFamily.cabinetGrotesk,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
                 ),
               ),
-              SizedBox(height: 8.hmea),
+              const SizedBox(height: 8),
               BlocBuilder<LangCurrencyBloc, LangCurrencyState>(
                 buildWhen: (p, c) {
                   return p.selectedCurrency.name != c.selectedCurrency.name;
@@ -151,16 +149,16 @@ class AddIncomeExpensePageContent extends StatelessWidget {
                 builder: (context, state) {
                   return Text(
                     '${AppLocalizations.of(context)!.amount} (${state.selectedCurrency.name})',
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.white,
-                      fontSize: 10.sp,
+                      fontSize: 12,
                       fontFamily: FontFamily.cabinetGrotesk,
                       fontWeight: FontWeight.w800,
                     ),
                   );
                 },
               ),
-              SizedBox(height: 8.hmea),
+              const SizedBox(height: 8),
               GestureDetector(
                 onTap: () async {
                   final amountRes = await Navigator.pushNamed(
@@ -184,9 +182,9 @@ class AddIncomeExpensePageContent extends StatelessWidget {
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  padding: EdgeInsets.symmetric(
-                    vertical: 16.hmea,
-                    horizontal: 16.wmea,
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 16,
+                    horizontal: 16,
                   ),
                   child: Row(
                     children: [
@@ -198,16 +196,16 @@ class AddIncomeExpensePageContent extends StatelessWidget {
                         builder: (context, state) {
                           return Text(
                             state.selectedCurrency.name,
-                            style: TextStyle(
+                            style: const TextStyle(
                               color: Colors.white,
-                              fontSize: 10.sp,
+                              fontSize: 12,
                               fontFamily: FontFamily.cabinetGrotesk,
                               fontWeight: FontWeight.w800,
                             ),
                           );
                         },
                       ),
-                      SizedBox(width: 10.wmea),
+                      const SizedBox(width: 10),
                       Expanded(
                         child: BlocBuilder<AddIncomeExpenseBloc,
                             AddIncomeExpenseState>(
@@ -216,9 +214,9 @@ class AddIncomeExpensePageContent extends StatelessWidget {
                           },
                           builder: (context, state) {
                             return NominalMoneyFormatter(
-                              textStyle: TextStyle(
+                              textStyle: const TextStyle(
                                 color: Colors.white,
-                                fontSize: 10.sp,
+                                fontSize: 12,
                                 fontFamily: FontFamily.cabinetGrotesk,
                                 fontWeight: FontWeight.w500,
                               ),
@@ -232,8 +230,8 @@ class AddIncomeExpensePageContent extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(
-                height: 40.hmea,
+              const SizedBox(
+                height: 40,
               ),
               PinkButton(
                 onTap: () {
@@ -242,8 +240,8 @@ class AddIncomeExpensePageContent extends StatelessWidget {
                 },
                 name: AppLocalizations.of(context)!.submit,
               ),
-              SizedBox(
-                height: 16.hmea,
+              const SizedBox(
+                height: 16,
               ),
               BlackButton(
                 name: AppLocalizations.of(context)!.cancel,

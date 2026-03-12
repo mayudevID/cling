@@ -1,7 +1,5 @@
-import 'package:cling/core/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sizer/sizer.dart';
 
 import '../../../../../core/common_widget.dart';
 import '../../../../../injection.dart';
@@ -37,7 +35,7 @@ class EditProfilePageContent extends StatelessWidget {
       child: Scaffold(
         backgroundColor: const Color(0xFF101010),
         body: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24.wmea),
+          padding: const EdgeInsets.symmetric(horizontal: 24),
           child: Column(
             children: [
               appBarProfile(
@@ -46,24 +44,24 @@ class EditProfilePageContent extends StatelessWidget {
                 textButton: "Save",
                 onTapButton: () {},
               ),
-              SizedBox(
-                height: 32.hmea,
+              const SizedBox(
+                height: 32,
               ),
               Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
                   AppLocalizations.of(context)!.name,
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.white,
-                    fontSize: 10.sp,
+                    fontSize: 12,
                     fontFamily: FontFamily.cabinetGrotesk,
                     fontWeight: FontWeight.w800,
                   ),
                 ),
               ),
-              SizedBox(height: 8.hmea),
+              const SizedBox(height: 8),
               const TextFieldNameEditProfile(),
-              SizedBox(height: 24.hmea),
+              const SizedBox(height: 24),
               BlocBuilder<EditProfileBloc, EditProfileState>(
                 buildWhen: (p, c) {
                   return p.isNameSame != c.isNameSame;
@@ -71,7 +69,7 @@ class EditProfilePageContent extends StatelessWidget {
                 builder: (context, state) {
                   if (!state.isNameSame) {
                     return Container(
-                      margin: EdgeInsets.only(bottom: 24.hmea),
+                      margin: const EdgeInsets.only(bottom: 24),
                       child: PinkButton(
                         onTap: () {
                           context.read<EditProfileBloc>().add(SaveNewName());
@@ -87,20 +85,20 @@ class EditProfilePageContent extends StatelessWidget {
                 alignment: Alignment.centerLeft,
                 child: Text(
                   AppLocalizations.of(context)!.email,
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.white,
-                    fontSize: 10.sp,
+                    fontSize: 12,
                     fontFamily: FontFamily.cabinetGrotesk,
                     fontWeight: FontWeight.w800,
                   ),
                 ),
               ),
-              SizedBox(
-                height: 8.hmea,
+              const SizedBox(
+                height: 8,
               ),
               const TextFieldEmailEditProfile(),
-              SizedBox(
-                height: 24.hmea,
+              const SizedBox(
+                height: 24,
               ),
               BlocBuilder<EditProfileBloc, EditProfileState>(
                 buildWhen: (p, c) {
@@ -109,7 +107,7 @@ class EditProfilePageContent extends StatelessWidget {
                 builder: (context, state) {
                   if (!state.isEmailSame) {
                     return Container(
-                      margin: EdgeInsets.only(bottom: 24.hmea),
+                      margin: const EdgeInsets.only(bottom: 24),
                       child: PinkButton(
                         onTap: () {
                           context.read<EditProfileBloc>().add(SaveNewEmail());
@@ -125,16 +123,16 @@ class EditProfilePageContent extends StatelessWidget {
                 alignment: Alignment.centerLeft,
                 child: Text(
                   AppLocalizations.of(context)!.password,
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.white,
-                    fontSize: 10.sp,
+                    fontSize: 12,
                     fontFamily: FontFamily.cabinetGrotesk,
                     fontWeight: FontWeight.w800,
                   ),
                 ),
               ),
-              SizedBox(
-                height: 8.hmea,
+              const SizedBox(
+                height: 8,
               ),
               PinkButton(
                 onTap: () async {

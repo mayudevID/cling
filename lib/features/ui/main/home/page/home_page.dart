@@ -1,9 +1,8 @@
-import 'package:cling/core/common_widget.dart';
-import 'package:cling/core/utils.dart';
+import '../../../../../core/common_widget.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sizer/sizer.dart';
+
 import '../../../../../resources/gen/fonts.gen.dart';
 import '../../../language_currency/lang_export.dart';
 import '../bloc/home_bloc.dart';
@@ -26,25 +25,23 @@ class HomePage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(height: 16.hmea),
+          const SizedBox(height: 16),
           nameAndNotification(context),
-          SizedBox(height: 24.hmea),
+          const SizedBox(height: 24),
           Container(
-            margin: EdgeInsets.symmetric(horizontal: 24.wmea),
-            padding:
-                EdgeInsets.symmetric(horizontal: 16.wmea, vertical: 16.hmea),
+            margin: const EdgeInsets.symmetric(horizontal: 24),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
             decoration: BoxDecoration(
               color: const Color(0x3D787880),
               borderRadius: BorderRadius.circular(10),
             ),
             child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
                   AppLocalizations.of(context)!.totalBalance,
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.white,
-                    fontSize: 10.sp,
+                    fontSize: 12,
                     fontFamily: FontFamily.cabinetGrotesk,
                     fontWeight: FontWeight.bold,
                   ),
@@ -63,16 +60,16 @@ class HomePage extends StatelessWidget {
                     );
                   },
                 ),
-                SizedBox(width: 8.wmea),
+                const SizedBox(width: 8),
                 BlocBuilder<HomeBloc, HomeState>(
                   buildWhen: (p, c) {
                     return p.totalBalance != c.totalBalance;
                   },
                   builder: (context, state) {
                     return NominalMoneyFormatter(
-                      textStyle: TextStyle(
+                      textStyle: const TextStyle(
                         color: Colors.white,
-                        fontSize: 14.sp,
+                        fontSize: 14,
                         fontFamily: FontFamily.cabinetGrotesk,
                         fontWeight: FontWeight.bold,
                       ),
@@ -90,7 +87,7 @@ class HomePage extends StatelessWidget {
             withDate: true,
           ),
           monthlyBudget(context),
-          SizedBox(height: 16.hmea),
+          const SizedBox(height: 16),
           incomeAndExpense(context),
           ...tagNameHome(context, AppLocalizations.of(context)!.goals),
           BlocBuilder<HomeBloc, HomeState>(
@@ -101,7 +98,7 @@ class HomePage extends StatelessWidget {
               final lengthD = state.totalGoals > 5 ? 6 : state.listGoals.length;
 
               return SizedBox(
-                height: 156.855.hmea,
+                height: 128,
                 child: ListView.builder(
                   shrinkWrap: true,
                   scrollDirection: Axis.horizontal,
@@ -128,7 +125,7 @@ class HomePage extends StatelessWidget {
             builder: (context, state) {
               if (state.listTodayExpenses.isEmpty) {
                 return Container(
-                  padding: EdgeInsets.symmetric(horizontal: 24.wmea),
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
                   child: Text(
                     AppLocalizations.of(context)!.noExpenseToday,
                     style: const TextStyle(
@@ -139,25 +136,22 @@ class HomePage extends StatelessWidget {
                 );
               }
 
-              return MediaQuery.removePadding(
-                context: context,
-                removeTop: true,
-                child: ListView.separated(
-                  itemCount: state.listTodayExpenses.length,
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemBuilder: (context, index) {
-                    return todayExpensesWidget(
-                      context,
-                      state.listTodayExpenses[index],
-                    );
-                  },
-                  separatorBuilder: (_, idx) => SizedBox(height: 6.hmea),
-                ),
+              return ListView.separated(
+                padding: EdgeInsets.zero,
+                itemCount: state.listTodayExpenses.length,
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemBuilder: (context, index) {
+                  return todayExpensesWidget(
+                    context,
+                    state.listTodayExpenses[index],
+                  );
+                },
+                separatorBuilder: (_, idx) => const SizedBox(height: 6),
               );
             },
           ),
-          SizedBox(height: 185.hmea),
+          const SizedBox(height: 185),
         ],
       ),
     );

@@ -7,7 +7,7 @@ String convertEnumToDetailDate(
   BuildContext mainContext,
   DateRangePickerView dateRangePickerView,
 ) {
-  var appLocal = AppLocalizations.of(mainContext)!;
+  final appLocal = AppLocalizations.of(mainContext)!;
 
   switch (dateRangePickerView) {
     case DateRangePickerView.month:

@@ -1,13 +1,9 @@
 // ignore_for_file: must_be_immutable
 
-import 'package:cling/core/static_name_table.dart';
+import '../../core/static_name_table.dart';
 import 'package:equatable/equatable.dart';
 
 class GoalSavingModel extends Equatable {
-  int? id;
-  int goalId;
-  DateTime date;
-  double amount;
 
   GoalSavingModel({
     this.id,
@@ -23,6 +19,10 @@ class GoalSavingModel extends Equatable {
         date: DateTime.parse(json[GoalSavingMeta.date]),
         amount: json[GoalSavingMeta.amount].toDouble(),
       );
+  int? id;
+  int goalId;
+  DateTime date;
+  double amount;
 
   GoalSavingModel copyWith({
     int? id,

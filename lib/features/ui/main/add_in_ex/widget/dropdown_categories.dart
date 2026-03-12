@@ -1,8 +1,6 @@
-import 'package:cling/core/utils.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sizer/sizer.dart';
 
 import '../../../../../resources/gen/assets.gen.dart';
 import '../../../../../resources/gen/fonts.gen.dart';
@@ -35,9 +33,9 @@ Widget dropDownCategories({required FlowType flowType}) {
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
-            padding: EdgeInsets.symmetric(
-              vertical: 16.hmea,
-              horizontal: 16.wmea,
+            padding: const EdgeInsets.symmetric(
+              vertical: 16,
+              horizontal: 16,
             ),
             child: Row(
               children: [
@@ -45,9 +43,9 @@ Widget dropDownCategories({required FlowType flowType}) {
                   Text(
                     AppLocalizations.of(context)!.selectCategories,
                     textAlign: TextAlign.center,
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.white,
-                      fontSize: 10.5.sp,
+                      fontSize: 12.5,
                       fontFamily: FontFamily.cabinetGrotesk,
                       fontWeight: FontWeight.w500,
                     ),
@@ -82,7 +80,7 @@ Widget dropDownCategories({required FlowType flowType}) {
             }
           },
           dropdownStyleData: DropdownStyleData(
-            width: 390.wmea,
+            width: 390,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
               color: const Color(0xFF313131),
@@ -94,10 +92,10 @@ Widget dropDownCategories({required FlowType flowType}) {
   );
 }
 
-List<DropdownMenuItem> menuItemExpense(List<ExpenseCategoriesModel> data) {
+List<DropdownItem> menuItemExpense(List<ExpenseCategoriesModel> data) {
   return data
       .map(
-        (item) => DropdownMenuItem<ExpenseCategoriesModel>(
+        (item) => DropdownItem<ExpenseCategoriesModel>(
           value: item,
           child: Row(
             children: rowCategories(item.expenseCategories),
@@ -107,10 +105,10 @@ List<DropdownMenuItem> menuItemExpense(List<ExpenseCategoriesModel> data) {
       .toList();
 }
 
-List<DropdownMenuItem> menuItemIncome(List<IncomeSourceModel> data) {
+List<DropdownItem> menuItemIncome(List<IncomeSourceModel> data) {
   return data
       .map(
-        (item) => DropdownMenuItem<IncomeSourceModel>(
+        (item) => DropdownItem<IncomeSourceModel>(
           value: item,
           child: Row(
             children: rowCategories(item.incomeSource),

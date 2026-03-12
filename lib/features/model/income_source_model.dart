@@ -1,9 +1,7 @@
-import 'package:cling/core/static_name_table.dart';
+import '../../core/static_name_table.dart';
 import 'package:equatable/equatable.dart';
 
 class IncomeSourceModel extends Equatable {
-  final int id;
-  final String incomeSource;
 
   const IncomeSourceModel({
     required this.id,
@@ -15,6 +13,8 @@ class IncomeSourceModel extends Equatable {
         id: json[IncomeSourceMeta.id],
         incomeSource: json[IncomeSourceMeta.incomeSource],
       );
+  final int id;
+  final String incomeSource;
 
   @override
   List<Object?> get props => [id, incomeSource];

@@ -1,7 +1,6 @@
-import 'package:cling/core/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sizer/sizer.dart';
+
 import '../../../../../resources/gen/fonts.gen.dart';
 import '../../../language_currency/lang_export.dart';
 import '../bloc/transaction_bloc.dart';
@@ -19,26 +18,26 @@ class TransactionPage extends StatelessWidget {
       child: Scaffold(
         backgroundColor: Colors.black,
         body: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24.wmea),
+          padding: const EdgeInsets.symmetric(horizontal: 24),
           child: Column(
             children: [
-              SizedBox(height: 16.hmea),
+              const SizedBox(height: 16),
               Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
                   AppLocalizations.of(context)!.transaction,
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.white,
-                    fontSize: 20.sp,
+                    fontSize: 20,
                     fontFamily: FontFamily.cabinetGrotesk,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
               ),
-              SizedBox(height: 16.hmea),
+              const SizedBox(height: 16),
               switchDateTransaction(context),
-              SizedBox(height: 16.hmea),
+              const SizedBox(height: 16),
               Expanded(
                 child: GestureDetector(
                   behavior: HitTestBehavior.opaque,
@@ -104,7 +103,7 @@ class TransactionPage extends StatelessWidget {
                     )
                   : listTransaction(context, state.listTransaction[idx]);
             },
-            separatorBuilder: (_, idx) => SizedBox(height: 8.hmea),
+            separatorBuilder: (_, idx) => const SizedBox(height: 8),
           ),
         );
       },

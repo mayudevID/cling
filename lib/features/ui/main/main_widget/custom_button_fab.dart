@@ -1,14 +1,12 @@
-import 'package:cling/core/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:sizer/sizer.dart';
 
 import '../../../../resources/gen/fonts.gen.dart';
 
 Widget customButtonFab(String text) {
   return Container(
-    padding: EdgeInsets.symmetric(
-      vertical: 9.wmea,
-      horizontal: 19.5.hmea,
+    padding: const EdgeInsets.symmetric(
+      vertical: 9,
+      horizontal: 19.5,
     ),
     decoration: BoxDecoration(
       color: const Color(0xFFF599DA),
@@ -16,9 +14,9 @@ Widget customButtonFab(String text) {
     ),
     child: Text(
       text,
-      style: TextStyle(
+      style: const TextStyle(
         color: Colors.black,
-        fontSize: 11.5.sp,
+        fontSize: 13.5,
         fontFamily: FontFamily.cabinetGrotesk,
         fontWeight: FontWeight.w400,
       ),

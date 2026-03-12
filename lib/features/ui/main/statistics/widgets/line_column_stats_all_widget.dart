@@ -1,9 +1,9 @@
-import 'package:cling/core/utils.dart';
-import 'package:cling/features/ui/language_currency/lang_export.dart';
+import '../../../../../core/utils.dart';
+import '../../../language_currency/lang_export.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:sizer/sizer.dart';
+
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../../../../../resources/gen/fonts.gen.dart';
@@ -22,9 +22,9 @@ Widget lineColumnStatsAllWidget(BuildContext mainContext) {
       if (state.chartDataExpenseList.isEmpty &&
           state.chartDataIncomeList.isEmpty &&
           state.chartDataSavingsList.isEmpty) {
-        return SizedBox(
-          height: 200.hmea,
-          child: const Center(
+        return const SizedBox(
+          height: 200,
+          child: Center(
             child: Text(
               "No data :(",
               style: TextStyle(
@@ -36,10 +36,10 @@ Widget lineColumnStatsAllWidget(BuildContext mainContext) {
         );
       }
 
-      double monthNow = DateTime.now().month.toDouble();
+      final double monthNow = DateTime.now().month.toDouble();
 
       return SizedBox(
-        height: 193.hmea,
+        height: 193,
         child: SfCartesianChart(
           tooltipBehavior: TooltipBehavior(
             enable: true,
@@ -57,18 +57,18 @@ Widget lineColumnStatsAllWidget(BuildContext mainContext) {
           primaryXAxis: CategoryAxis(
             initialVisibleMinimum: monthNow - 2,
             initialVisibleMaximum: monthNow + 2,
-            labelStyle: TextStyle(
+            labelStyle: const TextStyle(
               color: Colors.white,
-              fontSize: 8.sp,
+              fontSize: 8,
               fontFamily: FontFamily.cabinetGrotesk,
               fontWeight: FontWeight.w700,
             ),
           ),
           primaryYAxis: NumericAxis(
             interval: setInterval(state.maxValAll),
-            labelStyle: TextStyle(
+            labelStyle: const TextStyle(
               color: Colors.white,
-              fontSize: 9.5.sp,
+              fontSize: 9.5,
               fontFamily: FontFamily.cabinetGrotesk,
               fontWeight: FontWeight.w700,
             ),

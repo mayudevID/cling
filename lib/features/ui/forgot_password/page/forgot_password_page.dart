@@ -1,7 +1,6 @@
-import 'package:cling/core/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sizer/sizer.dart';
+
 import '../../../../core/common_widget.dart';
 import '../../../../injection.dart';
 import '../../../../resources/gen/assets.gen.dart';
@@ -36,12 +35,12 @@ class ForgotPasswordPageContent extends StatelessWidget {
       child: Scaffold(
         backgroundColor: Colors.black,
         body: Container(
-          width: 100.w,
-          padding: EdgeInsets.symmetric(horizontal: 24.wmea),
+          width: 100,
+          padding: const EdgeInsets.symmetric(horizontal: 24),
           child: Column(
             children: [
-              SizedBox(
-                height: 40.hmea,
+              const SizedBox(
+                height: 40,
               ),
               GestureDetector(
                 onTap: () {
@@ -52,38 +51,38 @@ class ForgotPasswordPageContent extends StatelessWidget {
                   child: Assets.lib.resources.images.backButton.svg(),
                 ),
               ),
-              SizedBox(
-                height: 36.hmea,
+              const SizedBox(
+                height: 36,
               ),
               Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
                   AppLocalizations.of(context)!.forgotPasswordPage,
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.white,
-                    fontSize: 20.sp,
+                    fontSize: 20,
                     fontFamily: FontFamily.bungee,
                     fontWeight: FontWeight.w400,
                   ),
                 ),
               ),
-              SizedBox(
-                height: 8.hmea,
+              const SizedBox(
+                height: 8,
               ),
               Text(
                 AppLocalizations.of(context)!.descForgotPassword,
-                style: TextStyle(
+                style: const TextStyle(
                   color: Colors.white,
-                  fontSize: 11.sp,
+                  fontSize: 13,
                   fontFamily: FontFamily.cabinetGrotesk,
                   fontWeight: FontWeight.w500,
                 ),
               ),
-              SizedBox(height: 32.hmea),
+              const SizedBox(height: 32),
               TagNameLogin(name: AppLocalizations.of(context)!.email),
-              SizedBox(height: 8.hmea),
+              const SizedBox(height: 8),
               const TextFieldEmailForgot(),
-              SizedBox(height: 40.hmea),
+              const SizedBox(height: 40),
               PinkButton(
                 onTap: () {
                   context.read<ForgotPasswordCubit>().sendResetPassword();

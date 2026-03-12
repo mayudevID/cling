@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
 import 'package:nil/nil.dart';
-import 'package:sizer/sizer.dart';
+
 import 'package:transitioned_indexed_stack/transitioned_indexed_stack.dart';
 import 'home/page/home_page.dart';
 import 'main_bloc/main_bloc.dart';
@@ -29,14 +30,13 @@ class MainPageContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        resizeToAvoidBottomInset: false,
-        backgroundColor: const Color(0xFF101010),
-        body: SizedBox(
-          width: 100.w,
-          height: 100.h,
-          child: Stack(
+    return AnnotatedRegion(
+      value: SystemUiOverlayStyle.light,
+      child: SafeArea(
+        child: Scaffold(
+          resizeToAvoidBottomInset: false,
+          backgroundColor: const Color(0xFF101010),
+          body: Stack(
             children: [
               BlocBuilder<MainBloc, MainState>(
                 buildWhen: (previous, current) {
@@ -47,7 +47,6 @@ class MainPageContent extends StatelessWidget {
                     index: state.tabIndex,
                     duration: const Duration(milliseconds: 60),
                     beginOpacity: 0.75,
-                    endOpacity: 1,
                     children: [
                       const HomePage(),
                       const TransactionPage(),
@@ -57,17 +56,24 @@ class MainPageContent extends StatelessWidget {
                   );
                 },
               ),
-              const Positioned(bottom: 0, child: CustomNavBar()),
+              const Positioned(
+                bottom: 0,
+                left: 0,
+                right: 0,
+                child: CustomNavBar(),
+              ),
             ],
           ),
-        ),
-        floatingActionButtonLocation: ExpandableFab.location,
-        floatingActionButton: BlocBuilder<MainBloc, MainState>(
-          builder: (context, state) {
-            if (state.tabIndex == 0) return customFloatingActionButton(context);
+          floatingActionButtonLocation: ExpandableFab.location,
+          floatingActionButton: BlocBuilder<MainBloc, MainState>(
+            builder: (context, state) {
+              if (state.tabIndex == 0) {
+                return customFloatingActionButton(context);
+              }
 
-            return nil;
-          },
+              return nil;
+            },
+          ),
         ),
       ),
     );

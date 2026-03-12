@@ -1,6 +1,4 @@
-import 'package:cling/core/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:sizer/sizer.dart';
 
 import '../../../../../core/route.dart';
 import '../../../../../resources/gen/assets.gen.dart';
@@ -9,27 +7,26 @@ import '../../../language_currency/lang_export.dart';
 
 Widget emptyGoalsWidget(BuildContext context) {
   return Container(
-    margin: EdgeInsets.symmetric(horizontal: 24.wmea),
+    margin: const EdgeInsets.symmetric(horizontal: 24),
     decoration: BoxDecoration(
       color: const Color(0x3D787880),
       borderRadius: BorderRadius.circular(10),
     ),
     child: Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        SizedBox(
-          height: 16.hmea,
+        const SizedBox(
+          height: 16,
         ),
         Text(
           AppLocalizations.of(context)!.goalEmpty,
-          style: TextStyle(
+          style: const TextStyle(
             fontFamily: FontFamily.cabinetGrotesk,
-            fontSize: 10.sp,
+            fontSize: 12,
             color: Colors.white,
           ),
         ),
-        SizedBox(
-          height: 16.hmea,
+        const SizedBox(
+          height: 16,
         ),
         GestureDetector(
           onTap: () {
@@ -41,23 +38,23 @@ Widget emptyGoalsWidget(BuildContext context) {
               Assets.lib.resources.images.plus.svg(
                 // ignore: deprecated_member_use_from_same_package
                 color: Colors.white,
-                width: 14.wmea,
+                width: 14,
               ),
-              SizedBox(
-                width: 4.wmea,
+              const SizedBox(
+                width: 4,
               ),
               Text(
                 AppLocalizations.of(context)!.addGoals,
-                style: TextStyle(
+                style: const TextStyle(
                   fontFamily: FontFamily.cabinetGrotesk,
-                  fontSize: 10.sp,
+                  fontSize: 12,
                   color: Colors.white,
                 ),
               ),
             ],
           ),
         ),
-        SizedBox(height: 16.hmea),
+        const SizedBox(height: 16),
       ],
     ),
   );

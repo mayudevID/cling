@@ -26,49 +26,49 @@ class GetYearlyIncome extends StatisticsEvent {}
 class GetExpenseDateRange extends StatisticsEvent {}
 
 class ChangeAllStatsChoose extends StatisticsEvent {
-  final AllStatsChoose allStatsChoose;
 
   const ChangeAllStatsChoose(this.allStatsChoose);
+  final AllStatsChoose allStatsChoose;
 }
 
 class ChangeRangeDate extends StatisticsEvent {
-  final RangeDate rangeDate;
 
   const ChangeRangeDate(this.rangeDate);
+  final RangeDate rangeDate;
 }
 
 class ChangeDaily extends StatisticsEvent {
-  final int? leftOrRightOrPick;
 
   const ChangeDaily(this.leftOrRightOrPick);
+  final int? leftOrRightOrPick;
 }
 
 class ChangeMonthly extends StatisticsEvent {
-  final int? leftOrRightOrPick;
 
   const ChangeMonthly(this.leftOrRightOrPick);
+  final int? leftOrRightOrPick;
 }
 
 class ChangeYearly extends StatisticsEvent {
-  final int? leftOrRightOrPick;
 
   const ChangeYearly(this.leftOrRightOrPick);
+  final int? leftOrRightOrPick;
 }
 
 class ChangeDateRangePickerView extends StatisticsEvent {
-  final DateRangePickerView dateRangePickerView;
 
   const ChangeDateRangePickerView(this.dateRangePickerView);
+  final DateRangePickerView dateRangePickerView;
 }
 
 class ChangeDateForPeriod extends StatisticsEvent {
-  final DateTime? startDate;
-  final DateTime? endDate;
 
   const ChangeDateForPeriod(
     this.startDate,
     this.endDate,
   );
+  final DateTime? startDate;
+  final DateTime? endDate;
 }
 
 class FreeResourcesStats extends StatisticsEvent {}

@@ -3,8 +3,6 @@ import 'package:equatable/equatable.dart';
 import '../../core/static_name_table.dart';
 
 class ExpenseCategoriesModel extends Equatable {
-  final int id;
-  final String expenseCategories;
 
   const ExpenseCategoriesModel({
     required this.id,
@@ -16,6 +14,8 @@ class ExpenseCategoriesModel extends Equatable {
         id: json[ExpenseCategoriesMeta.id],
         expenseCategories: json[ExpenseCategoriesMeta.expenseCategories],
       );
+  final int id;
+  final String expenseCategories;
 
   @override
   List<Object?> get props => [id, expenseCategories];

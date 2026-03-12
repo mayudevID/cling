@@ -40,9 +40,9 @@ class EditProfileBloc extends Bloc<EditProfileEvent, EditProfileState> {
 
   final SettingsRepository _settingsRepo;
   final AuthRepository _authRepo;
-  var mainContext = MainApp.navKeyGlobal.currentContext!;
+  final BuildContext mainContext = MainApp.navKeyGlobal.currentContext!;
 
-  void _initVal(InitialValueEdit event, emit) {
+  void _initVal(InitialValueEdit event, Emitter<EditProfileState> emit) {
     final userOld = _authRepo.currentUserFirebase;
 
     switch (event.type) {
@@ -58,24 +58,27 @@ class EditProfileBloc extends Bloc<EditProfileEvent, EditProfileState> {
     }
   }
 
-  void _toggleEye(event, emit) {
+  void _toggleEye(ToggleEyeEditProfile event, Emitter<EditProfileState> emit) {
     emit(state.copyWith(isObscure: !state.isObscure));
   }
 
-  void _checkName(CheckName event, emit) {
+  void _checkName(CheckName event, Emitter<EditProfileState> emit) {
     final isSame = TextFieldNameEditProfile.textEditingController.text.trim() ==
         state.initName.trim();
     emit(state.copyWith(isNameSame: isSame));
   }
 
-  void _checkEmail(CheckEmail event, emit) {
+  void _checkEmail(CheckEmail event, Emitter<EditProfileState> emit) {
     final isSame =
         TextFieldEmailEditProfile.textEditingController.text.trim() ==
             state.initEmail.trim();
     emit(state.copyWith(isEmailSame: isSame));
   }
 
-  void _saveNewName(event, emit) async {
+  Future<void> _saveNewName(
+    SaveNewName event,
+    Emitter<EditProfileState> emit,
+  ) async {
     final connectivityResult = await (Connectivity().checkConnectivity());
     if (!(connectivityResult[0] == ConnectivityResult.mobile ||
         connectivityResult[0] == ConnectivityResult.wifi)) {
@@ -86,7 +89,7 @@ class EditProfileBloc extends Bloc<EditProfileEvent, EditProfileState> {
       return;
     }
 
-    String? newName =
+    final String newName =
         TextFieldNameEditProfile.textEditingController.text.trim();
 
     if (newName.isEmpty || newName.length <= 4) {
@@ -109,7 +112,10 @@ class EditProfileBloc extends Bloc<EditProfileEvent, EditProfileState> {
     }
   }
 
-  void _saveNewEmail(event, emit) async {
+  Future<void> _saveNewEmail(
+    SaveNewEmail event,
+    Emitter<EditProfileState> emit,
+  ) async {
     final connectivityResult = await (Connectivity().checkConnectivity());
     if (!(connectivityResult[0] == ConnectivityResult.mobile ||
         connectivityResult[0] == ConnectivityResult.wifi)) {
@@ -120,7 +126,7 @@ class EditProfileBloc extends Bloc<EditProfileEvent, EditProfileState> {
       return;
     }
 
-    String? newEmail =
+    final String newEmail =
         TextFieldEmailEditProfile.textEditingController.text.trim();
 
     if (newEmail.isEmpty) {
@@ -159,7 +165,10 @@ class EditProfileBloc extends Bloc<EditProfileEvent, EditProfileState> {
     }
   }
 
-  void _changePassword(ChangePassword event, _) async {
+  Future<void> _changePassword(
+    ChangePassword event,
+    Emitter<EditProfileState> emit,
+  ) async {
     final result = await dialogChangeEmailOrPassword(mainContext, "pass");
     Logger.Green.log("ChangeP? $result");
     if (!result) return;

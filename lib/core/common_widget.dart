@@ -1,12 +1,11 @@
 // ignore_for_file: must_be_immutable, use_build_context_synchronously
-import 'package:cling/core/utils.dart';
 import 'package:flutter/material.dart' hide ModalBottomSheetRoute;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:sizer/sizer.dart';
+
 import '../features/model/language.dart';
 import '../features/ui/language_currency/lang_currency_bloc.dart';
 import '../features/ui/language_currency/lang_export.dart';
@@ -28,8 +27,8 @@ class PinkButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 380.wmea,
-      height: 57.hmea,
+      width: 380,
+      height: 57,
       child: ElevatedButton(
         onPressed: onTap,
         style: ButtonStyle(
@@ -48,9 +47,9 @@ class PinkButton extends StatelessWidget {
         child: Text(
           name,
           textAlign: TextAlign.center,
-          style: TextStyle(
-            color: const Color(0xFF101010),
-            fontSize: 11.5.sp,
+          style: const TextStyle(
+            color: Color(0xFF101010),
+            fontSize: 16,
             fontFamily: FontFamily.cabinetGrotesk,
             fontWeight: FontWeight.w700,
           ),
@@ -73,15 +72,14 @@ class BlackButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 390.wmea,
-      height: 57.wmea,
+      width: 390,
+      height: 57,
       child: ElevatedButton(
         onPressed: onTap,
         style: ButtonStyle(
           backgroundColor: WidgetStateProperty.all(
             const Color(0xFF101010),
           ),
-          overlayColor: null,
           shape: WidgetStateProperty.all(
             RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10),
@@ -91,9 +89,9 @@ class BlackButton extends StatelessWidget {
         child: Text(
           name,
           textAlign: TextAlign.center,
-          style: TextStyle(
-            color: const Color(0xFFF599DA),
-            fontSize: 11.5.sp,
+          style: const TextStyle(
+            color: Color(0xFFF599DA),
+            fontSize: 13.5,
             fontFamily: FontFamily.cabinetGrotesk,
             fontWeight: FontWeight.w700,
           ),
@@ -121,8 +119,8 @@ void loadingAuth(BuildContext context) {
             "lib/resources/anim/loading_carga.json",
             animate: true,
             repeat: true,
-            width: 48.wmea,
-            height: 48.wmea,
+            width: 48,
+            height: 48,
             frameRate: FrameRate.max,
           ),
         ),
@@ -140,10 +138,10 @@ void errorSnackbar(BuildContext context, String msg) {
         backgroundColor: Colors.red.shade400,
         content: Text(
           msg,
-          style: TextStyle(
+          style: const TextStyle(
             fontFamily: FontFamily.cabinetGrotesk,
             fontWeight: FontWeight.w600,
-            fontSize: 10.sp,
+            fontSize: 12,
           ),
         ),
       ),
@@ -159,10 +157,10 @@ void successSnackbar(BuildContext context, String msg) {
         backgroundColor: Colors.red.shade400,
         content: Text(
           msg,
-          style: TextStyle(
+          style: const TextStyle(
             fontFamily: FontFamily.cabinetGrotesk,
             fontWeight: FontWeight.w600,
-            fontSize: 10.sp,
+            fontSize: 12,
           ),
         ),
       ),
@@ -177,8 +175,8 @@ void errorToast(String msg) {
       gravity: ToastGravity.BOTTOM,
       toastDuration: const Duration(milliseconds: 3500),
       child: Container(
-        margin: EdgeInsets.only(bottom: 111.hmea),
-        padding: EdgeInsets.all(10.wmea),
+        margin: const EdgeInsets.only(bottom: 111),
+        padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(6),
           color: const Color(0xff313131),
@@ -187,12 +185,12 @@ void errorToast(String msg) {
           mainAxisSize: MainAxisSize.min,
           children: [
             Assets.lib.resources.images.dismiss.svg(),
-            SizedBox(width: 8.wmea),
+            const SizedBox(width: 8),
             Text(
               msg,
-              style: TextStyle(
+              style: const TextStyle(
                 fontFamily: FontFamily.cabinetGrotesk,
-                fontSize: 9.5.sp,
+                fontSize: 9.5,
                 color: Colors.white,
                 fontWeight: FontWeight.w700,
               ),
@@ -219,7 +217,7 @@ class NominalMoneyFormatter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var data = context.watch<LangCurrencyBloc>().state.selectedCurrency;
+    final data = context.watch<LangCurrencyBloc>().state.selectedCurrency;
     String formattedAmount = NumberFormat.currency(
       locale: data.value.toLanguageTag(),
       decimalDigits: (amount % 1 == 0) ? 0 : 2,
@@ -261,8 +259,8 @@ Future<void> showBottomSheetChooseLang(BuildContext context) async {
               0,
               Language.values[index].text.indexOf(" "),
             ),
-            style: TextStyle(
-              fontSize: 11.sp,
+            style: const TextStyle(
+              fontSize: 13,
               fontFamily: FontFamily.cabinetGrotesk,
             ),
           ),
@@ -285,17 +283,16 @@ Future<void> showBottomSheetChooseLang(BuildContext context) async {
             borderRadius: BorderRadius.circular(10.0),
             side: Language.values[index] == state.selectedLanguage
                 ? const BorderSide(
-                    color: Colors.black,
                     width: 1.5,
                   )
                 : BorderSide(color: Colors.grey[300]!),
           ),
           tileColor: Language.values[index] == state.selectedLanguage
-              ? Colors.black.withOpacity(0.05)
+              ? Colors.black.withValues(alpha: 0.05)
               : null,
         );
       },
-      separatorBuilder: (_, idx) => SizedBox(height: 18.hmea),
+      separatorBuilder: (_, idx) => const SizedBox(height: 18),
     );
   }
 
@@ -307,7 +304,7 @@ Future<void> showBottomSheetChooseLang(BuildContext context) async {
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
     builder: (context) {
       return Container(
-        padding: EdgeInsets.all(24.wmea),
+        padding: const EdgeInsets.all(24),
         decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -316,9 +313,9 @@ Future<void> showBottomSheetChooseLang(BuildContext context) async {
               children: [
                 Text(
                   AppLocalizations.of(context)!.chooseLang,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontFamily: FontFamily.cabinetGrotesk,
-                    fontSize: 10.sp,
+                    fontSize: 12,
                   ),
                 ),
                 const Spacer(),
@@ -331,7 +328,7 @@ Future<void> showBottomSheetChooseLang(BuildContext context) async {
                 ),
               ],
             ),
-            SizedBox(height: 16.hmea),
+            const SizedBox(height: 16),
             MediaQuery.removePadding(
               removeTop: true,
               context: context,
@@ -356,20 +353,20 @@ Widget appBarProfile({
   required Function() onTapButton,
 }) {
   return Container(
-    margin: EdgeInsets.only(top: 16.hmea),
+    margin: const EdgeInsets.only(top: 16),
     child: Row(
       children: [
         GestureDetector(
           onTap: () => Navigator.pop(context),
           child: Assets.lib.resources.images.fluentChevronLeft24Filled.svg(),
         ),
-        SizedBox(width: 8.wmea),
+        const SizedBox(width: 8),
         Text(
           title,
           textAlign: TextAlign.center,
-          style: TextStyle(
+          style: const TextStyle(
             color: Colors.white,
-            fontSize: 14.5.sp,
+            fontSize: 14.5,
             fontFamily: FontFamily.cabinetGrotesk,
             fontWeight: FontWeight.w500,
           ),
@@ -379,8 +376,8 @@ Widget appBarProfile({
           GestureDetector(
             onTap: onTapButton,
             child: Container(
-              width: 74.wmea,
-              height: 36.hmea,
+              width: 74,
+              height: 36,
               padding: const EdgeInsets.symmetric(vertical: 8),
               decoration: ShapeDecoration(
                 color: const Color(0xFFF599DA),
@@ -391,9 +388,9 @@ Widget appBarProfile({
               child: Text(
                 textButton,
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: const Color(0xFF101010),
-                  fontSize: 10.sp,
+                style: const TextStyle(
+                  color: Color(0xFF101010),
+                  fontSize: 12,
                   fontFamily: FontFamily.cabinetGrotesk,
                   fontWeight: FontWeight.w700,
                 ),
@@ -424,26 +421,26 @@ Future<bool> dialogDelete(BuildContext context) async {
             ),
             color: Colors.white,
           ),
-          padding: EdgeInsets.only(
-            top: 18.hmea,
-            left: 18.wmea,
-            right: 18.wmea,
-            bottom: 18.hmea,
+          padding: const EdgeInsets.only(
+            top: 18,
+            left: 18,
+            right: 18,
+            bottom: 18,
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
                 AppLocalizations.of(context)!.deleteConfirmation,
-                style: TextStyle(
+                style: const TextStyle(
                   fontFamily: FontFamily.cabinetGrotesk,
-                  fontSize: 10.sp,
+                  fontSize: 12,
                   color: Colors.black,
                 ),
                 textAlign: TextAlign.center,
               ),
-              SizedBox(
-                height: 12.hmea,
+              const SizedBox(
+                height: 12,
               ),
               Row(
                 children: [
@@ -453,19 +450,18 @@ Future<bool> dialogDelete(BuildContext context) async {
                       Navigator.pop(context, true);
                     },
                     child: Container(
-                      padding: EdgeInsets.all(12.hmea),
+                      padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
                         color: Colors.red,
                         borderRadius: BorderRadius.circular(8),
                       ),
                       alignment: Alignment.center,
                       child: Align(
-                        alignment: Alignment.center,
                         child: Text(
                           AppLocalizations.of(context)!.yes,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontFamily: FontFamily.cabinetGrotesk,
-                            fontSize: 10.sp,
+                            fontSize: 12,
                             color: Colors.white,
                             fontWeight: FontWeight.w700,
                           ),
@@ -473,25 +469,24 @@ Future<bool> dialogDelete(BuildContext context) async {
                       ),
                     ),
                   ),
-                  SizedBox(width: 10.wmea),
+                  const SizedBox(width: 10),
                   GestureDetector(
                     onTap: () async {
                       Navigator.pop(context, false);
                     },
                     child: Container(
-                      padding: EdgeInsets.all(12.hmea),
+                      padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
                         color: Colors.black,
                         borderRadius: BorderRadius.circular(8),
                       ),
                       alignment: Alignment.center,
                       child: Align(
-                        alignment: Alignment.center,
                         child: Text(
                           AppLocalizations.of(context)!.no,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontFamily: FontFamily.cabinetGrotesk,
-                            fontSize: 10.sp,
+                            fontSize: 12,
                             color: Colors.white,
                             fontWeight: FontWeight.w700,
                           ),

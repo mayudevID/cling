@@ -1,7 +1,5 @@
-import 'package:cling/core/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sizer/sizer.dart';
 
 import '../../../../resources/gen/fonts.gen.dart';
 import '../bloc/calc_bloc.dart';
@@ -15,7 +13,7 @@ Widget buildButtonCalculator(
 }) {
   return SizedBox(
     width: MediaQuery.of(context).size.width / 4,
-    height: 72.hmea,
+    height: 72,
     child: ElevatedButton(
       onPressed: () => context.read<CalcBloc>().add(AddExpression(value)),
       style: ButtonStyle(
@@ -30,7 +28,7 @@ Widget buildButtonCalculator(
       child: Text(
         value,
         style: TextStyle(
-          fontSize: 20.sp,
+          fontSize: 20,
           color: textColor,
           fontWeight: FontWeight.w500,
           fontFamily: FontFamily.cabinetGrotesk,

@@ -1,13 +1,12 @@
-import 'package:cling/core/utils.dart';
-import 'package:cling/features/ui/language_currency/lang_export.dart';
+import '../../../language_currency/lang_export.dart';
 
-import 'package:cling/features/ui/main/statistics/bloc/statistics_bloc.dart';
+import '../../statistics/bloc/statistics_bloc.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:sizer/sizer.dart';
+
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 import '../../../../../resources/gen/assets.gen.dart';
@@ -53,7 +52,7 @@ Widget rangeDatePeriod(BuildContext mainContext) {
     },
     child: Container(
       width: double.infinity,
-      padding: EdgeInsets.all(14.wmea),
+      padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
         color: const Color(0x3D787880),
         borderRadius: BorderRadius.circular(5),
@@ -85,7 +84,7 @@ Widget rangeDatePeriod(BuildContext mainContext) {
 }
 
 void pickDateRangeBottomSheet(BuildContext mainContext) {
-  var listDRPV = DateRangePickerView.values.toList(growable: true);
+  final listDRPV = DateRangePickerView.values.toList(growable: true);
   listDRPV.remove(DateRangePickerView.century);
 
   showMaterialModalBottomSheet(
@@ -115,17 +114,17 @@ void pickDateRangeBottomSheet(BuildContext mainContext) {
                 ),
                 color: Colors.white,
               ),
-              height: 550.hmea,
+              height: 550,
               child: Column(
                 children: [
                   Padding(
-                    padding: EdgeInsets.all(8.sp),
+                    padding: const EdgeInsets.all(8),
                     child: Text(
                       AppLocalizations.of(context)!.selectDateRange,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontFamily: FontFamily.cabinetGrotesk,
                         color: Colors.black,
-                        fontSize: 13.sp,
+                        fontSize: 13,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -136,9 +135,9 @@ void pickDateRangeBottomSheet(BuildContext mainContext) {
                         decoration: const BoxDecoration(
                           color: Color(0xFF313131),
                         ),
-                        padding: EdgeInsets.symmetric(
-                          vertical: 16.hmea,
-                          horizontal: 16.wmea,
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 16,
+                          horizontal: 16,
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -161,7 +160,7 @@ void pickDateRangeBottomSheet(BuildContext mainContext) {
                         ),
                       ),
                       items: listDRPV.map((item) {
-                        return DropdownMenuItem<DateRangePickerView>(
+                        return DropdownItem<DateRangePickerView>(
                           value: item,
                           child: Text(
                             convertEnumToDetailDate(context, item),

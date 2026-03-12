@@ -1,9 +1,8 @@
-import 'package:cling/core/common_widget.dart';
-import 'package:cling/core/utils.dart';
+import '../../../../../../core/common_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:sizer/sizer.dart';
+
 import 'dart:math' as math;
 
 import '../../../../../../core/route.dart';
@@ -34,7 +33,7 @@ void showEditGoalBottomSheet(BuildContext context) {
           GoalDetailPage.navKeyMain.currentContext!,
         ),
         child: Container(
-          padding: EdgeInsets.all(24.wmea),
+          padding: const EdgeInsets.all(24),
           decoration: const BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.only(
@@ -52,11 +51,11 @@ void showEditGoalBottomSheet(BuildContext context) {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
+                    const Text(
                       "Edit Goal",
                       style: TextStyle(
                         color: Colors.black,
-                        fontSize: 12.sp,
+                        fontSize: 12,
                       ),
                     ),
                     GestureDetector(
@@ -68,22 +67,22 @@ void showEditGoalBottomSheet(BuildContext context) {
                     ),
                   ],
                 ),
-                SizedBox(height: 8.hmea),
+                const SizedBox(height: 8),
                 logoGoalWidgetOnEditGoal(context),
-                SizedBox(height: 8.hmea),
+                const SizedBox(height: 8),
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
                     AppLocalizations.of(context)!.name,
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.black,
-                      fontSize: 10.sp,
+                      fontSize: 12,
                       fontFamily: FontFamily.cabinetGrotesk,
                       fontWeight: FontWeight.w800,
                     ),
                   ),
                 ),
-                SizedBox(height: 8.hmea),
+                const SizedBox(height: 8),
                 Container(
                   decoration: ShapeDecoration(
                     color: const Color.fromARGB(255, 224, 224, 224),
@@ -91,13 +90,13 @@ void showEditGoalBottomSheet(BuildContext context) {
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  padding: EdgeInsets.symmetric(
-                    vertical: 16.hmea,
-                    horizontal: 16.wmea,
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 16,
+                    horizontal: 16,
                   ),
                   child: const TextFieldNameEditGoal(),
                 ),
-                SizedBox(height: 16.hmea),
+                const SizedBox(height: 16),
                 Align(
                   alignment: Alignment.centerLeft,
                   child: BlocBuilder<LangCurrencyBloc, LangCurrencyState>(
@@ -107,9 +106,9 @@ void showEditGoalBottomSheet(BuildContext context) {
                     builder: (context, state) {
                       return Text(
                         '${AppLocalizations.of(context)!.amount} Target (${state.selectedCurrency.name})',
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Colors.black,
-                          fontSize: 10.sp,
+                          fontSize: 12,
                           fontFamily: FontFamily.cabinetGrotesk,
                           fontWeight: FontWeight.w800,
                         ),
@@ -117,10 +116,10 @@ void showEditGoalBottomSheet(BuildContext context) {
                     },
                   ),
                 ),
-                SizedBox(height: 8.hmea),
+                const SizedBox(height: 8),
                 GestureDetector(
                   onTap: () async {
-                    var ctxt = GoalDetailPage.navKeyMain.currentContext!;
+                    final ctxt = GoalDetailPage.navKeyMain.currentContext!;
                     final amountRes = await Navigator.pushNamed(
                       bottomSheetContext,
                       RouteName.calc,
@@ -141,9 +140,9 @@ void showEditGoalBottomSheet(BuildContext context) {
                         borderRadius: BorderRadius.circular(10),
                       ),
                     ),
-                    padding: EdgeInsets.symmetric(
-                      vertical: 16.hmea,
-                      horizontal: 16.wmea,
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 16,
+                      horizontal: 16,
                     ),
                     child: Row(
                       children: [
@@ -155,16 +154,16 @@ void showEditGoalBottomSheet(BuildContext context) {
                           builder: (context, state) {
                             return Text(
                               state.selectedCurrency.name,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 color: Colors.black,
-                                fontSize: 10.sp,
+                                fontSize: 12,
                                 fontFamily: FontFamily.cabinetGrotesk,
                                 fontWeight: FontWeight.w800,
                               ),
                             );
                           },
                         ),
-                        SizedBox(width: 10.wmea),
+                        const SizedBox(width: 10),
                         Expanded(
                           child: BlocBuilder<GoalDetailBloc, GoalDetailState>(
                             buildWhen: (p, c) {
@@ -172,9 +171,9 @@ void showEditGoalBottomSheet(BuildContext context) {
                             },
                             builder: (context, state) {
                               return NominalMoneyFormatter(
-                                textStyle: TextStyle(
+                                textStyle: const TextStyle(
                                   color: Colors.black,
-                                  fontSize: 10.sp,
+                                  fontSize: 12,
                                   fontFamily: FontFamily.cabinetGrotesk,
                                   fontWeight: FontWeight.w500,
                                 ),
@@ -188,7 +187,7 @@ void showEditGoalBottomSheet(BuildContext context) {
                     ),
                   ),
                 ),
-                SizedBox(height: 24.hmea),
+                const SizedBox(height: 24),
                 PinkButton(
                   onTap: () {
                     GoalDetailPage.navKeyMain.currentContext!
@@ -198,7 +197,7 @@ void showEditGoalBottomSheet(BuildContext context) {
                   },
                   name: "Edit",
                 ),
-                SizedBox(height: 24.hmea),
+                const SizedBox(height: 24),
               ],
             ),
           ),

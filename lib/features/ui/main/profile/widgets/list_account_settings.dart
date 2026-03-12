@@ -1,7 +1,5 @@
-import 'package:cling/core/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sizer/sizer.dart';
 
 import '../../../../../core/common_widget.dart';
 import '../../../../../core/route.dart';
@@ -24,17 +22,16 @@ List<Widget> listAccountSettings(BuildContext context) {
         );
       },
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          SizedBox(width: 8.wmea),
+          const SizedBox(width: 8),
           Assets.lib.resources.images.money.svg(),
-          SizedBox(width: 10.wmea),
+          const SizedBox(width: 10),
           Text(
             AppLocalizations.of(context)!.monthlyBudget,
             textAlign: TextAlign.center,
-            style: TextStyle(
+            style: const TextStyle(
               color: Colors.white,
-              fontSize: 10.sp,
+              fontSize: 12,
               fontFamily: FontFamily.cabinetGrotesk,
               fontWeight: FontWeight.w500,
             ),
@@ -46,9 +43,9 @@ List<Widget> listAccountSettings(BuildContext context) {
             },
             builder: (context, state) {
               return NominalMoneyFormatter(
-                textStyle: TextStyle(
+                textStyle: const TextStyle(
                   color: Colors.white,
-                  fontSize: 9.5.sp,
+                  fontSize: 9.5,
                   fontFamily: FontFamily.cabinetGrotesk,
                   fontWeight: FontWeight.w400,
                 ),
@@ -57,13 +54,13 @@ List<Widget> listAccountSettings(BuildContext context) {
               );
             },
           ),
-          SizedBox(width: 10.wmea),
+          const SizedBox(width: 10),
           Assets.lib.resources.images.chevronRight16.svg(),
-          SizedBox(width: 8.wmea),
+          const SizedBox(width: 8),
         ],
       ),
     ),
-    SizedBox(height: 32.hmea),
+    const SizedBox(height: 32),
 
     ///* Monthly Income
     GestureDetector(
@@ -76,17 +73,16 @@ List<Widget> listAccountSettings(BuildContext context) {
         );
       },
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          SizedBox(width: 8.wmea),
+          const SizedBox(width: 8),
           Assets.lib.resources.images.moneyHand.svg(),
-          SizedBox(width: 10.wmea),
+          const SizedBox(width: 10),
           Text(
             AppLocalizations.of(context)!.monthlyIncome,
             textAlign: TextAlign.center,
-            style: TextStyle(
+            style: const TextStyle(
               color: Colors.white,
-              fontSize: 10.sp,
+              fontSize: 12,
               fontFamily: FontFamily.cabinetGrotesk,
               fontWeight: FontWeight.w500,
             ),
@@ -98,9 +94,9 @@ List<Widget> listAccountSettings(BuildContext context) {
             },
             builder: (context, state) {
               return NominalMoneyFormatter(
-                textStyle: TextStyle(
+                textStyle: const TextStyle(
                   color: Colors.white,
-                  fontSize: 9.5.sp,
+                  fontSize: 9.5,
                   fontFamily: FontFamily.cabinetGrotesk,
                   fontWeight: FontWeight.w400,
                 ),
@@ -109,9 +105,9 @@ List<Widget> listAccountSettings(BuildContext context) {
               );
             },
           ),
-          SizedBox(width: 10.wmea),
+          const SizedBox(width: 10),
           Assets.lib.resources.images.chevronRight16.svg(),
-          SizedBox(width: 8.wmea),
+          const SizedBox(width: 8),
         ],
       ),
     ),

@@ -1,5 +1,5 @@
 import 'package:bloc/bloc.dart';
-import 'package:cling/features/repository/settings_repository.dart';
+import '../../repository/settings_repository.dart';
 import 'package:equatable/equatable.dart';
 
 import '../../model/currency.dart';

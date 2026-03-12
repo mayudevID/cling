@@ -1,43 +1,26 @@
 {
   "project_info": {
-    "project_number": "726454501636",
-    "project_id": "cling-c49aa",
-    "storage_bucket": "cling-c49aa.appspot.com"
+    "project_number": "222604788674",
+    "project_id": "cling--money-manager-app",
+    "storage_bucket": "cling--money-manager-app.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:726454501636:android:00991a888941c4426d1051",
+        "mobilesdk_app_id": "1:222604788674:android:e009e5927d6ed6e2d9cc5b",
         "android_client_info": {
           "package_name": "com.mayudev.cling"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "726454501636-vo3dlbc6mn8f00c2n5dpk3925d5a15b4.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyCl7wqJThd-_E68DSKI53ECk7x3YGCgWI0"
+          "current_key": "AIzaSyCdADhxMLnDk_bKxlWk0SzTE8c3igtn07k"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "726454501636-skdf4jfhb3r2ktgnsqhfp631ec03rrac.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "726454501636-6gfr5fknobmh0do3tga12aps810cb947.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.maul.cling"
-              }
-            }
-          ]
+          "other_platform_oauth_client": []
         }
       }
     }

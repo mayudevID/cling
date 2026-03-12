@@ -1,7 +1,6 @@
-import 'package:cling/core/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sizer/sizer.dart';
+
 import '../../../../resources/gen/assets.gen.dart';
 import '../../../../resources/gen/fonts.gen.dart';
 import '../../language_currency/lang_currency_bloc.dart';
@@ -16,23 +15,23 @@ import 'text_field_pass_reg.dart';
 List<Widget> formRegister(BuildContext context) {
   return [
     TagNameReg(name: AppLocalizations.of(context)!.name),
-    SizedBox(height: 8.hmea),
+    const SizedBox(height: 8),
     const TextFieldNameReg(),
-    SizedBox(height: 16.hmea),
+    const SizedBox(height: 16),
     TagNameReg(name: AppLocalizations.of(context)!.email),
-    SizedBox(height: 8.hmea),
+    const SizedBox(height: 8),
     const TextFieldEmailReg(),
-    SizedBox(height: 16.hmea),
+    const SizedBox(height: 16),
     TagNameReg(name: AppLocalizations.of(context)!.password),
-    SizedBox(height: 8.hmea),
+    const SizedBox(height: 8),
     const TextFieldPassReg(),
-    SizedBox(height: 16.hmea),
+    const SizedBox(height: 16),
     TagNameReg(name: AppLocalizations.of(context)!.confirmPassword),
-    SizedBox(height: 8.hmea),
+    const SizedBox(height: 8),
     const TextFieldConPassReg(),
-    SizedBox(height: 16.hmea),
+    const SizedBox(height: 16),
     TagNameReg(name: AppLocalizations.of(context)!.currency),
-    SizedBox(height: 8.hmea),
+    const SizedBox(height: 8),
     GestureDetector(
       onTap: () => currencyBottomSheet(context),
       child: Container(
@@ -42,7 +41,7 @@ List<Widget> formRegister(BuildContext context) {
             borderRadius: BorderRadius.circular(10),
           ),
         ),
-        padding: EdgeInsets.symmetric(vertical: 16.hmea, horizontal: 16.wmea),
+        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
         child: Row(
           children: [
             BlocBuilder<LangCurrencyBloc, LangCurrencyState>(
@@ -54,9 +53,9 @@ List<Widget> formRegister(BuildContext context) {
                 return Text(
                   state.selectedCurrency.longName,
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.white,
-                    fontSize: 10.5.sp,
+                    fontSize: 12.5,
                     fontFamily: FontFamily.cabinetGrotesk,
                     fontWeight: FontWeight.w500,
                   ),

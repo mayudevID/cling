@@ -3,12 +3,6 @@
 part of 'add_income_expense_bloc.dart';
 
 class AddIncomeExpenseState extends Equatable {
-  List<IncomeSourceModel> listInSource;
-  List<ExpenseCategoriesModel> listExCategories;
-  DateTime selectedDate;
-  String descOrItem;
-  double amountInput;
-  MapEntry<int, String> selectedCategories;
 
   AddIncomeExpenseState({
     List<IncomeSourceModel>? listInSource,
@@ -21,6 +15,12 @@ class AddIncomeExpenseState extends Equatable {
         selectedDate = selectedDate ?? DateTime.now(),
         selectedCategories = selectedCategories ?? const MapEntry(0, ""),
         listExCategories = listExCategories ?? List.empty();
+  List<IncomeSourceModel> listInSource;
+  List<ExpenseCategoriesModel> listExCategories;
+  DateTime selectedDate;
+  String descOrItem;
+  double amountInput;
+  MapEntry<int, String> selectedCategories;
 
   @override
   List<Object> get props => [

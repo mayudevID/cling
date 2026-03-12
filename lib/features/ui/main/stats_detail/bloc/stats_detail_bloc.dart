@@ -51,7 +51,7 @@ class StatsDetailBloc extends Bloc<StatsDetailEvent, StatsDetailState> {
   final DatabaseRepository _dbRepo;
   final String _type;
   final String _categoryOrSource;
-  var mainContext = MainApp.navKeyGlobal.currentContext!;
+  final BuildContext mainContext = MainApp.navKeyGlobal.currentContext!;
 
   bool get isIncome => _type == 'income';
 
@@ -64,7 +64,7 @@ class StatsDetailBloc extends Bloc<StatsDetailEvent, StatsDetailState> {
   }
 
   int _getDaysInMonth(int year, int month) {
-    DateTime lastDayOfMonth = DateTime(year, month + 1, 1).subtract(
+    final DateTime lastDayOfMonth = DateTime(year, month + 1).subtract(
       const Duration(days: 1),
     );
     return lastDayOfMonth.day;
@@ -80,7 +80,10 @@ class StatsDetailBloc extends Bloc<StatsDetailEvent, StatsDetailState> {
     );
   }
 
-  void _getMostExpenseByCategory(event, emit) async {
+  Future<void> _getMostExpenseByCategory(
+    GetMostExpenseByCategory event,
+    Emitter<StatsDetailState> emit,
+  ) async {
     final result =
         await _dbRepo.getMostExpenseByCategory(source: _categoryOrSource);
     emit(
@@ -90,7 +93,10 @@ class StatsDetailBloc extends Bloc<StatsDetailEvent, StatsDetailState> {
     );
   }
 
-  void _getIncomeBreakdownByCategory(event, emit) async {
+  Future<void> _getIncomeBreakdownByCategory(
+    GetIncomeBreakdownByCategory event,
+    Emitter<StatsDetailState> emit,
+  ) async {
     final result = await _dbRepo.getMostIncomeByCategory(
       source: _categoryOrSource,
       startDate: state.startDate.toIso8601String(),
@@ -104,7 +110,10 @@ class StatsDetailBloc extends Bloc<StatsDetailEvent, StatsDetailState> {
     Logger.Green.log("GetIncomeBreakdownByCategory");
   }
 
-  void _getExpenseBreakdownByCategory(event, emit) async {
+  Future<void> _getExpenseBreakdownByCategory(
+    GetExpenseBreakdownByCategory event,
+    Emitter<StatsDetailState> emit,
+  ) async {
     final result = await _dbRepo.getMostExpenseByCategory(
       source: _categoryOrSource,
       startDate: state.startDate.toIso8601String(),
@@ -131,7 +140,6 @@ class StatsDetailBloc extends Bloc<StatsDetailEvent, StatsDetailState> {
         startDate = DateTime(
           state.endDate.year,
           state.endDate.month,
-          1,
         );
         endDate = DateTime(
           state.endDate.year,
@@ -141,7 +149,7 @@ class StatsDetailBloc extends Bloc<StatsDetailEvent, StatsDetailState> {
         Logger.Green.log("ChangeRangeDateCategory Monthly");
         break;
       case RangeDate.yearly:
-        startDate = DateTime(state.endDate.year, 1, 1);
+        startDate = DateTime(state.endDate.year);
         endDate = DateTime(state.endDate.year, 12, 31);
         Logger.Green.log("ChangeRangeDateCategory Yearly");
         break;
@@ -182,11 +190,10 @@ class StatsDetailBloc extends Bloc<StatsDetailEvent, StatsDetailState> {
         emit(state.copyWith(startDate: newDate, endDate: newDate));
         break;
       default:
-        DateTime? pickedDate = await showDatePicker(
+        final DateTime? pickedDate = await showDatePicker(
           context: mainContext,
           initialDate: state.endDate,
-          initialDatePickerMode: DatePickerMode.day,
-          firstDate: DateTime(1970, 1, 1),
+          firstDate: DateTime(1970),
           lastDate: state.endDate.add(const Duration(days: 1000)),
         );
         if (pickedDate != null) {
@@ -205,12 +212,11 @@ class StatsDetailBloc extends Bloc<StatsDetailEvent, StatsDetailState> {
   void _changeMonthly(ChangeMonthly event, emit) async {
     Logger.Green.log("ChangeMonthlyCategory");
     if (event.leftOrRightOrPick == 0 || event.leftOrRightOrPick == 1) {
-      int monthModifier = (event.leftOrRightOrPick == 0) ? -1 : 1;
+      final int monthModifier = (event.leftOrRightOrPick == 0) ? -1 : 1;
 
       final newStartDate = DateTime(
         state.startDate.year,
         state.startDate.month + monthModifier,
-        1,
       );
       final newEndDate = DateTime(
         state.endDate.year,
@@ -231,7 +237,7 @@ class StatsDetailBloc extends Bloc<StatsDetailEvent, StatsDetailState> {
         lastDate: timeNow.add(const Duration(days: 10000000)),
       );
       if (pickedDate != null) {
-        final newStartDate = DateTime(pickedDate.year, pickedDate.month, 1);
+        final newStartDate = DateTime(pickedDate.year, pickedDate.month);
         final newEndDate = DateTime(
           pickedDate.year,
           pickedDate.month,
@@ -252,14 +258,14 @@ class StatsDetailBloc extends Bloc<StatsDetailEvent, StatsDetailState> {
   void _changeYearly(ChangeYearly event, emit) async {
     Logger.Green.log("ChangeYearlyCategory");
     if (event.leftOrRightOrPick == 0 || event.leftOrRightOrPick == 1) {
-      int yearModifier = (event.leftOrRightOrPick == 0) ? -1 : 1;
+      final int yearModifier = (event.leftOrRightOrPick == 0) ? -1 : 1;
 
-      final newStartDate = DateTime(state.endDate.year + yearModifier, 1, 1);
+      final newStartDate = DateTime(state.endDate.year + yearModifier);
       final newEndDate = DateTime(state.endDate.year + yearModifier, 12, 31);
 
       emit(state.copyWith(startDate: newStartDate, endDate: newEndDate));
     } else {
-      DateTime? pickedDate = await showDialog(
+      final DateTime? pickedDate = await showDialog(
         context: mainContext,
         builder: (BuildContext context) {
           return AlertDialog(
@@ -271,8 +277,8 @@ class StatsDetailBloc extends Bloc<StatsDetailEvent, StatsDetailState> {
               width: 300,
               height: 300,
               child: YearPicker(
-                firstDate: DateTime(timeNow.year - 100, 1),
-                lastDate: DateTime(timeNow.year + 100, 1),
+                firstDate: DateTime(timeNow.year - 100),
+                lastDate: DateTime(timeNow.year + 100),
                 currentDate: timeNow,
                 selectedDate: state.endDate,
                 onChanged: (DateTime dateTime) {
@@ -285,7 +291,7 @@ class StatsDetailBloc extends Bloc<StatsDetailEvent, StatsDetailState> {
       );
 
       if (pickedDate != null) {
-        final newStartDate = DateTime(pickedDate.year, 1, 1);
+        final newStartDate = DateTime(pickedDate.year);
         final newEndDate = DateTime(
           pickedDate.year,
           12,
@@ -314,7 +320,7 @@ class StatsDetailBloc extends Bloc<StatsDetailEvent, StatsDetailState> {
         Logger.Green.log("ChangeDateRangePickerView (By Day)");
         break;
       case DateRangePickerView.year:
-        newStartDate = DateTime(state.startDate.year, state.startDate.month, 1);
+        newStartDate = DateTime(state.startDate.year, state.startDate.month);
         newEndDate = DateTime(
           state.endDate.year,
           state.endDate.month,
@@ -323,7 +329,7 @@ class StatsDetailBloc extends Bloc<StatsDetailEvent, StatsDetailState> {
         Logger.Green.log("ChangeDateRangePickerView (By Month)");
         break;
       case DateRangePickerView.decade:
-        newStartDate = DateTime(state.startDate.year, 1, 1);
+        newStartDate = DateTime(state.startDate.year);
         newEndDate = DateTime(state.endDate.year, 12, 31);
         Logger.Green.log("ChangeDateRangePickerView (By Year)");
         break;
@@ -361,7 +367,7 @@ class StatsDetailBloc extends Bloc<StatsDetailEvent, StatsDetailState> {
   }
 
   void _updateFromEdit(UpdateFromEdit event, emit) {
-    var listData = state.listTransactionModel.toList(growable: true);
+    final listData = state.listTransactionModel.toList(growable: true);
     final idx = state.listTransactionModel.indexWhere(
       (element) => element.id == event.transactionModel.id,
     );
@@ -371,7 +377,7 @@ class StatsDetailBloc extends Bloc<StatsDetailEvent, StatsDetailState> {
   }
 
   void _deleteFromEdit(DeleteFromEdit event, emit) {
-    var listData = state.listTransactionModel.toList(growable: true);
+    final listData = state.listTransactionModel.toList(growable: true);
     listData.removeWhere((element) => element.id == event.id);
     emit(state.copyWith(listTransactionModel: listData));
   }

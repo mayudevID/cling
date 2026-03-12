@@ -1,7 +1,5 @@
-import 'package:cling/core/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sizer/sizer.dart';
 
 import '../../../../../core/init_database.dart';
 import '../../../../../resources/gen/fonts.gen.dart';
@@ -26,29 +24,29 @@ Future<void> dialogPickGoalLogo(BuildContext mainContext) async {
             ),
             color: Colors.white,
           ),
-          padding: EdgeInsets.only(
-            top: 18.hmea,
-            left: 18.wmea,
-            right: 18.wmea,
-            bottom: 18.hmea,
+          padding: const EdgeInsets.only(
+            top: 18,
+            left: 18,
+            right: 18,
+            bottom: 18,
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(
+              const Text(
                 "Choose Logo",
                 style: TextStyle(
                   fontFamily: FontFamily.cabinetGrotesk,
                   fontWeight: FontWeight.bold,
-                  fontSize: 10.sp,
+                  fontSize: 12,
                   color: Colors.black,
                 ),
               ),
-              SizedBox(
-                height: 8.hmea,
+              const SizedBox(
+                height: 8,
               ),
               SizedBox(
-                height: 400.hmea,
+                height: 400,
                 child: GridView.builder(
                   shrinkWrap: true,
                   itemCount: emotLogo.length,
@@ -66,8 +64,8 @@ Future<void> dialogPickGoalLogo(BuildContext mainContext) async {
                       child: Center(
                         child: Text(
                           emotLogo[index],
-                          style: TextStyle(
-                            fontSize: 32.sp,
+                          style: const TextStyle(
+                            fontSize: 32,
                           ),
                         ),
                       ),

@@ -1,9 +1,7 @@
-import 'package:cling/core/utils.dart';
-import 'package:cling/features/ui/language_currency/lang_currency_bloc.dart';
+import '../../language_currency/lang_currency_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:sizer/sizer.dart';
 
 import '../../../../resources/gen/fonts.gen.dart';
 import '../../language_currency/lang_export.dart';
@@ -36,35 +34,35 @@ Future<bool> dialogGetBackup(
             ),
             color: Colors.white,
           ),
-          padding: EdgeInsets.only(
-            top: 18.hmea,
-            left: 18.wmea,
-            right: 18.wmea,
-            bottom: 18.hmea,
+          padding: const EdgeInsets.only(
+            top: 18,
+            left: 18,
+            right: 18,
+            bottom: 18,
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
                 AppLocalizations.of(context)!.backupFound,
-                style: TextStyle(
+                style: const TextStyle(
                   fontFamily: FontFamily.cabinetGrotesk,
                   fontWeight: FontWeight.bold,
-                  fontSize: 10.sp,
+                  fontSize: 12,
                   color: Colors.black,
                 ),
               ),
-              SizedBox(
-                height: 8.hmea,
+              const SizedBox(
+                height: 8,
               ),
               Align(
                 alignment: Alignment.centerLeft,
                 child: RichText(
                   text: TextSpan(
                     text: AppLocalizations.of(context)!.lastBackup,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontFamily: FontFamily.cabinetGrotesk,
-                      fontSize: 10.sp,
+                      fontSize: 12,
                       color: Colors.black,
                     ),
                     children: [
@@ -73,9 +71,9 @@ Future<bool> dialogGetBackup(
                         text: DateFormat.yMd(dateFormat)
                             .add_jm()
                             .format(dateOfLastBackup),
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontFamily: FontFamily.cabinetGrotesk,
-                          fontSize: 10.sp,
+                          fontSize: 12,
                           color: Colors.black,
                           fontWeight: FontWeight.bold,
                         ),
@@ -84,23 +82,23 @@ Future<bool> dialogGetBackup(
                   ),
                 ),
               ),
-              SizedBox(
-                height: 8.hmea,
+              const SizedBox(
+                height: 8,
               ),
               Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
                   AppLocalizations.of(context)!.useThisBackup,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontFamily: FontFamily.cabinetGrotesk,
-                    fontSize: 10.sp,
+                    fontSize: 12,
                     color: Colors.black,
                   ),
                   textAlign: TextAlign.center,
                 ),
               ),
-              SizedBox(
-                height: 12.hmea,
+              const SizedBox(
+                height: 12,
               ),
               Row(
                 children: [
@@ -110,46 +108,44 @@ Future<bool> dialogGetBackup(
                       Navigator.pop(context, true);
                     },
                     child: Container(
-                      padding: EdgeInsets.all(12.hmea),
+                      padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
                         color: Colors.red,
                         borderRadius: BorderRadius.circular(8),
                       ),
                       alignment: Alignment.center,
                       child: Align(
-                        alignment: Alignment.center,
                         child: Text(
                           AppLocalizations.of(context)!.yes,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontFamily: FontFamily.cabinetGrotesk,
-                            fontSize: 10.sp,
+                            fontSize: 12,
                             color: Colors.white,
                           ),
                         ),
                       ),
                     ),
                   ),
-                  SizedBox(
-                    width: 10.wmea,
+                  const SizedBox(
+                    width: 10,
                   ),
                   GestureDetector(
                     onTap: () {
                       Navigator.pop(context, false);
                     },
                     child: Container(
-                      padding: EdgeInsets.all(12.hmea),
+                      padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
                         color: Colors.black,
                         borderRadius: BorderRadius.circular(8),
                       ),
                       alignment: Alignment.center,
                       child: Align(
-                        alignment: Alignment.center,
                         child: Text(
                           AppLocalizations.of(context)!.skip,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontFamily: FontFamily.cabinetGrotesk,
-                            fontSize: 10.sp,
+                            fontSize: 12,
                             color: Colors.white,
                           ),
                         ),

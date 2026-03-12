@@ -7,7 +7,7 @@ class CustomIndexedStack extends StatefulWidget {
     required this.index,
     required this.curve,
     this.begin = const Offset(0, 0.02),
-    this.end = const Offset(0, 0),
+    this.end = Offset.zero,
   });
 
   final List<Widget> children;

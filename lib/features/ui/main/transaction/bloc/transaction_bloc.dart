@@ -18,23 +18,23 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
   final DatabaseRepository _dbRepo;
   //final _debouncer = Debouncer(milliseconds: 750);
 
-  void _clickLeft(event, emit) {
+  void _clickLeft(ClickLeft event, Emitter<TransactionState> emit) {
     emit(
-      state.copyWith(date: DateTime(state.date.year, state.date.month - 1, 1)),
+      state.copyWith(date: DateTime(state.date.year, state.date.month - 1)),
     );
 
     add(GetData());
   }
 
-  void _clickRight(event, emit) {
+  void _clickRight(ClickRight event, Emitter<TransactionState> emit) {
     emit(
-      state.copyWith(date: DateTime(state.date.year, state.date.month + 1, 1)),
+      state.copyWith(date: DateTime(state.date.year, state.date.month + 1)),
     );
 
     add(GetData());
   }
 
-  void _getData(event, emit) async {
+  Future<void> _getData(GetData event, Emitter<TransactionState> emit) async {
     final result = await _dbRepo.getTransaction(state.date);
 
     if (result.isNotEmpty) {

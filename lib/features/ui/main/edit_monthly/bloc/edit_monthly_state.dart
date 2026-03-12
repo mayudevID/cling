@@ -3,13 +3,13 @@
 part of 'edit_monthly_bloc.dart';
 
 class EditMonthlyState extends Equatable {
-  double amount;
-  int dateRec;
 
   EditMonthlyState({
     this.dateRec = 0,
     this.amount = 0,
   });
+  double amount;
+  int dateRec;
 
   @override
   List<dynamic> get props => [dateRec, amount];

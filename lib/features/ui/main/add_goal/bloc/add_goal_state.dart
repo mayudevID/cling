@@ -3,14 +3,14 @@
 part of 'add_goal_bloc.dart';
 
 class AddGoalState extends Equatable {
-  String nameGoal;
-  String logoGoal;
-  double amountInput;
   AddGoalState({
     this.nameGoal = "",
     this.logoGoal = "",
     this.amountInput = 0,
   });
+  String nameGoal;
+  String logoGoal;
+  double amountInput;
 
   @override
   List<Object> get props => [

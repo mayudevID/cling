@@ -1,7 +1,5 @@
-import 'package:cling/core/utils.dart';
-import 'package:cling/features/ui/language_currency/lang_export.dart';
+import '../../language_currency/lang_export.dart';
 import 'package:flutter/material.dart';
-import 'package:sizer/sizer.dart';
 
 import '../../../../../resources/gen/fonts.gen.dart';
 
@@ -22,38 +20,38 @@ Future<void> dialogCloseVerifOnboard(BuildContext context) async {
             ),
             color: Colors.white,
           ),
-          padding: EdgeInsets.only(
-            top: 18.hmea,
-            left: 18.wmea,
-            right: 18.wmea,
-            bottom: 18.hmea,
+          padding: const EdgeInsets.only(
+            top: 18,
+            left: 18,
+            right: 18,
+            bottom: 18,
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(
+              const Text(
                 "Close",
                 style: TextStyle(
                   fontFamily: FontFamily.cabinetGrotesk,
                   fontWeight: FontWeight.bold,
-                  fontSize: 10.sp,
+                  fontSize: 12,
                   color: Colors.black,
                 ),
               ),
-              SizedBox(
-                height: 8.hmea,
+              const SizedBox(
+                height: 8,
               ),
-              Text(
+              const Text(
                 "Are you sure want to close? Monthly budget and Monthly Income will be empty.",
                 style: TextStyle(
                   fontFamily: FontFamily.cabinetGrotesk,
-                  fontSize: 10.sp,
+                  fontSize: 12,
                   color: Colors.black,
                 ),
                 textAlign: TextAlign.center,
               ),
-              SizedBox(
-                height: 12.hmea,
+              const SizedBox(
+                height: 12,
               ),
               Row(
                 children: [
@@ -65,46 +63,44 @@ Future<void> dialogCloseVerifOnboard(BuildContext context) async {
                         ..pop();
                     },
                     child: Container(
-                      padding: EdgeInsets.all(12.hmea),
+                      padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
                         color: Colors.red,
                         borderRadius: BorderRadius.circular(8),
                       ),
                       alignment: Alignment.center,
-                      child: Align(
-                        alignment: Alignment.center,
+                      child: const Align(
                         child: Text(
                           "Yes",
                           style: TextStyle(
                             fontFamily: FontFamily.cabinetGrotesk,
-                            fontSize: 10.sp,
+                            fontSize: 12,
                             color: Colors.white,
                           ),
                         ),
                       ),
                     ),
                   ),
-                  SizedBox(
-                    width: 10.wmea,
+                  const SizedBox(
+                    width: 10,
                   ),
                   GestureDetector(
                     onTap: () async {
                       Navigator.pop(context);
                     },
                     child: Container(
-                      padding: EdgeInsets.all(12.hmea),
+                      padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
                         color: Colors.black,
                         borderRadius: BorderRadius.circular(8),
                       ),
                       alignment: Alignment.center,
                       child: Align(
-                        alignment: Alignment.center,
                         child: Text(
                           AppLocalizations.of(context)!.back,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontFamily: FontFamily.cabinetGrotesk,
-                            fontSize: 10.sp,
+                            fontSize: 12,
                             color: Colors.white,
                           ),
                         ),

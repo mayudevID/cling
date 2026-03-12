@@ -1,8 +1,8 @@
 // ignore_for_file: use_buildmainContext_synchronously, use_build_context_synchronously
 
 import 'dart:io';
-import 'package:cling/core/utils.dart';
-import 'package:cling/main.dart';
+import '../../../../core/utils.dart';
+import '../../../../main.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
@@ -36,7 +36,7 @@ class MonthlyDataBloc extends Bloc<MonthlyDataEvent, MonthlyDataState> {
 
   final SettingsRepository _settingsRepo;
   final AuthRepository _authRepo;
-  var mainContext = MainApp.navKeyGlobal.currentContext!;
+  final BuildContext mainContext = MainApp.navKeyGlobal.currentContext!;
 
   void _recDay(RecDay event, emit) {
     emit(state.copyWith(dateRec: event.dateRec));
@@ -121,7 +121,10 @@ class MonthlyDataBloc extends Bloc<MonthlyDataEvent, MonthlyDataState> {
     );
   }
 
-  void _setFinish(event, emit) async {
+  Future<void> _setFinish(
+    SetFinish event,
+    Emitter<MonthlyDataState> emit,
+  ) async {
     final connectivityResult = await (Connectivity().checkConnectivity());
     if (!(connectivityResult[0] == ConnectivityResult.mobile ||
         connectivityResult[0] == ConnectivityResult.wifi)) {

@@ -1,7 +1,7 @@
-import 'package:cling/core/route.dart';
-import 'package:cling/core/utils.dart';
+import '../../../../core/route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
+
 import 'package:nil/nil.dart';
 
 import '../../../../resources/gen/assets.gen.dart';
@@ -31,8 +31,8 @@ Widget customFloatingActionButton(BuildContext context) {
   ];
 
   return Container(
-    margin: EdgeInsets.only(
-      bottom: 96.hmea,
+    margin: const EdgeInsets.only(
+      bottom: 96,
     ),
     child: ExpandableFab(
       type: ExpandableFabType.up,
@@ -45,8 +45,8 @@ Widget customFloatingActionButton(BuildContext context) {
         ) {
           return Container(
             padding: const EdgeInsets.all(18),
-            width: 64.wmea,
-            height: 64.wmea,
+            width: 64,
+            height: 64,
             decoration: BoxDecoration(
               color: const Color(0xFFF599DA),
               borderRadius: BorderRadius.circular(24),
@@ -67,8 +67,8 @@ Widget customFloatingActionButton(BuildContext context) {
         ) {
           return Container(
             padding: const EdgeInsets.all(18),
-            width: 64.wmea,
-            height: 64.wmea,
+            width: 64,
+            height: 64,
             decoration: BoxDecoration(
               color: const Color(0xFFF599DA),
               borderRadius: BorderRadius.circular(24),
@@ -77,11 +77,11 @@ Widget customFloatingActionButton(BuildContext context) {
           );
         },
       ),
-      distance: 50.hmea,
+      distance: 50,
       overlayStyle: const ExpandableFabOverlayStyle(blur: 3),
       children: [
         const Nil(),
-        for (Map data in buttonData)
+        for (final Map data in buttonData)
           GestureDetector(
             onTap: () async {
               Navigator.pushNamed(

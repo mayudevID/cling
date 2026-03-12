@@ -1,7 +1,5 @@
-import 'package:cling/core/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sizer/sizer.dart';
 
 import '../../../../../core/route.dart';
 import '../../../../../resources/gen/assets.gen.dart';
@@ -10,7 +8,7 @@ import '../../../app_bloc/app_bloc.dart';
 
 Widget nameAndEmail(BuildContext context) {
   return Container(
-    padding: EdgeInsets.all(16.wmea),
+    padding: const EdgeInsets.all(16),
     decoration: ShapeDecoration(
       color: const Color(0x3D787880),
       shape: RoundedRectangleBorder(
@@ -33,17 +31,17 @@ Widget nameAndEmail(BuildContext context) {
 
                   return Text(
                     name,
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.white,
-                      fontSize: 12.5.sp,
+                      fontSize: 12.5,
                       fontFamily: FontFamily.cabinetGrotesk,
                       fontWeight: FontWeight.w700,
                     ),
                   );
                 },
               ),
-              SizedBox(
-                height: 8.hmea,
+              const SizedBox(
+                height: 8,
               ),
               Row(
                 children: [
@@ -57,22 +55,22 @@ Widget nameAndEmail(BuildContext context) {
 
                       return Text(
                         email,
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Colors.white,
-                          fontSize: 9.5.sp,
+                          fontSize: 9.5,
                           fontFamily: FontFamily.cabinetGrotesk,
                           fontWeight: FontWeight.w400,
                         ),
                       );
                     },
                   ),
-                  SizedBox(
-                    width: 8.wmea,
+                  const SizedBox(
+                    width: 8,
                   ),
                   Container(
-                    padding: EdgeInsets.symmetric(
-                      vertical: 3.hmea,
-                      horizontal: 6.wmea,
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 3,
+                      horizontal: 6,
                     ),
                     decoration: BoxDecoration(
                       color: Colors.white,
@@ -95,7 +93,7 @@ Widget nameAndEmail(BuildContext context) {
                                 : Colors.red.shade800,
                             fontFamily: FontFamily.cabinetGrotesk,
                             fontWeight: FontWeight.bold,
-                            fontSize: 8.5.sp,
+                            fontSize: 8.5,
                           ),
                         );
                       },

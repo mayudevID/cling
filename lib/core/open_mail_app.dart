@@ -38,7 +38,7 @@ class OpenMailApp {
       name: 'Apple Mail',
       iosLaunchScheme: _LAUNCH_SCHEME_APPLE_MAIL,
       composeData: ComposeData(
-        base: 'mailto:',
+        
       ),
     ),
     MailApp(
@@ -165,10 +165,10 @@ class OpenMailApp {
 
       return OpenMailAppResult(didOpen: result);
     } else if (_isIOS) {
-      List<MailApp> installedApps = await _getIosMailApps();
+      final List<MailApp> installedApps = await _getIosMailApps();
       if (installedApps.length == 1) {
         bool result = false;
-        String? launchScheme =
+        final String? launchScheme =
             installedApps.first.composeLaunchScheme(emailContent);
         if (launchScheme != null) {
           result = await launchUrl(
@@ -207,7 +207,7 @@ class OpenMailApp {
           false;
       return result;
     } else if (_isIOS) {
-      String? launchScheme = mailApp.composeLaunchScheme(emailContent);
+      final String? launchScheme = mailApp.composeLaunchScheme(emailContent);
       if (launchScheme != null) {
         return await launchUrl(
           Uri.parse(launchScheme),
@@ -224,7 +224,7 @@ class OpenMailApp {
   /// Get a [MailApp] from calling [getMailApps]
   static Future<bool> openSpecificMailApp(MailApp mailApp) async {
     if (_isAndroid) {
-      var result = await _channel.invokeMethod<bool>(
+      final result = await _channel.invokeMethod<bool>(
             'openSpecificMailApp',
             <String, dynamic>{'name': mailApp.name},
           ) ??
@@ -253,7 +253,7 @@ class OpenMailApp {
   }
 
   static Future<List<MailApp>> _getAndroidMailApps() async {
-    var appsJson = await _channel.invokeMethod<String>('getMainApps');
+    final appsJson = await _channel.invokeMethod<String>('getMainApps');
     var apps = <MailApp>[];
 
     if (appsJson != null) {
@@ -267,8 +267,8 @@ class OpenMailApp {
   }
 
   static Future<List<MailApp>> _getIosMailApps() async {
-    var installedApps = <MailApp>[];
-    for (var app in _supportedMailApps) {
+    final installedApps = <MailApp>[];
+    for (final app in _supportedMailApps) {
       if (await canLaunchUrl(Uri.parse(app.iosLaunchScheme)) &&
           !_filterList.contains(app.name.toLowerCase())) {
         installedApps.add(app);
@@ -293,12 +293,6 @@ class OpenMailApp {
 /// Use with [OpenMailApp.getMailApps] or [OpenMailApp.openMailApp] to get a
 /// list of mail apps installed on the device.
 class MailAppPickerDialog extends StatelessWidget {
-  /// The title of the dialog
-  final String title;
-
-  /// The mail apps for the dialog to provide as options
-  final List<MailApp> mailApps;
-  final EmailContent? emailContent;
 
   const MailAppPickerDialog({
     super.key,
@@ -306,13 +300,19 @@ class MailAppPickerDialog extends StatelessWidget {
     required this.mailApps,
     this.emailContent,
   });
+  /// The title of the dialog
+  final String title;
+
+  /// The mail apps for the dialog to provide as options
+  final List<MailApp> mailApps;
+  final EmailContent? emailContent;
 
   @override
   Widget build(BuildContext context) {
     return SimpleDialog(
       title: Text(title),
       children: <Widget>[
-        for (var app in mailApps)
+        for (final app in mailApps)
           SimpleDialogOption(
             child: Text(app.name),
             onPressed: () {
@@ -335,19 +335,6 @@ class MailAppPickerDialog extends StatelessWidget {
 }
 
 class ComposeData {
-  String base;
-  String to;
-  String cc;
-  String bcc;
-  String subject;
-  String body;
-  bool composeStarted = false;
-
-  String get qsPairSeparator {
-    String separator = !composeStarted ? '?' : '&';
-    composeStarted = true;
-    return separator;
-  }
 
   ComposeData({
     this.base = 'mailto:',
@@ -357,6 +344,19 @@ class ComposeData {
     this.subject = 'subject',
     this.body = 'body',
   });
+  String base;
+  String to;
+  String cc;
+  String bcc;
+  String subject;
+  String body;
+  bool composeStarted = false;
+
+  String get qsPairSeparator {
+    final String separator = !composeStarted ? '?' : '&';
+    composeStarted = true;
+    return separator;
+  }
 
   String getComposeLaunchSchemeForIos(EmailContent content) {
     String scheme = base;
@@ -394,9 +394,6 @@ class ComposeData {
 }
 
 class MailApp {
-  final String name;
-  final String iosLaunchScheme;
-  final ComposeData? composeData;
 
   const MailApp({
     required this.name,
@@ -409,6 +406,9 @@ class MailApp {
         iosLaunchScheme: json["iosLaunchScheme"] ?? '',
         composeData: json["composeData"] ?? ComposeData(),
       );
+  final String name;
+  final String iosLaunchScheme;
+  final ComposeData? composeData;
 
   Map<String, dynamic> toJson() => {
         "name": name,
@@ -431,15 +431,15 @@ class MailApp {
 ///
 /// [options] and [canOpen] are only populated and used on iOS
 class OpenMailAppResult {
-  final bool didOpen;
-  final List<MailApp> options;
-
-  bool get canOpen => options.isNotEmpty;
 
   OpenMailAppResult({
     required this.didOpen,
     this.options = const <MailApp>[],
   });
+  final bool didOpen;
+  final List<MailApp> options;
+
+  bool get canOpen => options.isNotEmpty;
 }
 
 /// Used to populate the precomposed emails
@@ -450,16 +450,6 @@ class OpenMailAppResult {
 /// [subject] [String], getter returns [Uri.encodeComponent] from the set [String]
 /// [body] [String], getter returns [Uri.encodeComponent] from the set [String]
 class EmailContent {
-  final List<String> to;
-  final List<String> cc;
-  final List<String> bcc;
-  final String _subject;
-
-  String get subject =>
-      OpenMailApp._isIOS ? Uri.encodeComponent(_subject) : _subject;
-  final String _body;
-
-  String get body => OpenMailApp._isIOS ? Uri.encodeComponent(_body) : _body;
 
   EmailContent({
     List<String>? to,
@@ -472,6 +462,16 @@ class EmailContent {
         bcc = bcc ?? const [],
         _subject = subject ?? '',
         _body = body ?? '';
+  final List<String> to;
+  final List<String> cc;
+  final List<String> bcc;
+  final String _subject;
+
+  String get subject =>
+      OpenMailApp._isIOS ? Uri.encodeComponent(_subject) : _subject;
+  final String _body;
+
+  String get body => OpenMailApp._isIOS ? Uri.encodeComponent(_body) : _body;
 
   String toJson() {
     final Map<String, dynamic> emailContent = {

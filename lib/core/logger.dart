@@ -12,8 +12,9 @@ enum Logger {
   Cyan("36"),
   White("37");
 
-  final String code;
   const Logger(this.code);
+
+  final String code;
 
   void log(dynamic text) {
     dev.log('\x1B[${code}m$text\x1B[0m');

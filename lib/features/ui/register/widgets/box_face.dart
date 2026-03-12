@@ -1,7 +1,6 @@
 import 'dart:async';
 
-import 'package:cling/core/utils.dart';
-import 'package:cling/resources/gen/assets.gen.dart';
+import '../../../../resources/gen/assets.gen.dart';
 import 'package:flutter/material.dart';
 
 class BoxFace extends StatelessWidget {
@@ -11,19 +10,19 @@ class BoxFace extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Container(
-        width: 324.04.wmea,
-        height: 152.hmea,
+        width: 324.04,
+        height: 152,
         decoration: const BoxDecoration(
           color: Color(0xFF07AC65),
         ),
         child: Column(
           children: [
-            SizedBox(
-              height: 31.74.hmea,
+            const SizedBox(
+              height: 31.74,
             ),
             const EyeWidget(),
-            SizedBox(
-              height: 8.35.wmea,
+            const SizedBox(
+              height: 8.35,
             ),
             Assets.lib.resources.images.smile.svg(),
           ],
@@ -78,13 +77,13 @@ class _EyeWidgetState extends State<EyeWidget> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SizedBox(
-                width: 33.41.wmea,
-                height: 33.41.wmea,
+                width: 33.41,
+                height: 33.41,
                 child: Stack(
                   children: [
                     Container(
-                      width: 33.41.wmea,
-                      height: 33.41.wmea,
+                      width: 33.41,
+                      height: 33.41,
                       decoration: const ShapeDecoration(
                         color: Colors.white,
                         shape: OvalBorder(),
@@ -92,8 +91,8 @@ class _EyeWidgetState extends State<EyeWidget> {
                     ),
                     Center(
                       child: Container(
-                        width: 20.04.wmea,
-                        height: 20.04.wmea,
+                        width: 20.04,
+                        height: 20.04,
                         decoration: const ShapeDecoration(
                           color: Colors.black,
                           shape: OvalBorder(),
@@ -103,17 +102,17 @@ class _EyeWidgetState extends State<EyeWidget> {
                   ],
                 ),
               ),
-              SizedBox(
-                width: 8.35.wmea,
+              const SizedBox(
+                width: 8.35,
               ),
               SizedBox(
-                width: 33.41.wmea,
-                height: 33.41.wmea,
+                width: 33.41,
+                height: 33.41,
                 child: Stack(
                   children: [
                     Container(
-                      width: 33.41.wmea,
-                      height: 33.41.wmea,
+                      width: 33.41,
+                      height: 33.41,
                       decoration: const ShapeDecoration(
                         color: Colors.white,
                         shape: OvalBorder(),
@@ -121,8 +120,8 @@ class _EyeWidgetState extends State<EyeWidget> {
                     ),
                     Center(
                       child: Container(
-                        width: 20.04.wmea,
-                        height: 20.04.wmea,
+                        width: 20.04,
+                        height: 20.04,
                         decoration: const ShapeDecoration(
                           color: Colors.black,
                           shape: OvalBorder(),
@@ -138,32 +137,32 @@ class _EyeWidgetState extends State<EyeWidget> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SizedBox(
-                width: 33.41.wmea,
-                height: 33.41.wmea,
+                width: 33.41,
+                height: 33.41,
                 child: Container(
-                  margin: EdgeInsets.symmetric(
-                    vertical: 15.hmea,
-                    horizontal: 5.wmea,
+                  margin: const EdgeInsets.symmetric(
+                    vertical: 15,
+                    horizontal: 5,
                   ),
-                  width: 33.41.wmea,
+                  width: 33.41,
                   decoration: BoxDecoration(
                     color: Colors.black,
                     borderRadius: BorderRadius.circular(8),
                   ),
                 ),
               ),
-              SizedBox(
-                width: 8.35.wmea,
+              const SizedBox(
+                width: 8.35,
               ),
               SizedBox(
-                width: 33.41.wmea,
-                height: 33.41.wmea,
+                width: 33.41,
+                height: 33.41,
                 child: Container(
-                  margin: EdgeInsets.symmetric(
-                    vertical: 15.hmea,
-                    horizontal: 5.wmea,
+                  margin: const EdgeInsets.symmetric(
+                    vertical: 15,
+                    horizontal: 5,
                   ),
-                  width: 33.41.wmea,
+                  width: 33.41,
                   decoration: BoxDecoration(
                     color: Colors.black,
                     borderRadius: BorderRadius.circular(8),

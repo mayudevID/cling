@@ -1,6 +1,5 @@
-import 'package:cling/resources/gen/fonts.gen.dart';
+import '../../../../resources/gen/fonts.gen.dart';
 import 'package:flutter/material.dart';
-import 'package:sizer/sizer.dart';
 
 class TagNameReg extends StatelessWidget {
   const TagNameReg({super.key, required this.name});
@@ -12,9 +11,9 @@ class TagNameReg extends StatelessWidget {
       alignment: Alignment.centerLeft,
       child: Text(
         name,
-        style: TextStyle(
+        style: const TextStyle(
           color: Colors.white,
-          fontSize: 10.sp,
+          fontSize: 12,
           fontFamily: FontFamily.cabinetGrotesk,
           fontWeight: FontWeight.w800,
         ),

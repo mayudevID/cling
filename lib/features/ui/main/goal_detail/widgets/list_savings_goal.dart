@@ -1,8 +1,7 @@
-import 'package:cling/core/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:sizer/sizer.dart';
+
 import 'package:super_tooltip/super_tooltip.dart';
 
 import '../../../../../core/common_widget.dart';
@@ -16,13 +15,12 @@ Widget savingItem({
   required String formatCurr,
   required GoalSavingModel data,
 }) {
-  var controller = SuperTooltipController();
-  var key = GlobalKey();
+  final controller = SuperTooltipController();
+  final key = GlobalKey();
   return SuperTooltip(
     key: key,
     controller: controller,
-    fadeOutDuration: const Duration(milliseconds: 150),
-    barrierColor: Colors.transparent,
+    barrierConfig: const BarrierConfiguration(color: Colors.transparent),
     content: GestureDetector(
       onTap: () async {
         controller
@@ -43,7 +41,7 @@ Widget savingItem({
       ),
     ),
     child: Container(
-      padding: EdgeInsets.symmetric(horizontal: 10.wmea, vertical: 8.wmea),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
       decoration: ShapeDecoration(
         color: const Color(0x3D787880),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
@@ -53,17 +51,17 @@ Widget savingItem({
         children: [
           Text(
             DateFormat.yMd(formatCurr).format(data.date),
-            style: TextStyle(
+            style: const TextStyle(
               color: Colors.white,
-              fontSize: 9.5.sp,
+              fontSize: 9.5,
               fontFamily: FontFamily.cabinetGrotesk,
               fontWeight: FontWeight.w500,
             ),
           ),
           NominalMoneyFormatter(
-            textStyle: TextStyle(
+            textStyle: const TextStyle(
               color: Colors.white,
-              fontSize: 9.5.sp,
+              fontSize: 9.5,
               fontFamily: FontFamily.cabinetGrotesk,
               fontWeight: FontWeight.w700,
             ),

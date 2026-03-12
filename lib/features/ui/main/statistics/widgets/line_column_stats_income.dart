@@ -1,9 +1,9 @@
-import 'package:cling/core/utils.dart';
-import 'package:cling/features/model/chart_data.dart';
+import '../../../../../core/utils.dart';
+import '../../../../model/chart_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:sizer/sizer.dart';
+
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../../../../../resources/gen/fonts.gen.dart';
@@ -17,9 +17,9 @@ Widget lineColumnStatsIncomeWidget(BuildContext mainContext) {
     },
     builder: (context, state) {
       if (state.yearlyIncomeList.isEmpty) {
-        return SizedBox(
-          height: 193.hmea,
-          child: const Center(
+        return const SizedBox(
+          height: 193,
+          child: Center(
             child: Text(
               "No data :(",
               style: TextStyle(
@@ -33,7 +33,7 @@ Widget lineColumnStatsIncomeWidget(BuildContext mainContext) {
 
       return SizedBox(
         width: double.infinity,
-        height: 193.hmea,
+        height: 193,
         child: SfCartesianChart(
           tooltipBehavior: TooltipBehavior(
             enable: true,
@@ -45,20 +45,20 @@ Widget lineColumnStatsIncomeWidget(BuildContext mainContext) {
           ),
           plotAreaBorderWidth: 0,
           plotAreaBorderColor: Colors.transparent,
-          primaryXAxis: CategoryAxis(
+          primaryXAxis: const CategoryAxis(
             interval: 1,
             labelStyle: TextStyle(
               color: Colors.white,
-              fontSize: 7.5.sp,
+              fontSize: 7.5,
               fontFamily: FontFamily.cabinetGrotesk,
               fontWeight: FontWeight.w700,
             ),
           ),
           primaryYAxis: NumericAxis(
             interval: setInterval(state.maxValIncome),
-            labelStyle: TextStyle(
+            labelStyle: const TextStyle(
               color: Colors.white,
-              fontSize: 9.5.sp,
+              fontSize: 9.5,
               fontFamily: FontFamily.cabinetGrotesk,
               fontWeight: FontWeight.w700,
             ),

@@ -2,8 +2,8 @@
 
 import 'dart:math';
 
-import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../main.dart';
@@ -11,7 +11,6 @@ import '../../../../model/expense_model.dart';
 import '../../../../model/goal_model.dart';
 import '../../../../model/notification_model_class.dart';
 import '../../../../repository/database_repository.dart';
-import '../../../language_currency/lang_export.dart';
 import '../../profile/bloc/profile_bloc.dart';
 
 part 'home_event.dart';
@@ -30,9 +29,12 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   }
 
   final DatabaseRepository _dbRepo;
-  var mainContext = MainApp.navKeyGlobal.currentContext!;
+  final BuildContext mainContext = MainApp.navKeyGlobal.currentContext!;
 
-  void _getTotalIncomeExpenseCurrMonth(_, emit) async {
+  Future<void> _getTotalIncomeExpenseCurrMonth(
+    GetIncomeExpenseAmountTotalCurrMonth event,
+    Emitter<HomeState> emit,
+  ) async {
     final result = await Future.wait([
       _dbRepo.getTotalIncomeExpenseCurrMonth(),
       _dbRepo.getTotalBalance(),
@@ -58,12 +60,18 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     await _totalBalanceCheck();
   }
 
-  void _getNotificationCount(event, emit) async {
+  Future<void> _getNotificationCount(
+    GetNotificationCount event,
+    Emitter<HomeState> emit,
+  ) async {
     final total = await _dbRepo.getNotificationCount();
     emit(state.copyWith(totalNotif: total));
   }
 
-  void _getGoalsHomeWithCount(event, emit) async {
+  Future<void> _getGoalsHomeWithCount(
+    GetGoalsHomeWithCount event,
+    Emitter<HomeState> emit,
+  ) async {
     final result = await Future.wait([
       _dbRepo.getGoalsHome(),
       _dbRepo.getGoalsCount(),
@@ -75,7 +83,10 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     ));
   }
 
-  void _getTodayExpenses(_, emit) async {
+  Future<void> _getTodayExpenses(
+    GetTodayExpenses event,
+    Emitter<HomeState> emit,
+  ) async {
     final listData = await _dbRepo.getTodayExpenses();
     emit(state.copyWith(listTodayExpenses: listData));
   }
@@ -110,16 +121,15 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         //   );
         // }
 
-        await AwesomeNotifications().createNotification(
-          content: NotificationContent(
-            id: id,
-            channelKey: 'basic_channel',
-            category: NotificationCategory.Error,
-            actionType: ActionType.Default,
-            title: AppLocalizations.of(mainContext)!.alertMonthlyBudget,
-            body: AppLocalizations.of(mainContext)!.warningMonthlyBudget,
-          ),
-        );
+        // await AwesomeNotifications().createNotification(
+        //   content: NotificationContent(
+        //     id: id,
+        //     channelKey: 'basic_channel',
+        //     category: NotificationCategory.Error,
+        //     title: AppLocalizations.of(mainContext)!.alertMonthlyBudget,
+        //     body: AppLocalizations.of(mainContext)!.warningMonthlyBudget,
+        //   ),
+        // );
         add(GetNotificationCount());
       }
     }
@@ -138,16 +148,15 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
             type: 1,
           ),
         );
-        await AwesomeNotifications().createNotification(
-          content: NotificationContent(
-            id: id,
-            channelKey: 'basic_channel',
-            category: NotificationCategory.Error,
-            actionType: ActionType.Default,
-            title: AppLocalizations.of(mainContext)!.alertCurrentBalance,
-            body: AppLocalizations.of(mainContext)!.warningCurrentBalance,
-          ),
-        );
+        // await AwesomeNotifications().createNotification(
+        //   content: NotificationContent(
+        //     id: id,
+        //     channelKey: 'basic_channel',
+        //     category: NotificationCategory.Error,
+        //     title: AppLocalizations.of(mainContext)!.alertCurrentBalance,
+        //     body: AppLocalizations.of(mainContext)!.warningCurrentBalance,
+        //   ),
+        // );
         add(GetNotificationCount());
       }
     }
@@ -166,22 +175,21 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
             type: 2,
           ),
         );
-        await AwesomeNotifications().createNotification(
-          content: NotificationContent(
-            id: id,
-            channelKey: 'basic_channel',
-            category: NotificationCategory.Error,
-            actionType: ActionType.Default,
-            title: AppLocalizations.of(mainContext)!.alertTotalBalance,
-            body: AppLocalizations.of(mainContext)!.warningTotalBalance,
-          ),
-        );
+        // await AwesomeNotifications().createNotification(
+        //   content: NotificationContent(
+        //     id: id,
+        //     channelKey: 'basic_channel',
+        //     category: NotificationCategory.Error,
+        //     title: AppLocalizations.of(mainContext)!.alertTotalBalance,
+        //     body: AppLocalizations.of(mainContext)!.warningTotalBalance,
+        //   ),
+        // );
         add(GetNotificationCount());
       }
     }
   }
 
-  void _freeResources(FreeResourcesHome event, emit) {
+  void _freeResources(FreeResourcesHome event, Emitter<HomeState> emit) {
     emit(state.copyWith(
       listTodayExpenses: List.empty(),
       listGoals: List.empty(),

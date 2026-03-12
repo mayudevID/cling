@@ -1,9 +1,7 @@
-import 'package:cling/core/utils.dart';
-import 'package:cling/features/ui/main/goal_list/widget/goal_list_widget.dart';
+import '../widget/goal_list_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
-import 'package:sizer/sizer.dart';
 
 import '../../../../../injection.dart';
 import '../../../../../resources/gen/assets.gen.dart';
@@ -37,10 +35,10 @@ class GoalListPageContent extends StatelessWidget {
       child: Scaffold(
         backgroundColor: Colors.black,
         body: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24.wmea),
+          padding: const EdgeInsets.symmetric(horizontal: 24),
           child: Column(
             children: [
-              SizedBox(height: 16.hmea),
+              const SizedBox(height: 16),
               Row(
                 children: [
                   GestureDetector(
@@ -48,13 +46,13 @@ class GoalListPageContent extends StatelessWidget {
                     child: Assets.lib.resources.images.fluentChevronLeft24Filled
                         .svg(),
                   ),
-                  SizedBox(width: 16.wmea),
+                  const SizedBox(width: 16),
                   Text(
                     AppLocalizations.of(context)!.goals,
                     textAlign: TextAlign.center,
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.white,
-                      fontSize: 16.sp,
+                      fontSize: 16,
                       fontFamily: FontFamily.cabinetGrotesk,
                       fontWeight: FontWeight.w700,
                     ),
@@ -62,7 +60,7 @@ class GoalListPageContent extends StatelessWidget {
                   const Spacer(),
                 ],
               ),
-              SizedBox(height: 16.hmea),
+              const SizedBox(height: 16),
               Expanded(
                 child: MediaQuery.removePadding(
                   context: context,
@@ -121,7 +119,7 @@ class GoalListPageContent extends StatelessWidget {
               }
 
               return SizedBox(
-                height: 55.hmea,
+                height: 55,
                 child: Center(child: body),
               );
             },
@@ -131,7 +129,7 @@ class GoalListPageContent extends StatelessWidget {
             itemBuilder: (context, index) {
               return goalListWidget(context, state.listGoalModel[index]);
             },
-            separatorBuilder: (_, x) => SizedBox(height: 8.hmea),
+            separatorBuilder: (_, x) => const SizedBox(height: 8),
           ),
         );
       },

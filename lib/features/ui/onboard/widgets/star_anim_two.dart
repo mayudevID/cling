@@ -51,10 +51,6 @@ class _StarAnimTwoState extends State<StarAnimTwo>
           shape: StarBorder(
             points: 4,
             innerRadiusRatio: 0.39,
-            pointRounding: 0,
-            valleyRounding: 0,
-            rotation: 0,
-            squash: 0,
           ),
         ),
       ),
