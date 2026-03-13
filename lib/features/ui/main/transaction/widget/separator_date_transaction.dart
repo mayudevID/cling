@@ -37,7 +37,7 @@ Widget separatorDateTransaction(BuildContext context, TransactionModel model) {
                   color: Colors.white,
                   fontFamily: FontFamily.cabinetGrotesk,
                   fontWeight: FontWeight.bold,
-                  fontSize: 12,
+                  fontSize: 14,
                 ),
               ),
               Text(
@@ -45,7 +45,7 @@ Widget separatorDateTransaction(BuildContext context, TransactionModel model) {
                 style: const TextStyle(
                   color: Colors.white,
                   fontFamily: FontFamily.cabinetGrotesk,
-                  fontSize: 8.5,
+                  fontSize: 10.5,
                 ),
               ),
               const SizedBox(height: 2.8)

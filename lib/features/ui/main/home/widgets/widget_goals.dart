@@ -41,19 +41,19 @@ Widget widgetGoals(
             ),
             child: Text(goalModel.image, style: const TextStyle(fontSize: 18)),
           ),
-          Spacer(),
+          const Spacer(),
           Text(
             goalModel.name,
             textAlign: TextAlign.center,
             maxLines: 1,
             style: const TextStyle(
               color: Colors.white,
-              fontSize: 12,
+              fontSize: 14,
               fontFamily: FontFamily.cabinetGrotesk,
               fontWeight: FontWeight.w500,
             ),
           ),
-          Spacer(),
+          const Spacer(),
           Stack(
             children: [
               Container(
@@ -74,13 +74,13 @@ Widget widgetGoals(
               ),
             ],
           ),
-          Spacer(),
+          const Spacer(),
           Row(
             children: [
               NominalMoneyFormatter(
                 textStyle: const TextStyle(
                   color: Colors.white,
-                  fontSize: 9.5,
+                  fontSize: 12,
                   fontFamily: FontFamily.cabinetGrotesk,
                   fontWeight: FontWeight.w500,
                 ),
@@ -91,7 +91,7 @@ Widget widgetGoals(
                 " / $percent%",
                 style: const TextStyle(
                   color: Colors.white,
-                  fontSize: 9.5,
+                  fontSize: 12,
                   fontFamily: FontFamily.cabinetGrotesk,
                   fontWeight: FontWeight.w500,
                 ),

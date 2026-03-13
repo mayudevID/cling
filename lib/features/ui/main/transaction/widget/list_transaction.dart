@@ -82,7 +82,7 @@ Widget listTransaction(
                       color: Colors.white,
                       fontFamily: FontFamily.cabinetGrotesk,
                       fontWeight: FontWeight.bold,
-                      fontSize: 8,
+                      fontSize: 10,
                     ),
                   ),
                 ),
@@ -113,7 +113,7 @@ Widget listTransaction(
                 style: TextStyle(
                   color: Colors.grey.shade300,
                   fontFamily: FontFamily.cabinetGrotesk,
-                  fontSize: 8.5,
+                  fontSize: 10.5,
                   fontWeight: FontWeight.bold,
                 ),
               ),

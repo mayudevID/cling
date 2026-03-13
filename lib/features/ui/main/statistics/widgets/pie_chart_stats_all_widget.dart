@@ -104,7 +104,7 @@ Widget pieChartStatsAllWidget() {
                 isVisible: true,
                 textStyle: TextStyle(
                   color: Colors.white,
-                  fontSize: 9.5,
+                  fontSize: 12,
                   fontFamily: FontFamily.cabinetGrotesk,
                   fontWeight: FontWeight.w800,
                 ),

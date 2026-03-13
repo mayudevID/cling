@@ -55,7 +55,7 @@ void showEditGoalBottomSheet(BuildContext context) {
                       "Edit Goal",
                       style: TextStyle(
                         color: Colors.black,
-                        fontSize: 12,
+                        fontSize: 14,
                       ),
                     ),
                     GestureDetector(
@@ -76,7 +76,7 @@ void showEditGoalBottomSheet(BuildContext context) {
                     AppLocalizations.of(context)!.name,
                     style: const TextStyle(
                       color: Colors.black,
-                      fontSize: 12,
+                      fontSize: 14,
                       fontFamily: FontFamily.cabinetGrotesk,
                       fontWeight: FontWeight.w800,
                     ),
@@ -108,7 +108,7 @@ void showEditGoalBottomSheet(BuildContext context) {
                         '${AppLocalizations.of(context)!.amount} Target (${state.selectedCurrency.name})',
                         style: const TextStyle(
                           color: Colors.black,
-                          fontSize: 12,
+                          fontSize: 14,
                           fontFamily: FontFamily.cabinetGrotesk,
                           fontWeight: FontWeight.w800,
                         ),
@@ -156,7 +156,7 @@ void showEditGoalBottomSheet(BuildContext context) {
                               state.selectedCurrency.name,
                               style: const TextStyle(
                                 color: Colors.black,
-                                fontSize: 12,
+                                fontSize: 14,
                                 fontFamily: FontFamily.cabinetGrotesk,
                                 fontWeight: FontWeight.w800,
                               ),
@@ -173,7 +173,7 @@ void showEditGoalBottomSheet(BuildContext context) {
                               return NominalMoneyFormatter(
                                 textStyle: const TextStyle(
                                   color: Colors.black,
-                                  fontSize: 12,
+                                  fontSize: 14,
                                   fontFamily: FontFamily.cabinetGrotesk,
                                   fontWeight: FontWeight.w500,
                                 ),

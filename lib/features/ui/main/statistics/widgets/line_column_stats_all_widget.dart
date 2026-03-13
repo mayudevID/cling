@@ -59,7 +59,7 @@ Widget lineColumnStatsAllWidget(BuildContext mainContext) {
             initialVisibleMaximum: monthNow + 2,
             labelStyle: const TextStyle(
               color: Colors.white,
-              fontSize: 8,
+              fontSize: 10,
               fontFamily: FontFamily.cabinetGrotesk,
               fontWeight: FontWeight.w700,
             ),
@@ -68,7 +68,7 @@ Widget lineColumnStatsAllWidget(BuildContext mainContext) {
             interval: setInterval(state.maxValAll),
             labelStyle: const TextStyle(
               color: Colors.white,
-              fontSize: 9.5,
+              fontSize: 12,
               fontFamily: FontFamily.cabinetGrotesk,
               fontWeight: FontWeight.w700,
             ),

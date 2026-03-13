@@ -87,7 +87,7 @@ Widget pieChartStatsExpense() {
             position: LegendPosition.right,
             textStyle: TextStyle(
               color: Colors.white,
-              fontSize: 8.061,
+              fontSize: 10.061,
               fontFamily: FontFamily.cabinetGrotesk,
               fontWeight: FontWeight.w700,
             ),
@@ -105,7 +105,7 @@ Widget pieChartStatsExpense() {
                 isVisible: true,
                 textStyle: TextStyle(
                   color: Colors.white,
-                  fontSize: 9.5,
+                  fontSize: 12,
                   fontFamily: FontFamily.cabinetGrotesk,
                   fontWeight: FontWeight.w800,
                 ),

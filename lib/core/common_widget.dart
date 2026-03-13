@@ -91,7 +91,7 @@ class BlackButton extends StatelessWidget {
           textAlign: TextAlign.center,
           style: const TextStyle(
             color: Color(0xFFF599DA),
-            fontSize: 13.5,
+            fontSize: 15.5,
             fontFamily: FontFamily.cabinetGrotesk,
             fontWeight: FontWeight.w700,
           ),
@@ -141,7 +141,7 @@ void errorSnackbar(BuildContext context, String msg) {
           style: const TextStyle(
             fontFamily: FontFamily.cabinetGrotesk,
             fontWeight: FontWeight.w600,
-            fontSize: 12,
+            fontSize: 14,
           ),
         ),
       ),
@@ -160,7 +160,7 @@ void successSnackbar(BuildContext context, String msg) {
           style: const TextStyle(
             fontFamily: FontFamily.cabinetGrotesk,
             fontWeight: FontWeight.w600,
-            fontSize: 12,
+            fontSize: 14,
           ),
         ),
       ),
@@ -190,7 +190,7 @@ void errorToast(String msg) {
               msg,
               style: const TextStyle(
                 fontFamily: FontFamily.cabinetGrotesk,
-                fontSize: 9.5,
+                fontSize: 12,
                 color: Colors.white,
                 fontWeight: FontWeight.w700,
               ),
@@ -260,7 +260,7 @@ Future<void> showBottomSheetChooseLang(BuildContext context) async {
               Language.values[index].text.indexOf(" "),
             ),
             style: const TextStyle(
-              fontSize: 13,
+              fontSize: 15,
               fontFamily: FontFamily.cabinetGrotesk,
             ),
           ),
@@ -315,7 +315,7 @@ Future<void> showBottomSheetChooseLang(BuildContext context) async {
                   AppLocalizations.of(context)!.chooseLang,
                   style: const TextStyle(
                     fontFamily: FontFamily.cabinetGrotesk,
-                    fontSize: 12,
+                    fontSize: 14,
                   ),
                 ),
                 const Spacer(),
@@ -390,7 +390,7 @@ Widget appBarProfile({
                 textAlign: TextAlign.center,
                 style: const TextStyle(
                   color: Color(0xFF101010),
-                  fontSize: 12,
+                  fontSize: 14,
                   fontFamily: FontFamily.cabinetGrotesk,
                   fontWeight: FontWeight.w700,
                 ),
@@ -434,7 +434,7 @@ Future<bool> dialogDelete(BuildContext context) async {
                 AppLocalizations.of(context)!.deleteConfirmation,
                 style: const TextStyle(
                   fontFamily: FontFamily.cabinetGrotesk,
-                  fontSize: 12,
+                  fontSize: 14,
                   color: Colors.black,
                 ),
                 textAlign: TextAlign.center,
@@ -461,7 +461,7 @@ Future<bool> dialogDelete(BuildContext context) async {
                           AppLocalizations.of(context)!.yes,
                           style: const TextStyle(
                             fontFamily: FontFamily.cabinetGrotesk,
-                            fontSize: 12,
+                            fontSize: 14,
                             color: Colors.white,
                             fontWeight: FontWeight.w700,
                           ),
@@ -486,7 +486,7 @@ Future<bool> dialogDelete(BuildContext context) async {
                           AppLocalizations.of(context)!.no,
                           style: const TextStyle(
                             fontFamily: FontFamily.cabinetGrotesk,
-                            fontSize: 12,
+                            fontSize: 14,
                             color: Colors.white,
                             fontWeight: FontWeight.w700,
                           ),

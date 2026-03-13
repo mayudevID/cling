@@ -92,7 +92,7 @@ Widget notificationWidget(int idx) {
                               color: Colors.grey[300],
                               fontFamily: FontFamily.cabinetGrotesk,
                               fontWeight: FontWeight.w200,
-                              fontSize: 8.5,
+                              fontSize: 10.5,
                             ),
                           ),
                         ],

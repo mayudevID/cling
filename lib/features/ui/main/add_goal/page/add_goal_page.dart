@@ -56,7 +56,7 @@ class AddGoalPageContent extends StatelessWidget {
                 AppLocalizations.of(context)!.goalName,
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: 12,
+                  fontSize: 14,
                   fontFamily: FontFamily.cabinetGrotesk,
                   fontWeight: FontWeight.w800,
                 ),
@@ -80,7 +80,7 @@ class AddGoalPageContent extends StatelessWidget {
                   cursorColor: Colors.white,
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 12.5,
+                    fontSize: 14.5,
                     fontFamily: FontFamily.cabinetGrotesk,
                     fontWeight: FontWeight.w500,
                   ),
@@ -88,7 +88,7 @@ class AddGoalPageContent extends StatelessWidget {
                     hintText: "Enter Goal",
                     hintStyle: TextStyle(
                       color: Colors.grey,
-                      fontSize: 12.5,
+                      fontSize: 14.5,
                       fontFamily: FontFamily.cabinetGrotesk,
                       fontWeight: FontWeight.w500,
                     ),
@@ -107,7 +107,7 @@ class AddGoalPageContent extends StatelessWidget {
                     "Target (${state.selectedCurrency.name})",
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 12,
+                      fontSize: 14,
                       fontFamily: FontFamily.cabinetGrotesk,
                       fontWeight: FontWeight.w800,
                     ),
@@ -153,7 +153,7 @@ class AddGoalPageContent extends StatelessWidget {
                             state.selectedCurrency.name,
                             style: TextStyle(
                               color: Colors.white,
-                              fontSize: 12,
+                              fontSize: 14,
                               fontFamily: FontFamily.cabinetGrotesk,
                               fontWeight: FontWeight.w800,
                             ),
@@ -170,7 +170,7 @@ class AddGoalPageContent extends StatelessWidget {
                             return NominalMoneyFormatter(
                               textStyle: TextStyle(
                                 color: Colors.white,
-                                fontSize: 12,
+                                fontSize: 14,
                                 fontFamily: FontFamily.cabinetGrotesk,
                                 fontWeight: FontWeight.w500,
                               ),

@@ -48,7 +48,7 @@ Future<bool> dialogGetBackup(
                 style: const TextStyle(
                   fontFamily: FontFamily.cabinetGrotesk,
                   fontWeight: FontWeight.bold,
-                  fontSize: 12,
+                  fontSize: 14,
                   color: Colors.black,
                 ),
               ),
@@ -62,7 +62,7 @@ Future<bool> dialogGetBackup(
                     text: AppLocalizations.of(context)!.lastBackup,
                     style: const TextStyle(
                       fontFamily: FontFamily.cabinetGrotesk,
-                      fontSize: 12,
+                      fontSize: 14,
                       color: Colors.black,
                     ),
                     children: [
@@ -73,7 +73,7 @@ Future<bool> dialogGetBackup(
                             .format(dateOfLastBackup),
                         style: const TextStyle(
                           fontFamily: FontFamily.cabinetGrotesk,
-                          fontSize: 12,
+                          fontSize: 14,
                           color: Colors.black,
                           fontWeight: FontWeight.bold,
                         ),
@@ -91,7 +91,7 @@ Future<bool> dialogGetBackup(
                   AppLocalizations.of(context)!.useThisBackup,
                   style: const TextStyle(
                     fontFamily: FontFamily.cabinetGrotesk,
-                    fontSize: 12,
+                    fontSize: 14,
                     color: Colors.black,
                   ),
                   textAlign: TextAlign.center,
@@ -119,7 +119,7 @@ Future<bool> dialogGetBackup(
                           AppLocalizations.of(context)!.yes,
                           style: const TextStyle(
                             fontFamily: FontFamily.cabinetGrotesk,
-                            fontSize: 12,
+                            fontSize: 14,
                             color: Colors.white,
                           ),
                         ),
@@ -145,7 +145,7 @@ Future<bool> dialogGetBackup(
                           AppLocalizations.of(context)!.skip,
                           style: const TextStyle(
                             fontFamily: FontFamily.cabinetGrotesk,
-                            fontSize: 12,
+                            fontSize: 14,
                             color: Colors.white,
                           ),
                         ),

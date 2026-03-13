@@ -53,7 +53,7 @@ Widget savingItem({
             DateFormat.yMd(formatCurr).format(data.date),
             style: const TextStyle(
               color: Colors.white,
-              fontSize: 9.5,
+              fontSize: 12,
               fontFamily: FontFamily.cabinetGrotesk,
               fontWeight: FontWeight.w500,
             ),
@@ -61,7 +61,7 @@ Widget savingItem({
           NominalMoneyFormatter(
             textStyle: const TextStyle(
               color: Colors.white,
-              fontSize: 9.5,
+              fontSize: 12,
               fontFamily: FontFamily.cabinetGrotesk,
               fontWeight: FontWeight.w700,
             ),

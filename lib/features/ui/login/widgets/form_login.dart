@@ -39,7 +39,7 @@ List<Widget> formLogin(BuildContext context) {
           textAlign: TextAlign.right,
           style: const TextStyle(
             color: Colors.white,
-            fontSize: 12,
+            fontSize: 14,
             fontFamily: FontFamily.cabinetGrotesk,
             fontWeight: FontWeight.w800,
           ),

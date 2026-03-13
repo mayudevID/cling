@@ -95,7 +95,7 @@ Widget nameAndNotification(BuildContext context) {
                               fontFamily: FontFamily.cabinetGrotesk,
                               color: Colors.white,
                               fontWeight: FontWeight.w800,
-                              fontSize: 8,
+                              fontSize: 10,
                             ),
                           ),
                         ),

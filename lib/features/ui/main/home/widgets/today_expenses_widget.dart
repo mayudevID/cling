@@ -47,7 +47,7 @@ Widget todayExpensesWidget(BuildContext context, ExpenseModel expenseModel) {
                   0,
                   expenseModel.categories.indexOf(" "),
                 )}",
-                style: const TextStyle(fontSize: 9),
+                style: const TextStyle(fontSize: 12),
               ),
             ),
           ),
@@ -57,7 +57,7 @@ Widget todayExpensesWidget(BuildContext context, ExpenseModel expenseModel) {
             textAlign: TextAlign.center,
             style: const TextStyle(
               color: Colors.white,
-              fontSize: 12,
+              fontSize: 14,
               fontFamily: FontFamily.cabinetGrotesk,
               fontWeight: FontWeight.w500,
             ),
@@ -69,7 +69,7 @@ Widget todayExpensesWidget(BuildContext context, ExpenseModel expenseModel) {
               NominalMoneyFormatter(
                 textStyle: const TextStyle(
                   color: Colors.white,
-                  fontSize: 12,
+                  fontSize: 14,
                   fontFamily: FontFamily.cabinetGrotesk,
                   fontWeight: FontWeight.w500,
                 ),
@@ -81,7 +81,7 @@ Widget todayExpensesWidget(BuildContext context, ExpenseModel expenseModel) {
                 style: TextStyle(
                   color: Colors.grey.shade300,
                   fontFamily: FontFamily.cabinetGrotesk,
-                  fontSize: 8.5,
+                  fontSize: 10.5,
                   fontWeight: FontWeight.bold,
                 ),
               ),

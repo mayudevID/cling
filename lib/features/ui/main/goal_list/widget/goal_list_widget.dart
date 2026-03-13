@@ -52,7 +52,7 @@ Widget goalListWidget(BuildContext context, GoalModel goalModel) {
                       goalModel.name,
                       style: const TextStyle(
                         color: Colors.white,
-                        fontSize: 12.8,
+                        fontSize: 14.8,
                         fontFamily: FontFamily.cabinetGrotesk,
                         fontWeight: FontWeight.bold,
                       ),
@@ -73,7 +73,7 @@ Widget goalListWidget(BuildContext context, GoalModel goalModel) {
                             "${percent.toStringAsFixed(2)}%",
                             style: const TextStyle(
                               color: Colors.black,
-                              fontSize: 9,
+                              fontSize: 12,
                               fontFamily: FontFamily.cabinetGrotesk,
                               fontWeight: FontWeight.bold,
                             ),
@@ -115,14 +115,14 @@ Widget goalListWidget(BuildContext context, GoalModel goalModel) {
                       "${AppLocalizations.of(context)!.target}: ",
                       style: const TextStyle(
                         color: Colors.white,
-                        fontSize: 9.5,
+                        fontSize: 12,
                         fontFamily: FontFamily.cabinetGrotesk,
                       ),
                     ),
                     NominalMoneyFormatter(
                       textStyle: const TextStyle(
                         color: Colors.white,
-                        fontSize: 9.5,
+                        fontSize: 12,
                         fontWeight: FontWeight.w600,
                         fontFamily: FontFamily.cabinetGrotesk,
                       ),
@@ -137,14 +137,14 @@ Widget goalListWidget(BuildContext context, GoalModel goalModel) {
                       "${AppLocalizations.of(context)!.collected}: ",
                       style: const TextStyle(
                         color: Colors.white,
-                        fontSize: 9.5,
+                        fontSize: 12,
                         fontFamily: FontFamily.cabinetGrotesk,
                       ),
                     ),
                     NominalMoneyFormatter(
                       textStyle: const TextStyle(
                         color: Colors.white,
-                        fontSize: 9.5,
+                        fontSize: 12,
                         fontWeight: FontWeight.w600,
                         fontFamily: FontFamily.cabinetGrotesk,
                       ),

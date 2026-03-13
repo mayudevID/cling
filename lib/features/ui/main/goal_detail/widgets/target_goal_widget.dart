@@ -30,7 +30,7 @@ Widget targetGoalWidget(BuildContext context) {
               textAlign: TextAlign.center,
               style: const TextStyle(
                 color: Colors.white,
-                fontSize: 12,
+                fontSize: 14,
                 fontFamily: FontFamily.cabinetGrotesk,
                 fontWeight: FontWeight.w700,
               ),
@@ -43,7 +43,7 @@ Widget targetGoalWidget(BuildContext context) {
                 return NominalMoneyFormatter(
                   textStyle: const TextStyle(
                     color: Colors.white,
-                    fontSize: 12,
+                    fontSize: 14,
                     fontFamily: FontFamily.cabinetGrotesk,
                     fontWeight: FontWeight.w700,
                   ),
@@ -97,7 +97,7 @@ Widget targetGoalWidget(BuildContext context) {
                 return NominalMoneyFormatter(
                   textStyle: const TextStyle(
                     color: Colors.white,
-                    fontSize: 9.5,
+                    fontSize: 12,
                     fontFamily: FontFamily.cabinetGrotesk,
                     fontWeight: FontWeight.w700,
                   ),
@@ -118,7 +118,7 @@ Widget targetGoalWidget(BuildContext context) {
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 9.5,
+                      fontSize: 12,
                       fontFamily: FontFamily.cabinetGrotesk,
                       fontWeight: FontWeight.w700,
                     ),
@@ -133,7 +133,7 @@ Widget targetGoalWidget(BuildContext context) {
                   textAlign: TextAlign.center,
                   style: const TextStyle(
                     color: Colors.white,
-                    fontSize: 9.5,
+                    fontSize: 12,
                     fontFamily: FontFamily.cabinetGrotesk,
                     fontWeight: FontWeight.w700,
                   ),

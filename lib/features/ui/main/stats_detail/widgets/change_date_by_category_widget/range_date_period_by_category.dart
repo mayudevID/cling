@@ -123,7 +123,7 @@ void pickDateRangeBottomSheet(BuildContext mainContext) {
                       style: const TextStyle(
                         fontFamily: FontFamily.cabinetGrotesk,
                         color: Colors.black,
-                        fontSize: 13,
+                        fontSize: 15,
                         fontWeight: FontWeight.w600,
                       ),
                     ),

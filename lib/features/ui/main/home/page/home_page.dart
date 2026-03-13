@@ -41,7 +41,7 @@ class HomePage extends StatelessWidget {
                   AppLocalizations.of(context)!.totalBalance,
                   style: const TextStyle(
                     color: Colors.white,
-                    fontSize: 12,
+                    fontSize: 14,
                     fontFamily: FontFamily.cabinetGrotesk,
                     fontWeight: FontWeight.bold,
                   ),

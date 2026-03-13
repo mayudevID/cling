@@ -87,10 +87,10 @@ class AuthRepository {
       email: email,
       password: password,
     );
-    // TODO : Handle email verification in better way. This is just temporary solution
-    // if (!userCredential.user!.emailVerified) {
-    //   throw EmailNotVerifiedException();
-    // }
+
+    if (!userCredential.user!.emailVerified) {
+      throw EmailNotVerifiedException();
+    }
 
     await saveLoginProcess(false);
     await saveRegisterProcess(false);

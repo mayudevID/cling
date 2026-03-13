@@ -31,7 +31,7 @@ Widget incomeAndExpense(BuildContext context) {
               textAlign: TextAlign.center,
               style: const TextStyle(
                 color: Colors.white,
-                fontSize: 12,
+                fontSize: 14,
                 fontFamily: FontFamily.cabinetGrotesk,
                 fontWeight: FontWeight.w400,
               ),
@@ -61,7 +61,7 @@ Widget incomeAndExpense(BuildContext context) {
                 return NominalMoneyFormatter(
                   textStyle: const TextStyle(
                     color: Colors.white,
-                    fontSize: 12.5,
+                    fontSize: 14.5,
                     fontFamily: FontFamily.cabinetGrotesk,
                     fontWeight: FontWeight.w700,
                   ),
@@ -96,7 +96,7 @@ Widget incomeAndExpense(BuildContext context) {
                         textAlign: TextAlign.left,
                         style: const TextStyle(
                           color: Colors.white,
-                          fontSize: 9.5,
+                          fontSize: 12,
                           fontFamily: FontFamily.cabinetGrotesk,
                           fontWeight: FontWeight.w500,
                         ),
@@ -114,7 +114,7 @@ Widget incomeAndExpense(BuildContext context) {
                           return NominalMoneyFormatter(
                             textStyle: const TextStyle(
                               color: Colors.white,
-                              fontSize: 9.5,
+                              fontSize: 12,
                               fontFamily: FontFamily.cabinetGrotesk,
                               fontWeight: FontWeight.w500,
                             ),
@@ -150,7 +150,7 @@ Widget incomeAndExpense(BuildContext context) {
                         '${AppLocalizations.of(context)!.expense} 🙏',
                         style: const TextStyle(
                           color: Colors.white,
-                          fontSize: 9.5,
+                          fontSize: 12,
                           fontFamily: FontFamily.cabinetGrotesk,
                           fontWeight: FontWeight.w500,
                         ),
@@ -168,7 +168,7 @@ Widget incomeAndExpense(BuildContext context) {
                           return NominalMoneyFormatter(
                             textStyle: const TextStyle(
                               color: Colors.white,
-                              fontSize: 9.5,
+                              fontSize: 12,
                               fontFamily: FontFamily.cabinetGrotesk,
                               fontWeight: FontWeight.w500,
                             ),

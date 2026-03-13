@@ -33,7 +33,7 @@ Widget nameAndEmail(BuildContext context) {
                     name,
                     style: const TextStyle(
                       color: Colors.white,
-                      fontSize: 12.5,
+                      fontSize: 14.5,
                       fontFamily: FontFamily.cabinetGrotesk,
                       fontWeight: FontWeight.w700,
                     ),
@@ -57,7 +57,7 @@ Widget nameAndEmail(BuildContext context) {
                         email,
                         style: const TextStyle(
                           color: Colors.white,
-                          fontSize: 9.5,
+                          fontSize: 12,
                           fontFamily: FontFamily.cabinetGrotesk,
                           fontWeight: FontWeight.w400,
                         ),
@@ -93,7 +93,7 @@ Widget nameAndEmail(BuildContext context) {
                                 : Colors.red.shade800,
                             fontFamily: FontFamily.cabinetGrotesk,
                             fontWeight: FontWeight.bold,
-                            fontSize: 8.5,
+                            fontSize: 10.5,
                           ),
                         );
                       },

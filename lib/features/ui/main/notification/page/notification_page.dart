@@ -195,7 +195,7 @@ class NotificationPageContent extends StatelessWidget {
                                   color: Colors.white,
                                   fontFamily: FontFamily.cabinetGrotesk,
                                   fontWeight: FontWeight.w700,
-                                  fontSize: 9.2,
+                                  fontSize: 12,
                                 ),
                               ),
                             ),

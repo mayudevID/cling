@@ -42,7 +42,7 @@ Widget tagCategoriesWithTypeFlowWidget(
                 color: Colors.white,
                 fontFamily: FontFamily.cabinetGrotesk,
                 fontWeight: FontWeight.bold,
-                fontSize: 13,
+                fontSize: 15,
               ),
             ),
             Container(
