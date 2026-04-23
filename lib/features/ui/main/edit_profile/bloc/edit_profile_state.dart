@@ -3,7 +3,6 @@
 part of 'edit_profile_bloc.dart';
 
 class EditProfileState extends Equatable {
-
   EditProfileState({
     this.isObscure = true,
     this.initName = "",

@@ -3,7 +3,6 @@
 part of 'main_bloc.dart';
 
 class MainState extends Equatable {
-
   MainState({
     required this.tabIndex,
   });

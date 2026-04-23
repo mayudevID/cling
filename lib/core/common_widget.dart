@@ -194,7 +194,7 @@ void errorToast(String msg) {
                 color: Colors.white,
                 fontWeight: FontWeight.w700,
               ),
-            )
+            ),
           ],
         ),
       ),
@@ -396,8 +396,8 @@ Widget appBarProfile({
                 ),
               ),
             ),
-          )
-        ]
+          ),
+        ],
       ],
     ),
   );

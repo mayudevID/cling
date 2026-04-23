@@ -99,7 +99,7 @@ class _TextFieldConPassRegState extends State<TextFieldConPassReg> {
                 return Assets.lib.resources.images.eyeOn.svg();
               },
             ),
-          )
+          ),
         ],
       ),
     );

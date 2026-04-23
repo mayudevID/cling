@@ -22,7 +22,7 @@ final inSourceData = [
   "💹 Investment",
   "😎 Business",
   "🎁 Gift",
-  "🙂 Health, Beauty, & Wellbeing"
+  "🙂 Health, Beauty, & Wellbeing",
 ];
 
 final emotLogo = [

@@ -3,7 +3,6 @@
 part of 'stats_detail_bloc.dart';
 
 class StatsDetailState extends Equatable {
-
   StatsDetailState({
     List<TransactionModel>? listTransactionModel,
     DateTime? startDate,

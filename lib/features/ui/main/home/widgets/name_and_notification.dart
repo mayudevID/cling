@@ -106,7 +106,7 @@ Widget nameAndNotification(BuildContext context) {
               ],
             ),
           ),
-        )
+        ),
       ],
     ),
   );

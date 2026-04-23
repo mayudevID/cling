@@ -53,7 +53,7 @@ class StatisticsPage extends StatelessWidget {
                   ],
                 );
               },
-            )
+            ),
           ],
         ),
       ),

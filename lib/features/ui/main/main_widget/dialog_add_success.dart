@@ -97,7 +97,7 @@ Future<void> openMail(BuildContext context) async {
                   Navigator.pop(context);
                   Navigator.pop(context);
                 },
-              )
+              ),
             ],
           );
         },

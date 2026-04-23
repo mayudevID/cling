@@ -48,7 +48,7 @@ Widget separatorDateTransaction(BuildContext context, TransactionModel model) {
                   fontSize: 8.5,
                 ),
               ),
-              const SizedBox(height: 2.8)
+              const SizedBox(height: 2.8),
             ],
           ),
         ),

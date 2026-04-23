@@ -123,8 +123,9 @@ void addGoalSavingBottomSheet(BuildContext mainContext) {
                           }
                         },
                         child: Assets.lib.resources.images.calendar.svg(
-                            // ignore: deprecated_member_use_from_same_package
-                            color: Colors.black),
+                          // ignore: deprecated_member_use_from_same_package
+                          color: Colors.black,
+                        ),
                       ),
                     ],
                   ),

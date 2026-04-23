@@ -2,7 +2,6 @@ import '../../core/static_name_table.dart';
 import 'package:equatable/equatable.dart';
 
 class IncomeSourceModel extends Equatable {
-
   const IncomeSourceModel({
     required this.id,
     required this.incomeSource,

@@ -37,9 +37,7 @@ class OpenMailApp {
     MailApp(
       name: 'Apple Mail',
       iosLaunchScheme: _LAUNCH_SCHEME_APPLE_MAIL,
-      composeData: ComposeData(
-        
-      ),
+      composeData: ComposeData(),
     ),
     MailApp(
       name: 'Gmail',
@@ -293,13 +291,13 @@ class OpenMailApp {
 /// Use with [OpenMailApp.getMailApps] or [OpenMailApp.openMailApp] to get a
 /// list of mail apps installed on the device.
 class MailAppPickerDialog extends StatelessWidget {
-
   const MailAppPickerDialog({
     super.key,
     this.title = 'Choose Mail App',
     required this.mailApps,
     this.emailContent,
   });
+
   /// The title of the dialog
   final String title;
 
@@ -335,7 +333,6 @@ class MailAppPickerDialog extends StatelessWidget {
 }
 
 class ComposeData {
-
   ComposeData({
     this.base = 'mailto:',
     this.to = 'to',
@@ -394,7 +391,6 @@ class ComposeData {
 }
 
 class MailApp {
-
   const MailApp({
     required this.name,
     required this.iosLaunchScheme,
@@ -431,7 +427,6 @@ class MailApp {
 ///
 /// [options] and [canOpen] are only populated and used on iOS
 class OpenMailAppResult {
-
   OpenMailAppResult({
     required this.didOpen,
     this.options = const <MailApp>[],
@@ -450,7 +445,6 @@ class OpenMailAppResult {
 /// [subject] [String], getter returns [Uri.encodeComponent] from the set [String]
 /// [body] [String], getter returns [Uri.encodeComponent] from the set [String]
 class EmailContent {
-
   EmailContent({
     List<String>? to,
     List<String>? cc,

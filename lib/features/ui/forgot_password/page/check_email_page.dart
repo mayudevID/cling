@@ -72,7 +72,7 @@ class CheckEmailPage extends StatelessWidget {
                               onPressed: () {
                                 Navigator.pop(context);
                               },
-                            )
+                            ),
                           ],
                         );
                       },

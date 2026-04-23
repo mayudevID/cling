@@ -3,7 +3,6 @@
 part of 'edit_monthly_bloc.dart';
 
 class EditMonthlyState extends Equatable {
-
   EditMonthlyState({
     this.dateRec = 0,
     this.amount = 0,

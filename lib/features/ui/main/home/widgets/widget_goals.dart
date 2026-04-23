@@ -41,7 +41,7 @@ Widget widgetGoals(
             ),
             child: Text(goalModel.image, style: const TextStyle(fontSize: 18)),
           ),
-          Spacer(),
+          const Spacer(),
           Text(
             goalModel.name,
             textAlign: TextAlign.center,
@@ -53,7 +53,7 @@ Widget widgetGoals(
               fontWeight: FontWeight.w500,
             ),
           ),
-          Spacer(),
+          const Spacer(),
           Stack(
             children: [
               Container(
@@ -74,7 +74,7 @@ Widget widgetGoals(
               ),
             ],
           ),
-          Spacer(),
+          const Spacer(),
           Row(
             children: [
               NominalMoneyFormatter(
@@ -97,7 +97,7 @@ Widget widgetGoals(
                 ),
               ),
             ],
-          )
+          ),
         ],
       ),
     ),

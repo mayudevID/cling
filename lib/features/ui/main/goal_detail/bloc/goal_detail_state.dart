@@ -2,7 +2,6 @@ part of 'goal_detail_bloc.dart';
 
 // ignore: must_be_immutable
 class GoalDetailState extends Equatable {
-
   GoalDetailState({
     GoalModel? goalModel,
     List<GoalSavingModel>? dataSavingsList,

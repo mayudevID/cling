@@ -78,7 +78,9 @@ class GoalDetailBloc extends Bloc<GoalDetailEvent, GoalDetailState> {
   }
 
   Future<void> _addSaving(
-      AddSaving event, Emitter<GoalDetailState> emit) async {
+    AddSaving event,
+    Emitter<GoalDetailState> emit,
+  ) async {
     if (state.amount == 0) {
       errorToast(AppLocalizations.of(mainContext)!.pleaseFillAmount);
       return;
@@ -192,7 +194,9 @@ class GoalDetailBloc extends Bloc<GoalDetailEvent, GoalDetailState> {
   }
 
   Future<void> _deleteGoal(
-      DeleteGoal event, Emitter<GoalDetailState> emit) async {
+    DeleteGoal event,
+    Emitter<GoalDetailState> emit,
+  ) async {
     await _dbRepo.deleteGoalWithSaving(state.goalModel.id!);
     mainContext.read<HomeBloc>().add(GetGoalsHomeWithCount());
     goalListContext

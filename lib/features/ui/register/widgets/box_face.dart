@@ -130,7 +130,7 @@ class _EyeWidgetState extends State<EyeWidget> {
                     ),
                   ],
                 ),
-              )
+              ),
             ],
           )
         : Row(

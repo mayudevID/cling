@@ -135,7 +135,7 @@ class SettingsPageContent extends StatelessWidget {
                           textStyle: textStyle,
                         );
                       },
-                    )
+                    ),
                   ],
                 ),
               ),

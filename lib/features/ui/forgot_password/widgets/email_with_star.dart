@@ -56,7 +56,7 @@ class EmailWithStar extends StatelessWidget {
                 ),
               ),
             ),
-          )
+          ),
         ],
       ),
     );

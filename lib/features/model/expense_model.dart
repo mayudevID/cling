@@ -5,7 +5,6 @@ import '../../core/static_name_table.dart';
 import 'transaction_model.dart';
 
 class ExpenseModel implements TransactionModel {
-
   ExpenseModel({
     this.id,
     required this.date,

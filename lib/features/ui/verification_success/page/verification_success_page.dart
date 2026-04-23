@@ -92,7 +92,7 @@ class VerificationSuccessPage extends StatelessWidget {
                           ),
                         ),
                       ),
-                    )
+                    ),
                   ],
                 ),
               ),

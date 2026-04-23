@@ -54,7 +54,8 @@ class GoalListBloc extends Bloc<GoalListEvent, GoalListState> {
     final dataList = await _dbRepo.getGoalsList(_idOffset!);
 
     if (dataList.isNotEmpty) {
-      final List<GoalModel> dataListNew = state.listGoalModel.toList(growable: true);
+      final List<GoalModel> dataListNew =
+          state.listGoalModel.toList(growable: true);
       if (_firstAttempt) {
         _firstAttempt = false;
         dataListNew.add(lastRowData!);

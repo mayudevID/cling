@@ -62,7 +62,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     if (!(connectivityResult[0] == ConnectivityResult.mobile ||
         connectivityResult[0] == ConnectivityResult.wifi)) {
       errorSnackbar(
-          mainContext, AppLocalizations.of(mainContext)!.noConnection);
+        mainContext,
+        AppLocalizations.of(mainContext)!.noConnection,
+      );
       return;
     }
 
@@ -160,13 +162,17 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       await _authRepo.logOut();
       Navigator.pop(mainContext);
       errorSnackbar(
-          mainContext, AppLocalizations.of(mainContext)!.noConnection);
+        mainContext,
+        AppLocalizations.of(mainContext)!.noConnection,
+      );
     } on Exception catch (e) {
       Logger.Red.log("Exception: $e");
       await _authRepo.logOut();
       Navigator.pop(mainContext);
       errorSnackbar(
-          mainContext, const LogInWithEmailAndPasswordFailure().message);
+        mainContext,
+        const LogInWithEmailAndPasswordFailure().message,
+      );
     }
   }
 
@@ -187,7 +193,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           await _dbRepo.open();
         } on Exception catch (_) {
           errorSnackbar(
-              mainContext, AppLocalizations.of(mainContext)!.noConnection);
+            mainContext,
+            AppLocalizations.of(mainContext)!.noConnection,
+          );
         }
         result = false;
       }

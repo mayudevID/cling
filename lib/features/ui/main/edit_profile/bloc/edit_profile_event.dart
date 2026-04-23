@@ -10,7 +10,6 @@ sealed class EditProfileEvent extends Equatable {
 class ToggleEyeEditProfile extends EditProfileEvent {}
 
 class InitialValueEdit extends EditProfileEvent {
-
   const InitialValueEdit(this.type);
   final String type;
 }

@@ -18,7 +18,6 @@ import '../model/transaction_model.dart';
 import '../ui/main/statistics/bloc/statistics_bloc.dart';
 
 class DatabaseRepository {
-
   DatabaseRepository() {
     open();
   }

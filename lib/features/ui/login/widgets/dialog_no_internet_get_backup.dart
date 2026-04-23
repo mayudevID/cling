@@ -21,7 +21,7 @@ Future<bool> dialogNoInternetGetBackup(BuildContext context) async {
             onPressed: () {
               Navigator.pop(context, false);
             },
-          )
+          ),
         ],
       );
     },

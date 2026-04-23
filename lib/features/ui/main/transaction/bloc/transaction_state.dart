@@ -3,7 +3,6 @@
 part of 'transaction_bloc.dart';
 
 class TransactionState extends Equatable {
-
   TransactionState({
     DateTime? date,
     List<TransactionModel>? listTransaction,

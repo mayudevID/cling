@@ -158,13 +158,17 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     } on FirebaseAuthException catch (e) {
       Logger.Red.log("FirebaseAuthException: $e");
       Navigator.pop(mainContext);
-      errorSnackbar(mainContext,
-          SignUpWithEmailAndPasswordFailure.fromCode(e.code).message);
+      errorSnackbar(
+        mainContext,
+        SignUpWithEmailAndPasswordFailure.fromCode(e.code).message,
+      );
     } on SocketException catch (e) {
       Logger.Red.log("SocketException: $e");
       Navigator.pop(mainContext);
       errorSnackbar(
-          mainContext, AppLocalizations.of(mainContext)!.noConnection);
+        mainContext,
+        AppLocalizations.of(mainContext)!.noConnection,
+      );
     } catch (e) {
       Logger.Red.log("FirebaseAuthException: $e");
       Navigator.pop(mainContext);

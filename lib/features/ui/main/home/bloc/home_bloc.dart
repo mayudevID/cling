@@ -77,10 +77,12 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       _dbRepo.getGoalsCount(),
     ]);
 
-    emit(state.copyWith(
-      listGoals: result[0] as List<GoalModel>,
-      totalGoals: result[1] as int,
-    ));
+    emit(
+      state.copyWith(
+        listGoals: result[0] as List<GoalModel>,
+        totalGoals: result[1] as int,
+      ),
+    );
   }
 
   Future<void> _getTodayExpenses(
@@ -98,7 +100,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     if (state.amountExpenseThisMonth > monthlyBudget) {
       final sendNotifResult = await _dbRepo.checkNotificationMonthlyBudget();
       if (sendNotifResult) {
-        final id = await _dbRepo.saveNotification(
+        await _dbRepo.saveNotification(
           NotificationModelClass(
             title: Random().nextInt(253654).toString(),
             desc: Random().nextInt(253654).toString(),
@@ -139,7 +141,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     if (state.amountExpenseThisMonth > state.amountIncomeThisMonth) {
       final sendNotifResult = await _dbRepo.checkNotificationCurrentBalance();
       if (sendNotifResult) {
-        final id = await _dbRepo.saveNotification(
+        await _dbRepo.saveNotification(
           NotificationModelClass(
             title: Random().nextInt(253654).toString(),
             desc: Random().nextInt(253654).toString(),
@@ -166,7 +168,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     if (state.totalBalance < 0) {
       final sendNotifResult = await _dbRepo.checkNotificationTotalBalance();
       if (sendNotifResult) {
-        final id = await _dbRepo.saveNotification(
+        await _dbRepo.saveNotification(
           NotificationModelClass(
             title: Random().nextInt(253654).toString(),
             desc: Random().nextInt(253654).toString(),
@@ -190,11 +192,13 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   }
 
   void _freeResources(FreeResourcesHome event, Emitter<HomeState> emit) {
-    emit(state.copyWith(
-      listTodayExpenses: List.empty(),
-      listGoals: List.empty(),
-      amountIncomeThisMonth: 0,
-      amountExpenseThisMonth: 0,
-    ));
+    emit(
+      state.copyWith(
+        listTodayExpenses: List.empty(),
+        listGoals: List.empty(),
+        amountIncomeThisMonth: 0,
+        amountExpenseThisMonth: 0,
+      ),
+    );
   }
 }

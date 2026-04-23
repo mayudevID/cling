@@ -86,7 +86,7 @@ Widget todayExpensesWidget(BuildContext context, ExpenseModel expenseModel) {
                 ),
               ),
             ],
-          )
+          ),
         ],
       ),
     ),

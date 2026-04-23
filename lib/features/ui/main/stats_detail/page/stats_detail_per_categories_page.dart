@@ -144,7 +144,7 @@ class StatsDetailPerCategoriesPageContent extends StatelessWidget {
                     ),
                   );
                 },
-              )
+              ),
             ],
           ),
         ),
