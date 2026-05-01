@@ -1,1 +1,0 @@
-flutter build appbundle --obfuscate --split-debug-info=./build/debug-info-build
