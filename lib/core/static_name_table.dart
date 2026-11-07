@@ -142,6 +142,10 @@ class GoalMeta {
   static const targetMinor = 'goal_target_minor';
   static const collected = 'goal_collected';
   static const collectedMinor = 'goal_collected_minor';
+  static const targetDate = 'goal_target_date';
+  static const contributionFrequency = 'contribution_frequency';
+  static const planningPriority = 'planning_priority';
+  static const planningWalletId = 'planning_wallet_id';
 }
 
 class GoalSavingMeta {

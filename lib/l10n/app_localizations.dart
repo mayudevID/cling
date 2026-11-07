@@ -1585,6 +1585,426 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Weekly day uses Monday = 1 through Sunday = 7.'**
   String get weeklyWeekdayHint;
+
+  /// No description provided for @clingCheck.
+  ///
+  /// In en, this message translates to:
+  /// **'Cling Check'**
+  String get clingCheck;
+
+  /// No description provided for @clingInsights.
+  ///
+  /// In en, this message translates to:
+  /// **'Cling Insights'**
+  String get clingInsights;
+
+  /// No description provided for @checkPurchaseName.
+  ///
+  /// In en, this message translates to:
+  /// **'What are you planning to buy?'**
+  String get checkPurchaseName;
+
+  /// No description provided for @purchaseAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Purchase amount'**
+  String get purchaseAmount;
+
+  /// No description provided for @plannedTodayOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'This estimate uses today\'s balances. Future purchases are not forecast.'**
+  String get plannedTodayOnly;
+
+  /// No description provided for @estimateNotGuarantee.
+  ///
+  /// In en, this message translates to:
+  /// **'This is an estimate, not a guarantee. Expected income is not counted as cash.'**
+  String get estimateNotGuarantee;
+
+  /// No description provided for @availableBefore.
+  ///
+  /// In en, this message translates to:
+  /// **'Available balance before purchase'**
+  String get availableBefore;
+
+  /// No description provided for @walletAfterPurchase.
+  ///
+  /// In en, this message translates to:
+  /// **'Selected wallet after purchase'**
+  String get walletAfterPurchase;
+
+  /// No description provided for @spendableBefore.
+  ///
+  /// In en, this message translates to:
+  /// **'Estimated spendable before'**
+  String get spendableBefore;
+
+  /// No description provided for @spendableAfter.
+  ///
+  /// In en, this message translates to:
+  /// **'Estimated spendable after'**
+  String get spendableAfter;
+
+  /// No description provided for @dailyAllowanceBefore.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily allowance before'**
+  String get dailyAllowanceBefore;
+
+  /// No description provided for @dailyAllowanceAfter.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily allowance after'**
+  String get dailyAllowanceAfter;
+
+  /// No description provided for @budgetConsumed.
+  ///
+  /// In en, this message translates to:
+  /// **'Estimated spendable used'**
+  String get budgetConsumed;
+
+  /// No description provided for @purchaseWithinBudget.
+  ///
+  /// In en, this message translates to:
+  /// **'Within estimated budget'**
+  String get purchaseWithinBudget;
+
+  /// No description provided for @purchaseCaution.
+  ///
+  /// In en, this message translates to:
+  /// **'Caution: less financial flexibility'**
+  String get purchaseCaution;
+
+  /// No description provided for @purchaseExceedsSpendable.
+  ///
+  /// In en, this message translates to:
+  /// **'Exceeds estimated spendable'**
+  String get purchaseExceedsSpendable;
+
+  /// No description provided for @purchaseInsufficientWallet.
+  ///
+  /// In en, this message translates to:
+  /// **'The selected wallet cannot cover this purchase'**
+  String get purchaseInsufficientWallet;
+
+  /// No description provided for @purchaseInsufficientInformation.
+  ///
+  /// In en, this message translates to:
+  /// **'Not enough information for an estimate'**
+  String get purchaseInsufficientInformation;
+
+  /// No description provided for @reasonWalletShortfall.
+  ///
+  /// In en, this message translates to:
+  /// **'This wallet is short by {amount}.'**
+  String reasonWalletShortfall(Object amount);
+
+  /// No description provided for @reasonProjectedShortfall.
+  ///
+  /// In en, this message translates to:
+  /// **'This would put estimated spendable below zero by {amount}.'**
+  String reasonProjectedShortfall(Object amount);
+
+  /// No description provided for @reasonFlexibilityReduced.
+  ///
+  /// In en, this message translates to:
+  /// **'This purchase would reduce your estimated daily allowance from {before} to {after} until payday.'**
+  String reasonFlexibilityReduced(Object before, Object after);
+
+  /// No description provided for @reasonWithinBudget.
+  ///
+  /// In en, this message translates to:
+  /// **'The selected wallet and estimated obligations can cover this amount.'**
+  String get reasonWithinBudget;
+
+  /// No description provided for @reasonNoProjection.
+  ///
+  /// In en, this message translates to:
+  /// **'Set a payday and keep active wallets in one currency to see the full estimate.'**
+  String get reasonNoProjection;
+
+  /// No description provided for @noInsightsYet.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a few expenses to see useful patterns here.'**
+  String get noInsightsYet;
+
+  /// No description provided for @insightSpendingTrend.
+  ///
+  /// In en, this message translates to:
+  /// **'Spending trend'**
+  String get insightSpendingTrend;
+
+  /// No description provided for @insightCategoryAnalysis.
+  ///
+  /// In en, this message translates to:
+  /// **'Category share'**
+  String get insightCategoryAnalysis;
+
+  /// No description provided for @insightSpendingPace.
+  ///
+  /// In en, this message translates to:
+  /// **'Spending pace'**
+  String get insightSpendingPace;
+
+  /// No description provided for @insightCommitments.
+  ///
+  /// In en, this message translates to:
+  /// **'Upcoming commitments'**
+  String get insightCommitments;
+
+  /// No description provided for @insightFinancialProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'Savings progress'**
+  String get insightFinancialProgress;
+
+  /// No description provided for @insightTrendUp.
+  ///
+  /// In en, this message translates to:
+  /// **'Spending increased {percent}% versus the comparable part of last month.'**
+  String insightTrendUp(Object percent);
+
+  /// No description provided for @insightTrendDown.
+  ///
+  /// In en, this message translates to:
+  /// **'Spending decreased {percent}% versus the comparable part of last month.'**
+  String insightTrendDown(Object percent);
+
+  /// No description provided for @insightCategoryTrendUp.
+  ///
+  /// In en, this message translates to:
+  /// **'{category} spending increased {percent}% versus the comparable part of last month.'**
+  String insightCategoryTrendUp(Object category, Object percent);
+
+  /// No description provided for @insightCategoryTrendDown.
+  ///
+  /// In en, this message translates to:
+  /// **'{category} spending decreased {percent}% versus the comparable part of last month.'**
+  String insightCategoryTrendDown(Object category, Object percent);
+
+  /// No description provided for @insightCategoryShareDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'{category} represents {percent}% of recorded spending this month.'**
+  String insightCategoryShareDescription(Object category, Object percent);
+
+  /// No description provided for @insightPaceDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'You have used {spent}% of the monthly budget while {elapsed}% of the month has passed.'**
+  String insightPaceDescription(Object spent, Object elapsed);
+
+  /// No description provided for @insightCommitmentsDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Recorded bills and recurring expenses total {amount} before payday.'**
+  String insightCommitmentsDescription(Object amount);
+
+  /// No description provided for @insightGoalProgressDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Tracking-only goal contributions total {amount} this month. They do not move wallet money.'**
+  String insightGoalProgressDescription(Object amount);
+
+  /// No description provided for @smartGoalPlanning.
+  ///
+  /// In en, this message translates to:
+  /// **'Smart Savings Goal'**
+  String get smartGoalPlanning;
+
+  /// No description provided for @goalTargetDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Target completion date'**
+  String get goalTargetDate;
+
+  /// No description provided for @goalContributionFrequency.
+  ///
+  /// In en, this message translates to:
+  /// **'Contribution planning frequency'**
+  String get goalContributionFrequency;
+
+  /// No description provided for @goalPriority.
+  ///
+  /// In en, this message translates to:
+  /// **'Planning priority'**
+  String get goalPriority;
+
+  /// No description provided for @goalPlanningWallet.
+  ///
+  /// In en, this message translates to:
+  /// **'Reference wallet (informational)'**
+  String get goalPlanningWallet;
+
+  /// No description provided for @goalTrackingOnlyDisclosure.
+  ///
+  /// In en, this message translates to:
+  /// **'Goal contributions are tracking-only and do not transfer or reserve wallet money.'**
+  String get goalTrackingOnlyDisclosure;
+
+  /// No description provided for @goalRemaining.
+  ///
+  /// In en, this message translates to:
+  /// **'Remaining target'**
+  String get goalRemaining;
+
+  /// No description provided for @goalRequiredContribution.
+  ///
+  /// In en, this message translates to:
+  /// **'Recommended contribution'**
+  String get goalRequiredContribution;
+
+  /// No description provided for @goalProgressPercent.
+  ///
+  /// In en, this message translates to:
+  /// **'Progress'**
+  String get goalProgressPercent;
+
+  /// No description provided for @goalEstimatedCompletion.
+  ///
+  /// In en, this message translates to:
+  /// **'Estimated completion from recent pace'**
+  String get goalEstimatedCompletion;
+
+  /// No description provided for @goalAffordabilityUnknown.
+  ///
+  /// In en, this message translates to:
+  /// **'Affordability is unknown until payday and wallet currency are configured.'**
+  String get goalAffordabilityUnknown;
+
+  /// No description provided for @goalOnTrack.
+  ///
+  /// In en, this message translates to:
+  /// **'On track estimate'**
+  String get goalOnTrack;
+
+  /// No description provided for @goalNeedsAdjustment.
+  ///
+  /// In en, this message translates to:
+  /// **'Needs adjustment'**
+  String get goalNeedsAdjustment;
+
+  /// No description provided for @goalBehind.
+  ///
+  /// In en, this message translates to:
+  /// **'Target date has passed'**
+  String get goalBehind;
+
+  /// No description provided for @goalCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Completed'**
+  String get goalCompleted;
+
+  /// No description provided for @goalWhatIf.
+  ///
+  /// In en, this message translates to:
+  /// **'What-if plan'**
+  String get goalWhatIf;
+
+  /// No description provided for @targetAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Target amount'**
+  String get targetAmount;
+
+  /// No description provided for @saveGoalPlan.
+  ///
+  /// In en, this message translates to:
+  /// **'Save goal plan'**
+  String get saveGoalPlan;
+
+  /// No description provided for @sourceWallet.
+  ///
+  /// In en, this message translates to:
+  /// **'Source wallet'**
+  String get sourceWallet;
+
+  /// No description provided for @note.
+  ///
+  /// In en, this message translates to:
+  /// **'Note'**
+  String get note;
+
+  /// No description provided for @noWallets.
+  ///
+  /// In en, this message translates to:
+  /// **'Create an active wallet before running a purchase check.'**
+  String get noWallets;
+
+  /// No description provided for @obligationsBeforePayday.
+  ///
+  /// In en, this message translates to:
+  /// **'Obligations before payday'**
+  String get obligationsBeforePayday;
+
+  /// No description provided for @insightsExplainable.
+  ///
+  /// In en, this message translates to:
+  /// **'Insights are based on recorded expenses and your saved planning settings.'**
+  String get insightsExplainable;
+
+  /// No description provided for @moreInsights.
+  ///
+  /// In en, this message translates to:
+  /// **'More insights'**
+  String get moreInsights;
+
+  /// No description provided for @insightsCurrencyUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Insights are unavailable because recorded wallets use different currencies. Cling does not convert currencies.'**
+  String get insightsCurrencyUnavailable;
+
+  /// No description provided for @financialInsightsError.
+  ///
+  /// In en, this message translates to:
+  /// **'Your insights could not be loaded. Try again when your local data is available.'**
+  String get financialInsightsError;
+
+  /// No description provided for @goalWhatIfContribution.
+  ///
+  /// In en, this message translates to:
+  /// **'Simulated contribution per period'**
+  String get goalWhatIfContribution;
+
+  /// No description provided for @goalWhatIfCompletion.
+  ///
+  /// In en, this message translates to:
+  /// **'Completion at simulated contribution'**
+  String get goalWhatIfCompletion;
+
+  /// No description provided for @clear.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear'**
+  String get clear;
+
+  /// No description provided for @none.
+  ///
+  /// In en, this message translates to:
+  /// **'None'**
+  String get none;
+
+  /// No description provided for @previousPeriod.
+  ///
+  /// In en, this message translates to:
+  /// **'Previous period'**
+  String get previousPeriod;
+
+  /// No description provided for @currentPeriod.
+  ///
+  /// In en, this message translates to:
+  /// **'Current period'**
+  String get currentPeriod;
+
+  /// No description provided for @recordedIncomeNotCash.
+  ///
+  /// In en, this message translates to:
+  /// **'Expected income is shown separately and is not included as available cash.'**
+  String get recordedIncomeNotCash;
 }
 
 class _AppLocalizationsDelegate

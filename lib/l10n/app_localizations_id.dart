@@ -775,4 +775,249 @@ class AppLocalizationsId extends AppLocalizations {
   @override
   String get weeklyWeekdayHint =>
       'Hari mingguan menggunakan Senin = 1 hingga Minggu = 7.';
+
+  @override
+  String get clingCheck => 'Cling Check';
+
+  @override
+  String get clingInsights => 'Cling Insights';
+
+  @override
+  String get checkPurchaseName => 'Apa yang ingin kamu beli?';
+
+  @override
+  String get purchaseAmount => 'Nominal pembelian';
+
+  @override
+  String get plannedTodayOnly =>
+      'Estimasi ini memakai saldo hari ini. Pembelian di masa depan belum diproyeksikan.';
+
+  @override
+  String get estimateNotGuarantee =>
+      'Ini adalah perkiraan, bukan jaminan. Pemasukan yang diharapkan tidak dihitung sebagai uang tersedia.';
+
+  @override
+  String get availableBefore => 'Saldo tersedia sebelum pembelian';
+
+  @override
+  String get walletAfterPurchase => 'Saldo dompet terpilih setelah pembelian';
+
+  @override
+  String get spendableBefore => 'Perkiraan dana bebas sebelum';
+
+  @override
+  String get spendableAfter => 'Perkiraan dana bebas setelah';
+
+  @override
+  String get dailyAllowanceBefore => 'Batas harian sebelum';
+
+  @override
+  String get dailyAllowanceAfter => 'Batas harian setelah';
+
+  @override
+  String get budgetConsumed => 'Dana bebas yang digunakan';
+
+  @override
+  String get purchaseWithinBudget => 'Dalam perkiraan anggaran';
+
+  @override
+  String get purchaseCaution => 'Perhatian: ruang keuangan berkurang';
+
+  @override
+  String get purchaseExceedsSpendable => 'Melebihi perkiraan dana bebas';
+
+  @override
+  String get purchaseInsufficientWallet => 'Saldo dompet terpilih tidak cukup';
+
+  @override
+  String get purchaseInsufficientInformation =>
+      'Informasi belum cukup untuk membuat estimasi';
+
+  @override
+  String reasonWalletShortfall(Object amount) {
+    return 'Saldo dompet ini kurang $amount.';
+  }
+
+  @override
+  String reasonProjectedShortfall(Object amount) {
+    return 'Pembelian ini membuat perkiraan dana bebas kurang $amount.';
+  }
+
+  @override
+  String reasonFlexibilityReduced(Object before, Object after) {
+    return 'Pembelian ini menurunkan perkiraan batas harian dari $before menjadi $after sampai gajian.';
+  }
+
+  @override
+  String get reasonWithinBudget =>
+      'Saldo dompet terpilih dan kewajiban yang diperkirakan masih mencukupi.';
+
+  @override
+  String get reasonNoProjection =>
+      'Atur tanggal gajian dan gunakan dompet dengan satu mata uang untuk melihat estimasi lengkap.';
+
+  @override
+  String get noInsightsYet =>
+      'Catat beberapa pengeluaran untuk melihat pola keuangan di sini.';
+
+  @override
+  String get insightSpendingTrend => 'Tren pengeluaran';
+
+  @override
+  String get insightCategoryAnalysis => 'Porsi kategori';
+
+  @override
+  String get insightSpendingPace => 'Laju pengeluaran';
+
+  @override
+  String get insightCommitments => 'Kewajiban mendatang';
+
+  @override
+  String get insightFinancialProgress => 'Kemajuan tabungan';
+
+  @override
+  String insightTrendUp(Object percent) {
+    return 'Pengeluaran naik $percent% dibandingkan bagian bulan sebelumnya yang setara.';
+  }
+
+  @override
+  String insightTrendDown(Object percent) {
+    return 'Pengeluaran turun $percent% dibandingkan bagian bulan sebelumnya yang setara.';
+  }
+
+  @override
+  String insightCategoryTrendUp(Object category, Object percent) {
+    return 'Pengeluaran $category naik $percent% dibandingkan bagian bulan sebelumnya yang setara.';
+  }
+
+  @override
+  String insightCategoryTrendDown(Object category, Object percent) {
+    return 'Pengeluaran $category turun $percent% dibandingkan bagian bulan sebelumnya yang setara.';
+  }
+
+  @override
+  String insightCategoryShareDescription(Object category, Object percent) {
+    return '$category mencakup $percent% dari pengeluaran tercatat bulan ini.';
+  }
+
+  @override
+  String insightPaceDescription(Object spent, Object elapsed) {
+    return 'Kamu telah memakai $spent% dari anggaran bulanan saat $elapsed% bulan berjalan.';
+  }
+
+  @override
+  String insightCommitmentsDescription(Object amount) {
+    return 'Tagihan dan pengeluaran rutin yang tercatat berjumlah $amount sebelum gajian.';
+  }
+
+  @override
+  String insightGoalProgressDescription(Object amount) {
+    return 'Kontribusi target yang hanya dicatat berjumlah $amount bulan ini. Saldo dompet tidak berubah.';
+  }
+
+  @override
+  String get smartGoalPlanning => 'Rencana Target Tabungan';
+
+  @override
+  String get goalTargetDate => 'Tanggal target tercapai';
+
+  @override
+  String get goalContributionFrequency => 'Frekuensi rencana kontribusi';
+
+  @override
+  String get goalPriority => 'Prioritas rencana';
+
+  @override
+  String get goalPlanningWallet => 'Dompet acuan (informasi saja)';
+
+  @override
+  String get goalTrackingOnlyDisclosure =>
+      'Kontribusi target hanya dicatat dan tidak memindahkan atau menyisihkan uang dompet.';
+
+  @override
+  String get goalRemaining => 'Sisa target';
+
+  @override
+  String get goalRequiredContribution => 'Rekomendasi kontribusi';
+
+  @override
+  String get goalProgressPercent => 'Kemajuan';
+
+  @override
+  String get goalEstimatedCompletion => 'Perkiraan selesai dari laju terbaru';
+
+  @override
+  String get goalAffordabilityUnknown =>
+      'Kemampuan mencukupi belum diketahui sampai tanggal gajian dan mata uang dompet diatur.';
+
+  @override
+  String get goalOnTrack => 'Perkiraan sesuai rencana';
+
+  @override
+  String get goalNeedsAdjustment => 'Perlu penyesuaian';
+
+  @override
+  String get goalBehind => 'Tanggal target telah lewat';
+
+  @override
+  String get goalCompleted => 'Selesai';
+
+  @override
+  String get goalWhatIf => 'Simulasi rencana';
+
+  @override
+  String get targetAmount => 'Nominal target';
+
+  @override
+  String get saveGoalPlan => 'Simpan rencana target';
+
+  @override
+  String get sourceWallet => 'Dompet sumber';
+
+  @override
+  String get note => 'Catatan';
+
+  @override
+  String get noWallets => 'Buat dompet aktif sebelum memeriksa pembelian.';
+
+  @override
+  String get obligationsBeforePayday => 'Kewajiban sebelum gajian';
+
+  @override
+  String get insightsExplainable =>
+      'Insight menggunakan pengeluaran tercatat dan pengaturan perencanaan tersimpan.';
+
+  @override
+  String get moreInsights => 'Insight lainnya';
+
+  @override
+  String get insightsCurrencyUnavailable =>
+      'Insight tidak tersedia karena dompet yang tercatat memakai mata uang berbeda. Cling tidak mengonversi mata uang.';
+
+  @override
+  String get financialInsightsError =>
+      'Insight tidak dapat dimuat. Coba lagi saat data lokal tersedia.';
+
+  @override
+  String get goalWhatIfContribution => 'Simulasi kontribusi per periode';
+
+  @override
+  String get goalWhatIfCompletion =>
+      'Target selesai dengan kontribusi simulasi';
+
+  @override
+  String get clear => 'Hapus pilihan';
+
+  @override
+  String get none => 'Tidak ada';
+
+  @override
+  String get previousPeriod => 'Periode sebelumnya';
+
+  @override
+  String get currentPeriod => 'Periode ini';
+
+  @override
+  String get recordedIncomeNotCash =>
+      'Pemasukan yang diharapkan ditampilkan terpisah dan tidak dihitung sebagai uang tersedia.';
 }

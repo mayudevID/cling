@@ -774,4 +774,249 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get weeklyWeekdayHint =>
       'Weekly day uses Monday = 1 through Sunday = 7.';
+
+  @override
+  String get clingCheck => 'Cling Check';
+
+  @override
+  String get clingInsights => 'Cling Insights';
+
+  @override
+  String get checkPurchaseName => 'What are you planning to buy?';
+
+  @override
+  String get purchaseAmount => 'Purchase amount';
+
+  @override
+  String get plannedTodayOnly =>
+      'This estimate uses today\'s balances. Future purchases are not forecast.';
+
+  @override
+  String get estimateNotGuarantee =>
+      'This is an estimate, not a guarantee. Expected income is not counted as cash.';
+
+  @override
+  String get availableBefore => 'Available balance before purchase';
+
+  @override
+  String get walletAfterPurchase => 'Selected wallet after purchase';
+
+  @override
+  String get spendableBefore => 'Estimated spendable before';
+
+  @override
+  String get spendableAfter => 'Estimated spendable after';
+
+  @override
+  String get dailyAllowanceBefore => 'Daily allowance before';
+
+  @override
+  String get dailyAllowanceAfter => 'Daily allowance after';
+
+  @override
+  String get budgetConsumed => 'Estimated spendable used';
+
+  @override
+  String get purchaseWithinBudget => 'Within estimated budget';
+
+  @override
+  String get purchaseCaution => 'Caution: less financial flexibility';
+
+  @override
+  String get purchaseExceedsSpendable => 'Exceeds estimated spendable';
+
+  @override
+  String get purchaseInsufficientWallet =>
+      'The selected wallet cannot cover this purchase';
+
+  @override
+  String get purchaseInsufficientInformation =>
+      'Not enough information for an estimate';
+
+  @override
+  String reasonWalletShortfall(Object amount) {
+    return 'This wallet is short by $amount.';
+  }
+
+  @override
+  String reasonProjectedShortfall(Object amount) {
+    return 'This would put estimated spendable below zero by $amount.';
+  }
+
+  @override
+  String reasonFlexibilityReduced(Object before, Object after) {
+    return 'This purchase would reduce your estimated daily allowance from $before to $after until payday.';
+  }
+
+  @override
+  String get reasonWithinBudget =>
+      'The selected wallet and estimated obligations can cover this amount.';
+
+  @override
+  String get reasonNoProjection =>
+      'Set a payday and keep active wallets in one currency to see the full estimate.';
+
+  @override
+  String get noInsightsYet => 'Add a few expenses to see useful patterns here.';
+
+  @override
+  String get insightSpendingTrend => 'Spending trend';
+
+  @override
+  String get insightCategoryAnalysis => 'Category share';
+
+  @override
+  String get insightSpendingPace => 'Spending pace';
+
+  @override
+  String get insightCommitments => 'Upcoming commitments';
+
+  @override
+  String get insightFinancialProgress => 'Savings progress';
+
+  @override
+  String insightTrendUp(Object percent) {
+    return 'Spending increased $percent% versus the comparable part of last month.';
+  }
+
+  @override
+  String insightTrendDown(Object percent) {
+    return 'Spending decreased $percent% versus the comparable part of last month.';
+  }
+
+  @override
+  String insightCategoryTrendUp(Object category, Object percent) {
+    return '$category spending increased $percent% versus the comparable part of last month.';
+  }
+
+  @override
+  String insightCategoryTrendDown(Object category, Object percent) {
+    return '$category spending decreased $percent% versus the comparable part of last month.';
+  }
+
+  @override
+  String insightCategoryShareDescription(Object category, Object percent) {
+    return '$category represents $percent% of recorded spending this month.';
+  }
+
+  @override
+  String insightPaceDescription(Object spent, Object elapsed) {
+    return 'You have used $spent% of the monthly budget while $elapsed% of the month has passed.';
+  }
+
+  @override
+  String insightCommitmentsDescription(Object amount) {
+    return 'Recorded bills and recurring expenses total $amount before payday.';
+  }
+
+  @override
+  String insightGoalProgressDescription(Object amount) {
+    return 'Tracking-only goal contributions total $amount this month. They do not move wallet money.';
+  }
+
+  @override
+  String get smartGoalPlanning => 'Smart Savings Goal';
+
+  @override
+  String get goalTargetDate => 'Target completion date';
+
+  @override
+  String get goalContributionFrequency => 'Contribution planning frequency';
+
+  @override
+  String get goalPriority => 'Planning priority';
+
+  @override
+  String get goalPlanningWallet => 'Reference wallet (informational)';
+
+  @override
+  String get goalTrackingOnlyDisclosure =>
+      'Goal contributions are tracking-only and do not transfer or reserve wallet money.';
+
+  @override
+  String get goalRemaining => 'Remaining target';
+
+  @override
+  String get goalRequiredContribution => 'Recommended contribution';
+
+  @override
+  String get goalProgressPercent => 'Progress';
+
+  @override
+  String get goalEstimatedCompletion => 'Estimated completion from recent pace';
+
+  @override
+  String get goalAffordabilityUnknown =>
+      'Affordability is unknown until payday and wallet currency are configured.';
+
+  @override
+  String get goalOnTrack => 'On track estimate';
+
+  @override
+  String get goalNeedsAdjustment => 'Needs adjustment';
+
+  @override
+  String get goalBehind => 'Target date has passed';
+
+  @override
+  String get goalCompleted => 'Completed';
+
+  @override
+  String get goalWhatIf => 'What-if plan';
+
+  @override
+  String get targetAmount => 'Target amount';
+
+  @override
+  String get saveGoalPlan => 'Save goal plan';
+
+  @override
+  String get sourceWallet => 'Source wallet';
+
+  @override
+  String get note => 'Note';
+
+  @override
+  String get noWallets =>
+      'Create an active wallet before running a purchase check.';
+
+  @override
+  String get obligationsBeforePayday => 'Obligations before payday';
+
+  @override
+  String get insightsExplainable =>
+      'Insights are based on recorded expenses and your saved planning settings.';
+
+  @override
+  String get moreInsights => 'More insights';
+
+  @override
+  String get insightsCurrencyUnavailable =>
+      'Insights are unavailable because recorded wallets use different currencies. Cling does not convert currencies.';
+
+  @override
+  String get financialInsightsError =>
+      'Your insights could not be loaded. Try again when your local data is available.';
+
+  @override
+  String get goalWhatIfContribution => 'Simulated contribution per period';
+
+  @override
+  String get goalWhatIfCompletion => 'Completion at simulated contribution';
+
+  @override
+  String get clear => 'Clear';
+
+  @override
+  String get none => 'None';
+
+  @override
+  String get previousPeriod => 'Previous period';
+
+  @override
+  String get currentPeriod => 'Current period';
+
+  @override
+  String get recordedIncomeNotCash =>
+      'Expected income is shown separately and is not included as available cash.';
 }

@@ -10,4 +10,6 @@ Implemented: schema migration and legacy wallet assignment, wallet model and bal
 
 Remaining before release: wallet-labelled transaction history and filters, transfer editing/deletion and duplicate-submit keying, Quick Add template CRUD/confirmation flow, and transfer-specific interaction polish. The schema for Quick Add templates exists but the application flow is not implemented.
 
+Phase 3 adds a guard against creating cross-currency transfers. The existing Home total balance and generic Statistics projections still aggregate wallet minor units without a currency boundary; use Cling Check/Insights only when their explicit single-currency checks pass.
+
 No database downgrade is supported. Rollback means restoring the pre-upgrade per-UID SQLite snapshot; do not open a v3 database in an older app after making new wallet/transfer writes, because older versions cannot represent those records.

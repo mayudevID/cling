@@ -179,6 +179,71 @@ void main() {
     }
   });
 
+  test('schema v4 to v5 preserves goals and adds nullable planning metadata',
+      () async {
+    final dir = await Directory.systemTemp.createTemp('cling_schema_v5_');
+    final path = '${dir.path}/v4.db';
+    try {
+      var database = await openDatabase(
+        path,
+        version: 4,
+        onConfigure: (db) async => db.execute('PRAGMA foreign_keys=ON'),
+        onCreate: (db, version) async {
+          await initDatabaseTable(db, version);
+          await migrateMoneyColumns(db);
+          await migrateFinancialFoundation(db);
+          await migrateFinancialPlanning(db);
+        },
+      );
+      final goalId = await database.insert(GoalMeta.nameTable, {
+        GoalMeta.name: 'Emergency fund',
+        GoalMeta.image: 'safe',
+        GoalMeta.target: 60000,
+        GoalMeta.collected: 20000,
+        GoalMeta.targetMinor: 6000000,
+        GoalMeta.collectedMinor: 2000000,
+      });
+      await database.insert(GoalSavingMeta.nameTable, {
+        GoalSavingMeta.idGoal: goalId,
+        GoalSavingMeta.date: '2026-03-01T00:00:00.000',
+        GoalSavingMeta.amount: 20000,
+        GoalSavingMeta.amountMinor: 2000000,
+      });
+      await database.close();
+
+      database = await openDatabase(
+        path,
+        version: 5,
+        onConfigure: (db) async => db.execute('PRAGMA foreign_keys=ON'),
+        onUpgrade: (db, old, next) async {
+          if (old < 5) await migrateFinancialIntelligence(db);
+        },
+      );
+      await migrateFinancialIntelligence(database);
+      expect(await validateClingBackupSchema(database), 5);
+      final goal = (await database.query(GoalMeta.nameTable)).single;
+      expect(goal[GoalMeta.id], goalId);
+      expect(goal[GoalMeta.targetMinor], 6000000);
+      expect(goal[GoalMeta.collectedMinor], 2000000);
+      expect(goal[GoalMeta.targetDate], isNull);
+      expect(goal[GoalMeta.contributionFrequency], isNull);
+      expect(
+          (await database.query(GoalSavingMeta.nameTable))
+              .single[GoalSavingMeta.amountMinor],
+          2000000);
+      expect(
+          (await database.rawQuery('PRAGMA integrity_check'))
+              .single
+              .values
+              .single,
+          'ok');
+      expect(await database.rawQuery('PRAGMA foreign_key_check'), isEmpty);
+      await database.close();
+    } finally {
+      await dir.delete(recursive: true);
+    }
+  });
+
   test('backup with missing core tables is rejected', () async {
     final dir = await Directory.systemTemp.createTemp('cling_invalid_');
     try {

@@ -3,6 +3,7 @@ import '../../../../../core/common_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../../core/route.dart';
 import '../../../../../resources/gen/fonts.gen.dart';
 import '../../../language_currency/lang_export.dart';
 import '../bloc/home_bloc.dart';
@@ -89,6 +90,38 @@ class HomePage extends StatelessWidget {
           monthlyBudget(context),
           const SizedBox(height: 16),
           incomeAndExpense(context),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              decoration: BoxDecoration(
+                color: const Color(0x3D787880),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Row(children: [
+                Expanded(
+                    child: TextButton.icon(
+                  onPressed: () =>
+                      Navigator.pushNamed(context, RouteName.clingCheck),
+                  icon: const Icon(Icons.shopping_bag_outlined,
+                      color: Color(0xFFF599DA)),
+                  label: Text(AppLocalizations.of(context)!.clingCheck,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(color: Colors.white)),
+                )),
+                Expanded(
+                    child: TextButton.icon(
+                  onPressed: () =>
+                      Navigator.pushNamed(context, RouteName.clingInsights),
+                  icon: const Icon(Icons.insights_outlined,
+                      color: Color(0xFFF599DA)),
+                  label: Text(AppLocalizations.of(context)!.clingInsights,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(color: Colors.white)),
+                )),
+              ]),
+            ),
+          ),
           ...tagNameHome(context, AppLocalizations.of(context)!.goals),
           BlocBuilder<HomeBloc, HomeState>(
             buildWhen: (p, c) => p.listGoals != c.listGoals,

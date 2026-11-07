@@ -7,7 +7,6 @@ import '../../../../core/money_amount.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../main_widget/finance_refresh.dart';
 import '../../../model/financial_planning_models.dart';
-import '../../../model/wallet_model.dart';
 import '../../../repository/database_repository.dart';
 import '../../language_currency/lang_export.dart';
 import 'planning_bloc.dart';

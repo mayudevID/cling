@@ -1,4 +1,5 @@
 import 'package:flutter/services.dart';
+import '../../../../../core/route.dart';
 
 import '../../../../../core/common_widget.dart';
 import '../../../../../injection.dart';
@@ -95,6 +96,28 @@ class GoalDetailPageContent extends StatelessWidget {
                   height: 24,
                 ),
                 targetGoalWidget(context),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: TextButton.icon(
+                    onPressed: () async {
+                      final goalId =
+                          context.read<GoalDetailBloc>().state.goalModel.id;
+                      if (goalId == null) return;
+                      final saved = await Navigator.pushNamed(
+                        context,
+                        RouteName.goalPlanning,
+                        arguments: goalId,
+                      );
+                      if (saved == true && context.mounted) {
+                        context.read<GoalDetailBloc>().add(InitGoal(goalId));
+                      }
+                    },
+                    icon:
+                        const Icon(Icons.auto_graph, color: Color(0xFFF599DA)),
+                    label: Text(AppLocalizations.of(context)!.smartGoalPlanning,
+                        style: const TextStyle(color: Color(0xFFF599DA))),
+                  ),
+                ),
                 const SizedBox(
                   height: 32,
                 ),

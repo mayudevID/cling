@@ -148,6 +148,37 @@ Future<void> migrateFinancialPlanning(DatabaseExecutor db) async {
       'CREATE UNIQUE INDEX IF NOT EXISTS idx_planning_reminder_occurrence ON ${PlanningReminderMeta.table}(${PlanningReminderMeta.occurrenceId}, ${PlanningReminderMeta.reminderDays}) WHERE ${PlanningReminderMeta.occurrenceId} IS NOT NULL');
 }
 
+/// Schema v5 adds optional planning metadata without rewriting existing goals.
+Future<void> migrateFinancialIntelligence(DatabaseExecutor db) async {
+  final existing = (await db.rawQuery(
+    'PRAGMA table_info("${GoalMeta.nameTable}")',
+  ))
+      .map((row) => row['name'])
+      .toSet();
+  final additions = <String, String>{
+    GoalMeta.targetDate: 'TEXT',
+    GoalMeta.contributionFrequency:
+        "TEXT CHECK (${GoalMeta.contributionFrequency} IS NULL OR ${GoalMeta.contributionFrequency} IN ('weekly','monthly'))",
+    GoalMeta.planningPriority:
+        'INTEGER CHECK (${GoalMeta.planningPriority} IS NULL OR ${GoalMeta.planningPriority} BETWEEN 1 AND 5)',
+    GoalMeta.planningWalletId:
+        'INTEGER REFERENCES ${WalletMeta.table}(${WalletMeta.id}) ON DELETE SET NULL',
+  };
+  for (final entry in additions.entries) {
+    if (!existing.contains(entry.key)) {
+      await db.execute(
+        'ALTER TABLE ${GoalMeta.nameTable} ADD COLUMN ${entry.key} ${entry.value}',
+      );
+    }
+  }
+  await db.execute(
+    'CREATE INDEX IF NOT EXISTS idx_expense_date_category ON ${ExpenseMeta.nameTable}(date(${ExpenseMeta.date}), ${ExpenseMeta.idCategories})',
+  );
+  await db.execute(
+    'CREATE INDEX IF NOT EXISTS idx_goal_saving_date ON ${GoalSavingMeta.nameTable}(${GoalSavingMeta.idGoal}, date(${GoalSavingMeta.date}))',
+  );
+}
+
 final exCategoriesData = [
   "🎑 Other",
   "💵 Bill",

@@ -79,7 +79,7 @@ Future<int> validateClingBackupSchema(Database database) async {
   }
   final rows = await database.rawQuery('PRAGMA user_version');
   final version = (rows.first['user_version'] as num).toInt();
-  if (version < 1 || version > 4) {
+  if (version < 1 || version > 5) {
     throw FormatException('Unsupported Cling schema version: $version');
   }
   final columns = <String, List<String>>{
@@ -203,6 +203,16 @@ Future<int> validateClingBackupSchema(Database database) async {
       PlanningReminderMeta.reminderDays,
       PlanningReminderMeta.scheduledDate,
       PlanningReminderMeta.deliveredAt,
+    ];
+  }
+
+  if (version >= 5) {
+    columns[GoalMeta.nameTable] = [
+      ...columns[GoalMeta.nameTable]!,
+      GoalMeta.targetDate,
+      GoalMeta.contributionFrequency,
+      GoalMeta.planningPriority,
+      GoalMeta.planningWalletId,
     ];
   }
 

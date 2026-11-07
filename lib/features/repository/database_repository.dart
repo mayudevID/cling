@@ -7,6 +7,7 @@ import 'package:path/path.dart';
 
 import '../../core/init_database.dart';
 import '../../core/financial_planning.dart';
+import '../../core/financial_intelligence.dart';
 import '../../core/money_amount.dart';
 import '../../core/reference_id.dart';
 import '../../core/recurring_schedule.dart';
@@ -70,7 +71,7 @@ class DatabaseRepository {
       }
       _database = await openDatabase(
         path,
-        version: 4,
+        version: 5,
         onConfigure: (database) async {
           await database.execute('PRAGMA foreign_keys = ON');
         },
@@ -79,11 +80,13 @@ class DatabaseRepository {
           await migrateMoneyColumns(database);
           await migrateFinancialFoundation(database);
           await migrateFinancialPlanning(database);
+          await migrateFinancialIntelligence(database);
         },
         onUpgrade: (database, oldVersion, newVersion) async {
           if (oldVersion < 2) await migrateMoneyColumns(database);
           if (oldVersion < 3) await migrateFinancialFoundation(database);
           if (oldVersion < 4) await migrateFinancialPlanning(database);
+          if (oldVersion < 5) await migrateFinancialIntelligence(database);
         },
       );
 
@@ -535,33 +538,71 @@ class DatabaseRepository {
         GoalMeta.targetMinor: MoneyAmount.toMinorUnits(goalModel.target),
         GoalMeta.collectedMinor:
             MoneyAmount.toMinorUnits(goalModel.collected, allowZero: true),
+        GoalMeta.targetDate: goalModel.targetDate == null
+            ? null
+            : _dateKey(goalModel.targetDate!),
+        GoalMeta.contributionFrequency: goalModel.contributionFrequency,
+        GoalMeta.planningPriority: goalModel.planningPriority,
+        GoalMeta.planningWalletId: goalModel.planningWalletId,
       },
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }
 
   Future<void> updateGoal(GoalModel goalModel) async {
-    final updated = await db.rawUpdate(
-      '''
+    if (!{'weekly', 'monthly'}.contains(goalModel.contributionFrequency) ||
+        (goalModel.planningPriority != null &&
+            (goalModel.planningPriority! < 1 ||
+                goalModel.planningPriority! > 5))) {
+      throw ArgumentError('Invalid goal planning preferences.');
+    }
+    final database = db;
+    final revision = _revision;
+    await database.transaction((txn) async {
+      if (revision != _revision || !identical(database, _database)) {
+        throw StateError('Account changed while saving goal plan.');
+      }
+      if (goalModel.planningWalletId != null) {
+        final wallet = await txn.query(WalletMeta.table,
+            columns: [WalletMeta.id],
+            where: '${WalletMeta.id}=?',
+            whereArgs: [goalModel.planningWalletId],
+            limit: 1);
+        if (wallet.isEmpty) throw StateError('Planning wallet not found.');
+      }
+      final updated = await txn.rawUpdate(
+        '''
         UPDATE ${GoalMeta.nameTable} 
         SET ${GoalMeta.name} = ?,
         ${GoalMeta.image} = ?,
         ${GoalMeta.target} = ?,
-        ${GoalMeta.targetMinor} = ?
+        ${GoalMeta.targetMinor} = ?,
+        ${GoalMeta.targetDate} = ?,
+        ${GoalMeta.contributionFrequency} = ?,
+        ${GoalMeta.planningPriority} = ?,
+        ${GoalMeta.planningWalletId} = ?
         WHERE ${GoalMeta.id} = ? AND ${GoalMeta.collectedMinor} <= ?
-      ''',
-      [
-        goalModel.name,
-        goalModel.image,
-        goalModel.target,
-        MoneyAmount.toMinorUnits(goalModel.target),
-        goalModel.id,
-        MoneyAmount.toMinorUnits(goalModel.target),
-      ],
-    );
-    if (updated != 1) {
-      throw StateError('Goal not found or target below savings');
-    }
+        ''',
+        [
+          goalModel.name,
+          goalModel.image,
+          goalModel.target,
+          MoneyAmount.toMinorUnits(goalModel.target),
+          goalModel.targetDate == null ? null : _dateKey(goalModel.targetDate!),
+          goalModel.contributionFrequency,
+          goalModel.planningPriority,
+          goalModel.planningWalletId,
+          goalModel.id,
+          MoneyAmount.toMinorUnits(goalModel.target),
+        ],
+      );
+      if (updated != 1) {
+        throw StateError('Goal not found or target below savings');
+      }
+      if (revision != _revision || !identical(database, _database)) {
+        throw StateError('Account changed while saving goal plan.');
+      }
+    });
   }
 
   Future<void> updateCollectedGoal(GoalModel goalModel) async {
@@ -761,6 +802,189 @@ class DatabaseRepository {
     });
   }
 
+  Future<({List<WalletModel> wallets, PaydayRunwayModel? runway})>
+      getClingCheckContext(DateTime today) async {
+    final wallets = await getWallets(includeArchived: false);
+    return (wallets: wallets, runway: await getPaydayRunway(today));
+  }
+
+  Future<FinancialInsightInput> getFinancialInsightInput({
+    required DateTime now,
+    required int? monthlyBudgetMinor,
+  }) async {
+    final currentStart = DateTime(now.year, now.month);
+    final currentEnd = DateTime(now.year, now.month, now.day + 1);
+    final previousMonth = DateTime(now.year, now.month - 1);
+    final previousStart = DateTime(previousMonth.year, previousMonth.month);
+    final previousLastDay =
+        DateTime(previousMonth.year, previousMonth.month + 1, 0).day;
+    final previousEndDay =
+        now.day < previousLastDay ? now.day : previousLastDay;
+    final previousEnd =
+        DateTime(previousMonth.year, previousMonth.month, previousEndDay + 1);
+    final categories = await db.rawQuery('''
+      SELECT e.${ExpenseMeta.idCategories} AS category_id,
+             COALESCE(c.${ExpenseCategoriesMeta.expenseCategories}, 'Other') AS category_name,
+             CASE WHEN date(e.${ExpenseMeta.date}) >= date(?) THEN 1 ELSE 0 END AS is_current,
+             SUM(e.${ExpenseMeta.amountMinor}) AS amount_minor,
+             COUNT(*) AS transaction_count
+      FROM ${ExpenseMeta.nameTable} e
+      LEFT JOIN ${ExpenseCategoriesMeta.nameTable} c
+        ON c.${ExpenseCategoriesMeta.id}=e.${ExpenseMeta.idCategories}
+      WHERE date(e.${ExpenseMeta.date}) >= date(?)
+        AND date(e.${ExpenseMeta.date}) < date(?)
+      GROUP BY e.${ExpenseMeta.idCategories}, is_current, category_name
+    ''', [
+      _dateKey(currentStart),
+      _dateKey(previousStart),
+      _dateKey(currentEnd)
+    ]);
+    final monthRows = await db.rawQuery('''
+      SELECT COALESCE(SUM(${ExpenseMeta.amountMinor}),0) AS amount_minor,
+             COUNT(*) AS transaction_count
+      FROM ${ExpenseMeta.nameTable}
+      WHERE date(${ExpenseMeta.date}) >= date(?) AND date(${ExpenseMeta.date}) < date(?)
+    ''', [_dateKey(currentStart), _dateKey(currentEnd)]);
+    final prevRows = await db.rawQuery('''
+      SELECT COALESCE(SUM(${ExpenseMeta.amountMinor}),0) AS amount_minor,
+             COUNT(*) AS transaction_count
+      FROM ${ExpenseMeta.nameTable}
+      WHERE date(${ExpenseMeta.date}) >= date(?) AND date(${ExpenseMeta.date}) < date(?)
+    ''', [_dateKey(previousStart), _dateKey(previousEnd)]);
+    final currencies = await db.rawQuery('''
+      SELECT DISTINCT w.${WalletMeta.currency} AS currency
+      FROM ${ExpenseMeta.nameTable} e
+      JOIN ${WalletMeta.table} w ON w.${WalletMeta.id}=e.${ExpenseMeta.walletId}
+      WHERE date(e.${ExpenseMeta.date}) >= date(?) AND date(e.${ExpenseMeta.date}) < date(?)
+    ''', [_dateKey(previousStart), _dateKey(currentEnd)]);
+    final activeWallets = await getWallets(includeArchived: false);
+    final insightCurrencies = currencies.map((row) => row['currency']).toSet();
+    insightCurrencies.addAll(activeWallets.map((wallet) => wallet.currency));
+    if (insightCurrencies.length > 1) {
+      throw const FinancialInsightCurrencyException();
+    }
+    final byCategory = <String, Map<String, Object?>>{};
+    for (final row in categories) {
+      final key = '${row['category_id'] ?? 'unknown'}';
+      final data = byCategory.putIfAbsent(
+          key,
+          () => {
+                'categoryId': row['category_id'] as int?,
+                'name': row['category_name'] as String,
+                'currentMinor': 0,
+                'previousMinor': 0,
+                'currentCount': 0,
+                'previousCount': 0,
+              });
+      final current = row['is_current'] == 1;
+      data[current ? 'currentMinor' : 'previousMinor'] = row['amount_minor'];
+      data[current ? 'currentCount' : 'previousCount'] =
+          row['transaction_count'];
+    }
+    final runway = await getPaydayRunway(now);
+    final goalRows = await db.rawQuery('''
+      SELECT COALESCE(SUM(${GoalSavingMeta.amountMinor}),0) AS progress_minor
+      FROM ${GoalSavingMeta.nameTable}
+      WHERE date(${GoalSavingMeta.date}) >= date(?) AND date(${GoalSavingMeta.date}) < date(?)
+    ''', [_dateKey(currentStart), _dateKey(currentEnd)]);
+    return FinancialInsightInput(
+      now: now,
+      monthSpendMinor: (monthRows.single['amount_minor'] as num).toInt(),
+      monthTransactionCount:
+          (monthRows.single['transaction_count'] as num).toInt(),
+      previousComparableSpendMinor:
+          (prevRows.single['amount_minor'] as num).toInt(),
+      previousComparableTransactionCount:
+          (prevRows.single['transaction_count'] as num).toInt(),
+      monthBudgetMinor: monthlyBudgetMinor,
+      categories: byCategory.values
+          .map((row) => InsightCategoryData(
+                categoryId: row['categoryId'] as int?,
+                name: row['name'] as String,
+                currentMinor: row['currentMinor'] as int,
+                previousMinor: row['previousMinor'] as int,
+                currentCount: row['currentCount'] as int,
+                previousCount: row['previousCount'] as int,
+              ))
+          .toList(),
+      commitmentMinor:
+          runway == null ? 0 : runway.billsMinor + runway.recurringMinor,
+      goalProgressMinor: (goalRows.single['progress_minor'] as num).toInt(),
+      currency: insightCurrencies.isEmpty
+          ? 'IDR'
+          : insightCurrencies.single as String,
+    );
+  }
+
+  Future<
+      ({
+        GoalModel goal,
+        List<WalletModel> wallets,
+        String currency,
+        int? discretionaryMinorPerDay,
+        int recentContributionMinor,
+        int recentContributionDays,
+      })> getGoalPlanningContext(int goalId, DateTime today) async {
+    final goal = await getSingleGoalModel(goalId);
+    final since = DateTime(today.year, today.month, today.day)
+        .subtract(const Duration(days: 89));
+    final rows = await db.rawQuery('''
+      SELECT COALESCE(SUM(${GoalSavingMeta.amountMinor}),0) AS amount_minor
+      FROM ${GoalSavingMeta.nameTable}
+      WHERE ${GoalSavingMeta.idGoal}=? AND date(${GoalSavingMeta.date}) >= date(?)
+        AND date(${GoalSavingMeta.date}) <= date(?)
+    ''', [goalId, _dateKey(since), _dateKey(today)]);
+    final wallets = await getWallets(includeArchived: false);
+    WalletModel? planningWallet;
+    for (final wallet in wallets) {
+      if (wallet.id == goal.planningWalletId) planningWallet = wallet;
+    }
+    final runway = await getPaydayRunway(today);
+    final currency = runway?.currency ??
+        planningWallet?.currency ??
+        (wallets.isEmpty ? 'IDR' : wallets.first.currency);
+    int? dailyCapacity;
+    if (runway != null &&
+        !(goal.planningWalletId != null && planningWallet == null) &&
+        !(planningWallet != null &&
+            planningWallet.currency != runway.currency)) {
+      dailyCapacity = runway.dailyAllowanceMinor;
+      if (planningWallet != null) {
+        final walletPerDay =
+            runway.daysRemaining <= 0 || planningWallet.balanceMinor <= 0
+                ? 0
+                : planningWallet.balanceMinor ~/ runway.daysRemaining;
+        if (walletPerDay < dailyCapacity) dailyCapacity = walletPerDay;
+      }
+    }
+    return (
+      goal: goal,
+      wallets: wallets,
+      currency: currency,
+      discretionaryMinorPerDay: dailyCapacity,
+      recentContributionMinor: (rows.single['amount_minor'] as num).toInt(),
+      recentContributionDays: 90,
+    );
+  }
+
+  Future<GoalPlanProjection> getGoalPlanProjection(
+    int goalId,
+    DateTime today,
+  ) async {
+    final context = await getGoalPlanningContext(goalId, today);
+    return projectGoalPlan(
+      targetMinor: MoneyAmount.toMinorUnits(context.goal.target),
+      collectedMinor:
+          MoneyAmount.toMinorUnits(context.goal.collected, allowZero: true),
+      today: today,
+      targetDate: context.goal.targetDate,
+      frequency: context.goal.contributionFrequency,
+      discretionaryMinorPerDay: context.discretionaryMinorPerDay,
+      recentContributionMinor: context.recentContributionMinor,
+      recentContributionDays: context.recentContributionDays,
+    );
+  }
+
   //* ================ INCOME CRUD ================
 
   Future<void> insertIncome(IncomeModel data) async {
@@ -887,13 +1111,18 @@ class DatabaseRepository {
       throw ArgumentError(
           'Transfer requires different wallets and positive amount.');
     return db.transaction((txn) async {
+      final currencies = <String>[];
       for (final id in [sourceWalletId, destinationWalletId]) {
         final rows = await txn.query(WalletMeta.table,
-            columns: [WalletMeta.archived],
+            columns: [WalletMeta.archived, WalletMeta.currency],
             where: '${WalletMeta.id}=?',
             whereArgs: [id]);
         if (rows.isEmpty || rows.single[WalletMeta.archived] == 1)
           throw StateError('Transfer wallets must be active');
+        currencies.add(rows.single[WalletMeta.currency] as String);
+      }
+      if (currencies[0] != currencies[1]) {
+        throw StateError('Cross-currency transfers are not supported.');
       }
       return txn.insert(TransferMeta.table, {
         TransferMeta.sourceWalletId: sourceWalletId,

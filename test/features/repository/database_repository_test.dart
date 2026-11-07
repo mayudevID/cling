@@ -1,4 +1,5 @@
 import 'package:cling/core/init_database.dart';
+import 'package:cling/core/financial_intelligence.dart';
 import 'package:cling/core/static_name_table.dart';
 import 'package:cling/features/model/expense_model.dart';
 import 'package:cling/core/reference_id.dart';
@@ -307,6 +308,20 @@ void main() {
       openingBalanceMinor: 0,
       currency: 'IDR',
     ));
+    final foreign = await repository.saveWallet(const WalletModel(
+      name: 'Foreign',
+      type: 'bank',
+      openingBalanceMinor: 0,
+      currency: 'USD',
+    ));
+    await expectLater(
+      repository.transfer(
+          sourceWalletId: id,
+          destinationWalletId: foreign,
+          amountMinor: 1,
+          date: DateTime.now()),
+      throwsStateError,
+    );
     await repository.archiveWallet(other);
     await expectLater(
         repository.transfer(
@@ -674,5 +689,162 @@ void main() {
     final rules = await repository.db.query(RecurringMeta.nameTable);
     expect(rules.length, 1);
     expect(rules.single[RecurringMeta.amountMinor], 180000);
+  });
+
+  test(
+      'goal planning metadata persists while contributions remain tracking-only',
+      () async {
+    final walletId = await repository.getDefaultWalletId();
+    await repository.insertGoal(GoalModel(
+      name: 'Travel',
+      image: 'plane',
+      target: 6000000,
+      collected: 0,
+      targetDate: DateTime(2027, 1, 7),
+      contributionFrequency: 'monthly',
+      planningPriority: 2,
+      planningWalletId: walletId,
+    ));
+    final goal = (await repository.getGoalsPage()).single;
+    final beforeBalance = await repository.getTotalBalance();
+    await repository.addSavingAtomic(goal.id!, DateTime(2026, 3, 10), 2000000);
+    final afterSaving = await repository.getSingleGoalModel(goal.id!);
+    expect(afterSaving.targetDate, DateTime(2027, 1, 7));
+    expect(afterSaving.contributionFrequency, 'monthly');
+    expect(afterSaving.planningPriority, 2);
+    expect(afterSaving.planningWalletId, walletId);
+    expect(afterSaving.collected, 2000000);
+    expect(await repository.getTotalBalance(), beforeBalance);
+    expect(await repository.db.query(ExpenseMeta.nameTable), isEmpty);
+
+    final revised = afterSaving.copyWith(
+      target: 7000000,
+      targetDate: DateTime(2027, 3, 1),
+      contributionFrequency: 'weekly',
+      planningPriority: 4,
+    );
+    await repository.updateGoal(revised);
+    final saved = await repository.getSingleGoalModel(goal.id!);
+    expect(saved.target, 7000000);
+    expect(saved.targetDate, DateTime(2027, 3, 1));
+    expect(saved.contributionFrequency, 'weekly');
+    expect(saved.planningPriority, 4);
+    expect(
+        (await repository.getGoalDetailSave(goal.id!)).single.amount, 2000000);
+    await repository.deleteSavingAtomic(
+        goal.id!, (await repository.getGoalDetailSave(goal.id!)).single.id!);
+    expect((await repository.getSingleGoalModel(goal.id!)).collected, 0);
+    expect(await repository.getTotalBalance(), beforeBalance);
+  });
+
+  test(
+      'insight aggregation uses expense ledger only and comparable month dates',
+      () async {
+    for (final date in [
+      DateTime(2026, 2, 1),
+      DateTime(2026, 2, 8),
+      DateTime(2026, 2, 15),
+      DateTime(2026, 3, 1),
+      DateTime(2026, 3, 8),
+      DateTime(2026, 3, 15),
+    ]) {
+      await repository.insertExpense(ExpenseModel(
+        date: date,
+        item: 'meal',
+        amount: date.month == 3 ? 300 : 100,
+        categories: exCategoriesData[4],
+      ));
+    }
+    final secondWallet = await repository.saveWallet(const WalletModel(
+      name: 'Bank',
+      type: 'bank',
+      openingBalanceMinor: 500000,
+      currency: 'IDR',
+    ));
+    await repository.transfer(
+      sourceWalletId: 1,
+      destinationWalletId: secondWallet,
+      amountMinor: 25000,
+      date: DateTime(2026, 3, 15),
+    );
+    await repository.saveBill(PlanningBillModel(
+      title: 'Unpaid bill',
+      amountMinor: 9990000,
+      categoryId: 1,
+      walletId: 1,
+      dueDate: DateTime(2026, 3, 20),
+    ));
+    final input = await repository.getFinancialInsightInput(
+      now: DateTime(2026, 3, 16),
+      monthlyBudgetMinor: 100000,
+    );
+    expect(input.monthSpendMinor, 90000);
+    expect(input.monthTransactionCount, 3);
+    expect(input.previousComparableSpendMinor, 30000);
+    expect(input.previousComparableTransactionCount, 3);
+    expect(input.categories.single.currentMinor, 90000);
+    final insights = generateFinancialInsights(input);
+    expect(insights.map((item) => item.type),
+        contains(FinancialInsightType.spendingTrend));
+    expect(insights.map((item) => item.type),
+        contains(FinancialInsightType.categoryAnalysis));
+  });
+
+  test('cling check context and simulation leave every ledger unchanged',
+      () async {
+    final wallet = await repository.getDefaultWalletId();
+    await repository.setPlanningSettings(
+        paydayDay: 25, safetyReserveMinor: 50000);
+    await repository.saveBill(PlanningBillModel(
+      title: 'Rent',
+      amountMinor: 10000,
+      categoryId: 1,
+      walletId: wallet,
+      dueDate: DateTime(2026, 3, 20),
+    ));
+    await repository.insertExpense(ExpenseModel(
+      date: DateTime(2026, 3, 1),
+      item: 'existing',
+      amount: 50,
+      categories: exCategoriesData[4],
+      walletId: wallet,
+    ));
+    final beforeBalance = await repository.getTotalBalance();
+    final beforeExpenses = await repository.db.query(ExpenseMeta.nameTable);
+    final context =
+        await repository.getClingCheckContext(DateTime(2026, 3, 16));
+    final selected = context.wallets.single;
+    final assessment = assessClingCheck(
+      purchaseMinor: 1000,
+      selectedWalletBalanceMinor: selected.balanceMinor,
+      availableBalanceMinor: context.runway!.availableMinor,
+      spendableBeforeMinor: context.runway!.estimatedSpendableMinor,
+      daysRemaining: context.runway!.daysRemaining,
+      selectedDailyAllowanceMinor: context.runway!.dailyAllowanceMinor,
+      currencyMatches: selected.currency == context.runway!.currency,
+    );
+    expect(assessment.balanceBeforeMinor, beforeBalance * 100);
+    expect(await repository.db.query(ExpenseMeta.nameTable), beforeExpenses);
+    expect(await repository.getTotalBalance(), beforeBalance);
+  });
+
+  test('mixed wallet currencies are not combined in check or insights',
+      () async {
+    await repository.setPlanningSettings(paydayDay: 25, safetyReserveMinor: 0);
+    await repository.saveWallet(const WalletModel(
+      name: 'Foreign wallet',
+      type: 'bank',
+      openingBalanceMinor: 100000,
+      currency: 'USD',
+    ));
+    final context =
+        await repository.getClingCheckContext(DateTime(2026, 3, 16));
+    expect(context.wallets, hasLength(2));
+    expect(context.runway, isNull);
+    await expectLater(
+      repository.getFinancialInsightInput(
+          now: DateTime(2026, 3, 16), monthlyBudgetMinor: 50000),
+      throwsA(isA<FinancialInsightCurrencyException>()),
+    );
   });
 }

@@ -17,6 +17,7 @@ Dokumen ini menjadi indeks fitur Cling!. Penjelasan rinci dipisahkan berdasarkan
 | [Backup dan Restore](features/backup-restore.md) | Pencadangan SQLite ke Firebase Storage dan pemulihan saat login |
 | [Phase 1 Financial Foundation](PHASE_1_FINANCIAL_FOUNDATION.md) | Schema v3, wallet ledger, transfer, currency boundary, dan status integrasi |
 | [Phase 2 Financial Planning](PHASE_2_FINANCIAL_PLANNING.md) | Schema v4, recurring expenses, bills, reminders lokal, dan Payday Runway |
+| [Phase 3 Financial Intelligence](PHASE_3_FINANCIAL_INTELLIGENCE.md) | Schema v5, Cling Check, Insights deterministik, dan rencana goal |
 
 ## Gambaran Sistem
 

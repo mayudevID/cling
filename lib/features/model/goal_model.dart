@@ -12,6 +12,10 @@ class GoalModel extends Equatable {
     required this.image,
     required this.target,
     required this.collected,
+    this.targetDate,
+    this.contributionFrequency = 'monthly',
+    this.planningPriority,
+    this.planningWalletId,
   });
 
   factory GoalModel.fromDatabase(Map<String, dynamic> json) => GoalModel(
@@ -20,6 +24,12 @@ class GoalModel extends Equatable {
         image: json[GoalMeta.image],
         target: MoneyAmount.fromMinorUnits(json[GoalMeta.targetMinor]),
         collected: MoneyAmount.fromMinorUnits(json[GoalMeta.collectedMinor]),
+        targetDate:
+            DateTime.tryParse(json[GoalMeta.targetDate] as String? ?? ''),
+        contributionFrequency:
+            json[GoalMeta.contributionFrequency] as String? ?? 'monthly',
+        planningPriority: json[GoalMeta.planningPriority] as int?,
+        planningWalletId: json[GoalMeta.planningWalletId] as int?,
       );
 
   factory GoalModel.empty() => GoalModel(
@@ -33,6 +43,10 @@ class GoalModel extends Equatable {
   String image;
   double target;
   double collected;
+  DateTime? targetDate;
+  String contributionFrequency;
+  int? planningPriority;
+  int? planningWalletId;
 
   GoalModel copyWith({
     int? id,
@@ -40,6 +54,13 @@ class GoalModel extends Equatable {
     String? image,
     double? target,
     double? collected,
+    DateTime? targetDate,
+    bool clearTargetDate = false,
+    String? contributionFrequency,
+    int? planningPriority,
+    bool clearPlanningPriority = false,
+    int? planningWalletId,
+    bool clearPlanningWalletId = false,
   }) {
     return GoalModel(
       id: id ?? this.id,
@@ -47,6 +68,15 @@ class GoalModel extends Equatable {
       image: image ?? this.image,
       target: target ?? this.target,
       collected: collected ?? this.collected,
+      targetDate: clearTargetDate ? null : targetDate ?? this.targetDate,
+      contributionFrequency:
+          contributionFrequency ?? this.contributionFrequency,
+      planningPriority: clearPlanningPriority
+          ? null
+          : planningPriority ?? this.planningPriority,
+      planningWalletId: clearPlanningWalletId
+          ? null
+          : planningWalletId ?? this.planningWalletId,
     );
   }
 
@@ -59,6 +89,10 @@ class GoalModel extends Equatable {
         GoalMeta.collected: collected,
         GoalMeta.collectedMinor:
             MoneyAmount.toMinorUnits(collected, allowZero: true),
+        GoalMeta.targetDate: targetDate?.toIso8601String().substring(0, 10),
+        GoalMeta.contributionFrequency: contributionFrequency,
+        GoalMeta.planningPriority: planningPriority,
+        GoalMeta.planningWalletId: planningWalletId,
       };
 
   @override
@@ -68,5 +102,9 @@ class GoalModel extends Equatable {
         image,
         target,
         collected,
+        targetDate,
+        contributionFrequency,
+        planningPriority,
+        planningWalletId,
       ];
 }

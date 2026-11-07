@@ -14,6 +14,9 @@ import '../features/ui/main/goal_detail/pages/goal_detail_page.dart';
 import '../features/ui/main/goal_list/page/goal_list_page.dart';
 import '../features/ui/main/main_page.dart';
 import '../features/ui/main/planning/planning_page.dart';
+import '../features/ui/main/intelligence/cling_check_page.dart';
+import '../features/ui/main/intelligence/cling_insights_page.dart';
+import '../features/ui/main/intelligence/goal_planning_page.dart';
 import '../features/ui/main/wallets/wallets_page.dart';
 import '../features/ui/main/main_widget/enum_flowtype.dart';
 import '../features/ui/main/notification/page/notification_page.dart';
@@ -66,6 +69,19 @@ class RouteGen {
         return MaterialPageRoute(builder: (_) => const WalletsPage());
       case RouteName.financialPlanning:
         return MaterialPageRoute(builder: (_) => const FinancialPlanningPage());
+      case RouteName.clingCheck:
+        return MaterialPageRoute(builder: (_) => const ClingCheckPage());
+      case RouteName.clingInsights:
+        return MaterialPageRoute(builder: (_) => const ClingInsightsPage());
+      case RouteName.insightDetail:
+        return MaterialPageRoute(
+          builder: (_) =>
+              FinancialInsightDetailPage(args: data as InsightDetailArgs),
+        );
+      case RouteName.goalPlanning:
+        return MaterialPageRoute(
+          builder: (_) => GoalPlanningPage(goalId: data as int),
+        );
       case RouteName.verifOnboard:
         return MaterialPageRoute(
           builder: (_) => const VerificationSuccessPage(),
@@ -158,6 +174,10 @@ class RouteName {
   static const String main = "/main";
   static const String wallets = "/wallets";
   static const String financialPlanning = "/financialPlanning";
+  static const String clingCheck = "/clingCheck";
+  static const String clingInsights = "/clingInsights";
+  static const String insightDetail = "/insightDetail";
+  static const String goalPlanning = "/goalPlanning";
   static const String verifOnboard = "/verifOnboard";
   static const String monthlyData = "/monthlyData";
   static const String editProfile = "/editProfile";
