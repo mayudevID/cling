@@ -3,6 +3,7 @@
 import '../../core/init_database.dart';
 import '../../core/static_name_table.dart';
 import '../../core/money_amount.dart';
+import '../../core/reference_id.dart';
 import 'transaction_model.dart';
 
 class IncomeModel implements TransactionModel {
@@ -19,7 +20,8 @@ class IncomeModel implements TransactionModel {
         date: DateTime.parse(json[IncomeMeta.date]),
         desc: json[IncomeMeta.desc],
         amount: MoneyAmount.fromMinorUnits(json[IncomeMeta.amountMinor]),
-        incomeSource: inSourceData[json[IncomeMeta.idIncomeSource]],
+        incomeSource: displayReference(json[IncomeMeta.idIncomeSource], inSourceData,
+            unknownType: 'income source'),
       );
   @override
   int? id;

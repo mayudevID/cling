@@ -12,7 +12,9 @@ import '../stats_detail/page/stats_detail_per_categories_page.dart';
 void refreshFinancialViews(BuildContext context) {
   context.read<HomeBloc>()
     ..add(GetIncomeExpenseAmountTotalCurrMonth())
-    ..add(GetTodayExpenses());
+    ..add(GetTodayExpenses())
+    ..add(GetGoalsHomeWithCount())
+    ..add(GetNotificationCount());
   context.read<TransactionBloc>().add(GetData());
   context.read<StatisticsBloc>()
     ..add(GetIncomeExpenseTotalAllMonth())

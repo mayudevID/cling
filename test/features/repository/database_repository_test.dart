@@ -1,6 +1,7 @@
 import 'package:cling/core/init_database.dart';
 import 'package:cling/core/static_name_table.dart';
 import 'package:cling/features/model/expense_model.dart';
+import 'package:cling/core/reference_id.dart';
 import 'package:cling/features/model/goal_model.dart';
 import 'package:cling/features/model/income_model.dart';
 import 'package:cling/features/model/notification_model_class.dart';
@@ -72,7 +73,10 @@ void main() {
     final expenses = (await repository.getTransaction(now))
         .whereType<ExpenseModel>()
         .toList();
-    await repository.updateExpense(expenses.first.copyWith(amount: 15));
+    await repository.updateExpense(
+      expenses.firstWhere((expense) => expense.item == 'food')
+          .copyWith(amount: 15),
+    );
     expect(
         (await repository.getTransaction(now)).whereType<ExpenseModel>().length,
         2);
@@ -88,6 +92,69 @@ void main() {
       {1500, 1000},
     );
     expect(await repository.getTotalBalance(), 925.0);
+  });
+
+  test('legacy source IDs decode from integers and numeric Strings', () {
+    final date = DateTime(2026, 11, 7).toIso8601String();
+    final income = IncomeModel.fromDatabase({
+      IncomeMeta.id: 1,
+      IncomeMeta.date: date,
+      IncomeMeta.desc: 'legacy',
+      IncomeMeta.amountMinor: 12345,
+      IncomeMeta.idIncomeSource: '1',
+    });
+    expect(income.incomeSource, inSourceData[1]);
+    expect(income.amount, 123.45);
+    final expense = ExpenseModel.fromDatabase({
+      ExpenseMeta.id: 3,
+      ExpenseMeta.date: date,
+      ExpenseMeta.item: 'legacy',
+      ExpenseMeta.amountMinor: 2000,
+      ExpenseMeta.idCategories: '4',
+    });
+    expect(expense.categories, exCategoriesData[4]);
+    expect(expense.amount, 20);
+    expect(parseReferenceId('7'), 7);
+    expect(requireReferenceId(inSourceData[1], inSourceData), 1);
+    expect(requireReferenceId(exCategoriesData[4], exCategoriesData), 4);
+    expect(parseReferenceId('invalid'), isNull);
+    expect(
+      displayReference('900', inSourceData, unknownType: 'income source'),
+      contains('Unknown income source'),
+    );
+    expect(() => requireReferenceId('invalid', inSourceData),
+        throwsFormatException);
+  });
+
+  test('foreign key constraints reject orphan transactions', () async {
+    final config = await repository.db.rawQuery('PRAGMA foreign_keys');
+    expect(config.first['foreign_keys'], 1);
+    await expectLater(
+      repository.db.insert(IncomeMeta.nameTable, {
+        IncomeMeta.date: DateTime.now().toIso8601String(),
+        IncomeMeta.amount: 100,
+        IncomeMeta.amountMinor: 10000,
+        IncomeMeta.idIncomeSource: 99999,
+      }),
+      throwsA(isA<Exception>()),
+    );
+    expect(await repository.db.rawQuery('PRAGMA foreign_key_check'), isEmpty);
+  });
+
+  test('missing breakdown category does not crash or return unrelated rows',
+      () async {
+    expect(
+      await repository.getMostIncomeByCategory(
+        source: 'not-present',
+      ),
+      isEmpty,
+    );
+    expect(
+      await repository.getMostExpenseByCategory(
+        source: 'not-present',
+      ),
+      isEmpty,
+    );
   });
 
   test('goal contributions update the aggregate atomically', () async {

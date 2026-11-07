@@ -3,6 +3,7 @@
 import '../../core/init_database.dart';
 import '../../core/static_name_table.dart';
 import '../../core/money_amount.dart';
+import '../../core/reference_id.dart';
 import 'transaction_model.dart';
 
 class ExpenseModel implements TransactionModel {
@@ -19,7 +20,8 @@ class ExpenseModel implements TransactionModel {
         date: DateTime.parse(json[ExpenseMeta.date]),
         item: json[ExpenseMeta.item],
         amount: MoneyAmount.fromMinorUnits(json[ExpenseMeta.amountMinor]),
-        categories: exCategoriesData[json[ExpenseMeta.idCategories]],
+        categories: displayReference(json[ExpenseMeta.idCategories], exCategoriesData,
+            unknownType: 'expense category'),
       );
   @override
   int? id;

@@ -12,6 +12,7 @@ class BackupManifest {
     required this.schemaVersion,
     required this.snapshotAt,
     required this.sha256Digest,
+    this.dataLastModifiedAt,
   });
 
   final String ownerUid;
@@ -19,37 +20,47 @@ class BackupManifest {
   final DateTime snapshotAt;
   final String sha256Digest;
 
-  Map<String, String> toMetadata() => {
-    'owner_uid': ownerUid,
-    'schema_version': schemaVersion.toString(),
-    'snapshot_at': snapshotAt.toUtc().toIso8601String(),
-    'sha256': sha256Digest,
-  };
+  /// Last financial change recorded inside this exact snapshot, if present.
+  final DateTime? dataLastModifiedAt;
 
-  /// Null indicates a legacy backup without metadata, rather than an
-  /// authenticated manifest. A partially present manifest is rejected.
+  Map<String, String> toMetadata() => {
+        'owner_uid': ownerUid,
+        'schema_version': schemaVersion.toString(),
+        'snapshot_at': snapshotAt.toUtc().toIso8601String(),
+        'sha256': sha256Digest,
+        if (dataLastModifiedAt != null)
+          'data_modified_at': dataLastModifiedAt!.toUtc().toIso8601String(),
+      };
+
+  /// Empty metadata is allowed only for legacy single-file backups.
+  /// Incomplete modern manifests are always rejected.
   static BackupManifest? fromMetadata(Map<String, String>? metadata) {
     if (metadata == null || metadata.isEmpty) return null;
-    const requiredKeys = [
-      'owner_uid', 'schema_version', 'snapshot_at', 'sha256',
-    ];
-    if (requiredKeys.every((key) => !metadata.containsKey(key))) return null;
-    if (requiredKeys.any((key) => !metadata.containsKey(key))) {
+    const keys = ['owner_uid', 'schema_version', 'snapshot_at', 'sha256'];
+    if (keys.every((key) => !metadata.containsKey(key))) return null;
+    if (keys.any((key) => !metadata.containsKey(key))) {
       throw const FormatException('Incomplete backup manifest.');
     }
-    final owner = metadata['owner_uid']!;
+    final uid = metadata['owner_uid']!;
     final version = int.tryParse(metadata['schema_version']!);
-    final when = DateTime.tryParse(metadata['snapshot_at']!);
-    final hash = metadata['sha256']!;
-    if (owner.isEmpty || version == null || when == null ||
-        !RegExp(r'^[a-f0-9]{64}$').hasMatch(hash)) {
+    final captured = DateTime.tryParse(metadata['snapshot_at']!);
+    final digest = metadata['sha256']!;
+    final modifiedText = metadata['data_modified_at'];
+    final modified = modifiedText == null
+        ? null
+        : DateTime.tryParse(modifiedText)?.toUtc();
+    final validDigest =
+        digest.length == 64 && !digest.contains(RegExp(r'[^0-9a-f]'));
+    if (uid.isEmpty || version == null || captured == null || !validDigest ||
+        (modifiedText != null && modified == null)) {
       throw const FormatException('Invalid backup manifest.');
     }
     return BackupManifest(
-      ownerUid: owner,
+      ownerUid: uid,
       schemaVersion: version,
-      snapshotAt: when.toUtc(),
-      sha256Digest: hash,
+      snapshotAt: captured.toUtc(),
+      sha256Digest: digest,
+      dataLastModifiedAt: modified,
     );
   }
 }

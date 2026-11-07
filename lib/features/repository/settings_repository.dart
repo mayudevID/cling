@@ -10,6 +10,34 @@ import '../model/user_model.dart';
 import 'database_repository.dart';
 import 'backup_integrity.dart';
 
+class CloudBackupRecord {
+  const CloudBackupRecord({
+    required this.storagePath,
+    required this.manifest,
+    this.uploadedAt,
+  });
+  final String storagePath;
+  final BackupManifest? manifest;
+  final DateTime? uploadedAt;
+
+  DateTime get sortAt =>
+      manifest?.dataLastModifiedAt ??
+      manifest?.snapshotAt ??
+      uploadedAt ??
+      DateTime.fromMillisecondsSinceEpoch(0, isUtc: true);
+}
+
+class LocalRecoverySnapshot {
+  const LocalRecoverySnapshot({
+    required this.path,
+    required this.createdAt,
+    required this.sizeBytes,
+  });
+  final String path;
+  final DateTime createdAt;
+  final int sizeBytes;
+}
+
 class SettingsRepository {
   SettingsRepository({
     required FirebaseAuth firebaseAuth,
@@ -182,111 +210,206 @@ class SettingsRepository {
     await _firebaseAuth.currentUser!.reload();
   }
 
-  /// Snapshot and upload data with owner, schema and SHA-256 metadata.
-  Future<void> backupData() async {
+  String _requireAccount() {
     final uid = _firebaseAuth.currentUser?.uid;
     if (uid == null || !_databaseRepository.isReady ||
         _databaseRepository.activeUserId != uid) {
-      throw StateError('Sign in to the correct account before backing up.');
+      throw StateError('Account and local database are not synchronized.');
     }
-    final revision = _databaseRepository.revision;
-    final snapshot = File(
-      '${await _databaseRepository.databasePath}.snapshot_'
-      '${DateTime.now().toUtc().microsecondsSinceEpoch}.db',
-    );
-    try {
-      await _databaseRepository.createBackupSnapshot(snapshot.path);
-      final schemaRows = await _databaseRepository.db.rawQuery(
-        'PRAGMA user_version');
-      final schema = (schemaRows.first['user_version'] as num).toInt();
-      final manifest = BackupManifest(
-        ownerUid: uid,
-        schemaVersion: schema,
-        snapshotAt: DateTime.now().toUtc(),
-        sha256Digest: await sqliteFileSha256(snapshot),
-      );
-      if (_firebaseAuth.currentUser?.uid != uid ||
-          _databaseRepository.activeUserId != uid ||
-          revision != _databaseRepository.revision) {
-        throw StateError('Account switched during snapshot creation.');
-      }
-      final ref = _firebaseStorage.ref('backupDb/$uid.db');
-      await ref.putFile(snapshot, SettableMetadata(
-        customMetadata: manifest.toMetadata(),
-      ));
-    } finally {
-      if (await snapshot.exists()) await snapshot.delete();
+    return uid;
+  }
+
+  void _assertAccount(String uid, int revision) {
+    if (_firebaseAuth.currentUser?.uid != uid ||
+        !_databaseRepository.isReady ||
+        _databaseRepository.activeUserId != uid ||
+        _databaseRepository.revision != revision) {
+      throw StateError('Account changed while processing a backup.');
     }
   }
 
-  /// A cloud restore is rejected if an existing local database was modified
-  /// after the snapshot (or its age is unknown), unless the user explicitly
-  /// confirms replacement. A durable before-restore copy is always kept.
-  Future<void> getBackup({bool allowOverwriteNewerLocal = false}) async {
-    final uid = _firebaseAuth.currentUser?.uid;
-    if (uid == null || _databaseRepository.activeUserId != uid ||
-        !_databaseRepository.isReady) {
-      throw StateError('Account database mismatch during restore.');
+  /// Every upload gets a unique immutable path. A stale second device
+  /// cannot replace a newer backup produced by the first device.
+  Future<void> backupData() async {
+    final uid = _requireAccount();
+    final revision = _databaseRepository.revision;
+    // This is a lower bound on the snapshot's capture time. A transaction
+    // committed while VACUUM INTO runs will never be mistaken as older.
+    final captureStartedAt = DateTime.now().toUtc();
+    final file = File(
+      '${await _databaseRepository.databasePath}.snapshot_'
+      '${captureStartedAt.microsecondsSinceEpoch}.db',
+    );
+    try {
+      await _databaseRepository.createBackupSnapshot(file.path);
+      final snapshot = await openDatabase(
+        file.path, readOnly: true, singleInstance: false);
+      late int schema;
+      DateTime? dataModifiedAt;
+      try {
+        schema = await validateClingBackupSchema(snapshot);
+        final meta = await snapshot.rawQuery(
+          "SELECT value FROM finance_meta WHERE key = 'last_modified_at' LIMIT 1",
+        );
+        if (meta.isNotEmpty) {
+          dataModifiedAt = DateTime.tryParse(
+            meta.first['value'] as String,
+          )?.toUtc();
+        }
+      } finally {
+        await snapshot.close();
+      }
+      final manifest = BackupManifest(
+        ownerUid: uid,
+        schemaVersion: schema,
+        snapshotAt: captureStartedAt,
+        dataLastModifiedAt: dataModifiedAt,
+        sha256Digest: await sqliteFileSha256(file),
+      );
+      _assertAccount(uid, revision);
+      final id = '${captureStartedAt.microsecondsSinceEpoch}_'
+          '${manifest.sha256Digest.substring(0, 12)}.db';
+      final ref = _firebaseStorage.ref('backupDb/$uid/snapshots/$id');
+      await ref.putFile(
+        file, SettableMetadata(customMetadata: manifest.toMetadata()),
+      );
+    } finally {
+      if (await file.exists()) await file.delete();
     }
+  }
+
+  Future<List<CloudBackupRecord>> listCloudBackups() async {
+    final uid = _requireAccount();
+    final result = <CloudBackupRecord>[];
+    final root = _firebaseStorage.ref('backupDb/$uid/snapshots');
+    List<Reference> snapshots = [];
+    try {
+      snapshots = (await root.listAll()).items;
+    } on FirebaseException catch (error) {
+      // Older Storage rules may permit reading backupDb/<uid>.db but not
+      // listing the new path. Keep legacy restore available during rollout.
+      const legacyListErrors = {
+        'unauthorized',
+        'permission-denied',
+        'object-not-found',
+      };
+      if (!legacyListErrors.contains(error.code)) rethrow;
+    }
+    for (final entry in snapshots) {
+      final meta = await entry.getMetadata();
+      final manifest = BackupManifest.fromMetadata(meta.customMetadata);
+      if (manifest == null || manifest.ownerUid != uid) {
+        throw const FormatException('Untrusted cloud snapshot metadata.');
+      }
+      result.add(CloudBackupRecord(
+        storagePath: entry.fullPath,
+        manifest: manifest,
+        uploadedAt: meta.timeCreated,
+      ));
+    }
+
+    // Read old single-file backups without allowing new writes to overwrite
+    // them. The first successful versioned backup does not delete this file.
+    final legacy = _firebaseStorage.ref('backupDb/$uid.db');
+    try {
+      final meta = await legacy.getMetadata();
+      final manifest = BackupManifest.fromMetadata(meta.customMetadata);
+      if (manifest != null && manifest.ownerUid != uid) {
+        throw const FormatException('Legacy backup belongs to another user.');
+      }
+      result.add(CloudBackupRecord(
+        storagePath: legacy.fullPath,
+        manifest: manifest,
+        uploadedAt: meta.timeCreated,
+      ));
+    } on FirebaseException catch (error) {
+      if (error.code != 'object-not-found') rethrow;
+    }
+    result.sort((a, b) => b.sortAt.compareTo(a.sortAt));
+    return result;
+  }
+
+  /// Discover the account's durable, locally retained before-restore files.
+  Future<List<LocalRecoverySnapshot>> listLocalRecoverySnapshots() async {
+    _requireAccount();
+    final path = await _databaseRepository.databasePath;
+    final prefix = '$path.before_restore_';
+    final entries = <LocalRecoverySnapshot>[];
+    await for (final entry in File(path).parent.list()) {
+      if (entry is! File ||
+          !entry.path.startsWith(prefix) ||
+          !entry.path.endsWith('.db')) continue;
+      final suffix = entry.path.substring(
+        prefix.length, entry.path.length - '.db'.length);
+      final microseconds = int.tryParse(suffix);
+      if (microseconds == null) continue;
+      entries.add(LocalRecoverySnapshot(
+        path: entry.path,
+        createdAt: DateTime.fromMicrosecondsSinceEpoch(
+          microseconds, isUtc: true),
+        sizeBytes: await entry.length(),
+      ));
+    }
+    entries.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+    return entries;
+  }
+
+  Future<void> deleteLocalRecoverySnapshot(String path) async {
+    final files = await listLocalRecoverySnapshots();
+    if (!files.any((candidate) => candidate.path == path)) {
+      throw ArgumentError.value(path, 'path', 'Unknown recovery snapshot');
+    }
+    await File(path).delete();
+  }
+
+  Future<int> _validateStagedBackup(File staging,
+      {BackupManifest? manifest}) async {
+    if (manifest != null &&
+        await sqliteFileSha256(staging) != manifest.sha256Digest) {
+      throw const FormatException('Snapshot checksum does not match.');
+    }
+    final validation = await openDatabase(
+      staging.path, readOnly: true, singleInstance: false);
+    try {
+      final schema = await validateClingBackupSchema(validation);
+      if (manifest != null && manifest.schemaVersion != schema) {
+        throw const FormatException('Snapshot schema mismatch.');
+      }
+      return schema;
+    } finally {
+      await validation.close();
+    }
+  }
+
+  /// The caller must explicitly confirm replacing a more recent local DB.
+  /// The original data is always preserved in a separate recovery snapshot.
+  Future<void> _applyStagedBackup(
+    File staging, {
+    DateTime? capturedAt,
+    required bool allowOverwriteNewerLocal,
+  }) async {
+    final uid = _requireAccount();
     final revision = _databaseRepository.revision;
     final databaseFile = File(await _databaseRepository.databasePath);
-    final staging = File('${databaseFile.path}.restore');
     final rollback = File('${databaseFile.path}.rollback');
+    final hasLocal = await _databaseRepository.hasFinancialRecords();
+    final localModified = await _databaseRepository.lastFinanceChangeAt();
+    if (hasLocal && !allowOverwriteNewerLocal &&
+        (capturedAt == null || localModified == null ||
+         localModified.isAfter(capturedAt))) {
+      throw const RestoreConflictException(
+        'Local finance records may be newer than the snapshot.');
+    }
+    if (hasLocal) {
+      final recoveryPath = '${databaseFile.path}.before_restore_'
+          '${DateTime.now().toUtc().microsecondsSinceEpoch}.db';
+      await _databaseRepository.createBackupSnapshot(recoveryPath);
+    }
+    _assertAccount(uid, revision);
+
     var originalMoved = false;
     var newMoved = false;
     try {
-      if (await staging.exists()) await staging.delete();
-      final ref = _firebaseStorage.ref('backupDb/$uid.db');
-      final storageInfo = await ref.getMetadata();
-      final manifest = BackupManifest.fromMetadata(storageInfo.customMetadata);
-      if (manifest != null && manifest.ownerUid != uid) {
-        throw const FormatException('Backup belongs to a different account.');
-      }
-      await ref.writeToFile(staging);
-      if (manifest != null &&
-          await sqliteFileSha256(staging) != manifest.sha256Digest) {
-        throw const FormatException('Backup SHA-256 does not match manifest.');
-      }
-
-      final validation = await openDatabase(
-        staging.path, readOnly: true, singleInstance: false);
-      late int version;
-      try {
-        version = await validateClingBackupSchema(validation);
-      } finally {
-        await validation.close();
-      }
-      if (manifest != null && manifest.schemaVersion != version) {
-        throw const FormatException('Backup manifest schema version mismatch.');
-      }
-
-      if (_firebaseAuth.currentUser?.uid != uid ||
-          _databaseRepository.activeUserId != uid ||
-          revision != _databaseRepository.revision) {
-        throw StateError('Account changed during cloud restore.');
-      }
-      final hasLocal = await _databaseRepository.hasFinancialRecords();
-      final localModified = await _databaseRepository.lastFinanceChangeAt();
-      if (hasLocal && !allowOverwriteNewerLocal &&
-          (manifest == null || localModified == null ||
-           localModified.isAfter(manifest.snapshotAt))) {
-        throw const RestoreConflictException(
-          'Local financial records may be newer than this backup.');
-      }
-
-      // The last good on-device state remains recoverable even after a
-      // *successful* cloud restore. Never automatically delete this snapshot.
-      if (hasLocal) {
-        final safeCopy = '${databaseFile.path}.before_restore_'
-          '${DateTime.now().toUtc().microsecondsSinceEpoch}.db';
-        await _databaseRepository.createBackupSnapshot(safeCopy);
-      }
-
-      if (_firebaseAuth.currentUser?.uid != uid ||
-          _databaseRepository.activeUserId != uid ||
-          revision != _databaseRepository.revision) {
-        throw StateError('Account changed before database replacement.');
-      }
       await _databaseRepository.close();
       if (await rollback.exists()) await rollback.delete();
       if (await databaseFile.exists()) {
@@ -309,9 +432,63 @@ class SettingsRepository {
         await _databaseRepository.open();
       }
       rethrow;
+    }
+  }
+
+  Future<void> getBackup({
+    bool allowOverwriteNewerLocal = false,
+    String? storagePath,
+  }) async {
+    final uid = _requireAccount();
+    final choices = await listCloudBackups();
+    if (choices.isEmpty) throw StateError('No cloud backup found');
+    final backup = storagePath == null
+        ? choices.first
+        : choices.firstWhere(
+            (item) => item.storagePath == storagePath,
+            orElse: () => throw ArgumentError.value(
+              storagePath, 'storagePath', 'Unrecognized cloud backup'),
+          );
+    final revision = _databaseRepository.revision;
+    final dbPath = await _databaseRepository.databasePath;
+    final staging = File('$dbPath.restore_'
+        '${DateTime.now().toUtc().microsecondsSinceEpoch}.db');
+    try {
+      await _firebaseStorage.ref(backup.storagePath).writeToFile(staging);
+      await _validateStagedBackup(staging, manifest: backup.manifest);
+      _assertAccount(uid, revision);
+      await _applyStagedBackup(
+        staging,
+        capturedAt: backup.manifest?.snapshotAt,
+        allowOverwriteNewerLocal: allowOverwriteNewerLocal,
+      );
     } finally {
       if (await staging.exists()) await staging.delete();
     }
   }
 
+  Future<void> restoreLocalRecoverySnapshot(
+    String recoveryPath, {
+    bool allowOverwriteNewerLocal = false,
+  }) async {
+    _requireAccount();
+    final snapshots = await listLocalRecoverySnapshots();
+    if (!snapshots.any((record) => record.path == recoveryPath)) {
+      throw ArgumentError.value(recoveryPath, 'recoveryPath',
+          'Snapshot does not belong to this account');
+    }
+    final dbPath = await _databaseRepository.databasePath;
+    final staging = File('$dbPath.restore_'
+        '${DateTime.now().toUtc().microsecondsSinceEpoch}.db');
+    try {
+      await File(recoveryPath).copy(staging.path);
+      await _validateStagedBackup(staging);
+      await _applyStagedBackup(staging,
+        capturedAt: null,
+        allowOverwriteNewerLocal: allowOverwriteNewerLocal,
+      );
+    } finally {
+      if (await staging.exists()) await staging.delete();
+    }
+  }
 }

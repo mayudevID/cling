@@ -26,6 +26,16 @@ void main() {
     expect(decoded.schemaVersion, 2);
     expect(decoded.snapshotAt, when);
     expect(decoded.sha256Digest, hash);
+    final withRevision = BackupManifest(
+      ownerUid: 'user-A',
+      schemaVersion: 2,
+      snapshotAt: when,
+      dataLastModifiedAt: when.subtract(const Duration(minutes: 5)),
+      sha256Digest: hash,
+    );
+    final restored = BackupManifest.fromMetadata(withRevision.toMetadata());
+    expect(restored!.dataLastModifiedAt,
+        when.subtract(const Duration(minutes: 5)));
     expect(BackupManifest.fromMetadata(null), isNull);
     expect(
       () => BackupManifest.fromMetadata({'owner_uid': 'user-A'}),

@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:intl/intl.dart';
+
 import '../../../../../core/logger.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,6 +12,9 @@ import '../../../../../resources/gen/fonts.gen.dart';
 import '../../../language_currency/lang_currency_bloc.dart';
 import '../../../language_currency/lang_export.dart';
 import '../../profile/bloc/profile_bloc.dart';
+import '../../../../repository/settings_repository.dart';
+import '../../../../../injection.dart';
+import '../../main_widget/finance_refresh.dart';
 import '../widget/dialog_logout.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
@@ -29,14 +34,196 @@ class SettingsPage extends StatelessWidget {
 class SettingsPageContent extends StatelessWidget {
   const SettingsPageContent({super.key});
 
+  void _message(BuildContext context, String message) {
+    if (!context.mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message)),
+    );
+  }
+
+  Future<bool> _confirm(
+    BuildContext context, String title, String message,
+  ) async {
+    return await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: Text(title),
+        content: Text(message),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext, false),
+            child: const Text('Batal'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext, true),
+            child: const Text('Lanjutkan'),
+          ),
+        ],
+      ),
+    ) ?? false;
+  }
+
+  void _afterRestore(BuildContext context) {
+    if (!context.mounted) return;
+    refreshFinancialViews(context);
+    context.read<ProfileBloc>().add(GetProfile());
+    _message(context, 'Cadangan berhasil dipulihkan.');
+  }
+
+  Future<void> _showCloudBackupHistory(BuildContext context) async {
+    final repository = getIt<SettingsRepository>();
+    try {
+      final items = await repository.listCloudBackups();
+      if (!context.mounted) return;
+      if (items.isEmpty) {
+        _message(context, 'Belum ada backup cloud untuk akun ini.');
+        return;
+      }
+      final chosen = await showModalBottomSheet<CloudBackupRecord>(
+        context: context,
+        isScrollControlled: true,
+        builder: (sheetContext) => SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text('Riwayat backup cloud'),
+                const SizedBox(height: 12),
+                SizedBox(
+                  height: 320,
+                  child: ListView.builder(
+                    itemCount: items.length,
+                    itemBuilder: (context, index) {
+                      final item = items[index];
+                      return ListTile(
+                        title: Text(DateFormat('dd MMM yyyy, HH:mm')
+                            .format(item.sortAt.toLocal())),
+                        subtitle: Text(
+                          item.manifest == null
+                              ? 'Backup lama tanpa manifest'
+                              : 'Snapshot tersimpan • Verifikasi SHA-256',
+                        ),
+                        onTap: () => Navigator.pop(sheetContext, item),
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+      if (chosen == null || !context.mounted) return;
+      final proceed = await _confirm(
+        context,
+        'Pulihkan backup cloud?',
+        'Data aktif akan diganti dengan snapshot terpilih. '
+        'Salinan lokal akan disimpan sebelum restore. '
+        'Backup cloud lain tidak akan dihapus.',
+      );
+      if (!proceed || !context.mounted) return;
+      await repository.getBackup(
+        storagePath: chosen.storagePath,
+        allowOverwriteNewerLocal: true,
+      );
+      _afterRestore(context);
+    } catch (error) {
+      _message(context, 'Gagal mengakses backup cloud: $error');
+    }
+  }
+
+  Future<void> _showLocalRecovery(BuildContext context) async {
+    final repository = getIt<SettingsRepository>();
+    try {
+      final items = await repository.listLocalRecoverySnapshots();
+      if (!context.mounted) return;
+      if (items.isEmpty) {
+        _message(context, 'Belum ada snapshot pemulihan lokal.');
+        return;
+      }
+      final chosen = await showModalBottomSheet<LocalRecoverySnapshot>(
+        context: context,
+        isScrollControlled: true,
+        builder: (sheetContext) => SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text('Cadangan pemulihan lokal'),
+                const SizedBox(height: 12),
+                SizedBox(
+                  height: 320,
+                  child: ListView.builder(
+                    itemCount: items.length,
+                    itemBuilder: (_, index) {
+                      final item = items[index];
+                      return ListTile(
+                        title: Text(DateFormat('dd MMM yyyy, HH:mm')
+                            .format(item.createdAt.toLocal())),
+                        subtitle: Text(
+                          '${(item.sizeBytes / 1024).toStringAsFixed(1)} KB',
+                        ),
+                        onTap: () => Navigator.pop(sheetContext, item),
+                        trailing: IconButton(
+                          icon: const Icon(Icons.delete_outline),
+                          tooltip: 'Hapus salinan',
+                          onPressed: () async {
+                            final proceed = await _confirm(
+                              sheetContext,
+                              'Hapus salinan pemulihan?',
+                              'File ini akan dihapus secara permanen. '
+                              'Jangan hapus satu-satunya backup yang valid.',
+                            );
+                            if (!proceed) return;
+                            await repository.deleteLocalRecoverySnapshot(
+                              item.path,
+                            );
+                            if (sheetContext.mounted) {
+                              Navigator.pop(sheetContext);
+                            }
+                            if (context.mounted) {
+                              await _showLocalRecovery(context);
+                            }
+                          },
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+      if (chosen == null || !context.mounted) return;
+      final proceed = await _confirm(
+        context,
+        'Pulihkan cadangan lokal?',
+        'Database aktif akan diganti dengan salinan ini. '
+        'Aplikasi akan menyimpan snapshot kondisi sekarang sebelum restore.',
+      );
+      if (!proceed || !context.mounted) return;
+      await repository.restoreLocalRecoverySnapshot(
+        chosen.path,
+        allowOverwriteNewerLocal: true,
+      );
+      _afterRestore(context);
+    } catch (error) {
+      _message(context, 'Gagal memulihkan cadangan lokal: $error');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.black,
-        body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
-          child: Column(
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24),
+            child: Column(
             children: [
               const SizedBox(height: 16),
               Row(
@@ -179,6 +366,29 @@ class SettingsPageContent extends StatelessWidget {
                   ),
                 ),
               ),
+              const SizedBox(height: 12),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: SizedBox(
+                  width: double.infinity,
+                  child: OutlinedButton.icon(
+                    onPressed: () => _showCloudBackupHistory(context),
+                    icon: const Icon(Icons.cloud_download_outlined),
+                    label: const Text('Riwayat backup cloud'),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: SizedBox(
+                  width: double.infinity,
+                  child: OutlinedButton.icon(
+                    onPressed: () => _showLocalRecovery(context),
+                    icon: const Icon(Icons.restore_page_outlined),
+                    label: const Text('Pemulihan backup lokal'),
+                  ),
+                ),
+              ),
               const SizedBox(height: 16),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -213,6 +423,7 @@ class SettingsPageContent extends StatelessWidget {
               ),
             ],
           ),
+        ),
         ),
       ),
     );

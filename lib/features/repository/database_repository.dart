@@ -7,6 +7,7 @@ import 'package:path/path.dart';
 
 import '../../core/init_database.dart';
 import '../../core/money_amount.dart';
+import '../../core/reference_id.dart';
 import '../../core/recurring_schedule.dart';
 import '../../core/logger.dart';
 import '../../core/static_name_table.dart';
@@ -67,6 +68,9 @@ class DatabaseRepository {
       _database = await openDatabase(
         path,
         version: 2,
+        onConfigure: (database) async {
+          await database.execute('PRAGMA foreign_keys = ON');
+        },
         onCreate: (database, version) async {
           await initDatabaseTable(database, version);
           await migrateMoneyColumns(database);
@@ -713,10 +717,7 @@ class DatabaseRepository {
   //* ================ INCOME CRUD ================
 
   Future<void> insertIncome(IncomeModel data) async {
-    final foreignId = data.incomeSource.substring(
-      0,
-      data.incomeSource.indexOf(" "),
-    );
+    final foreignId = requireReferenceId(data.incomeSource, inSourceData);
 
     await db.insert(
       IncomeMeta.nameTable,
@@ -732,10 +733,7 @@ class DatabaseRepository {
   }
 
   Future<void> updateIncome(IncomeModel data) async {
-    final foreignId = data.incomeSource.substring(
-      0,
-      data.incomeSource.indexOf(" "),
-    );
+    final foreignId = requireReferenceId(data.incomeSource, inSourceData);
 
     await db.update(
       IncomeMeta.nameTable,
@@ -860,29 +858,22 @@ class DatabaseRepository {
     startDate ??= DateTime(now.year).toIso8601String();
     endDate ??= DateTime(now.year, 12, 31).toIso8601String();
 
-    final read = await db.rawQuery(
-      '''
-        SELECT ${IncomeSourceMeta.id} 
-        FROM ${IncomeSourceMeta.nameTable} 
-        WHERE ${IncomeSourceMeta.incomeSource} = ?
-      ''',
-      [source],
+    final sourceRows = await db.query(
+      IncomeSourceMeta.nameTable,
+      columns: [IncomeSourceMeta.id],
+      where: '${IncomeSourceMeta.incomeSource} = ?',
+      whereArgs: [source],
+      limit: 1,
     );
+    if (sourceRows.isEmpty) return [];
 
-    final List<Map<String, dynamic>> maps = await db.rawQuery(
-      '''
-        SELECT *
-        FROM ${IncomeMeta.nameTable}
-        INNER JOIN ${IncomeSourceMeta.nameTable} 
-        ON ${IncomeMeta.nameTable}.${IncomeMeta.idIncomeSource} 
-        = 
-        ${IncomeSourceMeta.nameTable}.${IncomeSourceMeta.id} 
-        WHERE date(${IncomeMeta.date}) >= date(?)
-        AND date(${IncomeMeta.date}) <= date(?)
-        AND ${IncomeSourceMeta.nameTable}.${IncomeSourceMeta.id} = ?
-        ORDER BY ${IncomeMeta.amountMinor} DESC
-      ''',
-      [startDate, endDate, read[0].values.first],
+    final maps = await db.query(
+      IncomeMeta.nameTable,
+      where: 'date(${IncomeMeta.date}) >= date(?) '
+          'AND date(${IncomeMeta.date}) <= date(?) '
+          'AND ${IncomeMeta.idIncomeSource} = ?',
+      whereArgs: [startDate, endDate, sourceRows.first[IncomeSourceMeta.id]],
+      orderBy: '${IncomeMeta.amountMinor} DESC',
     );
 
     for (final element in maps) {
@@ -895,10 +886,7 @@ class DatabaseRepository {
   //* ================ EXPENSE CRUD ================
 
   Future<void> insertExpense(ExpenseModel data) async {
-    final foreignId = data.categories.substring(
-      0,
-      data.categories.indexOf(" "),
-    );
+    final foreignId = requireReferenceId(data.categories, exCategoriesData);
 
     await db.insert(
       ExpenseMeta.nameTable,
@@ -914,10 +902,7 @@ class DatabaseRepository {
   }
 
   Future<void> updateExpense(ExpenseModel data) async {
-    final foreignId = data.categories.substring(
-      0,
-      data.categories.indexOf(" "),
-    );
+    final foreignId = requireReferenceId(data.categories, exCategoriesData);
 
     await db.update(
       ExpenseMeta.nameTable,
@@ -1002,29 +987,26 @@ class DatabaseRepository {
     startDate ??= DateTime(now.year).toIso8601String();
     endDate ??= DateTime(now.year, 12, 31).toIso8601String();
 
-    final read = await db.rawQuery(
-      '''
-        SELECT ${ExpenseCategoriesMeta.id} 
-        FROM ${ExpenseCategoriesMeta.nameTable} 
-        WHERE ${ExpenseCategoriesMeta.expenseCategories} = ?
-      ''',
-      [source],
+    final categoryRows = await db.query(
+      ExpenseCategoriesMeta.nameTable,
+      columns: [ExpenseCategoriesMeta.id],
+      where: '${ExpenseCategoriesMeta.expenseCategories} = ?',
+      whereArgs: [source],
+      limit: 1,
     );
+    if (categoryRows.isEmpty) return [];
 
-    final List<Map<String, dynamic>> maps = await db.rawQuery(
-      '''
-        SELECT *
-        FROM ${ExpenseMeta.nameTable}
-        INNER JOIN ${ExpenseCategoriesMeta.nameTable} 
-        ON ${ExpenseMeta.nameTable}.${ExpenseMeta.idCategories} 
-        = 
-        ${ExpenseCategoriesMeta.nameTable}.${ExpenseCategoriesMeta.id} 
-        WHERE date(${ExpenseMeta.date}) >= date(?)
-        AND date(${ExpenseMeta.date}) <= date(?)
-        AND ${ExpenseCategoriesMeta.nameTable}.${ExpenseCategoriesMeta.id} = ?
-        ORDER BY ${ExpenseMeta.amountMinor} DESC
-      ''',
-      [startDate, endDate, read[0].values.first],
+    final maps = await db.query(
+      ExpenseMeta.nameTable,
+      where: 'date(${ExpenseMeta.date}) >= date(?) '
+          'AND date(${ExpenseMeta.date}) <= date(?) '
+          'AND ${ExpenseMeta.idCategories} = ?',
+      whereArgs: [
+        startDate,
+        endDate,
+        categoryRows.first[ExpenseCategoriesMeta.id],
+      ],
+      orderBy: '${ExpenseMeta.amountMinor} DESC',
     );
 
     for (final element in maps) {
@@ -1398,25 +1380,26 @@ class DatabaseRepository {
   //! ================ DELETE ALL ================
 
   Future<void> deleteAllTable() async {
-    final table = [
+    // Keep a correct deletion order now that foreign keys are enforced.
+    // Clearing recurrence markers together with their rules is required
+    // whenever this destructive operation is intentionally invoked.
+    final tables = [
+      GoalSavingMeta.nameTable,
+      GoalMeta.nameTable,
       IncomeMeta.nameTable,
       ExpenseMeta.nameTable,
-      GoalMeta.nameTable,
-      GoalSavingMeta.nameTable,
       NotificationMeta.nameTable,
       RecurringMeta.nameTable,
     ];
-
-    await Future.wait(table.map((e) => db.delete(e)).toList());
-    await Future.wait(
-      table
-          .map(
-            (e) => db.rawUpdate(
-              "UPDATE SQLITE_SEQUENCE SET SEQ=0 WHERE NAME = ?",
-              [e],
-            ),
-          )
-          .toList(),
-    );
+    await db.transaction((txn) async {
+      await txn.delete('recurring_occurrences');
+      for (final table in tables) {
+        await txn.delete(table);
+        await txn.rawDelete(
+          'DELETE FROM sqlite_sequence WHERE name = ?',
+          [table],
+        );
+      }
+    });
   }
 }

@@ -20,6 +20,68 @@ class AuthRepository {
   static const userCacheKey = '__user_cache_key__';
   static const loginStatusKey = '__login_stat_key__';
   static const registerStatusKey = '__register_stat_key__';
+  static String _pendingCurrencyKey(String uid) => '__signup_currency_$uid';
+
+  static bool isTemporaryServiceFailure(FirebaseException error) =>
+      const {
+        'unavailable',
+        'deadline-exceeded',
+        'network-request-failed',
+      }.contains(error.code);
+
+  /// Create or repair a missing profile without changing already stored
+  /// fields, even if account creation was interrupted after Firebase Auth.
+  Future<UserModel> ensureProfile(User user, {String? currency}) async {
+    final uid = user.uid;
+    final savedCurrency = currency ??
+        _cache.getString(_pendingCurrencyKey(uid)) ??
+        'ID';
+    final createdAt = user.metadata.creationTime?.toIso8601String() ??
+        DateTime.now().toUtc().toIso8601String();
+    final defaults = <String, dynamic>{
+      'uid': uid,
+      'currency': savedCurrency,
+      'created_at': createdAt,
+      'updated_at': DateTime.now().toUtc().toIso8601String(),
+      'last_backup_time': null,
+      'recurring_day': 0,
+      'verified_process': false,
+      'monthly_budget': 0,
+      'monthly_income': 0,
+    };
+
+    final ref = _firestore.collection('users').doc(uid);
+    final data = await _firestore.runTransaction<Map<String, dynamic>>(
+      (transaction) async {
+        final current = await transaction.get(ref);
+        final existing = current.data() ?? <String, dynamic>{};
+        if (existing['uid'] != null && existing['uid'] != uid) {
+          throw StateError('Profile belongs to another Firebase UID');
+        }
+        final missing = <String, dynamic>{};
+        for (final entry in defaults.entries) {
+          if (!existing.containsKey(entry.key)) {
+            missing[entry.key] = entry.value;
+          }
+        }
+        if (missing.isNotEmpty) {
+          transaction.set(ref, missing, SetOptions(merge: true));
+        }
+        return <String, dynamic>{...defaults, ...existing};
+      },
+    );
+    await _cache.remove(_pendingCurrencyKey(uid));
+    return UserModel.fromMap(data);
+  }
+
+  UserModel? cachedProfileForUser(String uid) {
+    try {
+      final cached = currentUserModel;
+      return cached?.uid == uid ? cached : null;
+    } catch (_) {
+      return null;
+    }
+  }
 
   // Cache deletion is performed by awaited logout operations. A listener
   // must not asynchronously clear a newly signed-in account's cached UID.
@@ -44,30 +106,16 @@ class AuthRepository {
     required String currency,
   }) async {
     await saveRegisterProcess(true);
-    Logger.White.log("User empty. Create account...");
-    final userCredential = await _firebaseAuth.createUserWithEmailAndPassword(
-      email: email,
-      password: password,
+    final credential = await _firebaseAuth.createUserWithEmailAndPassword(
+      email: email, password: password,
     );
+    final user = credential.user!;
+    await _cache.setString(_pendingCurrencyKey(user.uid), currency);
+    // Verification can proceed even when Firestore is temporarily offline.
+    await user.sendEmailVerification();
+    await user.updateDisplayName(name);
+    await ensureProfile(user, currency: currency);
     await saveRegisterProcess(false);
-    Logger.Green.log("User regist: ${userCredential.user!.uid}");
-    Logger.White.log("Saving user data..");
-    await userCredential.user!.updateDisplayName(name);
-    await _firestore.collection("users").doc(userCredential.user!.uid).set(
-      {
-        "uid": userCredential.user!.uid,
-        "currency": currency,
-        "created_at": DateTime.now().toIso8601String(),
-        "last_backup_time": null,
-        "recurring_day": 0,
-        "verified_process": false,
-        "monthly_budget": 0,
-        "monthly_income": 0,
-        "updated_at": DateTime.now().toIso8601String(),
-      },
-    );
-    Logger.White.log("Send email verification..");
-    await userCredential.user!.sendEmailVerification();
   }
 
   Future<bool> logInWithEmailAndPassword({
@@ -75,55 +123,43 @@ class AuthRepository {
     required String password,
   }) async {
     await saveLoginProcess(true);
-    Logger.White.log("User login...");
-    final userCredential = await _firebaseAuth.signInWithEmailAndPassword(
-      email: email,
-      password: password,
+    final credentials = await _firebaseAuth.signInWithEmailAndPassword(
+      email: email, password: password,
     );
-
-    if (!userCredential.user!.emailVerified) {
+    final user = credentials.user!;
+    if (!user.emailVerified) {
       throw EmailNotVerifiedException();
     }
 
+    UserModel userModel;
+    try {
+      // Creates a missing document after partially completed registration.
+      userModel = await ensureProfile(user);
+    } on FirebaseException catch (error) {
+      final cached = cachedProfileForUser(user.uid);
+      if (!isTemporaryServiceFailure(error) || cached == null) rethrow;
+      // The cache is a read-only offline fallback for this exact Firebase UID.
+      // Recurring income must not run until server settings are reconciled.
+      userModel = cached;
+    }
+
+    final needsOnboarding = !userModel.verifiedProcess;
+    if (needsOnboarding) {
+      try {
+        await _firestore.collection('users').doc(user.uid).update({
+          'verified_process': true,
+        });
+        userModel = userModel.copyWith(verifiedProcess: true);
+      } on FirebaseException catch (error) {
+        if (!isTemporaryServiceFailure(error)) rethrow;
+        // Keep onboarding pending; never claim it succeeded offline.
+      }
+    }
+
+    await _cache.setString(userCacheKey, userModelToMap(userModel));
     await saveLoginProcess(false);
     await saveRegisterProcess(false);
-    Logger.Green.log("User logged...");
-    Logger.White.log("Get user data...");
-    final userDoc = await _firestore
-        .collection("users")
-        .doc(userCredential.user!.uid)
-        .get();
-    var userModel = UserModel.fromMap(userDoc.data()!);
-
-    final isVerifiedProcessNotPassed =
-        userCredential.user!.emailVerified && !userModel.verifiedProcess;
-
-    if (isVerifiedProcessNotPassed) {
-      Logger.Green.log("User not pass verified process. Update data...");
-
-      await _firestore
-          .collection("users")
-          .doc(userCredential.user!.uid)
-          .update({
-        "verified_process": true,
-      });
-
-      userModel = userModel.copyWith(verifiedProcess: true);
-    }
-
-    Logger.White.log("Save user data..");
-    await _cache.setString(
-      userCacheKey,
-      userModelToMap(userModel),
-    );
-
-    if (isVerifiedProcessNotPassed) {
-      Logger.Green.log(
-        "User not pass verified process. Go to verif onboard...",
-      );
-    }
-
-    return isVerifiedProcessNotPassed;
+    return needsOnboarding;
   }
 
   Future<void> logOut() async {

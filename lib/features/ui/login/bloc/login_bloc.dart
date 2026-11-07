@@ -63,16 +63,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   }
 
   Future<void> _sendLogin(SendLogin event, Emitter<LoginState> emit) async {
-    final connectivityResult = await (Connectivity().checkConnectivity());
-    if (!(connectivityResult[0] == ConnectivityResult.mobile ||
-        connectivityResult[0] == ConnectivityResult.wifi)) {
-      errorSnackbar(
-        mainContext,
-        AppLocalizations.of(mainContext)!.noConnection,
-      );
-      return;
-    }
-
+    final connectivityResult = await Connectivity().checkConnectivity();
+    final online = connectivityResult.contains(ConnectivityResult.mobile) ||
+        connectivityResult.contains(ConnectivityResult.wifi);
     if (state.email.trim().isEmpty || state.password.trim().isEmpty) {
       errorSnackbar(
         mainContext,
@@ -97,8 +90,14 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       return;
     }
 
+    if (!online) {
+      if (await _tryResumeCachedSession()) return;
+      errorSnackbar(mainContext,
+          AppLocalizations.of(mainContext)!.noConnection);
+      return;
+    }
+
     loadingAuth(mainContext);
-    await _authRepo.logOut();
 
     try {
       final isVerifiedNotPassed = await _authRepo.logInWithEmailAndPassword(
@@ -130,37 +129,28 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       // the case where a previously active rule was disabled in Firestore.
       // Fetch the authoritative server settings and then reconcile local
       // recurring income; this also clears any interrupted settings write.
-      await _settingsRepo.reconcileCurrentAccountSettingsFromServer();
-
-      await Future.delayed(const Duration(milliseconds: 100));
-      mainContext.read<ProfileBloc>()
-        ..add(GetProfile())
-        ..add(GetVerifiedStatus());
-      mainContext.read<HomeBloc>()
-        ..add(GetIncomeExpenseAmountTotalCurrMonth())
-        ..add(GetGoalsHomeWithCount())
-        ..add(GetTodayExpenses())
-        ..add(GetNotificationCount());
-      mainContext.read<TransactionBloc>().add(GetData());
-      mainContext.read<StatisticsBloc>()
-        ..add(GetIncomeExpenseTotalAllMonth())
-        ..add(GetMost())
-        ..add(GetYearlyIncome())
-        ..add(GetIncomeBreakdown())
-        ..add(GetExpenseBreakdownAndPieData());
-      mainContext.read<AppBloc>().add(const Redirect());
-
-      if (isVerifiedNotPassed) {
-        Future.delayed(
-          const Duration(milliseconds: 1000),
-          () {
-            Navigator.pushNamed(
-              MainApp.navKeyGlobal.currentContext!,
-              RouteName.verifOnboard,
-            );
-          },
-        );
+      try {
+        await _settingsRepo.reconcileCurrentAccountSettingsFromServer();
+      } on FirebaseException catch (error) {
+        if (!AuthRepository.isTemporaryServiceFailure(error) ||
+            _authRepo.cachedProfileForUser(_authRepo.currentUserFirebase!.uid)
+                == null) {
+          rethrow;
+        }
+        // Logged-in users may read their isolated local transactions while
+        // Firestore is unavailable. Recurring generation remains suspended.
+        Logger.Yellow.log('Account settings reconciliation deferred: $error');
+      } on SocketException catch (error) {
+        if (_authRepo.cachedProfileForUser(_authRepo.currentUserFirebase!.uid)
+            == null) {
+          rethrow;
+        }
+        Logger.Yellow.log('Offline account settings; recurring deferred: $error');
       }
+
+      await _finishLoginNavigation(
+        isVerifiedNotPassed: isVerifiedNotPassed,
+      );
     } on EmailNotVerifiedException catch (_) {
       Logger.Red.log("EmailNotVerified");
       await _authRepo.logOut();
@@ -169,6 +159,10 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       dialogEmailNotVerified(mainContext);
     } on FirebaseAuthException catch (e) {
       Logger.Red.log("FirebaseAuthException: $e");
+      if (AuthRepository.isTemporaryServiceFailure(e) &&
+          await _tryResumeCachedSession()) {
+        return;
+      }
       await _authRepo.logOut();
       await _dbRepo.switchAccount(null);
       Navigator.pop(mainContext);
@@ -178,6 +172,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       );
     } on SocketException catch (e) {
       Logger.Red.log("SocketException: $e");
+      if (await _tryResumeCachedSession()) return;
       await _authRepo.logOut();
       await _dbRepo.switchAccount(null);
       Navigator.pop(mainContext);
@@ -193,6 +188,59 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       errorSnackbar(
         mainContext,
         const LogInWithEmailAndPasswordFailure().message,
+      );
+    }
+  }
+
+  Future<bool> _tryResumeCachedSession() async {
+    final user = _authRepo.currentUserFirebase;
+    final cached = user == null
+        ? null
+        : _authRepo.cachedProfileForUser(user.uid);
+    if (user == null || !user.emailVerified || cached == null ||
+        user.email?.toLowerCase() != state.email.trim().toLowerCase()) {
+      return false;
+    }
+    await _dbRepo.switchAccount(user.uid);
+    mainContext.read<LangCurrencyBloc>().add(
+      ChangeCurrency(selectedCurrency: cached.currency),
+    );
+    // Offline mode is read-only for recurring settings until Firestore
+    // reconciliation succeeds. Only the persisted authenticated UID is used.
+    await _finishLoginNavigation(isVerifiedNotPassed: false);
+    return true;
+  }
+
+  Future<void> _finishLoginNavigation({
+    required bool isVerifiedNotPassed,
+  }) async {
+    await Future.delayed(const Duration(milliseconds: 100));
+    mainContext.read<ProfileBloc>()
+      ..add(GetProfile())
+      ..add(GetVerifiedStatus());
+    mainContext.read<HomeBloc>()
+      ..add(GetIncomeExpenseAmountTotalCurrMonth())
+      ..add(GetGoalsHomeWithCount())
+      ..add(GetTodayExpenses())
+      ..add(GetNotificationCount());
+    mainContext.read<TransactionBloc>().add(GetData());
+    mainContext.read<StatisticsBloc>()
+      ..add(GetIncomeExpenseTotalAllMonth())
+      ..add(GetMost())
+      ..add(GetYearlyIncome())
+      ..add(GetIncomeBreakdown())
+      ..add(GetExpenseBreakdownAndPieData());
+    mainContext.read<AppBloc>().add(const Redirect());
+
+    if (isVerifiedNotPassed) {
+      Future.delayed(
+        const Duration(milliseconds: 1000),
+        () {
+        Navigator.pushNamed(
+          MainApp.navKeyGlobal.currentContext!,
+          RouteName.verifOnboard,
+        );
+        },
       );
     }
   }
