@@ -17,7 +17,9 @@ class SettingsRepository {
     required FirebaseFirestore firestore,
     required FirebaseStorage firebaseStorage,
     required SharedPreferences cache,
-  })  : _cache = cache,
+    required DatabaseRepository databaseRepository,
+  })  : _databaseRepository = databaseRepository,
+        _cache = cache,
         _firestore = firestore,
         _firebaseStorage = firebaseStorage,
         _firebaseAuth = firebaseAuth;
@@ -25,6 +27,7 @@ class SettingsRepository {
   final FirebaseFirestore _firestore;
   final FirebaseStorage _firebaseStorage;
   final SharedPreferences _cache;
+  final DatabaseRepository _databaseRepository;
 
   static const userCacheKey = '__user_cache_key__';
   static const languagePrefsKey = '__language_prefs__';
@@ -125,45 +128,80 @@ class SettingsRepository {
     await _firebaseAuth.currentUser!.reload();
   }
 
+  /// Export a consistent SQLite snapshot; copying the live DB file can omit
+  /// in-flight journal/WAL changes.
   Future<void> backupData() async {
+    if (_firebaseAuth.currentUser == null) {
+      throw StateError('Sign in before backing up data');
+    }
+    final snapshot = File('${await _databaseRepository.databasePath}.snapshot');
     try {
-      final pathDb = await getDatabasesPath();
-
-      final File fileData = File(join(pathDb, DatabaseRepository.databaseName));
-      final pathOld = fileData.path;
-      final lastSeparator = pathOld.lastIndexOf(Platform.pathSeparator);
-      final newPath = pathOld.substring(0, lastSeparator + 1) +
-          _firebaseAuth.currentUser!.uid;
-      final newFileData = await fileData.copy('$newPath.db');
-      Logger.White.log("Location DB: ${newFileData.path}");
-
-      final path = basename(newFileData.path);
-      final ref = _firebaseStorage.ref('backupDb/$path');
-
-      final uploadTask = ref.putFile(newFileData);
-      await uploadTask.whenComplete(() {});
-      await newFileData.delete(recursive: true);
-    } on FirebaseException catch (e) {
-      Logger.Red.log(e);
-      throw Exception();
+      await _databaseRepository.createBackupSnapshot(snapshot.path);
+      final ref = _firebaseStorage.ref(
+          'backupDb/${_firebaseAuth.currentUser!.uid}.db');
+      await ref.putFile(snapshot);
+    } finally {
+      if (await snapshot.exists()) await snapshot.delete();
     }
   }
 
+  /// Download first, validate, then replace the closed database with rollback.
+  /// A network failure must never remove the existing local database.
   Future<void> getBackup() async {
+    final user = _firebaseAuth.currentUser;
+    if (user == null) throw StateError('Not authenticated');
+    final databaseFile = File(await _databaseRepository.databasePath);
+    final staging = File('${databaseFile.path}.restore');
+    final rollback = File('${databaseFile.path}.rollback');
+    var originalMoved = false;
+    var newMoved = false;
     try {
-      final pathDb = await getDatabasesPath();
+      if (await staging.exists()) await staging.delete();
+      final ref = _firebaseStorage.ref('backupDb/${user.uid}.db');
+      await ref.writeToFile(staging);
+      final validation = await openDatabase(staging.path, readOnly: true);
+      try {
+        final integrity = await validation.rawQuery('PRAGMA integrity_check');
+        if (integrity.isEmpty || integrity.first.values.first != 'ok') {
+          throw const FormatException('Corrupted backup');
+        }
+        final tables = await validation.rawQuery(
+            "SELECT name FROM sqlite_master WHERE type='table'");
+        final names = tables.map((e) => e['name']).toSet();
+        if (!names.contains('income_table') ||
+            !names.contains('expense_table') ||
+            !names.contains('goal_meta') ||
+            !names.contains('recurring_table')) {
+          throw const FormatException('Invalid Cling database backup');
+        }
+      } finally {
+        await validation.close();
+      }
 
-      final dbRef =
-          _firebaseStorage.ref('backupDb/${_firebaseAuth.currentUser!.uid}.db');
-
-      final File fileNew = File(join(pathDb, DatabaseRepository.databaseName));
-      await fileNew.delete();
-
-      final downloadTask = dbRef.writeToFile(fileNew);
-      await downloadTask.whenComplete(() {});
-    } on FirebaseException catch (e) {
-      Logger.Red.log(e);
-      throw Exception(e.message);
+      await _databaseRepository.close();
+      if (await rollback.exists()) await rollback.delete();
+      if (await databaseFile.exists()) {
+        await databaseFile.rename(rollback.path);
+        originalMoved = true;
+      }
+      await staging.rename(databaseFile.path);
+      newMoved = true;
+      await _databaseRepository.open(recoverRollback: false);
+      if (await rollback.exists()) await rollback.delete();
+    } catch (_) {
+      if (originalMoved || newMoved) {
+        await _databaseRepository.close();
+        if (newMoved && await databaseFile.exists()) {
+          await databaseFile.delete();
+        }
+        if (originalMoved && await rollback.exists()) {
+          await rollback.rename(databaseFile.path);
+        }
+        await _databaseRepository.open();
+      }
+      rethrow;
+    } finally {
+      if (await staging.exists()) await staging.delete();
     }
   }
 }

@@ -29,7 +29,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   }
 
   final DatabaseRepository _dbRepo;
-  final BuildContext mainContext = MainApp.navKeyGlobal.currentContext!;
+  BuildContext get mainContext => MainApp.navKeyGlobal.currentContext!;
 
   Future<void> _getTotalIncomeExpenseCurrMonth(
     GetIncomeExpenseAmountTotalCurrMonth event,
@@ -198,6 +198,9 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         listGoals: List.empty(),
         amountIncomeThisMonth: 0,
         amountExpenseThisMonth: 0,
+        totalBalance: 0,
+        totalGoals: 0,
+        totalNotif: 0,
       ),
     );
   }

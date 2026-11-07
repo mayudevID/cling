@@ -18,6 +18,7 @@ import '../../../app_bloc/app_bloc.dart';
 import '../../../language_currency/lang_currency_bloc.dart';
 import '../../../language_currency/lang_export.dart';
 import '../../home/bloc/home_bloc.dart';
+import '../../transaction/bloc/transaction_bloc.dart';
 import '../../settings/widget/dialog_go_backup.dart';
 import '../../statistics/bloc/statistics_bloc.dart';
 
@@ -42,7 +43,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   final AuthRepository _authRepo;
   final DatabaseRepository _dbRepo;
   final SettingsRepository _settingsRepo;
-  final BuildContext mainContext = MainApp.navKeyGlobal.currentContext!;
+  BuildContext get mainContext => MainApp.navKeyGlobal.currentContext!;
 
   Future<void> _sendLogout(
     SendLogout event,
@@ -51,20 +52,17 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     try {
       Navigator.pop(mainContext);
       loadingAuth(mainContext);
+      // Preserve the account's local data even without a cloud backup.
+      // Switch to the isolated guest DB before clearing authentication.
+      await _dbRepo.switchAccount(null);
+      await _authRepo.logOut();
       _freeResources();
-      Future.wait([
-        _authRepo.logOut(),
-        _dbRepo.deleteAllTable(),
-      ]).then((_) async {
-        mainContext.read<AppBloc>().add(const Redirect());
-        await Future.delayed(const Duration(milliseconds: 100));
-        // ignore: use_buildmainContext_synchronously
-        mainContext.read<LangCurrencyBloc>().add(
-              const ChangeCurrency(
-                selectedCurrency: Currency.idr,
-              ),
-            );
-      });
+      mainContext.read<TransactionBloc>().add(GetData());
+      emit(ProfileState());
+      mainContext.read<AppBloc>().add(const Redirect());
+      mainContext.read<LangCurrencyBloc>().add(
+        const ChangeCurrency(selectedCurrency: Currency.idr),
+      );
     } on LogOutFailure catch (_) {
       errorSnackbar(
         mainContext,
@@ -90,8 +88,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     GetVerifiedStatus event,
     Emitter<ProfileState> emit,
   ) {
-    final isVerified =
-        (_authRepo.currentUserFirebase!.emailVerified == false) ? false : true;
+    final isVerified = _authRepo.currentUserFirebase?.emailVerified ?? false;
     emit(state.copyWith(isVerified: isVerified));
   }
 
@@ -110,10 +107,18 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       return;
     }
     loadingAuth(mainContext);
-    await _settingsRepo.backupData();
-    await _settingsRepo.editBackupTime(userModel: state.userModel);
-    add(GetProfile());
-    Navigator.pop(mainContext);
+    try {
+      await _settingsRepo.backupData();
+      await _settingsRepo.editBackupTime(userModel: state.userModel);
+      add(GetProfile());
+    } catch (_) {
+      errorSnackbar(
+        mainContext,
+        'Backup failed. Local records were not deleted.',
+      );
+    } finally {
+      Navigator.pop(mainContext);
+    }
   }
 
   void _freeResources() {

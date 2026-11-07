@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sqflite/sqflite.dart';
 
 import '../../../../../core/common_widget.dart';
+import '../../../../../core/money_amount.dart';
 import '../../../../../core/logger.dart';
 import '../../../../../main.dart';
 import '../../../../model/expense_categories_model.dart';
@@ -52,8 +53,8 @@ class EditIncomeExpenseBloc
   }
 
   final DatabaseRepository _dbRepo;
-  var mainContext = MainApp.navKeyGlobal.currentContext!;
-  var detailStatsContext = StatsDetailPerCategoriesPage.navKey.currentContext;
+  BuildContext get mainContext => MainApp.navKeyGlobal.currentContext!;
+  BuildContext? get detailStatsContext => StatsDetailPerCategoriesPage.navKey.currentContext;
 
   void _setDate(SetDate event, emit) {
     final DateTime oldDateTime = state.selectedDate;
@@ -137,18 +138,19 @@ class EditIncomeExpenseBloc
     emit(state.copyWith(amountInput: event.amountInput));
   }
 
-  void _saveData(SaveData event, emit) async {
+  Future<void> _saveData(SaveData event, Emitter<EditIncomeExpenseState> emit) async {
     if (state.selectedCategories == const MapEntry(0, "")) {
       errorToast(AppLocalizations.of(mainContext)!.pleaseSelectCategories);
       return;
     }
 
-    if (state.amountInput == 0) {
+    if (!state.amountInput.isFinite || state.amountInput <= 0) {
       errorToast(AppLocalizations.of(mainContext)!.pleaseFillAmount);
       return;
     }
 
     try {
+      MoneyAmount.toMinorUnits(state.amountInput);
       TransactionModel data;
       switch (state.flowType) {
         case FlowType.income:
@@ -195,10 +197,8 @@ class EditIncomeExpenseBloc
         ..add(GetMost());
       detailStatsContext?.read<StatsDetailBloc>().add(UpdateFromEdit(data));
 
-      if (mainContext.read<TransactionBloc>().state.date ==
-          DateTime(DateTime.now().year, DateTime.now().month)) {
-        mainContext.read<TransactionBloc>().add(GetData());
-      }
+      // Always reload the selected month, including edits to past records.
+      mainContext.read<TransactionBloc>().add(GetData());
 
       Navigator.pop(mainContext);
     } on FormatException {

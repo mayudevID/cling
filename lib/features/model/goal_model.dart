@@ -3,6 +3,7 @@
 import 'package:equatable/equatable.dart';
 
 import '../../core/static_name_table.dart';
+import '../../core/money_amount.dart';
 
 class GoalModel extends Equatable {
   GoalModel({
@@ -17,8 +18,8 @@ class GoalModel extends Equatable {
         id: json[GoalMeta.id],
         name: json[GoalMeta.name],
         image: json[GoalMeta.image],
-        target: json[GoalMeta.target]?.toDouble(),
-        collected: json[GoalMeta.collected]?.toDouble(),
+        target: MoneyAmount.fromMinorUnits(json[GoalMeta.targetMinor]),
+        collected: MoneyAmount.fromMinorUnits(json[GoalMeta.collectedMinor]),
       );
 
   factory GoalModel.empty() => GoalModel(
@@ -54,7 +55,9 @@ class GoalModel extends Equatable {
         GoalMeta.name: name,
         GoalMeta.image: image,
         GoalMeta.target: target,
+        GoalMeta.targetMinor: MoneyAmount.toMinorUnits(target),
         GoalMeta.collected: collected,
+        GoalMeta.collectedMinor: MoneyAmount.toMinorUnits(collected, allowZero: true),
       };
 
   @override

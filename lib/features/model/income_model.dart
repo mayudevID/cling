@@ -2,6 +2,7 @@
 
 import '../../core/init_database.dart';
 import '../../core/static_name_table.dart';
+import '../../core/money_amount.dart';
 import 'transaction_model.dart';
 
 class IncomeModel implements TransactionModel {
@@ -17,7 +18,7 @@ class IncomeModel implements TransactionModel {
         id: json[IncomeMeta.id],
         date: DateTime.parse(json[IncomeMeta.date]),
         desc: json[IncomeMeta.desc],
-        amount: json[IncomeMeta.amount]?.toDouble(),
+        amount: MoneyAmount.fromMinorUnits(json[IncomeMeta.amountMinor]),
         incomeSource: inSourceData[json[IncomeMeta.idIncomeSource]],
       );
   @override
@@ -49,6 +50,7 @@ class IncomeModel implements TransactionModel {
         IncomeMeta.date: date.toIso8601String(),
         IncomeMeta.desc: desc ?? "-",
         IncomeMeta.amount: amount,
+        IncomeMeta.amountMinor: MoneyAmount.toMinorUnits(amount),
         IncomeMeta.idIncomeSource: incomeSource,
       };
 

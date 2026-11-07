@@ -1,10 +1,13 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:intl/intl.dart';
 import 'package:sqflite/sqflite.dart';
 // ignore: depend_on_referenced_packages
 import 'package:path/path.dart';
 
 import '../../core/init_database.dart';
+import '../../core/money_amount.dart';
+import '../../core/recurring_schedule.dart';
 import '../../core/logger.dart';
 import '../../core/static_name_table.dart';
 import '../model/expense_categories_model.dart';
@@ -18,24 +21,119 @@ import '../model/transaction_model.dart';
 import '../ui/main/statistics/bloc/statistics_bloc.dart';
 
 class DatabaseRepository {
-  DatabaseRepository() {
-    open();
-  }
-  late Database db;
+  DatabaseRepository({String? userId}) : _userId = userId;
+
+  // Each Firebase identity gets its own database. Unauthenticated sessions
+  // never see the data of the previously signed-in account.
+  String? _userId;
+  Database? _database;
   static const databaseName = 'cling_database.db';
+  Database get db => _database ?? (throw StateError('Database has not opened'));
+  String get databaseFileName => _userId == null
+      ? 'cling_guest.db'
+      : 'cling_database_${_userId!}.db';
+  Future<String> get databasePath async =>
+      join(await getDatabasesPath(), databaseFileName);
 
-  Future<void> open() async {
-    db = await openDatabase(
-      join(await getDatabasesPath(), databaseName),
-      onCreate: initDatabaseTable,
-      version: 1,
+  Future<void> open({bool recoverRollback = true}) async {
+    if (_database != null) return;
+    final path = await databasePath;
+    final rollback = File('$path.rollback');
+    if (recoverRollback && await rollback.exists()) {
+      // Restore was interrupted before it could commit successfully.
+      final current = File(path);
+      if (await current.exists()) await current.delete();
+      await rollback.rename(path);
+    }
+    // A pre-upgrade database belongs to the cached, authenticated user only.
+    // Never infer ownership of the legacy file during a new login.
+    _database = await openDatabase(
+      path,
+      version: 2,
+      onCreate: (database, version) async {
+        await initDatabaseTable(database, version);
+        await migrateMoneyColumns(database);
+      },
+      onUpgrade: (database, oldVersion, newVersion) async {
+        if (oldVersion < 2) await migrateMoneyColumns(database);
+      },
     );
-    Logger.Green.log("Database Created");
-
+    await db.execute('''CREATE TABLE IF NOT EXISTS recurring_occurrences (
+      rule_id INTEGER NOT NULL,
+      period TEXT NOT NULL,
+      PRIMARY KEY (rule_id, period)
+    )''');
+    // Older versions inserted one equivalent rule on every login.
+    await db.transaction((txn) async {
+      final rules = await txn.query(RecurringMeta.nameTable,
+          orderBy: '${RecurringMeta.id} ASC');
+      final seen = <String>{};
+      for (final rule in rules) {
+        final key = '${rule[RecurringMeta.type]}:${rule[RecurringMeta.idModel]}';
+        if (!seen.add(key)) {
+          await txn.delete(RecurringMeta.nameTable,
+            where: '${RecurringMeta.id} = ?',
+            whereArgs: [rule[RecurringMeta.id]]);
+        }
+      }
+    });
     await checkAndInputRecurring();
   }
 
-  Future<void> close() async => await db.close();
+  Future<void> close() async {
+    final current = _database;
+    _database = null;
+    if (current != null) await current.close();
+  }
+
+  Future<void> switchAccount(String? uid) async {
+    if (_userId == uid && _database != null) return;
+    await close();
+    _userId = uid;
+    await open();
+  }
+
+  /// Legacy database is copied only for the already authenticated owner,
+  /// not for arbitrary users logging in on the same device. Do not delete the
+  /// original file; it remains a fallback for older installations.
+  Future<void> migrateLegacyForAuthenticatedUser() async {
+    if (_userId == null) return;
+    final dir = await getDatabasesPath();
+    final legacy = File(join(dir, databaseName));
+    final target = File(await databasePath);
+    if (!await legacy.exists() || await target.exists()) return;
+    await close();
+    // VACUUM INTO includes committed WAL changes in a standalone snapshot.
+    final source = await openDatabase(legacy.path, readOnly: false);
+    var snapshotCreated = false;
+    try {
+      try {
+        await source.execute("VACUUM INTO '${target.path.replaceAll("'", "''")}'");
+        snapshotCreated = true;
+      } on DatabaseException {
+        // Older Android SQLite versions do not support VACUUM INTO.
+        // Flush any WAL before copying a database that is no longer open.
+        if (await target.exists()) await target.delete();
+        final result = await source.rawQuery('PRAGMA wal_checkpoint(TRUNCATE)');
+        if (result.isNotEmpty && result.first['busy'] == 1) {
+          throw StateError('Legacy WAL is busy; refusing unsafe migration');
+        }
+      }
+    } finally {
+      await source.close();
+    }
+    if (!snapshotCreated) await legacy.copy(target.path);
+    await open();
+  }
+
+  /// Creates a self-consistent SQLite snapshot while the live database is
+  /// open. SQLite VACUUM INTO takes care of the active journal/WAL.
+  Future<File> createBackupSnapshot(String outputPath) async {
+    final target = File(outputPath);
+    if (await target.exists()) await target.delete();
+    await db.execute("VACUUM INTO '${outputPath.replaceAll("'", "''")}'");
+    return target;
+  }
 
   Future<Map<String, double?>> getTotalIncomeExpenseCurrMonth() async {
     final monthNow = DateTime.now();
@@ -50,7 +148,7 @@ class DatabaseRepository {
       db.rawQuery(
         '''
         SELECT strftime('%Y-%m', ${IncomeMeta.date}) AS Month,
-        SUM(${IncomeMeta.amount}) AS TotalIncome
+        (SUM(${IncomeMeta.amountMinor}) / 100.0) AS TotalIncome
         FROM ${IncomeMeta.nameTable}
         WHERE date(${IncomeMeta.date}) >= date(?)
         AND date(${IncomeMeta.date}) <= date(?)
@@ -61,7 +159,7 @@ class DatabaseRepository {
       db.rawQuery(
         '''
         SELECT strftime('%Y-%m', ${ExpenseMeta.date}) AS Month,
-        SUM(${ExpenseMeta.amount}) AS TotalExpense
+        (SUM(${ExpenseMeta.amountMinor}) / 100.0) AS TotalExpense
         FROM ${ExpenseMeta.nameTable}
         WHERE date(${ExpenseMeta.date}) >= date(?)
         AND date(${ExpenseMeta.date}) <= date(?)
@@ -94,13 +192,13 @@ class DatabaseRepository {
     final result = await Future.wait([
       db.rawQuery(
         '''
-        SELECT SUM(${IncomeMeta.amount}) AS TotalIncome
+        SELECT (SUM(${IncomeMeta.amountMinor}) / 100.0) AS TotalIncome
         FROM ${IncomeMeta.nameTable}
       ''',
       ),
       db.rawQuery(
         '''
-        SELECT SUM(${ExpenseMeta.amount}) AS TotalExpense
+        SELECT (SUM(${ExpenseMeta.amountMinor}) / 100.0) AS TotalExpense
         FROM ${ExpenseMeta.nameTable}
       ''',
       ),
@@ -131,7 +229,7 @@ class DatabaseRepository {
       db.rawQuery(
         '''
         SELECT strftime('%Y-%m', ${IncomeMeta.date}) AS Month, 
-        SUM(${IncomeMeta.amount}) AS TotalIncome 
+        (SUM(${IncomeMeta.amountMinor}) / 100.0) AS TotalIncome 
         FROM ${IncomeMeta.nameTable}
         WHERE date(${IncomeMeta.date}) >= date(?)
         AND date(${IncomeMeta.date}) <= date(?)
@@ -143,7 +241,7 @@ class DatabaseRepository {
       db.rawQuery(
         '''
         SELECT strftime('%Y-%m', ${ExpenseMeta.date}) AS Month, 
-        SUM(${ExpenseMeta.amount}) AS TotalExpense
+        (SUM(${ExpenseMeta.amountMinor}) / 100.0) AS TotalExpense
         FROM ${ExpenseMeta.nameTable}
         WHERE date(${ExpenseMeta.date}) >= date(?)
         AND date(${ExpenseMeta.date}) <= date(?)
@@ -186,7 +284,7 @@ class DatabaseRepository {
         result = await db.rawQuery(
           '''
             SELECT ${ExpenseCategoriesMeta.nameTable}.${ExpenseCategoriesMeta.expenseCategories} AS Categories, 
-            SUM(${ExpenseMeta.amount}) AS TotalExpense
+            (SUM(${ExpenseMeta.amountMinor}) / 100.0) AS TotalExpense
             FROM ${ExpenseMeta.nameTable}
             INNER JOIN ${ExpenseCategoriesMeta.nameTable} 
             ON ${ExpenseMeta.nameTable}.${ExpenseMeta.idCategories} 
@@ -205,7 +303,7 @@ class DatabaseRepository {
         result = await db.rawQuery(
           '''
             SELECT ${IncomeSourceMeta.nameTable}.${IncomeSourceMeta.incomeSource} AS Source, 
-            SUM(${IncomeMeta.amount}) AS TotalIncome
+            (SUM(${IncomeMeta.amountMinor}) / 100.0) AS TotalIncome
             FROM ${IncomeMeta.nameTable}
             INNER JOIN ${IncomeSourceMeta.nameTable} 
             ON ${IncomeMeta.nameTable}.${IncomeMeta.idIncomeSource} 
@@ -273,39 +371,44 @@ class DatabaseRepository {
         GoalMeta.image: goalModel.image,
         GoalMeta.target: goalModel.target,
         GoalMeta.collected: goalModel.collected,
+        GoalMeta.targetMinor: MoneyAmount.toMinorUnits(goalModel.target),
+        GoalMeta.collectedMinor: MoneyAmount.toMinorUnits(goalModel.collected, allowZero: true),
       },
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }
 
   Future<void> updateGoal(GoalModel goalModel) async {
-    await db.rawUpdate(
+    final updated = await db.rawUpdate(
       '''
         UPDATE ${GoalMeta.nameTable} 
         SET ${GoalMeta.name} = ?,
         ${GoalMeta.image} = ?,
         ${GoalMeta.target} = ?,
-        ${GoalMeta.collected} = ?
-        WHERE ${GoalMeta.id} = ?
+        ${GoalMeta.targetMinor} = ?
+        WHERE ${GoalMeta.id} = ? AND ${GoalMeta.collectedMinor} <= ?
       ''',
       [
         goalModel.name,
         goalModel.image,
         goalModel.target,
-        goalModel.collected,
+        MoneyAmount.toMinorUnits(goalModel.target),
         goalModel.id,
+        MoneyAmount.toMinorUnits(goalModel.target),
       ],
     );
+    if (updated != 1) throw StateError('Goal not found or target below savings');
   }
 
   Future<void> updateCollectedGoal(GoalModel goalModel) async {
     await db.rawUpdate(
       '''
         UPDATE ${GoalMeta.nameTable} 
-        SET ${GoalMeta.collected} = ? 
+        SET ${GoalMeta.collected} = ?,
+            ${GoalMeta.collectedMinor} = ?
         WHERE ${GoalMeta.id} = ?
       ''',
-      [goalModel.collected, goalModel.id],
+      [goalModel.collected, MoneyAmount.toMinorUnits(goalModel.collected, allowZero: true), goalModel.id],
     );
   }
 
@@ -350,6 +453,7 @@ class DatabaseRepository {
         GoalSavingMeta.idGoal: idGoal,
         GoalSavingMeta.date: date.toIso8601String(),
         GoalSavingMeta.amount: amount,
+        GoalSavingMeta.amountMinor: MoneyAmount.toMinorUnits(amount),
       },
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
@@ -408,28 +512,59 @@ class DatabaseRepository {
   }
 
   Future<void> deleteGoalWithSaving(int id) async {
-    await Future.wait([
-      db.delete(
-        GoalMeta.nameTable,
-        where: "${GoalMeta.id} = ?",
-        whereArgs: [id],
-      ),
-      db.delete(
-        GoalSavingMeta.nameTable,
-        where: "${GoalSavingMeta.idGoal} = ?",
-        whereArgs: [id],
-      ),
-    ]);
+    await db.transaction((txn) async {
+      await txn.delete(GoalSavingMeta.nameTable,
+          where: "${GoalSavingMeta.idGoal} = ?", whereArgs: [id]);
+      await txn.delete(GoalMeta.nameTable,
+          where: "${GoalMeta.id} = ?", whereArgs: [id]);
+    });
   }
 
   Future<void> deleteSingleSaving(int id) async {
-    await db.rawQuery(
-      '''
-        DELETE FROM ${GoalSavingMeta.nameTable}
-        WHERE ${GoalSavingMeta.id} = ?  
-      ''',
-      [id],
-    );
+    await db.delete(GoalSavingMeta.nameTable,
+        where: "${GoalSavingMeta.id} = ?", whereArgs: [id]);
+  }
+
+  /// All goal balance mutations are atomic and constrained at write-time.
+  Future<void> addSavingAtomic(int goalId, DateTime date, double amount) async {
+    final minor = MoneyAmount.toMinorUnits(amount);
+    await db.transaction((txn) async {
+      final updated = await txn.rawUpdate(
+        'UPDATE ${GoalMeta.nameTable} SET '
+        '${GoalMeta.collectedMinor} = ${GoalMeta.collectedMinor} + ?, '
+        '${GoalMeta.collected} = (${GoalMeta.collectedMinor} + ?) / 100.0 '
+        'WHERE ${GoalMeta.id} = ? AND '
+        '${GoalMeta.collectedMinor} + ? <= ${GoalMeta.targetMinor}',
+        [minor, minor, goalId, minor],
+      );
+      if (updated != 1) throw StateError('Goal not found or target exceeded');
+      await txn.insert(GoalSavingMeta.nameTable, {
+        GoalSavingMeta.idGoal: goalId,
+        GoalSavingMeta.date: date.toIso8601String(),
+        GoalSavingMeta.amount: amount,
+        GoalSavingMeta.amountMinor: minor,
+      });
+    });
+  }
+
+  Future<void> deleteSavingAtomic(int goalId, int savingId) async {
+    await db.transaction((txn) async {
+      final rows = await txn.query(GoalSavingMeta.nameTable,
+          columns: [GoalSavingMeta.amountMinor],
+          where: '${GoalSavingMeta.id} = ? AND ${GoalSavingMeta.idGoal} = ?',
+          whereArgs: [savingId, goalId]);
+      if (rows.isEmpty) throw StateError('Saving not found');
+      final minor = rows.single[GoalSavingMeta.amountMinor] as int;
+      final updated = await txn.rawUpdate(
+          'UPDATE ${GoalMeta.nameTable} SET '
+          '${GoalMeta.collectedMinor} = ${GoalMeta.collectedMinor} - ?, '
+          '${GoalMeta.collected} = (${GoalMeta.collectedMinor} - ?) / 100.0 '
+          'WHERE ${GoalMeta.id} = ? AND ${GoalMeta.collectedMinor} >= ?',
+          [minor, minor, goalId, minor]);
+      if (updated != 1) throw StateError('Invalid goal balance');
+      await txn.delete(GoalSavingMeta.nameTable,
+          where: '${GoalSavingMeta.id} = ?', whereArgs: [savingId]);
+    });
   }
 
   //* ================ INCOME CRUD ================
@@ -445,6 +580,7 @@ class DatabaseRepository {
       {
         IncomeMeta.date: data.date.toIso8601String(),
         IncomeMeta.amount: data.amount,
+        IncomeMeta.amountMinor: MoneyAmount.toMinorUnits(data.amount),
         IncomeMeta.desc: data.desc,
         IncomeMeta.idIncomeSource: foreignId,
       },
@@ -461,13 +597,13 @@ class DatabaseRepository {
     await db.update(
       IncomeMeta.nameTable,
       {
-        IncomeMeta.id: data.id,
         IncomeMeta.date: data.date.toIso8601String(),
         IncomeMeta.amount: data.amount,
         IncomeMeta.desc: data.desc,
         IncomeMeta.idIncomeSource: foreignId,
       },
-      conflictAlgorithm: ConflictAlgorithm.replace,
+      where: "${IncomeMeta.id} = ?",
+      whereArgs: [data.id],
     );
   }
 
@@ -492,10 +628,10 @@ class DatabaseRepository {
 
   Future<num> getTotalIncome() async {
     final List<Map<String, dynamic>> maps = await db.rawQuery('''
-        SELECT SUM(${IncomeMeta.amount}) 
+        SELECT (SUM(${IncomeMeta.amountMinor}) / 100.0) AS total
         FROM ${IncomeMeta.nameTable}
       ''');
-    return maps.first['SUM(${IncomeMeta.amount})'] ?? 0;
+    return (maps.first['total'] as num?) ?? 0;
   }
 
   Future<Map<String, double>> getYearlyIncome() async {
@@ -523,7 +659,7 @@ class DatabaseRepository {
     final result = await db.rawQuery(
       '''
         SELECT strftime('%Y-%m', ${IncomeMeta.date}) AS Month, 
-        SUM(${IncomeMeta.amount}) AS TotalIncome 
+        (SUM(${IncomeMeta.amountMinor}) / 100.0) AS TotalIncome 
         FROM ${IncomeMeta.nameTable}
         WHERE date(${IncomeMeta.date}) >= date(?)
         AND date(${IncomeMeta.date}) <= date(?)
@@ -554,7 +690,7 @@ class DatabaseRepository {
     final result = await db.rawQuery(
       '''
         SELECT ${IncomeSourceMeta.nameTable}.${IncomeSourceMeta.incomeSource} AS Source, 
-        SUM(${IncomeMeta.amount}) AS TotalIncome
+        (SUM(${IncomeMeta.amountMinor}) / 100.0) AS TotalIncome
         FROM ${IncomeMeta.nameTable}
         INNER JOIN ${IncomeSourceMeta.nameTable} 
         ON ${IncomeMeta.nameTable}.${IncomeMeta.idIncomeSource} 
@@ -600,7 +736,7 @@ class DatabaseRepository {
         WHERE date(${IncomeMeta.date}) >= date(?)
         AND date(${IncomeMeta.date}) <= date(?)
         AND ${IncomeSourceMeta.nameTable}.${IncomeSourceMeta.id} = ?
-        ORDER BY ${IncomeMeta.amount} DESC
+        ORDER BY ${IncomeMeta.amountMinor} DESC
       ''',
       [startDate, endDate, read[0].values.first],
     );
@@ -625,6 +761,7 @@ class DatabaseRepository {
       {
         ExpenseMeta.date: data.date.toIso8601String(),
         ExpenseMeta.amount: data.amount,
+        ExpenseMeta.amountMinor: MoneyAmount.toMinorUnits(data.amount),
         ExpenseMeta.item: data.item,
         ExpenseMeta.idCategories: foreignId,
       },
@@ -641,13 +778,13 @@ class DatabaseRepository {
     await db.update(
       ExpenseMeta.nameTable,
       {
-        ExpenseMeta.id: data.id,
         ExpenseMeta.date: data.date.toIso8601String(),
         ExpenseMeta.amount: data.amount,
         ExpenseMeta.item: data.item,
         ExpenseMeta.idCategories: foreignId,
       },
-      conflictAlgorithm: ConflictAlgorithm.replace,
+      where: "${ExpenseMeta.id} = ?",
+      whereArgs: [data.id],
     );
   }
 
@@ -693,7 +830,7 @@ class DatabaseRepository {
     final result = await db.rawQuery(
       '''
         SELECT ${ExpenseCategoriesMeta.nameTable}.${ExpenseCategoriesMeta.expenseCategories} AS Categories, 
-        SUM(${ExpenseMeta.amount}) AS TotalExpense
+        (SUM(${ExpenseMeta.amountMinor}) / 100.0) AS TotalExpense
         FROM ${ExpenseMeta.nameTable}
         INNER JOIN ${ExpenseCategoriesMeta.nameTable} 
         ON ${ExpenseMeta.nameTable}.${ExpenseMeta.idCategories} 
@@ -740,7 +877,7 @@ class DatabaseRepository {
         WHERE date(${ExpenseMeta.date}) >= date(?)
         AND date(${ExpenseMeta.date}) <= date(?)
         AND ${ExpenseCategoriesMeta.nameTable}.${ExpenseCategoriesMeta.id} = ?
-        ORDER BY ${ExpenseMeta.amount} DESC
+        ORDER BY ${ExpenseMeta.amountMinor} DESC
       ''',
       [startDate, endDate, read[0].values.first],
     );
@@ -755,7 +892,7 @@ class DatabaseRepository {
   //* ================ NOTIFICATION CRUD ======================
 
   Future<void> updateNotificationIsRead(int id) async {
-    await db.rawQuery(
+    await db.rawUpdate(
       '''
         UPDATE ${NotificationMeta.nameTable}
         SET ${NotificationMeta.isRead} = ?
@@ -766,7 +903,7 @@ class DatabaseRepository {
   }
 
   Future<void> updateNotificationIsReadAll() async {
-    await db.rawQuery(
+    await db.rawUpdate(
       '''
         UPDATE ${NotificationMeta.nameTable}
         SET ${NotificationMeta.isRead} = ?
@@ -901,54 +1038,43 @@ class DatabaseRepository {
   //* ================ RECURRING CRUD ======================
 
   Future<void> checkAndInputRecurring() async {
-    //* Monthly (Monthly Income)
-    final now = DateTime.now();
-    final applicationOpenDate = DateTime(now.year, now.month, now.day);
+    final today = DateTime.now();
+    final through = DateTime(today.year, today.month, today.day);
+    final rules = await db.query(RecurringMeta.nameTable,
+        orderBy: '${RecurringMeta.id} ASC');
+    for (final rule in rules) {
+      final ruleId = rule[RecurringMeta.id] as int;
+      final day = rule[RecurringMeta.recurringDay] as int;
+      final latest = DateTime.parse(rule[RecurringMeta.recurringLast] as String);
+      var due = RecurringSchedule.next(latest, day);
+      while (!due.isAfter(through)) {
+        await db.transaction((txn) async {
+          // A unique rule/month key also prevents duplicates if processing is
+          // interrupted and re-entered.
+          final period = '${due.year}-${due.month.toString().padLeft(2, '0')}';
+          final prior = await txn.query('recurring_occurrences',
+            where: 'rule_id = ? AND period = ?',
+            whereArgs: [ruleId, period], limit: 1);
+          if (prior.isEmpty) {
+            await txn.insert('recurring_occurrences',
+              {'rule_id': ruleId, 'period': period});
 
-    final res = await db.query(RecurringMeta.nameTable);
-    for (var i = 0; i < res.length; i++) {
-      final dataRec = res[0];
-      final latestDate = DateTime.parse(
-        dataRec[RecurringMeta.recurringLast].toString(),
-      );
-
-      final int monthsDifference =
-          applicationOpenDate.difference(latestDate).inDays ~/ 30;
-
-      for (int i = 1; i <= monthsDifference; i++) {
-        final DateTime updateDate = DateTime(
-          latestDate.year,
-          latestDate.month + i,
-          int.parse(dataRec[RecurringMeta.recurringDay].toString()),
-        );
-
-        if (updateDate.isBefore(applicationOpenDate) ||
-            updateDate.isAtSameMomentAs(applicationOpenDate)) {
-          await insertIncome(
-            IncomeModel(
-              date: updateDate,
-              desc: "Monthly Income (Recurring)",
-              amount: double.parse(dataRec[RecurringMeta.amount].toString()),
-              incomeSource: "0 xxx",
-            ),
-          );
-          Logger.Red.log("Insert Data for $updateDate...");
-
-          if (i == monthsDifference) {
-            await db.rawUpdate(
-              '''
-                UPDATE ${RecurringMeta.nameTable}
-                SET ${RecurringMeta.recurringLast} = ?
-                WHERE ${RecurringMeta.id} = ?
-              ''',
-              [
-                updateDate.toIso8601String(),
-                dataRec[RecurringMeta.id].toString(),
-              ],
-            );
-            Logger.Yellow.log("Update Data Reccuring Again...");
+            final minor = (rule[RecurringMeta.amountMinor] as num).toInt();
+            if (minor > 0) {
+              await txn.insert(IncomeMeta.nameTable, {
+                IncomeMeta.date: due.toIso8601String(),
+                IncomeMeta.desc: 'Monthly Income (Recurring)',
+                IncomeMeta.amount: minor / MoneyAmount.factor,
+                IncomeMeta.amountMinor: minor,
+                IncomeMeta.idIncomeSource: 0,
+              });
+            }
           }
-        }
+          await txn.update(RecurringMeta.nameTable,
+            {RecurringMeta.recurringLast: due.toIso8601String()},
+            where: '${RecurringMeta.id} = ?', whereArgs: [ruleId]);
+        });
+        due = RecurringSchedule.next(due, day);
       }
     }
   }
@@ -959,36 +1085,42 @@ class DatabaseRepository {
     required double amount,
     required bool isFromLogin,
   }) async {
-    Logger.Yellow.log("Save Recurring Monthly...");
-    late DateTime lastInput;
-    final now = DateTime.now();
-    final dtNow = DateTime(now.year, now.month, now.day);
-    final dt = DateTime(now.year, now.month, recDay);
-
-    if (dt.isBefore(dtNow)) {
-      lastInput = dt;
-      Logger.Yellow.log("dt Is Before Now...");
-    } else {
-      lastInput = DateTime(now.year, now.month - 1, recDay);
-      Logger.Yellow.log("dt Is Same/After Now...");
+    if (recDay < 1 || recDay > 31) {
+      throw RangeError.range(recDay, 1, 31, 'recDay');
     }
-
-    Logger.Yellow.log("Insert Recurring...");
-    await db.insert(
-      RecurringMeta.nameTable,
-      {
-        RecurringMeta.idModel: 0,
-        RecurringMeta.type: type,
-        RecurringMeta.recurringDay: recDay,
-        RecurringMeta.recurringLast: lastInput.toIso8601String(),
-        RecurringMeta.amount: amount,
-      },
-    );
-
-    if (dt.isAtSameMomentAs(dtNow) && isFromLogin) {
-      Logger.Yellow.log("Same Moment, Check And Input Rec...");
-      await checkAndInputRecurring();
-    }
+    final minor = MoneyAmount.toMinorUnits(amount);
+    await db.transaction((txn) async {
+      final existing = await txn.query(RecurringMeta.nameTable,
+        where: '${RecurringMeta.type} = ? AND ${RecurringMeta.idModel} = ?',
+        whereArgs: [type, 0],
+        orderBy: '${RecurringMeta.id} ASC');
+      if (existing.isNotEmpty) {
+        final first = existing.first;
+        await txn.update(RecurringMeta.nameTable, {
+          RecurringMeta.recurringDay: recDay,
+          RecurringMeta.amount: amount,
+          RecurringMeta.amountMinor: minor,
+        }, where: '${RecurringMeta.id} = ?', whereArgs: [first[RecurringMeta.id]]);
+        // Prior versions could add duplicate rules on every login. Remove
+        // extras without touching the income entries already recorded.
+        for (final duplicate in existing.skip(1)) {
+          await txn.delete(RecurringMeta.nameTable,
+            where: '${RecurringMeta.id} = ?',
+            whereArgs: [duplicate[RecurringMeta.id]]);
+        }
+      } else {
+        await txn.insert(RecurringMeta.nameTable, {
+          RecurringMeta.idModel: 0,
+          RecurringMeta.type: type,
+          RecurringMeta.recurringDay: recDay,
+          RecurringMeta.recurringLast:
+              RecurringSchedule.initialLast(DateTime.now(), recDay).toIso8601String(),
+          RecurringMeta.amount: amount,
+          RecurringMeta.amountMinor: minor,
+        });
+      }
+    });
+    if (isFromLogin) await checkAndInputRecurring();
   }
 
   //! ================ DELETE ALL ================

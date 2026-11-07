@@ -106,6 +106,9 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
     Emitter<NotificationState> emit,
   ) async {
     await _dbRepo.updateNotificationIsReadAll();
+    emit(state.copyWith(
+      listNotif: state.listNotif.map((item) => item.copyWith(isRead: true)).toList(),
+    ));
     mainContext.read<HomeBloc>().add(GetNotificationCount());
     //add(GetNotificationList());
   }

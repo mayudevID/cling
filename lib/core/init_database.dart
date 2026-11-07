@@ -143,3 +143,28 @@ FutureOr<void> initDatabaseTable(Database db, int version) async {
     );
   }
 }
+
+ 
+/// Schema v2: keep legacy major-unit columns for compatibility, while
+/// persisting exact integer hundredths as the canonical monetary values.
+Future<void> migrateMoneyColumns(Database db) async {
+  final columns = <List<String>>[
+    [IncomeMeta.nameTable, IncomeMeta.amount, IncomeMeta.amountMinor],
+    [ExpenseMeta.nameTable, ExpenseMeta.amount, ExpenseMeta.amountMinor],
+    [GoalMeta.nameTable, GoalMeta.target, GoalMeta.targetMinor],
+    [GoalMeta.nameTable, GoalMeta.collected, GoalMeta.collectedMinor],
+    [GoalSavingMeta.nameTable, GoalSavingMeta.amount, GoalSavingMeta.amountMinor],
+    [RecurringMeta.nameTable, RecurringMeta.amount, RecurringMeta.amountMinor],
+  ];
+  for (final column in columns) {
+    final table = column[0];
+    final legacy = column[1];
+    final minor = column[2];
+    await db.execute(
+      'ALTER TABLE $table ADD COLUMN $minor INTEGER NOT NULL DEFAULT 0',
+    );
+    await db.execute(
+      'UPDATE $table SET $minor = CAST(ROUND(COALESCE($legacy, 0) * 100) AS INTEGER)',
+    );
+  }
+}

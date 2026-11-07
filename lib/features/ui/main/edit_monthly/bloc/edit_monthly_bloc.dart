@@ -78,7 +78,7 @@ class EditMonthlyBloc extends Bloc<EditMonthlyEvent, EditMonthlyState> {
       return;
     }
 
-    if (initMonthly == state.amount && initDateRec == state.amount) {
+    if (initMonthly == state.amount && initDateRec == state.dateRec) {
       return;
     }
 

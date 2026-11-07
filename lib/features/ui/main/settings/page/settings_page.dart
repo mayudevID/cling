@@ -140,46 +140,46 @@ class SettingsPageContent extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 16),
-              // Padding(
-              //   padding: const EdgeInsets.symmetric(horizontal: 8),
-              //   child: SizedBox(
-              //     width: 390,
-              //     height: 45,
-              //     child: ElevatedButton(
-              //       onPressed: () =>
-              //           context.read<ProfileBloc>().add(GoBackup()),
-              //       style: ButtonStyle(
-              //         backgroundColor: WidgetStateProperty.all(
-              //           const Color(0x3D787880),
-              //         ),
-              //         overlayColor: WidgetStateProperty.all(Colors.white60),
-              //         shape: WidgetStateProperty.all(
-              //           RoundedRectangleBorder(
-              //             borderRadius: BorderRadius.circular(10),
-              //           ),
-              //         ),
-              //       ),
-              //       child: Row(
-              //         mainAxisAlignment: MainAxisAlignment.center,
-              //         children: [
-              //           Assets.lib.resources.images.databaseBackup.svg(),
-              //           const SizedBox(width: 8),
-              //           Text(
-              //             AppLocalizations.of(context)!.backup,
-              //             textAlign: TextAlign.center,
-              //             style: const TextStyle(
-              //               color: Colors.white,
-              //               fontSize: 15.5,
-              //               fontFamily: FontFamily.cabinetGrotesk,
-              //               fontWeight: FontWeight.w700,
-              //             ),
-              //           ),
-              //         ],
-              //       ),
-              //     ),
-              //   ),
-              // ),
-              // const SizedBox(height: 16),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: SizedBox(
+                  width: 390,
+                  height: 45,
+                  child: ElevatedButton(
+                    onPressed: () =>
+                        context.read<ProfileBloc>().add(GoBackup()),
+                    style: ButtonStyle(
+                      backgroundColor: WidgetStateProperty.all(
+                        const Color(0x3D787880),
+                      ),
+                      overlayColor: WidgetStateProperty.all(Colors.white60),
+                      shape: WidgetStateProperty.all(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Assets.lib.resources.images.databaseBackup.svg(),
+                        const SizedBox(width: 8),
+                        Text(
+                          AppLocalizations.of(context)!.backup,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 15.5,
+                            fontFamily: FontFamily.cabinetGrotesk,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8),
                 child: SizedBox(

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../core/common_widget.dart';
+import '../../../../../core/money_amount.dart';
 import '../../../../../main.dart';
 import '../../../../model/goal_model.dart';
 import '../../../../model/goal_saving_model.dart';
@@ -35,8 +36,8 @@ class GoalDetailBloc extends Bloc<GoalDetailEvent, GoalDetailState> {
 
   final DatabaseRepository _dbRepo;
 
-  final BuildContext mainContext = MainApp.navKeyGlobal.currentContext!;
-  final BuildContext? goalListContext = GoalListPage.keyState.currentContext;
+  BuildContext get mainContext => MainApp.navKeyGlobal.currentContext!;
+  BuildContext? get goalListContext => GoalListPage.keyState.currentContext;
 
   Future<void> _initGoal(InitGoal event, Emitter<GoalDetailState> emit) async {
     final result = await Future.wait([
@@ -81,36 +82,32 @@ class GoalDetailBloc extends Bloc<GoalDetailEvent, GoalDetailState> {
     AddSaving event,
     Emitter<GoalDetailState> emit,
   ) async {
-    if (state.amount == 0) {
+    if (!state.amount.isFinite || state.amount <= 0) {
       errorToast(AppLocalizations.of(mainContext)!.pleaseFillAmount);
       return;
     }
 
     try {
       final amount = state.amount;
+      MoneyAmount.toMinorUnits(amount);
       if (amount > state.goalModel.target - state.goalModel.collected) {
         errorToast(
           AppLocalizations.of(mainContext)!.amountExceedsRemainingSaving,
         );
         return;
       }
-      final newGoalModel = state.goalModel.copyWith(
-        collected: state.goalModel.collected + amount,
+      await _dbRepo.addSavingAtomic(
+        state.goalModel.id!,
+        DateTime(
+          state.selectedDate.year,
+          state.selectedDate.month,
+          state.selectedDate.day,
+        ),
+        amount,
       );
 
-      await Future.wait([
-        _dbRepo.saveGoalSaving(
-          state.goalModel.id!,
-          DateTime(
-            state.selectedDate.year,
-            state.selectedDate.month,
-            state.selectedDate.day,
-          ),
-          amount,
-        ),
-        _dbRepo.updateCollectedGoal(newGoalModel),
-      ]);
-
+      final newGoalModel =
+          await _dbRepo.getSingleGoalModel(state.goalModel.id!);
       mainContext.read<HomeBloc>().add(GetGoalsHomeWithCount());
       goalListContext?.read<GoalListBloc>().add(UpdateGoalFromGL(newGoalModel));
 
@@ -127,6 +124,10 @@ class GoalDetailBloc extends Bloc<GoalDetailEvent, GoalDetailState> {
       errorToast(
         AppLocalizations.of(mainContext)!.invalidAmount,
       );
+    } on StateError {
+      errorToast(
+        AppLocalizations.of(mainContext)!.amountExceedsRemainingSaving,
+      );
     }
   }
 
@@ -138,7 +139,7 @@ class GoalDetailBloc extends Bloc<GoalDetailEvent, GoalDetailState> {
       return;
     }
 
-    if (newTarget == 0) {
+    if (!newTarget.isFinite || newTarget <= 0) {
       errorSnackbar(
         mainContext,
         AppLocalizations.of(mainContext)!.pleaseFillAmount,
@@ -161,6 +162,7 @@ class GoalDetailBloc extends Bloc<GoalDetailEvent, GoalDetailState> {
       image: state.tempLogoGoal,
     );
 
+    MoneyAmount.toMinorUnits(newTarget);
     await _dbRepo.updateGoal(newGoalModel);
     mainContext.read<HomeBloc>().add(GetGoalsHomeWithCount());
     goalListContext?.read<GoalListBloc>().add(UpdateGoalFromGL(newGoalModel));
@@ -174,23 +176,20 @@ class GoalDetailBloc extends Bloc<GoalDetailEvent, GoalDetailState> {
     DeleteSaving event,
     Emitter<GoalDetailState> emit,
   ) async {
-    //* Update Goal Model
-    final newGoalModel = state.goalModel.copyWith(
-      collected: state.goalModel.collected - event.goalSaving.amount,
-    );
     //* Update List Savings
     final List<GoalSavingModel> listSavings =
         state.dataSavingsList.toList(growable: true);
     listSavings.removeWhere((e) => e.id == event.goalSaving.id);
 
-    await Future.wait([
-      _dbRepo.deleteSingleSaving(event.goalSaving.id!),
-      _dbRepo.updateGoal(newGoalModel),
-    ]);
+    await _dbRepo.deleteSavingAtomic(
+      state.goalModel.id!,
+      event.goalSaving.id!,
+    );
+    final updatedGoal = await _dbRepo.getSingleGoalModel(state.goalModel.id!);
 
     mainContext.read<HomeBloc>().add(GetGoalsHomeWithCount());
-    goalListContext?.read<GoalListBloc>().add(UpdateGoalFromGL(newGoalModel));
-    emit(state.copyWith(goalModel: newGoalModel, dataSavingsList: listSavings));
+    goalListContext?.read<GoalListBloc>().add(UpdateGoalFromGL(updatedGoal));
+    emit(state.copyWith(goalModel: updatedGoal, dataSavingsList: listSavings));
   }
 
   Future<void> _deleteGoal(

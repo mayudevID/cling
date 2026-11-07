@@ -12,13 +12,13 @@ class HomeState extends Equatable {
     this.totalBalance = 0,
   })  : listTodayExpenses = listTodayExpenses ?? List.empty(),
         listGoals = listGoals ?? List.empty();
-  List<ExpenseModel> listTodayExpenses;
-  List<GoalModel> listGoals;
-  int totalGoals;
-  int totalNotif;
-  double amountIncomeThisMonth;
-  double amountExpenseThisMonth;
-  double totalBalance;
+  final List<ExpenseModel> listTodayExpenses;
+  final List<GoalModel> listGoals;
+  final int totalGoals;
+  final int totalNotif;
+  final double amountIncomeThisMonth;
+  final double amountExpenseThisMonth;
+  final double totalBalance;
 
   @override
   List<Object?> get props => [

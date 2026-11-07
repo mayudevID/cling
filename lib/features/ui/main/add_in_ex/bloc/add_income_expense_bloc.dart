@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sqflite/sqflite.dart';
 
 import '../../../../../core/common_widget.dart';
+import '../../../../../core/money_amount.dart';
 import '../../../../../core/logger.dart';
 import '../../../../../main.dart';
 import '../../../../model/expense_categories_model.dart';
@@ -42,7 +43,7 @@ class AddIncomeExpenseBloc
   }
 
   final DatabaseRepository _dbRepo;
-  var mainContext = MainApp.navKeyGlobal.currentContext!;
+  BuildContext get mainContext => MainApp.navKeyGlobal.currentContext!;
 
   void _setDate(SetDate event, emit) {
     final DateTime oldDateTime = state.selectedDate;
@@ -106,18 +107,19 @@ class AddIncomeExpenseBloc
     emit(state.copyWith(amountInput: event.amountInput));
   }
 
-  void _saveData(SaveData event, emit) async {
+  Future<void> _saveData(SaveData event, Emitter<AddIncomeExpenseState> emit) async {
     if (state.selectedCategories == const MapEntry(0, "")) {
       errorToast(AppLocalizations.of(mainContext)!.pleaseSelectCategories);
       return;
     }
 
-    if (state.amountInput == 0) {
+    if (!state.amountInput.isFinite || state.amountInput <= 0) {
       errorToast(AppLocalizations.of(mainContext)!.pleaseFillAmount);
       return;
     }
 
     try {
+      MoneyAmount.toMinorUnits(state.amountInput);
       switch (event.flowType) {
         case FlowType.income:
           final data = IncomeModel(
@@ -160,10 +162,8 @@ class AddIncomeExpenseBloc
         ..add(GetIncomeExpenseTotalAllMonth())
         ..add(GetMost());
 
-      if (mainContext.read<TransactionBloc>().state.date ==
-          DateTime(DateTime.now().year, DateTime.now().month)) {
-        mainContext.read<TransactionBloc>().add(GetData());
-      }
+      // Always reload the selected month, including edits to past records.
+      mainContext.read<TransactionBloc>().add(GetData());
 
       dialogAddSuccess(mainContext, event.flowType);
     } on FormatException {

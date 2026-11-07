@@ -4,6 +4,7 @@ class IncomeMeta {
   static const date = 'date';
   static const desc = 'desc';
   static const amount = 'amount';
+  static const amountMinor = 'amount_minor';
   static const idIncomeSource = 'income_source_id';
 }
 
@@ -13,6 +14,7 @@ class ExpenseMeta {
   static const date = 'date';
   static const item = 'item';
   static const amount = 'amount';
+  static const amountMinor = 'amount_minor';
   static const idCategories = 'expense_source_id';
 }
 
@@ -34,7 +36,9 @@ class GoalMeta {
   static const image = 'goal_image';
   static const name = 'goal_name';
   static const target = 'goal_target';
+  static const targetMinor = 'goal_target_minor';
   static const collected = 'goal_collected';
+  static const collectedMinor = 'goal_collected_minor';
 }
 
 class GoalSavingMeta {
@@ -43,6 +47,7 @@ class GoalSavingMeta {
   static const idGoal = 'goal_id';
   static const date = 'date_input';
   static const amount = 'amount_input';
+  static const amountMinor = 'amount_input_minor';
 }
 
 class NotificationMeta {
@@ -67,4 +72,5 @@ class RecurringMeta {
   static const recurringLast = 'last_time';
   static const type = 'recurring_type';
   static const amount = 'rec_amount';
+  static const amountMinor = 'rec_amount_minor';
 }

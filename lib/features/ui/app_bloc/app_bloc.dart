@@ -18,7 +18,9 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   AppBloc({required AuthRepository authRepo})
       : _authRepo = authRepo,
         super(
-          authRepo.currentUserModel != null
+          authRepo.currentUserModel != null &&
+                  authRepo.currentUserFirebase != null &&
+                  authRepo.currentUserModel!.uid == authRepo.currentUserFirebase!.uid
               ? AppState.authenticated(authRepo.currentUserFirebase!)
               : const AppState.unauthenticated(),
         ) {

@@ -1,6 +1,7 @@
 // ignore_for_file: must_be_immutable
 
 import '../../core/static_name_table.dart';
+import '../../core/money_amount.dart';
 import 'package:equatable/equatable.dart';
 
 class GoalSavingModel extends Equatable {
@@ -16,7 +17,7 @@ class GoalSavingModel extends Equatable {
         id: json[GoalSavingMeta.id],
         goalId: json[GoalSavingMeta.idGoal],
         date: DateTime.parse(json[GoalSavingMeta.date]),
-        amount: json[GoalSavingMeta.amount].toDouble(),
+        amount: MoneyAmount.fromMinorUnits(json[GoalSavingMeta.amountMinor]),
       );
   int? id;
   int goalId;

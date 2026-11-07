@@ -15,6 +15,10 @@ import '../../../repository/auth_repository.dart';
 import '../../../repository/database_repository.dart';
 import '../../../repository/settings_repository.dart';
 import '../../app_bloc/app_bloc.dart';
+import '../../main/home/bloc/home_bloc.dart';
+import '../../main/transaction/bloc/transaction_bloc.dart';
+import '../../main/statistics/bloc/statistics_bloc.dart';
+import '../../main/profile/bloc/profile_bloc.dart';
 import '../../language_currency/lang_currency_bloc.dart';
 import '../../language_currency/lang_export.dart';
 import '../widgets/dialog_email_not_verified.dart';
@@ -43,7 +47,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final DatabaseRepository _dbRepo;
   final SettingsRepository _settingsRepo;
   final AuthRepository _authRepo;
-  var mainContext = MainApp.navKeyGlobal.currentContext!;
+  BuildContext get mainContext => MainApp.navKeyGlobal.currentContext!;
 
   void _toggleEye(ToggleEye event, Emitter<LoginState> emit) {
     emit(state.copyWith(isObscure: !state.isObscure));
@@ -57,7 +61,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     emit(state.copyWith(password: event.password));
   }
 
-  void _sendLogin(SendLogin event, _) async {
+  Future<void> _sendLogin(SendLogin event, Emitter<LoginState> emit) async {
     final connectivityResult = await (Connectivity().checkConnectivity());
     if (!(connectivityResult[0] == ConnectivityResult.mobile ||
         connectivityResult[0] == ConnectivityResult.wifi)) {
@@ -101,6 +105,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         password: state.password.trim(),
       );
 
+      // Activate the authenticated account's isolated database before any
+      // read, recurring generation or cloud restore.
+      await _dbRepo.switchAccount(_authRepo.currentUserFirebase!.uid);
       mainContext.read<LangCurrencyBloc>().add(
             ChangeCurrency(
               selectedCurrency: _authRepo.currentUserModel!.currency,
@@ -130,7 +137,21 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       }
 
       await Future.delayed(const Duration(milliseconds: 100));
-
+      mainContext.read<ProfileBloc>()
+        ..add(GetProfile())
+        ..add(GetVerifiedStatus());
+      mainContext.read<HomeBloc>()
+        ..add(GetIncomeExpenseAmountTotalCurrMonth())
+        ..add(GetGoalsHomeWithCount())
+        ..add(GetTodayExpenses())
+        ..add(GetNotificationCount());
+      mainContext.read<TransactionBloc>().add(GetData());
+      mainContext.read<StatisticsBloc>()
+        ..add(GetIncomeExpenseTotalAllMonth())
+        ..add(GetMost())
+        ..add(GetYearlyIncome())
+        ..add(GetIncomeBreakdown())
+        ..add(GetExpenseBreakdownAndPieData());
       mainContext.read<AppBloc>().add(const Redirect());
 
       if (isVerifiedNotPassed) {
@@ -188,9 +209,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         result = await dialogNoInternetGetBackup(mainContext);
       } else {
         try {
-          await _dbRepo.close();
           await _settingsRepo.getBackup();
-          await _dbRepo.open();
         } on Exception catch (_) {
           errorSnackbar(
             mainContext,

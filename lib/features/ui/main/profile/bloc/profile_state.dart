@@ -9,10 +9,10 @@ class ProfileState extends Equatable {
     this.isObscure = true,
     this.isVerified = true,
   }) : userModel = userModel ?? UserModel.empty();
-  UserModel userModel;
-  String version;
-  bool isVerified;
-  bool isObscure;
+  final UserModel userModel;
+  final String version;
+  final bool isVerified;
+  final bool isObscure;
 
   @override
   List<Object> get props => [

@@ -8,8 +8,8 @@ class TransactionState extends Equatable {
     List<TransactionModel>? listTransaction,
   })  : date = date ?? DateTime(DateTime.now().year, DateTime.now().month),
         listTransaction = listTransaction ?? List.empty();
-  DateTime date;
-  List<TransactionModel> listTransaction;
+  final DateTime date;
+  final List<TransactionModel> listTransaction;
 
   @override
   List<Object> get props => [date, listTransaction];

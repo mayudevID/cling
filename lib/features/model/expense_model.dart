@@ -2,6 +2,7 @@
 
 import '../../core/init_database.dart';
 import '../../core/static_name_table.dart';
+import '../../core/money_amount.dart';
 import 'transaction_model.dart';
 
 class ExpenseModel implements TransactionModel {
@@ -17,7 +18,7 @@ class ExpenseModel implements TransactionModel {
         id: json[ExpenseMeta.id],
         date: DateTime.parse(json[ExpenseMeta.date]),
         item: json[ExpenseMeta.item],
-        amount: json[ExpenseMeta.amount]?.toDouble(),
+        amount: MoneyAmount.fromMinorUnits(json[ExpenseMeta.amountMinor]),
         categories: exCategoriesData[json[ExpenseMeta.idCategories]],
       );
   @override
@@ -49,6 +50,7 @@ class ExpenseModel implements TransactionModel {
         ExpenseMeta.date: date.toIso8601String(),
         ExpenseMeta.item: item,
         ExpenseMeta.amount: amount,
+        ExpenseMeta.amountMinor: MoneyAmount.toMinorUnits(amount),
         ExpenseMeta.idCategories: categories,
       };
 

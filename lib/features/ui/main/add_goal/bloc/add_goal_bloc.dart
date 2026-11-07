@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sqflite/sqflite.dart';
 
 import '../../../../../core/common_widget.dart';
+import '../../../../../core/money_amount.dart';
 import '../../../../../core/logger.dart';
 import '../../../../model/goal_model.dart';
 import '../../../../repository/database_repository.dart';
@@ -27,7 +28,7 @@ class AddGoalBloc extends Bloc<AddGoalEvent, AddGoalState> {
   }
 
   final DatabaseRepository _dbRepo;
-  var mainContext = MainApp.navKeyGlobal.currentContext!;
+  BuildContext get mainContext => MainApp.navKeyGlobal.currentContext!;
 
   void _setNameGoal(SetNameGoal event, Emitter<AddGoalState> emit) {
     emit(state.copyWith(nameGoal: event.nameGoal));
@@ -41,7 +42,7 @@ class AddGoalBloc extends Bloc<AddGoalEvent, AddGoalState> {
     emit(state.copyWith(amountInput: event.amountInput));
   }
 
-  void _saveDataGoal(SaveDataGoal event, Emitter<AddGoalState> emit) async {
+  Future<void> _saveDataGoal(SaveDataGoal event, Emitter<AddGoalState> emit) async {
     if (state.logoGoal.trim().isEmpty) {
       errorToast(AppLocalizations.of(mainContext)!.pleaseSelectLogo);
       return;
@@ -52,12 +53,13 @@ class AddGoalBloc extends Bloc<AddGoalEvent, AddGoalState> {
       return;
     }
 
-    if (state.amountInput == 0) {
+    if (!state.amountInput.isFinite || state.amountInput <= 0) {
       errorToast(AppLocalizations.of(mainContext)!.pleaseFillAmount);
       return;
     }
 
     try {
+      MoneyAmount.toMinorUnits(state.amountInput);
       final goalData = GoalModel(
         name: state.nameGoal.trim(),
         image: state.logoGoal,
