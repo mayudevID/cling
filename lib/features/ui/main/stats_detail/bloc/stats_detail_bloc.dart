@@ -82,8 +82,9 @@ class StatsDetailBloc extends Bloc<StatsDetailEvent, StatsDetailState> {
     final revision = _dbRepo.revision;
     final result =
         await _dbRepo.getMostIncomeByCategory(source: _categoryOrSource);
-    if (isClosed || query != _querySequence || revision != _dbRepo.revision)
+    if (isClosed || query != _querySequence || revision != _dbRepo.revision) {
       return;
+    }
     emit(
       state.copyWith(
         listTransactionModel: (result.isNotEmpty) ? result : List.empty(),
@@ -100,8 +101,9 @@ class StatsDetailBloc extends Bloc<StatsDetailEvent, StatsDetailState> {
     final revision = _dbRepo.revision;
     final result =
         await _dbRepo.getMostExpenseByCategory(source: _categoryOrSource);
-    if (isClosed || query != _querySequence || revision != _dbRepo.revision)
+    if (isClosed || query != _querySequence || revision != _dbRepo.revision) {
       return;
+    }
     emit(
       state.copyWith(
         listTransactionModel: (result.isNotEmpty) ? result : List.empty(),

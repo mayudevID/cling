@@ -106,7 +106,9 @@ class EditMonthlyBloc extends Bloc<EditMonthlyEvent, EditMonthlyState> {
       Logger.Red.log(e.message);
       Navigator.pop(mainContext);
       errorSnackbar(
-          mainContext, AppLocalizations.of(mainContext)!.noConnection);
+        mainContext,
+        AppLocalizations.of(mainContext)!.noConnection,
+      );
     } catch (e) {
       Logger.Red.log(e.toString());
       Navigator.pop(mainContext);

@@ -151,7 +151,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           rethrow;
         }
         Logger.Yellow.log(
-            'Offline account settings; recurring deferred: $error');
+          'Offline account settings; recurring deferred: $error',
+        );
       }
 
       await _finishLoginNavigation();
@@ -206,11 +207,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     Emitter<LoginState> emit,
   ) async {
     final user = _authRepo.currentUserFirebase;
-    final profile = user == null
-        ? null
-        : _authRepo.cachedProfileForUser(user.uid);
-    if (!_authRepo.canResumeSavedSession || user == null ||
-        profile == null) {
+    final profile =
+        user == null ? null : _authRepo.cachedProfileForUser(user.uid);
+    if (!_authRepo.canResumeSavedSession || user == null || profile == null) {
       errorSnackbar(
         mainContext,
         'Tidak ada sesi tersimpan yang dapat dilanjutkan.',
@@ -228,8 +227,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       await _authRepo.saveLoginProcess(false);
       await _authRepo.saveRegisterProcess(false);
       mainContext.read<LangCurrencyBloc>().add(
-        ChangeCurrency(selectedCurrency: profile.currency),
-      );
+            ChangeCurrency(selectedCurrency: profile.currency),
+          );
       // Reuse an existing authenticated session. This does not authenticate
       // the password typed into the sign-in form and never claims to.
       // Recurring entries are not generated from stale offline settings.

@@ -56,8 +56,10 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     required bool registrationInProgress,
     required bool onboardingCompleted,
   }) {
-    if (!isReady || !emailVerified ||
-        loginInProgress || registrationInProgress) {
+    if (!isReady ||
+        !emailVerified ||
+        loginInProgress ||
+        registrationInProgress) {
       return RouteName.onboard;
     }
     return onboardingCompleted ? RouteName.main : RouteName.verifOnboard;

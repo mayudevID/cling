@@ -86,8 +86,8 @@ class LoginPageContent extends StatelessWidget {
                     width: double.infinity,
                     child: OutlinedButton.icon(
                       onPressed: () => context.read<LoginBloc>().add(
-                        const ResumeSavedSession(),
-                      ),
+                            const ResumeSavedSession(),
+                          ),
                       icon: const Icon(Icons.lock_open_outlined),
                       label: const Text('Lanjutkan sesi tersimpan'),
                     ),

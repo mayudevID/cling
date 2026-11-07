@@ -5,7 +5,8 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('Saved session eligibility', () {
-    test('only an existing verified session matching the cached UID can resume', () {
+    test('only an existing verified session matching the cached UID can resume',
+        () {
       expect(
         AuthRepository.isSavedSessionEligible(
           firebaseUid: 'user-a',
