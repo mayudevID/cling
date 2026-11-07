@@ -7,7 +7,7 @@ import '../../../language_currency/lang_export.dart';
 
 Widget emptyGoalsWidget(BuildContext context) {
   return Container(
-    margin: const EdgeInsets.symmetric(horizontal: 24),
+    margin: const EdgeInsets.symmetric(horizontal: 20),
     decoration: BoxDecoration(
       color: const Color(0x3D787880),
       borderRadius: BorderRadius.circular(10),

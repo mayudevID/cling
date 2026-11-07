@@ -128,6 +128,7 @@ class _SplashContentState extends State<SplashContent>
   @override
   Widget build(BuildContext context) {
     return Stack(
+      fit: StackFit.expand,
       children: [
         PositionedTransition(
           rect: _tweenText,

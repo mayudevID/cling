@@ -132,7 +132,17 @@ class _MainAppState extends State<MainApp> {
           return MaterialApp(
             builder: FToastBuilder(),
             navigatorKey: MainApp.navKeyGlobal,
-            theme: ThemeData(primaryColor: Colors.white),
+            scrollBehavior: const MaterialScrollBehavior().copyWith(
+              physics: const BouncingScrollPhysics(),
+            ),
+            theme: ThemeData(
+              primaryColor: Colors.white,
+              colorScheme: const ColorScheme.dark(
+                surface: Colors.black,
+              ),
+              canvasColor: Colors.black,
+              scaffoldBackgroundColor: Colors.black,
+            ),
             locale: state.selectedLanguage.value,
             supportedLocales: AppLocalizations.supportedLocales,
             localizationsDelegates: const [

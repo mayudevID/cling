@@ -36,7 +36,7 @@ class ForgotPasswordPageContent extends StatelessWidget {
         backgroundColor: Colors.black,
         body: Container(
           width: 100,
-          padding: const EdgeInsets.symmetric(horizontal: 24),
+          padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Column(
             children: [
               const SizedBox(

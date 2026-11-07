@@ -10,7 +10,7 @@ import 'warning_amount_icon.dart';
 
 Widget monthlyBudget(BuildContext context) {
   return Container(
-    margin: const EdgeInsets.symmetric(horizontal: 24),
+    margin: const EdgeInsets.symmetric(horizontal: 20),
     padding: const EdgeInsets.symmetric(
       horizontal: 16,
       vertical: 16,

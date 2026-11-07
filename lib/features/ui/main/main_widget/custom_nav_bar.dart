@@ -14,80 +14,82 @@ class CustomNavBar extends StatelessWidget {
       margin: const EdgeInsets.only(
         left: 20,
         right: 20,
-        bottom: 15,
+        bottom: 20,
       ),
-      padding: const EdgeInsets.symmetric(
-        vertical: 25.5,
-        horizontal: 45.5,
-      ),
-      decoration: BoxDecoration(
+      child: Material(
         color: const Color(0xFF343437),
         borderRadius: BorderRadius.circular(16),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Flexible(
-            child: BlocBuilder<MainBloc, MainState>(
-              buildWhen: (p, c) {
-                return isStartBuild(p, c, 0);
-              },
-              builder: (context, state) {
-                return buildTabButton(
-                  state: state,
-                  onPressed: () => changeTab(state, context, 0),
-                  icon: Assets.lib.resources.images.fluentHome48Filled.svg(),
-                  isSelected: state.tabIndex == 0,
-                );
-              },
-            ),
+        clipBehavior: Clip.antiAlias,
+        child: SizedBox(
+          height: 56,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: BlocBuilder<MainBloc, MainState>(
+                  buildWhen: (p, c) {
+                    return isStartBuild(p, c, 0);
+                  },
+                  builder: (context, state) {
+                    return buildTabButton(
+                      state: state,
+                      onPressed: () => changeTab(state, context, 0),
+                      icon:
+                          Assets.lib.resources.images.fluentHome48Filled.svg(),
+                      isSelected: state.tabIndex == 0,
+                    );
+                  },
+                ),
+              ),
+              Expanded(
+                child: BlocBuilder<MainBloc, MainState>(
+                  buildWhen: (p, c) {
+                    return isStartBuild(p, c, 1);
+                  },
+                  builder: (context, state) {
+                    return buildTabButton(
+                      state: state,
+                      onPressed: () => changeTab(state, context, 1),
+                      icon: Assets.lib.resources.images.transaction.svg(),
+                      isSelected: state.tabIndex == 1,
+                    );
+                  },
+                ),
+              ),
+              Expanded(
+                child: BlocBuilder<MainBloc, MainState>(
+                  buildWhen: (p, c) {
+                    return isStartBuild(p, c, 2);
+                  },
+                  builder: (context, state) {
+                    return buildTabButton(
+                      state: state,
+                      onPressed: () => changeTab(state, context, 2),
+                      icon: Assets.lib.resources.images.biBarChartFill.svg(),
+                      isSelected: state.tabIndex == 2,
+                    );
+                  },
+                ),
+              ),
+              Expanded(
+                child: BlocBuilder<MainBloc, MainState>(
+                  buildWhen: (p, c) {
+                    return isStartBuild(p, c, 3);
+                  },
+                  builder: (context, state) {
+                    return buildTabButton(
+                      state: state,
+                      onPressed: () => changeTab(state, context, 3),
+                      icon: Assets.lib.resources.images.iconamoonProfileFill
+                          .svg(),
+                      isSelected: state.tabIndex == 3,
+                    );
+                  },
+                ),
+              ),
+            ],
           ),
-          Flexible(
-            child: BlocBuilder<MainBloc, MainState>(
-              buildWhen: (p, c) {
-                return isStartBuild(p, c, 1);
-              },
-              builder: (context, state) {
-                return buildTabButton(
-                  state: state,
-                  onPressed: () => changeTab(state, context, 1),
-                  icon: Assets.lib.resources.images.transaction.svg(),
-                  isSelected: state.tabIndex == 1,
-                );
-              },
-            ),
-          ),
-          Flexible(
-            child: BlocBuilder<MainBloc, MainState>(
-              buildWhen: (p, c) {
-                return isStartBuild(p, c, 2);
-              },
-              builder: (context, state) {
-                return buildTabButton(
-                  state: state,
-                  onPressed: () => changeTab(state, context, 2),
-                  icon: Assets.lib.resources.images.biBarChartFill.svg(),
-                  isSelected: state.tabIndex == 2,
-                );
-              },
-            ),
-          ),
-          Flexible(
-            child: BlocBuilder<MainBloc, MainState>(
-              buildWhen: (p, c) {
-                return isStartBuild(p, c, 3);
-              },
-              builder: (context, state) {
-                return buildTabButton(
-                  state: state,
-                  onPressed: () => changeTab(state, context, 3),
-                  icon: Assets.lib.resources.images.iconamoonProfileFill.svg(),
-                  isSelected: state.tabIndex == 3,
-                );
-              },
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }
@@ -103,11 +105,19 @@ class CustomNavBar extends StatelessWidget {
     required Widget icon,
     required bool isSelected,
   }) {
-    return InkWell(
-      onTap: onPressed,
-      child: Opacity(
-        opacity: isSelected ? 1.0 : 0.45,
-        child: icon,
+    return SizedBox(
+      height: double.infinity,
+      child: InkWell(
+        onTap: onPressed,
+        child: Center(
+          child: Opacity(
+            opacity: isSelected ? 1.0 : 0.45,
+            child: SizedBox.square(
+              dimension: 24,
+              child: icon,
+            ),
+          ),
+        ),
       ),
     );
   }

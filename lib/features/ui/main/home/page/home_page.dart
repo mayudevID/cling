@@ -29,7 +29,7 @@ class HomePage extends StatelessWidget {
           nameAndNotification(context),
           const SizedBox(height: 24),
           Container(
-            margin: const EdgeInsets.symmetric(horizontal: 24),
+            margin: const EdgeInsets.symmetric(horizontal: 20),
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
             decoration: BoxDecoration(
               color: const Color(0x3D787880),
@@ -125,7 +125,7 @@ class HomePage extends StatelessWidget {
             builder: (context, state) {
               if (state.listTodayExpenses.isEmpty) {
                 return Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Text(
                     AppLocalizations.of(context)!.noExpenseToday,
                     style: const TextStyle(

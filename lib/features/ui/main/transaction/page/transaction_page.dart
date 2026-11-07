@@ -18,7 +18,7 @@ class TransactionPage extends StatelessWidget {
       child: Scaffold(
         backgroundColor: Colors.black,
         body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
+          padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Column(
             children: [
               const SizedBox(height: 16),
@@ -93,11 +93,12 @@ class TransactionPage extends StatelessWidget {
               return isDateDifferent
                   ? Column(
                       children: [
-                        Divider(height: 0.1, color: Colors.grey[700]),
+                        Divider(height: 8, color: Colors.grey[700]),
                         separatorDateTransaction(
                           context,
                           state.listTransaction[idx],
                         ),
+                        SizedBox(height: 4),
                         listTransaction(context, state.listTransaction[idx]),
                       ],
                     )

@@ -46,7 +46,7 @@ class OnboardPage extends StatelessWidget {
               ),
               const SizedBox(height: 24),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
+                padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Text(
                   AppLocalizations.of(context)!.onboarding,
                   textAlign: TextAlign.center,

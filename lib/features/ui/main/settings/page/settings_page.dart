@@ -231,7 +231,7 @@ class SettingsPageContent extends StatelessWidget {
         backgroundColor: Colors.black,
         body: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24),
+            padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Column(
               children: [
                 const SizedBox(height: 16),
@@ -293,140 +293,133 @@ class SettingsPageContent extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 12),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        AppLocalizations.of(context)!.lastBackup,
-                        style: const TextStyle(
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      AppLocalizations.of(context)!.lastBackup,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontFamily: FontFamily.cabinetGrotesk,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    BlocBuilder<ProfileBloc, ProfileState>(
+                      buildWhen: (p, c) {
+                        return p.userModel.lastBackupTime !=
+                            c.userModel.lastBackupTime;
+                      },
+                      builder: (context, state) {
+                        const textStyle = TextStyle(
                           color: Colors.white,
                           fontFamily: FontFamily.cabinetGrotesk,
                           fontSize: 12,
                           fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      BlocBuilder<ProfileBloc, ProfileState>(
-                        buildWhen: (p, c) {
-                          return p.userModel.lastBackupTime !=
-                              c.userModel.lastBackupTime;
-                        },
-                        builder: (context, state) {
-                          const textStyle = TextStyle(
-                            color: Colors.white,
-                            fontFamily: FontFamily.cabinetGrotesk,
-                            fontSize: 12,
-                            fontWeight: FontWeight.w500,
-                          );
+                        );
 
-                          if (state.userModel.lastBackupTime == null) {
-                            return const Text(
-                              "---",
-                              style: textStyle,
-                            );
-                          }
-
-                          return TimeBackup(
-                            date: state.userModel.lastBackupTime!,
-                            textStyle: textStyle,
+                        if (state.userModel.lastBackupTime == null) {
+                          return const Text(
+                            "---",
+                            style: textStyle,
                           );
-                        },
-                      ),
-                    ],
-                  ),
+                        }
+
+                        return TimeBackup(
+                          date: state.userModel.lastBackupTime!,
+                          textStyle: textStyle,
+                        );
+                      },
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 16),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                  child: SizedBox(
-                    width: 390,
-                    height: 45,
-                    child: ElevatedButton(
-                      onPressed: () =>
-                          context.read<ProfileBloc>().add(GoBackup()),
-                      style: ButtonStyle(
-                        backgroundColor: WidgetStateProperty.all(
-                          const Color(0x3D787880),
-                        ),
-                        overlayColor: WidgetStateProperty.all(Colors.white60),
-                        shape: WidgetStateProperty.all(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
+                SizedBox(
+                  width: 390,
+                  height: 45,
+                  child: ElevatedButton(
+                    onPressed: () =>
+                        context.read<ProfileBloc>().add(GoBackup()),
+                    style: ButtonStyle(
+                      backgroundColor: WidgetStateProperty.all(
+                        const Color(0x3D787880),
+                      ),
+                      overlayColor: WidgetStateProperty.all(Colors.white60),
+                      shape: WidgetStateProperty.all(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
                         ),
                       ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Assets.lib.resources.images.databaseBackup.svg(),
-                          const SizedBox(width: 8),
-                          Text(
-                            AppLocalizations.of(context)!.backup,
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 15.5,
-                              fontFamily: FontFamily.cabinetGrotesk,
-                              fontWeight: FontWeight.w700,
-                            ),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Assets.lib.resources.images.databaseBackup.svg(),
+                        const SizedBox(width: 8),
+                        Text(
+                          AppLocalizations.of(context)!.backup,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 15.5,
+                            fontFamily: FontFamily.cabinetGrotesk,
+                            fontWeight: FontWeight.w700,
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
                 const SizedBox(height: 12),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                  child: SizedBox(
-                    width: double.infinity,
-                    child: OutlinedButton.icon(
-                      onPressed: () => _showCloudBackupHistory(context),
-                      icon: const Icon(Icons.cloud_download_outlined),
-                      label: const Text('Riwayat backup cloud'),
+                SizedBox(
+                  width: double.infinity,
+                  child: OutlinedButton.icon(
+                    onPressed: () => _showCloudBackupHistory(context),
+                    icon: const Icon(Icons.cloud_download_outlined),
+                    label: const Text('Riwayat backup cloud'),
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: Colors.white,
+                      side: const BorderSide(color: Colors.white),
                     ),
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                  child: SizedBox(
-                    width: double.infinity,
-                    child: OutlinedButton.icon(
-                      onPressed: () => _showLocalRecovery(context),
-                      icon: const Icon(Icons.restore_page_outlined),
-                      label: const Text('Pemulihan backup lokal'),
+                SizedBox(
+                  width: double.infinity,
+                  child: OutlinedButton.icon(
+                    onPressed: () => _showLocalRecovery(context),
+                    icon: const Icon(Icons.restore_page_outlined),
+                    label: const Text('Pemulihan backup lokal'),
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: Colors.white,
+                      side: const BorderSide(color: Colors.white),
                     ),
                   ),
                 ),
                 const SizedBox(height: 16),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                  child: SizedBox(
-                    width: 390,
-                    height: 57,
-                    child: ElevatedButton(
-                      onPressed: () => dialogLogout(context),
-                      style: ButtonStyle(
-                        backgroundColor: WidgetStateProperty.all(
-                          const Color(0xFFF8312F),
-                        ),
-                        overlayColor: WidgetStateProperty.all(Colors.redAccent),
-                        shape: WidgetStateProperty.all(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
+                SizedBox(
+                  width: 390,
+                  height: 57,
+                  child: ElevatedButton(
+                    onPressed: () => dialogLogout(context),
+                    style: ButtonStyle(
+                      backgroundColor: WidgetStateProperty.all(
+                        const Color(0xFFF8312F),
+                      ),
+                      overlayColor: WidgetStateProperty.all(Colors.redAccent),
+                      shape: WidgetStateProperty.all(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
                         ),
                       ),
-                      child: const Text(
-                        "Logout",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 15.5,
-                          fontFamily: FontFamily.cabinetGrotesk,
-                          fontWeight: FontWeight.w700,
-                        ),
+                    ),
+                    child: const Text(
+                      "Logout",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 15.5,
+                        fontFamily: FontFamily.cabinetGrotesk,
+                        fontWeight: FontWeight.w700,
                       ),
                     ),
                   ),

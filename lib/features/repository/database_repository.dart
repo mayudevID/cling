@@ -279,7 +279,10 @@ class DatabaseRepository {
       monthNow.month,
     ).toIso8601String();
 
-    final monthNowLastDay = monthNow.toIso8601String();
+    final monthNextFirstDay = DateTime(
+      monthNow.year,
+      monthNow.month + 1,
+    ).toIso8601String();
 
     final result = await Future.wait([
       db.rawQuery(
@@ -288,10 +291,10 @@ class DatabaseRepository {
         (SUM(${IncomeMeta.amountMinor}) / 100.0) AS TotalIncome
         FROM ${IncomeMeta.nameTable}
         WHERE date(${IncomeMeta.date}) >= date(?)
-        AND date(${IncomeMeta.date}) <= date(?)
+        AND date(${IncomeMeta.date}) < date(?)
         GROUP BY Month
       ''',
-        [monthNowFirstDay, monthNowLastDay],
+        [monthNowFirstDay, monthNextFirstDay],
       ),
       db.rawQuery(
         '''
@@ -299,10 +302,10 @@ class DatabaseRepository {
         (SUM(${ExpenseMeta.amountMinor}) / 100.0) AS TotalExpense
         FROM ${ExpenseMeta.nameTable}
         WHERE date(${ExpenseMeta.date}) >= date(?)
-        AND date(${ExpenseMeta.date}) <= date(?)
+        AND date(${ExpenseMeta.date}) < date(?)
         GROUP BY Month
       ''',
-        [monthNowFirstDay, monthNowLastDay],
+        [monthNowFirstDay, monthNextFirstDay],
       ),
     ]);
 

@@ -11,7 +11,7 @@ import 'warning_amount_icon.dart';
 Widget incomeAndExpense(BuildContext context) {
   return Container(
     margin: const EdgeInsets.symmetric(
-      horizontal: 24,
+      horizontal: 20,
     ),
     width: double.infinity,
     padding: const EdgeInsets.symmetric(

@@ -11,9 +11,9 @@ List<Widget> tagNameHome(
   bool withDate = false,
 }) {
   return [
-    const SizedBox(height: 24),
+    const SizedBox(height: 16),
     Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
       child: RichText(
         text: TextSpan(
           text: name,
@@ -57,8 +57,6 @@ List<Widget> tagNameHome(
         ),
       ),
     ),
-    const SizedBox(
-      height: 16,
-    ),
+    const SizedBox(height: 8),
   ];
 }

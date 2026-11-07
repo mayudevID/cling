@@ -17,7 +17,7 @@ Home memberi ringkasan cepat kondisi keuangan dan akses ke tindakan utama.
 
 ## Perhitungan
 
-Total saldo dihitung dari jumlah seluruh pemasukan dikurangi jumlah seluruh pengeluaran. Ringkasan bulan berjalan memakai transaksi sejak hari pertama bulan sampai waktu saat ini.
+Total saldo dihitung dari jumlah seluruh pemasukan dikurangi jumlah seluruh pengeluaran. Ringkasan bulan berjalan memakai semua transaksi dalam bulan kalender aktif, termasuk transaksi bertanggal setelah hari ini.
 
 Nilai anggaran berasal dari profil Firestore yang sudah disimpan dalam cache dan dimuat oleh `ProfileBloc`. Nilai transaksi berasal dari SQLite melalui `DatabaseRepository`.
 
