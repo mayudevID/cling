@@ -20,8 +20,11 @@ class ExpenseModel implements TransactionModel {
         date: DateTime.parse(json[ExpenseMeta.date]),
         item: json[ExpenseMeta.item],
         amount: MoneyAmount.fromMinorUnits(json[ExpenseMeta.amountMinor]),
-        categories: displayReference(json[ExpenseMeta.idCategories], exCategoriesData,
-            unknownType: 'expense category'),
+        categories: displayReference(
+          json[ExpenseMeta.idCategories],
+          exCategoriesData,
+          unknownType: 'expense category',
+        ),
       );
   @override
   int? id;

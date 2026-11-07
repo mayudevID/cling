@@ -155,7 +155,7 @@ Future<void> migrateMoneyColumns(Database db) async {
     [
       GoalSavingMeta.nameTable,
       GoalSavingMeta.amount,
-      GoalSavingMeta.amountMinor
+      GoalSavingMeta.amountMinor,
     ],
     [RecurringMeta.nameTable, RecurringMeta.amount, RecurringMeta.amountMinor],
   ];

@@ -21,9 +21,11 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     required DatabaseRepository dbRepo,
   })  : _authRepo = authRepo,
         _dbRepo = dbRepo,
-        super(_prepared(authRepo, dbRepo, authRepo.currentUserFirebase)
-            ? AppState.authenticated(authRepo.currentUserFirebase!)
-            : const AppState.unauthenticated()) {
+        super(
+          _prepared(authRepo, dbRepo, authRepo.currentUserFirebase)
+              ? AppState.authenticated(authRepo.currentUserFirebase!)
+              : const AppState.unauthenticated(),
+        ) {
     on<AppUserChanged>(_onUserChanged);
     on<AppLogoutRequested>(_onLogoutRequested);
     on<Redirect>(_onRedirect);
@@ -76,14 +78,12 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     // Evaluate readiness now, not a possibly stale queued auth event.
     final user = _authRepo.currentUserFirebase;
     final ready = _prepared(_authRepo, _dbRepo, user);
-    emit(ready
-        ? AppState.authenticated(user!)
-        : const AppState.unauthenticated());
+    emit(
+      ready ? AppState.authenticated(user!) : const AppState.unauthenticated(),
+    );
     Logger.Green.log('Auth and account database ready? $ready');
 
-    final route = ready &&
-            !_authRepo.loginProcess &&
-            !_authRepo.registerProcess
+    final route = ready && !_authRepo.loginProcess && !_authRepo.registerProcess
         ? RouteName.main
         : RouteName.onboard;
     Navigator.pushNamedAndRemoveUntil(

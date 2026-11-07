@@ -103,7 +103,8 @@ Future<bool> dialogGetBackup(
                 'backup ini. Jika terdapat transaksi lokal yang lebih baru, '
                 'aplikasi akan meminta konfirmasi tambahan.',
                 style: TextStyle(
-                  fontSize: 12, color: Colors.deepOrange,
+                  fontSize: 12,
+                  color: Colors.deepOrange,
                   fontFamily: FontFamily.cabinetGrotesk,
                 ),
                 textAlign: TextAlign.center,

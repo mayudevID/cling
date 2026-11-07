@@ -20,8 +20,11 @@ class IncomeModel implements TransactionModel {
         date: DateTime.parse(json[IncomeMeta.date]),
         desc: json[IncomeMeta.desc],
         amount: MoneyAmount.fromMinorUnits(json[IncomeMeta.amountMinor]),
-        incomeSource: displayReference(json[IncomeMeta.idIncomeSource], inSourceData,
-            unknownType: 'income source'),
+        incomeSource: displayReference(
+          json[IncomeMeta.idIncomeSource],
+          inSourceData,
+          unknownType: 'income source',
+        ),
       );
   @override
   int? id;

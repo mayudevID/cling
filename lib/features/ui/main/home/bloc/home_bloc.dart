@@ -1,6 +1,5 @@
 // ignore_for_file: use_build_context_synchronously
 
-
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -107,8 +106,11 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     }
     final budget = user.monthlyBudget;
     // Zero means "not configured", not "already over budget".
-    if (!budget.isFinite || budget <= 0 ||
-        state.amountExpenseThisMonth <= budget) return;
+    if (!budget.isFinite ||
+        budget <= 0 ||
+        state.amountExpenseThisMonth <= budget) {
+      return;
+    }
     await _saveWarning(
       type: 0,
       title: AppLocalizations.of(mainContext)!.alertMonthlyBudget,
@@ -143,8 +145,11 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     required String message,
     required int revision,
   }) async {
-    if (isClosed || revision != _dbRepo.revision ||
-        _dbRepo.activeUserId == null) return;
+    if (isClosed ||
+        revision != _dbRepo.revision ||
+        _dbRepo.activeUserId == null) {
+      return;
+    }
     if (await _dbRepo.saveWarningNotificationOnce(
       type: type,
       title: title,

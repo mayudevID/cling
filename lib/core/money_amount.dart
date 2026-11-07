@@ -15,7 +15,8 @@ class MoneyAmount {
         scaled.abs() > 9007199254740991 ||
         (scaled - scaled.roundToDouble()).abs() > 0.000001) {
       throw const FormatException(
-          'Amount exceeds two decimal places or is too large.');
+        'Amount exceeds two decimal places or is too large.',
+      );
     }
     return scaled.round();
   }

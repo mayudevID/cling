@@ -92,8 +92,10 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
     if (!online) {
       if (await _tryResumeCachedSession()) return;
-      errorSnackbar(mainContext,
-          AppLocalizations.of(mainContext)!.noConnection);
+      errorSnackbar(
+        mainContext,
+        AppLocalizations.of(mainContext)!.noConnection,
+      );
       return;
     }
 
@@ -133,19 +135,22 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         await _settingsRepo.reconcileCurrentAccountSettingsFromServer();
       } on FirebaseException catch (error) {
         if (!AuthRepository.isTemporaryServiceFailure(error) ||
-            _authRepo.cachedProfileForUser(_authRepo.currentUserFirebase!.uid)
-                == null) {
+            _authRepo
+                    .cachedProfileForUser(_authRepo.currentUserFirebase!.uid) ==
+                null) {
           rethrow;
         }
         // Logged-in users may read their isolated local transactions while
         // Firestore is unavailable. Recurring generation remains suspended.
         Logger.Yellow.log('Account settings reconciliation deferred: $error');
       } on SocketException catch (error) {
-        if (_authRepo.cachedProfileForUser(_authRepo.currentUserFirebase!.uid)
-            == null) {
+        if (_authRepo
+                .cachedProfileForUser(_authRepo.currentUserFirebase!.uid) ==
+            null) {
           rethrow;
         }
-        Logger.Yellow.log('Offline account settings; recurring deferred: $error');
+        Logger.Yellow.log(
+            'Offline account settings; recurring deferred: $error');
       }
 
       await _finishLoginNavigation(
@@ -194,17 +199,18 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
   Future<bool> _tryResumeCachedSession() async {
     final user = _authRepo.currentUserFirebase;
-    final cached = user == null
-        ? null
-        : _authRepo.cachedProfileForUser(user.uid);
-    if (user == null || !user.emailVerified || cached == null ||
+    final cached =
+        user == null ? null : _authRepo.cachedProfileForUser(user.uid);
+    if (user == null ||
+        !user.emailVerified ||
+        cached == null ||
         user.email?.toLowerCase() != state.email.trim().toLowerCase()) {
       return false;
     }
     await _dbRepo.switchAccount(user.uid);
     mainContext.read<LangCurrencyBloc>().add(
-      ChangeCurrency(selectedCurrency: cached.currency),
-    );
+          ChangeCurrency(selectedCurrency: cached.currency),
+        );
     // Offline mode is read-only for recurring settings until Firestore
     // reconciliation succeeds. Only the persisted authenticated UID is used.
     await _finishLoginNavigation(isVerifiedNotPassed: false);
@@ -236,10 +242,10 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       Future.delayed(
         const Duration(milliseconds: 1000),
         () {
-        Navigator.pushNamed(
-          MainApp.navKeyGlobal.currentContext!,
-          RouteName.verifOnboard,
-        );
+          Navigator.pushNamed(
+            MainApp.navKeyGlobal.currentContext!,
+            RouteName.verifOnboard,
+          );
         },
       );
     }
@@ -252,7 +258,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     do {
       final connectivity = await Connectivity().checkConnectivity();
       if (!(connectivity.contains(ConnectivityResult.mobile) ||
-            connectivity.contains(ConnectivityResult.wifi))) {
+          connectivity.contains(ConnectivityResult.wifi))) {
         retry = await dialogNoInternetGetBackup(mainContext);
         continue;
       }
@@ -261,28 +267,29 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         retry = false;
       } on RestoreConflictException {
         final confirmed = await showDialog<bool>(
-          context: mainContext,
-          barrierDismissible: false,
-          builder: (context) => AlertDialog(
-            title: const Text('Konfirmasi restore data lokal'),
-            content: const Text(
-              'Data keuangan lokal kemungkinan lebih baru daripada '
-              'backup cloud. Melanjutkan restore akan mengganti data aktif. '
-              'Salinan database lokal akan tetap disimpan di perangkat. '
-              'Yakin ingin melanjutkan?',
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context, false),
-                child: const Text('Batal'),
+              context: mainContext,
+              barrierDismissible: false,
+              builder: (context) => AlertDialog(
+                title: const Text('Konfirmasi restore data lokal'),
+                content: const Text(
+                  'Data keuangan lokal kemungkinan lebih baru daripada '
+                  'backup cloud. Melanjutkan restore akan mengganti data aktif. '
+                  'Salinan database lokal akan tetap disimpan di perangkat. '
+                  'Yakin ingin melanjutkan?',
+                ),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.pop(context, false),
+                    child: const Text('Batal'),
+                  ),
+                  TextButton(
+                    onPressed: () => Navigator.pop(context, true),
+                    child: const Text('Lanjutkan restore'),
+                  ),
+                ],
               ),
-              TextButton(
-                onPressed: () => Navigator.pop(context, true),
-                child: const Text('Lanjutkan restore'),
-              ),
-            ],
-          ),
-        ) ?? false;
+            ) ??
+            false;
         if (confirmed) {
           try {
             await _settingsRepo.getBackup(allowOverwriteNewerLocal: true);

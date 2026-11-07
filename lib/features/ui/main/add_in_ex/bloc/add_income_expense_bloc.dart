@@ -121,22 +121,26 @@ class AddIncomeExpenseBloc
       MoneyAmount.toMinorUnits(state.amountInput);
       switch (event.flowType) {
         case FlowType.income:
-          await _dbRepo.insertIncome(IncomeModel(
-            date: state.selectedDate,
-            amount: state.amountInput,
-            desc: state.descOrItem,
-            incomeSource:
-                '${state.selectedCategories.key} ${state.selectedCategories.value}',
-          ));
+          await _dbRepo.insertIncome(
+            IncomeModel(
+              date: state.selectedDate,
+              amount: state.amountInput,
+              desc: state.descOrItem,
+              incomeSource:
+                  '${state.selectedCategories.key} ${state.selectedCategories.value}',
+            ),
+          );
           break;
         case FlowType.expense:
-          await _dbRepo.insertExpense(ExpenseModel(
-            date: state.selectedDate,
-            amount: state.amountInput,
-            item: state.descOrItem,
-            categories:
-                '${state.selectedCategories.key} ${state.selectedCategories.value}',
-          ));
+          await _dbRepo.insertExpense(
+            ExpenseModel(
+              date: state.selectedDate,
+              amount: state.amountInput,
+              item: state.descOrItem,
+              categories:
+                  '${state.selectedCategories.key} ${state.selectedCategories.value}',
+            ),
+          );
           break;
       }
 

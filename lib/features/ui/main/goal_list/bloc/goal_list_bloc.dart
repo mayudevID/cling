@@ -37,15 +37,18 @@ class GoalListBloc extends Bloc<GoalListEvent, GoalListState> {
     try {
       final page = await _dbRepo.getGoalsPage(
         beforeId: _cursor,
-        limit: _pageSize,
       );
       if (isClosed || revision != _dbRepo.revision) return;
       if (page.isNotEmpty) {
         _cursor = page.last.id;
-        emit(state.copyWith(listGoalModel: [
-          ...state.listGoalModel,
-          ...page,
-        ]));
+        emit(
+          state.copyWith(
+            listGoalModel: [
+              ...state.listGoalModel,
+              ...page,
+            ],
+          ),
+        );
       }
       _hasMore = page.length == _pageSize;
       if (_hasMore) {
@@ -79,6 +82,7 @@ class GoalListBloc extends Bloc<GoalListEvent, GoalListState> {
     dataList.removeWhere((e) => e.id == event.id);
     emit(state.copyWith(listGoalModel: dataList));
   }
+
   @override
   Future<void> close() async {
     state.refreshController.dispose();

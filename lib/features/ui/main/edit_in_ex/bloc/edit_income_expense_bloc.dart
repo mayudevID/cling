@@ -150,24 +150,28 @@ class EditIncomeExpenseBloc
       MoneyAmount.toMinorUnits(state.amountInput);
       switch (state.flowType) {
         case FlowType.income:
-          await _dbRepo.updateIncome(IncomeModel(
-            id: state.id,
-            date: state.selectedDate,
-            amount: state.amountInput,
-            desc: state.descOrItem,
-            incomeSource:
-                '${state.selectedCategories.key} ${state.selectedCategories.value}',
-          ));
+          await _dbRepo.updateIncome(
+            IncomeModel(
+              id: state.id,
+              date: state.selectedDate,
+              amount: state.amountInput,
+              desc: state.descOrItem,
+              incomeSource:
+                  '${state.selectedCategories.key} ${state.selectedCategories.value}',
+            ),
+          );
           break;
         case FlowType.expense:
-          await _dbRepo.updateExpense(ExpenseModel(
-            id: state.id,
-            date: state.selectedDate,
-            amount: state.amountInput,
-            item: state.descOrItem,
-            categories:
-                '${state.selectedCategories.key} ${state.selectedCategories.value}',
-          ));
+          await _dbRepo.updateExpense(
+            ExpenseModel(
+              id: state.id,
+              date: state.selectedDate,
+              amount: state.amountInput,
+              item: state.descOrItem,
+              categories:
+                  '${state.selectedCategories.key} ${state.selectedCategories.value}',
+            ),
+          );
           break;
       }
       refreshFinancialViews(mainContext);

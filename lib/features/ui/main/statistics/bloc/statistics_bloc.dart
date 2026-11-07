@@ -83,8 +83,11 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
     List<PieDataExSav> pieData = List.empty(growable: true);
 
     final result = await _dbRepo.getTotalIncomeExpenseAllMonth();
-    if (isClosed || request != _allMonthRequest ||
-        revision != _dbRepo.revision) return;
+    if (isClosed ||
+        request != _allMonthRequest ||
+        revision != _dbRepo.revision) {
+      return;
+    }
 
     if (result != null) {
       final sortedKeys = result.keys.toList()..sort();
@@ -151,9 +154,13 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
     final start = state.startDate;
     final end = state.endDate;
     final result = await _dbRepo.getIncomeBreakdown(start, end);
-    if (isClosed || request != _incomeBreakdownRequest ||
+    if (isClosed ||
+        request != _incomeBreakdownRequest ||
         revision != _dbRepo.revision ||
-        state.startDate != start || state.endDate != end) return;
+        state.startDate != start ||
+        state.endDate != end) {
+      return;
+    }
 
     emit(
       state.copyWith(
@@ -174,9 +181,13 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
     final end = state.endDate;
     final List<PieDataExpense> pieDataExpenseList = List.empty(growable: true);
     final result = await _dbRepo.getExpenseBreakdown(start, end);
-    if (isClosed || request != _expenseBreakdownRequest ||
+    if (isClosed ||
+        request != _expenseBreakdownRequest ||
         revision != _dbRepo.revision ||
-        state.startDate != start || state.endDate != end) return;
+        state.startDate != start ||
+        state.endDate != end) {
+      return;
+    }
 
     if (result.isNotEmpty) {
       for (final Map element in result) {
@@ -206,8 +217,12 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
     final revision = _dbRepo.revision;
     final chosen = state.allStatsChoose;
     final result = await _dbRepo.getMost(chosen);
-    if (isClosed || request != _mostRequest || revision != _dbRepo.revision ||
-        chosen != state.allStatsChoose) return;
+    if (isClosed ||
+        request != _mostRequest ||
+        revision != _dbRepo.revision ||
+        chosen != state.allStatsChoose) {
+      return;
+    }
     final isIncome = chosen == AllStatsChoose.income;
 
     emit(
@@ -227,8 +242,9 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
     final List<ChartData> yearlyIncomeList = List.empty(growable: true);
     double max = 0;
     final result = await _dbRepo.getYearlyIncome();
-    if (isClosed || request != _yearlyRequest ||
-        revision != _dbRepo.revision) return;
+    if (isClosed || request != _yearlyRequest || revision != _dbRepo.revision) {
+      return;
+    }
 
     if (!result.values.every((value) => value == 0)) {
       result.forEach((key, value) {

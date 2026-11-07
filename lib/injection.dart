@@ -73,7 +73,8 @@ Future<void> initSl() async {
   // be retried at the next successful login/settings save.
   if (ownerUid != null) {
     try {
-      await settingsRepo.reconcileCurrentAccountSettingsFromServer()
+      await settingsRepo
+          .reconcileCurrentAccountSettingsFromServer()
           .timeout(const Duration(seconds: 6));
     } catch (_) {
       // Keep local transactions readable without inventing recurring income.

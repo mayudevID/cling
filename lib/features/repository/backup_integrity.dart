@@ -46,12 +46,14 @@ class BackupManifest {
     final captured = DateTime.tryParse(metadata['snapshot_at']!);
     final digest = metadata['sha256']!;
     final modifiedText = metadata['data_modified_at'];
-    final modified = modifiedText == null
-        ? null
-        : DateTime.tryParse(modifiedText)?.toUtc();
+    final modified =
+        modifiedText == null ? null : DateTime.tryParse(modifiedText)?.toUtc();
     final validDigest =
         digest.length == 64 && !digest.contains(RegExp(r'[^0-9a-f]'));
-    if (uid.isEmpty || version == null || captured == null || !validDigest ||
+    if (uid.isEmpty ||
+        version == null ||
+        captured == null ||
+        !validDigest ||
         (modifiedText != null && modified == null)) {
       throw const FormatException('Invalid backup manifest.');
     }
@@ -82,42 +84,57 @@ Future<int> validateClingBackupSchema(Database database) async {
   }
   final columns = <String, List<String>>{
     IncomeMeta.nameTable: [
-      IncomeMeta.id, IncomeMeta.date, IncomeMeta.amount,
+      IncomeMeta.id,
+      IncomeMeta.date,
+      IncomeMeta.amount,
       IncomeMeta.idIncomeSource,
       if (version >= 2) IncomeMeta.amountMinor,
     ],
     ExpenseMeta.nameTable: [
-      ExpenseMeta.id, ExpenseMeta.date, ExpenseMeta.amount,
+      ExpenseMeta.id,
+      ExpenseMeta.date,
+      ExpenseMeta.amount,
       ExpenseMeta.idCategories,
       if (version >= 2) ExpenseMeta.amountMinor,
     ],
     GoalMeta.nameTable: [
-      GoalMeta.id, GoalMeta.target, GoalMeta.collected,
+      GoalMeta.id,
+      GoalMeta.target,
+      GoalMeta.collected,
       if (version >= 2) GoalMeta.targetMinor,
       if (version >= 2) GoalMeta.collectedMinor,
     ],
     GoalSavingMeta.nameTable: [
-      GoalSavingMeta.id, GoalSavingMeta.idGoal, GoalSavingMeta.amount,
+      GoalSavingMeta.id,
+      GoalSavingMeta.idGoal,
+      GoalSavingMeta.amount,
       if (version >= 2) GoalSavingMeta.amountMinor,
     ],
     RecurringMeta.nameTable: [
-      RecurringMeta.id, RecurringMeta.recurringDay,
-      RecurringMeta.recurringLast, RecurringMeta.amount,
+      RecurringMeta.id,
+      RecurringMeta.recurringDay,
+      RecurringMeta.recurringLast,
+      RecurringMeta.amount,
       if (version >= 2) RecurringMeta.amountMinor,
     ],
     NotificationMeta.nameTable: [
-      NotificationMeta.id, NotificationMeta.date, NotificationMeta.isRead,
+      NotificationMeta.id,
+      NotificationMeta.date,
+      NotificationMeta.isRead,
     ],
     IncomeSourceMeta.nameTable: [
-      IncomeSourceMeta.id, IncomeSourceMeta.incomeSource,
+      IncomeSourceMeta.id,
+      IncomeSourceMeta.incomeSource,
     ],
     ExpenseCategoriesMeta.nameTable: [
-      ExpenseCategoriesMeta.id, ExpenseCategoriesMeta.expenseCategories,
+      ExpenseCategoriesMeta.id,
+      ExpenseCategoriesMeta.expenseCategories,
     ],
   };
 
   for (final entry in columns.entries) {
-    final tableInfo = await database.rawQuery('PRAGMA table_info("${entry.key}")');
+    final tableInfo =
+        await database.rawQuery('PRAGMA table_info("${entry.key}")');
     final available = tableInfo.map((row) => row['name']).toSet();
     if (tableInfo.isEmpty ||
         entry.value.any((requiredName) => !available.contains(requiredName))) {

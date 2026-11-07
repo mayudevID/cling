@@ -111,18 +111,24 @@ class DatabaseRepository {
   Future<void> _deduplicateAndBackfillRecurringHistory() async {
     await db.transaction((txn) async {
       final rules = await txn.query(
-        RecurringMeta.nameTable, orderBy: '${RecurringMeta.id} ASC');
+        RecurringMeta.nameTable,
+        orderBy: '${RecurringMeta.id} ASC',
+      );
       final seen = <String>{};
       for (final rule in rules) {
-        final key = '${rule[RecurringMeta.type]}:${rule[RecurringMeta.idModel]}';
+        final key =
+            '${rule[RecurringMeta.type]}:${rule[RecurringMeta.idModel]}';
         if (!seen.add(key)) {
-          await txn.delete(RecurringMeta.nameTable,
+          await txn.delete(
+            RecurringMeta.nameTable,
             where: '${RecurringMeta.id} = ?',
-            whereArgs: [rule[RecurringMeta.id]]);
+            whereArgs: [rule[RecurringMeta.id]],
+          );
           continue;
         }
         if (rule[RecurringMeta.type] == 0) {
-          await txn.rawInsert('''
+          await txn.rawInsert(
+            '''
             INSERT OR IGNORE INTO recurring_occurrences (rule_id, period)
             SELECT ?, substr(${IncomeMeta.date}, 1, 7)
             FROM ${IncomeMeta.nameTable}
@@ -130,7 +136,9 @@ class DatabaseRepository {
               AND ${IncomeMeta.idIncomeSource} = 0
               AND length(${IncomeMeta.date}) >= 7
             GROUP BY substr(${IncomeMeta.date}, 1, 7)
-          ''', [rule[RecurringMeta.id], 'Monthly Income (Recurring)']);
+          ''',
+            [rule[RecurringMeta.id], 'Monthly Income (Recurring)'],
+          );
         }
       }
     });
@@ -143,8 +151,12 @@ class DatabaseRepository {
     );
     // Existing v1/v2 databases did not track mutation timestamps. Treat
     // nonempty legacy data conservatively as recently modified.
-    final existing = await db.query('finance_meta',
-      where: 'key = ?', whereArgs: ['last_modified_at'], limit: 1);
+    final existing = await db.query(
+      'finance_meta',
+      where: 'key = ?',
+      whereArgs: ['last_modified_at'],
+      limit: 1,
+    );
     if (existing.isEmpty && await hasFinancialRecords()) {
       await db.insert('finance_meta', {
         'key': 'last_modified_at',
@@ -152,8 +164,10 @@ class DatabaseRepository {
       });
     }
     for (final table in [
-      IncomeMeta.nameTable, ExpenseMeta.nameTable,
-      GoalMeta.nameTable, GoalSavingMeta.nameTable,
+      IncomeMeta.nameTable,
+      ExpenseMeta.nameTable,
+      GoalMeta.nameTable,
+      GoalSavingMeta.nameTable,
     ]) {
       for (final operation in ['INSERT', 'UPDATE', 'DELETE']) {
         final name = 'track_${table}_${operation.toLowerCase()}';
@@ -171,8 +185,10 @@ class DatabaseRepository {
 
   Future<bool> hasFinancialRecords() async {
     for (final table in [
-      IncomeMeta.nameTable, ExpenseMeta.nameTable,
-      GoalMeta.nameTable, GoalSavingMeta.nameTable,
+      IncomeMeta.nameTable,
+      ExpenseMeta.nameTable,
+      GoalMeta.nameTable,
+      GoalSavingMeta.nameTable,
     ]) {
       final rows = await db.rawQuery('SELECT 1 FROM $table LIMIT 1');
       if (rows.isNotEmpty) return true;
@@ -181,9 +197,13 @@ class DatabaseRepository {
   }
 
   Future<DateTime?> lastFinanceChangeAt() async {
-    final rows = await db.query('finance_meta',
-      columns: ['value'], where: 'key = ?',
-      whereArgs: ['last_modified_at'], limit: 1);
+    final rows = await db.query(
+      'finance_meta',
+      columns: ['value'],
+      where: 'key = ?',
+      whereArgs: ['last_modified_at'],
+      limit: 1,
+    );
     if (rows.isEmpty) return null;
     return DateTime.tryParse(rows.first['value'] as String)?.toUtc();
   }
@@ -191,7 +211,9 @@ class DatabaseRepository {
   Future<void> close() async {
     final pending = _opening;
     if (pending != null) {
-      try { await pending; } catch (_) { /* Open already cleaned up. */ }
+      try {
+        await pending;
+      } catch (_) {/* Open already cleaned up. */}
     }
     _ready = false;
     _revision++;
@@ -513,8 +535,9 @@ class DatabaseRepository {
         MoneyAmount.toMinorUnits(goalModel.target),
       ],
     );
-    if (updated != 1)
+    if (updated != 1) {
       throw StateError('Goal not found or target below savings');
+    }
   }
 
   Future<void> updateCollectedGoal(GoalModel goalModel) async {
@@ -528,7 +551,7 @@ class DatabaseRepository {
       [
         goalModel.collected,
         MoneyAmount.toMinorUnits(goalModel.collected, allowZero: true),
-        goalModel.id
+        goalModel.id,
       ],
     );
   }
@@ -1121,19 +1144,23 @@ class DatabaseRepository {
       where: cursor == null
           ? null
           : '(${NotificationMeta.date} < ? OR '
-            '(${NotificationMeta.date} = ? AND ${NotificationMeta.id} < ?))',
+              '(${NotificationMeta.date} = ? AND ${NotificationMeta.id} < ?))',
       whereArgs: cursor == null ? null : [cursor, cursor, beforeId],
       orderBy: '${NotificationMeta.date} DESC, ${NotificationMeta.id} DESC',
       limit: limit,
     );
-    return rows.map((data) => NotificationModelClass(
-      id: data[NotificationMeta.id] as int,
-      title: data[NotificationMeta.title] as String,
-      desc: data[NotificationMeta.desc] as String,
-      date: DateTime.parse(data[NotificationMeta.date] as String),
-      isRead: data[NotificationMeta.isRead] != 0,
-      type: data[NotificationMeta.type] as int,
-    )).toList();
+    return rows
+        .map(
+          (data) => NotificationModelClass(
+            id: data[NotificationMeta.id] as int,
+            title: data[NotificationMeta.title] as String,
+            desc: data[NotificationMeta.desc] as String,
+            date: DateTime.parse(data[NotificationMeta.date] as String),
+            isRead: data[NotificationMeta.isRead] != 0,
+            type: data[NotificationMeta.type] as int,
+          ),
+        )
+        .toList();
   }
 
   /// Check-and-insert happens in one serialized SQLite transaction.
@@ -1153,7 +1180,7 @@ class DatabaseRepository {
         NotificationMeta.nameTable,
         columns: [NotificationMeta.id],
         where: '${NotificationMeta.type} = ? AND '
-               'substr(${NotificationMeta.date}, 1, $length) = ?',
+            'substr(${NotificationMeta.date}, 1, $length) = ?',
         whereArgs: [type, period],
         limit: 1,
       );
@@ -1343,7 +1370,8 @@ class DatabaseRepository {
       if (type == 0) {
         // Rules restored or created after the initial schema migration must
         // also reserve months with already-existing legacy salary entries.
-        await txn.rawInsert('''
+        await txn.rawInsert(
+          '''
           INSERT OR IGNORE INTO recurring_occurrences (rule_id, period)
           SELECT ?, substr(${IncomeMeta.date}, 1, 7)
           FROM ${IncomeMeta.nameTable}
@@ -1351,7 +1379,9 @@ class DatabaseRepository {
             AND ${IncomeMeta.idIncomeSource} = 0
             AND length(${IncomeMeta.date}) >= 7
           GROUP BY substr(${IncomeMeta.date}, 1, 7)
-        ''', [ruleId, 'Monthly Income (Recurring)']);
+        ''',
+          [ruleId, 'Monthly Income (Recurring)'],
+        );
       }
     });
     if (isFromLogin) await checkAndInputRecurring();
@@ -1364,16 +1394,23 @@ class DatabaseRepository {
     required double amount,
   }) async {
     if (recurringDay == 0 || amount <= 0) {
-      await db.update(RecurringMeta.nameTable, {
-        RecurringMeta.recurringDay: 0,
-        RecurringMeta.amount: 0,
-        RecurringMeta.amountMinor: 0,
-      }, where: '${RecurringMeta.type} = ? AND ${RecurringMeta.idModel} = ?',
-         whereArgs: [0, 0]);
+      await db.update(
+        RecurringMeta.nameTable,
+        {
+          RecurringMeta.recurringDay: 0,
+          RecurringMeta.amount: 0,
+          RecurringMeta.amountMinor: 0,
+        },
+        where: '${RecurringMeta.type} = ? AND ${RecurringMeta.idModel} = ?',
+        whereArgs: [0, 0],
+      );
       return;
     }
     await saveRecurringMonthly(
-      recDay: recurringDay, type: 0, amount: amount, isFromLogin: true,
+      recDay: recurringDay,
+      type: 0,
+      amount: amount,
+      isFromLogin: true,
     );
   }
 

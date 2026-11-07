@@ -91,14 +91,15 @@ class SettingsRepository {
   /// Always reconcile from a fresh server document before generating income.
   Future<UserModel> reconcileCurrentAccountSettingsFromServer() async {
     final uid = _firebaseAuth.currentUser?.uid;
-    if (uid == null || uid != _databaseRepository.activeUserId ||
+    if (uid == null ||
+        uid != _databaseRepository.activeUserId ||
         !_databaseRepository.isReady) {
       throw StateError('Account database is not ready for reconciliation.');
     }
     final revision = _databaseRepository.revision;
     final remote = await _firestore.collection('users').doc(uid).get(
-      const GetOptions(source: Source.server),
-    );
+          const GetOptions(source: Source.server),
+        );
     if (_firebaseAuth.currentUser?.uid != uid ||
         _databaseRepository.activeUserId != uid ||
         revision != _databaseRepository.revision) {
@@ -124,7 +125,8 @@ class SettingsRepository {
     int? recurringDay,
   }) async {
     final uid = _firebaseAuth.currentUser?.uid;
-    if (uid == null || uid != userModel.uid ||
+    if (uid == null ||
+        uid != userModel.uid ||
         uid != _databaseRepository.activeUserId ||
         !_databaseRepository.isReady) {
       throw StateError('Finance database does not match signed-in user.');
@@ -133,9 +135,12 @@ class SettingsRepository {
     final monIncomeNew = monthlyIncome ?? userModel.monthlyIncome;
     final monBudgetNew = monthlyBudget ?? userModel.monthlyBudget;
     final recurringNew = recurringDay ?? userModel.recurringDay;
-    if (!monIncomeNew.isFinite || monIncomeNew < 0 ||
-        !monBudgetNew.isFinite || monBudgetNew < 0 ||
-        recurringNew < 0 || recurringNew > 31) {
+    if (!monIncomeNew.isFinite ||
+        monIncomeNew < 0 ||
+        !monBudgetNew.isFinite ||
+        monBudgetNew < 0 ||
+        recurringNew < 0 ||
+        recurringNew > 31) {
       throw const FormatException('Invalid monthly income, budget or payday.');
     }
 
@@ -164,12 +169,15 @@ class SettingsRepository {
 
     // A failed local write leaves an explicit retry marker. Only clear it
     // after both local reconciliation and cache persistence succeed.
-    final hadPendingReconciliation = _cache.containsKey(_pendingMonthlyKey(uid));
+    final hadPendingReconciliation =
+        _cache.containsKey(_pendingMonthlyKey(uid));
     await _cache.setString(_pendingMonthlyKey(uid), userModelToMap(updated));
-    if (monthlyIncome != null || recurringDay != null ||
+    if (monthlyIncome != null ||
+        recurringDay != null ||
         hadPendingReconciliation) {
       await _databaseRepository.syncMonthlyIncomeRule(
-        recurringDay: recurringNew, amount: monIncomeNew,
+        recurringDay: recurringNew,
+        amount: monIncomeNew,
       );
     }
     await _cache.setString(userCacheKey, userModelToMap(updated));
@@ -212,7 +220,8 @@ class SettingsRepository {
 
   String _requireAccount() {
     final uid = _firebaseAuth.currentUser?.uid;
-    if (uid == null || !_databaseRepository.isReady ||
+    if (uid == null ||
+        !_databaseRepository.isReady ||
         _databaseRepository.activeUserId != uid) {
       throw StateError('Account and local database are not synchronized.');
     }
@@ -243,7 +252,10 @@ class SettingsRepository {
     try {
       await _databaseRepository.createBackupSnapshot(file.path);
       final snapshot = await openDatabase(
-        file.path, readOnly: true, singleInstance: false);
+        file.path,
+        readOnly: true,
+        singleInstance: false,
+      );
       late int schema;
       DateTime? dataModifiedAt;
       try {
@@ -271,7 +283,8 @@ class SettingsRepository {
           '${manifest.sha256Digest.substring(0, 12)}.db';
       final ref = _firebaseStorage.ref('backupDb/$uid/snapshots/$id');
       await ref.putFile(
-        file, SettableMetadata(customMetadata: manifest.toMetadata()),
+        file,
+        SettableMetadata(customMetadata: manifest.toMetadata()),
       );
     } finally {
       if (await file.exists()) await file.delete();
@@ -301,11 +314,13 @@ class SettingsRepository {
       if (manifest == null || manifest.ownerUid != uid) {
         throw const FormatException('Untrusted cloud snapshot metadata.');
       }
-      result.add(CloudBackupRecord(
-        storagePath: entry.fullPath,
-        manifest: manifest,
-        uploadedAt: meta.timeCreated,
-      ));
+      result.add(
+        CloudBackupRecord(
+          storagePath: entry.fullPath,
+          manifest: manifest,
+          uploadedAt: meta.timeCreated,
+        ),
+      );
     }
 
     // Read old single-file backups without allowing new writes to overwrite
@@ -317,11 +332,13 @@ class SettingsRepository {
       if (manifest != null && manifest.ownerUid != uid) {
         throw const FormatException('Legacy backup belongs to another user.');
       }
-      result.add(CloudBackupRecord(
-        storagePath: legacy.fullPath,
-        manifest: manifest,
-        uploadedAt: meta.timeCreated,
-      ));
+      result.add(
+        CloudBackupRecord(
+          storagePath: legacy.fullPath,
+          manifest: manifest,
+          uploadedAt: meta.timeCreated,
+        ),
+      );
     } on FirebaseException catch (error) {
       if (error.code != 'object-not-found') rethrow;
     }
@@ -338,17 +355,25 @@ class SettingsRepository {
     await for (final entry in File(path).parent.list()) {
       if (entry is! File ||
           !entry.path.startsWith(prefix) ||
-          !entry.path.endsWith('.db')) continue;
+          !entry.path.endsWith('.db')) {
+        continue;
+      }
       final suffix = entry.path.substring(
-        prefix.length, entry.path.length - '.db'.length);
+        prefix.length,
+        entry.path.length - '.db'.length,
+      );
       final microseconds = int.tryParse(suffix);
       if (microseconds == null) continue;
-      entries.add(LocalRecoverySnapshot(
-        path: entry.path,
-        createdAt: DateTime.fromMicrosecondsSinceEpoch(
-          microseconds, isUtc: true),
-        sizeBytes: await entry.length(),
-      ));
+      entries.add(
+        LocalRecoverySnapshot(
+          path: entry.path,
+          createdAt: DateTime.fromMicrosecondsSinceEpoch(
+            microseconds,
+            isUtc: true,
+          ),
+          sizeBytes: await entry.length(),
+        ),
+      );
     }
     entries.sort((a, b) => b.createdAt.compareTo(a.createdAt));
     return entries;
@@ -362,14 +387,19 @@ class SettingsRepository {
     await File(path).delete();
   }
 
-  Future<int> _validateStagedBackup(File staging,
-      {BackupManifest? manifest}) async {
+  Future<int> _validateStagedBackup(
+    File staging, {
+    BackupManifest? manifest,
+  }) async {
     if (manifest != null &&
         await sqliteFileSha256(staging) != manifest.sha256Digest) {
       throw const FormatException('Snapshot checksum does not match.');
     }
     final validation = await openDatabase(
-      staging.path, readOnly: true, singleInstance: false);
+      staging.path,
+      readOnly: true,
+      singleInstance: false,
+    );
     try {
       final schema = await validateClingBackupSchema(validation);
       if (manifest != null && manifest.schemaVersion != schema) {
@@ -394,11 +424,14 @@ class SettingsRepository {
     final rollback = File('${databaseFile.path}.rollback');
     final hasLocal = await _databaseRepository.hasFinancialRecords();
     final localModified = await _databaseRepository.lastFinanceChangeAt();
-    if (hasLocal && !allowOverwriteNewerLocal &&
-        (capturedAt == null || localModified == null ||
-         localModified.isAfter(capturedAt))) {
+    if (hasLocal &&
+        !allowOverwriteNewerLocal &&
+        (capturedAt == null ||
+            localModified == null ||
+            localModified.isAfter(capturedAt))) {
       throw const RestoreConflictException(
-        'Local finance records may be newer than the snapshot.');
+        'Local finance records may be newer than the snapshot.',
+      );
     }
     if (hasLocal) {
       final recoveryPath = '${databaseFile.path}.before_restore_'
@@ -447,7 +480,10 @@ class SettingsRepository {
         : choices.firstWhere(
             (item) => item.storagePath == storagePath,
             orElse: () => throw ArgumentError.value(
-              storagePath, 'storagePath', 'Unrecognized cloud backup'),
+              storagePath,
+              'storagePath',
+              'Unrecognized cloud backup',
+            ),
           );
     final revision = _databaseRepository.revision;
     final dbPath = await _databaseRepository.databasePath;
@@ -474,8 +510,11 @@ class SettingsRepository {
     _requireAccount();
     final snapshots = await listLocalRecoverySnapshots();
     if (!snapshots.any((record) => record.path == recoveryPath)) {
-      throw ArgumentError.value(recoveryPath, 'recoveryPath',
-          'Snapshot does not belong to this account');
+      throw ArgumentError.value(
+        recoveryPath,
+        'recoveryPath',
+        'Snapshot does not belong to this account',
+      );
     }
     final dbPath = await _databaseRepository.databasePath;
     final staging = File('$dbPath.restore_'
@@ -483,8 +522,8 @@ class SettingsRepository {
     try {
       await File(recoveryPath).copy(staging.path);
       await _validateStagedBackup(staging);
-      await _applyStagedBackup(staging,
-        capturedAt: null,
+      await _applyStagedBackup(
+        staging,
         allowOverwriteNewerLocal: allowOverwriteNewerLocal,
       );
     } finally {

@@ -42,25 +42,28 @@ class SettingsPageContent extends StatelessWidget {
   }
 
   Future<bool> _confirm(
-    BuildContext context, String title, String message,
+    BuildContext context,
+    String title,
+    String message,
   ) async {
     return await showDialog<bool>(
-      context: context,
-      builder: (dialogContext) => AlertDialog(
-        title: Text(title),
-        content: Text(message),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(dialogContext, false),
-            child: const Text('Batal'),
+          context: context,
+          builder: (dialogContext) => AlertDialog(
+            title: Text(title),
+            content: Text(message),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(dialogContext, false),
+                child: const Text('Batal'),
+              ),
+              TextButton(
+                onPressed: () => Navigator.pop(dialogContext, true),
+                child: const Text('Lanjutkan'),
+              ),
+            ],
           ),
-          TextButton(
-            onPressed: () => Navigator.pop(dialogContext, true),
-            child: const Text('Lanjutkan'),
-          ),
-        ],
-      ),
-    ) ?? false;
+        ) ??
+        false;
   }
 
   void _afterRestore(BuildContext context) {
@@ -97,8 +100,10 @@ class SettingsPageContent extends StatelessWidget {
                     itemBuilder: (context, index) {
                       final item = items[index];
                       return ListTile(
-                        title: Text(DateFormat('dd MMM yyyy, HH:mm')
-                            .format(item.sortAt.toLocal())),
+                        title: Text(
+                          DateFormat('dd MMM yyyy, HH:mm')
+                              .format(item.sortAt.toLocal()),
+                        ),
                         subtitle: Text(
                           item.manifest == null
                               ? 'Backup lama tanpa manifest'
@@ -119,8 +124,8 @@ class SettingsPageContent extends StatelessWidget {
         context,
         'Pulihkan backup cloud?',
         'Data aktif akan diganti dengan snapshot terpilih. '
-        'Salinan lokal akan disimpan sebelum restore. '
-        'Backup cloud lain tidak akan dihapus.',
+            'Salinan lokal akan disimpan sebelum restore. '
+            'Backup cloud lain tidak akan dihapus.',
       );
       if (!proceed || !context.mounted) return;
       await repository.getBackup(
@@ -160,8 +165,10 @@ class SettingsPageContent extends StatelessWidget {
                     itemBuilder: (_, index) {
                       final item = items[index];
                       return ListTile(
-                        title: Text(DateFormat('dd MMM yyyy, HH:mm')
-                            .format(item.createdAt.toLocal())),
+                        title: Text(
+                          DateFormat('dd MMM yyyy, HH:mm')
+                              .format(item.createdAt.toLocal()),
+                        ),
                         subtitle: Text(
                           '${(item.sizeBytes / 1024).toStringAsFixed(1)} KB',
                         ),
@@ -174,7 +181,7 @@ class SettingsPageContent extends StatelessWidget {
                               sheetContext,
                               'Hapus salinan pemulihan?',
                               'File ini akan dihapus secara permanen. '
-                              'Jangan hapus satu-satunya backup yang valid.',
+                                  'Jangan hapus satu-satunya backup yang valid.',
                             );
                             if (!proceed) return;
                             await repository.deleteLocalRecoverySnapshot(
@@ -202,7 +209,7 @@ class SettingsPageContent extends StatelessWidget {
         context,
         'Pulihkan cadangan lokal?',
         'Database aktif akan diganti dengan salinan ini. '
-        'Aplikasi akan menyimpan snapshot kondisi sekarang sebelum restore.',
+            'Aplikasi akan menyimpan snapshot kondisi sekarang sebelum restore.',
       );
       if (!proceed || !context.mounted) return;
       await repository.restoreLocalRecoverySnapshot(
@@ -224,206 +231,207 @@ class SettingsPageContent extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24),
             child: Column(
-            children: [
-              const SizedBox(height: 16),
-              Row(
-                children: [
-                  GestureDetector(
-                    onTap: () => Navigator.pop(context),
-                    child: Assets.lib.resources.images.fluentChevronLeft24Filled
-                        .svg(),
-                  ),
-                  const SizedBox(width: 16),
-                  Text(
-                    AppLocalizations.of(context)!.settings,
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontFamily: FontFamily.cabinetGrotesk,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                  const Spacer(),
-                ],
-              ),
-              const SizedBox(height: 24),
-              GestureDetector(
-                onTap: () => showBottomSheetChooseLang(context),
-                behavior: HitTestBehavior.opaque,
-                child: Row(
+              children: [
+                const SizedBox(height: 16),
+                Row(
                   children: [
-                    const SizedBox(width: 8),
-                    Assets.lib.resources.images.globe.svg(),
-                    const SizedBox(width: 10),
+                    GestureDetector(
+                      onTap: () => Navigator.pop(context),
+                      child: Assets
+                          .lib.resources.images.fluentChevronLeft24Filled
+                          .svg(),
+                    ),
+                    const SizedBox(width: 16),
                     Text(
-                      AppLocalizations.of(context)!.changeLanguage,
+                      AppLocalizations.of(context)!.settings,
                       textAlign: TextAlign.center,
                       style: const TextStyle(
                         color: Colors.white,
-                        fontSize: 14,
-                        fontFamily: FontFamily.cabinetGrotesk,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    const Spacer(),
-                    Assets.lib.resources.images.chevronRight16.svg(),
-                    const SizedBox(width: 8),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 48),
-              Text(
-                context.read<ProfileBloc>().state.version,
-                style: const TextStyle(
-                  fontFamily: FontFamily.cabinetGrotesk,
-                  color: Color.fromARGB(255, 189, 189, 189),
-                  fontSize: 12,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 12),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      AppLocalizations.of(context)!.lastBackup,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontFamily: FontFamily.cabinetGrotesk,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    BlocBuilder<ProfileBloc, ProfileState>(
-                      buildWhen: (p, c) {
-                        return p.userModel.lastBackupTime !=
-                            c.userModel.lastBackupTime;
-                      },
-                      builder: (context, state) {
-                        const textStyle = TextStyle(
-                          color: Colors.white,
-                          fontFamily: FontFamily.cabinetGrotesk,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w500,
-                        );
-
-                        if (state.userModel.lastBackupTime == null) {
-                          return const Text(
-                            "---",
-                            style: textStyle,
-                          );
-                        }
-
-                        return TimeBackup(
-                          date: state.userModel.lastBackupTime!,
-                          textStyle: textStyle,
-                        );
-                      },
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 16),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: SizedBox(
-                  width: 390,
-                  height: 45,
-                  child: ElevatedButton(
-                    onPressed: () =>
-                        context.read<ProfileBloc>().add(GoBackup()),
-                    style: ButtonStyle(
-                      backgroundColor: WidgetStateProperty.all(
-                        const Color(0x3D787880),
-                      ),
-                      overlayColor: WidgetStateProperty.all(Colors.white60),
-                      shape: WidgetStateProperty.all(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Assets.lib.resources.images.databaseBackup.svg(),
-                        const SizedBox(width: 8),
-                        Text(
-                          AppLocalizations.of(context)!.backup,
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 15.5,
-                            fontFamily: FontFamily.cabinetGrotesk,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 12),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: SizedBox(
-                  width: double.infinity,
-                  child: OutlinedButton.icon(
-                    onPressed: () => _showCloudBackupHistory(context),
-                    icon: const Icon(Icons.cloud_download_outlined),
-                    label: const Text('Riwayat backup cloud'),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: SizedBox(
-                  width: double.infinity,
-                  child: OutlinedButton.icon(
-                    onPressed: () => _showLocalRecovery(context),
-                    icon: const Icon(Icons.restore_page_outlined),
-                    label: const Text('Pemulihan backup lokal'),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 16),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: SizedBox(
-                  width: 390,
-                  height: 57,
-                  child: ElevatedButton(
-                    onPressed: () => dialogLogout(context),
-                    style: ButtonStyle(
-                      backgroundColor: WidgetStateProperty.all(
-                        const Color(0xFFF8312F),
-                      ),
-                      overlayColor: WidgetStateProperty.all(Colors.redAccent),
-                      shape: WidgetStateProperty.all(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                    ),
-                    child: const Text(
-                      "Logout",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 15.5,
+                        fontSize: 16,
                         fontFamily: FontFamily.cabinetGrotesk,
                         fontWeight: FontWeight.w700,
                       ),
                     ),
+                    const Spacer(),
+                  ],
+                ),
+                const SizedBox(height: 24),
+                GestureDetector(
+                  onTap: () => showBottomSheetChooseLang(context),
+                  behavior: HitTestBehavior.opaque,
+                  child: Row(
+                    children: [
+                      const SizedBox(width: 8),
+                      Assets.lib.resources.images.globe.svg(),
+                      const SizedBox(width: 10),
+                      Text(
+                        AppLocalizations.of(context)!.changeLanguage,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 14,
+                          fontFamily: FontFamily.cabinetGrotesk,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      const Spacer(),
+                      Assets.lib.resources.images.chevronRight16.svg(),
+                      const SizedBox(width: 8),
+                    ],
                   ),
                 ),
-              ),
-            ],
+                const SizedBox(height: 48),
+                Text(
+                  context.read<ProfileBloc>().state.version,
+                  style: const TextStyle(
+                    fontFamily: FontFamily.cabinetGrotesk,
+                    color: Color.fromARGB(255, 189, 189, 189),
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 12),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        AppLocalizations.of(context)!.lastBackup,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontFamily: FontFamily.cabinetGrotesk,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      BlocBuilder<ProfileBloc, ProfileState>(
+                        buildWhen: (p, c) {
+                          return p.userModel.lastBackupTime !=
+                              c.userModel.lastBackupTime;
+                        },
+                        builder: (context, state) {
+                          const textStyle = TextStyle(
+                            color: Colors.white,
+                            fontFamily: FontFamily.cabinetGrotesk,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
+                          );
+
+                          if (state.userModel.lastBackupTime == null) {
+                            return const Text(
+                              "---",
+                              style: textStyle,
+                            );
+                          }
+
+                          return TimeBackup(
+                            date: state.userModel.lastBackupTime!,
+                            textStyle: textStyle,
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: SizedBox(
+                    width: 390,
+                    height: 45,
+                    child: ElevatedButton(
+                      onPressed: () =>
+                          context.read<ProfileBloc>().add(GoBackup()),
+                      style: ButtonStyle(
+                        backgroundColor: WidgetStateProperty.all(
+                          const Color(0x3D787880),
+                        ),
+                        overlayColor: WidgetStateProperty.all(Colors.white60),
+                        shape: WidgetStateProperty.all(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Assets.lib.resources.images.databaseBackup.svg(),
+                          const SizedBox(width: 8),
+                          Text(
+                            AppLocalizations.of(context)!.backup,
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 15.5,
+                              fontFamily: FontFamily.cabinetGrotesk,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 12),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: OutlinedButton.icon(
+                      onPressed: () => _showCloudBackupHistory(context),
+                      icon: const Icon(Icons.cloud_download_outlined),
+                      label: const Text('Riwayat backup cloud'),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: OutlinedButton.icon(
+                      onPressed: () => _showLocalRecovery(context),
+                      icon: const Icon(Icons.restore_page_outlined),
+                      label: const Text('Pemulihan backup lokal'),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: SizedBox(
+                    width: 390,
+                    height: 57,
+                    child: ElevatedButton(
+                      onPressed: () => dialogLogout(context),
+                      style: ButtonStyle(
+                        backgroundColor: WidgetStateProperty.all(
+                          const Color(0xFFF8312F),
+                        ),
+                        overlayColor: WidgetStateProperty.all(Colors.redAccent),
+                        shape: WidgetStateProperty.all(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                      ),
+                      child: const Text(
+                        "Logout",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 15.5,
+                          fontFamily: FontFamily.cabinetGrotesk,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
         ),
       ),
     );

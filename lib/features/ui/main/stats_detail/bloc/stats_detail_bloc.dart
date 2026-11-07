@@ -74,13 +74,16 @@ class StatsDetailBloc extends Bloc<StatsDetailEvent, StatsDetailState> {
   }
 
   Future<void> _getMostIncomeByCategory(
-      GetMostIncomeByCategory event, Emitter<StatsDetailState> emit) async {
+    GetMostIncomeByCategory event,
+    Emitter<StatsDetailState> emit,
+  ) async {
     _mostMode = true;
     final query = ++_querySequence;
     final revision = _dbRepo.revision;
     final result =
         await _dbRepo.getMostIncomeByCategory(source: _categoryOrSource);
-    if (isClosed || query != _querySequence || revision != _dbRepo.revision) return;
+    if (isClosed || query != _querySequence || revision != _dbRepo.revision)
+      return;
     emit(
       state.copyWith(
         listTransactionModel: (result.isNotEmpty) ? result : List.empty(),
@@ -97,7 +100,8 @@ class StatsDetailBloc extends Bloc<StatsDetailEvent, StatsDetailState> {
     final revision = _dbRepo.revision;
     final result =
         await _dbRepo.getMostExpenseByCategory(source: _categoryOrSource);
-    if (isClosed || query != _querySequence || revision != _dbRepo.revision) return;
+    if (isClosed || query != _querySequence || revision != _dbRepo.revision)
+      return;
     emit(
       state.copyWith(
         listTransactionModel: (result.isNotEmpty) ? result : List.empty(),
@@ -119,8 +123,13 @@ class StatsDetailBloc extends Bloc<StatsDetailEvent, StatsDetailState> {
       startDate: start.toIso8601String(),
       endDate: end.toIso8601String(),
     );
-    if (isClosed || query != _querySequence || revision != _dbRepo.revision ||
-        state.startDate != start || state.endDate != end) return;
+    if (isClosed ||
+        query != _querySequence ||
+        revision != _dbRepo.revision ||
+        state.startDate != start ||
+        state.endDate != end) {
+      return;
+    }
     emit(
       state.copyWith(
         listTransactionModel: (result.isNotEmpty) ? result : List.empty(),
@@ -143,8 +152,13 @@ class StatsDetailBloc extends Bloc<StatsDetailEvent, StatsDetailState> {
       startDate: start.toIso8601String(),
       endDate: end.toIso8601String(),
     );
-    if (isClosed || query != _querySequence || revision != _dbRepo.revision ||
-        state.startDate != start || state.endDate != end) return;
+    if (isClosed ||
+        query != _querySequence ||
+        revision != _dbRepo.revision ||
+        state.startDate != start ||
+        state.endDate != end) {
+      return;
+    }
     emit(
       state.copyWith(
         listTransactionModel: (result.isNotEmpty) ? result : List.empty(),
@@ -413,8 +427,13 @@ class StatsDetailBloc extends Bloc<StatsDetailEvent, StatsDetailState> {
             startDate: startDate,
             endDate: endDate,
           );
-    if (isClosed || query != _querySequence || revision != _dbRepo.revision ||
-        state.startDate != start || state.endDate != end) return;
+    if (isClosed ||
+        query != _querySequence ||
+        revision != _dbRepo.revision ||
+        state.startDate != start ||
+        state.endDate != end) {
+      return;
+    }
     emit(state.copyWith(listTransactionModel: result));
   }
 

@@ -52,7 +52,9 @@ void main() {
         .toList();
     expect(updated.length, 3);
     expect(
-        updated.map((e) => e.amount).toList()..sort(), [200.0, 300.0, 450.0]);
+      updated.map((e) => e.amount).toList()..sort(),
+      [200.0, 300.0, 450.0],
+    );
 
     await repository.insertExpense(
       ExpenseModel(
@@ -74,12 +76,14 @@ void main() {
         .whereType<ExpenseModel>()
         .toList();
     await repository.updateExpense(
-      expenses.firstWhere((expense) => expense.item == 'food')
+      expenses
+          .firstWhere((expense) => expense.item == 'food')
           .copyWith(amount: 15),
     );
     expect(
-        (await repository.getTransaction(now)).whereType<ExpenseModel>().length,
-        2);
+      (await repository.getTransaction(now)).whereType<ExpenseModel>().length,
+      2,
+    );
     // The canonical integer columns must update with the editable UI amounts.
     final incomeRows = await repository.db.query(IncomeMeta.nameTable);
     expect(
@@ -122,8 +126,10 @@ void main() {
       displayReference('900', inSourceData, unknownType: 'income source'),
       contains('Unknown income source'),
     );
-    expect(() => requireReferenceId('invalid', inSourceData),
-        throwsFormatException);
+    expect(
+      () => requireReferenceId('invalid', inSourceData),
+      throwsFormatException,
+    );
   });
 
   test('foreign key constraints reject orphan transactions', () async {
@@ -241,16 +247,19 @@ void main() {
     expect(await repository.getTotalBalance(), 12.34);
   });
 
-  test('goals use stable keyset pagination for 0, 1, 12 and 25 items', () async {
+  test('goals use stable keyset pagination for 0, 1, 12 and 25 items',
+      () async {
     expect(await repository.getGoalsPage(), isEmpty);
 
     for (var i = 1; i <= 25; ++i) {
-      await repository.insertGoal(GoalModel(
-        name: 'Goal $i',
-        image: '📱',
-        target: 100,
-        collected: 0,
-      ));
+      await repository.insertGoal(
+        GoalModel(
+          name: 'Goal $i',
+          image: '📱',
+          target: 100,
+          collected: 0,
+        ),
+      );
       if (i == 1) {
         expect((await repository.getGoalsPage()).single.name, 'Goal 1');
       }
@@ -267,39 +276,54 @@ void main() {
   });
 
   test('notifications page correctly with equal timestamps', () async {
-    final when = DateTime(2026, 11, 7, 7, 0);
+    final when = DateTime(2026, 11, 7, 7);
     expect(await repository.getNotificationsPage(), isEmpty);
     for (var i = 0; i < 25; ++i) {
-      await repository.saveNotification(NotificationModelClass(
-        title: 'Notification $i',
-        desc: 'Message $i',
-        date: when,
-        type: 0,
-        isRead: false,
-      ));
+      await repository.saveNotification(
+        NotificationModelClass(
+          title: 'Notification $i',
+          desc: 'Message $i',
+          date: when,
+          type: 0,
+          isRead: false,
+        ),
+      );
       if (i == 0) {
         expect((await repository.getNotificationsPage()).length, 1);
       }
     }
     final a = await repository.getNotificationsPage();
     final b = await repository.getNotificationsPage(
-      beforeDate: a.last.date, beforeId: a.last.id);
+      beforeDate: a.last.date,
+      beforeId: a.last.id,
+    );
     final c = await repository.getNotificationsPage(
-      beforeDate: b.last.date, beforeId: b.last.id);
+      beforeDate: b.last.date,
+      beforeId: b.last.id,
+    );
     expect([a.length, b.length, c.length], [12, 12, 1]);
     expect([...a, ...b, ...c].map((e) => e.id).toSet().length, 25);
-    expect(await repository.getNotificationsPage(
-      beforeDate: c.last.date, beforeId: c.last.id), isEmpty);
+    expect(
+      await repository.getNotificationsPage(
+        beforeDate: c.last.date,
+        beforeId: c.last.id,
+      ),
+      isEmpty,
+    );
   });
 
   test('warning notifications are inserted at most once per period', () async {
     final date = DateTime(2026, 11, 7);
     final first = await repository.saveWarningNotificationOnce(
-      type: 0, title: 'Budget exceeded', description: 'Monthly warning',
+      type: 0,
+      title: 'Budget exceeded',
+      description: 'Monthly warning',
       date: date,
     );
     final duplicate = await repository.saveWarningNotificationOnce(
-      type: 0, title: 'Budget exceeded', description: 'Monthly warning',
+      type: 0,
+      title: 'Budget exceeded',
+      description: 'Monthly warning',
       date: date.add(const Duration(days: 1)),
     );
     expect(first, isTrue);
@@ -309,12 +333,14 @@ void main() {
 
   test('legacy recurring rows reserve paid months before processing', () async {
     final today = DateTime.now();
-    await repository.insertIncome(IncomeModel(
-      date: today,
-      desc: 'Monthly Income (Recurring)',
-      amount: 1800,
-      incomeSource: '0 Other',
-    ));
+    await repository.insertIncome(
+      IncomeModel(
+        date: today,
+        desc: 'Monthly Income (Recurring)',
+        amount: 1800,
+        incomeSource: '0 Other',
+      ),
+    );
     await repository.saveRecurringMonthly(
       recDay: today.day,
       type: 0,
@@ -329,31 +355,40 @@ void main() {
     expect((await repository.db.query(IncomeMeta.nameTable)).length, 1);
   });
 
-  test('new recurring rule does not repay a legacy salary in the same month', () async {
+  test('new recurring rule does not repay a legacy salary in the same month',
+      () async {
     final today = DateTime.now();
-    await repository.insertIncome(IncomeModel(
-      date: today,
-      desc: 'Monthly Income (Recurring)',
-      amount: 200,
-      incomeSource: '0 Other',
-    ));
+    await repository.insertIncome(
+      IncomeModel(
+        date: today,
+        desc: 'Monthly Income (Recurring)',
+        amount: 200,
+        incomeSource: '0 Other',
+      ),
+    );
     await repository.syncMonthlyIncomeRule(
-      recurringDay: today.day, amount: 200,
+      recurringDay: today.day,
+      amount: 200,
     );
     expect((await repository.db.query(IncomeMeta.nameTable)).length, 1);
     expect((await repository.db.query('recurring_occurrences')).length, 1);
   });
 
-  test('opening the database never generates income before reconciliation', () async {
+  test('opening the database never generates income before reconciliation',
+      () async {
     final today = DateTime.now();
     await repository.saveRecurringMonthly(
-      recDay: today.day, type: 0, amount: 999, isFromLogin: false,
+      recDay: today.day,
+      type: 0,
+      amount: 999,
+      isFromLogin: false,
     );
     await repository.close();
     await repository.open();
     expect((await repository.db.query(IncomeMeta.nameTable)), isEmpty);
     await repository.syncMonthlyIncomeRule(
-      recurringDay: 0, amount: 0,
+      recurringDay: 0,
+      amount: 0,
     );
     expect((await repository.db.query(IncomeMeta.nameTable)), isEmpty);
   });
@@ -361,10 +396,14 @@ void main() {
   test('financial changes receive a durable modification timestamp', () async {
     expect(await repository.hasFinancialRecords(), false);
     expect(await repository.lastFinanceChangeAt(), isNull);
-    await repository.insertIncome(IncomeModel(
-      date: DateTime.now(), amount: 20, desc: 'purchase',
-      incomeSource: '0 Other',
-    ));
+    await repository.insertIncome(
+      IncomeModel(
+        date: DateTime.now(),
+        amount: 20,
+        desc: 'purchase',
+        incomeSource: '0 Other',
+      ),
+    );
     expect(await repository.hasFinancialRecords(), true);
     final modified = await repository.lastFinanceChangeAt();
     expect(modified, isNotNull);
@@ -374,12 +413,14 @@ void main() {
   test('recurring edits and disable do not duplicate a paid month', () async {
     final today = DateTime.now();
     await repository.syncMonthlyIncomeRule(
-      recurringDay: today.day, amount: 1000,
+      recurringDay: today.day,
+      amount: 1000,
     );
     expect((await repository.db.query(IncomeMeta.nameTable)).length, 1);
     await repository.syncMonthlyIncomeRule(recurringDay: 0, amount: 0);
     await repository.syncMonthlyIncomeRule(
-      recurringDay: today.day, amount: 1800,
+      recurringDay: today.day,
+      amount: 1800,
     );
     expect((await repository.db.query(IncomeMeta.nameTable)).length, 1);
     final rules = await repository.db.query(RecurringMeta.nameTable);

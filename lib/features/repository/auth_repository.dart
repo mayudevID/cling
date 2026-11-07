@@ -22,8 +22,7 @@ class AuthRepository {
   static const registerStatusKey = '__register_stat_key__';
   static String _pendingCurrencyKey(String uid) => '__signup_currency_$uid';
 
-  static bool isTemporaryServiceFailure(FirebaseException error) =>
-      const {
+  static bool isTemporaryServiceFailure(FirebaseException error) => const {
         'unavailable',
         'deadline-exceeded',
         'network-request-failed',
@@ -33,9 +32,8 @@ class AuthRepository {
   /// fields, even if account creation was interrupted after Firebase Auth.
   Future<UserModel> ensureProfile(User user, {String? currency}) async {
     final uid = user.uid;
-    final savedCurrency = currency ??
-        _cache.getString(_pendingCurrencyKey(uid)) ??
-        'ID';
+    final savedCurrency =
+        currency ?? _cache.getString(_pendingCurrencyKey(uid)) ?? 'ID';
     final createdAt = user.metadata.creationTime?.toIso8601String() ??
         DateTime.now().toUtc().toIso8601String();
     final defaults = <String, dynamic>{
@@ -107,7 +105,8 @@ class AuthRepository {
   }) async {
     await saveRegisterProcess(true);
     final credential = await _firebaseAuth.createUserWithEmailAndPassword(
-      email: email, password: password,
+      email: email,
+      password: password,
     );
     final user = credential.user!;
     await _cache.setString(_pendingCurrencyKey(user.uid), currency);
@@ -124,7 +123,8 @@ class AuthRepository {
   }) async {
     await saveLoginProcess(true);
     final credentials = await _firebaseAuth.signInWithEmailAndPassword(
-      email: email, password: password,
+      email: email,
+      password: password,
     );
     final user = credentials.user!;
     if (!user.emailVerified) {

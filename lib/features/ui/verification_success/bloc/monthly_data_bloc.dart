@@ -25,7 +25,7 @@ class MonthlyDataBloc extends Bloc<MonthlyDataEvent, MonthlyDataState> {
     required AuthRepository authRepo,
   })  : _settingsRepo = settingsRepo,
         _authRepo = authRepo,
-        super(MonthlyDataState()) {
+        super(const MonthlyDataState()) {
     on<SetIncome>(_setIncome);
     on<SetBudget>(_setBudget);
     on<SetState>(_setState);
@@ -57,7 +57,7 @@ class MonthlyDataBloc extends Bloc<MonthlyDataEvent, MonthlyDataState> {
             monIncome: data,
           ),
         );
-        add(SetState(VerifOnboardPos.budget));
+        add(const SetState(VerifOnboardPos.budget));
       } on FormatException {
         errorSnackbar(
           mainContext,
@@ -96,14 +96,16 @@ class MonthlyDataBloc extends Bloc<MonthlyDataEvent, MonthlyDataState> {
   }
 
   void _setState(SetState event, Emitter<MonthlyDataState> emit) {
-    emit(state.copyWith(
-      state: event.state,
-      // Preserve the budget the user typed when navigating back, even if
-      // they have not tapped Finish yet.
-      monBudget: event.state == VerifOnboardPos.income
-          ? (event.currentInput ?? state.monBudget)
-          : state.monBudget,
-    ));
+    emit(
+      state.copyWith(
+        state: event.state,
+        // Preserve the budget the user typed when navigating back, even if
+        // they have not tapped Finish yet.
+        monBudget: event.state == VerifOnboardPos.income
+            ? (event.currentInput ?? state.monBudget)
+            : state.monBudget,
+      ),
+    );
   }
 
   Future<void> _setFinish(

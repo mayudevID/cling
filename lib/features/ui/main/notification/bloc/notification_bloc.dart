@@ -47,10 +47,12 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
       final page = await _dbRepo.getNotificationsPage(
         beforeDate: _cursorTime,
         beforeId: _cursorId,
-        limit: _pageSize,
       );
-      if (isClosed || revision != _dbRepo.revision ||
-          generation != _generation) return;
+      if (isClosed ||
+          revision != _dbRepo.revision ||
+          generation != _generation) {
+        return;
+      }
       if (page.isNotEmpty) {
         _cursorTime = page.last.date;
         _cursorId = page.last.id;

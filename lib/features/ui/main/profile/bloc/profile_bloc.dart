@@ -84,7 +84,9 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       ),
     );
     final context = MainApp.navKeyGlobal.currentContext;
-    if (context != null && context.mounted && user != null &&
+    if (context != null &&
+        context.mounted &&
+        user != null &&
         user.uid == _dbRepo.activeUserId) {
       context.read<HomeBloc>().add(GetIncomeExpenseAmountTotalCurrMonth());
     }
