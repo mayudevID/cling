@@ -81,6 +81,28 @@ class AuthRepository {
     }
   }
 
+  /// Reuse an existing Firebase Auth session only when it belongs to the
+  /// cached local profile. This is session continuation, not password login.
+  static bool isSavedSessionEligible({
+    required String? firebaseUid,
+    required bool emailVerified,
+    required String? cachedUid,
+  }) {
+    return firebaseUid != null &&
+        firebaseUid.isNotEmpty &&
+        emailVerified &&
+        cachedUid == firebaseUid;
+  }
+
+  bool get canResumeSavedSession {
+    final user = _firebaseAuth.currentUser;
+    return isSavedSessionEligible(
+      firebaseUid: user?.uid,
+      emailVerified: user?.emailVerified == true,
+      cachedUid: user == null ? null : cachedProfileForUser(user.uid)?.uid,
+    );
+  }
+
   // Cache deletion is performed by awaited logout operations. A listener
   // must not asynchronously clear a newly signed-in account's cached UID.
   Stream<User?> get user => _firebaseAuth.userChanges();
@@ -117,7 +139,7 @@ class AuthRepository {
     await saveRegisterProcess(false);
   }
 
-  Future<bool> logInWithEmailAndPassword({
+  Future<void> logInWithEmailAndPassword({
     required String email,
     required String password,
   }) async {
@@ -143,23 +165,11 @@ class AuthRepository {
       userModel = cached;
     }
 
-    final needsOnboarding = !userModel.verifiedProcess;
-    if (needsOnboarding) {
-      try {
-        await _firestore.collection('users').doc(user.uid).update({
-          'verified_process': true,
-        });
-        userModel = userModel.copyWith(verifiedProcess: true);
-      } on FirebaseException catch (error) {
-        if (!isTemporaryServiceFailure(error)) rethrow;
-        // Keep onboarding pending; never claim it succeeded offline.
-      }
-    }
-
+    // Do not mark onboarding as complete during login. The final onboarding
+    // submission commits verified_process only after monthly settings persist.
     await _cache.setString(userCacheKey, userModelToMap(userModel));
     await saveLoginProcess(false);
     await saveRegisterProcess(false);
-    return needsOnboarding;
   }
 
   Future<void> logOut() async {

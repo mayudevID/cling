@@ -6,7 +6,6 @@ import '../../../../main.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../core/logger.dart';
@@ -14,7 +13,9 @@ import '../../../../core/common_widget.dart';
 import '../../../repository/auth_repository.dart';
 import '../../../repository/settings_repository.dart';
 import '../../language_currency/lang_export.dart';
+import '../../app_bloc/app_bloc.dart';
 import '../../main/profile/bloc/profile_bloc.dart';
+import '../../main/main_widget/finance_refresh.dart';
 
 part 'monthly_data_event.dart';
 part 'monthly_data_state.dart';
@@ -127,7 +128,7 @@ class MonthlyDataBloc extends Bloc<MonthlyDataEvent, MonthlyDataState> {
       final monIncome = double.parse(state.monIncome.removeDot);
       final monBudget = double.parse(state.monBudget.removeDot);
 
-      await _settingsRepo.saveMonthlyBudgetAndIncome(
+      await _settingsRepo.completeMonthlyOnboarding(
         userModel: _authRepo.currentUserModel!,
         monthlyIncome: monIncome.toDouble(),
         monthlyBudget: monBudget.toDouble(),
@@ -135,13 +136,11 @@ class MonthlyDataBloc extends Bloc<MonthlyDataEvent, MonthlyDataState> {
       );
 
       mainContext.read<ProfileBloc>().add(GetProfile());
+      refreshFinancialViews(mainContext);
 
-      SchedulerBinding.instance.addPostFrameCallback((_) {
-        Navigator.popUntil(
-          MainApp.navKeyGlobal.currentContext!,
-          (route) => route.isFirst,
-        );
-      });
+      // Only after Firestore and local finance settings have both
+      // succeeded does AppBloc route the account to the main dashboard.
+      mainContext.read<AppBloc>().add(const Redirect());
     } on SocketException catch (e) {
       Logger.Red.log(e.message);
 

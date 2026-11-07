@@ -46,6 +46,23 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         dbRepo.isReady;
   }
 
+  /// Single routing policy for cold starts, password sign-in and resuming
+  /// a persisted session. Email verification and monthly onboarding are
+  /// independent conditions.
+  static String routeForAccount({
+    required bool isReady,
+    required bool emailVerified,
+    required bool loginInProgress,
+    required bool registrationInProgress,
+    required bool onboardingCompleted,
+  }) {
+    if (!isReady || !emailVerified ||
+        loginInProgress || registrationInProgress) {
+      return RouteName.onboard;
+    }
+    return onboardingCompleted ? RouteName.main : RouteName.verifOnboard;
+  }
+
   final AuthRepository _authRepo;
   final DatabaseRepository _dbRepo;
   late final StreamSubscription<User?> _userSubscription;
@@ -83,9 +100,13 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     );
     Logger.Green.log('Auth and account database ready? $ready');
 
-    final route = ready && !_authRepo.loginProcess && !_authRepo.registerProcess
-        ? RouteName.main
-        : RouteName.onboard;
+    final route = routeForAccount(
+      isReady: ready,
+      emailVerified: user?.emailVerified == true,
+      loginInProgress: _authRepo.loginProcess,
+      registrationInProgress: _authRepo.registerProcess,
+      onboardingCompleted: _authRepo.currentUserModel?.verifiedProcess == true,
+    );
     Navigator.pushNamedAndRemoveUntil(
       MainApp.navKeyGlobal.currentContext!,
       route,

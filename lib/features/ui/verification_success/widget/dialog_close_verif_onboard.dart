@@ -1,4 +1,5 @@
 import '../../language_currency/lang_export.dart';
+import '../../../../core/route.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../../resources/gen/fonts.gen.dart';
@@ -42,7 +43,7 @@ Future<void> dialogCloseVerifOnboard(BuildContext context) async {
                 height: 8,
               ),
               const Text(
-                "Are you sure want to close? Monthly budget and Monthly Income will be empty.",
+                "Skip monthly setup for now? Your account will remain onboarding-pending, and you'll be asked again on the next login.",
                 style: TextStyle(
                   fontFamily: FontFamily.cabinetGrotesk,
                   fontSize: 14,
@@ -58,9 +59,12 @@ Future<void> dialogCloseVerifOnboard(BuildContext context) async {
                   const Spacer(),
                   GestureDetector(
                     onTap: () async {
-                      Navigator.of(context)
-                        ..pop()
-                        ..pop();
+                      // Skip for now without marking onboarding complete.
+                      // The next login/startup will ask for monthly setup again.
+                      Navigator.of(context).pushNamedAndRemoveUntil(
+                        RouteName.main,
+                        (route) => false,
+                      );
                     },
                     child: Container(
                       padding: const EdgeInsets.all(12),

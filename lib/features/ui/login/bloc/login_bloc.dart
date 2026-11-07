@@ -9,7 +9,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../core/common_widget.dart';
 import '../../../../core/exception.dart';
 import '../../../../core/logger.dart';
-import '../../../../core/route.dart';
 import '../../../../main.dart';
 import '../../../repository/auth_repository.dart';
 import '../../../repository/backup_integrity.dart';
@@ -42,6 +41,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     on<ChangeEmail>(_changeEmail);
     on<ChangePassword>(_changePassword);
     on<SendLogin>(_sendLogin);
+    on<ResumeSavedSession>(_resumeSavedSession);
     on<LoginAnonymous>(_loginAnony);
   }
 
@@ -91,7 +91,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     }
 
     if (!online) {
-      if (await _tryResumeCachedSession()) return;
+      // Passwords cannot be verified offline. A saved Firebase session has
+      // its own explicit action and never uses the password field.
       errorSnackbar(
         mainContext,
         AppLocalizations.of(mainContext)!.noConnection,
@@ -102,7 +103,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     loadingAuth(mainContext);
 
     try {
-      final isVerifiedNotPassed = await _authRepo.logInWithEmailAndPassword(
+      await _authRepo.logInWithEmailAndPassword(
         email: state.email.trim(),
         password: state.password.trim(),
       );
@@ -153,9 +154,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
             'Offline account settings; recurring deferred: $error');
       }
 
-      await _finishLoginNavigation(
-        isVerifiedNotPassed: isVerifiedNotPassed,
-      );
+      await _finishLoginNavigation();
     } on EmailNotVerifiedException catch (_) {
       Logger.Red.log("EmailNotVerified");
       await _authRepo.logOut();
@@ -164,8 +163,14 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       dialogEmailNotVerified(mainContext);
     } on FirebaseAuthException catch (e) {
       Logger.Red.log("FirebaseAuthException: $e");
-      if (AuthRepository.isTemporaryServiceFailure(e) &&
-          await _tryResumeCachedSession()) {
+      if (AuthRepository.isTemporaryServiceFailure(e)) {
+        // Keep any previously authenticated session for the separate
+        // 'Continue saved session' action, but never silently resume it.
+        Navigator.pop(mainContext);
+        errorSnackbar(
+          mainContext,
+          AppLocalizations.of(mainContext)!.noConnection,
+        );
         return;
       }
       await _authRepo.logOut();
@@ -177,9 +182,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       );
     } on SocketException catch (e) {
       Logger.Red.log("SocketException: $e");
-      if (await _tryResumeCachedSession()) return;
-      await _authRepo.logOut();
-      await _dbRepo.switchAccount(null);
+      // A connection failure is not evidence that the entered password
+      // was valid. Preserve the existing session without logging in.
       Navigator.pop(mainContext);
       errorSnackbar(
         mainContext,
@@ -197,29 +201,50 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     }
   }
 
-  Future<bool> _tryResumeCachedSession() async {
+  Future<void> _resumeSavedSession(
+    ResumeSavedSession event,
+    Emitter<LoginState> emit,
+  ) async {
     final user = _authRepo.currentUserFirebase;
-    final cached =
-        user == null ? null : _authRepo.cachedProfileForUser(user.uid);
-    if (user == null ||
-        !user.emailVerified ||
-        cached == null ||
-        user.email?.toLowerCase() != state.email.trim().toLowerCase()) {
-      return false;
+    final profile = user == null
+        ? null
+        : _authRepo.cachedProfileForUser(user.uid);
+    if (!_authRepo.canResumeSavedSession || user == null ||
+        profile == null) {
+      errorSnackbar(
+        mainContext,
+        'Tidak ada sesi tersimpan yang dapat dilanjutkan.',
+      );
+      return;
     }
-    await _dbRepo.switchAccount(user.uid);
-    mainContext.read<LangCurrencyBloc>().add(
-          ChangeCurrency(selectedCurrency: cached.currency),
-        );
-    // Offline mode is read-only for recurring settings until Firestore
-    // reconciliation succeeds. Only the persisted authenticated UID is used.
-    await _finishLoginNavigation(isVerifiedNotPassed: false);
-    return true;
+
+    loadingAuth(mainContext);
+    try {
+      await _dbRepo.switchAccount(user.uid);
+      if (_authRepo.currentUserFirebase?.uid != user.uid ||
+          _dbRepo.activeUserId != user.uid) {
+        throw StateError('Sesi akun berubah saat dipulihkan.');
+      }
+      await _authRepo.saveLoginProcess(false);
+      await _authRepo.saveRegisterProcess(false);
+      mainContext.read<LangCurrencyBloc>().add(
+        ChangeCurrency(selectedCurrency: profile.currency),
+      );
+      // Reuse an existing authenticated session. This does not authenticate
+      // the password typed into the sign-in form and never claims to.
+      // Recurring entries are not generated from stale offline settings.
+      await _finishLoginNavigation();
+    } catch (error) {
+      Logger.Red.log('Unable to resume saved session: $error');
+      Navigator.pop(mainContext);
+      errorSnackbar(
+        mainContext,
+        'Sesi tersimpan tidak dapat dilanjutkan. Coba lagi.',
+      );
+    }
   }
 
-  Future<void> _finishLoginNavigation({
-    required bool isVerifiedNotPassed,
-  }) async {
+  Future<void> _finishLoginNavigation() async {
     await Future.delayed(const Duration(milliseconds: 100));
     mainContext.read<ProfileBloc>()
       ..add(GetProfile())
@@ -236,19 +261,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       ..add(GetYearlyIncome())
       ..add(GetIncomeBreakdown())
       ..add(GetExpenseBreakdownAndPieData());
+    // AppBloc chooses dashboard vs onboarding from the *persisted* profile,
+    // for both fresh logins and restored sessions.
     mainContext.read<AppBloc>().add(const Redirect());
-
-    if (isVerifiedNotPassed) {
-      Future.delayed(
-        const Duration(milliseconds: 1000),
-        () {
-          Navigator.pushNamed(
-            MainApp.navKeyGlobal.currentContext!,
-            RouteName.verifOnboard,
-          );
-        },
-      );
-    }
   }
 
   void _loginAnony(LoginAnonymous event, emit) {}

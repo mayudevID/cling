@@ -184,6 +184,51 @@ class SettingsRepository {
     await _cache.remove(_pendingMonthlyKey(uid));
   }
 
+  /// Complete onboarding only after the remote monthly settings, local
+  /// recurring schedule and cached profile have all been persisted.
+  ///
+  /// If either step fails the user remains onboarding-pending and can retry
+  /// without losing the previously submitted monthly settings.
+  Future<void> completeMonthlyOnboarding({
+    required UserModel userModel,
+    required double monthlyIncome,
+    required double monthlyBudget,
+    required int recurringDay,
+  }) async {
+    await saveMonthlyBudgetAndIncome(
+      userModel: userModel,
+      monthlyIncome: monthlyIncome,
+      monthlyBudget: monthlyBudget,
+      recurringDay: recurringDay,
+    );
+
+    final uid = userModel.uid;
+    if (_firebaseAuth.currentUser?.uid != uid ||
+        _databaseRepository.activeUserId != uid ||
+        !_databaseRepository.isReady) {
+      throw StateError('Account changed before onboarding completion.');
+    }
+
+    final savedJson = _cache.getString(userCacheKey);
+    if (savedJson == null) {
+      throw StateError('Monthly settings were not cached.');
+    }
+    final saved = userModelFromMap(savedJson);
+    if (saved.uid != uid) {
+      throw StateError('Saved profile belongs to a different account.');
+    }
+
+    // This is the final remote write, deliberately separate from login and
+    // after successfully reconciling the local recurring income schedule.
+    await _firestore.collection('users').doc(uid).update({
+      'verified_process': true,
+    });
+    await _cache.setString(
+      userCacheKey,
+      userModelToMap(saved.copyWith(verifiedProcess: true)),
+    );
+  }
+
   Future<DateTime> editBackupTime({required UserModel userModel}) async {
     final userData = userModel;
     final now = DateTime.now();

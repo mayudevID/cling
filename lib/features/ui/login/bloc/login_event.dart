@@ -25,4 +25,10 @@ class SendLogin extends LoginEvent {
   const SendLogin();
 }
 
+/// Explicitly resume an existing Firebase-authenticated session, without
+/// treating a password field as authenticated while offline.
+class ResumeSavedSession extends LoginEvent {
+  const ResumeSavedSession();
+}
+
 class LoginAnonymous extends LoginEvent {}

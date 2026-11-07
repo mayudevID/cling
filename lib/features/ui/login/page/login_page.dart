@@ -80,6 +80,26 @@ class LoginPageContent extends StatelessWidget {
                   },
                   name: AppLocalizations.of(context)!.login,
                 ),
+                if (getIt<AuthRepository>().canResumeSavedSession) ...[
+                  const SizedBox(height: 12),
+                  SizedBox(
+                    width: double.infinity,
+                    child: OutlinedButton.icon(
+                      onPressed: () => context.read<LoginBloc>().add(
+                        const ResumeSavedSession(),
+                      ),
+                      icon: const Icon(Icons.lock_open_outlined),
+                      label: const Text('Lanjutkan sesi tersimpan'),
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  const Text(
+                    'Menggunakan sesi akun yang masih aktif di perangkat. '
+                    'Bukan verifikasi password offline.',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: Colors.white70, fontSize: 11),
+                  ),
+                ],
                 const Spacer(),
                 Text.rich(
                   TextSpan(

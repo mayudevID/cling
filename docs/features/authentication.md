@@ -2,70 +2,90 @@
 
 ## Tujuan
 
-Fitur ini membentuk identitas pengguna, mempertahankan sesi, dan mengumpulkan data awal yang dibutuhkan fitur keuangan.
+Fitur ini membentuk identitas pengguna, mempertahankan sesi yang telah
+terautentikasi, dan mengumpulkan data awal pemasukan/anggaran bulanan.
 
-## Registrasi
+## Registrasi dan verifikasi email
 
-Pengguna memasukkan nama, email, kata sandi, konfirmasi kata sandi, dan mata uang. Sebelum mengirim data, aplikasi memeriksa:
+Registrasi menggunakan Firebase Authentication. Dokumen `users/{uid}` di
+Firestore dibuat dengan `verified_process: false`. Verifikasi email Firebase
+dan penyelesaian onboarding bulanan adalah dua kondisi yang **berbeda**.
 
-- perangkat memiliki koneksi Wi-Fi atau seluler;
-- seluruh kolom wajib terisi;
-- email memiliki format valid;
-- kata sandi minimal delapan karakter;
-- kata sandi dan konfirmasi sama.
+Jika pembuatan profil Firestore terputus, `ensureProfile()` memperbaiki
+field yang belum tersedia tanpa menimpa nilai yang sudah ada.
 
-Firebase Authentication membuat akun. Nama disimpan sebagai `displayName`. Firestore membuat dokumen `users/{uid}` berisi mata uang, waktu pembuatan, waktu backup, tanggal transaksi rutin, status onboarding, pemasukan bulanan, dan anggaran bulanan. Firebase mengirim email verifikasi setelah akun dibuat.
+## Login email dan password
 
-## Login
+Tombol **Login** memerlukan jaringan agar Firebase bisa memverifikasi password.
+Tidak ada fallback ke sesi tersimpan ketika password salah atau verifikasi
+password gagal karena koneksi.
 
-Login memakai email dan kata sandi dengan validasi koneksi, kelengkapan data, format email, dan panjang kata sandi. Setelah Firebase menerima kredensial:
+Jika koneksi tidak tersedia, form menampilkan kesalahan koneksi; aplikasi
+**tidak** menganggap input password sebagai berhasil terautentikasi.
 
-1. Aplikasi mengambil dokumen profil dari Firestore.
-2. Profil disimpan dalam SharedPreferences sebagai cache pengguna.
-3. Mata uang aktif disesuaikan dengan profil.
-4. Jika backup tersedia, pengguna ditawari pemulihan data lokal.
-5. Jika pemasukan rutin sudah dikonfigurasi, aturan rutin lokal dibuat.
-6. Aplikasi mengarahkan pengguna ke halaman utama.
+Jika Firebase telah memverifikasi email/password, Cling mengaktifkan database
+lokal untuk UID yang sama, memulihkan cache profil, dan menyinkronkan
+pengaturan recurring income bila server tersedia.
 
-Jika email Firebase sudah terverifikasi tetapi onboarding belum ditandai selesai, aplikasi memperbarui `verified_process` lalu membuka alur data bulanan.
+## Lanjutkan sesi tersimpan
 
-## Onboarding Data Bulanan
+Pada halaman Login, tersedia tombol **Lanjutkan sesi tersimpan** jika:
 
-Onboarding meminta pemasukan bulanan, anggaran bulanan, dan tanggal pemasukan rutin. Pemasukan serta anggaran harus lebih dari nol dan dapat diubah menjadi angka. Data disimpan ke Firestore, lalu cache profil diperbarui.
+- `FirebaseAuth.currentUser` masih tersedia di perangkat;
+- email akun tersebut sudah diverifikasi;
+- UID-nya cocok dengan UID profil lokal yang disimpan.
 
-## Sesi dan Redirect
+Tombol ini tidak meminta atau memverifikasi password, karena hanya
+**melanjutkan sesi Firebase yang sudah ada**. Tidak ada mekanisme login offline
+untuk akun yang sudah sign-out, dan perangkat yang digunakan harus dijaga
+keamanannya. Akses dengan biometrik/PIN lokal dapat ditambahkan sebagai
+lapisan perlindungan tersendiri jika dibutuhkan.
 
-`AppBloc` mendengarkan `FirebaseAuth.userChanges()`. Splash menunggu animasi selesai, lalu memilih tujuan:
+Ketika sesi lama dilanjutkan, Cling tidak otomatis membuat pemasukan rutin
+berdasarkan konfigurasi offline yang mungkin sudah kedaluwarsa.
 
-- pengguna terautentikasi dengan proses login dan registrasi selesai: halaman utama;
-- kondisi lain: onboarding awal.
+## Status onboarding bulanan
 
-Logout menghapus cache profil dan penanda proses autentikasi, lalu mengakhiri sesi Firebase.
+`verified_process` sekarang hanya diubah menjadi `true` setelah pengguna
+menyelesaikan kedua tahap onboarding dan:
 
-## Reset dan Perubahan Kata Sandi
+1. Nilai pemasukan, anggaran, dan tanggal recurring telah disimpan di
+   Firestore.
+2. Proyeksi aturan recurring di SQLite berhasil diperbarui.
+3. Cache profil bulanan berhasil disimpan.
+4. Firestore berhasil mengonfirmasi `verified_process: true` dan cache
+   lokal menandai onboarding selesai.
 
-Lupa kata sandi dan perubahan kata sandi memakai email reset dari Firebase Authentication. Aplikasi tidak mengganti kata sandi langsung di perangkat.
+Jika salah satu tahap gagal, penyelesaian onboarding tidak dianggap berhasil
+oleh aplikasi; pengguna dapat mencoba menyimpan kembali.
 
-## Data dan Dependensi
+Login dan splash menggunakan kebijakan rute yang sama: pengguna terautentikasi
+dengan onboarding belum selesai menuju `/verifOnboard`, sedangkan pengguna
+yang sudah menyelesaikannya menuju `/main`.
 
-- Firebase Authentication: akun, sesi, verifikasi email, reset kata sandi.
-- Cloud Firestore: dokumen profil pengguna.
-- SharedPreferences: cache profil dan penanda proses login/registrasi.
-- Connectivity Plus: pemeriksaan jenis koneksi sebelum operasi jaringan.
+Tombol **Skip** hanya melewati pengisian untuk sesi saat itu. Status onboarding
+tetap belum selesai, sehingga pengguna akan diminta kembali pada startup
+atau login berikutnya.
 
-## Kegagalan dan Batasan
+**Catatan data lama:** versi sebelumnya sempat mengubah
+`verified_process` menjadi true sebelum onboarding. Status lama tersebut
+tidak direset otomatis karena tidak mungkin membedakan pengguna yang
+benar-benar sudah selesai dan yang sebelumnya melewati setup tanpa
+memeriksa riwayat. Perbaikan alur ini berlaku untuk proses baru.
 
-- Pemeriksaan koneksi hanya mengenali Wi-Fi dan seluler; status jaringan tidak menjamin Firebase dapat dijangkau.
-- Login anonim memiliki event, tetapi handler saat ini tidak menjalankan perilaku.
-- Pemeriksaan wajib email terverifikasi pada login dinonaktifkan di repository.
-- Cache profil menjadi syarat state awal terautentikasi, bukan hanya keberadaan sesi Firebase.
-- Restore yang dipilih saat login dapat mengganti basis data lokal sebelum halaman utama dibuka.
+## Reset kata sandi dan logout
 
-## Source Terkait
+Reset password dilakukan melalui Firebase Authentication. Cache profil
+dihapus pada logout. Data transaksi SQLite per UID tetap disimpan secara
+lokal dan tidak menjadi data tamu.
 
-- `lib/features/repository/auth_repository.dart`
-- `lib/features/ui/register/bloc/register_bloc.dart`
-- `lib/features/ui/login/bloc/login_bloc.dart`
-- `lib/features/ui/app_bloc/app_bloc.dart`
-- `lib/features/ui/verification_success/bloc/monthly_data_bloc.dart`
-- `lib/features/ui/splash/splash_content.dart`
+## Pengujian
+
+`test/features/ui/login_onboarding_policy_test.dart` mencakup eligibility
+sesi Firebase dan penentuan rute onboarding/dashboard. Pengujian integrasi
+Firebase dan UI aktual tetap diperlukan sebelum rilis.
+
+```sh
+flutter analyze --no-fatal-infos
+flutter test
+```
