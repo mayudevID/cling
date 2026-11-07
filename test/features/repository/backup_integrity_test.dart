@@ -138,11 +138,14 @@ void main() {
         await Directory.systemTemp.createTemp('cling_schema_v2_upgrade_');
     final path = '${dir.path}/legacy.db';
     try {
-      var database =
-          await openDatabase(path, version: 2, onCreate: (db, version) async {
-        await initDatabaseTable(db, version);
-        await migrateMoneyColumns(db);
-      });
+      var database = await openDatabase(
+        path,
+        version: 2,
+        onCreate: (db, version) async {
+          await initDatabaseTable(db, version);
+          await migrateMoneyColumns(db);
+        },
+      );
       await database.insert(IncomeMeta.nameTable, {
         IncomeMeta.date: '2026-04-01T00:00:00.000',
         IncomeMeta.amount: 4500,
@@ -158,12 +161,17 @@ void main() {
         RecurringMeta.amountMinor: 450000,
       });
       await database.close();
-      database = await openDatabase(path, version: 4, onConfigure: (db) async {
-        await db.execute('PRAGMA foreign_keys=ON');
-      }, onUpgrade: (db, oldVersion, newVersion) async {
-        if (oldVersion < 3) await migrateFinancialFoundation(db);
-        if (oldVersion < 4) await migrateFinancialPlanning(db);
-      });
+      database = await openDatabase(
+        path,
+        version: 4,
+        onConfigure: (db) async {
+          await db.execute('PRAGMA foreign_keys=ON');
+        },
+        onUpgrade: (db, oldVersion, newVersion) async {
+          if (oldVersion < 3) await migrateFinancialFoundation(db);
+          if (oldVersion < 4) await migrateFinancialPlanning(db);
+        },
+      );
       expect(await validateClingBackupSchema(database), 4);
       final income = await database.query(IncomeMeta.nameTable);
       expect(income.single[IncomeMeta.amountMinor], 450000);
@@ -172,7 +180,9 @@ void main() {
       expect(recurring.single[RecurringMeta.amountMinor], 450000);
       expect(await database.query(BillMeta.table), isEmpty);
       expect(
-          await database.query(RecurringExpenseOccurrenceMeta.table), isEmpty);
+        await database.query(RecurringExpenseOccurrenceMeta.table),
+        isEmpty,
+      );
       await database.close();
     } finally {
       await dir.delete(recursive: true);
@@ -228,15 +238,17 @@ void main() {
       expect(goal[GoalMeta.targetDate], isNull);
       expect(goal[GoalMeta.contributionFrequency], isNull);
       expect(
-          (await database.query(GoalSavingMeta.nameTable))
-              .single[GoalSavingMeta.amountMinor],
-          2000000);
+        (await database.query(GoalSavingMeta.nameTable))
+            .single[GoalSavingMeta.amountMinor],
+        2000000,
+      );
       expect(
-          (await database.rawQuery('PRAGMA integrity_check'))
-              .single
-              .values
-              .single,
-          'ok');
+        (await database.rawQuery('PRAGMA integrity_check'))
+            .single
+            .values
+            .single,
+        'ok',
+      );
       expect(await database.rawQuery('PRAGMA foreign_key_check'), isEmpty);
       await database.close();
     } finally {

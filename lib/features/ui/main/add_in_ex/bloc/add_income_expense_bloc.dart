@@ -39,8 +39,9 @@ class AddIncomeExpenseBloc
     on<GetIncomeSource>(_getIncomeSource);
     on<GetExpenseCategories>(_getExpenseCategories);
     on<LoadWallets>(_loadWallets);
-    on<SetWallet>((event, emit) =>
-        emit(state.copyWith(selectedWalletId: event.walletId)));
+    on<SetWallet>(
+      (event, emit) => emit(state.copyWith(selectedWalletId: event.walletId)),
+    );
   }
 
   final DatabaseRepository _dbRepo;
@@ -95,11 +96,15 @@ class AddIncomeExpenseBloc
   }
 
   Future<void> _loadWallets(
-      LoadWallets event, Emitter<AddIncomeExpenseState> emit) async {
+    LoadWallets event,
+    Emitter<AddIncomeExpenseState> emit,
+  ) async {
     final wallets = await _dbRepo.getWallets(includeArchived: false);
     if (isClosed || wallets.isEmpty) return;
-    final defaultWallet = wallets.firstWhere((wallet) => wallet.isDefault,
-        orElse: () => wallets.first);
+    final defaultWallet = wallets.firstWhere(
+      (wallet) => wallet.isDefault,
+      orElse: () => wallets.first,
+    );
     emit(state.copyWith(wallets: wallets, selectedWalletId: defaultWallet.id!));
   }
 

@@ -43,28 +43,35 @@ class _GoalPlanningPageState extends State<GoalPlanningPage> {
     return Scaffold(
       backgroundColor: const Color(0xFF101010),
       appBar: AppBar(
-          backgroundColor: const Color(0xFF101010),
-          title: Text(l10n.smartGoalPlanning,
-              style: const TextStyle(color: Colors.white))),
+        backgroundColor: const Color(0xFF101010),
+        title: Text(
+          l10n.smartGoalPlanning,
+          style: const TextStyle(color: Colors.white),
+        ),
+      ),
       body: FutureBuilder(
-          future: _future,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState != ConnectionState.done) {
-              return const Center(
-                  child: CircularProgressIndicator(color: Color(0xFFF599DA)));
-            }
-            if (snapshot.hasError || _revision != _repository.revision) {
-              return Center(
-                  child: Text(
-                      snapshot.error?.toString() ??
-                          l10n.purchaseInsufficientInformation,
-                      style: const TextStyle(color: Colors.white70)));
-            }
-            return _GoalPlanForm(
-              repository: _repository,
-              contextData: snapshot.requireData,
+        future: _future,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState != ConnectionState.done) {
+            return const Center(
+              child: CircularProgressIndicator(color: Color(0xFFF599DA)),
             );
-          }),
+          }
+          if (snapshot.hasError || _revision != _repository.revision) {
+            return Center(
+              child: Text(
+                snapshot.error?.toString() ??
+                    l10n.purchaseInsufficientInformation,
+                style: const TextStyle(color: Colors.white70),
+              ),
+            );
+          }
+          return _GoalPlanForm(
+            repository: _repository,
+            contextData: snapshot.requireData,
+          );
+        },
+      ),
     );
   }
 }
@@ -156,119 +163,140 @@ class _GoalPlanFormState extends State<_GoalPlanForm> {
           )
         : null;
     final wallets = widget.contextData.wallets;
-    return ListView(padding: const EdgeInsets.all(20), children: [
-      _box(
-          child: Text(l10n.goalTrackingOnlyDisclosure,
-              style: const TextStyle(color: Colors.white70))),
-      const SizedBox(height: 12),
-      TextField(
+    return ListView(
+      padding: const EdgeInsets.all(20),
+      children: [
+        _box(
+          child: Text(
+            l10n.goalTrackingOnlyDisclosure,
+            style: const TextStyle(color: Colors.white70),
+          ),
+        ),
+        const SizedBox(height: 12),
+        TextField(
           controller: _target,
           keyboardType: const TextInputType.numberWithOptions(decimal: true),
           style: const TextStyle(color: Colors.white),
-          decoration: _decoration(l10n.targetAmount)),
-      if (!validTarget)
-        Padding(
-          padding: const EdgeInsets.only(top: 6),
-          child: Text(l10n.collectedHigher,
-              style: const TextStyle(color: Color(0xFFFF8A8A))),
+          decoration: _decoration(l10n.targetAmount),
         ),
-      const SizedBox(height: 12),
-      TextField(
+        if (!validTarget)
+          Padding(
+            padding: const EdgeInsets.only(top: 6),
+            child: Text(
+              l10n.collectedHigher,
+              style: const TextStyle(color: Color(0xFFFF8A8A)),
+            ),
+          ),
+        const SizedBox(height: 12),
+        TextField(
           controller: _whatIfContribution,
           keyboardType: const TextInputType.numberWithOptions(decimal: true),
           style: const TextStyle(color: Colors.white),
-          decoration: _decoration(l10n.goalWhatIfContribution)),
-      const SizedBox(height: 12),
-      DropdownButtonFormField<String>(
-        value: _frequency,
-        dropdownColor: const Color(0xFF292929),
-        style: const TextStyle(color: Colors.white),
-        decoration: _decoration(l10n.goalContributionFrequency),
-        items: [
-          DropdownMenuItem(value: 'weekly', child: Text(l10n.weekly)),
-          DropdownMenuItem(value: 'monthly', child: Text(l10n.monthly))
-        ],
-        onChanged: (value) => setState(() => _frequency = value ?? 'monthly'),
-      ),
-      const SizedBox(height: 12),
-      OutlinedButton.icon(
-        onPressed: () async {
-          final now = DateTime.now();
-          final today = DateTime(now.year, now.month, now.day);
-          final latest = DateTime(now.year + 30, now.month, now.day);
-          final stored = _targetDate;
-          final initial = stored == null || stored.isBefore(today)
-              ? DateTime(now.year, now.month + 3, now.day)
-              : stored.isAfter(latest)
-                  ? latest
-                  : stored;
-          final picked = await showDatePicker(
-            context: context,
-            initialDate: initial,
-            firstDate: today,
-            lastDate: latest,
-          );
-          if (picked != null && mounted) setState(() => _targetDate = picked);
-        },
-        icon: const Icon(Icons.event, color: Color(0xFFF599DA)),
-        label: Text(
+          decoration: _decoration(l10n.goalWhatIfContribution),
+        ),
+        const SizedBox(height: 12),
+        DropdownButtonFormField<String>(
+          value: _frequency,
+          dropdownColor: const Color(0xFF292929),
+          style: const TextStyle(color: Colors.white),
+          decoration: _decoration(l10n.goalContributionFrequency),
+          items: [
+            DropdownMenuItem(value: 'weekly', child: Text(l10n.weekly)),
+            DropdownMenuItem(value: 'monthly', child: Text(l10n.monthly)),
+          ],
+          onChanged: (value) => setState(() => _frequency = value ?? 'monthly'),
+        ),
+        const SizedBox(height: 12),
+        OutlinedButton.icon(
+          onPressed: () async {
+            final now = DateTime.now();
+            final today = DateTime(now.year, now.month, now.day);
+            final latest = DateTime(now.year + 30, now.month, now.day);
+            final stored = _targetDate;
+            final initial = stored == null || stored.isBefore(today)
+                ? DateTime(now.year, now.month + 3, now.day)
+                : stored.isAfter(latest)
+                    ? latest
+                    : stored;
+            final picked = await showDatePicker(
+              context: context,
+              initialDate: initial,
+              firstDate: today,
+              lastDate: latest,
+            );
+            if (picked != null && mounted) setState(() => _targetDate = picked);
+          },
+          icon: const Icon(Icons.event, color: Color(0xFFF599DA)),
+          label: Text(
             _targetDate == null
                 ? l10n.goalTargetDate
                 : '${l10n.goalTargetDate}: ${DateFormat.yMMMd(Localizations.localeOf(context).toString()).format(_targetDate!)}',
-            style: const TextStyle(color: Colors.white)),
-      ),
-      if (_targetDate != null)
-        Align(
+            style: const TextStyle(color: Colors.white),
+          ),
+        ),
+        if (_targetDate != null)
+          Align(
             alignment: Alignment.centerRight,
             child: TextButton(
               onPressed: () => setState(() => _targetDate = null),
-              child: Text(l10n.clear,
-                  style: const TextStyle(color: Color(0xFFF599DA))),
-            )),
-      const SizedBox(height: 8),
-      DropdownButtonFormField<int>(
-        value: _priority,
-        dropdownColor: const Color(0xFF292929),
-        style: const TextStyle(color: Colors.white),
-        decoration: _decoration(l10n.goalPriority),
-        items: [
-          DropdownMenuItem(value: 0, child: Text(l10n.none)),
-          for (var i = 1; i <= 5; i++)
-            DropdownMenuItem(value: i, child: Text('$i'))
-        ],
-        onChanged: (value) => setState(() => _priority = value ?? 0),
-      ),
-      const SizedBox(height: 12),
-      DropdownButtonFormField<int>(
-        value: wallets.any((w) => w.id == _walletId) ? _walletId : -1,
-        dropdownColor: const Color(0xFF292929),
-        style: const TextStyle(color: Colors.white),
-        decoration: _decoration(l10n.goalPlanningWallet),
-        items: [
-          DropdownMenuItem(value: -1, child: Text(l10n.none)),
-          ...wallets.map((wallet) =>
-              DropdownMenuItem(value: wallet.id, child: Text(wallet.name)))
-        ],
-        onChanged: (value) => setState(() => _walletId = value ?? -1),
-      ),
-      const SizedBox(height: 18),
-      if (projection != null) _projection(context, l10n, projection),
-      const SizedBox(height: 18),
-      FilledButton(
-        onPressed: _saving || !validTarget ? null : () => _save(targetMinor),
-        style: FilledButton.styleFrom(backgroundColor: const Color(0xFFF599DA)),
-        child: _saving
-            ? const SizedBox(
-                width: 20,
-                height: 20,
-                child: CircularProgressIndicator(strokeWidth: 2))
-            : Text(l10n.saveGoalPlan),
-      ),
-    ]);
+              child: Text(
+                l10n.clear,
+                style: const TextStyle(color: Color(0xFFF599DA)),
+              ),
+            ),
+          ),
+        const SizedBox(height: 8),
+        DropdownButtonFormField<int>(
+          value: _priority,
+          dropdownColor: const Color(0xFF292929),
+          style: const TextStyle(color: Colors.white),
+          decoration: _decoration(l10n.goalPriority),
+          items: [
+            DropdownMenuItem(value: 0, child: Text(l10n.none)),
+            for (var i = 1; i <= 5; i++)
+              DropdownMenuItem(value: i, child: Text('$i')),
+          ],
+          onChanged: (value) => setState(() => _priority = value ?? 0),
+        ),
+        const SizedBox(height: 12),
+        DropdownButtonFormField<int>(
+          value: wallets.any((w) => w.id == _walletId) ? _walletId : -1,
+          dropdownColor: const Color(0xFF292929),
+          style: const TextStyle(color: Colors.white),
+          decoration: _decoration(l10n.goalPlanningWallet),
+          items: [
+            DropdownMenuItem(value: -1, child: Text(l10n.none)),
+            ...wallets.map(
+              (wallet) =>
+                  DropdownMenuItem(value: wallet.id, child: Text(wallet.name)),
+            ),
+          ],
+          onChanged: (value) => setState(() => _walletId = value ?? -1),
+        ),
+        const SizedBox(height: 18),
+        if (projection != null) _projection(context, l10n, projection),
+        const SizedBox(height: 18),
+        FilledButton(
+          onPressed: _saving || !validTarget ? null : () => _save(targetMinor),
+          style:
+              FilledButton.styleFrom(backgroundColor: const Color(0xFFF599DA)),
+          child: _saving
+              ? const SizedBox(
+                  width: 20,
+                  height: 20,
+                  child: CircularProgressIndicator(strokeWidth: 2),
+                )
+              : Text(l10n.saveGoalPlan),
+        ),
+      ],
+    );
   }
 
   Widget _projection(
-      BuildContext context, AppLocalizations l10n, GoalPlanProjection p) {
+    BuildContext context,
+    AppLocalizations l10n,
+    GoalPlanProjection p,
+  ) {
     String money(int amount) => NumberFormat.currency(
           locale: Localizations.localeOf(context).toString(),
           name: widget.contextData.currency,
@@ -281,32 +309,47 @@ class _GoalPlanFormState extends State<_GoalPlanForm> {
       GoalFeasibility.unknown => l10n.goalAffordabilityUnknown,
     };
     return _box(
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      Text(status,
-          style: const TextStyle(
-              color: Color(0xFFF599DA), fontWeight: FontWeight.bold)),
-      const SizedBox(height: 8),
-      _row(l10n.goalRemaining, money(p.remainingMinor)),
-      _row(l10n.goalProgressPercent, '${p.progressPercent}%'),
-      if (p.requiredContributionMinor != null)
-        _row('${l10n.goalRequiredContribution} (${_frequencyName(context)})',
-            money(p.requiredContributionMinor!)),
-      if (p.estimatedCompletionDate != null)
-        _row(
-            l10n.goalEstimatedCompletion,
-            DateFormat.yMMMd(Localizations.localeOf(context).toString())
-                .format(p.estimatedCompletionDate!)),
-      if (p.whatIfCompletionDate != null)
-        _row(
-            l10n.goalWhatIfCompletion,
-            DateFormat.yMMMd(Localizations.localeOf(context).toString())
-                .format(p.whatIfCompletionDate!)),
-      if (widget.contextData.discretionaryMinorPerDay == null)
-        Padding(
-            padding: const EdgeInsets.only(top: 8),
-            child: Text(l10n.goalAffordabilityUnknown,
-                style: const TextStyle(color: Colors.white60))),
-    ]));
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            status,
+            style: const TextStyle(
+              color: Color(0xFFF599DA),
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 8),
+          _row(l10n.goalRemaining, money(p.remainingMinor)),
+          _row(l10n.goalProgressPercent, '${p.progressPercent}%'),
+          if (p.requiredContributionMinor != null)
+            _row(
+              '${l10n.goalRequiredContribution} (${_frequencyName(context)})',
+              money(p.requiredContributionMinor!),
+            ),
+          if (p.estimatedCompletionDate != null)
+            _row(
+              l10n.goalEstimatedCompletion,
+              DateFormat.yMMMd(Localizations.localeOf(context).toString())
+                  .format(p.estimatedCompletionDate!),
+            ),
+          if (p.whatIfCompletionDate != null)
+            _row(
+              l10n.goalWhatIfCompletion,
+              DateFormat.yMMMd(Localizations.localeOf(context).toString())
+                  .format(p.whatIfCompletionDate!),
+            ),
+          if (widget.contextData.discretionaryMinorPerDay == null)
+            Padding(
+              padding: const EdgeInsets.only(top: 8),
+              child: Text(
+                l10n.goalAffordabilityUnknown,
+                style: const TextStyle(color: Colors.white60),
+              ),
+            ),
+        ],
+      ),
+    );
   }
 
   String _frequencyName(BuildContext context) => _frequency == 'weekly'
@@ -330,9 +373,10 @@ class _GoalPlanFormState extends State<_GoalPlanForm> {
       await widget.repository.updateGoal(updated);
       if (mounted) Navigator.pop(context, true);
     } catch (error) {
-      if (mounted)
+      if (mounted) {
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text('$error')));
+      }
     } finally {
       if (mounted) setState(() => _saving = false);
     }
@@ -340,29 +384,34 @@ class _GoalPlanFormState extends State<_GoalPlanForm> {
 
   Widget _row(String label, String value) => Padding(
         padding: const EdgeInsets.symmetric(vertical: 4),
-        child: Row(children: [
-          Expanded(
-              child:
-                  Text(label, style: const TextStyle(color: Colors.white60))),
-          const SizedBox(width: 12),
-          Text(value, style: const TextStyle(color: Colors.white))
-        ]),
+        child: Row(
+          children: [
+            Expanded(
+              child: Text(label, style: const TextStyle(color: Colors.white60)),
+            ),
+            const SizedBox(width: 12),
+            Text(value, style: const TextStyle(color: Colors.white)),
+          ],
+        ),
       );
 
   InputDecoration _decoration(String label) => InputDecoration(
         labelText: label,
         labelStyle: const TextStyle(color: Colors.white60),
         enabledBorder: const OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.white24)),
+          borderSide: BorderSide(color: Colors.white24),
+        ),
         focusedBorder: const OutlineInputBorder(
-            borderSide: BorderSide(color: Color(0xFFF599DA))),
+          borderSide: BorderSide(color: Color(0xFFF599DA)),
+        ),
       );
 
   Widget _box({required Widget child}) => Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-            color: const Color(0xFF292929),
-            borderRadius: BorderRadius.circular(14)),
+          color: const Color(0xFF292929),
+          borderRadius: BorderRadius.circular(14),
+        ),
         child: child,
       );
 }

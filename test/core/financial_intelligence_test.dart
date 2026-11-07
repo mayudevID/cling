@@ -54,75 +54,95 @@ void main() {
     test(
         'compares equivalent month-to-date periods and ranks commitments first',
         () {
-      final result = generateFinancialInsights(FinancialInsightInput(
-        now: now,
-        monthSpendMinor: 180000,
-        monthTransactionCount: 6,
-        previousComparableSpendMinor: 150000,
-        previousComparableTransactionCount: 4,
-        monthBudgetMinor: 200000,
-        categories: const [
-          InsightCategoryData(
+      final result = generateFinancialInsights(
+        FinancialInsightInput(
+          now: now,
+          monthSpendMinor: 180000,
+          monthTransactionCount: 6,
+          previousComparableSpendMinor: 150000,
+          previousComparableTransactionCount: 4,
+          monthBudgetMinor: 200000,
+          categories: const [
+            InsightCategoryData(
               categoryId: 4,
               name: 'Food',
               currentMinor: 50000,
               previousMinor: 10000,
               currentCount: 3,
-              previousCount: 3),
-        ],
-        commitmentMinor: 40000,
-        goalProgressMinor: 25000,
-        currency: 'IDR',
-      ));
+              previousCount: 3,
+            ),
+          ],
+          commitmentMinor: 40000,
+          goalProgressMinor: 25000,
+          currency: 'IDR',
+        ),
+      );
       expect(result.first.type, FinancialInsightType.recurringCommitments);
-      expect(result.map((i) => i.type),
-          contains(FinancialInsightType.spendingTrend));
-      expect(result.map((i) => i.type),
-          contains(FinancialInsightType.categoryAnalysis));
-      expect(result.map((i) => i.type),
-          contains(FinancialInsightType.spendingPace));
-      expect(result.map((i) => i.type),
-          contains(FinancialInsightType.financialProgress));
-      final trend = result.singleWhere((i) =>
-          i.type == FinancialInsightType.spendingTrend && i.categoryId == null);
+      expect(
+        result.map((i) => i.type),
+        contains(FinancialInsightType.spendingTrend),
+      );
+      expect(
+        result.map((i) => i.type),
+        contains(FinancialInsightType.categoryAnalysis),
+      );
+      expect(
+        result.map((i) => i.type),
+        contains(FinancialInsightType.spendingPace),
+      );
+      expect(
+        result.map((i) => i.type),
+        contains(FinancialInsightType.financialProgress),
+      );
+      final trend = result.singleWhere(
+        (i) =>
+            i.type == FinancialInsightType.spendingTrend &&
+            i.categoryId == null,
+      );
       expect(trend.ratioPercent, 20);
       expect(trend.id, 'trend:2026-03');
       expect(
-          result.where((i) =>
-              i.type == FinancialInsightType.spendingTrend &&
-              i.categoryId == 4),
-          hasLength(1));
+        result.where(
+          (i) =>
+              i.type == FinancialInsightType.spendingTrend && i.categoryId == 4,
+        ),
+        hasLength(1),
+      );
     });
 
     test('suppresses percentage insights with sparse or tiny baselines', () {
-      final result = generateFinancialInsights(FinancialInsightInput(
-        now: now,
-        monthSpendMinor: 100000,
-        monthTransactionCount: 2,
-        previousComparableSpendMinor: 100,
-        previousComparableTransactionCount: 2,
-        monthBudgetMinor: null,
-        categories: const [],
-        commitmentMinor: 0,
-        goalProgressMinor: 0,
-        currency: 'IDR',
-      ));
+      final result = generateFinancialInsights(
+        FinancialInsightInput(
+          now: now,
+          monthSpendMinor: 100000,
+          monthTransactionCount: 2,
+          previousComparableSpendMinor: 100,
+          previousComparableTransactionCount: 2,
+          monthBudgetMinor: null,
+          categories: const [],
+          commitmentMinor: 0,
+          goalProgressMinor: 0,
+          currency: 'IDR',
+        ),
+      );
       expect(result, isEmpty);
     });
 
     test('zero baseline never fabricates an infinite percentage', () {
-      final result = generateFinancialInsights(FinancialInsightInput(
-        now: now,
-        monthSpendMinor: 100000,
-        monthTransactionCount: 4,
-        previousComparableSpendMinor: 0,
-        previousComparableTransactionCount: 0,
-        monthBudgetMinor: null,
-        categories: const [],
-        commitmentMinor: 0,
-        goalProgressMinor: 0,
-        currency: 'IDR',
-      ));
+      final result = generateFinancialInsights(
+        FinancialInsightInput(
+          now: now,
+          monthSpendMinor: 100000,
+          monthTransactionCount: 4,
+          previousComparableSpendMinor: 0,
+          previousComparableTransactionCount: 0,
+          monthBudgetMinor: null,
+          categories: const [],
+          commitmentMinor: 0,
+          goalProgressMinor: 0,
+          currency: 'IDR',
+        ),
+      );
       expect(result, isEmpty);
     });
   });

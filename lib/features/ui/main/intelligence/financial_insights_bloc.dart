@@ -59,21 +59,27 @@ class FinancialInsightsBloc
       );
       if (isClosed ||
           revision != _repository.revision ||
-          generation != _generation) return;
-      emit(FinancialInsightsState(
-        isLoading: false,
-        currency: input.currency,
-        insights: generateFinancialInsights(input),
-      ));
+          generation != _generation) {
+        return;
+      }
+      emit(
+        FinancialInsightsState(
+          isLoading: false,
+          currency: input.currency,
+          insights: generateFinancialInsights(input),
+        ),
+      );
     } catch (error) {
       if (!isClosed &&
           revision == _repository.revision &&
           generation == _generation) {
-        emit(FinancialInsightsState(
-          isLoading: false,
-          error: error.toString(),
-          currencyMismatch: error is FinancialInsightCurrencyException,
-        ));
+        emit(
+          FinancialInsightsState(
+            isLoading: false,
+            error: error.toString(),
+            currencyMismatch: error is FinancialInsightCurrencyException,
+          ),
+        );
       }
     }
   }

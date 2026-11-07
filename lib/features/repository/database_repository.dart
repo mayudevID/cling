@@ -224,14 +224,15 @@ class DatabaseRepository {
     for (final table in [
       RecurringExpenseMeta.table,
       BillMeta.table,
-      PlanningMeta.table
+      PlanningMeta.table,
     ]) {
       if ((await db.rawQuery('SELECT 1 FROM $table LIMIT 1')).isNotEmpty) {
         return true;
       }
     }
     if ((await db.rawQuery(
-            'SELECT 1 FROM ${WalletMeta.table} WHERE ${WalletMeta.id} != 1 LIMIT 1'))
+      'SELECT 1 FROM ${WalletMeta.table} WHERE ${WalletMeta.id} != 1 LIMIT 1',
+    ))
         .isNotEmpty) {
       return true;
     }
@@ -563,11 +564,13 @@ class DatabaseRepository {
         throw StateError('Account changed while saving goal plan.');
       }
       if (goalModel.planningWalletId != null) {
-        final wallet = await txn.query(WalletMeta.table,
-            columns: [WalletMeta.id],
-            where: '${WalletMeta.id}=?',
-            whereArgs: [goalModel.planningWalletId],
-            limit: 1);
+        final wallet = await txn.query(
+          WalletMeta.table,
+          columns: [WalletMeta.id],
+          where: '${WalletMeta.id}=?',
+          whereArgs: [goalModel.planningWalletId],
+          limit: 1,
+        );
         if (wallet.isEmpty) throw StateError('Planning wallet not found.');
       }
       final updated = await txn.rawUpdate(
@@ -837,26 +840,35 @@ class DatabaseRepository {
     ''', [
       _dateKey(currentStart),
       _dateKey(previousStart),
-      _dateKey(currentEnd)
+      _dateKey(currentEnd),
     ]);
-    final monthRows = await db.rawQuery('''
+    final monthRows = await db.rawQuery(
+      '''
       SELECT COALESCE(SUM(${ExpenseMeta.amountMinor}),0) AS amount_minor,
              COUNT(*) AS transaction_count
       FROM ${ExpenseMeta.nameTable}
       WHERE date(${ExpenseMeta.date}) >= date(?) AND date(${ExpenseMeta.date}) < date(?)
-    ''', [_dateKey(currentStart), _dateKey(currentEnd)]);
-    final prevRows = await db.rawQuery('''
+    ''',
+      [_dateKey(currentStart), _dateKey(currentEnd)],
+    );
+    final prevRows = await db.rawQuery(
+      '''
       SELECT COALESCE(SUM(${ExpenseMeta.amountMinor}),0) AS amount_minor,
              COUNT(*) AS transaction_count
       FROM ${ExpenseMeta.nameTable}
       WHERE date(${ExpenseMeta.date}) >= date(?) AND date(${ExpenseMeta.date}) < date(?)
-    ''', [_dateKey(previousStart), _dateKey(previousEnd)]);
-    final currencies = await db.rawQuery('''
+    ''',
+      [_dateKey(previousStart), _dateKey(previousEnd)],
+    );
+    final currencies = await db.rawQuery(
+      '''
       SELECT DISTINCT w.${WalletMeta.currency} AS currency
       FROM ${ExpenseMeta.nameTable} e
       JOIN ${WalletMeta.table} w ON w.${WalletMeta.id}=e.${ExpenseMeta.walletId}
       WHERE date(e.${ExpenseMeta.date}) >= date(?) AND date(e.${ExpenseMeta.date}) < date(?)
-    ''', [_dateKey(previousStart), _dateKey(currentEnd)]);
+    ''',
+      [_dateKey(previousStart), _dateKey(currentEnd)],
+    );
     final activeWallets = await getWallets(includeArchived: false);
     final insightCurrencies = currencies.map((row) => row['currency']).toSet();
     insightCurrencies.addAll(activeWallets.map((wallet) => wallet.currency));
@@ -867,26 +879,30 @@ class DatabaseRepository {
     for (final row in categories) {
       final key = '${row['category_id'] ?? 'unknown'}';
       final data = byCategory.putIfAbsent(
-          key,
-          () => {
-                'categoryId': row['category_id'] as int?,
-                'name': row['category_name'] as String,
-                'currentMinor': 0,
-                'previousMinor': 0,
-                'currentCount': 0,
-                'previousCount': 0,
-              });
+        key,
+        () => {
+          'categoryId': row['category_id'] as int?,
+          'name': row['category_name'] as String,
+          'currentMinor': 0,
+          'previousMinor': 0,
+          'currentCount': 0,
+          'previousCount': 0,
+        },
+      );
       final current = row['is_current'] == 1;
       data[current ? 'currentMinor' : 'previousMinor'] = row['amount_minor'];
       data[current ? 'currentCount' : 'previousCount'] =
           row['transaction_count'];
     }
     final runway = await getPaydayRunway(now);
-    final goalRows = await db.rawQuery('''
+    final goalRows = await db.rawQuery(
+      '''
       SELECT COALESCE(SUM(${GoalSavingMeta.amountMinor}),0) AS progress_minor
       FROM ${GoalSavingMeta.nameTable}
       WHERE date(${GoalSavingMeta.date}) >= date(?) AND date(${GoalSavingMeta.date}) < date(?)
-    ''', [_dateKey(currentStart), _dateKey(currentEnd)]);
+    ''',
+      [_dateKey(currentStart), _dateKey(currentEnd)],
+    );
     return FinancialInsightInput(
       now: now,
       monthSpendMinor: (monthRows.single['amount_minor'] as num).toInt(),
@@ -898,14 +914,16 @@ class DatabaseRepository {
           (prevRows.single['transaction_count'] as num).toInt(),
       monthBudgetMinor: monthlyBudgetMinor,
       categories: byCategory.values
-          .map((row) => InsightCategoryData(
-                categoryId: row['categoryId'] as int?,
-                name: row['name'] as String,
-                currentMinor: row['currentMinor'] as int,
-                previousMinor: row['previousMinor'] as int,
-                currentCount: row['currentCount'] as int,
-                previousCount: row['previousCount'] as int,
-              ))
+          .map(
+            (row) => InsightCategoryData(
+              categoryId: row['categoryId'] as int?,
+              name: row['name'] as String,
+              currentMinor: row['currentMinor'] as int,
+              previousMinor: row['previousMinor'] as int,
+              currentCount: row['currentCount'] as int,
+              previousCount: row['previousCount'] as int,
+            ),
+          )
           .toList(),
       commitmentMinor:
           runway == null ? 0 : runway.billsMinor + runway.recurringMinor,
@@ -928,12 +946,15 @@ class DatabaseRepository {
     final goal = await getSingleGoalModel(goalId);
     final since = DateTime(today.year, today.month, today.day)
         .subtract(const Duration(days: 89));
-    final rows = await db.rawQuery('''
+    final rows = await db.rawQuery(
+      '''
       SELECT COALESCE(SUM(${GoalSavingMeta.amountMinor}),0) AS amount_minor
       FROM ${GoalSavingMeta.nameTable}
       WHERE ${GoalSavingMeta.idGoal}=? AND date(${GoalSavingMeta.date}) >= date(?)
         AND date(${GoalSavingMeta.date}) <= date(?)
-    ''', [goalId, _dateKey(since), _dateKey(today)]);
+    ''',
+      [goalId, _dateKey(since), _dateKey(today)],
+    );
     final wallets = await getWallets(includeArchived: false);
     WalletModel? planningWallet;
     for (final wallet in wallets) {
@@ -1045,10 +1066,12 @@ class DatabaseRepository {
   }
 
   Future<int> getDefaultWalletId() async {
-    final rows = await db.query(WalletMeta.table,
-        columns: [WalletMeta.id],
-        where: '${WalletMeta.isDefault}=1 AND ${WalletMeta.archived}=0',
-        limit: 1);
+    final rows = await db.query(
+      WalletMeta.table,
+      columns: [WalletMeta.id],
+      where: '${WalletMeta.isDefault}=1 AND ${WalletMeta.archived}=0',
+      limit: 1,
+    );
     if (rows.isEmpty) throw StateError('No active default wallet');
     return rows.single[WalletMeta.id] as int;
   }
@@ -1056,7 +1079,8 @@ class DatabaseRepository {
   Future<int> saveWallet(WalletModel wallet) async {
     if (wallet.name.trim().isEmpty || wallet.openingBalanceMinor < 0) {
       throw ArgumentError(
-          'Wallet name and nonnegative opening balance are required.');
+        'Wallet name and nonnegative opening balance are required.',
+      );
     }
     final now = DateTime.now().toUtc().toIso8601String();
     return db.transaction((txn) async {
@@ -1076,8 +1100,12 @@ class DatabaseRepository {
         return txn
             .insert(WalletMeta.table, {...values, WalletMeta.createdAt: now});
       }
-      final changed = await txn.update(WalletMeta.table, values,
-          where: '${WalletMeta.id}=?', whereArgs: [wallet.id]);
+      final changed = await txn.update(
+        WalletMeta.table,
+        values,
+        where: '${WalletMeta.id}=?',
+        whereArgs: [wallet.id],
+      );
       if (changed != 1) throw StateError('Wallet not found');
       return wallet.id!;
     });
@@ -1085,40 +1113,51 @@ class DatabaseRepository {
 
   Future<void> archiveWallet(int walletId) async {
     await db.transaction((txn) async {
-      final rows = await txn.query(WalletMeta.table,
-          where: '${WalletMeta.id}=?', whereArgs: [walletId]);
+      final rows = await txn.query(
+        WalletMeta.table,
+        where: '${WalletMeta.id}=?',
+        whereArgs: [walletId],
+      );
       if (rows.isEmpty) throw StateError('Wallet not found');
-      if (rows.single[WalletMeta.isDefault] == 1)
+      if (rows.single[WalletMeta.isDefault] == 1) {
         throw StateError('Choose another default wallet first');
+      }
       await txn.update(
-          WalletMeta.table,
-          {
-            WalletMeta.archived: 1,
-            WalletMeta.updatedAt: DateTime.now().toUtc().toIso8601String()
-          },
-          where: '${WalletMeta.id}=?',
-          whereArgs: [walletId]);
+        WalletMeta.table,
+        {
+          WalletMeta.archived: 1,
+          WalletMeta.updatedAt: DateTime.now().toUtc().toIso8601String(),
+        },
+        where: '${WalletMeta.id}=?',
+        whereArgs: [walletId],
+      );
     });
   }
 
-  Future<int> transfer(
-      {required int sourceWalletId,
-      required int destinationWalletId,
-      required int amountMinor,
-      required DateTime date,
-      String? note}) async {
-    if (sourceWalletId == destinationWalletId || amountMinor <= 0)
+  Future<int> transfer({
+    required int sourceWalletId,
+    required int destinationWalletId,
+    required int amountMinor,
+    required DateTime date,
+    String? note,
+  }) async {
+    if (sourceWalletId == destinationWalletId || amountMinor <= 0) {
       throw ArgumentError(
-          'Transfer requires different wallets and positive amount.');
+        'Transfer requires different wallets and positive amount.',
+      );
+    }
     return db.transaction((txn) async {
       final currencies = <String>[];
       for (final id in [sourceWalletId, destinationWalletId]) {
-        final rows = await txn.query(WalletMeta.table,
-            columns: [WalletMeta.archived, WalletMeta.currency],
-            where: '${WalletMeta.id}=?',
-            whereArgs: [id]);
-        if (rows.isEmpty || rows.single[WalletMeta.archived] == 1)
+        final rows = await txn.query(
+          WalletMeta.table,
+          columns: [WalletMeta.archived, WalletMeta.currency],
+          where: '${WalletMeta.id}=?',
+          whereArgs: [id],
+        );
+        if (rows.isEmpty || rows.single[WalletMeta.archived] == 1) {
           throw StateError('Transfer wallets must be active');
+        }
         currencies.add(rows.single[WalletMeta.currency] as String);
       }
       if (currencies[0] != currencies[1]) {
@@ -1300,38 +1339,47 @@ class DatabaseRepository {
   }
 
   Future<void> _requireWallet(int id) async {
-    final rows = await db.query(WalletMeta.table,
-        columns: [WalletMeta.id],
-        where: '${WalletMeta.id}=?',
-        whereArgs: [id],
-        limit: 1);
+    final rows = await db.query(
+      WalletMeta.table,
+      columns: [WalletMeta.id],
+      where: '${WalletMeta.id}=?',
+      whereArgs: [id],
+      limit: 1,
+    );
     if (rows.isEmpty) throw StateError('Wallet not found');
   }
 
   Future<void> _requireActiveWallet(int id) async {
-    final rows = await db.query(WalletMeta.table,
-        columns: [WalletMeta.archived],
-        where: '${WalletMeta.id}=?',
-        whereArgs: [id],
-        limit: 1);
-    if (rows.isEmpty || rows.single[WalletMeta.archived] == 1)
+    final rows = await db.query(
+      WalletMeta.table,
+      columns: [WalletMeta.archived],
+      where: '${WalletMeta.id}=?',
+      whereArgs: [id],
+      limit: 1,
+    );
+    if (rows.isEmpty || rows.single[WalletMeta.archived] == 1) {
       throw StateError('Wallet must be active');
+    }
   }
 
   Future<void> deleteExpense(int id) async {
     await db.transaction((txn) async {
       await txn.update(
-          RecurringExpenseOccurrenceMeta.table,
-          {
-            RecurringExpenseOccurrenceMeta.status: 'due',
-            RecurringExpenseOccurrenceMeta.expenseId: null,
-            RecurringExpenseOccurrenceMeta.updatedAt:
-                DateTime.now().toUtc().toIso8601String(),
-          },
-          where: '${RecurringExpenseOccurrenceMeta.expenseId}=?',
-          whereArgs: [id]);
-      await txn.delete(ExpenseMeta.nameTable,
-          where: '${ExpenseMeta.id}=?', whereArgs: [id]);
+        RecurringExpenseOccurrenceMeta.table,
+        {
+          RecurringExpenseOccurrenceMeta.status: 'due',
+          RecurringExpenseOccurrenceMeta.expenseId: null,
+          RecurringExpenseOccurrenceMeta.updatedAt:
+              DateTime.now().toUtc().toIso8601String(),
+        },
+        where: '${RecurringExpenseOccurrenceMeta.expenseId}=?',
+        whereArgs: [id],
+      );
+      await txn.delete(
+        ExpenseMeta.nameTable,
+        where: '${ExpenseMeta.id}=?',
+        whereArgs: [id],
+      );
     });
   }
 
@@ -1826,11 +1874,13 @@ class DatabaseRepository {
       throw ArgumentError('End date must be on or after start date.');
     }
     await _requireActiveWallet(rule.walletId);
-    final category = await db.query(ExpenseCategoriesMeta.nameTable,
-        columns: [ExpenseCategoriesMeta.id],
-        where: '${ExpenseCategoriesMeta.id}=?',
-        whereArgs: [rule.categoryId],
-        limit: 1);
+    final category = await db.query(
+      ExpenseCategoriesMeta.nameTable,
+      columns: [ExpenseCategoriesMeta.id],
+      where: '${ExpenseCategoriesMeta.id}=?',
+      whereArgs: [rule.categoryId],
+      limit: 1,
+    );
     if (category.isEmpty) throw StateError('Expense category not found.');
     final now = DateTime.now().toUtc().toIso8601String();
     final today = RecurringExpenseSchedule.dateOnly(DateTime.now());
@@ -1863,16 +1913,22 @@ class DatabaseRepository {
         RecurringExpenseMeta.createdAt: now,
       });
     }
-    final changed = await db.update(RecurringExpenseMeta.table, values,
-        where: '${RecurringExpenseMeta.id}=?', whereArgs: [rule.id]);
+    final changed = await db.update(
+      RecurringExpenseMeta.table,
+      values,
+      where: '${RecurringExpenseMeta.id}=?',
+      whereArgs: [rule.id],
+    );
     if (changed != 1) throw StateError('Recurring expense rule not found.');
     return rule.id!;
   }
 
   Future<List<RecurringExpenseRuleModel>> getRecurringExpenseRules() async {
-    final rows = await db.query(RecurringExpenseMeta.table,
-        orderBy:
-            '${RecurringExpenseMeta.enabled} DESC, ${RecurringExpenseMeta.name} COLLATE NOCASE');
+    final rows = await db.query(
+      RecurringExpenseMeta.table,
+      orderBy:
+          '${RecurringExpenseMeta.enabled} DESC, ${RecurringExpenseMeta.name} COLLATE NOCASE',
+    );
     return rows.map(RecurringExpenseRuleModel.fromMap).toList();
   }
 
@@ -1894,8 +1950,12 @@ class DatabaseRepository {
 
   Future<void> setRecurringExpenseEnabled(int id, bool enabled) async {
     await db.transaction((txn) async {
-      final rules = await txn.query(RecurringExpenseMeta.table,
-          where: '${RecurringExpenseMeta.id}=?', whereArgs: [id], limit: 1);
+      final rules = await txn.query(
+        RecurringExpenseMeta.table,
+        where: '${RecurringExpenseMeta.id}=?',
+        whereArgs: [id],
+        limit: 1,
+      );
       if (rules.isEmpty) throw StateError('Recurring expense rule not found.');
       final rule = rules.single;
       final now = DateTime.now();
@@ -1903,23 +1963,28 @@ class DatabaseRepository {
           ? RecurringExpenseSchedule.firstOnOrAfter(
               frequency: rule[RecurringExpenseMeta.frequency] as String,
               scheduledDay: rule[RecurringExpenseMeta.scheduledDay] as int,
-              from: now)
+              from: now,
+            )
           : DateTime.parse(rule[RecurringExpenseMeta.nextDate] as String);
       await txn.update(
-          RecurringExpenseMeta.table,
-          {
-            RecurringExpenseMeta.enabled: enabled ? 1 : 0,
-            RecurringExpenseMeta.nextDate: _dateKey(nextDate),
-            RecurringExpenseMeta.updatedAt: now.toUtc().toIso8601String(),
-          },
-          where: '${RecurringExpenseMeta.id}=?',
-          whereArgs: [id]);
+        RecurringExpenseMeta.table,
+        {
+          RecurringExpenseMeta.enabled: enabled ? 1 : 0,
+          RecurringExpenseMeta.nextDate: _dateKey(nextDate),
+          RecurringExpenseMeta.updatedAt: now.toUtc().toIso8601String(),
+        },
+        where: '${RecurringExpenseMeta.id}=?',
+        whereArgs: [id],
+      );
     });
   }
 
   Future<void> deleteRecurringExpenseRule(int id) async {
-    await db.delete(RecurringExpenseMeta.table,
-        where: '${RecurringExpenseMeta.id}=?', whereArgs: [id]);
+    await db.delete(
+      RecurringExpenseMeta.table,
+      where: '${RecurringExpenseMeta.id}=?',
+      whereArgs: [id],
+    );
   }
 
   Future<int> _insertPlannedExpense(
@@ -1945,9 +2010,11 @@ class DatabaseRepository {
   Future<void> reconcileFinancialPlanning(DateTime asOf) async {
     final today = RecurringExpenseSchedule.dateOnly(asOf);
     await db.transaction((txn) async {
-      final rules = await txn.query(RecurringExpenseMeta.table,
-          where: '${RecurringExpenseMeta.enabled}=1',
-          orderBy: '${RecurringExpenseMeta.id}');
+      final rules = await txn.query(
+        RecurringExpenseMeta.table,
+        where: '${RecurringExpenseMeta.enabled}=1',
+        orderBy: RecurringExpenseMeta.id,
+      );
       for (final rule in rules) {
         final ruleId = rule[RecurringExpenseMeta.id] as int;
         var due = DateTime.parse(rule[RecurringExpenseMeta.nextDate] as String);
@@ -1978,16 +2045,17 @@ class DatabaseRepository {
           );
           if (occurrenceId == 0) {
             final existingOccurrence = await txn.query(
-                RecurringExpenseOccurrenceMeta.table,
-                columns: [
-                  RecurringExpenseOccurrenceMeta.id,
-                  RecurringExpenseOccurrenceMeta.status,
-                  RecurringExpenseOccurrenceMeta.expenseId
-                ],
-                where:
-                    '${RecurringExpenseOccurrenceMeta.ruleId}=? AND ${RecurringExpenseOccurrenceMeta.scheduledDate}=?',
-                whereArgs: [ruleId, key],
-                limit: 1);
+              RecurringExpenseOccurrenceMeta.table,
+              columns: [
+                RecurringExpenseOccurrenceMeta.id,
+                RecurringExpenseOccurrenceMeta.status,
+                RecurringExpenseOccurrenceMeta.expenseId,
+              ],
+              where:
+                  '${RecurringExpenseOccurrenceMeta.ruleId}=? AND ${RecurringExpenseOccurrenceMeta.scheduledDate}=?',
+              whereArgs: [ruleId, key],
+              limit: 1,
+            );
             if (existingOccurrence.isNotEmpty &&
                 existingOccurrence
                         .single[RecurringExpenseOccurrenceMeta.expenseId] ==
@@ -2001,34 +2069,41 @@ class DatabaseRepository {
           }
           if (occurrenceId != 0 &&
               rule[RecurringExpenseMeta.postingMode] == 'automatic') {
-            final walletRows = await txn.query(WalletMeta.table,
-                columns: [WalletMeta.archived],
-                where: '${WalletMeta.id}=?',
-                whereArgs: [rule[RecurringExpenseMeta.walletId]],
-                limit: 1);
+            final walletRows = await txn.query(
+              WalletMeta.table,
+              columns: [WalletMeta.archived],
+              where: '${WalletMeta.id}=?',
+              whereArgs: [rule[RecurringExpenseMeta.walletId]],
+              limit: 1,
+            );
             if (walletRows.isEmpty ||
                 walletRows.single[WalletMeta.archived] == 1) {
-              await txn.update(RecurringExpenseOccurrenceMeta.table,
-                  {RecurringExpenseOccurrenceMeta.status: 'blocked'},
-                  where: '${RecurringExpenseOccurrenceMeta.id}=?',
-                  whereArgs: [occurrenceId]);
-            } else {
-              final expenseId = await _insertPlannedExpense(txn,
-                  title: rule[RecurringExpenseMeta.name] as String,
-                  amountMinor: rule[RecurringExpenseMeta.amount] as int,
-                  categoryId: rule[RecurringExpenseMeta.categoryId] as int,
-                  walletId: rule[RecurringExpenseMeta.walletId] as int,
-                  date: due);
               await txn.update(
-                  RecurringExpenseOccurrenceMeta.table,
-                  {
-                    RecurringExpenseOccurrenceMeta.expenseId: expenseId,
-                    RecurringExpenseOccurrenceMeta.status: 'paid',
-                    RecurringExpenseOccurrenceMeta.updatedAt:
-                        DateTime.now().toUtc().toIso8601String(),
-                  },
-                  where: '${RecurringExpenseOccurrenceMeta.id}=?',
-                  whereArgs: [occurrenceId]);
+                RecurringExpenseOccurrenceMeta.table,
+                {RecurringExpenseOccurrenceMeta.status: 'blocked'},
+                where: '${RecurringExpenseOccurrenceMeta.id}=?',
+                whereArgs: [occurrenceId],
+              );
+            } else {
+              final expenseId = await _insertPlannedExpense(
+                txn,
+                title: rule[RecurringExpenseMeta.name] as String,
+                amountMinor: rule[RecurringExpenseMeta.amount] as int,
+                categoryId: rule[RecurringExpenseMeta.categoryId] as int,
+                walletId: rule[RecurringExpenseMeta.walletId] as int,
+                date: due,
+              );
+              await txn.update(
+                RecurringExpenseOccurrenceMeta.table,
+                {
+                  RecurringExpenseOccurrenceMeta.expenseId: expenseId,
+                  RecurringExpenseOccurrenceMeta.status: 'paid',
+                  RecurringExpenseOccurrenceMeta.updatedAt:
+                      DateTime.now().toUtc().toIso8601String(),
+                },
+                where: '${RecurringExpenseOccurrenceMeta.id}=?',
+                whereArgs: [occurrenceId],
+              );
             }
           }
           due = RecurringExpenseSchedule.next(
@@ -2037,25 +2112,27 @@ class DatabaseRepository {
             previous: due,
           );
           await txn.update(
-              RecurringExpenseMeta.table,
-              {
-                RecurringExpenseMeta.nextDate: _dateKey(due),
-                RecurringExpenseMeta.updatedAt:
-                    DateTime.now().toUtc().toIso8601String()
-              },
-              where: '${RecurringExpenseMeta.id}=?',
-              whereArgs: [ruleId]);
+            RecurringExpenseMeta.table,
+            {
+              RecurringExpenseMeta.nextDate: _dateKey(due),
+              RecurringExpenseMeta.updatedAt:
+                  DateTime.now().toUtc().toIso8601String(),
+            },
+            where: '${RecurringExpenseMeta.id}=?',
+            whereArgs: [ruleId],
+          );
         }
         if (endDate != null && due.isAfter(endDate)) {
           await txn.update(
-              RecurringExpenseMeta.table,
-              {
-                RecurringExpenseMeta.enabled: 0,
-                RecurringExpenseMeta.updatedAt:
-                    DateTime.now().toUtc().toIso8601String()
-              },
-              where: '${RecurringExpenseMeta.id}=?',
-              whereArgs: [ruleId]);
+            RecurringExpenseMeta.table,
+            {
+              RecurringExpenseMeta.enabled: 0,
+              RecurringExpenseMeta.updatedAt:
+                  DateTime.now().toUtc().toIso8601String(),
+            },
+            where: '${RecurringExpenseMeta.id}=?',
+            whereArgs: [ruleId],
+          );
         }
       }
       await _deliverPlanningReminders(txn, today);
@@ -2063,9 +2140,13 @@ class DatabaseRepository {
   }
 
   Future<void> _deliverPlanningReminders(
-      Transaction txn, DateTime today) async {
-    final bills = await txn.query(BillMeta.table,
-        where: '${BillMeta.expenseId} IS NULL AND ${BillMeta.isCancelled}=0');
+    Transaction txn,
+    DateTime today,
+  ) async {
+    final bills = await txn.query(
+      BillMeta.table,
+      where: '${BillMeta.expenseId} IS NULL AND ${BillMeta.isCancelled}=0',
+    );
     for (final bill in bills) {
       final due = DateTime.parse(bill[BillMeta.dueDate] as String);
       final days =
@@ -2075,15 +2156,16 @@ class DatabaseRepository {
       if (reminderBit == null || mask & reminderBit == 0) continue;
       final billId = bill[BillMeta.id] as int;
       final marker = await txn.insert(
-          PlanningReminderMeta.table,
-          {
-            PlanningReminderMeta.billId: billId,
-            PlanningReminderMeta.reminderDays: days,
-            PlanningReminderMeta.scheduledDate: _dateKey(due),
-            PlanningReminderMeta.deliveredAt:
-                DateTime.now().toUtc().toIso8601String(),
-          },
-          conflictAlgorithm: ConflictAlgorithm.ignore);
+        PlanningReminderMeta.table,
+        {
+          PlanningReminderMeta.billId: billId,
+          PlanningReminderMeta.reminderDays: days,
+          PlanningReminderMeta.scheduledDate: _dateKey(due),
+          PlanningReminderMeta.deliveredAt:
+              DateTime.now().toUtc().toIso8601String(),
+        },
+        conflictAlgorithm: ConflictAlgorithm.ignore,
+      );
       if (marker != 0) {
         await txn.insert(NotificationMeta.nameTable, {
           NotificationMeta.title: 'Bill reminder',
@@ -2114,81 +2196,103 @@ class DatabaseRepository {
       BillMeta.isCancelled: bill.isCancelled ? 1 : 0,
       BillMeta.updatedAt: now,
     };
-    if (bill.id == null)
+    if (bill.id == null) {
       return db.insert(BillMeta.table, {
         ...values,
         BillMeta.createdAt: now,
       });
-    final changed = await db.update(BillMeta.table, values,
-        where: '${BillMeta.id}=? AND ${BillMeta.expenseId} IS NULL',
-        whereArgs: [bill.id]);
+    }
+    final changed = await db.update(
+      BillMeta.table,
+      values,
+      where: '${BillMeta.id}=? AND ${BillMeta.expenseId} IS NULL',
+      whereArgs: [bill.id],
+    );
     if (changed != 1) throw StateError('Bill is paid or does not exist.');
     return bill.id!;
   }
 
-  Future<List<PlanningBillModel>> getBills(
-      {DateTime? asOf, bool includePaid = true}) async {
-    final rows = await db.query(BillMeta.table,
-        where: includePaid
-            ? null
-            : '${BillMeta.expenseId} IS NULL AND ${BillMeta.isCancelled}=0',
-        orderBy: '${BillMeta.dueDate} ASC, ${BillMeta.id} ASC');
+  Future<List<PlanningBillModel>> getBills({
+    DateTime? asOf,
+    bool includePaid = true,
+  }) async {
+    final rows = await db.query(
+      BillMeta.table,
+      where: includePaid
+          ? null
+          : '${BillMeta.expenseId} IS NULL AND ${BillMeta.isCancelled}=0',
+      orderBy: '${BillMeta.dueDate} ASC, ${BillMeta.id} ASC',
+    );
     return rows.map(PlanningBillModel.fromMap).toList();
   }
 
   Future<int> payBill(int billId, DateTime paidAt) async =>
       db.transaction((txn) async {
-        final rows = await txn.query(BillMeta.table,
-            where: '${BillMeta.id}=?', whereArgs: [billId], limit: 1);
+        final rows = await txn.query(
+          BillMeta.table,
+          where: '${BillMeta.id}=?',
+          whereArgs: [billId],
+          limit: 1,
+        );
         if (rows.isEmpty) throw StateError('Bill not found.');
         final bill = rows.single;
         final existingExpense = bill[BillMeta.expenseId] as int?;
         if (existingExpense != null) return existingExpense;
-        if (bill[BillMeta.isCancelled] == 1)
+        if (bill[BillMeta.isCancelled] == 1) {
           throw StateError('Cancelled bill cannot be paid.');
-        final expenseId = await _insertPlannedExpense(txn,
-            title: bill[BillMeta.title] as String,
-            amountMinor: bill[BillMeta.amount] as int,
-            categoryId: bill[BillMeta.categoryId] as int,
-            walletId: bill[BillMeta.walletId] as int,
-            date: paidAt);
+        }
+        final expenseId = await _insertPlannedExpense(
+          txn,
+          title: bill[BillMeta.title] as String,
+          amountMinor: bill[BillMeta.amount] as int,
+          categoryId: bill[BillMeta.categoryId] as int,
+          walletId: bill[BillMeta.walletId] as int,
+          date: paidAt,
+        );
         final changed = await txn.update(
-            BillMeta.table,
-            {
-              BillMeta.expenseId: expenseId,
-              BillMeta.updatedAt: DateTime.now().toUtc().toIso8601String()
-            },
-            where: '${BillMeta.id}=? AND ${BillMeta.expenseId} IS NULL',
-            whereArgs: [billId]);
-        if (changed != 1)
+          BillMeta.table,
+          {
+            BillMeta.expenseId: expenseId,
+            BillMeta.updatedAt: DateTime.now().toUtc().toIso8601String(),
+          },
+          where: '${BillMeta.id}=? AND ${BillMeta.expenseId} IS NULL',
+          whereArgs: [billId],
+        );
+        if (changed != 1) {
           throw StateError('Bill payment raced with another update.');
+        }
         return expenseId;
       });
 
   Future<void> linkBillExpense(int billId, int expenseId) async =>
       db.transaction((txn) async {
-        final expense = await txn.query(ExpenseMeta.nameTable,
-            columns: [ExpenseMeta.id],
-            where: '${ExpenseMeta.id}=?',
-            whereArgs: [expenseId],
-            limit: 1);
+        final expense = await txn.query(
+          ExpenseMeta.nameTable,
+          columns: [ExpenseMeta.id],
+          where: '${ExpenseMeta.id}=?',
+          whereArgs: [expenseId],
+          limit: 1,
+        );
         if (expense.isEmpty) throw StateError('Expense not found.');
         final changed = await txn.update(
-            BillMeta.table,
-            {
-              BillMeta.expenseId: expenseId,
-              BillMeta.updatedAt: DateTime.now().toUtc().toIso8601String()
-            },
-            where:
-                '${BillMeta.id}=? AND ${BillMeta.expenseId} IS NULL AND ${BillMeta.isCancelled}=0',
-            whereArgs: [billId]);
+          BillMeta.table,
+          {
+            BillMeta.expenseId: expenseId,
+            BillMeta.updatedAt: DateTime.now().toUtc().toIso8601String(),
+          },
+          where:
+              '${BillMeta.id}=? AND ${BillMeta.expenseId} IS NULL AND ${BillMeta.isCancelled}=0',
+          whereArgs: [billId],
+        );
         if (changed != 1) throw StateError('Bill already paid or cancelled.');
       });
 
   Future<List<ExpenseModel>> getBillExpenseCandidates(
-      PlanningBillModel bill) async {
+    PlanningBillModel bill,
+  ) async {
     final due = _dateKey(bill.dueDate);
-    final rows = await db.rawQuery('''
+    final rows = await db.rawQuery(
+      '''
       SELECT e.* FROM ${ExpenseMeta.nameTable} e
       WHERE e.${ExpenseMeta.amountMinor}=?
         AND e.${ExpenseMeta.idCategories}=?
@@ -2197,125 +2301,151 @@ class DatabaseRepository {
         AND NOT EXISTS (SELECT 1 FROM ${RecurringExpenseOccurrenceMeta.table} o WHERE o.${RecurringExpenseOccurrenceMeta.expenseId}=e.${ExpenseMeta.id})
       ORDER BY e.${ExpenseMeta.date} DESC, e.${ExpenseMeta.id} DESC
       LIMIT 20
-    ''', [bill.amountMinor, bill.categoryId, due, due]);
+    ''',
+      [bill.amountMinor, bill.categoryId, due, due],
+    );
     return rows.map(ExpenseModel.fromDatabase).toList();
   }
 
   Future<int> payRecurringExpenseOccurrence(
-          int occurrenceId, DateTime paidAt) async =>
+    int occurrenceId,
+    DateTime paidAt,
+  ) async =>
       db.transaction((txn) async {
-        final rows = await txn.query(RecurringExpenseOccurrenceMeta.table,
-            where: '${RecurringExpenseOccurrenceMeta.id}=?',
-            whereArgs: [occurrenceId],
-            limit: 1);
-        if (rows.isEmpty)
+        final rows = await txn.query(
+          RecurringExpenseOccurrenceMeta.table,
+          where: '${RecurringExpenseOccurrenceMeta.id}=?',
+          whereArgs: [occurrenceId],
+          limit: 1,
+        );
+        if (rows.isEmpty) {
           throw StateError('Recurring expense occurrence not found.');
+        }
         final row = rows.single;
         final existing = row[RecurringExpenseOccurrenceMeta.expenseId] as int?;
         if (existing != null) return existing;
         if (row[RecurringExpenseOccurrenceMeta.status] == 'skipped') {
           throw StateError('Skipped occurrence cannot be paid.');
         }
-        final rules = await txn.query(RecurringExpenseMeta.table,
-            columns: [RecurringExpenseMeta.name],
-            where: '${RecurringExpenseMeta.id}=?',
-            whereArgs: [row[RecurringExpenseOccurrenceMeta.ruleId]],
-            limit: 1);
-        if (rules.isEmpty)
+        final rules = await txn.query(
+          RecurringExpenseMeta.table,
+          columns: [RecurringExpenseMeta.name],
+          where: '${RecurringExpenseMeta.id}=?',
+          whereArgs: [row[RecurringExpenseOccurrenceMeta.ruleId]],
+          limit: 1,
+        );
+        if (rules.isEmpty) {
           throw StateError('Recurring expense rule not found.');
-        final expenseId = await _insertPlannedExpense(txn,
-            title: rules.single[RecurringExpenseMeta.name] as String,
-            amountMinor: row[RecurringExpenseOccurrenceMeta.amount] as int,
-            categoryId: row[RecurringExpenseOccurrenceMeta.categoryId] as int,
-            walletId: row[RecurringExpenseOccurrenceMeta.walletId] as int,
-            date: paidAt);
+        }
+        final expenseId = await _insertPlannedExpense(
+          txn,
+          title: rules.single[RecurringExpenseMeta.name] as String,
+          amountMinor: row[RecurringExpenseOccurrenceMeta.amount] as int,
+          categoryId: row[RecurringExpenseOccurrenceMeta.categoryId] as int,
+          walletId: row[RecurringExpenseOccurrenceMeta.walletId] as int,
+          date: paidAt,
+        );
         final changed = await txn.update(
-            RecurringExpenseOccurrenceMeta.table,
-            {
-              RecurringExpenseOccurrenceMeta.expenseId: expenseId,
-              RecurringExpenseOccurrenceMeta.status: 'paid',
-              RecurringExpenseOccurrenceMeta.updatedAt:
-                  DateTime.now().toUtc().toIso8601String(),
-            },
-            where:
-                '${RecurringExpenseOccurrenceMeta.id}=? AND ${RecurringExpenseOccurrenceMeta.expenseId} IS NULL',
-            whereArgs: [occurrenceId]);
-        if (changed != 1)
+          RecurringExpenseOccurrenceMeta.table,
+          {
+            RecurringExpenseOccurrenceMeta.expenseId: expenseId,
+            RecurringExpenseOccurrenceMeta.status: 'paid',
+            RecurringExpenseOccurrenceMeta.updatedAt:
+                DateTime.now().toUtc().toIso8601String(),
+          },
+          where:
+              '${RecurringExpenseOccurrenceMeta.id}=? AND ${RecurringExpenseOccurrenceMeta.expenseId} IS NULL',
+          whereArgs: [occurrenceId],
+        );
+        if (changed != 1) {
           throw StateError('Occurrence payment raced with another update.');
+        }
         return expenseId;
       });
 
   Future<void> linkRecurringOccurrenceExpense(
-          int occurrenceId, int expenseId) async =>
+    int occurrenceId,
+    int expenseId,
+  ) async =>
       db.transaction((txn) async {
-        final expense = await txn.query(ExpenseMeta.nameTable,
-            columns: [ExpenseMeta.id],
-            where: '${ExpenseMeta.id}=?',
-            whereArgs: [expenseId],
-            limit: 1);
+        final expense = await txn.query(
+          ExpenseMeta.nameTable,
+          columns: [ExpenseMeta.id],
+          where: '${ExpenseMeta.id}=?',
+          whereArgs: [expenseId],
+          limit: 1,
+        );
         if (expense.isEmpty) throw StateError('Expense not found.');
         final changed = await txn.update(
-            RecurringExpenseOccurrenceMeta.table,
-            {
-              RecurringExpenseOccurrenceMeta.expenseId: expenseId,
-              RecurringExpenseOccurrenceMeta.status: 'paid',
-              RecurringExpenseOccurrenceMeta.updatedAt:
-                  DateTime.now().toUtc().toIso8601String(),
-            },
-            where:
-                '${RecurringExpenseOccurrenceMeta.id}=? AND ${RecurringExpenseOccurrenceMeta.expenseId} IS NULL AND ${RecurringExpenseOccurrenceMeta.status}!=?',
-            whereArgs: [occurrenceId, 'skipped']);
-        if (changed != 1)
+          RecurringExpenseOccurrenceMeta.table,
+          {
+            RecurringExpenseOccurrenceMeta.expenseId: expenseId,
+            RecurringExpenseOccurrenceMeta.status: 'paid',
+            RecurringExpenseOccurrenceMeta.updatedAt:
+                DateTime.now().toUtc().toIso8601String(),
+          },
+          where:
+              '${RecurringExpenseOccurrenceMeta.id}=? AND ${RecurringExpenseOccurrenceMeta.expenseId} IS NULL AND ${RecurringExpenseOccurrenceMeta.status}!=?',
+          whereArgs: [occurrenceId, 'skipped'],
+        );
+        if (changed != 1) {
           throw StateError('Occurrence already paid, skipped or missing.');
+        }
       });
 
   Future<void> skipRecurringExpenseOccurrence(int occurrenceId) async {
     final changed = await db.update(
-        RecurringExpenseOccurrenceMeta.table,
-        {
-          RecurringExpenseOccurrenceMeta.status: 'skipped',
-          RecurringExpenseOccurrenceMeta.updatedAt:
-              DateTime.now().toUtc().toIso8601String(),
-        },
-        where:
-            '${RecurringExpenseOccurrenceMeta.id}=? AND ${RecurringExpenseOccurrenceMeta.expenseId} IS NULL',
-        whereArgs: [occurrenceId]);
+      RecurringExpenseOccurrenceMeta.table,
+      {
+        RecurringExpenseOccurrenceMeta.status: 'skipped',
+        RecurringExpenseOccurrenceMeta.updatedAt:
+            DateTime.now().toUtc().toIso8601String(),
+      },
+      where:
+          '${RecurringExpenseOccurrenceMeta.id}=? AND ${RecurringExpenseOccurrenceMeta.expenseId} IS NULL',
+      whereArgs: [occurrenceId],
+    );
     if (changed != 1) throw StateError('Occurrence is paid or missing.');
   }
 
   Future<void> cancelBill(int billId) async {
     final changed = await db.update(
-        BillMeta.table,
-        {
-          BillMeta.isCancelled: 1,
-          BillMeta.updatedAt: DateTime.now().toUtc().toIso8601String()
-        },
-        where: '${BillMeta.id}=? AND ${BillMeta.expenseId} IS NULL',
-        whereArgs: [billId]);
+      BillMeta.table,
+      {
+        BillMeta.isCancelled: 1,
+        BillMeta.updatedAt: DateTime.now().toUtc().toIso8601String(),
+      },
+      where: '${BillMeta.id}=? AND ${BillMeta.expenseId} IS NULL',
+      whereArgs: [billId],
+    );
     if (changed != 1) throw StateError('Paid bill cannot be cancelled.');
   }
 
-  Future<void> setPlanningSettings(
-      {int? paydayDay, required int safetyReserveMinor}) async {
+  Future<void> setPlanningSettings({
+    int? paydayDay,
+    required int safetyReserveMinor,
+  }) async {
     if ((paydayDay != null && (paydayDay < 1 || paydayDay > 31)) ||
         safetyReserveMinor < 0) {
       throw ArgumentError('Invalid payday or safety reserve.');
     }
     await db.transaction((txn) async {
       await txn.insert(
-          PlanningMeta.table,
-          {
-            PlanningMeta.key: 'payday_day',
-            PlanningMeta.value: paydayDay?.toString() ?? ''
-          },
-          conflictAlgorithm: ConflictAlgorithm.replace);
+        PlanningMeta.table,
+        {
+          PlanningMeta.key: 'payday_day',
+          PlanningMeta.value: paydayDay?.toString() ?? '',
+        },
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
       await txn.insert(
-          PlanningMeta.table,
-          {
-            PlanningMeta.key: 'safety_reserve_minor',
-            PlanningMeta.value: safetyReserveMinor.toString()
-          },
-          conflictAlgorithm: ConflictAlgorithm.replace);
+        PlanningMeta.table,
+        {
+          PlanningMeta.key: 'safety_reserve_minor',
+          PlanningMeta.value: safetyReserveMinor.toString(),
+        },
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
     });
   }
 
@@ -2336,13 +2466,15 @@ class DatabaseRepository {
     final settings = await db.query(PlanningMeta.table);
     final values = {
       for (final row in settings)
-        row[PlanningMeta.key] as String: row[PlanningMeta.value] as String
+        row[PlanningMeta.key] as String: row[PlanningMeta.value] as String,
     };
     var paydayDay = int.tryParse(values['payday_day'] ?? '');
-    final incomeRules = await db.query(RecurringMeta.nameTable,
-        where:
-            '${RecurringMeta.type}=0 AND ${RecurringMeta.idModel}=0 AND ${RecurringMeta.recurringDay}>0',
-        limit: 1);
+    final incomeRules = await db.query(
+      RecurringMeta.nameTable,
+      where:
+          '${RecurringMeta.type}=0 AND ${RecurringMeta.idModel}=0 AND ${RecurringMeta.recurringDay}>0',
+      limit: 1,
+    );
     var expectedIncome = 0;
     if (incomeRules.isNotEmpty) {
       paydayDay ??= incomeRules.single[RecurringMeta.recurringDay] as int;
@@ -2365,10 +2497,12 @@ class DatabaseRepository {
         .where((wallet) => wallet.isArchived)
         .map((wallet) => wallet.name)
         .toList();
-    final bills = await db.query(BillMeta.table,
-        where:
-            '${BillMeta.expenseId} IS NULL AND ${BillMeta.isCancelled}=0 AND date(${BillMeta.dueDate}) < date(?)',
-        whereArgs: [_dateKey(payday)]);
+    final bills = await db.query(
+      BillMeta.table,
+      where:
+          '${BillMeta.expenseId} IS NULL AND ${BillMeta.isCancelled}=0 AND date(${BillMeta.dueDate}) < date(?)',
+      whereArgs: [_dateKey(payday)],
+    );
     // Every obligation must use the same currency as the included balances.
     // Returning no projection is safer than silently adding unlike units.
     if (bills
@@ -2378,16 +2512,21 @@ class DatabaseRepository {
     final billAmount =
         bills.fold<int>(0, (sum, bill) => sum + (bill[BillMeta.amount] as int));
     final billKeys = bills
-        .map((bill) =>
-            '${bill[BillMeta.recurringRuleId]}:${bill[BillMeta.dueDate]}')
+        .map(
+          (bill) =>
+              '${bill[BillMeta.recurringRuleId]}:${bill[BillMeta.dueDate]}',
+        )
         .toSet();
-    final occurrenceRows = await db.rawQuery('''
+    final occurrenceRows = await db.rawQuery(
+      '''
       SELECT o.*, r.${RecurringExpenseMeta.name} AS rule_name
       FROM ${RecurringExpenseOccurrenceMeta.table} o
       JOIN ${RecurringExpenseMeta.table} r ON r.${RecurringExpenseMeta.id}=o.${RecurringExpenseOccurrenceMeta.ruleId}
       WHERE o.${RecurringExpenseOccurrenceMeta.status} IN ('due','blocked')
         AND date(o.${RecurringExpenseOccurrenceMeta.scheduledDate}) < date(?)
-    ''', [_dateKey(payday)]);
+    ''',
+      [_dateKey(payday)],
+    );
     var recurringAmount = 0;
     final includedRecurring = <RunwayObligation>[];
     for (final row in occurrenceRows) {
@@ -2399,21 +2538,28 @@ class DatabaseRepository {
           '${row[RecurringExpenseOccurrenceMeta.ruleId]}:${row[RecurringExpenseOccurrenceMeta.scheduledDate]}';
       if (!billKeys.contains(key)) {
         recurringAmount += row[RecurringExpenseOccurrenceMeta.amount] as int;
-        includedRecurring.add(RunwayObligation(
-          name: row['rule_name'] as String,
-          date: DateTime.parse(
-              row[RecurringExpenseOccurrenceMeta.scheduledDate] as String),
-          amountMinor: row[RecurringExpenseOccurrenceMeta.amount] as int,
-        ));
+        includedRecurring.add(
+          RunwayObligation(
+            name: row['rule_name'] as String,
+            date: DateTime.parse(
+              row[RecurringExpenseOccurrenceMeta.scheduledDate] as String,
+            ),
+            amountMinor: row[RecurringExpenseOccurrenceMeta.amount] as int,
+          ),
+        );
       }
     }
     final existingOccurrenceKeys = occurrenceRows
-        .map((row) =>
-            '${row[RecurringExpenseOccurrenceMeta.ruleId]}:${row[RecurringExpenseOccurrenceMeta.scheduledDate]}')
+        .map(
+          (row) =>
+              '${row[RecurringExpenseOccurrenceMeta.ruleId]}:${row[RecurringExpenseOccurrenceMeta.scheduledDate]}',
+        )
         .toSet();
-    final rules = await db.query(RecurringExpenseMeta.table,
-        where: '${RecurringExpenseMeta.enabled}=1',
-        orderBy: '${RecurringExpenseMeta.id}');
+    final rules = await db.query(
+      RecurringExpenseMeta.table,
+      where: '${RecurringExpenseMeta.enabled}=1',
+      orderBy: RecurringExpenseMeta.id,
+    );
     for (final rule in rules) {
       if (walletCurrencies[rule[RecurringExpenseMeta.walletId]] != currency) {
         final nextDate =
@@ -2432,17 +2578,20 @@ class DatabaseRepository {
             return null;
           }
           recurringAmount += rule[RecurringExpenseMeta.amount] as int;
-          includedRecurring.add(RunwayObligation(
-            name: rule[RecurringExpenseMeta.name] as String,
-            date: DateTime.parse(date),
-            amountMinor: rule[RecurringExpenseMeta.amount] as int,
-          ));
+          includedRecurring.add(
+            RunwayObligation(
+              name: rule[RecurringExpenseMeta.name] as String,
+              date: DateTime.parse(date),
+              amountMinor: rule[RecurringExpenseMeta.amount] as int,
+            ),
+          );
           existingOccurrenceKeys.add(key);
         }
         due = RecurringExpenseSchedule.next(
-            frequency: rule[RecurringExpenseMeta.frequency] as String,
-            scheduledDay: rule[RecurringExpenseMeta.scheduledDay] as int,
-            previous: due);
+          frequency: rule[RecurringExpenseMeta.frequency] as String,
+          scheduledDay: rule[RecurringExpenseMeta.scheduledDay] as int,
+          previous: due,
+        );
       }
     }
     return PaydayRunwayModel(
@@ -2457,11 +2606,13 @@ class DatabaseRepository {
       expectedIncomeMinor: expectedIncome,
       excludedWalletNames: excluded,
       includedBills: bills
-          .map((bill) => RunwayObligation(
-                name: bill[BillMeta.title] as String,
-                date: DateTime.parse(bill[BillMeta.dueDate] as String),
-                amountMinor: bill[BillMeta.amount] as int,
-              ))
+          .map(
+            (bill) => RunwayObligation(
+              name: bill[BillMeta.title] as String,
+              date: DateTime.parse(bill[BillMeta.dueDate] as String),
+              amountMinor: bill[BillMeta.amount] as int,
+            ),
+          )
           .toList(),
       includedRecurringDetails: includedRecurring,
     );

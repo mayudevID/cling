@@ -98,28 +98,40 @@ class HomePage extends StatelessWidget {
                 color: const Color(0x3D787880),
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: Row(children: [
-                Expanded(
+              child: Row(
+                children: [
+                  Expanded(
                     child: TextButton.icon(
-                  onPressed: () =>
-                      Navigator.pushNamed(context, RouteName.clingCheck),
-                  icon: const Icon(Icons.shopping_bag_outlined,
-                      color: Color(0xFFF599DA)),
-                  label: Text(AppLocalizations.of(context)!.clingCheck,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(color: Colors.white)),
-                )),
-                Expanded(
+                      onPressed: () =>
+                          Navigator.pushNamed(context, RouteName.clingCheck),
+                      icon: const Icon(
+                        Icons.shopping_bag_outlined,
+                        color: Color(0xFFF599DA),
+                      ),
+                      label: Text(
+                        AppLocalizations.of(context)!.clingCheck,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  ),
+                  Expanded(
                     child: TextButton.icon(
-                  onPressed: () =>
-                      Navigator.pushNamed(context, RouteName.clingInsights),
-                  icon: const Icon(Icons.insights_outlined,
-                      color: Color(0xFFF599DA)),
-                  label: Text(AppLocalizations.of(context)!.clingInsights,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(color: Colors.white)),
-                )),
-              ]),
+                      onPressed: () =>
+                          Navigator.pushNamed(context, RouteName.clingInsights),
+                      icon: const Icon(
+                        Icons.insights_outlined,
+                        color: Color(0xFFF599DA),
+                      ),
+                      label: Text(
+                        AppLocalizations.of(context)!.clingInsights,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
           ...tagNameHome(context, AppLocalizations.of(context)!.goals),

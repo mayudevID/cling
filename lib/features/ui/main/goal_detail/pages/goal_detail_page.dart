@@ -114,8 +114,10 @@ class GoalDetailPageContent extends StatelessWidget {
                     },
                     icon:
                         const Icon(Icons.auto_graph, color: Color(0xFFF599DA)),
-                    label: Text(AppLocalizations.of(context)!.smartGoalPlanning,
-                        style: const TextStyle(color: Color(0xFFF599DA))),
+                    label: Text(
+                      AppLocalizations.of(context)!.smartGoalPlanning,
+                      style: const TextStyle(color: Color(0xFFF599DA)),
+                    ),
                   ),
                 ),
                 const SizedBox(

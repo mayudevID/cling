@@ -7,7 +7,7 @@ class RecurringExpenseSchedule {
 
   static DateTime monthlyDate(int year, int month, int day) {
     if (day < 1 || day > 31) throw RangeError.range(day, 1, 31, 'day');
-    final first = DateTime(year, month, 1);
+    final first = DateTime(year, month);
     final lastDay = DateTime(first.year, first.month + 1, 0).day;
     return DateTime(first.year, first.month, day.clamp(1, lastDay).toInt());
   }
@@ -36,8 +36,9 @@ class RecurringExpenseSchedule {
     required int scheduledDay,
     required DateTime previous,
   }) {
-    if (frequency == 'weekly')
+    if (frequency == 'weekly') {
       return dateOnly(previous).add(const Duration(days: 7));
+    }
     if (frequency != 'monthly') throw ArgumentError.value(frequency);
     return monthlyDate(previous.year, previous.month + 1, scheduledDay);
   }

@@ -1,6 +1,25 @@
 import '../../core/static_name_table.dart';
 
 class RecurringExpenseRuleModel {
+  factory RecurringExpenseRuleModel.fromMap(Map<String, Object?> row) =>
+      RecurringExpenseRuleModel(
+        id: row[RecurringExpenseMeta.id] as int,
+        name: row[RecurringExpenseMeta.name] as String,
+        description: row[RecurringExpenseMeta.description] as String?,
+        amountMinor: row[RecurringExpenseMeta.amount] as int,
+        categoryId: row[RecurringExpenseMeta.categoryId] as int,
+        walletId: row[RecurringExpenseMeta.walletId] as int,
+        frequency: row[RecurringExpenseMeta.frequency] as String,
+        scheduledDay: row[RecurringExpenseMeta.scheduledDay] as int,
+        startDate:
+            DateTime.parse(row[RecurringExpenseMeta.startDate] as String),
+        endDate: row[RecurringExpenseMeta.endDate] == null
+            ? null
+            : DateTime.parse(row[RecurringExpenseMeta.endDate] as String),
+        nextDate: DateTime.parse(row[RecurringExpenseMeta.nextDate] as String),
+        enabled: row[RecurringExpenseMeta.enabled] == 1,
+        postingMode: row[RecurringExpenseMeta.postingMode] as String,
+      );
   const RecurringExpenseRuleModel({
     this.id,
     required this.name,
@@ -30,29 +49,23 @@ class RecurringExpenseRuleModel {
   final DateTime nextDate;
   final bool enabled;
   final String postingMode;
-
-  factory RecurringExpenseRuleModel.fromMap(Map<String, Object?> row) =>
-      RecurringExpenseRuleModel(
-        id: row[RecurringExpenseMeta.id] as int,
-        name: row[RecurringExpenseMeta.name] as String,
-        description: row[RecurringExpenseMeta.description] as String?,
-        amountMinor: row[RecurringExpenseMeta.amount] as int,
-        categoryId: row[RecurringExpenseMeta.categoryId] as int,
-        walletId: row[RecurringExpenseMeta.walletId] as int,
-        frequency: row[RecurringExpenseMeta.frequency] as String,
-        scheduledDay: row[RecurringExpenseMeta.scheduledDay] as int,
-        startDate:
-            DateTime.parse(row[RecurringExpenseMeta.startDate] as String),
-        endDate: row[RecurringExpenseMeta.endDate] == null
-            ? null
-            : DateTime.parse(row[RecurringExpenseMeta.endDate] as String),
-        nextDate: DateTime.parse(row[RecurringExpenseMeta.nextDate] as String),
-        enabled: row[RecurringExpenseMeta.enabled] == 1,
-        postingMode: row[RecurringExpenseMeta.postingMode] as String,
-      );
 }
 
 class PlanningBillModel {
+  factory PlanningBillModel.fromMap(Map<String, Object?> row) =>
+      PlanningBillModel(
+        id: row[BillMeta.id] as int,
+        title: row[BillMeta.title] as String,
+        amountMinor: row[BillMeta.amount] as int,
+        categoryId: row[BillMeta.categoryId] as int,
+        walletId: row[BillMeta.walletId] as int,
+        dueDate: DateTime.parse(row[BillMeta.dueDate] as String),
+        reminderMask: row[BillMeta.reminderMask] as int,
+        note: row[BillMeta.note] as String?,
+        recurringRuleId: row[BillMeta.recurringRuleId] as int?,
+        expenseId: row[BillMeta.expenseId] as int?,
+        isCancelled: row[BillMeta.isCancelled] == 1,
+      );
   const PlanningBillModel({
     this.id,
     required this.title,
@@ -88,21 +101,6 @@ class PlanningBillModel {
     if (due == now) return 'due_today';
     return 'upcoming';
   }
-
-  factory PlanningBillModel.fromMap(Map<String, Object?> row) =>
-      PlanningBillModel(
-        id: row[BillMeta.id] as int,
-        title: row[BillMeta.title] as String,
-        amountMinor: row[BillMeta.amount] as int,
-        categoryId: row[BillMeta.categoryId] as int,
-        walletId: row[BillMeta.walletId] as int,
-        dueDate: DateTime.parse(row[BillMeta.dueDate] as String),
-        reminderMask: row[BillMeta.reminderMask] as int,
-        note: row[BillMeta.note] as String?,
-        recurringRuleId: row[BillMeta.recurringRuleId] as int?,
-        expenseId: row[BillMeta.expenseId] as int?,
-        isCancelled: row[BillMeta.isCancelled] == 1,
-      );
 }
 
 class PaydayRunwayModel {

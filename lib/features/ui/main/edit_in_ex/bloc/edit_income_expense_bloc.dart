@@ -41,8 +41,9 @@ class EditIncomeExpenseBloc
     on<SetDate>(_setDate);
     on<SetTime>(_setTime);
     on<SetCategories>(_setCategories);
-    on<SetWallet>((event, emit) =>
-        emit(state.copyWith(selectedWalletId: event.walletId)));
+    on<SetWallet>(
+      (event, emit) => emit(state.copyWith(selectedWalletId: event.walletId)),
+    );
     on<SetDescOrItem>(_setDescOrItem);
     on<SetAmountInput>(_setAmountInput);
     on<SaveData>(_saveData);

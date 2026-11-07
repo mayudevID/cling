@@ -155,17 +155,24 @@ class EditIncomeExpensePageContent extends StatelessWidget {
                       : null,
                   dropdownColor: const Color(0xFF313131),
                   decoration: InputDecoration(
-                      labelText: AppLocalizations.of(context)!.wallet,
-                      labelStyle: const TextStyle(color: Colors.white70)),
+                    labelText: AppLocalizations.of(context)!.wallet,
+                    labelStyle: const TextStyle(color: Colors.white70),
+                  ),
                   items: state.wallets
-                      .map((wallet) => DropdownMenuItem<int>(
+                      .map(
+                        (wallet) => DropdownMenuItem<int>(
                           value: wallet.id!,
-                          child: Text(wallet.name,
-                              style: const TextStyle(color: Colors.white))))
+                          child: Text(
+                            wallet.name,
+                            style: const TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      )
                       .toList(),
                   onChanged: (id) {
-                    if (id != null)
+                    if (id != null) {
                       context.read<EditIncomeExpenseBloc>().add(SetWallet(id));
+                    }
                   },
                 ),
               ),

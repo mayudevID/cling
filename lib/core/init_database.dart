@@ -46,28 +46,32 @@ Future<void> migrateFinancialFoundation(DatabaseExecutor db) async {
         .any((column) => column['name'] == entry.value);
     if (!present) {
       await db.execute(
-          'ALTER TABLE ${entry.key} ADD COLUMN ${entry.value} INTEGER NOT NULL DEFAULT 1');
+        'ALTER TABLE ${entry.key} ADD COLUMN ${entry.value} INTEGER NOT NULL DEFAULT 1',
+      );
     }
   }
   final now = DateTime.now().toUtc().toIso8601String();
   await db.insert(
-      WalletMeta.table,
-      {
-        WalletMeta.id: 1,
-        WalletMeta.name: 'Cash',
-        WalletMeta.type: 'cash',
-        WalletMeta.openingBalance: 0,
-        WalletMeta.currency: 'IDR',
-        WalletMeta.archived: 0,
-        WalletMeta.isDefault: 1,
-        WalletMeta.createdAt: now,
-        WalletMeta.updatedAt: now,
-      },
-      conflictAlgorithm: ConflictAlgorithm.ignore);
+    WalletMeta.table,
+    {
+      WalletMeta.id: 1,
+      WalletMeta.name: 'Cash',
+      WalletMeta.type: 'cash',
+      WalletMeta.openingBalance: 0,
+      WalletMeta.currency: 'IDR',
+      WalletMeta.archived: 0,
+      WalletMeta.isDefault: 1,
+      WalletMeta.createdAt: now,
+      WalletMeta.updatedAt: now,
+    },
+    conflictAlgorithm: ConflictAlgorithm.ignore,
+  );
   await db.execute(
-      'UPDATE ${IncomeMeta.nameTable} SET ${IncomeMeta.walletId}=1 WHERE ${IncomeMeta.walletId} IS NULL');
+    'UPDATE ${IncomeMeta.nameTable} SET ${IncomeMeta.walletId}=1 WHERE ${IncomeMeta.walletId} IS NULL',
+  );
   await db.execute(
-      'UPDATE ${ExpenseMeta.nameTable} SET ${ExpenseMeta.walletId}=1 WHERE ${ExpenseMeta.walletId} IS NULL');
+    'UPDATE ${ExpenseMeta.nameTable} SET ${ExpenseMeta.walletId}=1 WHERE ${ExpenseMeta.walletId} IS NULL',
+  );
 }
 
 Future<void> migrateFinancialPlanning(DatabaseExecutor db) async {
@@ -143,9 +147,11 @@ Future<void> migrateFinancialPlanning(DatabaseExecutor db) async {
     FOREIGN KEY (${PlanningReminderMeta.occurrenceId}) REFERENCES ${RecurringExpenseOccurrenceMeta.table}(${RecurringExpenseOccurrenceMeta.id}) ON DELETE CASCADE
   )''');
   await db.execute(
-      'CREATE UNIQUE INDEX IF NOT EXISTS idx_planning_reminder_bill ON ${PlanningReminderMeta.table}(${PlanningReminderMeta.billId}, ${PlanningReminderMeta.scheduledDate}, ${PlanningReminderMeta.reminderDays}) WHERE ${PlanningReminderMeta.billId} IS NOT NULL');
+    'CREATE UNIQUE INDEX IF NOT EXISTS idx_planning_reminder_bill ON ${PlanningReminderMeta.table}(${PlanningReminderMeta.billId}, ${PlanningReminderMeta.scheduledDate}, ${PlanningReminderMeta.reminderDays}) WHERE ${PlanningReminderMeta.billId} IS NOT NULL',
+  );
   await db.execute(
-      'CREATE UNIQUE INDEX IF NOT EXISTS idx_planning_reminder_occurrence ON ${PlanningReminderMeta.table}(${PlanningReminderMeta.occurrenceId}, ${PlanningReminderMeta.reminderDays}) WHERE ${PlanningReminderMeta.occurrenceId} IS NOT NULL');
+    'CREATE UNIQUE INDEX IF NOT EXISTS idx_planning_reminder_occurrence ON ${PlanningReminderMeta.table}(${PlanningReminderMeta.occurrenceId}, ${PlanningReminderMeta.reminderDays}) WHERE ${PlanningReminderMeta.occurrenceId} IS NOT NULL',
+  );
 }
 
 /// Schema v5 adds optional planning metadata without rewriting existing goals.

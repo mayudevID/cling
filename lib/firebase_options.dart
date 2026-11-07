@@ -63,8 +63,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '222604788674',
     projectId: 'cling--money-manager-app',
     storageBucket: 'cling--money-manager-app.firebasestorage.app',
-    iosClientId: '222604788674-h13nol9a038ihovpsgkips80uk5aemij.apps.googleusercontent.com',
+    iosClientId:
+        '222604788674-h13nol9a038ihovpsgkips80uk5aemij.apps.googleusercontent.com',
     iosBundleId: 'com.mayudev.id.cling',
   );
-
 }

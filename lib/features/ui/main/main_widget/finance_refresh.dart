@@ -10,8 +10,10 @@ import '../planning/planning_bloc.dart';
 
 /// Invalidate *all* finance projections after a committed transaction write.
 /// Queries retain their currently selected date/category filters.
-void refreshFinancialViews(BuildContext context,
-    {bool refreshPlanning = true}) {
+void refreshFinancialViews(
+  BuildContext context, {
+  bool refreshPlanning = true,
+}) {
   context.read<HomeBloc>()
     ..add(GetIncomeExpenseAmountTotalCurrMonth())
     ..add(GetTodayExpenses())

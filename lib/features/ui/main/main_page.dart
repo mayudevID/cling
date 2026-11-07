@@ -65,7 +65,9 @@ class _MainPageContentState extends State<MainPageContent>
       await _repository.reconcileFinancialPlanning(DateTime.now());
       if (!mounted ||
           revision != _repository.revision ||
-          uid != _repository.activeUserId) return;
+          uid != _repository.activeUserId) {
+        return;
+      }
       refreshFinancialViews(context);
     } catch (_) {
       // Planning remains available offline; errors are shown when its screen

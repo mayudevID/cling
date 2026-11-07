@@ -256,32 +256,39 @@ void main() {
       'wallet ledger includes opening balance and transfer without income/expense',
       () async {
     final cashId = await repository.getDefaultWalletId();
-    final bankId = await repository.saveWallet(const WalletModel(
-      name: 'BCA',
-      type: 'bank',
-      openingBalanceMinor: 200000,
-      currency: 'IDR',
-    ));
-    await repository.insertExpense(ExpenseModel(
-      date: DateTime.now(),
-      item: 'Lunch',
-      amount: 25,
-      categories: exCategoriesData[4],
-      walletId: bankId,
-    ));
+    final bankId = await repository.saveWallet(
+      const WalletModel(
+        name: 'BCA',
+        type: 'bank',
+        openingBalanceMinor: 200000,
+        currency: 'IDR',
+      ),
+    );
+    await repository.insertExpense(
+      ExpenseModel(
+        date: DateTime.now(),
+        item: 'Lunch',
+        amount: 25,
+        categories: exCategoriesData[4],
+        walletId: bankId,
+      ),
+    );
     final before = await repository.getTotalBalance();
     await repository.transfer(
-        sourceWalletId: bankId,
-        destinationWalletId: cashId,
-        amountMinor: 5000,
-        date: DateTime.now(),
-        note: 'ATM');
+      sourceWalletId: bankId,
+      destinationWalletId: cashId,
+      amountMinor: 5000,
+      date: DateTime.now(),
+      note: 'ATM',
+    );
     expect(await repository.getTotalBalance(), before);
     final wallets = await repository.getWallets();
     expect(wallets.firstWhere((w) => w.id == bankId).balanceMinor, 192500);
     expect(wallets.firstWhere((w) => w.id == cashId).balanceMinor, 5000);
     expect(
-        (await repository.getTotalIncomeExpenseCurrMonth())['income'], isNull);
+      (await repository.getTotalIncomeExpenseCurrMonth())['income'],
+      isNull,
+    );
     expect((await repository.getTotalIncomeExpenseCurrMonth())['expense'], 25);
   });
 
@@ -289,58 +296,71 @@ void main() {
       () async {
     final id = await repository.getDefaultWalletId();
     await expectLater(
-        repository.transfer(
-            sourceWalletId: id,
-            destinationWalletId: id,
-            amountMinor: 10,
-            date: DateTime.now()),
-        throwsArgumentError);
-    await expectLater(
-        repository.transfer(
-            sourceWalletId: id,
-            destinationWalletId: id + 1,
-            amountMinor: 0,
-            date: DateTime.now()),
-        throwsArgumentError);
-    final other = await repository.saveWallet(const WalletModel(
-      name: 'Bank',
-      type: 'bank',
-      openingBalanceMinor: 0,
-      currency: 'IDR',
-    ));
-    final foreign = await repository.saveWallet(const WalletModel(
-      name: 'Foreign',
-      type: 'bank',
-      openingBalanceMinor: 0,
-      currency: 'USD',
-    ));
+      repository.transfer(
+        sourceWalletId: id,
+        destinationWalletId: id,
+        amountMinor: 10,
+        date: DateTime.now(),
+      ),
+      throwsArgumentError,
+    );
     await expectLater(
       repository.transfer(
-          sourceWalletId: id,
-          destinationWalletId: foreign,
-          amountMinor: 1,
-          date: DateTime.now()),
+        sourceWalletId: id,
+        destinationWalletId: id + 1,
+        amountMinor: 0,
+        date: DateTime.now(),
+      ),
+      throwsArgumentError,
+    );
+    final other = await repository.saveWallet(
+      const WalletModel(
+        name: 'Bank',
+        type: 'bank',
+        openingBalanceMinor: 0,
+        currency: 'IDR',
+      ),
+    );
+    final foreign = await repository.saveWallet(
+      const WalletModel(
+        name: 'Foreign',
+        type: 'bank',
+        openingBalanceMinor: 0,
+        currency: 'USD',
+      ),
+    );
+    await expectLater(
+      repository.transfer(
+        sourceWalletId: id,
+        destinationWalletId: foreign,
+        amountMinor: 1,
+        date: DateTime.now(),
+      ),
       throwsStateError,
     );
     await repository.archiveWallet(other);
     await expectLater(
-        repository.transfer(
-            sourceWalletId: id,
-            destinationWalletId: other,
-            amountMinor: 1,
-            date: DateTime.now()),
-        throwsStateError);
+      repository.transfer(
+        sourceWalletId: id,
+        destinationWalletId: other,
+        amountMinor: 1,
+        date: DateTime.now(),
+      ),
+      throwsStateError,
+    );
   });
 
   test('unpaid bill is not accounted until idempotent payment', () async {
     final walletId = await repository.getDefaultWalletId();
-    final billId = await repository.saveBill(PlanningBillModel(
+    final billId = await repository.saveBill(
+      PlanningBillModel(
         title: 'Internet',
         amountMinor: 35000,
         categoryId: 0,
         walletId: walletId,
         dueDate: DateTime(2026, 11, 12),
-        reminderMask: 7));
+      ),
+    );
     expect(await repository.getTotalBalance(), 0);
     final firstExpense =
         await repository.payBill(billId, DateTime(2026, 11, 12));
@@ -350,25 +370,32 @@ void main() {
     expect((await repository.db.query(ExpenseMeta.nameTable)).length, 1);
     expect(await repository.getTotalBalance(), -350);
     expect(
-        (await repository.getBills()).single.statusOn(DateTime(2026, 11, 12)),
-        'paid');
+      (await repository.getBills()).single.statusOn(DateTime(2026, 11, 12)),
+      'paid',
+    );
   });
 
   test('deleting linked expense returns bill to unpaid without losing bill',
       () async {
     final walletId = await repository.getDefaultWalletId();
-    final billId = await repository.saveBill(PlanningBillModel(
+    final billId = await repository.saveBill(
+      PlanningBillModel(
         title: 'Gym',
         amountMinor: 25000,
         categoryId: 0,
         walletId: walletId,
-        dueDate: DateTime(2026, 11, 20)));
-    await repository.insertExpense(ExpenseModel(
+        dueDate: DateTime(2026, 11, 20),
+      ),
+    );
+    await repository.insertExpense(
+      ExpenseModel(
         date: DateTime(2026, 11, 20),
         item: 'Gym paid already',
         amount: 250,
         categories: exCategoriesData[0],
-        walletId: walletId));
+        walletId: walletId,
+      ),
+    );
     final expenseId = (await repository.db.query(ExpenseMeta.nameTable))
         .single[ExpenseMeta.id] as int;
     await repository.linkBillExpense(billId, expenseId);
@@ -384,7 +411,8 @@ void main() {
       'automatic monthly expense reconciliation posts each missed occurrence once',
       () async {
     final walletId = await repository.getDefaultWalletId();
-    await repository.saveRecurringExpenseRule(RecurringExpenseRuleModel(
+    await repository.saveRecurringExpenseRule(
+      RecurringExpenseRuleModel(
         name: 'Rent',
         amountMinor: 12500,
         categoryId: 0,
@@ -393,7 +421,9 @@ void main() {
         scheduledDay: 31,
         startDate: DateTime(2026, 1, 31),
         nextDate: DateTime(2026, 1, 31),
-        postingMode: 'automatic'));
+        postingMode: 'automatic',
+      ),
+    );
     await repository.reconcileFinancialPlanning(DateTime(2026, 3, 31));
     await repository.reconcileFinancialPlanning(DateTime(2026, 3, 31));
     final expenses = await repository.db.query(ExpenseMeta.nameTable);
@@ -402,23 +432,26 @@ void main() {
     expect(expenses.length, 3);
     expect(occurrences.length, 3);
     expect(
-        occurrences
-            .map((row) => row[RecurringExpenseOccurrenceMeta.scheduledDate]),
-        ['2026-01-31', '2026-02-28', '2026-03-31']);
+      occurrences
+          .map((row) => row[RecurringExpenseOccurrenceMeta.scheduledDate]),
+      ['2026-01-31', '2026-02-28', '2026-03-31'],
+    );
     expect(await repository.getTotalBalance(), -375);
   });
 
   test('runway deducts bills and reserve but keeps expected income separate',
       () async {
     final walletId = await repository.getDefaultWalletId();
-    await repository.saveWallet(const WalletModel(
-      id: 1,
-      name: 'Cash',
-      type: 'cash',
-      openingBalanceMinor: 300000000,
-      currency: 'IDR',
-      isDefault: true,
-    ));
+    await repository.saveWallet(
+      const WalletModel(
+        id: 1,
+        name: 'Cash',
+        type: 'cash',
+        openingBalanceMinor: 300000000,
+        currency: 'IDR',
+        isDefault: true,
+      ),
+    );
     await repository.db.insert(RecurringMeta.nameTable, {
       RecurringMeta.idModel: 0,
       RecurringMeta.type: 0,
@@ -427,15 +460,18 @@ void main() {
       RecurringMeta.amount: 2500000,
       RecurringMeta.amountMinor: 250000000,
     });
-    await repository.saveBill(PlanningBillModel(
-      title: 'Bills',
-      amountMinor: 85000000,
-      categoryId: 0,
-      walletId: walletId,
-      dueDate: DateTime(2026, 5, 24),
-    ));
+    await repository.saveBill(
+      PlanningBillModel(
+        title: 'Bills',
+        amountMinor: 85000000,
+        categoryId: 0,
+        walletId: walletId,
+        dueDate: DateTime(2026, 5, 24),
+      ),
+    );
     await repository.setPlanningSettings(
-        paydayDay: null, safetyReserveMinor: 50000000);
+      safetyReserveMinor: 50000000,
+    );
     final result = await repository.getPaydayRunway(DateTime(2026, 5, 20));
     expect(result, isNotNull);
     expect(result!.payday, DateTime(2026, 5, 31));
@@ -452,33 +488,38 @@ void main() {
   test('runway does not double count recurring rule linked to a bill',
       () async {
     final walletId = await repository.getDefaultWalletId();
-    await repository.saveWallet(const WalletModel(
-      id: 1,
-      name: 'Cash',
-      type: 'cash',
-      openingBalanceMinor: 10000000,
-      currency: 'IDR',
-      isDefault: true,
-    ));
-    final ruleId =
-        await repository.saveRecurringExpenseRule(RecurringExpenseRuleModel(
-      name: 'Internet',
-      amountMinor: 2000000,
-      categoryId: 0,
-      walletId: walletId,
-      frequency: 'monthly',
-      scheduledDay: 25,
-      startDate: DateTime(2026, 5, 25),
-      nextDate: DateTime(2026, 5, 25),
-    ));
-    await repository.saveBill(PlanningBillModel(
-      title: 'Internet bill',
-      amountMinor: 2000000,
-      categoryId: 0,
-      walletId: walletId,
-      dueDate: DateTime(2026, 5, 25),
-      recurringRuleId: ruleId,
-    ));
+    await repository.saveWallet(
+      const WalletModel(
+        id: 1,
+        name: 'Cash',
+        type: 'cash',
+        openingBalanceMinor: 10000000,
+        currency: 'IDR',
+        isDefault: true,
+      ),
+    );
+    final ruleId = await repository.saveRecurringExpenseRule(
+      RecurringExpenseRuleModel(
+        name: 'Internet',
+        amountMinor: 2000000,
+        categoryId: 0,
+        walletId: walletId,
+        frequency: 'monthly',
+        scheduledDay: 25,
+        startDate: DateTime(2026, 5, 25),
+        nextDate: DateTime(2026, 5, 25),
+      ),
+    );
+    await repository.saveBill(
+      PlanningBillModel(
+        title: 'Internet bill',
+        amountMinor: 2000000,
+        categoryId: 0,
+        walletId: walletId,
+        dueDate: DateTime(2026, 5, 25),
+        recurringRuleId: ruleId,
+      ),
+    );
     await repository.setPlanningSettings(paydayDay: 31, safetyReserveMinor: 0);
     final runway = await repository.getPaydayRunway(DateTime(2026, 5, 20));
     expect(runway!.billsMinor, 2000000);
@@ -488,14 +529,16 @@ void main() {
 
   test('bill reminder appears once in local inbox for its due date', () async {
     final walletId = await repository.getDefaultWalletId();
-    await repository.saveBill(PlanningBillModel(
-      title: 'Rent',
-      amountMinor: 100000,
-      categoryId: 0,
-      walletId: walletId,
-      dueDate: DateTime(2026, 7, 10),
-      reminderMask: 1,
-    ));
+    await repository.saveBill(
+      PlanningBillModel(
+        title: 'Rent',
+        amountMinor: 100000,
+        categoryId: 0,
+        walletId: walletId,
+        dueDate: DateTime(2026, 7, 10),
+        reminderMask: 1,
+      ),
+    );
     await repository.reconcileFinancialPlanning(DateTime(2026, 7, 7));
     await repository.reconcileFinancialPlanning(DateTime(2026, 7, 7));
     final notifications = await repository.db.query(
@@ -695,16 +738,17 @@ void main() {
       'goal planning metadata persists while contributions remain tracking-only',
       () async {
     final walletId = await repository.getDefaultWalletId();
-    await repository.insertGoal(GoalModel(
-      name: 'Travel',
-      image: 'plane',
-      target: 6000000,
-      collected: 0,
-      targetDate: DateTime(2027, 1, 7),
-      contributionFrequency: 'monthly',
-      planningPriority: 2,
-      planningWalletId: walletId,
-    ));
+    await repository.insertGoal(
+      GoalModel(
+        name: 'Travel',
+        image: 'plane',
+        target: 6000000,
+        collected: 0,
+        targetDate: DateTime(2027, 1, 7),
+        planningPriority: 2,
+        planningWalletId: walletId,
+      ),
+    );
     final goal = (await repository.getGoalsPage()).single;
     final beforeBalance = await repository.getTotalBalance();
     await repository.addSavingAtomic(goal.id!, DateTime(2026, 3, 10), 2000000);
@@ -719,20 +763,24 @@ void main() {
 
     final revised = afterSaving.copyWith(
       target: 7000000,
-      targetDate: DateTime(2027, 3, 1),
+      targetDate: DateTime(2027, 3),
       contributionFrequency: 'weekly',
       planningPriority: 4,
     );
     await repository.updateGoal(revised);
     final saved = await repository.getSingleGoalModel(goal.id!);
     expect(saved.target, 7000000);
-    expect(saved.targetDate, DateTime(2027, 3, 1));
+    expect(saved.targetDate, DateTime(2027, 3));
     expect(saved.contributionFrequency, 'weekly');
     expect(saved.planningPriority, 4);
     expect(
-        (await repository.getGoalDetailSave(goal.id!)).single.amount, 2000000);
+      (await repository.getGoalDetailSave(goal.id!)).single.amount,
+      2000000,
+    );
     await repository.deleteSavingAtomic(
-        goal.id!, (await repository.getGoalDetailSave(goal.id!)).single.id!);
+      goal.id!,
+      (await repository.getGoalDetailSave(goal.id!)).single.id!,
+    );
     expect((await repository.getSingleGoalModel(goal.id!)).collected, 0);
     expect(await repository.getTotalBalance(), beforeBalance);
   });
@@ -741,39 +789,45 @@ void main() {
       'insight aggregation uses expense ledger only and comparable month dates',
       () async {
     for (final date in [
-      DateTime(2026, 2, 1),
+      DateTime(2026, 2),
       DateTime(2026, 2, 8),
       DateTime(2026, 2, 15),
-      DateTime(2026, 3, 1),
+      DateTime(2026, 3),
       DateTime(2026, 3, 8),
       DateTime(2026, 3, 15),
     ]) {
-      await repository.insertExpense(ExpenseModel(
-        date: date,
-        item: 'meal',
-        amount: date.month == 3 ? 300 : 100,
-        categories: exCategoriesData[4],
-      ));
+      await repository.insertExpense(
+        ExpenseModel(
+          date: date,
+          item: 'meal',
+          amount: date.month == 3 ? 300 : 100,
+          categories: exCategoriesData[4],
+        ),
+      );
     }
-    final secondWallet = await repository.saveWallet(const WalletModel(
-      name: 'Bank',
-      type: 'bank',
-      openingBalanceMinor: 500000,
-      currency: 'IDR',
-    ));
+    final secondWallet = await repository.saveWallet(
+      const WalletModel(
+        name: 'Bank',
+        type: 'bank',
+        openingBalanceMinor: 500000,
+        currency: 'IDR',
+      ),
+    );
     await repository.transfer(
       sourceWalletId: 1,
       destinationWalletId: secondWallet,
       amountMinor: 25000,
       date: DateTime(2026, 3, 15),
     );
-    await repository.saveBill(PlanningBillModel(
-      title: 'Unpaid bill',
-      amountMinor: 9990000,
-      categoryId: 1,
-      walletId: 1,
-      dueDate: DateTime(2026, 3, 20),
-    ));
+    await repository.saveBill(
+      PlanningBillModel(
+        title: 'Unpaid bill',
+        amountMinor: 9990000,
+        categoryId: 1,
+        walletId: 1,
+        dueDate: DateTime(2026, 3, 20),
+      ),
+    );
     final input = await repository.getFinancialInsightInput(
       now: DateTime(2026, 3, 16),
       monthlyBudgetMinor: 100000,
@@ -784,31 +838,41 @@ void main() {
     expect(input.previousComparableTransactionCount, 3);
     expect(input.categories.single.currentMinor, 90000);
     final insights = generateFinancialInsights(input);
-    expect(insights.map((item) => item.type),
-        contains(FinancialInsightType.spendingTrend));
-    expect(insights.map((item) => item.type),
-        contains(FinancialInsightType.categoryAnalysis));
+    expect(
+      insights.map((item) => item.type),
+      contains(FinancialInsightType.spendingTrend),
+    );
+    expect(
+      insights.map((item) => item.type),
+      contains(FinancialInsightType.categoryAnalysis),
+    );
   });
 
   test('cling check context and simulation leave every ledger unchanged',
       () async {
     final wallet = await repository.getDefaultWalletId();
     await repository.setPlanningSettings(
-        paydayDay: 25, safetyReserveMinor: 50000);
-    await repository.saveBill(PlanningBillModel(
-      title: 'Rent',
-      amountMinor: 10000,
-      categoryId: 1,
-      walletId: wallet,
-      dueDate: DateTime(2026, 3, 20),
-    ));
-    await repository.insertExpense(ExpenseModel(
-      date: DateTime(2026, 3, 1),
-      item: 'existing',
-      amount: 50,
-      categories: exCategoriesData[4],
-      walletId: wallet,
-    ));
+      paydayDay: 25,
+      safetyReserveMinor: 50000,
+    );
+    await repository.saveBill(
+      PlanningBillModel(
+        title: 'Rent',
+        amountMinor: 10000,
+        categoryId: 1,
+        walletId: wallet,
+        dueDate: DateTime(2026, 3, 20),
+      ),
+    );
+    await repository.insertExpense(
+      ExpenseModel(
+        date: DateTime(2026, 3),
+        item: 'existing',
+        amount: 50,
+        categories: exCategoriesData[4],
+        walletId: wallet,
+      ),
+    );
     final beforeBalance = await repository.getTotalBalance();
     final beforeExpenses = await repository.db.query(ExpenseMeta.nameTable);
     final context =
@@ -831,19 +895,23 @@ void main() {
   test('mixed wallet currencies are not combined in check or insights',
       () async {
     await repository.setPlanningSettings(paydayDay: 25, safetyReserveMinor: 0);
-    await repository.saveWallet(const WalletModel(
-      name: 'Foreign wallet',
-      type: 'bank',
-      openingBalanceMinor: 100000,
-      currency: 'USD',
-    ));
+    await repository.saveWallet(
+      const WalletModel(
+        name: 'Foreign wallet',
+        type: 'bank',
+        openingBalanceMinor: 100000,
+        currency: 'USD',
+      ),
+    );
     final context =
         await repository.getClingCheckContext(DateTime(2026, 3, 16));
     expect(context.wallets, hasLength(2));
     expect(context.runway, isNull);
     await expectLater(
       repository.getFinancialInsightInput(
-          now: DateTime(2026, 3, 16), monthlyBudgetMinor: 50000),
+        now: DateTime(2026, 3, 16),
+        monthlyBudgetMinor: 50000,
+      ),
       throwsA(isA<FinancialInsightCurrencyException>()),
     );
   });

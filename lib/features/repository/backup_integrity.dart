@@ -142,14 +142,14 @@ Future<int> validateClingBackupSchema(Database database) async {
       WalletMeta.openingBalance,
       WalletMeta.currency,
       WalletMeta.archived,
-      WalletMeta.isDefault
+      WalletMeta.isDefault,
     ];
     columns[TransferMeta.table] = [
       TransferMeta.id,
       TransferMeta.sourceWalletId,
       TransferMeta.destinationWalletId,
       TransferMeta.amount,
-      TransferMeta.date
+      TransferMeta.date,
     ];
     columns[QuickTemplateMeta.table] = [
       QuickTemplateMeta.id,
@@ -157,7 +157,7 @@ Future<int> validateClingBackupSchema(Database database) async {
       QuickTemplateMeta.type,
       QuickTemplateMeta.amount,
       QuickTemplateMeta.categoryId,
-      QuickTemplateMeta.walletId
+      QuickTemplateMeta.walletId,
     ];
   }
 
@@ -166,7 +166,8 @@ Future<int> validateClingBackupSchema(Database database) async {
         await database.rawQuery('PRAGMA foreign_key_check');
     if (foreignKeyErrors.isNotEmpty) {
       throw const FormatException(
-          'SQLite backup contains broken foreign keys.');
+        'SQLite backup contains broken foreign keys.',
+      );
     }
     columns[RecurringExpenseMeta.table] = [
       RecurringExpenseMeta.id,

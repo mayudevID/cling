@@ -233,30 +233,34 @@ List<FinancialInsight> generateFinancialInsights(FinancialInsightInput input) {
           ClingCheckThresholds.minimumMeaningfulBaselineMinor) {
     final diff = input.monthSpendMinor - input.previousComparableSpendMinor;
     final percent = (diff.abs() * 100) ~/ input.previousComparableSpendMinor;
-    insights.add(FinancialInsight(
-      id: 'trend:${now.year}-${now.month.toString().padLeft(2, '0')}',
-      type: FinancialInsightType.spendingTrend,
-      periodStart: monthStart,
-      periodEnd: end,
-      generatedAt: now,
-      severity: diff > 0
-          ? FinancialInsightSentiment.caution
-          : FinancialInsightSentiment.positive,
-      currentMinor: input.monthSpendMinor,
-      previousMinor: input.previousComparableSpendMinor,
-      ratioPercent: percent,
-      count: diff > 0 ? 1 : -1,
-    ));
+    insights.add(
+      FinancialInsight(
+        id: 'trend:${now.year}-${now.month.toString().padLeft(2, '0')}',
+        type: FinancialInsightType.spendingTrend,
+        periodStart: monthStart,
+        periodEnd: end,
+        generatedAt: now,
+        severity: diff > 0
+            ? FinancialInsightSentiment.caution
+            : FinancialInsightSentiment.positive,
+        currentMinor: input.monthSpendMinor,
+        previousMinor: input.previousComparableSpendMinor,
+        ratioPercent: percent,
+        count: diff > 0 ? 1 : -1,
+      ),
+    );
   }
   final categoryTrends = input.categories
-      .where((item) =>
-          item.currentCount >=
-              ClingCheckThresholds.minimumTrendTransactionsPerPeriod &&
-          item.previousCount >=
-              ClingCheckThresholds.minimumTrendTransactionsPerPeriod &&
-          item.previousMinor >=
-              ClingCheckThresholds.minimumMeaningfulBaselineMinor &&
-          item.currentMinor != item.previousMinor)
+      .where(
+        (item) =>
+            item.currentCount >=
+                ClingCheckThresholds.minimumTrendTransactionsPerPeriod &&
+            item.previousCount >=
+                ClingCheckThresholds.minimumTrendTransactionsPerPeriod &&
+            item.previousMinor >=
+                ClingCheckThresholds.minimumMeaningfulBaselineMinor &&
+            item.currentMinor != item.previousMinor,
+      )
       .toList()
     ..sort((a, b) {
       final aChange =
@@ -268,45 +272,51 @@ List<FinancialInsight> generateFinancialInsights(FinancialInsightInput input) {
   if (categoryTrends.isNotEmpty) {
     final category = categoryTrends.first;
     final difference = category.currentMinor - category.previousMinor;
-    insights.add(FinancialInsight(
-      id: 'trend:${now.year}-${now.month.toString().padLeft(2, '0')}:category:${category.categoryId ?? 'unknown'}',
-      type: FinancialInsightType.spendingTrend,
-      periodStart: monthStart,
-      periodEnd: end,
-      generatedAt: now,
-      severity: difference > 0
-          ? FinancialInsightSentiment.caution
-          : FinancialInsightSentiment.positive,
-      categoryId: category.categoryId,
-      currentMinor: category.currentMinor,
-      previousMinor: category.previousMinor,
-      ratioPercent: (difference.abs() * 100) ~/ category.previousMinor,
-      count: difference > 0 ? 1 : -1,
-    ));
+    insights.add(
+      FinancialInsight(
+        id: 'trend:${now.year}-${now.month.toString().padLeft(2, '0')}:category:${category.categoryId ?? 'unknown'}',
+        type: FinancialInsightType.spendingTrend,
+        periodStart: monthStart,
+        periodEnd: end,
+        generatedAt: now,
+        severity: difference > 0
+            ? FinancialInsightSentiment.caution
+            : FinancialInsightSentiment.positive,
+        categoryId: category.categoryId,
+        currentMinor: category.currentMinor,
+        previousMinor: category.previousMinor,
+        ratioPercent: (difference.abs() * 100) ~/ category.previousMinor,
+        count: difference > 0 ? 1 : -1,
+      ),
+    );
   }
   final categoryCandidates = input.categories
-      .where((item) =>
-          input.monthSpendMinor > 0 &&
-          item.currentCount >= 2 &&
-          item.currentMinor * 100 >=
-              input.monthSpendMinor *
-                  ClingCheckThresholds.significantCategorySharePercent)
+      .where(
+        (item) =>
+            input.monthSpendMinor > 0 &&
+            item.currentCount >= 2 &&
+            item.currentMinor * 100 >=
+                input.monthSpendMinor *
+                    ClingCheckThresholds.significantCategorySharePercent,
+      )
       .toList()
     ..sort((a, b) => b.currentMinor.compareTo(a.currentMinor));
   if (categoryCandidates.isNotEmpty) {
     final category = categoryCandidates.first;
-    insights.add(FinancialInsight(
-      id: 'category:${now.year}-${now.month}:${category.categoryId ?? 'unknown'}',
-      type: FinancialInsightType.categoryAnalysis,
-      periodStart: monthStart,
-      periodEnd: end,
-      generatedAt: now,
-      severity: FinancialInsightSentiment.neutral,
-      categoryId: category.categoryId,
-      currentMinor: category.currentMinor,
-      ratioPercent: (category.currentMinor * 100) ~/ input.monthSpendMinor,
-      count: category.currentCount,
-    ));
+    insights.add(
+      FinancialInsight(
+        id: 'category:${now.year}-${now.month}:${category.categoryId ?? 'unknown'}',
+        type: FinancialInsightType.categoryAnalysis,
+        periodStart: monthStart,
+        periodEnd: end,
+        generatedAt: now,
+        severity: FinancialInsightSentiment.neutral,
+        categoryId: category.categoryId,
+        currentMinor: category.currentMinor,
+        ratioPercent: (category.currentMinor * 100) ~/ input.monthSpendMinor,
+        count: category.currentCount,
+      ),
+    );
   }
   final daysElapsed = now.day;
   if (input.monthBudgetMinor != null &&
@@ -318,41 +328,47 @@ List<FinancialInsight> generateFinancialInsights(FinancialInsightInput input) {
     final elapsedPercent =
         (daysElapsed * 100) ~/ DateTime(now.year, now.month + 1, 0).day;
     if (spentPercent >= 50 && spentPercent > elapsedPercent + 10) {
-      insights.add(FinancialInsight(
-        id: 'pace:${now.year}-${now.month}',
-        type: FinancialInsightType.spendingPace,
-        periodStart: monthStart,
-        periodEnd: end,
-        generatedAt: now,
-        severity: FinancialInsightSentiment.caution,
-        currentMinor: input.monthSpendMinor,
-        previousMinor: input.monthBudgetMinor,
-        ratioPercent: spentPercent,
-        count: elapsedPercent,
-      ));
+      insights.add(
+        FinancialInsight(
+          id: 'pace:${now.year}-${now.month}',
+          type: FinancialInsightType.spendingPace,
+          periodStart: monthStart,
+          periodEnd: end,
+          generatedAt: now,
+          severity: FinancialInsightSentiment.caution,
+          currentMinor: input.monthSpendMinor,
+          previousMinor: input.monthBudgetMinor,
+          ratioPercent: spentPercent,
+          count: elapsedPercent,
+        ),
+      );
     }
   }
   if (input.commitmentMinor > 0) {
-    insights.add(FinancialInsight(
-      id: 'commitments:${now.year}-${now.month}-${now.day}',
-      type: FinancialInsightType.recurringCommitments,
-      periodStart: end,
-      periodEnd: end,
-      generatedAt: now,
-      severity: FinancialInsightSentiment.caution,
-      currentMinor: input.commitmentMinor,
-    ));
+    insights.add(
+      FinancialInsight(
+        id: 'commitments:${now.year}-${now.month}-${now.day}',
+        type: FinancialInsightType.recurringCommitments,
+        periodStart: end,
+        periodEnd: end,
+        generatedAt: now,
+        severity: FinancialInsightSentiment.caution,
+        currentMinor: input.commitmentMinor,
+      ),
+    );
   }
   if (input.goalProgressMinor > 0) {
-    insights.add(FinancialInsight(
-      id: 'goal-progress:${now.year}-${now.month}',
-      type: FinancialInsightType.financialProgress,
-      periodStart: monthStart,
-      periodEnd: end,
-      generatedAt: now,
-      severity: FinancialInsightSentiment.positive,
-      currentMinor: input.goalProgressMinor,
-    ));
+    insights.add(
+      FinancialInsight(
+        id: 'goal-progress:${now.year}-${now.month}',
+        type: FinancialInsightType.financialProgress,
+        periodStart: monthStart,
+        periodEnd: end,
+        generatedAt: now,
+        severity: FinancialInsightSentiment.positive,
+        currentMinor: input.goalProgressMinor,
+      ),
+    );
   }
   const priority = {
     FinancialInsightType.recurringCommitments: 0,

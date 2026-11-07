@@ -164,16 +164,21 @@ class PlanningBloc extends Bloc<PlanningEvent, PlanningState> {
     on<LoadPlanning>(_load);
     on<SaveRecurringRule>((event, emit) async {
       await _mutate(
-          () => _repository.saveRecurringExpenseRule(event.rule), emit);
+        () => _repository.saveRecurringExpenseRule(event.rule),
+        emit,
+      );
     });
     on<ToggleRecurringRule>((event, emit) async {
       await _mutate(
-          () => _repository.setRecurringExpenseEnabled(event.id, event.enabled),
-          emit);
+        () => _repository.setRecurringExpenseEnabled(event.id, event.enabled),
+        emit,
+      );
     });
     on<RemoveRecurringRule>((event, emit) async {
       await _mutate(
-          () => _repository.deleteRecurringExpenseRule(event.id), emit);
+        () => _repository.deleteRecurringExpenseRule(event.id),
+        emit,
+      );
     });
     on<SavePlanningBill>((event, emit) async {
       await _mutate(() => _repository.saveBill(event.bill), emit);
@@ -186,20 +191,24 @@ class PlanningBloc extends Bloc<PlanningEvent, PlanningState> {
     });
     on<PayOccurrence>((event, emit) async {
       await _mutate(
-          () =>
-              _repository.payRecurringExpenseOccurrence(event.id, event.paidAt),
-          emit);
+        () => _repository.payRecurringExpenseOccurrence(event.id, event.paidAt),
+        emit,
+      );
     });
     on<SkipOccurrence>((event, emit) async {
       await _mutate(
-          () => _repository.skipRecurringExpenseOccurrence(event.id), emit);
+        () => _repository.skipRecurringExpenseOccurrence(event.id),
+        emit,
+      );
     });
     on<SavePlanningPreferences>((event, emit) async {
       await _mutate(
-          () => _repository.setPlanningSettings(
-              paydayDay: event.paydayDay,
-              safetyReserveMinor: event.reserveMinor),
-          emit);
+        () => _repository.setPlanningSettings(
+          paydayDay: event.paydayDay,
+          safetyReserveMinor: event.reserveMinor,
+        ),
+        emit,
+      );
     });
   }
 
@@ -208,17 +217,23 @@ class PlanningBloc extends Bloc<PlanningEvent, PlanningState> {
   int _financialMutationId = 0;
 
   Future<void> _mutate(
-      Future<dynamic> Function() operation, Emitter<PlanningState> emit) async {
+    Future<dynamic> Function() operation,
+    Emitter<PlanningState> emit,
+  ) async {
     emit(state.copyWith(isLoading: true, clearError: true));
     try {
       await operation();
       if (!isClosed) {
-        await _refresh(DateTime.now(), emit,
-            financialMutationId: ++_financialMutationId);
+        await _refresh(
+          DateTime.now(),
+          emit,
+          financialMutationId: ++_financialMutationId,
+        );
       }
     } catch (error) {
-      if (!isClosed)
+      if (!isClosed) {
         emit(state.copyWith(isLoading: false, error: error.toString()));
+      }
     }
   }
 
@@ -228,8 +243,11 @@ class PlanningBloc extends Bloc<PlanningEvent, PlanningState> {
   ) =>
       _refresh(event.asOf, emit);
 
-  Future<void> _refresh(DateTime asOf, Emitter<PlanningState> emit,
-      {int? financialMutationId}) async {
+  Future<void> _refresh(
+    DateTime asOf,
+    Emitter<PlanningState> emit, {
+    int? financialMutationId,
+  }) async {
     final generation = ++_loadGeneration;
     final revision = _repository.revision;
     emit(state.copyWith(isLoading: true, clearError: true));
@@ -246,20 +264,24 @@ class PlanningBloc extends Bloc<PlanningEvent, PlanningState> {
       ]);
       if (isClosed ||
           revision != _repository.revision ||
-          generation != _loadGeneration) return;
-      emit(PlanningState(
-        isLoading: false,
-        bills: results[0] as List<PlanningBillModel>,
-        rules: results[1] as List<RecurringExpenseRuleModel>,
-        occurrences: results[2] as List<Map<String, Object?>>,
-        categories: results[3] as List<ExpenseCategoriesModel>,
-        wallets: results[4] as List<WalletModel>,
-        runway: results[5] as PaydayRunwayModel?,
-        configuredPaydayDay: (results[6] as Map<String, int?>)['paydayDay'],
-        safetyReserveMinor:
-            (results[6] as Map<String, int?>)['safetyReserveMinor'] ?? 0,
-        financialMutationId: financialMutationId ?? state.financialMutationId,
-      ));
+          generation != _loadGeneration) {
+        return;
+      }
+      emit(
+        PlanningState(
+          isLoading: false,
+          bills: results[0] as List<PlanningBillModel>,
+          rules: results[1] as List<RecurringExpenseRuleModel>,
+          occurrences: results[2] as List<Map<String, Object?>>,
+          categories: results[3] as List<ExpenseCategoriesModel>,
+          wallets: results[4] as List<WalletModel>,
+          runway: results[5] as PaydayRunwayModel?,
+          configuredPaydayDay: (results[6] as Map<String, int?>)['paydayDay'],
+          safetyReserveMinor:
+              (results[6] as Map<String, int?>)['safetyReserveMinor'] ?? 0,
+          financialMutationId: financialMutationId ?? state.financialMutationId,
+        ),
+      );
     } catch (error) {
       if (!isClosed &&
           revision == _repository.revision &&
