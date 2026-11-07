@@ -4,7 +4,6 @@ import '../../core/static_name_table.dart';
 import 'package:equatable/equatable.dart';
 
 class GoalSavingModel extends Equatable {
-
   GoalSavingModel({
     this.id,
     required this.goalId,

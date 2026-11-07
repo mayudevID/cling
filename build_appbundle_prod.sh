@@ -1,1 +1,0 @@
-fvm flutter build appbundle --obfuscate --split-debug-info=./build/appbundle_prod_dysm_android --flavor production -t lib/main_production.dart

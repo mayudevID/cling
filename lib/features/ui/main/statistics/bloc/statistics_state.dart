@@ -5,7 +5,6 @@ part of 'statistics_bloc.dart';
 enum AllStatsChoose { income, expense }
 
 class StatisticsState extends Equatable {
-
   StatisticsState({
     this.typeCategories = 0,
     this.maxValAll = 0,

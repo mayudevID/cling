@@ -5,7 +5,6 @@ import '../../core/static_name_table.dart';
 import 'transaction_model.dart';
 
 class IncomeModel implements TransactionModel {
-
   IncomeModel({
     this.id,
     required this.date,

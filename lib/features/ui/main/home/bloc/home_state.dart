@@ -2,7 +2,6 @@
 part of 'home_bloc.dart';
 
 class HomeState extends Equatable {
-
   HomeState({
     List<ExpenseModel>? listTodayExpenses,
     List<GoalModel>? listGoals,

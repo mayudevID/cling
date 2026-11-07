@@ -94,7 +94,8 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
     await _dbRepo.updateNotificationIsRead(event.notifData.id!);
     final List<NotificationModelClass> oldDataList =
         state.listNotif.toList(growable: true);
-    final NotificationModelClass newModel = event.notifData.copyWith(isRead: true);
+    final NotificationModelClass newModel =
+        event.notifData.copyWith(isRead: true);
     oldDataList[event.idx] = newModel;
     emit(state.copyWith(listNotif: oldDataList));
     mainContext.read<HomeBloc>().add(GetNotificationCount());

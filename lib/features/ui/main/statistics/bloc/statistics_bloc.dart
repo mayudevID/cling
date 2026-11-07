@@ -142,9 +142,11 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
       state.endDate,
     );
 
-    emit(state.copyWith(
-      incomeBreakdownList: (result.isNotEmpty) ? result : List.empty(),
-    ));
+    emit(
+      state.copyWith(
+        incomeBreakdownList: (result.isNotEmpty) ? result : List.empty(),
+      ),
+    );
 
     Logger.Yellow.log("GetIncomeBreakdown Called");
   }
@@ -218,10 +220,12 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
       Logger.Red.log(yearlyIncomeList.first.y);
     }
 
-    emit(state.copyWith(
-      yearlyIncomeList: yearlyIncomeList,
-      maxValIncome: max.toDouble(),
-    ));
+    emit(
+      state.copyWith(
+        yearlyIncomeList: yearlyIncomeList,
+        maxValIncome: max.toDouble(),
+      ),
+    );
   }
 
   void _changeDateForPeriod(ChangeDateForPeriod event, emit) {
@@ -458,17 +462,19 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
   }
 
   void _freeResources(FreeResourcesStats event, emit) {
-    emit(state.copyWith(
-      pieDataExSavList: List.empty(),
-      yearlyIncomeList: List.empty(),
-      mostExpenseList: List.empty(),
-      incomeBreakdownList: List.empty(),
-      chartDataIncomeList: List.empty(),
-      chartDataExpenseList: List.empty(),
-      chartDataSavingsList: List.empty(),
-      pieDataExpenseList: List.empty(),
-      expenseBreakdownList: List.empty(),
-    ));
+    emit(
+      state.copyWith(
+        pieDataExSavList: List.empty(),
+        yearlyIncomeList: List.empty(),
+        mostExpenseList: List.empty(),
+        incomeBreakdownList: List.empty(),
+        chartDataIncomeList: List.empty(),
+        chartDataExpenseList: List.empty(),
+        chartDataSavingsList: List.empty(),
+        pieDataExpenseList: List.empty(),
+        expenseBreakdownList: List.empty(),
+      ),
+    );
   }
 
   String monthDataInExToString({

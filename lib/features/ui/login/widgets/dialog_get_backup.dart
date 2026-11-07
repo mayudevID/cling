@@ -77,7 +77,7 @@ Future<bool> dialogGetBackup(
                           color: Colors.black,
                           fontWeight: FontWeight.bold,
                         ),
-                      )
+                      ),
                     ],
                   ),
                 ),

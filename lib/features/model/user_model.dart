@@ -10,7 +10,6 @@ UserModel userModelFromMap(String str) => UserModel.fromMap(json.decode(str));
 String userModelToMap(UserModel data) => json.encode(data.toMap());
 
 class UserModel extends Equatable {
-
   factory UserModel.fromMap(Map<String, dynamic> json) => UserModel(
         uid: json["uid"],
         lastBackupTime: DateTime.tryParse(json["last_backup_time"] ?? ""),

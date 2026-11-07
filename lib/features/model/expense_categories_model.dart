@@ -3,7 +3,6 @@ import 'package:equatable/equatable.dart';
 import '../../core/static_name_table.dart';
 
 class ExpenseCategoriesModel extends Equatable {
-
   const ExpenseCategoriesModel({
     required this.id,
     required this.expenseCategories,

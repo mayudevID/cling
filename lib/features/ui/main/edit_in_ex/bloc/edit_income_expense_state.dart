@@ -3,7 +3,6 @@
 part of 'edit_income_expense_bloc.dart';
 
 class EditIncomeExpenseState extends Equatable {
-
   EditIncomeExpenseState({
     List<IncomeSourceModel>? listInSource,
     List<ExpenseCategoriesModel>? listExCategories,

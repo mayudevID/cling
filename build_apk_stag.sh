@@ -1,1 +1,0 @@
-fvm flutter build apk --release --obfuscate --split-debug-info=./build/apk_stag_dysm_android --flavor staging -t lib/main_staging.dart

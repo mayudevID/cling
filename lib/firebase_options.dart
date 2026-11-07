@@ -65,5 +65,4 @@ class DefaultFirebaseOptions {
     storageBucket: 'cling--money-manager-app.firebasestorage.app',
     iosBundleId: 'com.mayudev.cling',
   );
-
 }

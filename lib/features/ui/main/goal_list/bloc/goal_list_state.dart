@@ -3,7 +3,6 @@
 part of 'goal_list_bloc.dart';
 
 class GoalListState extends Equatable {
-
   GoalListState({
     List<GoalModel>? listGoalModel,
     RefreshController? refreshController,

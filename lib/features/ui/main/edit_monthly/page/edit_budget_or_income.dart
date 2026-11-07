@@ -226,7 +226,7 @@ class EditMonBudgetOrIncomePageContent extends StatelessWidget {
                     ),
                   ],
                 ),
-              ]
+              ],
             ],
           ),
         ),

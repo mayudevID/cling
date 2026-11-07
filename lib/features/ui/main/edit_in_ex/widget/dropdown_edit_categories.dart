@@ -68,15 +68,19 @@ Widget dropDownEditCategories({required FlowType flowType}) {
             switch (flowType) {
               case FlowType.income:
                 newVal = value as IncomeSourceModel;
-                context.read<EditIncomeExpenseBloc>().add(SetCategories(
-                      MapEntry(newVal.id, newVal.incomeSource),
-                    ));
+                context.read<EditIncomeExpenseBloc>().add(
+                      SetCategories(
+                        MapEntry(newVal.id, newVal.incomeSource),
+                      ),
+                    );
                 break;
               case FlowType.expense:
                 newVal = value as ExpenseCategoriesModel;
-                context.read<EditIncomeExpenseBloc>().add(SetCategories(
-                      MapEntry(newVal.id, newVal.expenseCategories),
-                    ));
+                context.read<EditIncomeExpenseBloc>().add(
+                      SetCategories(
+                        MapEntry(newVal.id, newVal.expenseCategories),
+                      ),
+                    );
                 break;
             }
           },

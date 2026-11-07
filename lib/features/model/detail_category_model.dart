@@ -2,7 +2,6 @@ import '../ui/main/main_widget/enum_range_date.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 class DetailCategoryModel {
-
   DetailCategoryModel({
     required this.type,
     required this.categoryStr,

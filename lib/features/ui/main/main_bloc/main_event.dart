@@ -8,7 +8,6 @@ abstract class MainEvent extends Equatable {
 }
 
 class TabChange extends MainEvent {
-
   const TabChange({required this.tabIndex});
   final int tabIndex;
 }

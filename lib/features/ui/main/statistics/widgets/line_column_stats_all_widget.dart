@@ -128,7 +128,7 @@ Widget lineColumnStatsAllWidget(BuildContext mainContext) {
               borderRadius: const BorderRadius.all(Radius.circular(5)),
               width: 1,
               spacing: 0.4,
-            )
+            ),
           ],
         ),
       );

@@ -63,7 +63,8 @@ class CalcBloc extends Bloc<CalcEvent, CalcState> {
     try {
       final joiningStr = state.listInput.join();
       final ShuntingYardParser parser = ShuntingYardParser();
-      final Expression expression = parser.parse(joiningStr.replaceAll(",", ""));
+      final Expression expression =
+          parser.parse(joiningStr.replaceAll(",", ""));
       final ContextModel contextModel = ContextModel();
       final double result =
           RealEvaluator(contextModel).evaluate(expression).toDouble();

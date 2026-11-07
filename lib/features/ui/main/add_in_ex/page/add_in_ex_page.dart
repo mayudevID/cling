@@ -23,9 +23,11 @@ class AddIncomeExpensePage extends StatelessWidget {
       create: (_) => AddIncomeExpenseBloc(
         context: context,
         dbRepo: getIt<DatabaseRepository>(),
-      )..add((flowType == FlowType.income)
-          ? GetIncomeSource()
-          : GetExpenseCategories()),
+      )..add(
+          (flowType == FlowType.income)
+              ? GetIncomeSource()
+              : GetExpenseCategories(),
+        ),
       child: AddIncomeExpensePageContent(flowType: flowType),
     );
   }

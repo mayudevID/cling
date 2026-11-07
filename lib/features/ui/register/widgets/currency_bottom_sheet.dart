@@ -34,7 +34,8 @@ void currencyBottomSheet(BuildContext context) {
           child: Container(
             padding: const EdgeInsets.all(16),
             margin: EdgeInsets.only(
-                bottom: (index == Currency.values.length - 1) ? 8 : 0),
+              bottom: (index == Currency.values.length - 1) ? 8 : 0,
+            ),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
               border: Border.all(

@@ -13,7 +13,6 @@ class SetAmountInput extends EditMonthlyEvent {
 }
 
 class ChangeTempRecDay extends EditMonthlyEvent {
-
   const ChangeTempRecDay(this.value);
   final int value;
 }

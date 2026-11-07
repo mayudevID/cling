@@ -72,7 +72,9 @@ class EditMonthlyBloc extends Bloc<EditMonthlyEvent, EditMonthlyState> {
     if (!(connectivityResult[0] == ConnectivityResult.mobile ||
         connectivityResult[0] == ConnectivityResult.wifi)) {
       errorSnackbar(
-          mainContext, AppLocalizations.of(mainContext)!.noConnection);
+        mainContext,
+        AppLocalizations.of(mainContext)!.noConnection,
+      );
       return;
     }
 

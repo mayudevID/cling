@@ -37,18 +37,21 @@ Widget incomeAndExpense(BuildContext context) {
               ),
             ),
             const Spacer(),
-            BlocBuilder<HomeBloc, HomeState>(buildWhen: (p, c) {
-              return p.amountIncomeThisMonth != c.amountIncomeThisMonth ||
-                  p.amountExpenseThisMonth != c.amountExpenseThisMonth;
-            }, builder: (context, state) {
-              final currBalance =
-                  state.amountIncomeThisMonth - state.amountExpenseThisMonth;
-              if (currBalance >= 0) return const SizedBox();
+            BlocBuilder<HomeBloc, HomeState>(
+              buildWhen: (p, c) {
+                return p.amountIncomeThisMonth != c.amountIncomeThisMonth ||
+                    p.amountExpenseThisMonth != c.amountExpenseThisMonth;
+              },
+              builder: (context, state) {
+                final currBalance =
+                    state.amountIncomeThisMonth - state.amountExpenseThisMonth;
+                if (currBalance >= 0) return const SizedBox();
 
-              return warningAmountIcon(
-                content: AppLocalizations.of(context)!.warningMonthlyBudget,
-              );
-            }),
+                return warningAmountIcon(
+                  content: AppLocalizations.of(context)!.warningMonthlyBudget,
+                );
+              },
+            ),
             const SizedBox(width: 8),
             BlocBuilder<HomeBloc, HomeState>(
               buildWhen: (p, c) {
@@ -78,7 +81,7 @@ Widget incomeAndExpense(BuildContext context) {
         Row(
           children: [
             Expanded(
-              child: Container(
+              child: DecoratedBox(
                 decoration: BoxDecoration(
                   color: const Color(0xFF07AC65),
                   borderRadius: BorderRadius.circular(7),
@@ -133,7 +136,7 @@ Widget incomeAndExpense(BuildContext context) {
               width: 16,
             ),
             Expanded(
-              child: Container(
+              child: DecoratedBox(
                 decoration: BoxDecoration(
                   color: const Color(0xFFE54C19),
                   borderRadius: BorderRadius.circular(7),

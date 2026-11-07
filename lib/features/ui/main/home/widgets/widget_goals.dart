@@ -97,7 +97,7 @@ Widget widgetGoals(
                 ),
               ),
             ],
-          )
+          ),
         ],
       ),
     ),

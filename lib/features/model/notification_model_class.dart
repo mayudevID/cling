@@ -3,7 +3,6 @@
 import 'package:equatable/equatable.dart';
 
 class NotificationModelClass extends Equatable {
-
   NotificationModelClass({
     this.id,
     required this.title,

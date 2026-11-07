@@ -3,7 +3,6 @@
 part of 'notification_bloc.dart';
 
 class NotificationState extends Equatable {
-
   NotificationState({
     this.totalNotif = 0,
     RefreshController? refreshController,

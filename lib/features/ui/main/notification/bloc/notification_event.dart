@@ -10,7 +10,6 @@ sealed class NotificationEvent extends Equatable {
 class GetNotificationList extends NotificationEvent {}
 
 class MarkNotificationRead extends NotificationEvent {
-
   const MarkNotificationRead(this.idx, this.notifData);
   final int idx;
   final NotificationModelClass notifData;

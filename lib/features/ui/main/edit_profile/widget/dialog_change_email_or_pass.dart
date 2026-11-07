@@ -140,7 +140,7 @@ Future<void> openMail(BuildContext context) async {
                     ..pop()
                     ..pop();
                 },
-              )
+              ),
             ],
           );
         },

@@ -3,7 +3,6 @@
 part of 'calc_bloc.dart';
 
 class CalcState extends Equatable {
-
   CalcState({
     List<String>? listInput,
     this.expressionFromCount = "",

@@ -98,9 +98,9 @@ Widget nameAndEmail(BuildContext context) {
                         );
                       },
                     ),
-                  )
+                  ),
                 ],
-              )
+              ),
             ],
           ),
         ),

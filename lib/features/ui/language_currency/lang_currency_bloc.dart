@@ -45,13 +45,15 @@ class LangCurrencyBloc extends Bloc<LangCurrencyEvent, LangCurrencyState> {
     Emitter<LangCurrencyState> emit,
   ) async {
     final selectedLanguage = _settingsRepo.getCurrentLang();
-    emit(state.copyWith(
-      selectedLanguage: selectedLanguage != null
-          ? Language.values
-              .where((item) => item.value.languageCode == selectedLanguage)
-              .first
-          : Language.english,
-    ));
+    emit(
+      state.copyWith(
+        selectedLanguage: selectedLanguage != null
+            ? Language.values
+                .where((item) => item.value.languageCode == selectedLanguage)
+                .first
+            : Language.english,
+      ),
+    );
   }
 
   void _onGetCurrency(
@@ -59,12 +61,14 @@ class LangCurrencyBloc extends Bloc<LangCurrencyEvent, LangCurrencyState> {
     Emitter<LangCurrencyState> emit,
   ) async {
     final selectedCurrency = _settingsRepo.getCurrentCurrency();
-    emit(state.copyWith(
-      selectedCurrency: selectedCurrency != null
-          ? Currency.values
-              .where((item) => item.value.countryCode == selectedCurrency)
-              .first
-          : Currency.idr,
-    ));
+    emit(
+      state.copyWith(
+        selectedCurrency: selectedCurrency != null
+            ? Currency.values
+                .where((item) => item.value.countryCode == selectedCurrency)
+                .first
+            : Currency.idr,
+      ),
+    );
   }
 }

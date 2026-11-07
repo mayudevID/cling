@@ -1,1 +1,0 @@
-fvm flutter build ipa --release --obfuscate --split-debug-info=./build/prod_dysm_ios --flavor production -t lib/main_production.dart

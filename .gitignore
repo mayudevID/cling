@@ -153,3 +153,5 @@ dart_fix_cheatsheet.txt
 .fvm/
 .fvmrc
 .vscode/
+# Added by code-review-graph
+.code-review-graph/

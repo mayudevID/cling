@@ -10,13 +10,11 @@ sealed class GoalListEvent extends Equatable {
 class GetGoalsList extends GoalListEvent {}
 
 class DeleteGoalFromGL extends GoalListEvent {
-
   const DeleteGoalFromGL(this.id);
   final int id;
 }
 
 class UpdateGoalFromGL extends GoalListEvent {
-
   const UpdateGoalFromGL(this.newGoalModel);
   final GoalModel newGoalModel;
 }

@@ -12,7 +12,6 @@ import 'package:path/path.dart';
 import 'database_repository.dart';
 
 class SettingsRepository {
-
   SettingsRepository({
     required FirebaseAuth firebaseAuth,
     required FirebaseFirestore firestore,
