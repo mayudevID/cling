@@ -101,7 +101,7 @@ Widget incomeAndExpense(BuildContext context) {
                           color: Colors.white,
                           fontSize: 12,
                           fontFamily: FontFamily.cabinetGrotesk,
-                          fontWeight: FontWeight.w500,
+                          fontWeight: FontWeight.w700,
                         ),
                       ),
                       const SizedBox(
@@ -155,7 +155,7 @@ Widget incomeAndExpense(BuildContext context) {
                           color: Colors.white,
                           fontSize: 12,
                           fontFamily: FontFamily.cabinetGrotesk,
-                          fontWeight: FontWeight.w500,
+                          fontWeight: FontWeight.w700,
                         ),
                       ),
                       const SizedBox(
