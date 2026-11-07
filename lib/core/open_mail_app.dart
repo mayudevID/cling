@@ -5,7 +5,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:platform/platform.dart';
-import 'package:platform/testing.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 /// Launch Schemes for supported apps:
@@ -26,7 +25,7 @@ class OpenMailApp {
   OpenMailApp._();
 
   @visibleForTesting
-  static Platform platform = const Platform();
+  static Platform platform = const LocalPlatform();
 
   static bool get _isAndroid => platform.isAndroid;
 
