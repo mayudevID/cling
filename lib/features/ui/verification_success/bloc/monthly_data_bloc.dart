@@ -163,6 +163,10 @@ class MonthlyDataBloc extends Bloc<MonthlyDataEvent, MonthlyDataState> {
         mainContext,
         AppLocalizations.of(mainContext)!.noConnection,
       );
+    } catch (e) {
+      Logger.Red.log(e.toString());
+      Navigator.pop(mainContext);
+      errorSnackbar(mainContext, 'Unable to save monthly settings. Try again.');
     }
   }
 }

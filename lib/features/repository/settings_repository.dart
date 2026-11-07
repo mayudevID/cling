@@ -66,6 +66,11 @@ class SettingsRepository {
     final double monIncomeNew = monthlyIncome ?? userData.monthlyIncome;
     final double monBudgetNew = monthlyBudget ?? userData.monthlyBudget;
     final int recurringNew = recurringDay ?? userData.recurringDay;
+    if (!monIncomeNew.isFinite || monIncomeNew < 0 ||
+        !monBudgetNew.isFinite || monBudgetNew < 0 ||
+        recurringNew < 0 || recurringNew > 31) {
+      throw const FormatException('Invalid monthly income, budget or payday.');
+    }
 
     final now = DateTime.now();
 
@@ -90,6 +95,17 @@ class SettingsRepository {
       userCacheKey,
       userModelToMap(newUserData),
     );
+
+    if (monthlyIncome != null || recurringDay != null) {
+      if (_databaseRepository.activeUserId != _firebaseAuth.currentUser?.uid ||
+          !_databaseRepository.isReady) {
+        throw StateError('Finance database does not match signed-in user.');
+      }
+      await _databaseRepository.syncMonthlyIncomeRule(
+        recurringDay: recurringNew,
+        amount: monIncomeNew,
+      );
+    }
   }
 
   Future<DateTime> editBackupTime({required UserModel userModel}) async {

@@ -104,12 +104,12 @@ class EditMonthlyBloc extends Bloc<EditMonthlyEvent, EditMonthlyState> {
         ..pop();
     } on SocketException catch (e) {
       Logger.Red.log(e.message);
-
       Navigator.pop(mainContext);
-      errorSnackbar(
-        mainContext,
-        AppLocalizations.of(mainContext)!.noConnection,
-      );
+      errorSnackbar(mainContext, AppLocalizations.of(mainContext)!.noConnection);
+    } catch (e) {
+      Logger.Red.log(e.toString());
+      Navigator.pop(mainContext);
+      errorSnackbar(mainContext, 'Unable to save monthly settings. Try again.');
     }
   }
 }

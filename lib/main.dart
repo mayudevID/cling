@@ -70,7 +70,10 @@ class _MainAppState extends State<MainApp> {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (_) => AppBloc(authRepo: getIt<AuthRepository>()),
+          create: (_) => AppBloc(
+            authRepo: getIt<AuthRepository>(),
+            dbRepo: getIt<DatabaseRepository>(),
+          ),
         ),
         BlocProvider(
           create: (_) => LangCurrencyBloc(

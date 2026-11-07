@@ -82,3 +82,43 @@ rules limit each backup path to its matching authenticated UID.
   operation sequencing, and reloading active views after account switches.
 - The tests use `sqflite_common_ffi` and must be executed in a compatible
   Flutter/Dart development environment; no CI/device results are implied.
+
+## Follow-up patch: transaction correctness and UI projection consistency
+
+- Editing an income/expense now writes both the legacy major-unit amount and
+  the canonical integer `amount_minor` in one row update.
+- Authenticated app state is permitted only when Firebase UID, cached profile
+  UID, active SQLite owner UID, and database readiness all agree. A Firebase
+  auth event by itself is not sufficient to open the finance dashboard.
+- Goals and notifications use deterministic keyset paging. Notifications are
+  ordered by the full ISO timestamp plus ID, with a supporting index. The
+  page-size boundary and one-record cases are regression-tested.
+- Finance notifications use localized copy and an atomic once-per-period
+  check. A missing (zero) budget never triggers a budget-exceeded warning.
+- Updating monthly income/recurring day immediately synchronizes its local
+  schedule. The disabled rule keeps its identity and occurrence ledger so
+  re-enabling it in the same month does not generate a second payment.
+- Transaction mutations refresh Home, selected-month transaction history,
+  statistics and any active category detail page from SQLite. Async result
+  handling checks active account revisions and request identity.
+- GitHub Actions now executes `flutter analyze` and `flutter test` for
+  main-branch pushes and pull requests.
+
+### Release smoke tests
+
+1. Edit income and expense amounts, restart the app, and compare transaction
+   values, Home balance and graph totals.
+2. Open an existing account, log out, sign into another UID and confirm no
+   records from the previous account are shown. Repeat with app restart.
+3. Open Goals with one item, then 12, 13 and 25; scroll through each page.
+   Repeat with notifications containing equal timestamps.
+4. Leave budget at zero, add an expense, and confirm no budget-exceeded
+   notification is created. Set a budget and exceed it.
+5. Change or disable monthly income, then re-enable it on payday; verify no
+   second income transaction is inserted for the same month.
+6. Switch transaction months rapidly and edit a transaction's date/category
+   while viewing filtered statistics.
+
+**Note:** Unit tests and static analysis must run in a Flutter-equipped
+environment or GitHub Actions. This repository patch itself was prepared via
+GitHub APIs without executing an Android/iOS build.

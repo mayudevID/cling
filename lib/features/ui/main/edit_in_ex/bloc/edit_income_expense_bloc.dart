@@ -17,12 +17,8 @@ import '../../../../model/transaction_model.dart';
 import '../../../../repository/database_repository.dart';
 import '../../../../repository/settings_repository.dart';
 import '../../../language_currency/lang_export.dart';
-import '../../home/bloc/home_bloc.dart';
+import '../../main_widget/finance_refresh.dart';
 import '../../main_widget/enum_flowtype.dart';
-import '../../stats_detail/bloc/stats_detail_bloc.dart';
-import '../../stats_detail/page/stats_detail_per_categories_page.dart';
-import '../../transaction/bloc/transaction_bloc.dart';
-import '../../statistics/bloc/statistics_bloc.dart';
 
 part 'edit_income_expense_event.dart';
 part 'edit_income_expense_state.dart';
@@ -54,8 +50,6 @@ class EditIncomeExpenseBloc
 
   final DatabaseRepository _dbRepo;
   BuildContext get mainContext => MainApp.navKeyGlobal.currentContext!;
-  BuildContext? get detailStatsContext =>
-      StatsDetailPerCategoriesPage.navKey.currentContext;
 
   void _setDate(SetDate event, emit) {
     final DateTime oldDateTime = state.selectedDate;
@@ -140,12 +134,13 @@ class EditIncomeExpenseBloc
   }
 
   Future<void> _saveData(
-      SaveData event, Emitter<EditIncomeExpenseState> emit) async {
+    SaveData event,
+    Emitter<EditIncomeExpenseState> emit,
+  ) async {
     if (state.selectedCategories == const MapEntry(0, "")) {
       errorToast(AppLocalizations.of(mainContext)!.pleaseSelectCategories);
       return;
     }
-
     if (!state.amountInput.isFinite || state.amountInput <= 0) {
       errorToast(AppLocalizations.of(mainContext)!.pleaseFillAmount);
       return;
@@ -153,55 +148,29 @@ class EditIncomeExpenseBloc
 
     try {
       MoneyAmount.toMinorUnits(state.amountInput);
-      TransactionModel data;
       switch (state.flowType) {
         case FlowType.income:
-          data = IncomeModel(
+          await _dbRepo.updateIncome(IncomeModel(
             id: state.id,
             date: state.selectedDate,
             amount: state.amountInput,
             desc: state.descOrItem,
             incomeSource:
                 '${state.selectedCategories.key} ${state.selectedCategories.value}',
-          );
-          await _dbRepo.updateIncome(data as IncomeModel);
-
-          ///* Update UI
-          mainContext.read<StatisticsBloc>()
-            ..add(GetIncomeBreakdown())
-            ..add(GetYearlyIncome());
-
+          ));
           break;
         case FlowType.expense:
-          data = ExpenseModel(
+          await _dbRepo.updateExpense(ExpenseModel(
             id: state.id,
             date: state.selectedDate,
             amount: state.amountInput,
             item: state.descOrItem,
             categories:
                 '${state.selectedCategories.key} ${state.selectedCategories.value}',
-          );
-          await _dbRepo.updateExpense(data as ExpenseModel);
-
-          ///* Update UI
-          mainContext.read<HomeBloc>().add(GetTodayExpenses());
-          mainContext
-              .read<StatisticsBloc>()
-              .add(GetExpenseBreakdownAndPieData());
-
+          ));
           break;
       }
-
-      ///* Update UI
-      mainContext.read<HomeBloc>().add(GetIncomeExpenseAmountTotalCurrMonth());
-      mainContext.read<StatisticsBloc>()
-        ..add(GetIncomeExpenseTotalAllMonth())
-        ..add(GetMost());
-      detailStatsContext?.read<StatsDetailBloc>().add(UpdateFromEdit(data));
-
-      // Always reload the selected month, including edits to past records.
-      mainContext.read<TransactionBloc>().add(GetData());
-
+      refreshFinancialViews(mainContext);
       Navigator.pop(mainContext);
     } on FormatException {
       errorToast(AppLocalizations.of(mainContext)!.invalidAmount);
@@ -211,45 +180,27 @@ class EditIncomeExpenseBloc
     }
   }
 
-  void _deleteData(DeleteData event, emit) async {
-    final result = await dialogDelete(mainContext);
-    if (!result) return;
+  Future<void> _deleteData(
+    DeleteData event,
+    Emitter<EditIncomeExpenseState> emit,
+  ) async {
+    final confirmed = await dialogDelete(mainContext);
+    if (!confirmed) return;
 
-    switch (state.flowType) {
-      case FlowType.income:
-        await _dbRepo.deleteIncome(state.id);
-
-        ///* Update UI
-        mainContext.read<StatisticsBloc>()
-          ..add(GetIncomeBreakdown())
-          ..add(GetYearlyIncome());
-
-        Logger.Green.log("Delete Income ${state.id} and Updated");
-        break;
-      case FlowType.expense:
-        await _dbRepo.deleteExpense(state.id);
-
-        ///* Update UI
-        mainContext.read<HomeBloc>().add(GetTodayExpenses());
-        mainContext.read<StatisticsBloc>().add(GetExpenseBreakdownAndPieData());
-
-        Logger.Green.log("Delete Expense ${state.id} and Updated");
-        break;
+    try {
+      switch (state.flowType) {
+        case FlowType.income:
+          await _dbRepo.deleteIncome(state.id);
+          break;
+        case FlowType.expense:
+          await _dbRepo.deleteExpense(state.id);
+          break;
+      }
+      refreshFinancialViews(mainContext);
+      Navigator.pop(mainContext);
+    } on DatabaseException catch (e) {
+      errorToast(e.toString());
+      Logger.Red.log(e.toString());
     }
-
-    ///* Update UI
-    mainContext.read<HomeBloc>().add(GetIncomeExpenseAmountTotalCurrMonth());
-    mainContext.read<StatisticsBloc>()
-      ..add(GetIncomeExpenseTotalAllMonth())
-      ..add(GetMost());
-    detailStatsContext?.read<StatsDetailBloc>().add(DeleteFromEdit(state.id));
-
-    if (mainContext.read<TransactionBloc>().state.date ==
-        DateTime(DateTime.now().year, DateTime.now().month)) {
-      mainContext.read<TransactionBloc>().add(GetData());
-    }
-
-    Logger.Green.log("Updated --> Back");
-    Navigator.pop(mainContext);
   }
 }

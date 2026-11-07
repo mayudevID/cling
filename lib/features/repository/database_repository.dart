@@ -27,6 +27,11 @@ class DatabaseRepository {
   // never see the data of the previously signed-in account.
   String? _userId;
   Database? _database;
+  int _revision = 0;
+  bool _ready = false;
+  String? get activeUserId => _userId;
+  int get revision => _revision;
+  bool get isReady => _ready && _database != null;
   static const databaseName = 'cling_database.db';
   Database get db => _database ?? (throw StateError('Database has not opened'));
   String get databaseFileName =>
@@ -35,7 +40,7 @@ class DatabaseRepository {
       join(await getDatabasesPath(), databaseFileName);
 
   Future<void> open({bool recoverRollback = true}) async {
-    if (_database != null) return;
+    if (_database != null && _ready) return;
     final path = await databasePath;
     final rollback = File('$path.rollback');
     if (recoverRollback && await rollback.exists()) {
@@ -62,6 +67,11 @@ class DatabaseRepository {
       period TEXT NOT NULL,
       PRIMARY KEY (rule_id, period)
     )''');
+    await db.execute(
+      'CREATE INDEX IF NOT EXISTS idx_notifications_date_id '
+      'ON ${NotificationMeta.nameTable} '
+      '(${NotificationMeta.date} DESC, ${NotificationMeta.id} DESC)',
+    );
     // Older versions inserted one equivalent rule on every login.
     await db.transaction((txn) async {
       final rules = await txn.query(
@@ -82,9 +92,12 @@ class DatabaseRepository {
       }
     });
     await checkAndInputRecurring();
+    _ready = true;
   }
 
   Future<void> close() async {
+    _ready = false;
+    _revision++;
     final current = _database;
     _database = null;
     if (current != null) await current.close();
@@ -482,6 +495,17 @@ class DatabaseRepository {
     return dataList;
   }
 
+  Future<List<GoalModel>> getGoalsPage({int? beforeId, int limit = 12}) async {
+    final rows = await db.query(
+      GoalMeta.nameTable,
+      where: beforeId == null ? null : '${GoalMeta.id} < ?',
+      whereArgs: beforeId == null ? null : [beforeId],
+      orderBy: '${GoalMeta.id} DESC',
+      limit: limit,
+    );
+    return rows.map(GoalModel.fromDatabase).toList();
+  }
+
   Future<List<GoalModel>> getGoalsList(int id) async {
     final List<GoalModel> dataList = [];
     final maps = await db.rawQuery(
@@ -625,6 +649,7 @@ class DatabaseRepository {
       {
         IncomeMeta.date: data.date.toIso8601String(),
         IncomeMeta.amount: data.amount,
+        IncomeMeta.amountMinor: MoneyAmount.toMinorUnits(data.amount),
         IncomeMeta.desc: data.desc,
         IncomeMeta.idIncomeSource: foreignId,
       },
@@ -806,6 +831,7 @@ class DatabaseRepository {
       {
         ExpenseMeta.date: data.date.toIso8601String(),
         ExpenseMeta.amount: data.amount,
+        ExpenseMeta.amountMinor: MoneyAmount.toMinorUnits(data.amount),
         ExpenseMeta.item: data.item,
         ExpenseMeta.idCategories: foreignId,
       },
@@ -1005,6 +1031,69 @@ class DatabaseRepository {
     return dataList;
   }
 
+  /// Stable keyset pagination by full ISO timestamp and unique ID.
+  Future<List<NotificationModelClass>> getNotificationsPage({
+    DateTime? beforeDate,
+    int? beforeId,
+    int limit = 12,
+  }) async {
+    if ((beforeDate == null) != (beforeId == null)) {
+      throw ArgumentError('Both cursor fields must be provided together.');
+    }
+    final cursor = beforeDate?.toIso8601String();
+    final rows = await db.query(
+      NotificationMeta.nameTable,
+      where: cursor == null
+          ? null
+          : '(${NotificationMeta.date} < ? OR '
+            '(${NotificationMeta.date} = ? AND ${NotificationMeta.id} < ?))',
+      whereArgs: cursor == null ? null : [cursor, cursor, beforeId],
+      orderBy: '${NotificationMeta.date} DESC, ${NotificationMeta.id} DESC',
+      limit: limit,
+    );
+    return rows.map((data) => NotificationModelClass(
+      id: data[NotificationMeta.id] as int,
+      title: data[NotificationMeta.title] as String,
+      desc: data[NotificationMeta.desc] as String,
+      date: DateTime.parse(data[NotificationMeta.date] as String),
+      isRead: data[NotificationMeta.isRead] != 0,
+      type: data[NotificationMeta.type] as int,
+    )).toList();
+  }
+
+  /// Check-and-insert happens in one serialized SQLite transaction.
+  Future<bool> saveWarningNotificationOnce({
+    required int type,
+    required String title,
+    required String description,
+    required DateTime date,
+  }) async {
+    if (type < 0 || type > 2) throw ArgumentError.value(type, 'type');
+    final period = type == 2
+        ? date.toIso8601String().substring(0, 10)
+        : date.toIso8601String().substring(0, 7);
+    final length = type == 2 ? 10 : 7;
+    return db.transaction((txn) async {
+      final rows = await txn.query(
+        NotificationMeta.nameTable,
+        columns: [NotificationMeta.id],
+        where: '${NotificationMeta.type} = ? AND '
+               'substr(${NotificationMeta.date}, 1, $length) = ?',
+        whereArgs: [type, period],
+        limit: 1,
+      );
+      if (rows.isNotEmpty) return false;
+      await txn.insert(NotificationMeta.nameTable, {
+        NotificationMeta.title: title,
+        NotificationMeta.desc: description,
+        NotificationMeta.date: date.toIso8601String(),
+        NotificationMeta.type: type,
+        NotificationMeta.isRead: 0,
+      });
+      return true;
+    });
+  }
+
   Future<bool> checkNotificationMonthlyBudget() async {
     final now = DateFormat('yyyy-MM').format(DateTime.now());
     final checkNotification = await db.rawQuery(
@@ -1073,6 +1162,7 @@ class DatabaseRepository {
     for (final rule in rules) {
       final ruleId = rule[RecurringMeta.id] as int;
       final day = rule[RecurringMeta.recurringDay] as int;
+      if (day == 0) continue; // An intentionally disabled recurring rule.
       final latest =
           DateTime.parse(rule[RecurringMeta.recurringLast] as String);
       var due = RecurringSchedule.next(latest, day);
@@ -1135,9 +1225,16 @@ class DatabaseRepository {
       );
       if (existing.isNotEmpty) {
         final first = existing.first;
+        final oldDay = first[RecurringMeta.recurringDay] as int;
         await txn.update(
           RecurringMeta.nameTable,
           {
+            // Changing payday takes effect prospectively. Do not fabricate
+            // a payment for a new payday that has already passed this month.
+            if (oldDay != recDay)
+              RecurringMeta.recurringLast:
+                  RecurringSchedule.initialLast(DateTime.now(), recDay)
+                      .toIso8601String(),
             RecurringMeta.recurringDay: recDay,
             RecurringMeta.amount: amount,
             RecurringMeta.amountMinor: minor,
@@ -1168,6 +1265,27 @@ class DatabaseRepository {
       }
     });
     if (isFromLogin) await checkAndInputRecurring();
+  }
+
+  /// Update the configured monthly rule immediately after a budget/income
+  /// settings edit. Disabling preserves the rule ID and occurrence history.
+  Future<void> syncMonthlyIncomeRule({
+    required int recurringDay,
+    required double amount,
+  }) async {
+    if (recurringDay == 0 || amount <= 0) {
+      await db.update(RecurringMeta.nameTable, {
+        RecurringMeta.recurringDay: 0,
+        RecurringMeta.amount: 0,
+        RecurringMeta.amountMinor: 0,
+      }, where: '${RecurringMeta.type} = ? AND ${RecurringMeta.idModel} = ?',
+         whereArgs: [0, 0]);
+      return;
+    }
+    await checkAndInputRecurring(); // Commit any pending old-schedule entries.
+    await saveRecurringMonthly(
+      recDay: recurringDay, type: 0, amount: amount, isFromLogin: true,
+    );
   }
 
   //! ================ DELETE ALL ================

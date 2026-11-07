@@ -93,8 +93,10 @@ Widget monthlyBudget(BuildContext context) {
                       return const SizedBox();
                     }
 
-                    final length = (homeState.amountExpenseThisMonth * 358) /
-                        profileState.userModel.monthlyBudget;
+                    final fraction = (homeState.amountExpenseThisMonth /
+                            profileState.userModel.monthlyBudget)
+                        .clamp(0.0, 1.0);
+                    final length = 358.0 * fraction;
                     return Container(
                       width: length,
                       height: 16,
@@ -188,11 +190,11 @@ Widget monthlyBudget(BuildContext context) {
                     return p.amountExpenseThisMonth != c.amountExpenseThisMonth;
                   },
                   builder: (context, homeState) {
-                    final amount = (homeState.amountExpenseThisMonth /
-                            profileState.userModel.monthlyBudget) *
-                        100.0;
-
-                    if (amount <= 100) return const SizedBox();
+                    if (profileState.userModel.monthlyBudget <= 0 ||
+                        homeState.amountExpenseThisMonth <=
+                            profileState.userModel.monthlyBudget) {
+                      return const SizedBox();
+                    }
 
                     return warningAmountIcon(
                       content:

@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
-import '../../../../../core/logger.dart';
 import '../../../../../main.dart';
 import '../../../../model/notification_model_class.dart';
 import '../../../../repository/database_repository.dart';
@@ -24,66 +23,49 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
   }
 
   final DatabaseRepository _dbRepo;
-  DateTime? _timeOffset;
-  int? _idOffset;
-  bool _firstAttempt = true;
-  bool _loadAgain = true;
-  final BuildContext mainContext = MainApp.navKeyGlobal.currentContext!;
+  DateTime? _cursorTime;
+  int? _cursorId;
+  bool _loading = false;
+  bool _hasMore = true;
+  int _generation = 0;
+  static const int _pageSize = 12;
+  BuildContext get mainContext => MainApp.navKeyGlobal.currentContext!;
 
   Future<void> _getNotificationList(
     GetNotificationList event,
     Emitter<NotificationState> emit,
   ) async {
-    if (_loadAgain == false) {
-      Logger.Yellow.log("Loader: No DATA");
+    if (_loading) return;
+    if (!_hasMore) {
       state.refreshController.loadNoData();
       return;
     }
-
-    NotificationModelClass? lastRowData;
-    if (_firstAttempt) {
-      Logger.Green.log("FIRST ATTEMPT");
-      lastRowData = await _dbRepo.checkLastRowNotification();
-      if (lastRowData == null) {
-        state.refreshController.loadNoData();
-        return;
+    _loading = true;
+    final revision = _dbRepo.revision;
+    final generation = _generation;
+    try {
+      final page = await _dbRepo.getNotificationsPage(
+        beforeDate: _cursorTime,
+        beforeId: _cursorId,
+        limit: _pageSize,
+      );
+      if (isClosed || revision != _dbRepo.revision ||
+          generation != _generation) return;
+      if (page.isNotEmpty) {
+        _cursorTime = page.last.date;
+        _cursorId = page.last.id;
+        emit(state.copyWith(listNotif: [...state.listNotif, ...page]));
+      }
+      _hasMore = page.length == _pageSize;
+      if (_hasMore) {
+        state.refreshController.loadComplete();
       } else {
-        _timeOffset = lastRowData.date;
-        _idOffset = lastRowData.id;
+        state.refreshController.loadNoData();
       }
-    }
-
-    if (_idOffset == null || _timeOffset == null) {
-      Logger.Yellow.log("Loader: FAIL");
-      state.refreshController.loadFailed();
-      return;
-    }
-
-    final dataList = await _dbRepo.getNotificationList(
-      _timeOffset!.toIso8601String(),
-      _idOffset!,
-    );
-
-    if (dataList.isNotEmpty) {
-      final List<NotificationModelClass> dataListNew =
-          state.listNotif.toList(growable: true);
-      if (_firstAttempt) {
-        _firstAttempt = false;
-        dataListNew.add(lastRowData!);
-      }
-      dataListNew.addAll(dataList);
-      emit(state.copyWith(listNotif: dataListNew));
-    }
-
-    if (dataList.length < 12) {
-      _loadAgain = false;
-      Logger.Yellow.log("Loader: No DATA");
-      state.refreshController.loadNoData();
-    } else {
-      Logger.Yellow.log("Loader: Load Complete/Possible Next");
-      state.refreshController.loadComplete();
-      _timeOffset = dataList.last.date;
-      _idOffset = dataList.last.id;
+    } catch (_) {
+      if (!isClosed) state.refreshController.loadFailed();
+    } finally {
+      _loading = false;
     }
   }
 
@@ -96,7 +78,9 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
         state.listNotif.toList(growable: true);
     final NotificationModelClass newModel =
         event.notifData.copyWith(isRead: true);
-    oldDataList[event.idx] = newModel;
+    final idx = oldDataList.indexWhere((item) => item.id == event.notifData.id);
+    if (idx < 0) return;
+    oldDataList[idx] = newModel;
     emit(state.copyWith(listNotif: oldDataList));
     mainContext.read<HomeBloc>().add(GetNotificationCount());
   }
@@ -117,10 +101,17 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
   }
 
   void _clearList(ClearList event, Emitter<NotificationState> emit) {
-    emit(state.copyWith(listNotif: List.empty()));
-    _timeOffset = null;
-    _idOffset = null;
-    _firstAttempt = true;
-    _loadAgain = true;
+    ++_generation;
+    _cursorTime = null;
+    _cursorId = null;
+    _hasMore = true;
+    state.refreshController.resetNoData();
+    emit(state.copyWith(listNotif: []));
+  }
+
+  @override
+  Future<void> close() async {
+    state.refreshController.dispose();
+    await super.close();
   }
 }

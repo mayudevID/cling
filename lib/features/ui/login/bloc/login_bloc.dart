@@ -125,16 +125,12 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         if (result) await _getBackup();
       }
 
-      //* ~~~~ SAVE RECURRING M INCOME ~~~~
-      if (_authRepo.currentUserModel!.recurringDay != 0 &&
-          _authRepo.currentUserModel!.monthlyIncome != 0) {
-        await _dbRepo.saveRecurringMonthly(
-          recDay: _authRepo.currentUserModel!.recurringDay,
-          type: 0,
-          amount: _authRepo.currentUserModel!.monthlyIncome,
-          isFromLogin: true,
-        );
-      }
+      // Reconcile local recurring rules with account settings, including
+      // the case where a previously active rule was disabled in Firestore.
+      await _dbRepo.syncMonthlyIncomeRule(
+        recurringDay: _authRepo.currentUserModel!.recurringDay,
+        amount: _authRepo.currentUserModel!.monthlyIncome,
+      );
 
       await Future.delayed(const Duration(milliseconds: 100));
       mainContext.read<ProfileBloc>()
@@ -168,11 +164,13 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     } on EmailNotVerifiedException catch (_) {
       Logger.Red.log("EmailNotVerified");
       await _authRepo.logOut();
+      await _dbRepo.switchAccount(null);
       Navigator.pop(mainContext);
       dialogEmailNotVerified(mainContext);
     } on FirebaseAuthException catch (e) {
       Logger.Red.log("FirebaseAuthException: $e");
       await _authRepo.logOut();
+      await _dbRepo.switchAccount(null);
       Navigator.pop(mainContext);
       errorSnackbar(
         mainContext,
@@ -181,6 +179,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     } on SocketException catch (e) {
       Logger.Red.log("SocketException: $e");
       await _authRepo.logOut();
+      await _dbRepo.switchAccount(null);
       Navigator.pop(mainContext);
       errorSnackbar(
         mainContext,
@@ -189,6 +188,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     } on Exception catch (e) {
       Logger.Red.log("Exception: $e");
       await _authRepo.logOut();
+      await _dbRepo.switchAccount(null);
       Navigator.pop(mainContext);
       errorSnackbar(
         mainContext,

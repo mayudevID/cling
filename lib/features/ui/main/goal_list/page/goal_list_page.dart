@@ -86,7 +86,7 @@ class GoalListPageContent extends StatelessWidget {
           enablePullUp: true,
           enablePullDown: false,
           controller: state.refreshController,
-          onLoading: () {},
+          onLoading: () => context.read<GoalListBloc>().add(GetGoalsList()),
           footer: CustomFooter(
             builder: (BuildContext context, LoadStatus? mode) {
               Widget body;

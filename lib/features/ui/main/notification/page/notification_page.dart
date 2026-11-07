@@ -65,7 +65,6 @@ class NotificationPageContent extends StatelessWidget {
                       context
                           .read<NotificationBloc>()
                           .add(MarkNotificationReadAll());
-                      Navigator.of(context).pop();
                     },
                     child: Text(
                       AppLocalizations.of(context)!.markReadAll,
@@ -107,7 +106,7 @@ class NotificationPageContent extends StatelessWidget {
 
     return BlocBuilder<NotificationBloc, NotificationState>(
       buildWhen: (p, c) {
-        return p.listNotif.length != c.listNotif.length ||
+        return p.listNotif != c.listNotif ||
             p.refreshController != c.refreshController;
       },
       builder: (context, state) {

@@ -76,12 +76,18 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     Emitter<ProfileState> emit,
   ) async {
     final packageInfo = await PackageInfo.fromPlatform();
+    final user = _authRepo.currentUserModel;
     emit(
       state.copyWith(
-        userModel: _authRepo.currentUserModel,
+        userModel: user,
         version: "v${packageInfo.version} + ${packageInfo.buildNumber}",
       ),
     );
+    final context = MainApp.navKeyGlobal.currentContext;
+    if (context != null && context.mounted && user != null &&
+        user.uid == _dbRepo.activeUserId) {
+      context.read<HomeBloc>().add(GetIncomeExpenseAmountTotalCurrMonth());
+    }
   }
 
   void _getVerifiedStatus(

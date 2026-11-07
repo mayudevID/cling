@@ -1,0 +1,22 @@
+name: Flutter integrity checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+      - name: Fetch packages
+        run: flutter pub get
+      - name: Analyze Dart
+        run: flutter analyze
+      - name: Run regression tests
+        run: flutter test

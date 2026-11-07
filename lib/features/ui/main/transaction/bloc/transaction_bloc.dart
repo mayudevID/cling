@@ -16,7 +16,7 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
   }
 
   final DatabaseRepository _dbRepo;
-  //final _debouncer = Debouncer(milliseconds: 750);
+  int _requestSequence = 0;
 
   void _clickLeft(ClickLeft event, Emitter<TransactionState> emit) {
     emit(
@@ -35,13 +35,18 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
   }
 
   Future<void> _getData(GetData event, Emitter<TransactionState> emit) async {
-    final result = await _dbRepo.getTransaction(state.date);
-
-    if (result.isNotEmpty) {
-      result.sort((a, b) => b.date.compareTo(a.date));
-      emit(state.copyWith(listTransaction: result));
-    } else {
-      emit(state.copyWith(listTransaction: List.empty()));
+    final requestedDate = state.date;
+    final request = ++_requestSequence;
+    final revision = _dbRepo.revision;
+    final result = await _dbRepo.getTransaction(requestedDate);
+    if (isClosed ||
+        request != _requestSequence ||
+        revision != _dbRepo.revision ||
+        state.date.year != requestedDate.year ||
+        state.date.month != requestedDate.month) {
+      return;
     }
+    result.sort((a, b) => b.date.compareTo(a.date));
+    emit(state.copyWith(listTransaction: result));
   }
 }

@@ -3,6 +3,7 @@ import 'package:cling/core/static_name_table.dart';
 import 'package:cling/features/model/expense_model.dart';
 import 'package:cling/features/model/goal_model.dart';
 import 'package:cling/features/model/income_model.dart';
+import 'package:cling/features/model/notification_model_class.dart';
 import 'package:cling/features/repository/database_repository.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
@@ -75,6 +76,18 @@ void main() {
     expect(
         (await repository.getTransaction(now)).whereType<ExpenseModel>().length,
         2);
+    // The canonical integer columns must update with the editable UI amounts.
+    final incomeRows = await repository.db.query(IncomeMeta.nameTable);
+    expect(
+      incomeRows.map((e) => e[IncomeMeta.amountMinor]).toSet(),
+      {45000, 20000, 30000},
+    );
+    final expenseRows = await repository.db.query(ExpenseMeta.nameTable);
+    expect(
+      expenseRows.map((e) => e[ExpenseMeta.amountMinor]).toSet(),
+      {1500, 1000},
+    );
+    expect(await repository.getTotalBalance(), 925.0);
   });
 
   test('goal contributions update the aggregate atomically', () async {
@@ -159,5 +172,87 @@ void main() {
     final rows = await repository.db.query(IncomeMeta.nameTable);
     expect(rows.single[IncomeMeta.amountMinor], 1234);
     expect(await repository.getTotalBalance(), 12.34);
+  });
+
+  test('goals use stable keyset pagination for 0, 1, 12 and 25 items', () async {
+    expect(await repository.getGoalsPage(), isEmpty);
+
+    for (var i = 1; i <= 25; ++i) {
+      await repository.insertGoal(GoalModel(
+        name: 'Goal $i',
+        image: '📱',
+        target: 100,
+        collected: 0,
+      ));
+      if (i == 1) {
+        expect((await repository.getGoalsPage()).single.name, 'Goal 1');
+      }
+    }
+    final first = await repository.getGoalsPage();
+    expect(first.length, 12);
+    final second = await repository.getGoalsPage(beforeId: first.last.id);
+    expect(second.length, 12);
+    final last = await repository.getGoalsPage(beforeId: second.last.id);
+    expect(last.length, 1);
+    expect(last.single.name, 'Goal 1');
+    expect((await repository.getGoalsPage(beforeId: last.single.id)), isEmpty);
+    expect([...first, ...second, ...last].map((e) => e.id).toSet().length, 25);
+  });
+
+  test('notifications page correctly with equal timestamps', () async {
+    final when = DateTime(2026, 11, 7, 7, 0);
+    expect(await repository.getNotificationsPage(), isEmpty);
+    for (var i = 0; i < 25; ++i) {
+      await repository.saveNotification(NotificationModelClass(
+        title: 'Notification $i',
+        desc: 'Message $i',
+        date: when,
+        type: 0,
+        isRead: false,
+      ));
+      if (i == 0) {
+        expect((await repository.getNotificationsPage()).length, 1);
+      }
+    }
+    final a = await repository.getNotificationsPage();
+    final b = await repository.getNotificationsPage(
+      beforeDate: a.last.date, beforeId: a.last.id);
+    final c = await repository.getNotificationsPage(
+      beforeDate: b.last.date, beforeId: b.last.id);
+    expect([a.length, b.length, c.length], [12, 12, 1]);
+    expect([...a, ...b, ...c].map((e) => e.id).toSet().length, 25);
+    expect(await repository.getNotificationsPage(
+      beforeDate: c.last.date, beforeId: c.last.id), isEmpty);
+  });
+
+  test('warning notifications are inserted at most once per period', () async {
+    final date = DateTime(2026, 11, 7);
+    final first = await repository.saveWarningNotificationOnce(
+      type: 0, title: 'Budget exceeded', description: 'Monthly warning',
+      date: date,
+    );
+    final duplicate = await repository.saveWarningNotificationOnce(
+      type: 0, title: 'Budget exceeded', description: 'Monthly warning',
+      date: date.add(const Duration(days: 1)),
+    );
+    expect(first, isTrue);
+    expect(duplicate, isFalse);
+    expect((await repository.getNotificationsPage()).length, 1);
+  });
+
+  test('recurring edits and disable do not duplicate a paid month', () async {
+    final today = DateTime.now();
+    await repository.syncMonthlyIncomeRule(
+      recurringDay: today.day, amount: 1000,
+    );
+    expect((await repository.db.query(IncomeMeta.nameTable)).length, 1);
+    await repository.syncMonthlyIncomeRule(recurringDay: 0, amount: 0);
+    await repository.syncMonthlyIncomeRule(
+      recurringDay: today.day, amount: 1800,
+    );
+    expect((await repository.db.query(IncomeMeta.nameTable)).length, 1);
+    final rules = await repository.db.query(RecurringMeta.nameTable);
+    expect(rules.length, 1);
+    expect(rules.single[RecurringMeta.amountMinor], 180000);
   });
 }

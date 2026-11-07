@@ -49,7 +49,12 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
   }
 
   final DatabaseRepository _dbRepo;
-  final BuildContext mainContext = MainApp.navKeyGlobal.currentContext!;
+  BuildContext get mainContext => MainApp.navKeyGlobal.currentContext!;
+  int _allMonthRequest = 0;
+  int _incomeBreakdownRequest = 0;
+  int _expenseBreakdownRequest = 0;
+  int _mostRequest = 0;
+  int _yearlyRequest = 0;
 
   int _getDaysInMonth(int year, int month) {
     return DateTime(year, month + 1, 0).day;
@@ -66,6 +71,8 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
     GetIncomeExpenseTotalAllMonth event,
     Emitter<StatisticsState> emit,
   ) async {
+    final request = ++_allMonthRequest;
+    final revision = _dbRepo.revision;
     double max = 0;
     double totalExpense = 0;
     double totalSavings = 0;
@@ -76,6 +83,8 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
     List<PieDataExSav> pieData = List.empty(growable: true);
 
     final result = await _dbRepo.getTotalIncomeExpenseAllMonth();
+    if (isClosed || request != _allMonthRequest ||
+        revision != _dbRepo.revision) return;
 
     if (result != null) {
       final sortedKeys = result.keys.toList()..sort();
@@ -137,10 +146,14 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
     GetIncomeBreakdown event,
     Emitter<StatisticsState> emit,
   ) async {
-    final result = await _dbRepo.getIncomeBreakdown(
-      state.startDate,
-      state.endDate,
-    );
+    final request = ++_incomeBreakdownRequest;
+    final revision = _dbRepo.revision;
+    final start = state.startDate;
+    final end = state.endDate;
+    final result = await _dbRepo.getIncomeBreakdown(start, end);
+    if (isClosed || request != _incomeBreakdownRequest ||
+        revision != _dbRepo.revision ||
+        state.startDate != start || state.endDate != end) return;
 
     emit(
       state.copyWith(
@@ -155,11 +168,15 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
     GetExpenseBreakdownAndPieData event,
     Emitter<StatisticsState> emit,
   ) async {
+    final request = ++_expenseBreakdownRequest;
+    final revision = _dbRepo.revision;
+    final start = state.startDate;
+    final end = state.endDate;
     final List<PieDataExpense> pieDataExpenseList = List.empty(growable: true);
-    final result = await _dbRepo.getExpenseBreakdown(
-      state.startDate,
-      state.endDate,
-    );
+    final result = await _dbRepo.getExpenseBreakdown(start, end);
+    if (isClosed || request != _expenseBreakdownRequest ||
+        revision != _dbRepo.revision ||
+        state.startDate != start || state.endDate != end) return;
 
     if (result.isNotEmpty) {
       for (final Map element in result) {
@@ -185,8 +202,13 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
   }
 
   Future<void> _getMost(GetMost event, Emitter<StatisticsState> emit) async {
-    final result = await _dbRepo.getMost(state.allStatsChoose);
-    final isIncome = state.allStatsChoose == AllStatsChoose.income;
+    final request = ++_mostRequest;
+    final revision = _dbRepo.revision;
+    final chosen = state.allStatsChoose;
+    final result = await _dbRepo.getMost(chosen);
+    if (isClosed || request != _mostRequest || revision != _dbRepo.revision ||
+        chosen != state.allStatsChoose) return;
+    final isIncome = chosen == AllStatsChoose.income;
 
     emit(
       state.copyWith(
@@ -200,9 +222,13 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
     GetYearlyIncome event,
     Emitter<StatisticsState> emit,
   ) async {
+    final request = ++_yearlyRequest;
+    final revision = _dbRepo.revision;
     final List<ChartData> yearlyIncomeList = List.empty(growable: true);
     double max = 0;
     final result = await _dbRepo.getYearlyIncome();
+    if (isClosed || request != _yearlyRequest ||
+        revision != _dbRepo.revision) return;
 
     if (!result.values.every((value) => value == 0)) {
       result.forEach((key, value) {
@@ -462,6 +488,11 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
   }
 
   void _freeResources(FreeResourcesStats event, emit) {
+    ++_allMonthRequest;
+    ++_incomeBreakdownRequest;
+    ++_expenseBreakdownRequest;
+    ++_mostRequest;
+    ++_yearlyRequest;
     emit(
       state.copyWith(
         pieDataExSavList: List.empty(),

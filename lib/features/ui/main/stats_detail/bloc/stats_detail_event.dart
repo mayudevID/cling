@@ -49,6 +49,8 @@ class ChangeDateForPeriod extends StatsDetailEvent {
   final DateTime? endDate;
 }
 
+class RefreshCurrentCategory extends StatsDetailEvent {}
+
 class UpdateFromEdit extends StatsDetailEvent {
   const UpdateFromEdit(this.transactionModel);
   final TransactionModel transactionModel;

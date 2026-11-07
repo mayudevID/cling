@@ -15,11 +15,9 @@ import '../../../../model/income_model.dart';
 import '../../../../model/income_source_model.dart';
 import '../../../../repository/database_repository.dart';
 import '../../../language_currency/lang_export.dart';
-import '../../home/bloc/home_bloc.dart';
+import '../../main_widget/finance_refresh.dart';
 import '../../main_widget/enum_flowtype.dart';
-import '../../transaction/bloc/transaction_bloc.dart';
 import '../../main_widget/dialog_add_success.dart';
-import '../../statistics/bloc/statistics_bloc.dart';
 
 part 'add_income_expense_event.dart';
 part 'add_income_expense_state.dart';
@@ -114,7 +112,6 @@ class AddIncomeExpenseBloc
       errorToast(AppLocalizations.of(mainContext)!.pleaseSelectCategories);
       return;
     }
-
     if (!state.amountInput.isFinite || state.amountInput <= 0) {
       errorToast(AppLocalizations.of(mainContext)!.pleaseFillAmount);
       return;
@@ -124,49 +121,26 @@ class AddIncomeExpenseBloc
       MoneyAmount.toMinorUnits(state.amountInput);
       switch (event.flowType) {
         case FlowType.income:
-          final data = IncomeModel(
+          await _dbRepo.insertIncome(IncomeModel(
             date: state.selectedDate,
             amount: state.amountInput,
             desc: state.descOrItem,
             incomeSource:
                 '${state.selectedCategories.key} ${state.selectedCategories.value}',
-          );
-          await _dbRepo.insertIncome(data);
-
-          ///* Update UI
-          mainContext.read<StatisticsBloc>()
-            ..add(GetIncomeBreakdown())
-            ..add(GetYearlyIncome());
-
+          ));
           break;
         case FlowType.expense:
-          final data = ExpenseModel(
+          await _dbRepo.insertExpense(ExpenseModel(
             date: state.selectedDate,
             amount: state.amountInput,
             item: state.descOrItem,
             categories:
                 '${state.selectedCategories.key} ${state.selectedCategories.value}',
-          );
-          await _dbRepo.insertExpense(data);
-
-          ///* Update UI
-          mainContext.read<HomeBloc>().add(GetTodayExpenses());
-          mainContext
-              .read<StatisticsBloc>()
-              .add(GetExpenseBreakdownAndPieData());
-
+          ));
           break;
       }
 
-      ///* Update UI
-      mainContext.read<HomeBloc>().add(GetIncomeExpenseAmountTotalCurrMonth());
-      mainContext.read<StatisticsBloc>()
-        ..add(GetIncomeExpenseTotalAllMonth())
-        ..add(GetMost());
-
-      // Always reload the selected month, including edits to past records.
-      mainContext.read<TransactionBloc>().add(GetData());
-
+      refreshFinancialViews(mainContext);
       dialogAddSuccess(mainContext, event.flowType);
     } on FormatException {
       errorToast(AppLocalizations.of(mainContext)!.invalidAmount);

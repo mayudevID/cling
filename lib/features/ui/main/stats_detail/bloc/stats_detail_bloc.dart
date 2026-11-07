@@ -44,6 +44,7 @@ class StatsDetailBloc extends Bloc<StatsDetailEvent, StatsDetailState> {
     on<ChangeMonthly>(_changeMonthly);
     on<ChangeYearly>(_changeYearly);
     on<ChangeDateForPeriod>(_changeDateForPeriod);
+    on<RefreshCurrentCategory>(_refreshCurrentCategory);
     on<UpdateFromEdit>(_updateFromEdit);
     on<DeleteFromEdit>(_deleteFromEdit);
   }
@@ -51,6 +52,8 @@ class StatsDetailBloc extends Bloc<StatsDetailEvent, StatsDetailState> {
   final DatabaseRepository _dbRepo;
   final String _type;
   final String _categoryOrSource;
+  bool _mostMode = false;
+  int _querySequence = 0;
   final BuildContext mainContext = MainApp.navKeyGlobal.currentContext!;
 
   bool get isIncome => _type == 'income';
@@ -70,9 +73,14 @@ class StatsDetailBloc extends Bloc<StatsDetailEvent, StatsDetailState> {
     return lastDayOfMonth.day;
   }
 
-  void _getMostIncomeByCategory(GetMostIncomeByCategory event, emit) async {
+  Future<void> _getMostIncomeByCategory(
+      GetMostIncomeByCategory event, Emitter<StatsDetailState> emit) async {
+    _mostMode = true;
+    final query = ++_querySequence;
+    final revision = _dbRepo.revision;
     final result =
         await _dbRepo.getMostIncomeByCategory(source: _categoryOrSource);
+    if (isClosed || query != _querySequence || revision != _dbRepo.revision) return;
     emit(
       state.copyWith(
         listTransactionModel: (result.isNotEmpty) ? result : List.empty(),
@@ -84,8 +92,12 @@ class StatsDetailBloc extends Bloc<StatsDetailEvent, StatsDetailState> {
     GetMostExpenseByCategory event,
     Emitter<StatsDetailState> emit,
   ) async {
+    _mostMode = true;
+    final query = ++_querySequence;
+    final revision = _dbRepo.revision;
     final result =
         await _dbRepo.getMostExpenseByCategory(source: _categoryOrSource);
+    if (isClosed || query != _querySequence || revision != _dbRepo.revision) return;
     emit(
       state.copyWith(
         listTransactionModel: (result.isNotEmpty) ? result : List.empty(),
@@ -97,11 +109,18 @@ class StatsDetailBloc extends Bloc<StatsDetailEvent, StatsDetailState> {
     GetIncomeBreakdownByCategory event,
     Emitter<StatsDetailState> emit,
   ) async {
+    _mostMode = false;
+    final query = ++_querySequence;
+    final revision = _dbRepo.revision;
+    final start = state.startDate;
+    final end = state.endDate;
     final result = await _dbRepo.getMostIncomeByCategory(
       source: _categoryOrSource,
-      startDate: state.startDate.toIso8601String(),
-      endDate: state.endDate.toIso8601String(),
+      startDate: start.toIso8601String(),
+      endDate: end.toIso8601String(),
     );
+    if (isClosed || query != _querySequence || revision != _dbRepo.revision ||
+        state.startDate != start || state.endDate != end) return;
     emit(
       state.copyWith(
         listTransactionModel: (result.isNotEmpty) ? result : List.empty(),
@@ -114,11 +133,18 @@ class StatsDetailBloc extends Bloc<StatsDetailEvent, StatsDetailState> {
     GetExpenseBreakdownByCategory event,
     Emitter<StatsDetailState> emit,
   ) async {
+    _mostMode = false;
+    final query = ++_querySequence;
+    final revision = _dbRepo.revision;
+    final start = state.startDate;
+    final end = state.endDate;
     final result = await _dbRepo.getMostExpenseByCategory(
       source: _categoryOrSource,
-      startDate: state.startDate.toIso8601String(),
-      endDate: state.endDate.toIso8601String(),
+      startDate: start.toIso8601String(),
+      endDate: end.toIso8601String(),
     );
+    if (isClosed || query != _querySequence || revision != _dbRepo.revision ||
+        state.startDate != start || state.endDate != end) return;
     emit(
       state.copyWith(
         listTransactionModel: (result.isNotEmpty) ? result : List.empty(),
@@ -366,19 +392,38 @@ class StatsDetailBloc extends Bloc<StatsDetailEvent, StatsDetailState> {
     );
   }
 
-  void _updateFromEdit(UpdateFromEdit event, emit) {
-    final listData = state.listTransactionModel.toList(growable: true);
-    final idx = state.listTransactionModel.indexWhere(
-      (element) => element.id == event.transactionModel.id,
-    );
-    if (idx == -1) return;
-    listData[idx] = event.transactionModel;
-    emit(state.copyWith(listTransactionModel: listData));
+  Future<void> _refreshCurrentCategory(
+    RefreshCurrentCategory event,
+    Emitter<StatsDetailState> emit,
+  ) async {
+    final query = ++_querySequence;
+    final revision = _dbRepo.revision;
+    final start = state.startDate;
+    final end = state.endDate;
+    final startDate = _mostMode ? null : start.toIso8601String();
+    final endDate = _mostMode ? null : end.toIso8601String();
+    final List<TransactionModel> result = isIncome
+        ? await _dbRepo.getMostIncomeByCategory(
+            source: _categoryOrSource,
+            startDate: startDate,
+            endDate: endDate,
+          )
+        : await _dbRepo.getMostExpenseByCategory(
+            source: _categoryOrSource,
+            startDate: startDate,
+            endDate: endDate,
+          );
+    if (isClosed || query != _querySequence || revision != _dbRepo.revision ||
+        state.startDate != start || state.endDate != end) return;
+    emit(state.copyWith(listTransactionModel: result));
   }
 
-  void _deleteFromEdit(DeleteFromEdit event, emit) {
-    final listData = state.listTransactionModel.toList(growable: true);
-    listData.removeWhere((element) => element.id == event.id);
-    emit(state.copyWith(listTransactionModel: listData));
+  // Legacy edit/delete events now reload the filtered source of truth.
+  void _updateFromEdit(UpdateFromEdit event, Emitter<StatsDetailState> emit) {
+    add(RefreshCurrentCategory());
+  }
+
+  void _deleteFromEdit(DeleteFromEdit event, Emitter<StatsDetailState> emit) {
+    add(RefreshCurrentCategory());
   }
 }

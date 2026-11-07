@@ -21,16 +21,9 @@ class AuthRepository {
   static const loginStatusKey = '__login_stat_key__';
   static const registerStatusKey = '__register_stat_key__';
 
-  Stream<User?> get user {
-    return _firebaseAuth.userChanges().map((firebaseUser) {
-      final user = firebaseUser;
-      if (user == null) {
-        _cache.remove(userCacheKey);
-      }
-
-      return user;
-    });
-  }
+  // Cache deletion is performed by awaited logout operations. A listener
+  // must not asynchronously clear a newly signed-in account's cached UID.
+  Stream<User?> get user => _firebaseAuth.userChanges();
 
   UserModel? get currentUserModel {
     final getData = _cache.getString(userCacheKey);
