@@ -43,3 +43,12 @@ gives you structural context (callers, dependents, test coverage) that file sear
 3. Use `get_affected_flows_tool` to understand impact.
 4. Use `query_graph_tool` pattern="tests_for" to check coverage.
 <!-- /code-review-graph MCP tools -->
+
+## Feature Documentation
+
+- Start with [docs/FEATURES.md](docs/FEATURES.md) for the feature index and system overview.
+- Use the linked files under [docs/features](docs/features/) for detailed feature flows,
+  business rules, data ownership, invariants, failure modes, and source references.
+- Keep feature documentation synchronized with behavior changes. Update the relevant feature
+  document and the index when adding, removing, or materially changing a feature.
+- Verify documentation against source code. Source code remains authoritative when they differ.

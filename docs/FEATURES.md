@@ -6,15 +6,15 @@ Dokumen ini menjadi indeks fitur Cling!. Penjelasan rinci dipisahkan berdasarkan
 
 | Fitur | Cakupan |
 | --- | --- |
-| [Autentikasi dan Onboarding](docs/features/authentication.md) | Registrasi, login, reset kata sandi, sesi, verifikasi, dan onboarding data bulanan |
-| [Dasbor](docs/features/dashboard.md) | Saldo, ringkasan bulanan, target, pengeluaran hari ini, dan peringatan |
-| [Transaksi](docs/features/transactions.md) | Pemasukan, pengeluaran, kategori, riwayat, perubahan, dan penghapusan |
-| [Target Tabungan](docs/features/savings-goals.md) | Pembuatan target, setoran, progres, perubahan, penghapusan, dan daftar target |
-| [Statistik](docs/features/statistics.md) | Agregasi bulanan, kategori terbesar, distribusi, dan rincian kategori |
-| [Perencanaan Bulanan](docs/features/monthly-planning.md) | Pemasukan bulanan, anggaran, tanggal rutin, dan transaksi berulang |
-| [Notifikasi](docs/features/notifications.md) | Peringatan keuangan lokal, status baca, penghitung, dan pagination |
-| [Profil dan Pengaturan](docs/features/profile-settings.md) | Profil, email, kata sandi, bahasa, mata uang, dan logout |
-| [Backup dan Restore](docs/features/backup-restore.md) | Pencadangan SQLite ke Firebase Storage dan pemulihan saat login |
+| [Autentikasi dan Onboarding](features/authentication.md) | Registrasi, login, reset kata sandi, sesi, verifikasi, dan onboarding data bulanan |
+| [Dasbor](features/dashboard.md) | Saldo, ringkasan bulanan, target, pengeluaran hari ini, dan peringatan |
+| [Transaksi](features/transactions.md) | Pemasukan, pengeluaran, kategori, riwayat, perubahan, dan penghapusan |
+| [Target Tabungan](features/savings-goals.md) | Pembuatan target, setoran, progres, perubahan, penghapusan, dan daftar target |
+| [Statistik](features/statistics.md) | Agregasi bulanan, kategori terbesar, distribusi, dan rincian kategori |
+| [Perencanaan Bulanan](features/monthly-planning.md) | Pemasukan bulanan, anggaran, tanggal rutin, dan transaksi berulang |
+| [Notifikasi](features/notifications.md) | Peringatan keuangan lokal, status baca, penghitung, dan pagination |
+| [Profil dan Pengaturan](features/profile-settings.md) | Profil, email, kata sandi, bahasa, mata uang, dan logout |
+| [Backup dan Restore](features/backup-restore.md) | Pencadangan SQLite ke Firebase Storage dan pemulihan saat login |
 
 ## Gambaran Sistem
 
