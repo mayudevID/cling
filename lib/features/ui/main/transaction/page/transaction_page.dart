@@ -98,7 +98,7 @@ class TransactionPage extends StatelessWidget {
                           context,
                           state.listTransaction[idx],
                         ),
-                        SizedBox(height: 4),
+                        const SizedBox(height: 4),
                         listTransaction(context, state.listTransaction[idx]),
                       ],
                     )
