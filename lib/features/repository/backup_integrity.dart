@@ -71,7 +71,7 @@ Future<String> sqliteFileSha256(File file) async =>
     (await sha256.bind(file.openRead()).first).toString();
 
 /// Validate the *application* schema, not just SQLite file integrity.
-/// v1 legacy backups are allowed for migration to v2 on successful restore.
+/// Legacy v1/v2 backups remain supported and migrate on successful restore.
 Future<int> validateClingBackupSchema(Database database) async {
   final integrity = await database.rawQuery('PRAGMA integrity_check');
   if (integrity.isEmpty || integrity.first.values.first != 'ok') {
@@ -79,7 +79,7 @@ Future<int> validateClingBackupSchema(Database database) async {
   }
   final rows = await database.rawQuery('PRAGMA user_version');
   final version = (rows.first['user_version'] as num).toInt();
-  if (version != 1 && version != 2) {
+  if (version != 1 && version != 2 && version != 3) {
     throw FormatException('Unsupported Cling schema version: $version');
   }
   final columns = <String, List<String>>{
@@ -89,6 +89,7 @@ Future<int> validateClingBackupSchema(Database database) async {
       IncomeMeta.amount,
       IncomeMeta.idIncomeSource,
       if (version >= 2) IncomeMeta.amountMinor,
+      if (version >= 3) IncomeMeta.walletId,
     ],
     ExpenseMeta.nameTable: [
       ExpenseMeta.id,
@@ -96,6 +97,7 @@ Future<int> validateClingBackupSchema(Database database) async {
       ExpenseMeta.amount,
       ExpenseMeta.idCategories,
       if (version >= 2) ExpenseMeta.amountMinor,
+      if (version >= 3) ExpenseMeta.walletId,
     ],
     GoalMeta.nameTable: [
       GoalMeta.id,
@@ -131,6 +133,33 @@ Future<int> validateClingBackupSchema(Database database) async {
       ExpenseCategoriesMeta.expenseCategories,
     ],
   };
+
+  if (version >= 3) {
+    columns[WalletMeta.table] = [
+      WalletMeta.id,
+      WalletMeta.name,
+      WalletMeta.type,
+      WalletMeta.openingBalance,
+      WalletMeta.currency,
+      WalletMeta.archived,
+      WalletMeta.isDefault
+    ];
+    columns[TransferMeta.table] = [
+      TransferMeta.id,
+      TransferMeta.sourceWalletId,
+      TransferMeta.destinationWalletId,
+      TransferMeta.amount,
+      TransferMeta.date
+    ];
+    columns[QuickTemplateMeta.table] = [
+      QuickTemplateMeta.id,
+      QuickTemplateMeta.name,
+      QuickTemplateMeta.type,
+      QuickTemplateMeta.amount,
+      QuickTemplateMeta.categoryId,
+      QuickTemplateMeta.walletId
+    ];
+  }
 
   for (final entry in columns.entries) {
     final tableInfo =

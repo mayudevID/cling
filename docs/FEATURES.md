@@ -15,6 +15,7 @@ Dokumen ini menjadi indeks fitur Cling!. Penjelasan rinci dipisahkan berdasarkan
 | [Notifikasi](features/notifications.md) | Peringatan keuangan lokal, status baca, penghitung, dan pagination |
 | [Profil dan Pengaturan](features/profile-settings.md) | Profil, email, kata sandi, bahasa, mata uang, dan logout |
 | [Backup dan Restore](features/backup-restore.md) | Pencadangan SQLite ke Firebase Storage dan pemulihan saat login |
+| [Phase 1 Financial Foundation](PHASE_1_FINANCIAL_FOUNDATION.md) | Schema v3, wallet ledger, transfer, currency boundary, dan status integrasi |
 
 ## Gambaran Sistem
 

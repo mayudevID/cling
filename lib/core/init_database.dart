@@ -3,6 +3,73 @@ import 'package:sqflite/sqflite.dart';
 
 import 'static_name_table.dart';
 
+Future<void> migrateFinancialFoundation(DatabaseExecutor db) async {
+  await db.execute('''CREATE TABLE IF NOT EXISTS ${WalletMeta.table} (
+    ${WalletMeta.id} INTEGER PRIMARY KEY AUTOINCREMENT,
+    ${WalletMeta.name} TEXT NOT NULL,
+    ${WalletMeta.type} TEXT NOT NULL,
+    ${WalletMeta.openingBalance} INTEGER NOT NULL DEFAULT 0,
+    ${WalletMeta.currency} TEXT NOT NULL,
+    ${WalletMeta.archived} INTEGER NOT NULL DEFAULT 0,
+    ${WalletMeta.isDefault} INTEGER NOT NULL DEFAULT 0,
+    ${WalletMeta.createdAt} TEXT NOT NULL,
+    ${WalletMeta.updatedAt} TEXT NOT NULL
+  )''');
+  await db.execute('''CREATE TABLE IF NOT EXISTS ${TransferMeta.table} (
+    ${TransferMeta.id} INTEGER PRIMARY KEY AUTOINCREMENT,
+    ${TransferMeta.sourceWalletId} INTEGER NOT NULL,
+    ${TransferMeta.destinationWalletId} INTEGER NOT NULL,
+    ${TransferMeta.amount} INTEGER NOT NULL CHECK (${TransferMeta.amount} > 0),
+    ${TransferMeta.date} TEXT NOT NULL,
+    ${TransferMeta.note} TEXT,
+    FOREIGN KEY (${TransferMeta.sourceWalletId}) REFERENCES ${WalletMeta.table}(${WalletMeta.id}),
+    FOREIGN KEY (${TransferMeta.destinationWalletId}) REFERENCES ${WalletMeta.table}(${WalletMeta.id}),
+    CHECK (${TransferMeta.sourceWalletId} != ${TransferMeta.destinationWalletId})
+  )''');
+  await db.execute('''CREATE TABLE IF NOT EXISTS ${QuickTemplateMeta.table} (
+    ${QuickTemplateMeta.id} INTEGER PRIMARY KEY AUTOINCREMENT,
+    ${QuickTemplateMeta.name} TEXT NOT NULL,
+    ${QuickTemplateMeta.type} TEXT NOT NULL CHECK (${QuickTemplateMeta.type} IN ('income','expense')),
+    ${QuickTemplateMeta.amount} INTEGER NOT NULL CHECK (${QuickTemplateMeta.amount} > 0),
+    ${QuickTemplateMeta.categoryId} INTEGER NOT NULL,
+    ${QuickTemplateMeta.walletId} INTEGER NOT NULL,
+    ${QuickTemplateMeta.createdAt} TEXT NOT NULL,
+    ${QuickTemplateMeta.updatedAt} TEXT NOT NULL,
+    FOREIGN KEY (${QuickTemplateMeta.walletId}) REFERENCES ${WalletMeta.table}(${WalletMeta.id})
+  )''');
+  final columns = <String, String>{
+    IncomeMeta.nameTable: IncomeMeta.walletId,
+    ExpenseMeta.nameTable: ExpenseMeta.walletId,
+  };
+  for (final entry in columns.entries) {
+    final present = (await db.rawQuery('PRAGMA table_info("${entry.key}")'))
+        .any((column) => column['name'] == entry.value);
+    if (!present) {
+      await db.execute(
+          'ALTER TABLE ${entry.key} ADD COLUMN ${entry.value} INTEGER NOT NULL DEFAULT 1');
+    }
+  }
+  final now = DateTime.now().toUtc().toIso8601String();
+  await db.insert(
+      WalletMeta.table,
+      {
+        WalletMeta.id: 1,
+        WalletMeta.name: 'Cash',
+        WalletMeta.type: 'cash',
+        WalletMeta.openingBalance: 0,
+        WalletMeta.currency: 'IDR',
+        WalletMeta.archived: 0,
+        WalletMeta.isDefault: 1,
+        WalletMeta.createdAt: now,
+        WalletMeta.updatedAt: now,
+      },
+      conflictAlgorithm: ConflictAlgorithm.ignore);
+  await db.execute(
+      'UPDATE ${IncomeMeta.nameTable} SET ${IncomeMeta.walletId}=1 WHERE ${IncomeMeta.walletId} IS NULL');
+  await db.execute(
+      'UPDATE ${ExpenseMeta.nameTable} SET ${ExpenseMeta.walletId}=1 WHERE ${ExpenseMeta.walletId} IS NULL');
+}
+
 final exCategoriesData = [
   "🎑 Other",
   "💵 Bill",

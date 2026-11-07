@@ -13,6 +13,7 @@ import '../features/ui/main/edit_profile/page/edit_profile_page.dart';
 import '../features/ui/main/goal_detail/pages/goal_detail_page.dart';
 import '../features/ui/main/goal_list/page/goal_list_page.dart';
 import '../features/ui/main/main_page.dart';
+import '../features/ui/main/wallets/wallets_page.dart';
 import '../features/ui/main/main_widget/enum_flowtype.dart';
 import '../features/ui/main/notification/page/notification_page.dart';
 import '../features/ui/main/settings/page/settings_page.dart';
@@ -60,6 +61,8 @@ class RouteGen {
         return MaterialPageRoute(
           builder: (_) => const MainPage(),
         );
+      case RouteName.wallets:
+        return MaterialPageRoute(builder: (_) => const WalletsPage());
       case RouteName.verifOnboard:
         return MaterialPageRoute(
           builder: (_) => const VerificationSuccessPage(),
@@ -150,6 +153,7 @@ class RouteName {
   static const String forgotPassword = "/forgotPassword";
   static const String checkEmail = "/checkEmail";
   static const String main = "/main";
+  static const String wallets = "/wallets";
   static const String verifOnboard = "/verifOnboard";
   static const String monthlyData = "/monthlyData";
   static const String editProfile = "/editProfile";

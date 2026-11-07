@@ -5,6 +5,7 @@ import 'package:cling/core/reference_id.dart';
 import 'package:cling/features/model/goal_model.dart';
 import 'package:cling/features/model/income_model.dart';
 import 'package:cling/features/model/notification_model_class.dart';
+import 'package:cling/features/model/wallet_model.dart';
 import 'package:cling/features/repository/database_repository.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
@@ -244,7 +245,75 @@ void main() {
     await repository.open();
     final rows = await repository.db.query(IncomeMeta.nameTable);
     expect(rows.single[IncomeMeta.amountMinor], 1234);
+    expect(rows.single[IncomeMeta.walletId], 1);
     expect(await repository.getTotalBalance(), 12.34);
+    expect((await repository.getWallets()).single.balanceMinor, 1234);
+  });
+
+  test(
+      'wallet ledger includes opening balance and transfer without income/expense',
+      () async {
+    final cashId = await repository.getDefaultWalletId();
+    final bankId = await repository.saveWallet(const WalletModel(
+      name: 'BCA',
+      type: 'bank',
+      openingBalanceMinor: 200000,
+      currency: 'IDR',
+    ));
+    await repository.insertExpense(ExpenseModel(
+      date: DateTime.now(),
+      item: 'Lunch',
+      amount: 25,
+      categories: exCategoriesData[4],
+      walletId: bankId,
+    ));
+    final before = await repository.getTotalBalance();
+    await repository.transfer(
+        sourceWalletId: bankId,
+        destinationWalletId: cashId,
+        amountMinor: 5000,
+        date: DateTime.now(),
+        note: 'ATM');
+    expect(await repository.getTotalBalance(), before);
+    final wallets = await repository.getWallets();
+    expect(wallets.firstWhere((w) => w.id == bankId).balanceMinor, 192500);
+    expect(wallets.firstWhere((w) => w.id == cashId).balanceMinor, 5000);
+    expect(
+        (await repository.getTotalIncomeExpenseCurrMonth())['income'], isNull);
+    expect((await repository.getTotalIncomeExpenseCurrMonth())['expense'], 25);
+  });
+
+  test('transfer rejects same wallet, nonpositive amount and archived wallet',
+      () async {
+    final id = await repository.getDefaultWalletId();
+    await expectLater(
+        repository.transfer(
+            sourceWalletId: id,
+            destinationWalletId: id,
+            amountMinor: 10,
+            date: DateTime.now()),
+        throwsArgumentError);
+    await expectLater(
+        repository.transfer(
+            sourceWalletId: id,
+            destinationWalletId: id + 1,
+            amountMinor: 0,
+            date: DateTime.now()),
+        throwsArgumentError);
+    final other = await repository.saveWallet(const WalletModel(
+      name: 'Bank',
+      type: 'bank',
+      openingBalanceMinor: 0,
+      currency: 'IDR',
+    ));
+    await repository.archiveWallet(other);
+    await expectLater(
+        repository.transfer(
+            sourceWalletId: id,
+            destinationWalletId: other,
+            amountMinor: 1,
+            date: DateTime.now()),
+        throwsStateError);
   });
 
   test('goals use stable keyset pagination for 0, 1, 12 and 25 items',

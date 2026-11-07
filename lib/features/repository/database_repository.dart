@@ -19,6 +19,7 @@ import '../model/income_model.dart';
 import '../model/income_source_model.dart';
 import '../model/notification_model_class.dart';
 import '../model/transaction_model.dart';
+import '../model/wallet_model.dart';
 import '../ui/main/statistics/bloc/statistics_bloc.dart';
 
 class DatabaseRepository {
@@ -67,16 +68,18 @@ class DatabaseRepository {
       }
       _database = await openDatabase(
         path,
-        version: 2,
+        version: 3,
         onConfigure: (database) async {
           await database.execute('PRAGMA foreign_keys = ON');
         },
         onCreate: (database, version) async {
           await initDatabaseTable(database, version);
           await migrateMoneyColumns(database);
+          await migrateFinancialFoundation(database);
         },
         onUpgrade: (database, oldVersion, newVersion) async {
           if (oldVersion < 2) await migrateMoneyColumns(database);
+          if (oldVersion < 3) await migrateFinancialFoundation(database);
         },
       );
 
@@ -168,6 +171,9 @@ class DatabaseRepository {
       ExpenseMeta.nameTable,
       GoalMeta.nameTable,
       GoalSavingMeta.nameTable,
+      WalletMeta.table,
+      TransferMeta.table,
+      QuickTemplateMeta.table,
     ]) {
       for (final operation in ['INSERT', 'UPDATE', 'DELETE']) {
         final name = 'track_${table}_${operation.toLowerCase()}';
@@ -192,6 +198,16 @@ class DatabaseRepository {
     ]) {
       final rows = await db.rawQuery('SELECT 1 FROM $table LIMIT 1');
       if (rows.isNotEmpty) return true;
+    }
+    for (final table in [TransferMeta.table, QuickTemplateMeta.table]) {
+      if ((await db.rawQuery('SELECT 1 FROM $table LIMIT 1')).isNotEmpty) {
+        return true;
+      }
+    }
+    if ((await db.rawQuery(
+            'SELECT 1 FROM ${WalletMeta.table} WHERE ${WalletMeta.id} != 1 LIMIT 1'))
+        .isNotEmpty) {
+      return true;
     }
     return false;
   }
@@ -329,33 +345,15 @@ class DatabaseRepository {
   }
 
   Future<double> getTotalBalance() async {
-    final result = await Future.wait([
-      db.rawQuery(
-        '''
-        SELECT (SUM(${IncomeMeta.amountMinor}) / 100.0) AS TotalIncome
-        FROM ${IncomeMeta.nameTable}
-      ''',
-      ),
-      db.rawQuery(
-        '''
-        SELECT (SUM(${ExpenseMeta.amountMinor}) / 100.0) AS TotalExpense
-        FROM ${ExpenseMeta.nameTable}
-      ''',
-      ),
-    ]);
-
-    final Object? totInc = result[0][0]['TotalIncome'];
-    final Object? totEx = result[1][0]['TotalExpense'];
-
-    final income = totInc != null
-        ? (totInc is int ? totInc.toDouble() : totInc as double)
-        : 0.0;
-
-    final expense = totEx != null
-        ? (totEx is int ? totEx.toDouble() : totEx as double)
-        : 0.0;
-
-    return income - expense;
+    final rows = await db.rawQuery('''
+      SELECT COALESCE(SUM(${WalletMeta.openingBalance}),0)
+        + COALESCE((SELECT SUM(${IncomeMeta.amountMinor}) FROM ${IncomeMeta.nameTable}),0)
+        - COALESCE((SELECT SUM(${ExpenseMeta.amountMinor}) FROM ${ExpenseMeta.nameTable}),0)
+        + COALESCE((SELECT SUM(${TransferMeta.amount}) FROM ${TransferMeta.table}),0)
+        - COALESCE((SELECT SUM(${TransferMeta.amount}) FROM ${TransferMeta.table}),0) AS balance_minor
+      FROM ${WalletMeta.table}
+    ''');
+    return ((rows.single['balance_minor'] as num?) ?? 0).toInt() / 100.0;
   }
 
   Future<Map<String, Map<String, dynamic>>?>
@@ -744,7 +742,7 @@ class DatabaseRepository {
 
   Future<void> insertIncome(IncomeModel data) async {
     final foreignId = requireReferenceId(data.incomeSource, inSourceData);
-
+    await _requireActiveWallet(data.walletId);
     await db.insert(
       IncomeMeta.nameTable,
       {
@@ -753,6 +751,7 @@ class DatabaseRepository {
         IncomeMeta.amountMinor: MoneyAmount.toMinorUnits(data.amount),
         IncomeMeta.desc: data.desc,
         IncomeMeta.idIncomeSource: foreignId,
+        IncomeMeta.walletId: data.walletId,
       },
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
@@ -760,6 +759,7 @@ class DatabaseRepository {
 
   Future<void> updateIncome(IncomeModel data) async {
     final foreignId = requireReferenceId(data.incomeSource, inSourceData);
+    await _requireWallet(data.walletId);
 
     await db.update(
       IncomeMeta.nameTable,
@@ -769,6 +769,7 @@ class DatabaseRepository {
         IncomeMeta.amountMinor: MoneyAmount.toMinorUnits(data.amount),
         IncomeMeta.desc: data.desc,
         IncomeMeta.idIncomeSource: foreignId,
+        IncomeMeta.walletId: data.walletId,
       },
       where: "${IncomeMeta.id} = ?",
       whereArgs: [data.id],
@@ -781,6 +782,104 @@ class DatabaseRepository {
       where: "${IncomeMeta.id} = ?",
       whereArgs: [id],
     );
+  }
+
+  Future<List<WalletModel>> getWallets({bool includeArchived = true}) async {
+    final rows = await db.rawQuery('''
+      SELECT w.*, w.${WalletMeta.openingBalance}
+        + COALESCE((SELECT SUM(i.${IncomeMeta.amountMinor}) FROM ${IncomeMeta.nameTable} i WHERE i.${IncomeMeta.walletId}=w.${WalletMeta.id}),0)
+        - COALESCE((SELECT SUM(e.${ExpenseMeta.amountMinor}) FROM ${ExpenseMeta.nameTable} e WHERE e.${ExpenseMeta.walletId}=w.${WalletMeta.id}),0)
+        + COALESCE((SELECT SUM(t.${TransferMeta.amount}) FROM ${TransferMeta.table} t WHERE t.${TransferMeta.destinationWalletId}=w.${WalletMeta.id}),0)
+        - COALESCE((SELECT SUM(t.${TransferMeta.amount}) FROM ${TransferMeta.table} t WHERE t.${TransferMeta.sourceWalletId}=w.${WalletMeta.id}),0) AS balance_minor
+      FROM ${WalletMeta.table} w ${includeArchived ? '' : 'WHERE w.${WalletMeta.archived}=0'}
+      ORDER BY w.${WalletMeta.isDefault} DESC, w.${WalletMeta.name} COLLATE NOCASE
+    ''');
+    return rows.map(WalletModel.fromMap).toList();
+  }
+
+  Future<int> getDefaultWalletId() async {
+    final rows = await db.query(WalletMeta.table,
+        columns: [WalletMeta.id],
+        where: '${WalletMeta.isDefault}=1 AND ${WalletMeta.archived}=0',
+        limit: 1);
+    if (rows.isEmpty) throw StateError('No active default wallet');
+    return rows.single[WalletMeta.id] as int;
+  }
+
+  Future<int> saveWallet(WalletModel wallet) async {
+    if (wallet.name.trim().isEmpty || wallet.openingBalanceMinor < 0) {
+      throw ArgumentError(
+          'Wallet name and nonnegative opening balance are required.');
+    }
+    final now = DateTime.now().toUtc().toIso8601String();
+    return db.transaction((txn) async {
+      if (wallet.isDefault) {
+        await txn.update(WalletMeta.table, {WalletMeta.isDefault: 0});
+      }
+      final values = <String, Object?>{
+        WalletMeta.name: wallet.name.trim(),
+        WalletMeta.type: wallet.type,
+        WalletMeta.openingBalance: wallet.openingBalanceMinor,
+        WalletMeta.currency: wallet.currency,
+        WalletMeta.archived: wallet.isArchived ? 1 : 0,
+        WalletMeta.isDefault: wallet.isDefault ? 1 : 0,
+        WalletMeta.updatedAt: now,
+      };
+      if (wallet.id == null) {
+        return txn
+            .insert(WalletMeta.table, {...values, WalletMeta.createdAt: now});
+      }
+      final changed = await txn.update(WalletMeta.table, values,
+          where: '${WalletMeta.id}=?', whereArgs: [wallet.id]);
+      if (changed != 1) throw StateError('Wallet not found');
+      return wallet.id!;
+    });
+  }
+
+  Future<void> archiveWallet(int walletId) async {
+    await db.transaction((txn) async {
+      final rows = await txn.query(WalletMeta.table,
+          where: '${WalletMeta.id}=?', whereArgs: [walletId]);
+      if (rows.isEmpty) throw StateError('Wallet not found');
+      if (rows.single[WalletMeta.isDefault] == 1)
+        throw StateError('Choose another default wallet first');
+      await txn.update(
+          WalletMeta.table,
+          {
+            WalletMeta.archived: 1,
+            WalletMeta.updatedAt: DateTime.now().toUtc().toIso8601String()
+          },
+          where: '${WalletMeta.id}=?',
+          whereArgs: [walletId]);
+    });
+  }
+
+  Future<int> transfer(
+      {required int sourceWalletId,
+      required int destinationWalletId,
+      required int amountMinor,
+      required DateTime date,
+      String? note}) async {
+    if (sourceWalletId == destinationWalletId || amountMinor <= 0)
+      throw ArgumentError(
+          'Transfer requires different wallets and positive amount.');
+    return db.transaction((txn) async {
+      for (final id in [sourceWalletId, destinationWalletId]) {
+        final rows = await txn.query(WalletMeta.table,
+            columns: [WalletMeta.archived],
+            where: '${WalletMeta.id}=?',
+            whereArgs: [id]);
+        if (rows.isEmpty || rows.single[WalletMeta.archived] == 1)
+          throw StateError('Transfer wallets must be active');
+      }
+      return txn.insert(TransferMeta.table, {
+        TransferMeta.sourceWalletId: sourceWalletId,
+        TransferMeta.destinationWalletId: destinationWalletId,
+        TransferMeta.amount: amountMinor,
+        TransferMeta.date: date.toIso8601String(),
+        TransferMeta.note: note,
+      });
+    });
   }
 
   Future<List<IncomeSourceModel>> getIncomeSource() async {
@@ -913,6 +1012,7 @@ class DatabaseRepository {
 
   Future<void> insertExpense(ExpenseModel data) async {
     final foreignId = requireReferenceId(data.categories, exCategoriesData);
+    await _requireActiveWallet(data.walletId);
 
     await db.insert(
       ExpenseMeta.nameTable,
@@ -922,6 +1022,7 @@ class DatabaseRepository {
         ExpenseMeta.amountMinor: MoneyAmount.toMinorUnits(data.amount),
         ExpenseMeta.item: data.item,
         ExpenseMeta.idCategories: foreignId,
+        ExpenseMeta.walletId: data.walletId,
       },
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
@@ -929,6 +1030,7 @@ class DatabaseRepository {
 
   Future<void> updateExpense(ExpenseModel data) async {
     final foreignId = requireReferenceId(data.categories, exCategoriesData);
+    await _requireWallet(data.walletId);
 
     await db.update(
       ExpenseMeta.nameTable,
@@ -938,10 +1040,30 @@ class DatabaseRepository {
         ExpenseMeta.amountMinor: MoneyAmount.toMinorUnits(data.amount),
         ExpenseMeta.item: data.item,
         ExpenseMeta.idCategories: foreignId,
+        ExpenseMeta.walletId: data.walletId,
       },
       where: "${ExpenseMeta.id} = ?",
       whereArgs: [data.id],
     );
+  }
+
+  Future<void> _requireWallet(int id) async {
+    final rows = await db.query(WalletMeta.table,
+        columns: [WalletMeta.id],
+        where: '${WalletMeta.id}=?',
+        whereArgs: [id],
+        limit: 1);
+    if (rows.isEmpty) throw StateError('Wallet not found');
+  }
+
+  Future<void> _requireActiveWallet(int id) async {
+    final rows = await db.query(WalletMeta.table,
+        columns: [WalletMeta.archived],
+        where: '${WalletMeta.id}=?',
+        whereArgs: [id],
+        limit: 1);
+    if (rows.isEmpty || rows.single[WalletMeta.archived] == 1)
+      throw StateError('Wallet must be active');
   }
 
   Future<void> deleteExpense(int id) async {

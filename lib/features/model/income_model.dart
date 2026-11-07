@@ -13,6 +13,7 @@ class IncomeModel implements TransactionModel {
     this.desc,
     required this.amount,
     required this.incomeSource,
+    this.walletId = 1,
   });
 
   factory IncomeModel.fromDatabase(Map<String, dynamic> json) => IncomeModel(
@@ -25,6 +26,7 @@ class IncomeModel implements TransactionModel {
           inSourceData,
           unknownType: 'income source',
         ),
+        walletId: json[IncomeMeta.walletId] as int? ?? 1,
       );
   @override
   int? id;
@@ -34,6 +36,7 @@ class IncomeModel implements TransactionModel {
   @override
   double amount;
   String incomeSource;
+  int walletId;
 
   IncomeModel copyWith({
     int? id,
@@ -41,6 +44,7 @@ class IncomeModel implements TransactionModel {
     String? desc,
     double? amount,
     String? incomeSource,
+    int? walletId,
   }) =>
       IncomeModel(
         id: id ?? this.id,
@@ -48,6 +52,7 @@ class IncomeModel implements TransactionModel {
         desc: desc ?? this.desc,
         amount: amount ?? this.amount,
         incomeSource: incomeSource ?? this.incomeSource,
+        walletId: walletId ?? this.walletId,
       );
 
   Map<String, dynamic> toMap() => {
@@ -57,6 +62,7 @@ class IncomeModel implements TransactionModel {
         IncomeMeta.amount: amount,
         IncomeMeta.amountMinor: MoneyAmount.toMinorUnits(amount),
         IncomeMeta.idIncomeSource: incomeSource,
+        IncomeMeta.walletId: walletId,
       };
 
   @override
@@ -69,6 +75,7 @@ class IncomeModel implements TransactionModel {
         desc,
         amount,
         incomeSource,
+        walletId,
       ];
 
   @override

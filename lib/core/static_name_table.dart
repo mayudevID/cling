@@ -6,6 +6,7 @@ class IncomeMeta {
   static const amount = 'amount';
   static const amountMinor = 'amount_minor';
   static const idIncomeSource = 'income_source_id';
+  static const walletId = 'wallet_id';
 }
 
 class ExpenseMeta {
@@ -16,6 +17,42 @@ class ExpenseMeta {
   static const amount = 'amount';
   static const amountMinor = 'amount_minor';
   static const idCategories = 'expense_source_id';
+  static const walletId = 'wallet_id';
+}
+
+class WalletMeta {
+  static const table = 'wallets';
+  static const id = 'wallet_id';
+  static const name = 'name';
+  static const type = 'type';
+  static const openingBalance = 'opening_balance_minor';
+  static const currency = 'currency';
+  static const archived = 'is_archived';
+  static const isDefault = 'is_default';
+  static const createdAt = 'created_at';
+  static const updatedAt = 'updated_at';
+}
+
+class TransferMeta {
+  static const table = 'wallet_transfers';
+  static const id = 'transfer_id';
+  static const sourceWalletId = 'source_wallet_id';
+  static const destinationWalletId = 'destination_wallet_id';
+  static const amount = 'amount_minor';
+  static const date = 'date';
+  static const note = 'note';
+}
+
+class QuickTemplateMeta {
+  static const table = 'quick_transaction_templates';
+  static const id = 'template_id';
+  static const name = 'name';
+  static const type = 'type';
+  static const amount = 'amount_minor';
+  static const categoryId = 'category_id';
+  static const walletId = 'wallet_id';
+  static const createdAt = 'created_at';
+  static const updatedAt = 'updated_at';
 }
 
 class IncomeSourceMeta {

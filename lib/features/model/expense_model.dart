@@ -13,6 +13,7 @@ class ExpenseModel implements TransactionModel {
     required this.item,
     required this.amount,
     required this.categories,
+    this.walletId = 1,
   });
 
   factory ExpenseModel.fromDatabase(Map<String, dynamic> json) => ExpenseModel(
@@ -25,6 +26,7 @@ class ExpenseModel implements TransactionModel {
           exCategoriesData,
           unknownType: 'expense category',
         ),
+        walletId: json[ExpenseMeta.walletId] as int? ?? 1,
       );
   @override
   int? id;
@@ -34,6 +36,7 @@ class ExpenseModel implements TransactionModel {
   @override
   double amount;
   String categories;
+  int walletId;
 
   ExpenseModel copyWith({
     int? id,
@@ -41,6 +44,7 @@ class ExpenseModel implements TransactionModel {
     String? item,
     double? amount,
     String? categories,
+    int? walletId,
   }) =>
       ExpenseModel(
         id: id ?? this.id,
@@ -48,6 +52,7 @@ class ExpenseModel implements TransactionModel {
         item: item ?? this.item,
         amount: amount ?? this.amount,
         categories: categories ?? this.categories,
+        walletId: walletId ?? this.walletId,
       );
 
   Map<String, dynamic> toMap() => {
@@ -57,6 +62,7 @@ class ExpenseModel implements TransactionModel {
         ExpenseMeta.amount: amount,
         ExpenseMeta.amountMinor: MoneyAmount.toMinorUnits(amount),
         ExpenseMeta.idCategories: categories,
+        ExpenseMeta.walletId: walletId,
       };
 
   @override
@@ -69,6 +75,7 @@ class ExpenseModel implements TransactionModel {
         item,
         amount,
         categories,
+        walletId,
       ];
 
   @override
