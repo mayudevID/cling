@@ -196,7 +196,7 @@ class _GoalPlanFormState extends State<_GoalPlanForm> {
         ),
         const SizedBox(height: 12),
         DropdownButtonFormField<String>(
-          value: _frequency,
+          initialValue: _frequency,
           dropdownColor: const Color(0xFF292929),
           style: const TextStyle(color: Colors.white),
           decoration: _decoration(l10n.goalContributionFrequency),
@@ -247,7 +247,7 @@ class _GoalPlanFormState extends State<_GoalPlanForm> {
           ),
         const SizedBox(height: 8),
         DropdownButtonFormField<int>(
-          value: _priority,
+          initialValue: _priority,
           dropdownColor: const Color(0xFF292929),
           style: const TextStyle(color: Colors.white),
           decoration: _decoration(l10n.goalPriority),
@@ -260,7 +260,7 @@ class _GoalPlanFormState extends State<_GoalPlanForm> {
         ),
         const SizedBox(height: 12),
         DropdownButtonFormField<int>(
-          value: wallets.any((w) => w.id == _walletId) ? _walletId : -1,
+          initialValue: wallets.any((w) => w.id == _walletId) ? _walletId : -1,
           dropdownColor: const Color(0xFF292929),
           style: const TextStyle(color: Colors.white),
           decoration: _decoration(l10n.goalPlanningWallet),

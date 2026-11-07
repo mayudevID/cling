@@ -343,8 +343,9 @@ class _PlanningScreen extends StatelessWidget {
                               .read<PlanningBloc>()
                               .add(CancelPlanningBill(bill.id!));
                         }
-                        if (value == 'link')
+                        if (value == 'link') {
                           _linkExistingExpense(context, bill);
+                        }
                       },
                       itemBuilder: (_) => [
                         PopupMenuItem(
@@ -384,8 +385,10 @@ class _PlanningScreen extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(l10n.setupPayday,
-                  style: const TextStyle(color: Colors.white)),
+              Text(
+                l10n.setupPayday,
+                style: const TextStyle(color: Colors.white),
+              ),
               TextButton(
                 onPressed: () => _open(context, _PlanningSection.settings),
                 child: Text(l10n.planningSettings),
@@ -1213,7 +1216,7 @@ class _PlanningScreen extends StatelessWidget {
     ValueChanged<T?> onChanged,
   ) =>
       DropdownButtonFormField<T>(
-        value: value,
+        initialValue: value,
         dropdownColor: const Color(0xFF353535),
         decoration: InputDecoration(
           labelText: label,

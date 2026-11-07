@@ -149,7 +149,7 @@ class EditIncomeExpensePageContent extends StatelessWidget {
                     previous.wallets != current.wallets ||
                     previous.selectedWalletId != current.selectedWalletId,
                 builder: (context, state) => DropdownButtonFormField<int>(
-                  value: state.wallets
+                  initialValue: state.wallets
                           .any((wallet) => wallet.id == state.selectedWalletId)
                       ? state.selectedWalletId
                       : null,

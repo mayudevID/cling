@@ -170,7 +170,7 @@ class _ClingCheckPageState extends State<ClingCheckPage> {
                 ),
               const SizedBox(height: 12),
               DropdownButtonFormField<int>(
-                value: selected.id,
+                initialValue: selected.id,
                 dropdownColor: const Color(0xFF292929),
                 style: const TextStyle(color: Colors.white),
                 decoration: _decoration(l10n.sourceWallet),
