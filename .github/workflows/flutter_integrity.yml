@@ -4,19 +4,91 @@ on:
   push:
     branches: [main]
   pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: flutter-integrity-${{ github.ref }}
+  cancel-in-progress: false
 
 jobs:
-  test:
+  tidy-main:
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
-      - uses: actions/checkout@v4
-      - uses: subosito/flutter-action@v2
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Flutter
+        uses: subosito/flutter-action@v2
         with:
           channel: stable
           cache: true
-      - name: Fetch packages
+
+      - name: Resolve dependencies
         run: flutter pub get
-      - name: Analyze Dart
+
+      - name: Apply Dart fixes and format
+        env:
+          DART_FIX_SKIP_ANALYZE: "1"
+        run: bash scripts/dart_fix_apply.sh
+
+      - name: Analyze Dart / Flutter
         run: flutter analyze
+
       - name: Run regression tests
         run: flutter test
+
+      # Only commit validated changes. GITHUB_TOKEN pushes do not
+      # recursively trigger this workflow.
+      - name: Commit automated Dart cleanup
+        if: github.ref == 'refs/heads/main'
+        run: |
+          if [[ -z "$(git status --porcelain -- lib test)" ]]; then
+            echo "No Dart cleanup changes to commit."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- lib test
+          git commit -m "style: apply automated Dart fixes and formatting"
+          git push origin HEAD:main
+
+  # PR code is untrusted: it never gets a write-capable GitHub token.
+  verify-pull-request:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout pull request
+        uses: actions/checkout@v4
+
+      - name: Install Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Resolve dependencies
+        run: flutter pub get
+
+      - name: Apply Dart fixes and format
+        env:
+          DART_FIX_SKIP_ANALYZE: "1"
+        run: bash scripts/dart_fix_apply.sh
+
+      - name: Analyze Dart / Flutter
+        run: flutter analyze
+
+      - name: Run regression tests
+        run: flutter test
+
+      - name: Require formatted code on pull requests
+        run: |
+          if [[ -n "$(git status --porcelain -- lib test)" ]]; then
+            git diff --stat -- lib test
+            echo "::error::Dart files need cleanup. Run bash scripts/dart_fix_apply.sh locally."
+            exit 1
+          fi
