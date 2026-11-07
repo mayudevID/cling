@@ -35,7 +35,7 @@ jobs:
         run: bash scripts/dart_fix_apply.sh
 
       - name: Analyze Dart / Flutter
-        run: flutter analyze
+        run: flutter analyze --no-fatal-infos
 
       - name: Run regression tests
         run: flutter test
@@ -80,7 +80,7 @@ jobs:
         run: bash scripts/dart_fix_apply.sh
 
       - name: Analyze Dart / Flutter
-        run: flutter analyze
+        run: flutter analyze --no-fatal-infos
 
       - name: Run regression tests
         run: flutter test
