@@ -132,6 +132,7 @@ class SettingsPageContent extends StatelessWidget {
         storagePath: chosen.storagePath,
         allowOverwriteNewerLocal: true,
       );
+      if (!context.mounted) return;
       _afterRestore(context);
     } catch (error) {
       _message(context, 'Gagal mengakses backup cloud: $error');
@@ -216,6 +217,7 @@ class SettingsPageContent extends StatelessWidget {
         chosen.path,
         allowOverwriteNewerLocal: true,
       );
+      if (!context.mounted) return;
       _afterRestore(context);
     } catch (error) {
       _message(context, 'Gagal memulihkan cadangan lokal: $error');

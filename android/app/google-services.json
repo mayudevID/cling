@@ -7,12 +7,17 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:222604788674:android:e009e5927d6ed6e2d9cc5b",
+        "mobilesdk_app_id": "1:222604788674:android:4d39389466027b1ed9cc5b",
         "android_client_info": {
-          "package_name": "com.mayudev.cling"
+          "package_name": "com.mayudev.id.cling"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "222604788674-faifor103le2slmkjed18ni35n6rh725.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyCdADhxMLnDk_bKxlWk0SzTE8c3igtn07k"
@@ -20,7 +25,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "222604788674-faifor103le2slmkjed18ni35n6rh725.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "222604788674-o2je28elurns2l6a01k08tbvdk70r2bd.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.mayudev.cling"
+              }
+            }
+          ]
         }
       }
     }
