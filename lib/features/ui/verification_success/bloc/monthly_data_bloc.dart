@@ -15,7 +15,6 @@ import '../../../repository/auth_repository.dart';
 import '../../../repository/settings_repository.dart';
 import '../../language_currency/lang_export.dart';
 import '../../main/profile/bloc/profile_bloc.dart';
-import '../widget/text_field_monthly_data.dart';
 
 part 'monthly_data_event.dart';
 part 'monthly_data_state.dart';
@@ -36,14 +35,14 @@ class MonthlyDataBloc extends Bloc<MonthlyDataEvent, MonthlyDataState> {
 
   final SettingsRepository _settingsRepo;
   final AuthRepository _authRepo;
-  final BuildContext mainContext = MainApp.navKeyGlobal.currentContext!;
+  BuildContext get mainContext => MainApp.navKeyGlobal.currentContext!;
 
   void _recDay(RecDay event, emit) {
     emit(state.copyWith(dateRec: event.dateRec));
   }
 
   void _setIncome(SetIncome event, emit) {
-    final data = TextFieldMonthlyData.textEditingController.text;
+    final data = event.input;
     final amount = data.removeDot;
     if (amount == "0" || amount.trim().isEmpty) {
       errorSnackbar(
@@ -69,7 +68,7 @@ class MonthlyDataBloc extends Bloc<MonthlyDataEvent, MonthlyDataState> {
   }
 
   void _setBudget(SetBudget event, emit) {
-    final data = TextFieldMonthlyData.textEditingController.text;
+    final data = event.input;
     final amount = data.removeDot;
     if (amount == "0" || amount.trim().isEmpty) {
       errorSnackbar(
@@ -96,29 +95,15 @@ class MonthlyDataBloc extends Bloc<MonthlyDataEvent, MonthlyDataState> {
     }
   }
 
-  void _setState(SetState event, emit) {
-    emit(state.copyWith(state: event.state));
-
-    switch (event.state) {
-      case VerifOnboardPos.income:
-        //* (Back Condition)
-        //* Save Month Budget
-        state.monBudget = TextFieldMonthlyData.textEditingController.text;
-        //* Get Month Income
-        TextFieldMonthlyData.textEditingController.text = state.monIncome;
-        break;
-      case VerifOnboardPos.budget:
-        //* Get Month Budget
-        TextFieldMonthlyData.textEditingController.text = state.monBudget;
-        break;
-    }
-
-    TextFieldMonthlyData.textEditingController.selection =
-        TextSelection.fromPosition(
-      TextPosition(
-        offset: TextFieldMonthlyData.textEditingController.text.length,
-      ),
-    );
+  void _setState(SetState event, Emitter<MonthlyDataState> emit) {
+    emit(state.copyWith(
+      state: event.state,
+      // Preserve the budget the user typed when navigating back, even if
+      // they have not tapped Finish yet.
+      monBudget: event.state == VerifOnboardPos.income
+          ? (event.currentInput ?? state.monBudget)
+          : state.monBudget,
+    ));
   }
 
   Future<void> _setFinish(

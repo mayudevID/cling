@@ -122,3 +122,90 @@ rules limit each backup path to its matching authenticated UID.
 **Note:** Unit tests and static analysis must run in a Flutter-equipped
 environment or GitHub Actions. This repository patch itself was prepared via
 GitHub APIs without executing an Android/iOS build.
+
+## Integrity hardening (schema v2 compatible)
+
+### Test toolchain
+
+Use `sqflite_common_ffi >=2.3.7 <2.4.0` to avoid the breaking
+`sqlite3/open.dart` import caused by mixing older sqflite FFI with
+sqlite3 v3. The Flutter runner must have Dart >=3.9 for this version.
+
+### Recurring income
+
+- Database open now creates/migrates schema but **does not** generate
+  recurring salary from stale device settings.
+- A successful login, or a cold start with server connectivity, fetches
+  the current account settings from Firestore and then reconciles the
+  SQLite recurring rule. When offline, keep existing transactions
+  available without generating an unverified recurring payment.
+- Legacy recurring entries that match the original description and
+  source are used to populate the rule/month occurrence ledger before
+  the scheduler can generate new entries. This is conservative and does
+  not erase existing transactions; users should review historical
+  duplicate salary entries manually.
+- Disabling a recurring rule retains the rule identity and its payment
+  occurrence history, so a payday change cannot generate two records
+  for a month that is already marked as paid.
+
+### Settings synchronization
+
+- Firestore is the desired state. After a successful remote change,
+  an account-specific `pending_monthly_settings_<uid>` marker survives
+  interrupted local writes. Startup/login fetches fresh server values,
+  reconciles local recurring configuration, and clears the marker.
+- Firestore and SQLite are **not** a distributed transaction. When
+  the network is unavailable, local salary generation waits until the
+  server can be reconciled; users can still view existing device data.
+- Login/startup reconciliation runs only with a matching active
+  authenticated UID and database. A change of account invalidates
+  in-flight processing.
+
+### Restore and backup protection
+
+- New Firebase Storage SQLite backups include object metadata for
+  owner UID, SQLite schema version, UTC snapshot time, and SHA-256.
+- Restore verifies SQLite integrity, required tables and columns,
+  supported schema version (v1/v2), optional legacy/new manifest,
+  owner UID, and SHA-256 before swapping the active file.
+- A newer local financial modification timestamp triggers a **second
+  explicit confirmation**. Backups without modern manifest metadata
+  also require confirmation if there are existing local transactions.
+- The previous local database is snapshotted to a unique
+  `.before_restore_<timestamp>.db` path before replacement. This
+  recovery copy is **not** deleted on success and is not encrypted
+  separately from the local SQLite database; apply the same device
+  security/privacy controls. Avoid indefinitely accumulating these
+  copies in production: provide a deliberate recovery/retention UX.
+- The short-lived `.rollback` file protects failed/interrupted
+  replacement. The pre-restore snapshot protects against *successful*
+  restores replacing more recent local data.
+- Never directly restore a mismatched or malformed manifest, even
+  if the SQLite file itself passes integrity_check.
+
+### Database and onboarding lifecycle
+
+- Concurrent database-open requests share the same future; an
+  initialization exception closes its partial handle and does not
+  mark an account as ready. An open may be retried.
+- Nonempty databases track the last change to income, expenses,
+  savings goals and savings history through SQLite triggers.
+- Monthly onboarding state is immutable and its text controller is
+  owned/disposed by the page. Navigating backward preserves in-progress
+  budget input without mutating Equatable state.
+
+### Release verification
+
+```bash
+flutter pub get
+dart format lib test
+flutter analyze --no-fatal-infos
+flutter test
+```
+
+Test additionally: offline startup on payday, switching UID mid-restore,
+restoring an old v1 backup and a tampered checksum, saving settings while
+offline or with a forced local write failure, and restoring newer versus
+older local data. Never deploy on the only copy of actual finance records
+without a separate verified backup.
+

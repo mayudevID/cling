@@ -240,6 +240,70 @@ void main() {
     expect((await repository.getNotificationsPage()).length, 1);
   });
 
+  test('legacy recurring rows reserve paid months before processing', () async {
+    final today = DateTime.now();
+    await repository.insertIncome(IncomeModel(
+      date: today,
+      desc: 'Monthly Income (Recurring)',
+      amount: 1800,
+      incomeSource: '0 Other',
+    ));
+    await repository.saveRecurringMonthly(
+      recDay: today.day,
+      type: 0,
+      amount: 1800,
+      isFromLogin: false,
+    );
+    await repository.close();
+    await repository.open(); // Backfills the new occurrence ledger.
+    final markers = await repository.db.query('recurring_occurrences');
+    expect(markers.length, 1);
+    await repository.checkAndInputRecurring();
+    expect((await repository.db.query(IncomeMeta.nameTable)).length, 1);
+  });
+
+  test('new recurring rule does not repay a legacy salary in the same month', () async {
+    final today = DateTime.now();
+    await repository.insertIncome(IncomeModel(
+      date: today,
+      desc: 'Monthly Income (Recurring)',
+      amount: 200,
+      incomeSource: '0 Other',
+    ));
+    await repository.syncMonthlyIncomeRule(
+      recurringDay: today.day, amount: 200,
+    );
+    expect((await repository.db.query(IncomeMeta.nameTable)).length, 1);
+    expect((await repository.db.query('recurring_occurrences')).length, 1);
+  });
+
+  test('opening the database never generates income before reconciliation', () async {
+    final today = DateTime.now();
+    await repository.saveRecurringMonthly(
+      recDay: today.day, type: 0, amount: 999, isFromLogin: false,
+    );
+    await repository.close();
+    await repository.open();
+    expect((await repository.db.query(IncomeMeta.nameTable)), isEmpty);
+    await repository.syncMonthlyIncomeRule(
+      recurringDay: 0, amount: 0,
+    );
+    expect((await repository.db.query(IncomeMeta.nameTable)), isEmpty);
+  });
+
+  test('financial changes receive a durable modification timestamp', () async {
+    expect(await repository.hasFinancialRecords(), false);
+    expect(await repository.lastFinanceChangeAt(), isNull);
+    await repository.insertIncome(IncomeModel(
+      date: DateTime.now(), amount: 20, desc: 'purchase',
+      incomeSource: '0 Other',
+    ));
+    expect(await repository.hasFinancialRecords(), true);
+    final modified = await repository.lastFinanceChangeAt();
+    expect(modified, isNotNull);
+    expect(modified!.isUtc, true);
+  });
+
   test('recurring edits and disable do not duplicate a paid month', () async {
     final today = DateTime.now();
     await repository.syncMonthlyIncomeRule(

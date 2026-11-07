@@ -1,5 +1,3 @@
-// ignore_for_file: must_be_immutable
-
 import 'package:auto_size_text_field/auto_size_text_field.dart';
 import '../../language_currency/lang_currency_bloc.dart';
 import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
@@ -8,31 +6,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../resources/gen/fonts.gen.dart';
 
-class TextFieldMonthlyData extends StatefulWidget {
-  const TextFieldMonthlyData({super.key});
-  static late TextEditingController textEditingController;
-
-  @override
-  State<TextFieldMonthlyData> createState() => _TextFieldMonthlyDataState();
-}
-
-class _TextFieldMonthlyDataState extends State<TextFieldMonthlyData> {
-  @override
-  void initState() {
-    TextFieldMonthlyData.textEditingController = TextEditingController();
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    TextFieldMonthlyData.textEditingController.dispose();
-    super.dispose();
-  }
+class TextFieldMonthlyData extends StatelessWidget {
+  const TextFieldMonthlyData({super.key, required this.controller});
+  final TextEditingController controller;
 
   @override
   Widget build(BuildContext context) {
     return AutoSizeTextField(
-      controller: TextFieldMonthlyData.textEditingController,
+      controller: controller,
       inputFormatters: [
         CurrencyTextInputFormatter.currency(
           locale: context.select(

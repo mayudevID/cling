@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -65,4 +67,16 @@ Future<void> initSl() async {
     databaseRepository: getIt<DatabaseRepository>(),
   );
   getIt.registerLazySingleton<SettingsRepository>(() => settingsRepo);
+
+  // Never generate recurring income from unverified, stale cached settings.
+  // A network failure is nonfatal for offline viewing; reconciliation will
+  // be retried at the next successful login/settings save.
+  if (ownerUid != null) {
+    try {
+      await settingsRepo.reconcileCurrentAccountSettingsFromServer()
+          .timeout(const Duration(seconds: 6));
+    } catch (_) {
+      // Keep local transactions readable without inventing recurring income.
+    }
+  }
 }

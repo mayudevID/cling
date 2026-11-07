@@ -1,5 +1,3 @@
-// ignore_for_file: must_be_immutable
-
 part of 'monthly_data_bloc.dart';
 
 sealed class MonthlyDataEvent extends Equatable {
@@ -9,20 +7,33 @@ sealed class MonthlyDataEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class SetIncome extends MonthlyDataEvent {}
+class SetIncome extends MonthlyDataEvent {
+  const SetIncome(this.input);
+  final String input;
+  @override
+  List<Object> get props => [input];
+}
 
-class SetBudget extends MonthlyDataEvent {}
+class SetBudget extends MonthlyDataEvent {
+  const SetBudget(this.input);
+  final String input;
+  @override
+  List<Object> get props => [input];
+}
 
 class RecDay extends MonthlyDataEvent {
-  RecDay(this.dateRec);
-
-  int dateRec;
+  const RecDay(this.dateRec);
+  final int dateRec;
+  @override
+  List<Object> get props => [dateRec];
 }
 
 class SetState extends MonthlyDataEvent {
-  SetState(this.state);
-
-  VerifOnboardPos state;
+  const SetState(this.state, {this.currentInput});
+  final VerifOnboardPos state;
+  final String? currentInput;
+  @override
+  List<Object> get props => [state, if (currentInput != null) currentInput!];
 }
 
 class SetFinish extends MonthlyDataEvent {}

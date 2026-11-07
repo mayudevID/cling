@@ -12,6 +12,7 @@ import '../../../../core/logger.dart';
 import '../../../../core/route.dart';
 import '../../../../main.dart';
 import '../../../repository/auth_repository.dart';
+import '../../../repository/backup_integrity.dart';
 import '../../../repository/database_repository.dart';
 import '../../../repository/settings_repository.dart';
 import '../../app_bloc/app_bloc.dart';
@@ -127,10 +128,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
       // Reconcile local recurring rules with account settings, including
       // the case where a previously active rule was disabled in Firestore.
-      await _dbRepo.syncMonthlyIncomeRule(
-        recurringDay: _authRepo.currentUserModel!.recurringDay,
-        amount: _authRepo.currentUserModel!.monthlyIncome,
-      );
+      // Fetch the authoritative server settings and then reconcile local
+      // recurring income; this also clears any interrupted settings write.
+      await _settingsRepo.reconcileCurrentAccountSettingsFromServer();
 
       await Future.delayed(const Duration(milliseconds: 100));
       mainContext.read<ProfileBloc>()
@@ -200,24 +200,53 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   void _loginAnony(LoginAnonymous event, emit) {}
 
   Future<void> _getBackup() async {
-    late bool result;
+    var retry = false;
     do {
-      final connectivityResult = await (Connectivity().checkConnectivity());
-      if (!(connectivityResult[0] == ConnectivityResult.mobile ||
-          connectivityResult[0] == ConnectivityResult.wifi)) {
-        //* No Connection
-        result = await dialogNoInternetGetBackup(mainContext);
-      } else {
-        try {
-          await _settingsRepo.getBackup();
-        } on Exception catch (_) {
-          errorSnackbar(
-            mainContext,
-            AppLocalizations.of(mainContext)!.noConnection,
-          );
-        }
-        result = false;
+      final connectivity = await Connectivity().checkConnectivity();
+      if (!(connectivity.contains(ConnectivityResult.mobile) ||
+            connectivity.contains(ConnectivityResult.wifi))) {
+        retry = await dialogNoInternetGetBackup(mainContext);
+        continue;
       }
-    } while (result);
+      try {
+        await _settingsRepo.getBackup();
+        retry = false;
+      } on RestoreConflictException {
+        final confirmed = await showDialog<bool>(
+          context: mainContext,
+          barrierDismissible: false,
+          builder: (context) => AlertDialog(
+            title: const Text('Konfirmasi restore data lokal'),
+            content: const Text(
+              'Data keuangan lokal kemungkinan lebih baru daripada '
+              'backup cloud. Melanjutkan restore akan mengganti data aktif. '
+              'Salinan database lokal akan tetap disimpan di perangkat. '
+              'Yakin ingin melanjutkan?',
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context, false),
+                child: const Text('Batal'),
+              ),
+              TextButton(
+                onPressed: () => Navigator.pop(context, true),
+                child: const Text('Lanjutkan restore'),
+              ),
+            ],
+          ),
+        ) ?? false;
+        if (confirmed) {
+          try {
+            await _settingsRepo.getBackup(allowOverwriteNewerLocal: true);
+          } on Exception catch (error) {
+            errorSnackbar(mainContext, 'Restore gagal: $error');
+          }
+        }
+        retry = false;
+      } on Exception catch (error) {
+        errorSnackbar(mainContext, 'Restore gagal: $error');
+        retry = false;
+      }
+    } while (retry);
   }
 }

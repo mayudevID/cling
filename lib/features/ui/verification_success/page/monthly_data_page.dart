@@ -1,5 +1,3 @@
-// ignore_for_file: must_be_immutable
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -33,12 +31,37 @@ class MonthlyDataPage extends StatelessWidget {
   }
 }
 
-class MonthlyDataPageContent extends StatelessWidget {
+class MonthlyDataPageContent extends StatefulWidget {
   const MonthlyDataPageContent({super.key});
 
   @override
+  State<MonthlyDataPageContent> createState() =>
+      _MonthlyDataPageContentState();
+}
+
+class _MonthlyDataPageContentState extends State<MonthlyDataPageContent> {
+  final TextEditingController _controller = TextEditingController();
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return SafeArea(
+    return BlocListener<MonthlyDataBloc, MonthlyDataState>(
+      listenWhen: (previous, current) => previous.state != current.state,
+      listener: (context, state) {
+        final text = state.state == VerifOnboardPos.income
+            ? state.monIncome
+            : state.monBudget;
+        _controller.value = TextEditingValue(
+          text: text,
+          selection: TextSelection.collapsed(offset: text.length),
+        );
+      },
+      child: SafeArea(
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         backgroundColor: Colors.black,
@@ -98,7 +121,7 @@ class MonthlyDataPageContent extends StatelessWidget {
                   },
                 ),
                 const SizedBox(width: 6),
-                const TextFieldMonthlyData(),
+                TextFieldMonthlyData(controller: _controller),
               ],
             ),
             BlocBuilder<MonthlyDataBloc, MonthlyDataState>(
@@ -132,10 +155,10 @@ class MonthlyDataPageContent extends StatelessWidget {
                   onTap: () {
                     switch (state.state) {
                       case VerifOnboardPos.income:
-                        context.read<MonthlyDataBloc>().add(SetIncome());
+                        context.read<MonthlyDataBloc>().add(SetIncome(_controller.text));
                         break;
                       case VerifOnboardPos.budget:
-                        context.read<MonthlyDataBloc>().add(SetBudget());
+                        context.read<MonthlyDataBloc>().add(SetBudget(_controller.text));
                         break;
                     }
                   },
@@ -157,6 +180,7 @@ class MonthlyDataPageContent extends StatelessWidget {
                       context.read<MonthlyDataBloc>().add(
                             SetState(
                               VerifOnboardPos.income,
+                              currentInput: _controller.text,
                             ),
                           );
                     },
@@ -166,6 +190,7 @@ class MonthlyDataPageContent extends StatelessWidget {
             ),
           ],
         ),
+      ),
       ),
     );
   }

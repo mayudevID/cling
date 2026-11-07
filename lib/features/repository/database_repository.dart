@@ -27,6 +27,7 @@ class DatabaseRepository {
   // never see the data of the previously signed-in account.
   String? _userId;
   Database? _database;
+  Future<void>? _opening;
   int _revision = 0;
   bool _ready = false;
   String? get activeUserId => _userId;
@@ -39,63 +40,155 @@ class DatabaseRepository {
   Future<String> get databasePath async =>
       join(await getDatabasesPath(), databaseFileName);
 
-  Future<void> open({bool recoverRollback = true}) async {
-    if (_database != null && _ready) return;
-    final path = await databasePath;
-    final rollback = File('$path.rollback');
-    if (recoverRollback && await rollback.exists()) {
-      // Restore was interrupted before it could commit successfully.
-      final current = File(path);
-      if (await current.exists()) await current.delete();
-      await rollback.rename(path);
+  /// Share one in-flight initialization and close partially opened handles
+  /// on error. An account is only ready after its schema is verified.
+  Future<void> open({bool recoverRollback = true}) {
+    if (isReady) return Future.value();
+    final pending = _opening;
+    if (pending != null) return pending;
+    final task = _openInternal(recoverRollback: recoverRollback);
+    _opening = task;
+    return task.whenComplete(() {
+      if (identical(_opening, task)) _opening = null;
+    });
+  }
+
+  Future<void> _openInternal({required bool recoverRollback}) async {
+    try {
+      final path = await databasePath;
+      final rollback = File('$path.rollback');
+      if (recoverRollback && await rollback.exists()) {
+        // Restore interrupted before success. Prefer retaining the known
+        // good rollback over an uncommitted replacement.
+        final current = File(path);
+        if (await current.exists()) await current.delete();
+        await rollback.rename(path);
+      }
+      _database = await openDatabase(
+        path,
+        version: 2,
+        onCreate: (database, version) async {
+          await initDatabaseTable(database, version);
+          await migrateMoneyColumns(database);
+        },
+        onUpgrade: (database, oldVersion, newVersion) async {
+          if (oldVersion < 2) await migrateMoneyColumns(database);
+        },
+      );
+
+      await db.execute('''CREATE TABLE IF NOT EXISTS recurring_occurrences (
+        rule_id INTEGER NOT NULL,
+        period TEXT NOT NULL,
+        PRIMARY KEY (rule_id, period)
+      )''');
+      await db.execute(
+        'CREATE INDEX IF NOT EXISTS idx_notifications_date_id '
+        'ON ${NotificationMeta.nameTable} '
+        '(${NotificationMeta.date} DESC, ${NotificationMeta.id} DESC)',
+      );
+      await _deduplicateAndBackfillRecurringHistory();
+      await _installFinanceChangeTracking();
+
+      // Recurring payments are deliberately NOT generated here.
+      // They must be reconciled against a fresh account profile first.
+      _ready = true;
+    } catch (_) {
+      _ready = false;
+      final partial = _database;
+      _database = null;
+      if (partial != null) await partial.close();
+      rethrow;
     }
-    // A pre-upgrade database belongs to the cached, authenticated user only.
-    // Never infer ownership of the legacy file during a new login.
-    _database = await openDatabase(
-      path,
-      version: 2,
-      onCreate: (database, version) async {
-        await initDatabaseTable(database, version);
-        await migrateMoneyColumns(database);
-      },
-      onUpgrade: (database, oldVersion, newVersion) async {
-        if (oldVersion < 2) await migrateMoneyColumns(database);
-      },
-    );
-    await db.execute('''CREATE TABLE IF NOT EXISTS recurring_occurrences (
-      rule_id INTEGER NOT NULL,
-      period TEXT NOT NULL,
-      PRIMARY KEY (rule_id, period)
-    )''');
-    await db.execute(
-      'CREATE INDEX IF NOT EXISTS idx_notifications_date_id '
-      'ON ${NotificationMeta.nameTable} '
-      '(${NotificationMeta.date} DESC, ${NotificationMeta.id} DESC)',
-    );
-    // Older versions inserted one equivalent rule on every login.
+  }
+
+  /// On upgrade, historical recurring income must reserve its month before
+  /// the new scheduler runs. This is a conservative match of the legacy
+  /// generator's unique description and source id; it never deletes money.
+  Future<void> _deduplicateAndBackfillRecurringHistory() async {
     await db.transaction((txn) async {
       final rules = await txn.query(
-        RecurringMeta.nameTable,
-        orderBy: '${RecurringMeta.id} ASC',
-      );
+        RecurringMeta.nameTable, orderBy: '${RecurringMeta.id} ASC');
       final seen = <String>{};
       for (final rule in rules) {
-        final key =
-            '${rule[RecurringMeta.type]}:${rule[RecurringMeta.idModel]}';
+        final key = '${rule[RecurringMeta.type]}:${rule[RecurringMeta.idModel]}';
         if (!seen.add(key)) {
-          await txn.delete(
-            RecurringMeta.nameTable,
+          await txn.delete(RecurringMeta.nameTable,
             where: '${RecurringMeta.id} = ?',
-            whereArgs: [rule[RecurringMeta.id]],
-          );
+            whereArgs: [rule[RecurringMeta.id]]);
+          continue;
+        }
+        if (rule[RecurringMeta.type] == 0) {
+          await txn.rawInsert('''
+            INSERT OR IGNORE INTO recurring_occurrences (rule_id, period)
+            SELECT ?, substr(${IncomeMeta.date}, 1, 7)
+            FROM ${IncomeMeta.nameTable}
+            WHERE ${IncomeMeta.desc} = ?
+              AND ${IncomeMeta.idIncomeSource} = 0
+              AND length(${IncomeMeta.date}) >= 7
+            GROUP BY substr(${IncomeMeta.date}, 1, 7)
+          ''', [rule[RecurringMeta.id], 'Monthly Income (Recurring)']);
         }
       }
     });
-    await checkAndInputRecurring();
-    _ready = true;
+  }
+
+  Future<void> _installFinanceChangeTracking() async {
+    await db.execute(
+      'CREATE TABLE IF NOT EXISTS finance_meta ('
+      'key TEXT PRIMARY KEY, value TEXT NOT NULL)',
+    );
+    // Existing v1/v2 databases did not track mutation timestamps. Treat
+    // nonempty legacy data conservatively as recently modified.
+    final existing = await db.query('finance_meta',
+      where: 'key = ?', whereArgs: ['last_modified_at'], limit: 1);
+    if (existing.isEmpty && await hasFinancialRecords()) {
+      await db.insert('finance_meta', {
+        'key': 'last_modified_at',
+        'value': DateTime.now().toUtc().toIso8601String(),
+      });
+    }
+    for (final table in [
+      IncomeMeta.nameTable, ExpenseMeta.nameTable,
+      GoalMeta.nameTable, GoalSavingMeta.nameTable,
+    ]) {
+      for (final operation in ['INSERT', 'UPDATE', 'DELETE']) {
+        final name = 'track_${table}_${operation.toLowerCase()}';
+        await db.execute('''
+          CREATE TRIGGER IF NOT EXISTS $name AFTER $operation ON $table
+          BEGIN
+            INSERT OR REPLACE INTO finance_meta (key, value)
+            VALUES ('last_modified_at',
+              strftime('%Y-%m-%dT%H:%M:%fZ', 'now'));
+          END
+        ''');
+      }
+    }
+  }
+
+  Future<bool> hasFinancialRecords() async {
+    for (final table in [
+      IncomeMeta.nameTable, ExpenseMeta.nameTable,
+      GoalMeta.nameTable, GoalSavingMeta.nameTable,
+    ]) {
+      final rows = await db.rawQuery('SELECT 1 FROM $table LIMIT 1');
+      if (rows.isNotEmpty) return true;
+    }
+    return false;
+  }
+
+  Future<DateTime?> lastFinanceChangeAt() async {
+    final rows = await db.query('finance_meta',
+      columns: ['value'], where: 'key = ?',
+      whereArgs: ['last_modified_at'], limit: 1);
+    if (rows.isEmpty) return null;
+    return DateTime.tryParse(rows.first['value'] as String)?.toUtc();
   }
 
   Future<void> close() async {
+    final pending = _opening;
+    if (pending != null) {
+      try { await pending; } catch (_) { /* Open already cleaned up. */ }
+    }
     _ready = false;
     _revision++;
     final current = _database;
@@ -104,7 +197,7 @@ class DatabaseRepository {
   }
 
   Future<void> switchAccount(String? uid) async {
-    if (_userId == uid && _database != null) return;
+    if (_userId == uid && isReady) return;
     await close();
     _userId = uid;
     await open();
@@ -1223,8 +1316,10 @@ class DatabaseRepository {
         whereArgs: [type, 0],
         orderBy: '${RecurringMeta.id} ASC',
       );
+      int ruleId;
       if (existing.isNotEmpty) {
         final first = existing.first;
+        ruleId = first[RecurringMeta.id] as int;
         final oldDay = first[RecurringMeta.recurringDay] as int;
         await txn.update(
           RecurringMeta.nameTable,
@@ -1252,7 +1347,7 @@ class DatabaseRepository {
           );
         }
       } else {
-        await txn.insert(RecurringMeta.nameTable, {
+        ruleId = await txn.insert(RecurringMeta.nameTable, {
           RecurringMeta.idModel: 0,
           RecurringMeta.type: type,
           RecurringMeta.recurringDay: recDay,
@@ -1262,6 +1357,19 @@ class DatabaseRepository {
           RecurringMeta.amount: amount,
           RecurringMeta.amountMinor: minor,
         });
+      }
+      if (type == 0) {
+        // Rules restored or created after the initial schema migration must
+        // also reserve months with already-existing legacy salary entries.
+        await txn.rawInsert('''
+          INSERT OR IGNORE INTO recurring_occurrences (rule_id, period)
+          SELECT ?, substr(${IncomeMeta.date}, 1, 7)
+          FROM ${IncomeMeta.nameTable}
+          WHERE ${IncomeMeta.desc} = ?
+            AND ${IncomeMeta.idIncomeSource} = 0
+            AND length(${IncomeMeta.date}) >= 7
+          GROUP BY substr(${IncomeMeta.date}, 1, 7)
+        ''', [ruleId, 'Monthly Income (Recurring)']);
       }
     });
     if (isFromLogin) await checkAndInputRecurring();
@@ -1282,7 +1390,6 @@ class DatabaseRepository {
          whereArgs: [0, 0]);
       return;
     }
-    await checkAndInputRecurring(); // Commit any pending old-schedule entries.
     await saveRecurringMonthly(
       recDay: recurringDay, type: 0, amount: amount, isFromLogin: true,
     );

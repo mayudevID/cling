@@ -37,6 +37,9 @@ jobs:
       - name: Analyze Dart / Flutter
         run: flutter analyze --no-fatal-infos
 
+      - name: Install SQLite native library for FFI tests
+        run: sudo apt-get install -y libsqlite3-dev
+
       - name: Run regression tests
         run: flutter test
 
@@ -81,6 +84,9 @@ jobs:
 
       - name: Analyze Dart / Flutter
         run: flutter analyze --no-fatal-infos
+
+      - name: Install SQLite native library for FFI tests
+        run: sudo apt-get install -y libsqlite3-dev
 
       - name: Run regression tests
         run: flutter test

@@ -97,6 +97,17 @@ Future<bool> dialogGetBackup(
                   textAlign: TextAlign.center,
                 ),
               ),
+              const SizedBox(height: 8),
+              const Text(
+                'Restore akan mengganti data keuangan lokal dengan isi '
+                'backup ini. Jika terdapat transaksi lokal yang lebih baru, '
+                'aplikasi akan meminta konfirmasi tambahan.',
+                style: TextStyle(
+                  fontSize: 12, color: Colors.deepOrange,
+                  fontFamily: FontFamily.cabinetGrotesk,
+                ),
+                textAlign: TextAlign.center,
+              ),
               const SizedBox(
                 height: 12,
               ),
