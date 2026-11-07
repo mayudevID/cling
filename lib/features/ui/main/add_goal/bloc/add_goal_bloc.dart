@@ -1,4 +1,6 @@
 // ignore_for_file: use_buildmainContext_synchronously, use_build_context_synchronously
+import 'package:flutter/material.dart';
+
 import '../../../../../main.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -42,7 +44,10 @@ class AddGoalBloc extends Bloc<AddGoalEvent, AddGoalState> {
     emit(state.copyWith(amountInput: event.amountInput));
   }
 
-  Future<void> _saveDataGoal(SaveDataGoal event, Emitter<AddGoalState> emit) async {
+  Future<void> _saveDataGoal(
+    SaveDataGoal event,
+    Emitter<AddGoalState> emit,
+  ) async {
     if (state.logoGoal.trim().isEmpty) {
       errorToast(AppLocalizations.of(mainContext)!.pleaseSelectLogo);
       return;

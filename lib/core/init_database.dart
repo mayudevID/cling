@@ -144,7 +144,6 @@ FutureOr<void> initDatabaseTable(Database db, int version) async {
   }
 }
 
- 
 /// Schema v2: keep legacy major-unit columns for compatibility, while
 /// persisting exact integer hundredths as the canonical monetary values.
 Future<void> migrateMoneyColumns(Database db) async {
@@ -153,7 +152,11 @@ Future<void> migrateMoneyColumns(Database db) async {
     [ExpenseMeta.nameTable, ExpenseMeta.amount, ExpenseMeta.amountMinor],
     [GoalMeta.nameTable, GoalMeta.target, GoalMeta.targetMinor],
     [GoalMeta.nameTable, GoalMeta.collected, GoalMeta.collectedMinor],
-    [GoalSavingMeta.nameTable, GoalSavingMeta.amount, GoalSavingMeta.amountMinor],
+    [
+      GoalSavingMeta.nameTable,
+      GoalSavingMeta.amount,
+      GoalSavingMeta.amountMinor
+    ],
     [RecurringMeta.nameTable, RecurringMeta.amount, RecurringMeta.amountMinor],
   ];
   for (final column in columns) {

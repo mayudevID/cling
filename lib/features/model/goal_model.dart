@@ -57,7 +57,8 @@ class GoalModel extends Equatable {
         GoalMeta.target: target,
         GoalMeta.targetMinor: MoneyAmount.toMinorUnits(target),
         GoalMeta.collected: collected,
-        GoalMeta.collectedMinor: MoneyAmount.toMinorUnits(collected, allowZero: true),
+        GoalMeta.collectedMinor:
+            MoneyAmount.toMinorUnits(collected, allowZero: true),
       };
 
   @override

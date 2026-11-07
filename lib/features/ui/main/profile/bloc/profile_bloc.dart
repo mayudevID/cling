@@ -61,8 +61,8 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       emit(ProfileState());
       mainContext.read<AppBloc>().add(const Redirect());
       mainContext.read<LangCurrencyBloc>().add(
-        const ChangeCurrency(selectedCurrency: Currency.idr),
-      );
+            const ChangeCurrency(selectedCurrency: Currency.idr),
+          );
     } on LogOutFailure catch (_) {
       errorSnackbar(
         mainContext,

@@ -1,5 +1,4 @@
 import 'dart:io';
-import '../../core/logger.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -7,7 +6,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 import '../model/user_model.dart';
 // ignore: depend_on_referenced_packages
-import 'package:path/path.dart';
 
 import 'database_repository.dart';
 
@@ -138,7 +136,8 @@ class SettingsRepository {
     try {
       await _databaseRepository.createBackupSnapshot(snapshot.path);
       final ref = _firebaseStorage.ref(
-          'backupDb/${_firebaseAuth.currentUser!.uid}.db');
+        'backupDb/${_firebaseAuth.currentUser!.uid}.db',
+      );
       await ref.putFile(snapshot);
     } finally {
       if (await snapshot.exists()) await snapshot.delete();
@@ -166,7 +165,8 @@ class SettingsRepository {
           throw const FormatException('Corrupted backup');
         }
         final tables = await validation.rawQuery(
-            "SELECT name FROM sqlite_master WHERE type='table'");
+          "SELECT name FROM sqlite_master WHERE type='table'",
+        );
         final names = tables.map((e) => e['name']).toSet();
         if (!names.contains('income_table') ||
             !names.contains('expense_table') ||

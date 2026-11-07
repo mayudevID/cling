@@ -45,9 +45,8 @@ Future<void> initSl() async {
   final cachedJson = cache.getString(AuthRepository.userCacheKey);
   final cachedUser = cachedJson == null ? null : userModelFromMap(cachedJson);
   final activeUid = firebaseAuth.currentUser?.uid;
-  final ownerUid = activeUid != null && activeUid == cachedUser?.uid
-      ? activeUid
-      : null;
+  final ownerUid =
+      activeUid != null && activeUid == cachedUser?.uid ? activeUid : null;
   final dbRepository = DatabaseRepository(userId: ownerUid);
   // Legacy data may only be claimed by the currently authenticated cached
   // owner; do not assign a previous account's file to a new sign-in.

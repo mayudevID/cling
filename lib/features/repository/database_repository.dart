@@ -29,9 +29,8 @@ class DatabaseRepository {
   Database? _database;
   static const databaseName = 'cling_database.db';
   Database get db => _database ?? (throw StateError('Database has not opened'));
-  String get databaseFileName => _userId == null
-      ? 'cling_guest.db'
-      : 'cling_database_${_userId!}.db';
+  String get databaseFileName =>
+      _userId == null ? 'cling_guest.db' : 'cling_database_${_userId!}.db';
   Future<String> get databasePath async =>
       join(await getDatabasesPath(), databaseFileName);
 
@@ -65,15 +64,20 @@ class DatabaseRepository {
     )''');
     // Older versions inserted one equivalent rule on every login.
     await db.transaction((txn) async {
-      final rules = await txn.query(RecurringMeta.nameTable,
-          orderBy: '${RecurringMeta.id} ASC');
+      final rules = await txn.query(
+        RecurringMeta.nameTable,
+        orderBy: '${RecurringMeta.id} ASC',
+      );
       final seen = <String>{};
       for (final rule in rules) {
-        final key = '${rule[RecurringMeta.type]}:${rule[RecurringMeta.idModel]}';
+        final key =
+            '${rule[RecurringMeta.type]}:${rule[RecurringMeta.idModel]}';
         if (!seen.add(key)) {
-          await txn.delete(RecurringMeta.nameTable,
+          await txn.delete(
+            RecurringMeta.nameTable,
             where: '${RecurringMeta.id} = ?',
-            whereArgs: [rule[RecurringMeta.id]]);
+            whereArgs: [rule[RecurringMeta.id]],
+          );
         }
       }
     });
@@ -104,11 +108,12 @@ class DatabaseRepository {
     if (!await legacy.exists() || await target.exists()) return;
     await close();
     // VACUUM INTO includes committed WAL changes in a standalone snapshot.
-    final source = await openDatabase(legacy.path, readOnly: false);
+    final source = await openDatabase(legacy.path);
     var snapshotCreated = false;
     try {
       try {
-        await source.execute("VACUUM INTO '${target.path.replaceAll("'", "''")}'");
+        await source
+            .execute("VACUUM INTO '${target.path.replaceAll("'", "''")}'");
         snapshotCreated = true;
       } on DatabaseException {
         // Older Android SQLite versions do not support VACUUM INTO.
@@ -372,7 +377,8 @@ class DatabaseRepository {
         GoalMeta.target: goalModel.target,
         GoalMeta.collected: goalModel.collected,
         GoalMeta.targetMinor: MoneyAmount.toMinorUnits(goalModel.target),
-        GoalMeta.collectedMinor: MoneyAmount.toMinorUnits(goalModel.collected, allowZero: true),
+        GoalMeta.collectedMinor:
+            MoneyAmount.toMinorUnits(goalModel.collected, allowZero: true),
       },
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
@@ -397,7 +403,8 @@ class DatabaseRepository {
         MoneyAmount.toMinorUnits(goalModel.target),
       ],
     );
-    if (updated != 1) throw StateError('Goal not found or target below savings');
+    if (updated != 1)
+      throw StateError('Goal not found or target below savings');
   }
 
   Future<void> updateCollectedGoal(GoalModel goalModel) async {
@@ -408,7 +415,11 @@ class DatabaseRepository {
             ${GoalMeta.collectedMinor} = ?
         WHERE ${GoalMeta.id} = ?
       ''',
-      [goalModel.collected, MoneyAmount.toMinorUnits(goalModel.collected, allowZero: true), goalModel.id],
+      [
+        goalModel.collected,
+        MoneyAmount.toMinorUnits(goalModel.collected, allowZero: true),
+        goalModel.id
+      ],
     );
   }
 
@@ -513,16 +524,25 @@ class DatabaseRepository {
 
   Future<void> deleteGoalWithSaving(int id) async {
     await db.transaction((txn) async {
-      await txn.delete(GoalSavingMeta.nameTable,
-          where: "${GoalSavingMeta.idGoal} = ?", whereArgs: [id]);
-      await txn.delete(GoalMeta.nameTable,
-          where: "${GoalMeta.id} = ?", whereArgs: [id]);
+      await txn.delete(
+        GoalSavingMeta.nameTable,
+        where: "${GoalSavingMeta.idGoal} = ?",
+        whereArgs: [id],
+      );
+      await txn.delete(
+        GoalMeta.nameTable,
+        where: "${GoalMeta.id} = ?",
+        whereArgs: [id],
+      );
     });
   }
 
   Future<void> deleteSingleSaving(int id) async {
-    await db.delete(GoalSavingMeta.nameTable,
-        where: "${GoalSavingMeta.id} = ?", whereArgs: [id]);
+    await db.delete(
+      GoalSavingMeta.nameTable,
+      where: "${GoalSavingMeta.id} = ?",
+      whereArgs: [id],
+    );
   }
 
   /// All goal balance mutations are atomic and constrained at write-time.
@@ -549,21 +569,27 @@ class DatabaseRepository {
 
   Future<void> deleteSavingAtomic(int goalId, int savingId) async {
     await db.transaction((txn) async {
-      final rows = await txn.query(GoalSavingMeta.nameTable,
-          columns: [GoalSavingMeta.amountMinor],
-          where: '${GoalSavingMeta.id} = ? AND ${GoalSavingMeta.idGoal} = ?',
-          whereArgs: [savingId, goalId]);
+      final rows = await txn.query(
+        GoalSavingMeta.nameTable,
+        columns: [GoalSavingMeta.amountMinor],
+        where: '${GoalSavingMeta.id} = ? AND ${GoalSavingMeta.idGoal} = ?',
+        whereArgs: [savingId, goalId],
+      );
       if (rows.isEmpty) throw StateError('Saving not found');
       final minor = rows.single[GoalSavingMeta.amountMinor] as int;
       final updated = await txn.rawUpdate(
-          'UPDATE ${GoalMeta.nameTable} SET '
-          '${GoalMeta.collectedMinor} = ${GoalMeta.collectedMinor} - ?, '
-          '${GoalMeta.collected} = (${GoalMeta.collectedMinor} - ?) / 100.0 '
-          'WHERE ${GoalMeta.id} = ? AND ${GoalMeta.collectedMinor} >= ?',
-          [minor, minor, goalId, minor]);
+        'UPDATE ${GoalMeta.nameTable} SET '
+        '${GoalMeta.collectedMinor} = ${GoalMeta.collectedMinor} - ?, '
+        '${GoalMeta.collected} = (${GoalMeta.collectedMinor} - ?) / 100.0 '
+        'WHERE ${GoalMeta.id} = ? AND ${GoalMeta.collectedMinor} >= ?',
+        [minor, minor, goalId, minor],
+      );
       if (updated != 1) throw StateError('Invalid goal balance');
-      await txn.delete(GoalSavingMeta.nameTable,
-          where: '${GoalSavingMeta.id} = ?', whereArgs: [savingId]);
+      await txn.delete(
+        GoalSavingMeta.nameTable,
+        where: '${GoalSavingMeta.id} = ?',
+        whereArgs: [savingId],
+      );
     });
   }
 
@@ -1040,24 +1066,32 @@ class DatabaseRepository {
   Future<void> checkAndInputRecurring() async {
     final today = DateTime.now();
     final through = DateTime(today.year, today.month, today.day);
-    final rules = await db.query(RecurringMeta.nameTable,
-        orderBy: '${RecurringMeta.id} ASC');
+    final rules = await db.query(
+      RecurringMeta.nameTable,
+      orderBy: '${RecurringMeta.id} ASC',
+    );
     for (final rule in rules) {
       final ruleId = rule[RecurringMeta.id] as int;
       final day = rule[RecurringMeta.recurringDay] as int;
-      final latest = DateTime.parse(rule[RecurringMeta.recurringLast] as String);
+      final latest =
+          DateTime.parse(rule[RecurringMeta.recurringLast] as String);
       var due = RecurringSchedule.next(latest, day);
       while (!due.isAfter(through)) {
         await db.transaction((txn) async {
           // A unique rule/month key also prevents duplicates if processing is
           // interrupted and re-entered.
           final period = '${due.year}-${due.month.toString().padLeft(2, '0')}';
-          final prior = await txn.query('recurring_occurrences',
+          final prior = await txn.query(
+            'recurring_occurrences',
             where: 'rule_id = ? AND period = ?',
-            whereArgs: [ruleId, period], limit: 1);
+            whereArgs: [ruleId, period],
+            limit: 1,
+          );
           if (prior.isEmpty) {
-            await txn.insert('recurring_occurrences',
-              {'rule_id': ruleId, 'period': period});
+            await txn.insert(
+              'recurring_occurrences',
+              {'rule_id': ruleId, 'period': period},
+            );
 
             final minor = (rule[RecurringMeta.amountMinor] as num).toInt();
             if (minor > 0) {
@@ -1070,9 +1104,12 @@ class DatabaseRepository {
               });
             }
           }
-          await txn.update(RecurringMeta.nameTable,
+          await txn.update(
+            RecurringMeta.nameTable,
             {RecurringMeta.recurringLast: due.toIso8601String()},
-            where: '${RecurringMeta.id} = ?', whereArgs: [ruleId]);
+            where: '${RecurringMeta.id} = ?',
+            whereArgs: [ruleId],
+          );
         });
         due = RecurringSchedule.next(due, day);
       }
@@ -1090,23 +1127,32 @@ class DatabaseRepository {
     }
     final minor = MoneyAmount.toMinorUnits(amount);
     await db.transaction((txn) async {
-      final existing = await txn.query(RecurringMeta.nameTable,
+      final existing = await txn.query(
+        RecurringMeta.nameTable,
         where: '${RecurringMeta.type} = ? AND ${RecurringMeta.idModel} = ?',
         whereArgs: [type, 0],
-        orderBy: '${RecurringMeta.id} ASC');
+        orderBy: '${RecurringMeta.id} ASC',
+      );
       if (existing.isNotEmpty) {
         final first = existing.first;
-        await txn.update(RecurringMeta.nameTable, {
-          RecurringMeta.recurringDay: recDay,
-          RecurringMeta.amount: amount,
-          RecurringMeta.amountMinor: minor,
-        }, where: '${RecurringMeta.id} = ?', whereArgs: [first[RecurringMeta.id]]);
+        await txn.update(
+          RecurringMeta.nameTable,
+          {
+            RecurringMeta.recurringDay: recDay,
+            RecurringMeta.amount: amount,
+            RecurringMeta.amountMinor: minor,
+          },
+          where: '${RecurringMeta.id} = ?',
+          whereArgs: [first[RecurringMeta.id]],
+        );
         // Prior versions could add duplicate rules on every login. Remove
         // extras without touching the income entries already recorded.
         for (final duplicate in existing.skip(1)) {
-          await txn.delete(RecurringMeta.nameTable,
+          await txn.delete(
+            RecurringMeta.nameTable,
             where: '${RecurringMeta.id} = ?',
-            whereArgs: [duplicate[RecurringMeta.id]]);
+            whereArgs: [duplicate[RecurringMeta.id]],
+          );
         }
       } else {
         await txn.insert(RecurringMeta.nameTable, {
@@ -1114,7 +1160,8 @@ class DatabaseRepository {
           RecurringMeta.type: type,
           RecurringMeta.recurringDay: recDay,
           RecurringMeta.recurringLast:
-              RecurringSchedule.initialLast(DateTime.now(), recDay).toIso8601String(),
+              RecurringSchedule.initialLast(DateTime.now(), recDay)
+                  .toIso8601String(),
           RecurringMeta.amount: amount,
           RecurringMeta.amountMinor: minor,
         });

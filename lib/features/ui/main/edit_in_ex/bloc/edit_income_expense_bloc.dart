@@ -54,7 +54,8 @@ class EditIncomeExpenseBloc
 
   final DatabaseRepository _dbRepo;
   BuildContext get mainContext => MainApp.navKeyGlobal.currentContext!;
-  BuildContext? get detailStatsContext => StatsDetailPerCategoriesPage.navKey.currentContext;
+  BuildContext? get detailStatsContext =>
+      StatsDetailPerCategoriesPage.navKey.currentContext;
 
   void _setDate(SetDate event, emit) {
     final DateTime oldDateTime = state.selectedDate;
@@ -138,7 +139,8 @@ class EditIncomeExpenseBloc
     emit(state.copyWith(amountInput: event.amountInput));
   }
 
-  Future<void> _saveData(SaveData event, Emitter<EditIncomeExpenseState> emit) async {
+  Future<void> _saveData(
+      SaveData event, Emitter<EditIncomeExpenseState> emit) async {
     if (state.selectedCategories == const MapEntry(0, "")) {
       errorToast(AppLocalizations.of(mainContext)!.pleaseSelectCategories);
       return;

@@ -29,8 +29,7 @@ class AddIncomeExpenseBloc
   AddIncomeExpenseBloc({
     required BuildContext context,
     required DatabaseRepository dbRepo,
-  })  : mainContext = context,
-        _dbRepo = dbRepo,
+  })  : _dbRepo = dbRepo,
         super(AddIncomeExpenseState()) {
     on<SetDate>(_setDate);
     on<SetTime>(_setTime);
@@ -107,7 +106,10 @@ class AddIncomeExpenseBloc
     emit(state.copyWith(amountInput: event.amountInput));
   }
 
-  Future<void> _saveData(SaveData event, Emitter<AddIncomeExpenseState> emit) async {
+  Future<void> _saveData(
+    SaveData event,
+    Emitter<AddIncomeExpenseState> emit,
+  ) async {
     if (state.selectedCategories == const MapEntry(0, "")) {
       errorToast(AppLocalizations.of(mainContext)!.pleaseSelectCategories);
       return;
