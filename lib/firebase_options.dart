@@ -51,20 +51,18 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyCdADhxMLnDk_bKxlWk0SzTE8c3igtn07k',
-    appId: '1:222604788674:android:4d39389466027b1ed9cc5b',
+    appId: '1:222604788674:android:e009e5927d6ed6e2d9cc5b',
     messagingSenderId: '222604788674',
     projectId: 'cling--money-manager-app',
     storageBucket: 'cling--money-manager-app.firebasestorage.app',
   );
-
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyC3jV12G9yKgrfEDD_PytkrVUu1HPPUyQE',
-    appId: '1:222604788674:ios:1ea583a8eb1a2be7d9cc5b',
+    appId: '1:222604788674:ios:bc70ad3028cfa0c7d9cc5b',
     messagingSenderId: '222604788674',
     projectId: 'cling--money-manager-app',
     storageBucket: 'cling--money-manager-app.firebasestorage.app',
-    iosClientId:
-        '222604788674-h13nol9a038ihovpsgkips80uk5aemij.apps.googleusercontent.com',
-    iosBundleId: 'com.mayudev.id.cling',
+    iosClientId: '222604788674-o2je28elurns2l6a01k08tbvdk70r2bd.apps.googleusercontent.com',
+    iosBundleId: 'com.mayudev.cling',
   );
 }

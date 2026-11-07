@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>222604788674-h13nol9a038ihovpsgkips80uk5aemij.apps.googleusercontent.com</string>
+	<string>222604788674-o2je28elurns2l6a01k08tbvdk70r2bd.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.222604788674-h13nol9a038ihovpsgkips80uk5aemij</string>
+	<string>com.googleusercontent.apps.222604788674-o2je28elurns2l6a01k08tbvdk70r2bd</string>
 	<key>API_KEY</key>
 	<string>AIzaSyC3jV12G9yKgrfEDD_PytkrVUu1HPPUyQE</string>
 	<key>GCM_SENDER_ID</key>
@@ -13,7 +13,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.mayudev.id.cling</string>
+	<string>com.mayudev.cling</string>
 	<key>PROJECT_ID</key>
 	<string>cling--money-manager-app</string>
 	<key>STORAGE_BUCKET</key>
@@ -29,6 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:222604788674:ios:1ea583a8eb1a2be7d9cc5b</string>
+	<string>1:222604788674:ios:bc70ad3028cfa0c7d9cc5b</string>
 </dict>
 </plist>

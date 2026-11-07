@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:222604788674:android:4d39389466027b1ed9cc5b",
+        "mobilesdk_app_id": "1:222604788674:android:e009e5927d6ed6e2d9cc5b",
         "android_client_info": {
-          "package_name": "com.mayudev.id.cling"
+          "package_name": "com.mayudev.cling"
         }
       },
       "oauth_client": [
@@ -31,10 +31,10 @@
               "client_type": 3
             },
             {
-              "client_id": "222604788674-o2je28elurns2l6a01k08tbvdk70r2bd.apps.googleusercontent.com",
+              "client_id": "222604788674-h13nol9a038ihovpsgkips80uk5aemij.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.mayudev.cling"
+                "bundle_id": "com.mayudev.id.cling"
               }
             }
           ]
