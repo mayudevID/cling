@@ -16,6 +16,7 @@ Dokumen ini menjadi indeks fitur Cling!. Penjelasan rinci dipisahkan berdasarkan
 | [Profil dan Pengaturan](features/profile-settings.md) | Profil, email, kata sandi, bahasa, mata uang, dan logout |
 | [Backup dan Restore](features/backup-restore.md) | Pencadangan SQLite ke Firebase Storage dan pemulihan saat login |
 | [Phase 1 Financial Foundation](PHASE_1_FINANCIAL_FOUNDATION.md) | Schema v3, wallet ledger, transfer, currency boundary, dan status integrasi |
+| [Phase 2 Financial Planning](PHASE_2_FINANCIAL_PLANNING.md) | Schema v4, recurring expenses, bills, reminders lokal, dan Payday Runway |
 
 ## Gambaran Sistem
 

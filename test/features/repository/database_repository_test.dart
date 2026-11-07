@@ -3,6 +3,7 @@ import 'package:cling/core/static_name_table.dart';
 import 'package:cling/features/model/expense_model.dart';
 import 'package:cling/core/reference_id.dart';
 import 'package:cling/features/model/goal_model.dart';
+import 'package:cling/features/model/financial_planning_models.dart';
 import 'package:cling/features/model/income_model.dart';
 import 'package:cling/features/model/notification_model_class.dart';
 import 'package:cling/features/model/wallet_model.dart';
@@ -314,6 +315,184 @@ void main() {
             amountMinor: 1,
             date: DateTime.now()),
         throwsStateError);
+  });
+
+  test('unpaid bill is not accounted until idempotent payment', () async {
+    final walletId = await repository.getDefaultWalletId();
+    final billId = await repository.saveBill(PlanningBillModel(
+        title: 'Internet',
+        amountMinor: 35000,
+        categoryId: 0,
+        walletId: walletId,
+        dueDate: DateTime(2026, 11, 12),
+        reminderMask: 7));
+    expect(await repository.getTotalBalance(), 0);
+    final firstExpense =
+        await repository.payBill(billId, DateTime(2026, 11, 12));
+    final secondExpense =
+        await repository.payBill(billId, DateTime(2026, 11, 12));
+    expect(secondExpense, firstExpense);
+    expect((await repository.db.query(ExpenseMeta.nameTable)).length, 1);
+    expect(await repository.getTotalBalance(), -350);
+    expect(
+        (await repository.getBills()).single.statusOn(DateTime(2026, 11, 12)),
+        'paid');
+  });
+
+  test('deleting linked expense returns bill to unpaid without losing bill',
+      () async {
+    final walletId = await repository.getDefaultWalletId();
+    final billId = await repository.saveBill(PlanningBillModel(
+        title: 'Gym',
+        amountMinor: 25000,
+        categoryId: 0,
+        walletId: walletId,
+        dueDate: DateTime(2026, 11, 20)));
+    await repository.insertExpense(ExpenseModel(
+        date: DateTime(2026, 11, 20),
+        item: 'Gym paid already',
+        amount: 250,
+        categories: exCategoriesData[0],
+        walletId: walletId));
+    final expenseId = (await repository.db.query(ExpenseMeta.nameTable))
+        .single[ExpenseMeta.id] as int;
+    await repository.linkBillExpense(billId, expenseId);
+    expect((await repository.getBills()).single.expenseId, expenseId);
+    await repository.deleteExpense(expenseId);
+    final restored = (await repository.getBills()).single;
+    expect(restored.expenseId, isNull);
+    expect(restored.statusOn(DateTime(2026, 11, 20)), 'due_today');
+    expect(await repository.getTotalBalance(), 0);
+  });
+
+  test(
+      'automatic monthly expense reconciliation posts each missed occurrence once',
+      () async {
+    final walletId = await repository.getDefaultWalletId();
+    await repository.saveRecurringExpenseRule(RecurringExpenseRuleModel(
+        name: 'Rent',
+        amountMinor: 12500,
+        categoryId: 0,
+        walletId: walletId,
+        frequency: 'monthly',
+        scheduledDay: 31,
+        startDate: DateTime(2026, 1, 31),
+        nextDate: DateTime(2026, 1, 31),
+        postingMode: 'automatic'));
+    await repository.reconcileFinancialPlanning(DateTime(2026, 3, 31));
+    await repository.reconcileFinancialPlanning(DateTime(2026, 3, 31));
+    final expenses = await repository.db.query(ExpenseMeta.nameTable);
+    final occurrences =
+        await repository.db.query(RecurringExpenseOccurrenceMeta.table);
+    expect(expenses.length, 3);
+    expect(occurrences.length, 3);
+    expect(
+        occurrences
+            .map((row) => row[RecurringExpenseOccurrenceMeta.scheduledDate]),
+        ['2026-01-31', '2026-02-28', '2026-03-31']);
+    expect(await repository.getTotalBalance(), -375);
+  });
+
+  test('runway deducts bills and reserve but keeps expected income separate',
+      () async {
+    final walletId = await repository.getDefaultWalletId();
+    await repository.saveWallet(const WalletModel(
+      id: 1,
+      name: 'Cash',
+      type: 'cash',
+      openingBalanceMinor: 300000000,
+      currency: 'IDR',
+      isDefault: true,
+    ));
+    await repository.db.insert(RecurringMeta.nameTable, {
+      RecurringMeta.idModel: 0,
+      RecurringMeta.type: 0,
+      RecurringMeta.recurringDay: 31,
+      RecurringMeta.recurringLast: '2026-04-30',
+      RecurringMeta.amount: 2500000,
+      RecurringMeta.amountMinor: 250000000,
+    });
+    await repository.saveBill(PlanningBillModel(
+      title: 'Bills',
+      amountMinor: 85000000,
+      categoryId: 0,
+      walletId: walletId,
+      dueDate: DateTime(2026, 5, 24),
+    ));
+    await repository.setPlanningSettings(
+        paydayDay: null, safetyReserveMinor: 50000000);
+    final result = await repository.getPaydayRunway(DateTime(2026, 5, 20));
+    expect(result, isNotNull);
+    expect(result!.payday, DateTime(2026, 5, 31));
+    expect(result.availableMinor, 300000000);
+    expect(result.billsMinor, 85000000);
+    expect(result.recurringMinor, 0);
+    expect(result.reserveMinor, 50000000);
+    expect(result.expectedIncomeMinor, 250000000);
+    expect(result.daysRemaining, 11);
+    expect(result.estimatedSpendableMinor, 165000000);
+    expect(result.dailyAllowanceMinor, 15000000);
+  });
+
+  test('runway does not double count recurring rule linked to a bill',
+      () async {
+    final walletId = await repository.getDefaultWalletId();
+    await repository.saveWallet(const WalletModel(
+      id: 1,
+      name: 'Cash',
+      type: 'cash',
+      openingBalanceMinor: 10000000,
+      currency: 'IDR',
+      isDefault: true,
+    ));
+    final ruleId =
+        await repository.saveRecurringExpenseRule(RecurringExpenseRuleModel(
+      name: 'Internet',
+      amountMinor: 2000000,
+      categoryId: 0,
+      walletId: walletId,
+      frequency: 'monthly',
+      scheduledDay: 25,
+      startDate: DateTime(2026, 5, 25),
+      nextDate: DateTime(2026, 5, 25),
+    ));
+    await repository.saveBill(PlanningBillModel(
+      title: 'Internet bill',
+      amountMinor: 2000000,
+      categoryId: 0,
+      walletId: walletId,
+      dueDate: DateTime(2026, 5, 25),
+      recurringRuleId: ruleId,
+    ));
+    await repository.setPlanningSettings(paydayDay: 31, safetyReserveMinor: 0);
+    final runway = await repository.getPaydayRunway(DateTime(2026, 5, 20));
+    expect(runway!.billsMinor, 2000000);
+    expect(runway.recurringMinor, 0);
+    expect(runway.includedBills.single.name, 'Internet bill');
+  });
+
+  test('bill reminder appears once in local inbox for its due date', () async {
+    final walletId = await repository.getDefaultWalletId();
+    await repository.saveBill(PlanningBillModel(
+      title: 'Rent',
+      amountMinor: 100000,
+      categoryId: 0,
+      walletId: walletId,
+      dueDate: DateTime(2026, 7, 10),
+      reminderMask: 1,
+    ));
+    await repository.reconcileFinancialPlanning(DateTime(2026, 7, 7));
+    await repository.reconcileFinancialPlanning(DateTime(2026, 7, 7));
+    final notifications = await repository.db.query(
+      NotificationMeta.nameTable,
+      where: '${NotificationMeta.type}=?',
+      whereArgs: [4],
+    );
+    expect(notifications.length, 1);
+    expect(notifications.single[NotificationMeta.desc], 'Rent');
+    final markers = await repository.db.query(PlanningReminderMeta.table);
+    expect(markers.length, 1);
+    expect(markers.single[PlanningReminderMeta.scheduledDate], '2026-07-10');
   });
 
   test('goals use stable keyset pagination for 0, 1, 12 and 25 items',

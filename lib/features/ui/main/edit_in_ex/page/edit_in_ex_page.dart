@@ -89,8 +89,7 @@ class EditIncomeExpensePageContent extends StatelessWidget {
         backgroundColor: Colors.black,
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          child: ListView(
             children: [
               const SizedBox(height: 16),
               Row(
@@ -144,6 +143,32 @@ class EditIncomeExpensePageContent extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               dropDownEditCategories(flowType: flowType),
+              const SizedBox(height: 8),
+              BlocBuilder<EditIncomeExpenseBloc, EditIncomeExpenseState>(
+                buildWhen: (previous, current) =>
+                    previous.wallets != current.wallets ||
+                    previous.selectedWalletId != current.selectedWalletId,
+                builder: (context, state) => DropdownButtonFormField<int>(
+                  value: state.wallets
+                          .any((wallet) => wallet.id == state.selectedWalletId)
+                      ? state.selectedWalletId
+                      : null,
+                  dropdownColor: const Color(0xFF313131),
+                  decoration: InputDecoration(
+                      labelText: AppLocalizations.of(context)!.wallet,
+                      labelStyle: const TextStyle(color: Colors.white70)),
+                  items: state.wallets
+                      .map((wallet) => DropdownMenuItem<int>(
+                          value: wallet.id!,
+                          child: Text(wallet.name,
+                              style: const TextStyle(color: Colors.white))))
+                      .toList(),
+                  onChanged: (id) {
+                    if (id != null)
+                      context.read<EditIncomeExpenseBloc>().add(SetWallet(id));
+                  },
+                ),
+              ),
               const SizedBox(height: 8),
               Text(
                 (flowType == FlowType.income)

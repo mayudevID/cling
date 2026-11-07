@@ -10,16 +10,21 @@ class AddIncomeExpenseState extends Equatable {
     DateTime? selectedDate,
     this.descOrItem = "",
     this.amountInput = 0,
+    this.selectedWalletId = 1,
+    List<WalletModel>? wallets,
   })  : listInSource = listInSource ?? List.empty(),
         selectedDate = selectedDate ?? DateTime.now(),
         selectedCategories = selectedCategories ?? const MapEntry(0, ""),
-        listExCategories = listExCategories ?? List.empty();
+        listExCategories = listExCategories ?? List.empty(),
+        wallets = wallets ?? List.empty();
   List<IncomeSourceModel> listInSource;
   List<ExpenseCategoriesModel> listExCategories;
   DateTime selectedDate;
   String descOrItem;
   double amountInput;
   MapEntry<int, String> selectedCategories;
+  List<WalletModel> wallets;
+  int selectedWalletId;
 
   @override
   List<Object> get props => [
@@ -29,6 +34,8 @@ class AddIncomeExpenseState extends Equatable {
         selectedCategories,
         descOrItem,
         amountInput,
+        wallets,
+        selectedWalletId,
       ];
 
   AddIncomeExpenseState copyWith({
@@ -38,6 +45,8 @@ class AddIncomeExpenseState extends Equatable {
     MapEntry<int, String>? selectedCategories,
     String? descOrItem,
     double? amountInput,
+    List<WalletModel>? wallets,
+    int? selectedWalletId,
   }) {
     return AddIncomeExpenseState(
       listInSource: listInSource ?? this.listInSource,
@@ -46,6 +55,8 @@ class AddIncomeExpenseState extends Equatable {
       selectedCategories: selectedCategories ?? this.selectedCategories,
       descOrItem: descOrItem ?? this.descOrItem,
       amountInput: amountInput ?? this.amountInput,
+      wallets: wallets ?? this.wallets,
+      selectedWalletId: selectedWalletId ?? this.selectedWalletId,
     );
   }
 }

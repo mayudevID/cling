@@ -6,6 +6,7 @@ import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
 import '../../core/init_database.dart';
+import '../../core/financial_planning.dart';
 import '../../core/money_amount.dart';
 import '../../core/reference_id.dart';
 import '../../core/recurring_schedule.dart';
@@ -20,6 +21,7 @@ import '../model/income_source_model.dart';
 import '../model/notification_model_class.dart';
 import '../model/transaction_model.dart';
 import '../model/wallet_model.dart';
+import '../model/financial_planning_models.dart';
 import '../ui/main/statistics/bloc/statistics_bloc.dart';
 
 class DatabaseRepository {
@@ -68,7 +70,7 @@ class DatabaseRepository {
       }
       _database = await openDatabase(
         path,
-        version: 3,
+        version: 4,
         onConfigure: (database) async {
           await database.execute('PRAGMA foreign_keys = ON');
         },
@@ -76,10 +78,12 @@ class DatabaseRepository {
           await initDatabaseTable(database, version);
           await migrateMoneyColumns(database);
           await migrateFinancialFoundation(database);
+          await migrateFinancialPlanning(database);
         },
         onUpgrade: (database, oldVersion, newVersion) async {
           if (oldVersion < 2) await migrateMoneyColumns(database);
           if (oldVersion < 3) await migrateFinancialFoundation(database);
+          if (oldVersion < 4) await migrateFinancialPlanning(database);
         },
       );
 
@@ -174,15 +178,25 @@ class DatabaseRepository {
       WalletMeta.table,
       TransferMeta.table,
       QuickTemplateMeta.table,
+      RecurringExpenseMeta.table,
+      RecurringExpenseOccurrenceMeta.table,
+      BillMeta.table,
+      PlanningMeta.table,
+      PlanningReminderMeta.table,
     ]) {
       for (final operation in ['INSERT', 'UPDATE', 'DELETE']) {
         final name = 'track_${table}_${operation.toLowerCase()}';
+        // Recreate legacy definitions because INSERT OR REPLACE can inherit
+        // the outer DELETE conflict policy when a trigger fires in a txn.
+        await db.execute('DROP TRIGGER IF EXISTS $name');
         await db.execute('''
-          CREATE TRIGGER IF NOT EXISTS $name AFTER $operation ON $table
+          CREATE TRIGGER $name AFTER $operation ON $table
           BEGIN
-            INSERT OR REPLACE INTO finance_meta (key, value)
-            VALUES ('last_modified_at',
-              strftime('%Y-%m-%dT%H:%M:%fZ', 'now'));
+            UPDATE finance_meta SET value = strftime('%Y-%m-%dT%H:%M:%fZ', 'now')
+              WHERE key = 'last_modified_at';
+            INSERT INTO finance_meta (key, value)
+              SELECT 'last_modified_at', strftime('%Y-%m-%dT%H:%M:%fZ', 'now')
+              WHERE NOT EXISTS (SELECT 1 FROM finance_meta WHERE key = 'last_modified_at');
           END
         ''');
       }
@@ -200,6 +214,15 @@ class DatabaseRepository {
       if (rows.isNotEmpty) return true;
     }
     for (final table in [TransferMeta.table, QuickTemplateMeta.table]) {
+      if ((await db.rawQuery('SELECT 1 FROM $table LIMIT 1')).isNotEmpty) {
+        return true;
+      }
+    }
+    for (final table in [
+      RecurringExpenseMeta.table,
+      BillMeta.table,
+      PlanningMeta.table
+    ]) {
       if ((await db.rawQuery('SELECT 1 FROM $table LIMIT 1')).isNotEmpty) {
         return true;
       }
@@ -1067,11 +1090,20 @@ class DatabaseRepository {
   }
 
   Future<void> deleteExpense(int id) async {
-    await db.delete(
-      ExpenseMeta.nameTable,
-      where: "${ExpenseMeta.id} = ?",
-      whereArgs: [id],
-    );
+    await db.transaction((txn) async {
+      await txn.update(
+          RecurringExpenseOccurrenceMeta.table,
+          {
+            RecurringExpenseOccurrenceMeta.status: 'due',
+            RecurringExpenseOccurrenceMeta.expenseId: null,
+            RecurringExpenseOccurrenceMeta.updatedAt:
+                DateTime.now().toUtc().toIso8601String(),
+          },
+          where: '${RecurringExpenseOccurrenceMeta.expenseId}=?',
+          whereArgs: [id]);
+      await txn.delete(ExpenseMeta.nameTable,
+          where: '${ExpenseMeta.id}=?', whereArgs: [id]);
+    });
   }
 
   Future<List<ExpenseCategoriesModel>> getExpenseCategories() async {
@@ -1536,6 +1568,673 @@ class DatabaseRepository {
       type: 0,
       amount: amount,
       isFromLogin: true,
+    );
+  }
+
+  String _dateKey(DateTime value) =>
+      '${value.year.toString().padLeft(4, '0')}-${value.month.toString().padLeft(2, '0')}-${value.day.toString().padLeft(2, '0')}';
+
+  Future<int> saveRecurringExpenseRule(RecurringExpenseRuleModel rule) async {
+    if (rule.name.trim().isEmpty || rule.amountMinor <= 0) {
+      throw ArgumentError('Name and positive amount are required.');
+    }
+    if (rule.frequency == 'weekly') {
+      if (rule.scheduledDay < DateTime.monday ||
+          rule.scheduledDay > DateTime.sunday) {
+        throw RangeError.range(rule.scheduledDay, 1, 7, 'scheduledDay');
+      }
+    } else if (rule.frequency == 'monthly') {
+      if (rule.scheduledDay < 1 || rule.scheduledDay > 31) {
+        throw RangeError.range(rule.scheduledDay, 1, 31, 'scheduledDay');
+      }
+    } else {
+      throw ArgumentError.value(rule.frequency, 'frequency');
+    }
+    if (rule.postingMode != 'manual' && rule.postingMode != 'automatic') {
+      throw ArgumentError.value(rule.postingMode, 'postingMode');
+    }
+    if (rule.endDate != null && rule.endDate!.isBefore(rule.startDate)) {
+      throw ArgumentError('End date must be on or after start date.');
+    }
+    await _requireActiveWallet(rule.walletId);
+    final category = await db.query(ExpenseCategoriesMeta.nameTable,
+        columns: [ExpenseCategoriesMeta.id],
+        where: '${ExpenseCategoriesMeta.id}=?',
+        whereArgs: [rule.categoryId],
+        limit: 1);
+    if (category.isEmpty) throw StateError('Expense category not found.');
+    final now = DateTime.now().toUtc().toIso8601String();
+    final today = RecurringExpenseSchedule.dateOnly(DateTime.now());
+    final next = RecurringExpenseSchedule.firstOnOrAfter(
+      frequency: rule.frequency,
+      scheduledDay: rule.scheduledDay,
+      from: rule.id == null
+          ? rule.startDate
+          : (rule.startDate.isAfter(today) ? rule.startDate : today),
+    );
+    final values = <String, Object?>{
+      RecurringExpenseMeta.name: rule.name.trim(),
+      RecurringExpenseMeta.description: rule.description,
+      RecurringExpenseMeta.amount: rule.amountMinor,
+      RecurringExpenseMeta.categoryId: rule.categoryId,
+      RecurringExpenseMeta.walletId: rule.walletId,
+      RecurringExpenseMeta.frequency: rule.frequency,
+      RecurringExpenseMeta.scheduledDay: rule.scheduledDay,
+      RecurringExpenseMeta.startDate: _dateKey(rule.startDate),
+      RecurringExpenseMeta.endDate:
+          rule.endDate == null ? null : _dateKey(rule.endDate!),
+      RecurringExpenseMeta.nextDate: _dateKey(next),
+      RecurringExpenseMeta.enabled: rule.enabled ? 1 : 0,
+      RecurringExpenseMeta.postingMode: rule.postingMode,
+      RecurringExpenseMeta.updatedAt: now,
+    };
+    if (rule.id == null) {
+      return db.insert(RecurringExpenseMeta.table, {
+        ...values,
+        RecurringExpenseMeta.createdAt: now,
+      });
+    }
+    final changed = await db.update(RecurringExpenseMeta.table, values,
+        where: '${RecurringExpenseMeta.id}=?', whereArgs: [rule.id]);
+    if (changed != 1) throw StateError('Recurring expense rule not found.');
+    return rule.id!;
+  }
+
+  Future<List<RecurringExpenseRuleModel>> getRecurringExpenseRules() async {
+    final rows = await db.query(RecurringExpenseMeta.table,
+        orderBy:
+            '${RecurringExpenseMeta.enabled} DESC, ${RecurringExpenseMeta.name} COLLATE NOCASE');
+    return rows.map(RecurringExpenseRuleModel.fromMap).toList();
+  }
+
+  Future<List<Map<String, Object?>>> getRecurringExpenseOccurrences({
+    bool unpaidOnly = false,
+  }) async {
+    return db.rawQuery('''
+      SELECT o.*, r.${RecurringExpenseMeta.name} AS rule_name,
+             c.${ExpenseCategoriesMeta.expenseCategories} AS category_name,
+             w.${WalletMeta.name} AS wallet_name
+      FROM ${RecurringExpenseOccurrenceMeta.table} o
+      JOIN ${RecurringExpenseMeta.table} r ON r.${RecurringExpenseMeta.id}=o.${RecurringExpenseOccurrenceMeta.ruleId}
+      JOIN ${ExpenseCategoriesMeta.nameTable} c ON c.${ExpenseCategoriesMeta.id}=o.${RecurringExpenseOccurrenceMeta.categoryId}
+      JOIN ${WalletMeta.table} w ON w.${WalletMeta.id}=o.${RecurringExpenseOccurrenceMeta.walletId}
+      ${unpaidOnly ? "WHERE o.${RecurringExpenseOccurrenceMeta.status} IN ('due','blocked')" : ''}
+      ORDER BY o.${RecurringExpenseOccurrenceMeta.scheduledDate} DESC, o.${RecurringExpenseOccurrenceMeta.id} DESC
+    ''');
+  }
+
+  Future<void> setRecurringExpenseEnabled(int id, bool enabled) async {
+    await db.transaction((txn) async {
+      final rules = await txn.query(RecurringExpenseMeta.table,
+          where: '${RecurringExpenseMeta.id}=?', whereArgs: [id], limit: 1);
+      if (rules.isEmpty) throw StateError('Recurring expense rule not found.');
+      final rule = rules.single;
+      final now = DateTime.now();
+      final nextDate = enabled
+          ? RecurringExpenseSchedule.firstOnOrAfter(
+              frequency: rule[RecurringExpenseMeta.frequency] as String,
+              scheduledDay: rule[RecurringExpenseMeta.scheduledDay] as int,
+              from: now)
+          : DateTime.parse(rule[RecurringExpenseMeta.nextDate] as String);
+      await txn.update(
+          RecurringExpenseMeta.table,
+          {
+            RecurringExpenseMeta.enabled: enabled ? 1 : 0,
+            RecurringExpenseMeta.nextDate: _dateKey(nextDate),
+            RecurringExpenseMeta.updatedAt: now.toUtc().toIso8601String(),
+          },
+          where: '${RecurringExpenseMeta.id}=?',
+          whereArgs: [id]);
+    });
+  }
+
+  Future<void> deleteRecurringExpenseRule(int id) async {
+    await db.delete(RecurringExpenseMeta.table,
+        where: '${RecurringExpenseMeta.id}=?', whereArgs: [id]);
+  }
+
+  Future<int> _insertPlannedExpense(
+    DatabaseExecutor txn, {
+    required String title,
+    required int amountMinor,
+    required int categoryId,
+    required int walletId,
+    required DateTime date,
+  }) async {
+    return txn.insert(ExpenseMeta.nameTable, {
+      ExpenseMeta.date: date.toIso8601String(),
+      ExpenseMeta.item: title,
+      ExpenseMeta.amount: amountMinor / MoneyAmount.factor,
+      ExpenseMeta.amountMinor: amountMinor,
+      ExpenseMeta.idCategories: categoryId,
+      ExpenseMeta.walletId: walletId,
+    });
+  }
+
+  /// Reconciles missed dates at launch/resume. Unique schedule dates and one
+  /// transaction per occurrence make retries safe after interruption.
+  Future<void> reconcileFinancialPlanning(DateTime asOf) async {
+    final today = RecurringExpenseSchedule.dateOnly(asOf);
+    await db.transaction((txn) async {
+      final rules = await txn.query(RecurringExpenseMeta.table,
+          where: '${RecurringExpenseMeta.enabled}=1',
+          orderBy: '${RecurringExpenseMeta.id}');
+      for (final rule in rules) {
+        final ruleId = rule[RecurringExpenseMeta.id] as int;
+        var due = DateTime.parse(rule[RecurringExpenseMeta.nextDate] as String);
+        final endDateText = rule[RecurringExpenseMeta.endDate] as String?;
+        final endDate =
+            endDateText == null ? null : DateTime.parse(endDateText);
+        while (
+            !due.isAfter(today) && (endDate == null || !due.isAfter(endDate))) {
+          final key = _dateKey(due);
+          var occurrenceId = await txn.insert(
+            RecurringExpenseOccurrenceMeta.table,
+            {
+              RecurringExpenseOccurrenceMeta.ruleId: ruleId,
+              RecurringExpenseOccurrenceMeta.scheduledDate: key,
+              RecurringExpenseOccurrenceMeta.amount:
+                  rule[RecurringExpenseMeta.amount],
+              RecurringExpenseOccurrenceMeta.categoryId:
+                  rule[RecurringExpenseMeta.categoryId],
+              RecurringExpenseOccurrenceMeta.walletId:
+                  rule[RecurringExpenseMeta.walletId],
+              RecurringExpenseOccurrenceMeta.status: 'due',
+              RecurringExpenseOccurrenceMeta.createdAt:
+                  DateTime.now().toUtc().toIso8601String(),
+              RecurringExpenseOccurrenceMeta.updatedAt:
+                  DateTime.now().toUtc().toIso8601String(),
+            },
+            conflictAlgorithm: ConflictAlgorithm.ignore,
+          );
+          if (occurrenceId == 0) {
+            final existingOccurrence = await txn.query(
+                RecurringExpenseOccurrenceMeta.table,
+                columns: [
+                  RecurringExpenseOccurrenceMeta.id,
+                  RecurringExpenseOccurrenceMeta.status,
+                  RecurringExpenseOccurrenceMeta.expenseId
+                ],
+                where:
+                    '${RecurringExpenseOccurrenceMeta.ruleId}=? AND ${RecurringExpenseOccurrenceMeta.scheduledDate}=?',
+                whereArgs: [ruleId, key],
+                limit: 1);
+            if (existingOccurrence.isNotEmpty &&
+                existingOccurrence
+                        .single[RecurringExpenseOccurrenceMeta.expenseId] ==
+                    null &&
+                existingOccurrence
+                        .single[RecurringExpenseOccurrenceMeta.status] !=
+                    'skipped') {
+              occurrenceId = existingOccurrence
+                  .single[RecurringExpenseOccurrenceMeta.id] as int;
+            }
+          }
+          if (occurrenceId != 0 &&
+              rule[RecurringExpenseMeta.postingMode] == 'automatic') {
+            final walletRows = await txn.query(WalletMeta.table,
+                columns: [WalletMeta.archived],
+                where: '${WalletMeta.id}=?',
+                whereArgs: [rule[RecurringExpenseMeta.walletId]],
+                limit: 1);
+            if (walletRows.isEmpty ||
+                walletRows.single[WalletMeta.archived] == 1) {
+              await txn.update(RecurringExpenseOccurrenceMeta.table,
+                  {RecurringExpenseOccurrenceMeta.status: 'blocked'},
+                  where: '${RecurringExpenseOccurrenceMeta.id}=?',
+                  whereArgs: [occurrenceId]);
+            } else {
+              final expenseId = await _insertPlannedExpense(txn,
+                  title: rule[RecurringExpenseMeta.name] as String,
+                  amountMinor: rule[RecurringExpenseMeta.amount] as int,
+                  categoryId: rule[RecurringExpenseMeta.categoryId] as int,
+                  walletId: rule[RecurringExpenseMeta.walletId] as int,
+                  date: due);
+              await txn.update(
+                  RecurringExpenseOccurrenceMeta.table,
+                  {
+                    RecurringExpenseOccurrenceMeta.expenseId: expenseId,
+                    RecurringExpenseOccurrenceMeta.status: 'paid',
+                    RecurringExpenseOccurrenceMeta.updatedAt:
+                        DateTime.now().toUtc().toIso8601String(),
+                  },
+                  where: '${RecurringExpenseOccurrenceMeta.id}=?',
+                  whereArgs: [occurrenceId]);
+            }
+          }
+          due = RecurringExpenseSchedule.next(
+            frequency: rule[RecurringExpenseMeta.frequency] as String,
+            scheduledDay: rule[RecurringExpenseMeta.scheduledDay] as int,
+            previous: due,
+          );
+          await txn.update(
+              RecurringExpenseMeta.table,
+              {
+                RecurringExpenseMeta.nextDate: _dateKey(due),
+                RecurringExpenseMeta.updatedAt:
+                    DateTime.now().toUtc().toIso8601String()
+              },
+              where: '${RecurringExpenseMeta.id}=?',
+              whereArgs: [ruleId]);
+        }
+        if (endDate != null && due.isAfter(endDate)) {
+          await txn.update(
+              RecurringExpenseMeta.table,
+              {
+                RecurringExpenseMeta.enabled: 0,
+                RecurringExpenseMeta.updatedAt:
+                    DateTime.now().toUtc().toIso8601String()
+              },
+              where: '${RecurringExpenseMeta.id}=?',
+              whereArgs: [ruleId]);
+        }
+      }
+      await _deliverPlanningReminders(txn, today);
+    });
+  }
+
+  Future<void> _deliverPlanningReminders(
+      Transaction txn, DateTime today) async {
+    final bills = await txn.query(BillMeta.table,
+        where: '${BillMeta.expenseId} IS NULL AND ${BillMeta.isCancelled}=0');
+    for (final bill in bills) {
+      final due = DateTime.parse(bill[BillMeta.dueDate] as String);
+      final days =
+          DateTime(due.year, due.month, due.day).difference(today).inDays;
+      final mask = bill[BillMeta.reminderMask] as int;
+      final reminderBit = {3: 1, 1: 2, 0: 4}[days];
+      if (reminderBit == null || mask & reminderBit == 0) continue;
+      final billId = bill[BillMeta.id] as int;
+      final marker = await txn.insert(
+          PlanningReminderMeta.table,
+          {
+            PlanningReminderMeta.billId: billId,
+            PlanningReminderMeta.reminderDays: days,
+            PlanningReminderMeta.scheduledDate: _dateKey(due),
+            PlanningReminderMeta.deliveredAt:
+                DateTime.now().toUtc().toIso8601String(),
+          },
+          conflictAlgorithm: ConflictAlgorithm.ignore);
+      if (marker != 0) {
+        await txn.insert(NotificationMeta.nameTable, {
+          NotificationMeta.title: 'Bill reminder',
+          NotificationMeta.desc: bill[BillMeta.title],
+          NotificationMeta.type: 4,
+          NotificationMeta.date: DateTime.now().toIso8601String(),
+          NotificationMeta.isRead: 0,
+        });
+      }
+    }
+  }
+
+  Future<int> saveBill(PlanningBillModel bill) async {
+    if (bill.title.trim().isEmpty || bill.amountMinor <= 0) {
+      throw ArgumentError('Title and positive amount are required.');
+    }
+    await _requireActiveWallet(bill.walletId);
+    final now = DateTime.now().toUtc().toIso8601String();
+    final values = <String, Object?>{
+      BillMeta.title: bill.title.trim(),
+      BillMeta.amount: bill.amountMinor,
+      BillMeta.categoryId: bill.categoryId,
+      BillMeta.walletId: bill.walletId,
+      BillMeta.dueDate: _dateKey(bill.dueDate),
+      BillMeta.reminderMask: bill.reminderMask,
+      BillMeta.note: bill.note,
+      BillMeta.recurringRuleId: bill.recurringRuleId,
+      BillMeta.isCancelled: bill.isCancelled ? 1 : 0,
+      BillMeta.updatedAt: now,
+    };
+    if (bill.id == null)
+      return db.insert(BillMeta.table, {
+        ...values,
+        BillMeta.createdAt: now,
+      });
+    final changed = await db.update(BillMeta.table, values,
+        where: '${BillMeta.id}=? AND ${BillMeta.expenseId} IS NULL',
+        whereArgs: [bill.id]);
+    if (changed != 1) throw StateError('Bill is paid or does not exist.');
+    return bill.id!;
+  }
+
+  Future<List<PlanningBillModel>> getBills(
+      {DateTime? asOf, bool includePaid = true}) async {
+    final rows = await db.query(BillMeta.table,
+        where: includePaid
+            ? null
+            : '${BillMeta.expenseId} IS NULL AND ${BillMeta.isCancelled}=0',
+        orderBy: '${BillMeta.dueDate} ASC, ${BillMeta.id} ASC');
+    return rows.map(PlanningBillModel.fromMap).toList();
+  }
+
+  Future<int> payBill(int billId, DateTime paidAt) async =>
+      db.transaction((txn) async {
+        final rows = await txn.query(BillMeta.table,
+            where: '${BillMeta.id}=?', whereArgs: [billId], limit: 1);
+        if (rows.isEmpty) throw StateError('Bill not found.');
+        final bill = rows.single;
+        final existingExpense = bill[BillMeta.expenseId] as int?;
+        if (existingExpense != null) return existingExpense;
+        if (bill[BillMeta.isCancelled] == 1)
+          throw StateError('Cancelled bill cannot be paid.');
+        final expenseId = await _insertPlannedExpense(txn,
+            title: bill[BillMeta.title] as String,
+            amountMinor: bill[BillMeta.amount] as int,
+            categoryId: bill[BillMeta.categoryId] as int,
+            walletId: bill[BillMeta.walletId] as int,
+            date: paidAt);
+        final changed = await txn.update(
+            BillMeta.table,
+            {
+              BillMeta.expenseId: expenseId,
+              BillMeta.updatedAt: DateTime.now().toUtc().toIso8601String()
+            },
+            where: '${BillMeta.id}=? AND ${BillMeta.expenseId} IS NULL',
+            whereArgs: [billId]);
+        if (changed != 1)
+          throw StateError('Bill payment raced with another update.');
+        return expenseId;
+      });
+
+  Future<void> linkBillExpense(int billId, int expenseId) async =>
+      db.transaction((txn) async {
+        final expense = await txn.query(ExpenseMeta.nameTable,
+            columns: [ExpenseMeta.id],
+            where: '${ExpenseMeta.id}=?',
+            whereArgs: [expenseId],
+            limit: 1);
+        if (expense.isEmpty) throw StateError('Expense not found.');
+        final changed = await txn.update(
+            BillMeta.table,
+            {
+              BillMeta.expenseId: expenseId,
+              BillMeta.updatedAt: DateTime.now().toUtc().toIso8601String()
+            },
+            where:
+                '${BillMeta.id}=? AND ${BillMeta.expenseId} IS NULL AND ${BillMeta.isCancelled}=0',
+            whereArgs: [billId]);
+        if (changed != 1) throw StateError('Bill already paid or cancelled.');
+      });
+
+  Future<List<ExpenseModel>> getBillExpenseCandidates(
+      PlanningBillModel bill) async {
+    final due = _dateKey(bill.dueDate);
+    final rows = await db.rawQuery('''
+      SELECT e.* FROM ${ExpenseMeta.nameTable} e
+      WHERE e.${ExpenseMeta.amountMinor}=?
+        AND e.${ExpenseMeta.idCategories}=?
+        AND date(e.${ExpenseMeta.date}) BETWEEN date(?, '-7 days') AND date(?, '+7 days')
+        AND NOT EXISTS (SELECT 1 FROM ${BillMeta.table} b WHERE b.${BillMeta.expenseId}=e.${ExpenseMeta.id})
+        AND NOT EXISTS (SELECT 1 FROM ${RecurringExpenseOccurrenceMeta.table} o WHERE o.${RecurringExpenseOccurrenceMeta.expenseId}=e.${ExpenseMeta.id})
+      ORDER BY e.${ExpenseMeta.date} DESC, e.${ExpenseMeta.id} DESC
+      LIMIT 20
+    ''', [bill.amountMinor, bill.categoryId, due, due]);
+    return rows.map(ExpenseModel.fromDatabase).toList();
+  }
+
+  Future<int> payRecurringExpenseOccurrence(
+          int occurrenceId, DateTime paidAt) async =>
+      db.transaction((txn) async {
+        final rows = await txn.query(RecurringExpenseOccurrenceMeta.table,
+            where: '${RecurringExpenseOccurrenceMeta.id}=?',
+            whereArgs: [occurrenceId],
+            limit: 1);
+        if (rows.isEmpty)
+          throw StateError('Recurring expense occurrence not found.');
+        final row = rows.single;
+        final existing = row[RecurringExpenseOccurrenceMeta.expenseId] as int?;
+        if (existing != null) return existing;
+        if (row[RecurringExpenseOccurrenceMeta.status] == 'skipped') {
+          throw StateError('Skipped occurrence cannot be paid.');
+        }
+        final rules = await txn.query(RecurringExpenseMeta.table,
+            columns: [RecurringExpenseMeta.name],
+            where: '${RecurringExpenseMeta.id}=?',
+            whereArgs: [row[RecurringExpenseOccurrenceMeta.ruleId]],
+            limit: 1);
+        if (rules.isEmpty)
+          throw StateError('Recurring expense rule not found.');
+        final expenseId = await _insertPlannedExpense(txn,
+            title: rules.single[RecurringExpenseMeta.name] as String,
+            amountMinor: row[RecurringExpenseOccurrenceMeta.amount] as int,
+            categoryId: row[RecurringExpenseOccurrenceMeta.categoryId] as int,
+            walletId: row[RecurringExpenseOccurrenceMeta.walletId] as int,
+            date: paidAt);
+        final changed = await txn.update(
+            RecurringExpenseOccurrenceMeta.table,
+            {
+              RecurringExpenseOccurrenceMeta.expenseId: expenseId,
+              RecurringExpenseOccurrenceMeta.status: 'paid',
+              RecurringExpenseOccurrenceMeta.updatedAt:
+                  DateTime.now().toUtc().toIso8601String(),
+            },
+            where:
+                '${RecurringExpenseOccurrenceMeta.id}=? AND ${RecurringExpenseOccurrenceMeta.expenseId} IS NULL',
+            whereArgs: [occurrenceId]);
+        if (changed != 1)
+          throw StateError('Occurrence payment raced with another update.');
+        return expenseId;
+      });
+
+  Future<void> linkRecurringOccurrenceExpense(
+          int occurrenceId, int expenseId) async =>
+      db.transaction((txn) async {
+        final expense = await txn.query(ExpenseMeta.nameTable,
+            columns: [ExpenseMeta.id],
+            where: '${ExpenseMeta.id}=?',
+            whereArgs: [expenseId],
+            limit: 1);
+        if (expense.isEmpty) throw StateError('Expense not found.');
+        final changed = await txn.update(
+            RecurringExpenseOccurrenceMeta.table,
+            {
+              RecurringExpenseOccurrenceMeta.expenseId: expenseId,
+              RecurringExpenseOccurrenceMeta.status: 'paid',
+              RecurringExpenseOccurrenceMeta.updatedAt:
+                  DateTime.now().toUtc().toIso8601String(),
+            },
+            where:
+                '${RecurringExpenseOccurrenceMeta.id}=? AND ${RecurringExpenseOccurrenceMeta.expenseId} IS NULL AND ${RecurringExpenseOccurrenceMeta.status}!=?',
+            whereArgs: [occurrenceId, 'skipped']);
+        if (changed != 1)
+          throw StateError('Occurrence already paid, skipped or missing.');
+      });
+
+  Future<void> skipRecurringExpenseOccurrence(int occurrenceId) async {
+    final changed = await db.update(
+        RecurringExpenseOccurrenceMeta.table,
+        {
+          RecurringExpenseOccurrenceMeta.status: 'skipped',
+          RecurringExpenseOccurrenceMeta.updatedAt:
+              DateTime.now().toUtc().toIso8601String(),
+        },
+        where:
+            '${RecurringExpenseOccurrenceMeta.id}=? AND ${RecurringExpenseOccurrenceMeta.expenseId} IS NULL',
+        whereArgs: [occurrenceId]);
+    if (changed != 1) throw StateError('Occurrence is paid or missing.');
+  }
+
+  Future<void> cancelBill(int billId) async {
+    final changed = await db.update(
+        BillMeta.table,
+        {
+          BillMeta.isCancelled: 1,
+          BillMeta.updatedAt: DateTime.now().toUtc().toIso8601String()
+        },
+        where: '${BillMeta.id}=? AND ${BillMeta.expenseId} IS NULL',
+        whereArgs: [billId]);
+    if (changed != 1) throw StateError('Paid bill cannot be cancelled.');
+  }
+
+  Future<void> setPlanningSettings(
+      {int? paydayDay, required int safetyReserveMinor}) async {
+    if ((paydayDay != null && (paydayDay < 1 || paydayDay > 31)) ||
+        safetyReserveMinor < 0) {
+      throw ArgumentError('Invalid payday or safety reserve.');
+    }
+    await db.transaction((txn) async {
+      await txn.insert(
+          PlanningMeta.table,
+          {
+            PlanningMeta.key: 'payday_day',
+            PlanningMeta.value: paydayDay?.toString() ?? ''
+          },
+          conflictAlgorithm: ConflictAlgorithm.replace);
+      await txn.insert(
+          PlanningMeta.table,
+          {
+            PlanningMeta.key: 'safety_reserve_minor',
+            PlanningMeta.value: safetyReserveMinor.toString()
+          },
+          conflictAlgorithm: ConflictAlgorithm.replace);
+    });
+  }
+
+  Future<Map<String, int?>> getPlanningSettings() async {
+    final rows = await db.query(PlanningMeta.table);
+    final values = {
+      for (final row in rows)
+        row[PlanningMeta.key] as String: row[PlanningMeta.value] as String,
+    };
+    return {
+      'paydayDay': int.tryParse(values['payday_day'] ?? ''),
+      'safetyReserveMinor':
+          int.tryParse(values['safety_reserve_minor'] ?? '') ?? 0,
+    };
+  }
+
+  Future<PaydayRunwayModel?> getPaydayRunway(DateTime today) async {
+    final settings = await db.query(PlanningMeta.table);
+    final values = {
+      for (final row in settings)
+        row[PlanningMeta.key] as String: row[PlanningMeta.value] as String
+    };
+    var paydayDay = int.tryParse(values['payday_day'] ?? '');
+    final incomeRules = await db.query(RecurringMeta.nameTable,
+        where:
+            '${RecurringMeta.type}=0 AND ${RecurringMeta.idModel}=0 AND ${RecurringMeta.recurringDay}>0',
+        limit: 1);
+    var expectedIncome = 0;
+    if (incomeRules.isNotEmpty) {
+      paydayDay ??= incomeRules.single[RecurringMeta.recurringDay] as int;
+      expectedIncome =
+          incomeRules.single[RecurringMeta.amountMinor] as int? ?? 0;
+    }
+    if (paydayDay == null || paydayDay < 1 || paydayDay > 31) return null;
+    final payday = nextPayday(today, paydayDay);
+    final wallets = await getWallets();
+    final active = wallets.where((wallet) => !wallet.isArchived).toList();
+    if (active.isEmpty) return null;
+    final currency = active.first.currency;
+    if (active.any((wallet) => wallet.currency != currency)) return null;
+    final walletCurrencies = {
+      for (final wallet in wallets) wallet.id: wallet.currency,
+    };
+    final available =
+        active.fold<int>(0, (sum, wallet) => sum + wallet.balanceMinor);
+    final excluded = wallets
+        .where((wallet) => wallet.isArchived)
+        .map((wallet) => wallet.name)
+        .toList();
+    final bills = await db.query(BillMeta.table,
+        where:
+            '${BillMeta.expenseId} IS NULL AND ${BillMeta.isCancelled}=0 AND date(${BillMeta.dueDate}) < date(?)',
+        whereArgs: [_dateKey(payday)]);
+    // Every obligation must use the same currency as the included balances.
+    // Returning no projection is safer than silently adding unlike units.
+    if (bills
+        .any((bill) => walletCurrencies[bill[BillMeta.walletId]] != currency)) {
+      return null;
+    }
+    final billAmount =
+        bills.fold<int>(0, (sum, bill) => sum + (bill[BillMeta.amount] as int));
+    final billKeys = bills
+        .map((bill) =>
+            '${bill[BillMeta.recurringRuleId]}:${bill[BillMeta.dueDate]}')
+        .toSet();
+    final occurrenceRows = await db.rawQuery('''
+      SELECT o.*, r.${RecurringExpenseMeta.name} AS rule_name
+      FROM ${RecurringExpenseOccurrenceMeta.table} o
+      JOIN ${RecurringExpenseMeta.table} r ON r.${RecurringExpenseMeta.id}=o.${RecurringExpenseOccurrenceMeta.ruleId}
+      WHERE o.${RecurringExpenseOccurrenceMeta.status} IN ('due','blocked')
+        AND date(o.${RecurringExpenseOccurrenceMeta.scheduledDate}) < date(?)
+    ''', [_dateKey(payday)]);
+    var recurringAmount = 0;
+    final includedRecurring = <RunwayObligation>[];
+    for (final row in occurrenceRows) {
+      if (walletCurrencies[row[RecurringExpenseOccurrenceMeta.walletId]] !=
+          currency) {
+        return null;
+      }
+      final key =
+          '${row[RecurringExpenseOccurrenceMeta.ruleId]}:${row[RecurringExpenseOccurrenceMeta.scheduledDate]}';
+      if (!billKeys.contains(key)) {
+        recurringAmount += row[RecurringExpenseOccurrenceMeta.amount] as int;
+        includedRecurring.add(RunwayObligation(
+          name: row['rule_name'] as String,
+          date: DateTime.parse(
+              row[RecurringExpenseOccurrenceMeta.scheduledDate] as String),
+          amountMinor: row[RecurringExpenseOccurrenceMeta.amount] as int,
+        ));
+      }
+    }
+    final existingOccurrenceKeys = occurrenceRows
+        .map((row) =>
+            '${row[RecurringExpenseOccurrenceMeta.ruleId]}:${row[RecurringExpenseOccurrenceMeta.scheduledDate]}')
+        .toSet();
+    final rules = await db.query(RecurringExpenseMeta.table,
+        where: '${RecurringExpenseMeta.enabled}=1',
+        orderBy: '${RecurringExpenseMeta.id}');
+    for (final rule in rules) {
+      if (walletCurrencies[rule[RecurringExpenseMeta.walletId]] != currency) {
+        final nextDate =
+            DateTime.parse(rule[RecurringExpenseMeta.nextDate] as String);
+        if (nextDate.isBefore(payday)) return null;
+      }
+      var due = DateTime.parse(rule[RecurringExpenseMeta.nextDate] as String);
+      final endDate = rule[RecurringExpenseMeta.endDate] as String?;
+      while (due.isBefore(payday) &&
+          (endDate == null || !due.isAfter(DateTime.parse(endDate)))) {
+        final date = _dateKey(due);
+        final key = '${rule[RecurringExpenseMeta.id]}:$date';
+        if (!billKeys.contains(key) && !existingOccurrenceKeys.contains(key)) {
+          if (walletCurrencies[rule[RecurringExpenseMeta.walletId]] !=
+              currency) {
+            return null;
+          }
+          recurringAmount += rule[RecurringExpenseMeta.amount] as int;
+          includedRecurring.add(RunwayObligation(
+            name: rule[RecurringExpenseMeta.name] as String,
+            date: DateTime.parse(date),
+            amountMinor: rule[RecurringExpenseMeta.amount] as int,
+          ));
+          existingOccurrenceKeys.add(key);
+        }
+        due = RecurringExpenseSchedule.next(
+            frequency: rule[RecurringExpenseMeta.frequency] as String,
+            scheduledDay: rule[RecurringExpenseMeta.scheduledDay] as int,
+            previous: due);
+      }
+    }
+    return PaydayRunwayModel(
+      payday: payday,
+      daysRemaining:
+          payday.difference(RecurringExpenseSchedule.dateOnly(today)).inDays,
+      currency: currency,
+      availableMinor: available,
+      billsMinor: billAmount,
+      recurringMinor: recurringAmount,
+      reserveMinor: int.tryParse(values['safety_reserve_minor'] ?? '') ?? 0,
+      expectedIncomeMinor: expectedIncome,
+      excludedWalletNames: excluded,
+      includedBills: bills
+          .map((bill) => RunwayObligation(
+                name: bill[BillMeta.title] as String,
+                date: DateTime.parse(bill[BillMeta.dueDate] as String),
+                amountMinor: bill[BillMeta.amount] as int,
+              ))
+          .toList(),
+      includedRecurringDetails: includedRecurring,
     );
   }
 

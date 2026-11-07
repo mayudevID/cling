@@ -70,6 +70,84 @@ Future<void> migrateFinancialFoundation(DatabaseExecutor db) async {
       'UPDATE ${ExpenseMeta.nameTable} SET ${ExpenseMeta.walletId}=1 WHERE ${ExpenseMeta.walletId} IS NULL');
 }
 
+Future<void> migrateFinancialPlanning(DatabaseExecutor db) async {
+  await db.execute('''CREATE TABLE IF NOT EXISTS ${RecurringExpenseMeta.table} (
+    ${RecurringExpenseMeta.id} INTEGER PRIMARY KEY AUTOINCREMENT,
+    ${RecurringExpenseMeta.name} TEXT NOT NULL,
+    ${RecurringExpenseMeta.description} TEXT,
+    ${RecurringExpenseMeta.amount} INTEGER NOT NULL CHECK (${RecurringExpenseMeta.amount}>0),
+    ${RecurringExpenseMeta.categoryId} INTEGER NOT NULL,
+    ${RecurringExpenseMeta.walletId} INTEGER NOT NULL,
+    ${RecurringExpenseMeta.frequency} TEXT NOT NULL CHECK (${RecurringExpenseMeta.frequency} IN ('weekly','monthly')),
+    ${RecurringExpenseMeta.scheduledDay} INTEGER NOT NULL,
+    ${RecurringExpenseMeta.startDate} TEXT NOT NULL,
+    ${RecurringExpenseMeta.endDate} TEXT,
+    ${RecurringExpenseMeta.nextDate} TEXT NOT NULL,
+    ${RecurringExpenseMeta.enabled} INTEGER NOT NULL DEFAULT 1,
+    ${RecurringExpenseMeta.postingMode} TEXT NOT NULL DEFAULT 'manual' CHECK (${RecurringExpenseMeta.postingMode} IN ('manual','automatic')),
+    ${RecurringExpenseMeta.createdAt} TEXT NOT NULL,
+    ${RecurringExpenseMeta.updatedAt} TEXT NOT NULL,
+    FOREIGN KEY (${RecurringExpenseMeta.categoryId}) REFERENCES ${ExpenseCategoriesMeta.nameTable}(${ExpenseCategoriesMeta.id}),
+    FOREIGN KEY (${RecurringExpenseMeta.walletId}) REFERENCES ${WalletMeta.table}(${WalletMeta.id})
+  )''');
+  await db.execute(
+      '''CREATE TABLE IF NOT EXISTS ${RecurringExpenseOccurrenceMeta.table} (
+    ${RecurringExpenseOccurrenceMeta.id} INTEGER PRIMARY KEY AUTOINCREMENT,
+    ${RecurringExpenseOccurrenceMeta.ruleId} INTEGER NOT NULL,
+    ${RecurringExpenseOccurrenceMeta.scheduledDate} TEXT NOT NULL,
+    ${RecurringExpenseOccurrenceMeta.amount} INTEGER NOT NULL CHECK (${RecurringExpenseOccurrenceMeta.amount}>0),
+    ${RecurringExpenseOccurrenceMeta.categoryId} INTEGER NOT NULL,
+    ${RecurringExpenseOccurrenceMeta.walletId} INTEGER NOT NULL,
+    ${RecurringExpenseOccurrenceMeta.status} TEXT NOT NULL CHECK (${RecurringExpenseOccurrenceMeta.status} IN ('due','paid','skipped','blocked')),
+    ${RecurringExpenseOccurrenceMeta.expenseId} INTEGER UNIQUE,
+    ${RecurringExpenseOccurrenceMeta.createdAt} TEXT NOT NULL,
+    ${RecurringExpenseOccurrenceMeta.updatedAt} TEXT NOT NULL,
+    UNIQUE (${RecurringExpenseOccurrenceMeta.ruleId}, ${RecurringExpenseOccurrenceMeta.scheduledDate}),
+    FOREIGN KEY (${RecurringExpenseOccurrenceMeta.ruleId}) REFERENCES ${RecurringExpenseMeta.table}(${RecurringExpenseMeta.id}) ON DELETE CASCADE,
+    FOREIGN KEY (${RecurringExpenseOccurrenceMeta.expenseId}) REFERENCES ${ExpenseMeta.nameTable}(${ExpenseMeta.id}) ON DELETE SET NULL,
+    FOREIGN KEY (${RecurringExpenseOccurrenceMeta.categoryId}) REFERENCES ${ExpenseCategoriesMeta.nameTable}(${ExpenseCategoriesMeta.id}),
+    FOREIGN KEY (${RecurringExpenseOccurrenceMeta.walletId}) REFERENCES ${WalletMeta.table}(${WalletMeta.id})
+  )''');
+  await db.execute('''CREATE TABLE IF NOT EXISTS ${BillMeta.table} (
+    ${BillMeta.id} INTEGER PRIMARY KEY AUTOINCREMENT,
+    ${BillMeta.title} TEXT NOT NULL,
+    ${BillMeta.amount} INTEGER NOT NULL CHECK (${BillMeta.amount}>0),
+    ${BillMeta.categoryId} INTEGER NOT NULL,
+    ${BillMeta.walletId} INTEGER NOT NULL,
+    ${BillMeta.dueDate} TEXT NOT NULL,
+    ${BillMeta.reminderMask} INTEGER NOT NULL DEFAULT 7,
+    ${BillMeta.note} TEXT,
+    ${BillMeta.recurringRuleId} INTEGER,
+    ${BillMeta.expenseId} INTEGER UNIQUE,
+    ${BillMeta.isCancelled} INTEGER NOT NULL DEFAULT 0,
+    ${BillMeta.createdAt} TEXT NOT NULL,
+    ${BillMeta.updatedAt} TEXT NOT NULL,
+    FOREIGN KEY (${BillMeta.categoryId}) REFERENCES ${ExpenseCategoriesMeta.nameTable}(${ExpenseCategoriesMeta.id}),
+    FOREIGN KEY (${BillMeta.walletId}) REFERENCES ${WalletMeta.table}(${WalletMeta.id}),
+    FOREIGN KEY (${BillMeta.recurringRuleId}) REFERENCES ${RecurringExpenseMeta.table}(${RecurringExpenseMeta.id}) ON DELETE SET NULL,
+    FOREIGN KEY (${BillMeta.expenseId}) REFERENCES ${ExpenseMeta.nameTable}(${ExpenseMeta.id}) ON DELETE SET NULL
+  )''');
+  await db.execute('''CREATE TABLE IF NOT EXISTS ${PlanningMeta.table} (
+    ${PlanningMeta.key} TEXT PRIMARY KEY,
+    ${PlanningMeta.value} TEXT NOT NULL
+  )''');
+  await db.execute('''CREATE TABLE IF NOT EXISTS ${PlanningReminderMeta.table} (
+    ${PlanningReminderMeta.id} INTEGER PRIMARY KEY AUTOINCREMENT,
+    ${PlanningReminderMeta.billId} INTEGER,
+    ${PlanningReminderMeta.occurrenceId} INTEGER,
+    ${PlanningReminderMeta.reminderDays} INTEGER NOT NULL,
+    ${PlanningReminderMeta.scheduledDate} TEXT NOT NULL,
+    ${PlanningReminderMeta.deliveredAt} TEXT NOT NULL,
+    CHECK ((${PlanningReminderMeta.billId} IS NULL) != (${PlanningReminderMeta.occurrenceId} IS NULL)),
+    FOREIGN KEY (${PlanningReminderMeta.billId}) REFERENCES ${BillMeta.table}(${BillMeta.id}) ON DELETE CASCADE,
+    FOREIGN KEY (${PlanningReminderMeta.occurrenceId}) REFERENCES ${RecurringExpenseOccurrenceMeta.table}(${RecurringExpenseOccurrenceMeta.id}) ON DELETE CASCADE
+  )''');
+  await db.execute(
+      'CREATE UNIQUE INDEX IF NOT EXISTS idx_planning_reminder_bill ON ${PlanningReminderMeta.table}(${PlanningReminderMeta.billId}, ${PlanningReminderMeta.scheduledDate}, ${PlanningReminderMeta.reminderDays}) WHERE ${PlanningReminderMeta.billId} IS NOT NULL');
+  await db.execute(
+      'CREATE UNIQUE INDEX IF NOT EXISTS idx_planning_reminder_occurrence ON ${PlanningReminderMeta.table}(${PlanningReminderMeta.occurrenceId}, ${PlanningReminderMeta.reminderDays}) WHERE ${PlanningReminderMeta.occurrenceId} IS NOT NULL');
+}
+
 final exCategoriesData = [
   "🎑 Other",
   "💵 Bill",

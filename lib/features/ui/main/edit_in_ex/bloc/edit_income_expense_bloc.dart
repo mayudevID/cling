@@ -14,6 +14,7 @@ import '../../../../model/expense_model.dart';
 import '../../../../model/income_model.dart';
 import '../../../../model/income_source_model.dart';
 import '../../../../model/transaction_model.dart';
+import '../../../../model/wallet_model.dart';
 import '../../../../repository/database_repository.dart';
 import '../../../../repository/settings_repository.dart';
 import '../../../language_currency/lang_export.dart';
@@ -40,6 +41,8 @@ class EditIncomeExpenseBloc
     on<SetDate>(_setDate);
     on<SetTime>(_setTime);
     on<SetCategories>(_setCategories);
+    on<SetWallet>((event, emit) =>
+        emit(state.copyWith(selectedWalletId: event.walletId)));
     on<SetDescOrItem>(_setDescOrItem);
     on<SetAmountInput>(_setAmountInput);
     on<SaveData>(_saveData);
@@ -81,6 +84,8 @@ class EditIncomeExpenseBloc
 
   void _getIncomeSource(GetIncomeSource event, emit) async {
     final dataIncomeSource = await _dbRepo.getIncomeSource();
+    final wallets = await _dbRepo.getWallets();
+    if (isClosed) return;
 
     final loc = dataIncomeSource.firstWhere(
       (e) =>
@@ -95,12 +100,16 @@ class EditIncomeExpenseBloc
         selectedDate: event.transactionModel.date,
         listInSource: dataIncomeSource,
         selectedCategories: MapEntry(loc.id, loc.incomeSource),
+        wallets: wallets,
+        selectedWalletId: (event.transactionModel as IncomeModel).walletId,
       ),
     );
   }
 
   void _getExpenseCategories(GetExpenseCategories event, emit) async {
     final dataExCategories = await _dbRepo.getExpenseCategories();
+    final wallets = await _dbRepo.getWallets();
+    if (isClosed) return;
 
     final loc = dataExCategories.firstWhere(
       (e) =>
@@ -115,6 +124,8 @@ class EditIncomeExpenseBloc
         selectedDate: event.transactionModel.date,
         listExCategories: dataExCategories,
         selectedCategories: MapEntry(loc.id, loc.expenseCategories),
+        wallets: wallets,
+        selectedWalletId: (event.transactionModel as ExpenseModel).walletId,
       ),
     );
   }
@@ -158,6 +169,7 @@ class EditIncomeExpenseBloc
               desc: state.descOrItem,
               incomeSource:
                   '${state.selectedCategories.key} ${state.selectedCategories.value}',
+              walletId: state.selectedWalletId,
             ),
           );
           break;
@@ -170,6 +182,7 @@ class EditIncomeExpenseBloc
               item: state.descOrItem,
               categories:
                   '${state.selectedCategories.key} ${state.selectedCategories.value}',
+              walletId: state.selectedWalletId,
             ),
           );
           break;

@@ -31,7 +31,12 @@ Widget customFloatingActionButton(BuildContext context) {
     {
       "route": RouteName.wallets,
       "args": null,
-      "name": "Wallet & Transfer",
+      "name": AppLocalizations.of(context)!.walletAndTransfer,
+    },
+    {
+      "route": RouteName.financialPlanning,
+      "args": null,
+      "name": AppLocalizations.of(context)!.planning,
     }
   ];
 

@@ -79,7 +79,7 @@ Future<int> validateClingBackupSchema(Database database) async {
   }
   final rows = await database.rawQuery('PRAGMA user_version');
   final version = (rows.first['user_version'] as num).toInt();
-  if (version != 1 && version != 2 && version != 3) {
+  if (version < 1 || version > 4) {
     throw FormatException('Unsupported Cling schema version: $version');
   }
   final columns = <String, List<String>>{
@@ -158,6 +158,51 @@ Future<int> validateClingBackupSchema(Database database) async {
       QuickTemplateMeta.amount,
       QuickTemplateMeta.categoryId,
       QuickTemplateMeta.walletId
+    ];
+  }
+
+  if (version >= 4) {
+    final foreignKeyErrors =
+        await database.rawQuery('PRAGMA foreign_key_check');
+    if (foreignKeyErrors.isNotEmpty) {
+      throw const FormatException(
+          'SQLite backup contains broken foreign keys.');
+    }
+    columns[RecurringExpenseMeta.table] = [
+      RecurringExpenseMeta.id,
+      RecurringExpenseMeta.name,
+      RecurringExpenseMeta.amount,
+      RecurringExpenseMeta.categoryId,
+      RecurringExpenseMeta.walletId,
+      RecurringExpenseMeta.frequency,
+      RecurringExpenseMeta.scheduledDay,
+      RecurringExpenseMeta.startDate,
+      RecurringExpenseMeta.nextDate,
+      RecurringExpenseMeta.enabled,
+      RecurringExpenseMeta.postingMode,
+    ];
+    columns[RecurringExpenseOccurrenceMeta.table] = [
+      RecurringExpenseOccurrenceMeta.id,
+      RecurringExpenseOccurrenceMeta.ruleId,
+      RecurringExpenseOccurrenceMeta.scheduledDate,
+      RecurringExpenseOccurrenceMeta.amount,
+      RecurringExpenseOccurrenceMeta.status,
+    ];
+    columns[BillMeta.table] = [
+      BillMeta.id,
+      BillMeta.title,
+      BillMeta.amount,
+      BillMeta.categoryId,
+      BillMeta.walletId,
+      BillMeta.dueDate,
+      BillMeta.expenseId,
+    ];
+    columns[PlanningMeta.table] = [PlanningMeta.key, PlanningMeta.value];
+    columns[PlanningReminderMeta.table] = [
+      PlanningReminderMeta.id,
+      PlanningReminderMeta.reminderDays,
+      PlanningReminderMeta.scheduledDate,
+      PlanningReminderMeta.deliveredAt,
     ];
   }
 

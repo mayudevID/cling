@@ -43,6 +43,11 @@ class SetCategories extends EditIncomeExpenseEvent {
   final MapEntry<int, String> categories;
 }
 
+class SetWallet extends EditIncomeExpenseEvent {
+  const SetWallet(this.walletId);
+  final int walletId;
+}
+
 class SetDescOrItem extends EditIncomeExpenseEvent {
   const SetDescOrItem(this.descOrItem);
 

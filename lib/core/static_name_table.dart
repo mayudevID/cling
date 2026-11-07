@@ -55,6 +55,72 @@ class QuickTemplateMeta {
   static const updatedAt = 'updated_at';
 }
 
+class RecurringExpenseMeta {
+  static const table = 'recurring_expense_rules';
+  static const id = 'rule_id';
+  static const name = 'name';
+  static const description = 'description';
+  static const amount = 'amount_minor';
+  static const categoryId = 'category_id';
+  static const walletId = 'wallet_id';
+  static const frequency = 'frequency';
+  static const scheduledDay = 'scheduled_day';
+  static const startDate = 'start_date';
+  static const endDate = 'end_date';
+  static const nextDate = 'next_date';
+  static const enabled = 'is_enabled';
+  static const postingMode = 'posting_mode';
+  static const createdAt = 'created_at';
+  static const updatedAt = 'updated_at';
+}
+
+class RecurringExpenseOccurrenceMeta {
+  static const table = 'recurring_expense_occurrences';
+  static const id = 'occurrence_id';
+  static const ruleId = 'rule_id';
+  static const scheduledDate = 'scheduled_date';
+  static const amount = 'amount_minor';
+  static const categoryId = 'category_id';
+  static const walletId = 'wallet_id';
+  static const status = 'status';
+  static const expenseId = 'expense_id';
+  static const createdAt = 'created_at';
+  static const updatedAt = 'updated_at';
+}
+
+class BillMeta {
+  static const table = 'bills';
+  static const id = 'bill_id';
+  static const title = 'title';
+  static const amount = 'amount_minor';
+  static const categoryId = 'category_id';
+  static const walletId = 'wallet_id';
+  static const dueDate = 'due_date';
+  static const reminderMask = 'reminder_mask';
+  static const note = 'note';
+  static const recurringRuleId = 'recurring_rule_id';
+  static const expenseId = 'expense_id';
+  static const isCancelled = 'is_cancelled';
+  static const createdAt = 'created_at';
+  static const updatedAt = 'updated_at';
+}
+
+class PlanningMeta {
+  static const table = 'planning_settings';
+  static const key = 'setting_key';
+  static const value = 'setting_value';
+}
+
+class PlanningReminderMeta {
+  static const table = 'planning_reminder_deliveries';
+  static const id = 'delivery_id';
+  static const billId = 'bill_id';
+  static const occurrenceId = 'occurrence_id';
+  static const reminderDays = 'reminder_days';
+  static const scheduledDate = 'scheduled_date';
+  static const deliveredAt = 'delivered_at';
+}
+
 class IncomeSourceMeta {
   static const nameTable = 'income_source_table';
   static const id = 'income_source_id';

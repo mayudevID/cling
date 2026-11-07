@@ -6,16 +6,25 @@ import '../transaction/bloc/transaction_bloc.dart';
 import '../statistics/bloc/statistics_bloc.dart';
 import '../stats_detail/bloc/stats_detail_bloc.dart';
 import '../stats_detail/page/stats_detail_per_categories_page.dart';
+import '../planning/planning_bloc.dart';
 
 /// Invalidate *all* finance projections after a committed transaction write.
 /// Queries retain their currently selected date/category filters.
-void refreshFinancialViews(BuildContext context) {
+void refreshFinancialViews(BuildContext context,
+    {bool refreshPlanning = true}) {
   context.read<HomeBloc>()
     ..add(GetIncomeExpenseAmountTotalCurrMonth())
     ..add(GetTodayExpenses())
     ..add(GetGoalsHomeWithCount())
     ..add(GetNotificationCount());
   context.read<TransactionBloc>().add(GetData());
+  if (refreshPlanning) {
+    try {
+      context.read<PlanningBloc>().add(LoadPlanning(DateTime.now()));
+    } on ProviderNotFoundException {
+      // The planning state exists only while its feature flow is mounted.
+    }
+  }
   context.read<StatisticsBloc>()
     ..add(GetIncomeExpenseTotalAllMonth())
     ..add(GetMost())

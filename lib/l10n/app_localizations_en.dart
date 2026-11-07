@@ -576,4 +576,202 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get change => 'Change';
+
+  @override
+  String get wallet => 'Wallet';
+
+  @override
+  String get financialPlanning => 'Financial Planning';
+
+  @override
+  String get recurringExpenses => 'Recurring Expenses';
+
+  @override
+  String get billsAndReminders => 'Bills & Reminders';
+
+  @override
+  String get paydayRunway => 'Payday Runway';
+
+  @override
+  String get planningSettings => 'Planning Settings';
+
+  @override
+  String get nextPayday => 'Next payday';
+
+  @override
+  String get dailyAllowance => 'Daily allowance';
+
+  @override
+  String get estimatedSpendable => 'Estimated spendable';
+
+  @override
+  String get upcomingBills => 'Upcoming bills';
+
+  @override
+  String get overdueBills => 'Overdue bills';
+
+  @override
+  String get activeRecurring => 'Active recurring expenses';
+
+  @override
+  String get addBill => 'Add bill';
+
+  @override
+  String get addRecurringExpense => 'Add recurring expense';
+
+  @override
+  String get title => 'Title';
+
+  @override
+  String get description => 'Description';
+
+  @override
+  String get category => 'Category';
+
+  @override
+  String get dueDate => 'Due date';
+
+  @override
+  String get frequency => 'Frequency';
+
+  @override
+  String get weekly => 'Weekly';
+
+  @override
+  String get scheduledDay => 'Scheduled day';
+
+  @override
+  String get startDate => 'Start date';
+
+  @override
+  String get endDateOptional => 'End date (optional)';
+
+  @override
+  String get manualConfirmation => 'Manual confirmation';
+
+  @override
+  String get automaticPosting => 'Automatic posting';
+
+  @override
+  String get automaticPostingNotice =>
+      'Automatic posting records an assumed payment; it is not verified by your bank.';
+
+  @override
+  String get confirmPayment => 'Confirm payment';
+
+  @override
+  String get cancelBill => 'Cancel bill';
+
+  @override
+  String get upcoming => 'Upcoming';
+
+  @override
+  String get dueToday => 'Due today';
+
+  @override
+  String get overdue => 'Overdue';
+
+  @override
+  String get paid => 'Paid';
+
+  @override
+  String get cancelled => 'Cancelled';
+
+  @override
+  String get expectedIncome =>
+      'Expected income (not included in available balance)';
+
+  @override
+  String get availableBalance => 'Available balance';
+
+  @override
+  String get upcomingObligations => 'Upcoming obligations';
+
+  @override
+  String get safetyReserve => 'Safety reserve';
+
+  @override
+  String get estimateDisclaimer => 'This is an estimate, not a guarantee.';
+
+  @override
+  String get shortfall => 'Shortfall';
+
+  @override
+  String get setupPayday => 'Set a payday to calculate your runway.';
+
+  @override
+  String get reminders => 'Reminders';
+
+  @override
+  String get threeDaysBefore => '3 days before';
+
+  @override
+  String get oneDayBefore => '1 day before';
+
+  @override
+  String get onDueDate => 'On due date';
+
+  @override
+  String get planning => 'Planning';
+
+  @override
+  String get noPlanningItems => 'No planning items yet';
+
+  @override
+  String get pay => 'Pay';
+
+  @override
+  String get pause => 'Pause';
+
+  @override
+  String get resume => 'Resume';
+
+  @override
+  String get automatic => 'Automatic';
+
+  @override
+  String get manual => 'Manual';
+
+  @override
+  String get paydayDay => 'Payday (day of month)';
+
+  @override
+  String get includedWallets => 'Included wallets';
+
+  @override
+  String get excludedWallets => 'Excluded archived wallets';
+
+  @override
+  String get includedBills => 'Bills deducted';
+
+  @override
+  String get includedRecurring => 'Recurring obligations deducted';
+
+  @override
+  String get paymentSaved => 'Payment recorded';
+
+  @override
+  String get reminderLeadDays => 'Reminder days before due date';
+
+  @override
+  String get days => 'days';
+
+  @override
+  String get transactionId => 'Existing transaction ID';
+
+  @override
+  String get linkExistingExpense => 'Link an existing expense';
+
+  @override
+  String get walletAndTransfer => 'Wallets & Transfers';
+
+  @override
+  String get billReminder => 'Bill reminder';
+
+  @override
+  String get postingMode => 'Posting mode';
+
+  @override
+  String get weeklyWeekdayHint =>
+      'Weekly day uses Monday = 1 through Sunday = 7.';
 }

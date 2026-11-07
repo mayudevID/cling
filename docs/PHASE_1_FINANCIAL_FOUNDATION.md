@@ -6,8 +6,8 @@ Wallet balances are projections: opening balance + income - expense + incoming t
 
 ## Current implementation status
 
-Implemented: schema migration and legacy wallet assignment, wallet model and balance projection, wallet CRUD/archive/default selection, transfer creation and wallet list UI, income/expense model wallet references, and v3 backup validation.
+Implemented: schema migration and legacy wallet assignment, wallet model and balance projection, wallet CRUD/archive/default selection, transfer creation and wallet list UI, income/expense model wallet references and wallet selection in add/edit forms, and legacy/current backup validation through schema v4.
 
-Remaining before release: wallet selection controls in add/edit transaction forms, wallet-labelled transaction history and filters, transfer editing/deletion and duplicate-submit keying, Quick Add template CRUD/confirmation flow, loading/success integration polish, broader v1/v2 restore and concurrent-account migration tests, and localization. The schema for templates exists but the application flow is not implemented.
+Remaining before release: wallet-labelled transaction history and filters, transfer editing/deletion and duplicate-submit keying, Quick Add template CRUD/confirmation flow, and transfer-specific interaction polish. The schema for Quick Add templates exists but the application flow is not implemented.
 
 No database downgrade is supported. Rollback means restoring the pre-upgrade per-UID SQLite snapshot; do not open a v3 database in an older app after making new wallet/transfer writes, because older versions cannot represent those records.

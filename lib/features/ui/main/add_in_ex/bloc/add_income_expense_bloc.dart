@@ -13,6 +13,7 @@ import '../../../../model/expense_categories_model.dart';
 import '../../../../model/expense_model.dart';
 import '../../../../model/income_model.dart';
 import '../../../../model/income_source_model.dart';
+import '../../../../model/wallet_model.dart';
 import '../../../../repository/database_repository.dart';
 import '../../../language_currency/lang_export.dart';
 import '../../main_widget/finance_refresh.dart';
@@ -37,6 +38,9 @@ class AddIncomeExpenseBloc
     on<SaveData>(_saveData);
     on<GetIncomeSource>(_getIncomeSource);
     on<GetExpenseCategories>(_getExpenseCategories);
+    on<LoadWallets>(_loadWallets);
+    on<SetWallet>((event, emit) =>
+        emit(state.copyWith(selectedWalletId: event.walletId)));
   }
 
   final DatabaseRepository _dbRepo;
@@ -90,6 +94,15 @@ class AddIncomeExpenseBloc
     );
   }
 
+  Future<void> _loadWallets(
+      LoadWallets event, Emitter<AddIncomeExpenseState> emit) async {
+    final wallets = await _dbRepo.getWallets(includeArchived: false);
+    if (isClosed || wallets.isEmpty) return;
+    final defaultWallet = wallets.firstWhere((wallet) => wallet.isDefault,
+        orElse: () => wallets.first);
+    emit(state.copyWith(wallets: wallets, selectedWalletId: defaultWallet.id!));
+  }
+
   void _setDescOrItem(
     SetDescOrItem event,
     Emitter<AddIncomeExpenseState> emit,
@@ -126,6 +139,7 @@ class AddIncomeExpenseBloc
               date: state.selectedDate,
               amount: state.amountInput,
               desc: state.descOrItem,
+              walletId: state.selectedWalletId,
               incomeSource:
                   '${state.selectedCategories.key} ${state.selectedCategories.value}',
             ),
@@ -139,6 +153,7 @@ class AddIncomeExpenseBloc
               item: state.descOrItem,
               categories:
                   '${state.selectedCategories.key} ${state.selectedCategories.value}',
+              walletId: state.selectedWalletId,
             ),
           );
           break;

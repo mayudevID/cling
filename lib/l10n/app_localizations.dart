@@ -1195,6 +1195,396 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Change'**
   String get change;
+
+  /// No description provided for @wallet.
+  ///
+  /// In en, this message translates to:
+  /// **'Wallet'**
+  String get wallet;
+
+  /// No description provided for @financialPlanning.
+  ///
+  /// In en, this message translates to:
+  /// **'Financial Planning'**
+  String get financialPlanning;
+
+  /// No description provided for @recurringExpenses.
+  ///
+  /// In en, this message translates to:
+  /// **'Recurring Expenses'**
+  String get recurringExpenses;
+
+  /// No description provided for @billsAndReminders.
+  ///
+  /// In en, this message translates to:
+  /// **'Bills & Reminders'**
+  String get billsAndReminders;
+
+  /// No description provided for @paydayRunway.
+  ///
+  /// In en, this message translates to:
+  /// **'Payday Runway'**
+  String get paydayRunway;
+
+  /// No description provided for @planningSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Planning Settings'**
+  String get planningSettings;
+
+  /// No description provided for @nextPayday.
+  ///
+  /// In en, this message translates to:
+  /// **'Next payday'**
+  String get nextPayday;
+
+  /// No description provided for @dailyAllowance.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily allowance'**
+  String get dailyAllowance;
+
+  /// No description provided for @estimatedSpendable.
+  ///
+  /// In en, this message translates to:
+  /// **'Estimated spendable'**
+  String get estimatedSpendable;
+
+  /// No description provided for @upcomingBills.
+  ///
+  /// In en, this message translates to:
+  /// **'Upcoming bills'**
+  String get upcomingBills;
+
+  /// No description provided for @overdueBills.
+  ///
+  /// In en, this message translates to:
+  /// **'Overdue bills'**
+  String get overdueBills;
+
+  /// No description provided for @activeRecurring.
+  ///
+  /// In en, this message translates to:
+  /// **'Active recurring expenses'**
+  String get activeRecurring;
+
+  /// No description provided for @addBill.
+  ///
+  /// In en, this message translates to:
+  /// **'Add bill'**
+  String get addBill;
+
+  /// No description provided for @addRecurringExpense.
+  ///
+  /// In en, this message translates to:
+  /// **'Add recurring expense'**
+  String get addRecurringExpense;
+
+  /// No description provided for @title.
+  ///
+  /// In en, this message translates to:
+  /// **'Title'**
+  String get title;
+
+  /// No description provided for @description.
+  ///
+  /// In en, this message translates to:
+  /// **'Description'**
+  String get description;
+
+  /// No description provided for @category.
+  ///
+  /// In en, this message translates to:
+  /// **'Category'**
+  String get category;
+
+  /// No description provided for @dueDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Due date'**
+  String get dueDate;
+
+  /// No description provided for @frequency.
+  ///
+  /// In en, this message translates to:
+  /// **'Frequency'**
+  String get frequency;
+
+  /// No description provided for @weekly.
+  ///
+  /// In en, this message translates to:
+  /// **'Weekly'**
+  String get weekly;
+
+  /// No description provided for @scheduledDay.
+  ///
+  /// In en, this message translates to:
+  /// **'Scheduled day'**
+  String get scheduledDay;
+
+  /// No description provided for @startDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Start date'**
+  String get startDate;
+
+  /// No description provided for @endDateOptional.
+  ///
+  /// In en, this message translates to:
+  /// **'End date (optional)'**
+  String get endDateOptional;
+
+  /// No description provided for @manualConfirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Manual confirmation'**
+  String get manualConfirmation;
+
+  /// No description provided for @automaticPosting.
+  ///
+  /// In en, this message translates to:
+  /// **'Automatic posting'**
+  String get automaticPosting;
+
+  /// No description provided for @automaticPostingNotice.
+  ///
+  /// In en, this message translates to:
+  /// **'Automatic posting records an assumed payment; it is not verified by your bank.'**
+  String get automaticPostingNotice;
+
+  /// No description provided for @confirmPayment.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm payment'**
+  String get confirmPayment;
+
+  /// No description provided for @cancelBill.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel bill'**
+  String get cancelBill;
+
+  /// No description provided for @upcoming.
+  ///
+  /// In en, this message translates to:
+  /// **'Upcoming'**
+  String get upcoming;
+
+  /// No description provided for @dueToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Due today'**
+  String get dueToday;
+
+  /// No description provided for @overdue.
+  ///
+  /// In en, this message translates to:
+  /// **'Overdue'**
+  String get overdue;
+
+  /// No description provided for @paid.
+  ///
+  /// In en, this message translates to:
+  /// **'Paid'**
+  String get paid;
+
+  /// No description provided for @cancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancelled'**
+  String get cancelled;
+
+  /// No description provided for @expectedIncome.
+  ///
+  /// In en, this message translates to:
+  /// **'Expected income (not included in available balance)'**
+  String get expectedIncome;
+
+  /// No description provided for @availableBalance.
+  ///
+  /// In en, this message translates to:
+  /// **'Available balance'**
+  String get availableBalance;
+
+  /// No description provided for @upcomingObligations.
+  ///
+  /// In en, this message translates to:
+  /// **'Upcoming obligations'**
+  String get upcomingObligations;
+
+  /// No description provided for @safetyReserve.
+  ///
+  /// In en, this message translates to:
+  /// **'Safety reserve'**
+  String get safetyReserve;
+
+  /// No description provided for @estimateDisclaimer.
+  ///
+  /// In en, this message translates to:
+  /// **'This is an estimate, not a guarantee.'**
+  String get estimateDisclaimer;
+
+  /// No description provided for @shortfall.
+  ///
+  /// In en, this message translates to:
+  /// **'Shortfall'**
+  String get shortfall;
+
+  /// No description provided for @setupPayday.
+  ///
+  /// In en, this message translates to:
+  /// **'Set a payday to calculate your runway.'**
+  String get setupPayday;
+
+  /// No description provided for @reminders.
+  ///
+  /// In en, this message translates to:
+  /// **'Reminders'**
+  String get reminders;
+
+  /// No description provided for @threeDaysBefore.
+  ///
+  /// In en, this message translates to:
+  /// **'3 days before'**
+  String get threeDaysBefore;
+
+  /// No description provided for @oneDayBefore.
+  ///
+  /// In en, this message translates to:
+  /// **'1 day before'**
+  String get oneDayBefore;
+
+  /// No description provided for @onDueDate.
+  ///
+  /// In en, this message translates to:
+  /// **'On due date'**
+  String get onDueDate;
+
+  /// No description provided for @planning.
+  ///
+  /// In en, this message translates to:
+  /// **'Planning'**
+  String get planning;
+
+  /// No description provided for @noPlanningItems.
+  ///
+  /// In en, this message translates to:
+  /// **'No planning items yet'**
+  String get noPlanningItems;
+
+  /// No description provided for @pay.
+  ///
+  /// In en, this message translates to:
+  /// **'Pay'**
+  String get pay;
+
+  /// No description provided for @pause.
+  ///
+  /// In en, this message translates to:
+  /// **'Pause'**
+  String get pause;
+
+  /// No description provided for @resume.
+  ///
+  /// In en, this message translates to:
+  /// **'Resume'**
+  String get resume;
+
+  /// No description provided for @automatic.
+  ///
+  /// In en, this message translates to:
+  /// **'Automatic'**
+  String get automatic;
+
+  /// No description provided for @manual.
+  ///
+  /// In en, this message translates to:
+  /// **'Manual'**
+  String get manual;
+
+  /// No description provided for @paydayDay.
+  ///
+  /// In en, this message translates to:
+  /// **'Payday (day of month)'**
+  String get paydayDay;
+
+  /// No description provided for @includedWallets.
+  ///
+  /// In en, this message translates to:
+  /// **'Included wallets'**
+  String get includedWallets;
+
+  /// No description provided for @excludedWallets.
+  ///
+  /// In en, this message translates to:
+  /// **'Excluded archived wallets'**
+  String get excludedWallets;
+
+  /// No description provided for @includedBills.
+  ///
+  /// In en, this message translates to:
+  /// **'Bills deducted'**
+  String get includedBills;
+
+  /// No description provided for @includedRecurring.
+  ///
+  /// In en, this message translates to:
+  /// **'Recurring obligations deducted'**
+  String get includedRecurring;
+
+  /// No description provided for @paymentSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment recorded'**
+  String get paymentSaved;
+
+  /// No description provided for @reminderLeadDays.
+  ///
+  /// In en, this message translates to:
+  /// **'Reminder days before due date'**
+  String get reminderLeadDays;
+
+  /// No description provided for @days.
+  ///
+  /// In en, this message translates to:
+  /// **'days'**
+  String get days;
+
+  /// No description provided for @transactionId.
+  ///
+  /// In en, this message translates to:
+  /// **'Existing transaction ID'**
+  String get transactionId;
+
+  /// No description provided for @linkExistingExpense.
+  ///
+  /// In en, this message translates to:
+  /// **'Link an existing expense'**
+  String get linkExistingExpense;
+
+  /// No description provided for @walletAndTransfer.
+  ///
+  /// In en, this message translates to:
+  /// **'Wallets & Transfers'**
+  String get walletAndTransfer;
+
+  /// No description provided for @billReminder.
+  ///
+  /// In en, this message translates to:
+  /// **'Bill reminder'**
+  String get billReminder;
+
+  /// No description provided for @postingMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Posting mode'**
+  String get postingMode;
+
+  /// No description provided for @weeklyWeekdayHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Weekly day uses Monday = 1 through Sunday = 7.'**
+  String get weeklyWeekdayHint;
 }
 
 class _AppLocalizationsDelegate

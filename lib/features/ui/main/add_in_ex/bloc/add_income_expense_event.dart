@@ -11,6 +11,13 @@ class GetIncomeSource extends AddIncomeExpenseEvent {}
 
 class GetExpenseCategories extends AddIncomeExpenseEvent {}
 
+class LoadWallets extends AddIncomeExpenseEvent {}
+
+class SetWallet extends AddIncomeExpenseEvent {
+  const SetWallet(this.walletId);
+  final int walletId;
+}
+
 class SetDate extends AddIncomeExpenseEvent {
   const SetDate(this.date);
 

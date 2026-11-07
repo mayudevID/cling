@@ -46,6 +46,9 @@ Widget notificationWidget(int idx) {
         title = appLoc.alertCurrentBalance;
         desc = appLoc.warningCurrentBalance;
         isNeedDateContext = true;
+      } else if (state.listNotif[idx].type == 4) {
+        title = appLoc.billReminder;
+        desc = state.listNotif[idx].desc;
       } else {
         title = appLoc.alertTotalBalance;
         desc = appLoc.warningTotalBalance;

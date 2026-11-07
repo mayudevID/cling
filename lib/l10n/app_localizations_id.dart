@@ -577,4 +577,202 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get change => 'Ubah';
+
+  @override
+  String get wallet => 'Dompet';
+
+  @override
+  String get financialPlanning => 'Perencanaan Keuangan';
+
+  @override
+  String get recurringExpenses => 'Pengeluaran Berulang';
+
+  @override
+  String get billsAndReminders => 'Tagihan & Pengingat';
+
+  @override
+  String get paydayRunway => 'Perkiraan hingga Gajian';
+
+  @override
+  String get planningSettings => 'Pengaturan Perencanaan';
+
+  @override
+  String get nextPayday => 'Gajian berikutnya';
+
+  @override
+  String get dailyAllowance => 'Batas pengeluaran harian';
+
+  @override
+  String get estimatedSpendable => 'Perkiraan dana tersedia';
+
+  @override
+  String get upcomingBills => 'Tagihan mendatang';
+
+  @override
+  String get overdueBills => 'Tagihan terlambat';
+
+  @override
+  String get activeRecurring => 'Pengeluaran berulang aktif';
+
+  @override
+  String get addBill => 'Tambah tagihan';
+
+  @override
+  String get addRecurringExpense => 'Tambah pengeluaran berulang';
+
+  @override
+  String get title => 'Judul';
+
+  @override
+  String get description => 'Deskripsi';
+
+  @override
+  String get category => 'Kategori';
+
+  @override
+  String get dueDate => 'Tanggal jatuh tempo';
+
+  @override
+  String get frequency => 'Frekuensi';
+
+  @override
+  String get weekly => 'Mingguan';
+
+  @override
+  String get scheduledDay => 'Tanggal terjadwal';
+
+  @override
+  String get startDate => 'Tanggal mulai';
+
+  @override
+  String get endDateOptional => 'Tanggal berakhir (opsional)';
+
+  @override
+  String get manualConfirmation => 'Konfirmasi manual';
+
+  @override
+  String get automaticPosting => 'Pencatatan otomatis';
+
+  @override
+  String get automaticPostingNotice =>
+      'Pencatatan otomatis menganggap pembayaran terjadi; ini tidak diverifikasi oleh bank.';
+
+  @override
+  String get confirmPayment => 'Konfirmasi pembayaran';
+
+  @override
+  String get cancelBill => 'Batalkan tagihan';
+
+  @override
+  String get upcoming => 'Mendatang';
+
+  @override
+  String get dueToday => 'Jatuh tempo hari ini';
+
+  @override
+  String get overdue => 'Terlambat';
+
+  @override
+  String get paid => 'Lunas';
+
+  @override
+  String get cancelled => 'Dibatalkan';
+
+  @override
+  String get expectedIncome =>
+      'Pemasukan diharapkan (belum termasuk saldo tersedia)';
+
+  @override
+  String get availableBalance => 'Saldo tersedia';
+
+  @override
+  String get upcomingObligations => 'Kewajiban mendatang';
+
+  @override
+  String get safetyReserve => 'Dana cadangan aman';
+
+  @override
+  String get estimateDisclaimer => 'Ini adalah perkiraan, bukan jaminan.';
+
+  @override
+  String get shortfall => 'Kekurangan dana';
+
+  @override
+  String get setupPayday => 'Atur hari gajian untuk menghitung perkiraan.';
+
+  @override
+  String get reminders => 'Pengingat';
+
+  @override
+  String get threeDaysBefore => '3 hari sebelumnya';
+
+  @override
+  String get oneDayBefore => '1 hari sebelumnya';
+
+  @override
+  String get onDueDate => 'Pada tanggal jatuh tempo';
+
+  @override
+  String get planning => 'Perencanaan';
+
+  @override
+  String get noPlanningItems => 'Belum ada item perencanaan';
+
+  @override
+  String get pay => 'Bayar';
+
+  @override
+  String get pause => 'Jeda';
+
+  @override
+  String get resume => 'Lanjutkan';
+
+  @override
+  String get automatic => 'Otomatis';
+
+  @override
+  String get manual => 'Manual';
+
+  @override
+  String get paydayDay => 'Tanggal gajian (hari dalam bulan)';
+
+  @override
+  String get includedWallets => 'Dompet yang dihitung';
+
+  @override
+  String get excludedWallets => 'Dompet arsip yang dikecualikan';
+
+  @override
+  String get includedBills => 'Tagihan yang dikurangi';
+
+  @override
+  String get includedRecurring => 'Kewajiban berulang yang dikurangi';
+
+  @override
+  String get paymentSaved => 'Pembayaran dicatat';
+
+  @override
+  String get reminderLeadDays => 'Hari sebelum jatuh tempo untuk pengingat';
+
+  @override
+  String get days => 'hari';
+
+  @override
+  String get transactionId => 'ID transaksi yang sudah ada';
+
+  @override
+  String get linkExistingExpense => 'Hubungkan pengeluaran yang sudah ada';
+
+  @override
+  String get walletAndTransfer => 'Dompet & Transfer';
+
+  @override
+  String get billReminder => 'Pengingat tagihan';
+
+  @override
+  String get postingMode => 'Mode pencatatan';
+
+  @override
+  String get weeklyWeekdayHint =>
+      'Hari mingguan menggunakan Senin = 1 hingga Minggu = 7.';
 }
