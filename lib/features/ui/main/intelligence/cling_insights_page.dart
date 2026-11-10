@@ -4,6 +4,7 @@ import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../core/financial_intelligence.dart';
+import '../../../../core/financial_feature_theme.dart';
 import '../../../../core/init_database.dart';
 import '../../../../core/money_amount.dart';
 import '../../../../core/route.dart';
@@ -75,88 +76,91 @@ class _InsightsContentState extends State<_InsightsContent> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    return Scaffold(
-      backgroundColor: const Color(0xFF101010),
-      appBar: AppBar(
+    return FinancialFeatureTheme(
+      child: Scaffold(
         backgroundColor: const Color(0xFF101010),
-        title: Text(
-          l10n.clingInsights,
-          style: const TextStyle(color: Colors.white),
+        appBar: AppBar(
+          backgroundColor: const Color(0xFF101010),
+          title: Text(
+            l10n.clingInsights,
+            style: const TextStyle(color: Colors.white),
+          ),
+          actions: [
+            IconButton(onPressed: _load, icon: const Icon(Icons.refresh)),
+          ],
         ),
-        actions: [
-          IconButton(onPressed: _load, icon: const Icon(Icons.refresh)),
-        ],
-      ),
-      body: BlocBuilder<FinancialInsightsBloc, FinancialInsightsState>(
-        builder: (context, state) {
-          if (state.isLoading) {
-            return const Center(
-              child: CircularProgressIndicator(color: Color(0xFFF599DA)),
-            );
-          }
-          if (state.error != null) {
-            return Center(
-              child: Padding(
-                padding: const EdgeInsets.all(24),
-                child: Text(
-                  state.currencyMismatch
-                      ? l10n.insightsCurrencyUnavailable
-                      : l10n.financialInsightsError,
-                  style: const TextStyle(color: Colors.white70),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            );
-          }
-          if (state.insights.isEmpty) {
-            return Center(
-              child: Padding(
-                padding: const EdgeInsets.all(28),
-                child: Text(
-                  l10n.noInsightsYet,
-                  style: const TextStyle(color: Colors.white70),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            );
-          }
-          final visible = state.insights.take(3).toList();
-          return RefreshIndicator(
-            onRefresh: _load,
-            child: ListView(
-              padding: const EdgeInsets.all(16),
-              children: [
-                Text(
-                  l10n.insightsExplainable,
-                  style: const TextStyle(color: Colors.white60),
-                ),
-                const SizedBox(height: 12),
-                ...visible.map(
-                  (insight) => _InsightCard(
-                    insight: insight,
-                    currency: state.currency,
-                    money: (amount) => _money(context, amount, state.currency),
-                  ),
-                ),
-                if (state.insights.length > visible.length) ...[
-                  const SizedBox(height: 12),
-                  Text(
-                    l10n.moreInsights,
+        body: BlocBuilder<FinancialInsightsBloc, FinancialInsightsState>(
+          builder: (context, state) {
+            if (state.isLoading) {
+              return const Center(
+                child: CircularProgressIndicator(color: Color(0xFFF599DA)),
+              );
+            }
+            if (state.error != null) {
+              return Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(24),
+                  child: Text(
+                    state.currencyMismatch
+                        ? l10n.insightsCurrencyUnavailable
+                        : l10n.financialInsightsError,
                     style: const TextStyle(color: Colors.white70),
+                    textAlign: TextAlign.center,
                   ),
-                  ...state.insights.skip(visible.length).map(
-                        (insight) => _InsightCard(
-                          insight: insight,
-                          currency: state.currency,
-                          money: (amount) =>
-                              _money(context, amount, state.currency),
+                ),
+              );
+            }
+            if (state.insights.isEmpty) {
+              return Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(28),
+                  child: Text(
+                    l10n.noInsightsYet,
+                    style: const TextStyle(color: Colors.white70),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              );
+            }
+            final visible = state.insights.take(3).toList();
+            return RefreshIndicator(
+              onRefresh: _load,
+              child: ListView(
+                padding: const EdgeInsets.all(16),
+                children: [
+                  Text(
+                    l10n.insightsExplainable,
+                    style: const TextStyle(color: Colors.white60),
+                  ),
+                  const SizedBox(height: 12),
+                  ...visible.map(
+                    (insight) => _InsightCard(
+                      insight: insight,
+                      currency: state.currency,
+                      money: (amount) =>
+                          _money(context, amount, state.currency),
+                    ),
+                  ),
+                  if (state.insights.length > visible.length) ...[
+                    const SizedBox(height: 12),
+                    Text(
+                      l10n.moreInsights,
+                      style: const TextStyle(color: Colors.white70),
+                    ),
+                    ...state.insights.skip(visible.length).map(
+                          (insight) => _InsightCard(
+                            insight: insight,
+                            currency: state.currency,
+                            money: (amount) =>
+                                _money(context, amount, state.currency),
+                          ),
                         ),
-                      ),
+                  ],
                 ],
-              ],
-            ),
-          );
-        },
+              ),
+            );
+          },
+        ),
       ),
     );
   }
@@ -189,11 +193,11 @@ class _InsightCard extends StatelessWidget {
       FinancialInsightType.spendingTrend => insight.categoryId != null
           ? (insight.count != null && insight.count! > 0
               ? l10n.insightCategoryTrendUp(
-                  _categoryName(insight.categoryId),
+                  _categoryName(context, insight.categoryId),
                   insight.ratioPercent ?? 0,
                 )
               : l10n.insightCategoryTrendDown(
-                  _categoryName(insight.categoryId),
+                  _categoryName(context, insight.categoryId),
                   insight.ratioPercent ?? 0,
                 ))
           : (insight.count != null && insight.count! > 0
@@ -201,7 +205,7 @@ class _InsightCard extends StatelessWidget {
               : l10n.insightTrendDown(insight.ratioPercent ?? 0)),
       FinancialInsightType.categoryAnalysis =>
         l10n.insightCategoryShareDescription(
-          _categoryName(insight.categoryId),
+          _categoryName(context, insight.categoryId),
           insight.ratioPercent ?? 0,
         ),
       FinancialInsightType.spendingPace => l10n.insightPaceDescription(
@@ -250,8 +254,10 @@ class _InsightCard extends StatelessWidget {
     );
   }
 
-  String _categoryName(int? id) {
-    if (id == null || id < 0 || id >= exCategoriesData.length) return 'Other';
+  String _categoryName(BuildContext context, int? id) {
+    if (id == null || id < 0 || id >= exCategoriesData.length) {
+      return AppLocalizations.of(context)!.insightOtherCategory;
+    }
     final value = exCategoriesData[id];
     final split = value.indexOf(' ');
     return split < 0 ? value : value.substring(split + 1);
@@ -279,55 +285,57 @@ class FinancialInsightDetailPage extends StatelessWidget {
         name: args.currency,
       ).format((amount ?? 0) / MoneyAmount.factor),
     );
-    return Scaffold(
-      backgroundColor: const Color(0xFF101010),
-      appBar: AppBar(
+    return FinancialFeatureTheme(
+      child: Scaffold(
         backgroundColor: const Color(0xFF101010),
-        title: Text(
-          l10n.clingInsights,
-          style: const TextStyle(color: Colors.white),
+        appBar: AppBar(
+          backgroundColor: const Color(0xFF101010),
+          title: Text(
+            l10n.clingInsights,
+            style: const TextStyle(color: Colors.white),
+          ),
         ),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Card(
-          color: const Color(0xFF292929),
-          child: Padding(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  card.titleFor(context),
-                  style: const TextStyle(
-                    color: Color(0xFFF599DA),
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 12),
-                Text(
-                  card.descriptionFor(context),
-                  style: const TextStyle(color: Colors.white),
-                ),
-                const SizedBox(height: 16),
-                Text(
-                  '${DateFormat.yMMMd(Localizations.localeOf(context).toString()).format(args.insight.periodStart)} – ${DateFormat.yMMMd(Localizations.localeOf(context).toString()).format(args.insight.periodEnd)}',
-                  style: const TextStyle(color: Colors.white60),
-                ),
-                if (args.insight.previousMinor != null) ...[
-                  const Divider(color: Colors.white24, height: 28),
+        body: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Card(
+            color: const Color(0xFF292929),
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
                   Text(
-                    '${l10n.previousPeriod}: ${card.money(args.insight.previousMinor)}',
-                    style: const TextStyle(color: Colors.white70),
+                    card.titleFor(context),
+                    style: const TextStyle(
+                      color: Color(0xFFF599DA),
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
+                  const SizedBox(height: 12),
                   Text(
-                    '${l10n.currentPeriod}: ${card.money(args.insight.currentMinor)}',
-                    style: const TextStyle(color: Colors.white70),
+                    card.descriptionFor(context),
+                    style: const TextStyle(color: Colors.white),
                   ),
+                  const SizedBox(height: 16),
+                  Text(
+                    '${DateFormat.yMMMd(Localizations.localeOf(context).toString()).format(args.insight.periodStart)} – ${DateFormat.yMMMd(Localizations.localeOf(context).toString()).format(args.insight.periodEnd)}',
+                    style: const TextStyle(color: Colors.white60),
+                  ),
+                  if (args.insight.previousMinor != null) ...[
+                    const Divider(color: Colors.white24, height: 28),
+                    Text(
+                      '${l10n.previousPeriod}: ${card.money(args.insight.previousMinor)}',
+                      style: const TextStyle(color: Colors.white70),
+                    ),
+                    Text(
+                      '${l10n.currentPeriod}: ${card.money(args.insight.currentMinor)}',
+                      style: const TextStyle(color: Colors.white70),
+                    ),
+                  ],
                 ],
-              ],
+              ),
             ),
           ),
         ),

@@ -1019,4 +1019,94 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get recordedIncomeNotCash =>
       'Expected income is shown separately and is not included as available cash.';
+
+  @override
+  String get walletTotalBalance => 'Total balance';
+
+  @override
+  String walletCount(Object count) {
+    return '$count wallets';
+  }
+
+  @override
+  String get walletAdd => 'Add wallet';
+
+  @override
+  String get walletEdit => 'Edit wallet';
+
+  @override
+  String get walletName => 'Wallet name';
+
+  @override
+  String get walletOpeningBalance => 'Opening balance';
+
+  @override
+  String get walletDefault => 'Default wallet';
+
+  @override
+  String get walletActive => 'Active';
+
+  @override
+  String get walletArchived => 'Archived';
+
+  @override
+  String get walletEmpty => 'No wallets yet';
+
+  @override
+  String get walletLoadError => 'Wallets could not be loaded.';
+
+  @override
+  String get walletRetry => 'Try again';
+
+  @override
+  String get walletCreateTwoForTransfer =>
+      'Create at least two active wallets to transfer.';
+
+  @override
+  String get walletInvalidNameBalance =>
+      'Enter a valid name and opening balance.';
+
+  @override
+  String get walletTransferAmountPositive =>
+      'Transfer amount must be greater than zero.';
+
+  @override
+  String get walletTypeBank => 'Bank';
+
+  @override
+  String get walletTypeEwallet => 'E-wallet';
+
+  @override
+  String get walletTypeCash => 'Cash';
+
+  @override
+  String get walletTypeOther => 'Other';
+
+  @override
+  String get walletTransferFrom => 'From wallet';
+
+  @override
+  String get walletTransferButton => 'Transfer';
+
+  @override
+  String get walletTransferTo => 'To wallet';
+
+  @override
+  String get walletTransferAmount => 'Transfer amount';
+
+  @override
+  String get walletTransferNote => 'Note (optional)';
+
+  @override
+  String get walletArchiveTitle => 'Archive wallet?';
+
+  @override
+  String get walletArchiveDescription =>
+      'This wallet will be hidden from active choices. Its history will be kept.';
+
+  @override
+  String get walletArchiveAction => 'Archive';
+
+  @override
+  String get insightOtherCategory => 'Other';
 }

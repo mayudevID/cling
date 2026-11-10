@@ -2005,6 +2005,174 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Expected income is shown separately and is not included as available cash.'**
   String get recordedIncomeNotCash;
+
+  /// No description provided for @walletTotalBalance.
+  ///
+  /// In en, this message translates to:
+  /// **'Total balance'**
+  String get walletTotalBalance;
+
+  /// No description provided for @walletCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} wallets'**
+  String walletCount(Object count);
+
+  /// No description provided for @walletAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Add wallet'**
+  String get walletAdd;
+
+  /// No description provided for @walletEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit wallet'**
+  String get walletEdit;
+
+  /// No description provided for @walletName.
+  ///
+  /// In en, this message translates to:
+  /// **'Wallet name'**
+  String get walletName;
+
+  /// No description provided for @walletOpeningBalance.
+  ///
+  /// In en, this message translates to:
+  /// **'Opening balance'**
+  String get walletOpeningBalance;
+
+  /// No description provided for @walletDefault.
+  ///
+  /// In en, this message translates to:
+  /// **'Default wallet'**
+  String get walletDefault;
+
+  /// No description provided for @walletActive.
+  ///
+  /// In en, this message translates to:
+  /// **'Active'**
+  String get walletActive;
+
+  /// No description provided for @walletArchived.
+  ///
+  /// In en, this message translates to:
+  /// **'Archived'**
+  String get walletArchived;
+
+  /// No description provided for @walletEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No wallets yet'**
+  String get walletEmpty;
+
+  /// No description provided for @walletLoadError.
+  ///
+  /// In en, this message translates to:
+  /// **'Wallets could not be loaded.'**
+  String get walletLoadError;
+
+  /// No description provided for @walletRetry.
+  ///
+  /// In en, this message translates to:
+  /// **'Try again'**
+  String get walletRetry;
+
+  /// No description provided for @walletCreateTwoForTransfer.
+  ///
+  /// In en, this message translates to:
+  /// **'Create at least two active wallets to transfer.'**
+  String get walletCreateTwoForTransfer;
+
+  /// No description provided for @walletInvalidNameBalance.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid name and opening balance.'**
+  String get walletInvalidNameBalance;
+
+  /// No description provided for @walletTransferAmountPositive.
+  ///
+  /// In en, this message translates to:
+  /// **'Transfer amount must be greater than zero.'**
+  String get walletTransferAmountPositive;
+
+  /// No description provided for @walletTypeBank.
+  ///
+  /// In en, this message translates to:
+  /// **'Bank'**
+  String get walletTypeBank;
+
+  /// No description provided for @walletTypeEwallet.
+  ///
+  /// In en, this message translates to:
+  /// **'E-wallet'**
+  String get walletTypeEwallet;
+
+  /// No description provided for @walletTypeCash.
+  ///
+  /// In en, this message translates to:
+  /// **'Cash'**
+  String get walletTypeCash;
+
+  /// No description provided for @walletTypeOther.
+  ///
+  /// In en, this message translates to:
+  /// **'Other'**
+  String get walletTypeOther;
+
+  /// No description provided for @walletTransferFrom.
+  ///
+  /// In en, this message translates to:
+  /// **'From wallet'**
+  String get walletTransferFrom;
+
+  /// No description provided for @walletTransferButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Transfer'**
+  String get walletTransferButton;
+
+  /// No description provided for @walletTransferTo.
+  ///
+  /// In en, this message translates to:
+  /// **'To wallet'**
+  String get walletTransferTo;
+
+  /// No description provided for @walletTransferAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Transfer amount'**
+  String get walletTransferAmount;
+
+  /// No description provided for @walletTransferNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Note (optional)'**
+  String get walletTransferNote;
+
+  /// No description provided for @walletArchiveTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Archive wallet?'**
+  String get walletArchiveTitle;
+
+  /// No description provided for @walletArchiveDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'This wallet will be hidden from active choices. Its history will be kept.'**
+  String get walletArchiveDescription;
+
+  /// No description provided for @walletArchiveAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Archive'**
+  String get walletArchiveAction;
+
+  /// No description provided for @insightOtherCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Other'**
+  String get insightOtherCategory;
 }
 
 class _AppLocalizationsDelegate

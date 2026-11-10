@@ -4,6 +4,7 @@ import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../core/money_amount.dart';
+import '../../../../core/financial_feature_theme.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../main_widget/finance_refresh.dart';
 import '../../../model/financial_planning_models.dart';
@@ -49,64 +50,66 @@ class _PlanningScreen extends StatelessWidget {
       _PlanningSection.runway => l10n.paydayRunway,
       _PlanningSection.settings => l10n.planningSettings,
     };
-    return Scaffold(
-      backgroundColor: const Color(0xFF101010),
-      appBar: AppBar(
+    return FinancialFeatureTheme(
+      child: Scaffold(
         backgroundColor: const Color(0xFF101010),
-        title: Text(title, style: const TextStyle(color: Colors.white)),
-      ),
-      body: BlocConsumer<PlanningBloc, PlanningState>(
-        listenWhen: (previous, current) =>
-            (previous.error != current.error && current.error != null) ||
-            previous.financialMutationId != current.financialMutationId,
-        listener: (context, state) {
-          if (state.error != null) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.error!)),
-            );
-          } else {
-            refreshFinancialViews(context, refreshPlanning: false);
-          }
-        },
-        builder: (context, state) {
-          if (state.isLoading && state.rules.isEmpty && state.bills.isEmpty) {
-            return const Center(
-              child: CircularProgressIndicator(color: Color(0xFFF599DA)),
-            );
-          }
-          if (state.error != null &&
-              state.rules.isEmpty &&
-              state.bills.isEmpty) {
-            return Center(
-              child: Padding(
-                padding: const EdgeInsets.all(24),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      state.error!,
-                      style: const TextStyle(color: Colors.white70),
-                      textAlign: TextAlign.center,
-                    ),
-                    TextButton(
-                      onPressed: () => context
-                          .read<PlanningBloc>()
-                          .add(LoadPlanning(DateTime.now())),
-                      child: Text(l10n.change),
-                    ),
-                  ],
+        appBar: AppBar(
+          backgroundColor: const Color(0xFF101010),
+          title: Text(title, style: const TextStyle(color: Colors.white)),
+        ),
+        body: BlocConsumer<PlanningBloc, PlanningState>(
+          listenWhen: (previous, current) =>
+              (previous.error != current.error && current.error != null) ||
+              previous.financialMutationId != current.financialMutationId,
+          listener: (context, state) {
+            if (state.error != null) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text(state.error!)),
+              );
+            } else {
+              refreshFinancialViews(context, refreshPlanning: false);
+            }
+          },
+          builder: (context, state) {
+            if (state.isLoading && state.rules.isEmpty && state.bills.isEmpty) {
+              return const Center(
+                child: CircularProgressIndicator(color: Color(0xFFF599DA)),
+              );
+            }
+            if (state.error != null &&
+                state.rules.isEmpty &&
+                state.bills.isEmpty) {
+              return Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(24),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        state.error!,
+                        style: const TextStyle(color: Colors.white70),
+                        textAlign: TextAlign.center,
+                      ),
+                      TextButton(
+                        onPressed: () => context
+                            .read<PlanningBloc>()
+                            .add(LoadPlanning(DateTime.now())),
+                        child: Text(l10n.change),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            );
-          }
-          return switch (section) {
-            _PlanningSection.overview => _overview(context, state),
-            _PlanningSection.recurring => _recurring(context, state),
-            _PlanningSection.bills => _bills(context, state),
-            _PlanningSection.runway => _runway(context, state),
-            _PlanningSection.settings => _settings(context, state),
-          };
-        },
+              );
+            }
+            return switch (section) {
+              _PlanningSection.overview => _overview(context, state),
+              _PlanningSection.recurring => _recurring(context, state),
+              _PlanningSection.bills => _bills(context, state),
+              _PlanningSection.runway => _runway(context, state),
+              _PlanningSection.settings => _settings(context, state),
+            };
+          },
+        ),
       ),
     );
   }

@@ -3,6 +3,7 @@ import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../core/financial_intelligence.dart';
+import '../../../../core/financial_feature_theme.dart';
 import '../../../../core/money_amount.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../model/goal_model.dart';
@@ -40,37 +41,39 @@ class _GoalPlanningPageState extends State<GoalPlanningPage> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    return Scaffold(
-      backgroundColor: const Color(0xFF101010),
-      appBar: AppBar(
+    return FinancialFeatureTheme(
+      child: Scaffold(
         backgroundColor: const Color(0xFF101010),
-        title: Text(
-          l10n.smartGoalPlanning,
-          style: const TextStyle(color: Colors.white),
+        appBar: AppBar(
+          backgroundColor: const Color(0xFF101010),
+          title: Text(
+            l10n.smartGoalPlanning,
+            style: const TextStyle(color: Colors.white),
+          ),
         ),
-      ),
-      body: FutureBuilder(
-        future: _future,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState != ConnectionState.done) {
-            return const Center(
-              child: CircularProgressIndicator(color: Color(0xFFF599DA)),
+        body: FutureBuilder(
+          future: _future,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState != ConnectionState.done) {
+              return const Center(
+                child: CircularProgressIndicator(color: Color(0xFFF599DA)),
+              );
+            }
+            if (snapshot.hasError || _revision != _repository.revision) {
+              return Center(
+                child: Text(
+                  snapshot.error?.toString() ??
+                      l10n.purchaseInsufficientInformation,
+                  style: const TextStyle(color: Colors.white70),
+                ),
+              );
+            }
+            return _GoalPlanForm(
+              repository: _repository,
+              contextData: snapshot.requireData,
             );
-          }
-          if (snapshot.hasError || _revision != _repository.revision) {
-            return Center(
-              child: Text(
-                snapshot.error?.toString() ??
-                    l10n.purchaseInsufficientInformation,
-                style: const TextStyle(color: Colors.white70),
-              ),
-            );
-          }
-          return _GoalPlanForm(
-            repository: _repository,
-            contextData: snapshot.requireData,
-          );
-        },
+          },
+        ),
       ),
     );
   }
@@ -308,14 +311,22 @@ class _GoalPlanFormState extends State<_GoalPlanForm> {
       GoalFeasibility.behindTarget => l10n.goalBehind,
       GoalFeasibility.unknown => l10n.goalAffordabilityUnknown,
     };
+    final statusColor = switch (p.feasibility) {
+      GoalFeasibility.completed ||
+      GoalFeasibility.onTrack =>
+        const Color(0xFF7CD992),
+      GoalFeasibility.needsAdjustment => const Color(0xFFF2C66D),
+      GoalFeasibility.behindTarget => const Color(0xFFFF8A8A),
+      GoalFeasibility.unknown => Colors.white70,
+    };
     return _box(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             status,
-            style: const TextStyle(
-              color: Color(0xFFF599DA),
+            style: TextStyle(
+              color: statusColor,
               fontWeight: FontWeight.bold,
             ),
           ),

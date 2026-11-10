@@ -1020,4 +1020,94 @@ class AppLocalizationsId extends AppLocalizations {
   @override
   String get recordedIncomeNotCash =>
       'Pemasukan yang diharapkan ditampilkan terpisah dan tidak dihitung sebagai uang tersedia.';
+
+  @override
+  String get walletTotalBalance => 'Total saldo';
+
+  @override
+  String walletCount(Object count) {
+    return '$count dompet';
+  }
+
+  @override
+  String get walletAdd => 'Tambah dompet';
+
+  @override
+  String get walletEdit => 'Edit dompet';
+
+  @override
+  String get walletName => 'Nama dompet';
+
+  @override
+  String get walletOpeningBalance => 'Saldo awal';
+
+  @override
+  String get walletDefault => 'Dompet utama';
+
+  @override
+  String get walletActive => 'Aktif';
+
+  @override
+  String get walletArchived => 'Diarsipkan';
+
+  @override
+  String get walletEmpty => 'Belum ada dompet';
+
+  @override
+  String get walletLoadError => 'Dompet tidak dapat dimuat.';
+
+  @override
+  String get walletRetry => 'Coba lagi';
+
+  @override
+  String get walletCreateTwoForTransfer =>
+      'Buat setidaknya dua dompet aktif untuk transfer.';
+
+  @override
+  String get walletInvalidNameBalance =>
+      'Masukkan nama dan saldo awal yang valid.';
+
+  @override
+  String get walletTransferAmountPositive =>
+      'Nominal transfer harus lebih dari nol.';
+
+  @override
+  String get walletTypeBank => 'Bank';
+
+  @override
+  String get walletTypeEwallet => 'Dompet digital';
+
+  @override
+  String get walletTypeCash => 'Tunai';
+
+  @override
+  String get walletTypeOther => 'Lainnya';
+
+  @override
+  String get walletTransferFrom => 'Dari dompet';
+
+  @override
+  String get walletTransferButton => 'Transfer';
+
+  @override
+  String get walletTransferTo => 'Ke dompet';
+
+  @override
+  String get walletTransferAmount => 'Nominal transfer';
+
+  @override
+  String get walletTransferNote => 'Catatan (opsional)';
+
+  @override
+  String get walletArchiveTitle => 'Arsipkan dompet?';
+
+  @override
+  String get walletArchiveDescription =>
+      'Dompet ini akan disembunyikan dari pilihan aktif. Riwayatnya tetap tersimpan.';
+
+  @override
+  String get walletArchiveAction => 'Arsipkan';
+
+  @override
+  String get insightOtherCategory => 'Lainnya';
 }

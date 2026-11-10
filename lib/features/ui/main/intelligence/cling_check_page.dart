@@ -3,6 +3,7 @@ import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../core/financial_intelligence.dart';
+import '../../../../core/financial_feature_theme.dart';
 import '../../../../core/money_amount.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../model/financial_planning_models.dart';
@@ -75,171 +76,181 @@ class _ClingCheckPageState extends State<ClingCheckPage> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    return Scaffold(
-      backgroundColor: const Color(0xFF101010),
-      appBar: AppBar(
+    return FinancialFeatureTheme(
+      child: Scaffold(
         backgroundColor: const Color(0xFF101010),
-        title:
-            Text(l10n.clingCheck, style: const TextStyle(color: Colors.white)),
-      ),
-      body: FutureBuilder<
-          ({List<WalletModel> wallets, PaydayRunwayModel? runway})>(
-        future: _contextFuture,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState != ConnectionState.done) {
-            return const Center(
-              child: CircularProgressIndicator(color: Color(0xFFF599DA)),
-            );
-          }
-          if (snapshot.hasError || _revision != _repository.revision) {
-            return Center(
-              child: Padding(
-                padding: const EdgeInsets.all(24),
-                child: Text(
-                  snapshot.error?.toString() ??
-                      l10n.purchaseInsufficientInformation,
-                  style: const TextStyle(color: Colors.white70),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            );
-          }
-          final data = snapshot.requireData;
-          if (data.wallets.isEmpty) {
-            return Center(
-              child: Text(
-                l10n.noWallets,
-                style: const TextStyle(color: Colors.white70),
-              ),
-            );
-          }
-          final wallets = data.wallets;
-          var selected = wallets.first;
-          for (final wallet in wallets) {
-            if (wallet.id == _walletId) selected = wallet;
-          }
-          final amountMinor = _parseMinor(_amount.text);
-          final runway = data.runway;
-          final projection = amountMinor == null || amountMinor <= 0
-              ? null
-              : assessClingCheck(
-                  purchaseMinor: amountMinor,
-                  selectedWalletBalanceMinor: selected.balanceMinor,
-                  availableBalanceMinor:
-                      runway?.availableMinor ?? selected.balanceMinor,
-                  spendableBeforeMinor: runway?.estimatedSpendableMinor,
-                  daysRemaining: runway?.daysRemaining,
-                  selectedDailyAllowanceMinor: runway?.dailyAllowanceMinor,
-                  currencyMatches:
-                      runway != null && selected.currency == runway.currency,
-                );
-          final currency = runway?.currency ?? selected.currency;
-          return ListView(
-            padding: const EdgeInsets.all(20),
-            children: [
-              _panel(
-                child: Text(
-                  l10n.estimateNotGuarantee,
-                  style: const TextStyle(color: Colors.white70),
-                ),
-              ),
-              const SizedBox(height: 12),
-              TextField(
-                controller: _name,
-                onChanged: (_) => setState(() {}),
-                style: const TextStyle(color: Colors.white),
-                decoration: _decoration(l10n.checkPurchaseName),
-              ),
-              const SizedBox(height: 12),
-              TextField(
-                controller: _amount,
-                onChanged: (_) => setState(() {}),
-                keyboardType:
-                    const TextInputType.numberWithOptions(decimal: true),
-                style: const TextStyle(color: Colors.white),
-                decoration: _decoration(l10n.purchaseAmount),
-              ),
-              if (_amount.text.isNotEmpty &&
-                  (_parseMinor(_amount.text) ?? 0) <= 0)
-                Padding(
-                  padding: const EdgeInsets.only(top: 6),
+        appBar: AppBar(
+          backgroundColor: const Color(0xFF101010),
+          title: Text(
+            l10n.clingCheck,
+            style: const TextStyle(color: Colors.white),
+          ),
+        ),
+        body: FutureBuilder<
+            ({List<WalletModel> wallets, PaydayRunwayModel? runway})>(
+          future: _contextFuture,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState != ConnectionState.done) {
+              return const Center(
+                child: CircularProgressIndicator(color: Color(0xFFF599DA)),
+              );
+            }
+            if (snapshot.hasError || _revision != _repository.revision) {
+              return Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(24),
                   child: Text(
-                    l10n.invalidAmount,
-                    style: const TextStyle(color: Color(0xFFFF8A8A)),
+                    snapshot.error?.toString() ??
+                        l10n.purchaseInsufficientInformation,
+                    style: const TextStyle(color: Colors.white70),
+                    textAlign: TextAlign.center,
                   ),
                 ),
-              const SizedBox(height: 12),
-              DropdownButtonFormField<int>(
-                initialValue: selected.id,
-                dropdownColor: const Color(0xFF292929),
-                style: const TextStyle(color: Colors.white),
-                decoration: _decoration(l10n.sourceWallet),
-                items: wallets
-                    .map(
-                      (wallet) => DropdownMenuItem(
-                        value: wallet.id,
-                        child: Text(
-                          '${wallet.name} · ${_money(context, wallet.balanceMinor, wallet.currency)}',
+              );
+            }
+            final data = snapshot.requireData;
+            if (data.wallets.isEmpty) {
+              return Center(
+                child: Text(
+                  l10n.noWallets,
+                  style: const TextStyle(color: Colors.white70),
+                ),
+              );
+            }
+            final wallets = data.wallets;
+            var selected = wallets.first;
+            for (final wallet in wallets) {
+              if (wallet.id == _walletId) selected = wallet;
+            }
+            final amountMinor = _parseMinor(_amount.text);
+            final runway = data.runway;
+            final projection = amountMinor == null || amountMinor <= 0
+                ? null
+                : assessClingCheck(
+                    purchaseMinor: amountMinor,
+                    selectedWalletBalanceMinor: selected.balanceMinor,
+                    availableBalanceMinor:
+                        runway?.availableMinor ?? selected.balanceMinor,
+                    spendableBeforeMinor: runway?.estimatedSpendableMinor,
+                    daysRemaining: runway?.daysRemaining,
+                    selectedDailyAllowanceMinor: runway?.dailyAllowanceMinor,
+                    currencyMatches:
+                        runway != null && selected.currency == runway.currency,
+                  );
+            final currency = runway?.currency ?? selected.currency;
+            return ListView(
+              padding: const EdgeInsets.all(20),
+              children: [
+                _panel(
+                  child: Text(
+                    l10n.estimateNotGuarantee,
+                    style: const TextStyle(color: Colors.white70),
+                  ),
+                ),
+                const SizedBox(height: 12),
+                TextField(
+                  controller: _name,
+                  onChanged: (_) => setState(() {}),
+                  style: const TextStyle(color: Colors.white),
+                  decoration: _decoration(l10n.checkPurchaseName),
+                ),
+                const SizedBox(height: 12),
+                TextField(
+                  controller: _amount,
+                  onChanged: (_) => setState(() {}),
+                  keyboardType:
+                      const TextInputType.numberWithOptions(decimal: true),
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontWeight: FontWeight.w700,
+                  ),
+                  decoration: _decoration(l10n.purchaseAmount),
+                ),
+                if (_amount.text.isNotEmpty &&
+                    (_parseMinor(_amount.text) ?? 0) <= 0)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 6),
+                    child: Text(
+                      l10n.invalidAmount,
+                      style: const TextStyle(color: Color(0xFFFF8A8A)),
+                    ),
+                  ),
+                const SizedBox(height: 12),
+                DropdownButtonFormField<int>(
+                  initialValue: selected.id,
+                  dropdownColor: const Color(0xFF292929),
+                  style: const TextStyle(color: Colors.white),
+                  decoration: _decoration(l10n.sourceWallet),
+                  items: wallets
+                      .map(
+                        (wallet) => DropdownMenuItem(
+                          value: wallet.id,
+                          child: Text(
+                            '${wallet.name} · ${_money(context, wallet.balanceMinor, wallet.currency)}',
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
                         ),
-                      ),
-                    )
-                    .toList(),
-                onChanged: (id) => setState(() => _walletId = id),
-              ),
-              const SizedBox(height: 12),
-              TextField(
-                controller: _note,
-                onChanged: (_) => setState(() {}),
-                maxLines: 2,
-                style: const TextStyle(color: Colors.white),
-                decoration: _decoration(l10n.note),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                l10n.plannedTodayOnly,
-                style: const TextStyle(color: Colors.white54),
-              ),
-              if (projection != null) ...[
-                const SizedBox(height: 16),
-                _resultCard(
-                  context,
-                  l10n,
-                  projection,
-                  currency,
-                  runway,
-                  _name.text.trim(),
-                  _note.text.trim(),
+                      )
+                      .toList(),
+                  onChanged: (id) => setState(() => _walletId = id),
                 ),
-                if (runway != null) ...[
+                const SizedBox(height: 12),
+                TextField(
+                  controller: _note,
+                  onChanged: (_) => setState(() {}),
+                  maxLines: 2,
+                  style: const TextStyle(color: Colors.white),
+                  decoration: _decoration(l10n.note),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  l10n.plannedTodayOnly,
+                  style: const TextStyle(color: Colors.white54),
+                ),
+                if (projection != null) ...[
                   const SizedBox(height: 16),
-                  Text(
-                    l10n.obligationsBeforePayday,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
+                  _resultCard(
+                    context,
+                    l10n,
+                    projection,
+                    currency,
+                    runway,
+                    _name.text.trim(),
+                    _note.text.trim(),
                   ),
-                  ...runway.includedBills.map(
-                    (item) => _obligation(
-                      context,
-                      item.name,
-                      item.amountMinor,
-                      currency,
+                  if (runway != null) ...[
+                    const SizedBox(height: 16),
+                    Text(
+                      l10n.obligationsBeforePayday,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                  ...runway.includedRecurringDetails.map(
-                    (item) => _obligation(
-                      context,
-                      item.name,
-                      item.amountMinor,
-                      currency,
+                    ...runway.includedBills.map(
+                      (item) => _obligation(
+                        context,
+                        item.name,
+                        item.amountMinor,
+                        currency,
+                      ),
                     ),
-                  ),
+                    ...runway.includedRecurringDetails.map(
+                      (item) => _obligation(
+                        context,
+                        item.name,
+                        item.amountMinor,
+                        currency,
+                      ),
+                    ),
+                  ],
                 ],
               ],
-            ],
-          );
-        },
+            );
+          },
+        ),
       ),
     );
   }
@@ -289,6 +300,7 @@ class _ClingCheckPageState extends State<ClingCheckPage> {
             ? const Color(0xFFF2C66D)
             : const Color(0xFFFF8A8A);
     return _panel(
+      borderColor: color,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -381,7 +393,15 @@ class _ClingCheckPageState extends State<ClingCheckPage> {
               child: Text(label, style: const TextStyle(color: Colors.white60)),
             ),
             const SizedBox(width: 12),
-            Text(value, style: const TextStyle(color: Colors.white)),
+            Flexible(
+              child: Text(
+                value,
+                textAlign: TextAlign.end,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(color: Colors.white),
+              ),
+            ),
           ],
         ),
       );
@@ -397,11 +417,14 @@ class _ClingCheckPageState extends State<ClingCheckPage> {
         ),
       );
 
-  Widget _panel({required Widget child}) => Container(
+  Widget _panel({required Widget child, Color? borderColor}) => Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: const Color(0xFF292929),
           borderRadius: BorderRadius.circular(14),
+          border: borderColor == null
+              ? null
+              : Border.all(color: borderColor.withValues(alpha: 0.55)),
         ),
         child: child,
       );

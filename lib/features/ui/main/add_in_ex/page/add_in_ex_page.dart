@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../core/common_widget.dart';
+import '../../../../../core/financial_wallet_selector.dart';
 import '../../../../../core/route.dart';
 import '../../../../../injection.dart';
 import '../../../../../resources/gen/fonts.gen.dart';
@@ -99,27 +100,10 @@ class AddIncomeExpensePageContent extends StatelessWidget {
                 buildWhen: (previous, current) =>
                     previous.wallets != current.wallets ||
                     previous.selectedWalletId != current.selectedWalletId,
-                builder: (context, state) => DropdownButtonFormField<int>(
-                  initialValue: state.wallets
-                          .any((wallet) => wallet.id == state.selectedWalletId)
-                      ? state.selectedWalletId
-                      : null,
-                  dropdownColor: const Color(0xFF313131),
-                  decoration: InputDecoration(
-                    labelText: AppLocalizations.of(context)!.wallet,
-                    labelStyle: const TextStyle(color: Colors.white70),
-                  ),
-                  items: state.wallets
-                      .map(
-                        (wallet) => DropdownMenuItem(
-                          value: wallet.id,
-                          child: Text(
-                            wallet.name,
-                            style: const TextStyle(color: Colors.white),
-                          ),
-                        ),
-                      )
-                      .toList(),
+                builder: (context, state) => FinancialWalletSelector(
+                  wallets: state.wallets,
+                  selectedWalletId: state.selectedWalletId,
+                  label: AppLocalizations.of(context)!.wallet,
                   onChanged: (id) {
                     if (id != null) {
                       context.read<AddIncomeExpenseBloc>().add(SetWallet(id));
